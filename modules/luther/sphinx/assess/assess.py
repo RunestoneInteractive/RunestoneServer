@@ -185,7 +185,10 @@ class MChoiceMF(Directive):
         self.options['qnumber'] = questionNum;
                      
         if self.content:
-            self.options['bodytext'] = "\n".join(self.content)
+            if 'iscode' in self.options:
+                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
+            else:
+                self.options['bodytext'] = "\n".join(self.content)
         else:
             self.options['bodytext'] = "\n"
 
@@ -288,7 +291,10 @@ class MChoiceMA(Directive):
         self.options['qnumber'] = questionNum;
 
         if self.content:
-            self.options['bodytext'] = "\n".join(self.content)
+            if 'iscode' in self.options:
+                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
+            else:
+                self.options['bodytext'] = "\n".join(self.content)
 
         res = ""
         res = TEMPLATE_START % self.options
@@ -386,7 +392,6 @@ class FillInTheBlank(Directive):
         self.options['fbl'] = json.dumps(fbl).replace('"',"'")
         res = ""
         res = TEMPLATE_START % self.options
-        # Add all of the possible answers
 
         res += TEMPLATE_END % self.options
         return [nodes.raw('',res , format='html')]
