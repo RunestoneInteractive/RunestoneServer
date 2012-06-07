@@ -223,6 +223,35 @@ the list only in the case where we do not find the item.
 
     Comparisons Used in Sequential Search of an Ordered List
 
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_SRCH_1
+      :correct:
+      :answer_a: 5
+      :answer_b: 10
+      :answer_c: 4
+      :answer_d: 2
+      :feedback_a: Five comparisons would get the second 18 in the list.
+      :feedback_b: You do not need to search the entire list, only until you find the key you are looking for.
+      :feedback_c: No, remember in a sequential search you start at the beginning and check each key until you find what you are looking for or exhaust the list.
+      :feedback_d: In this case only 2 comparisons were needed to find the key.
+
+      Suppose you are doing a sequential search of the list <br> [15, 18, 2, 19, 18, 0, 8, 14, 19, 14].  How many comparisons would you need to do in order to find the key 18?
+
+   .. mchoicemf:: question_SRCH_2
+      :correct: c
+      :answer_a: 10
+      :answer_b: 5
+      :answer_c: 7
+      :answer_d: 6
+      :feedback_a:  You do not need to search the entire list, since it is ordered you can stop searching when you have compared with a value larger than the key.
+      :feedback_b: Since 11 is less than the key value 13 you need to keep searching.
+      :feedback_c: Since 14 is greater than the key value 13 you can stop.
+      :feedback_d: Because 12 is less than the key value 13 you need to keep going.
+
+      Suppose you are doing a sequential search of the ordered list <br> [3, 5, 6, 8, 11, 12, 14, 15, 17, 18].  How many comparisons would you need to do in order to find the key 13?
+
 The Binary Search
 ~~~~~~~~~~~~~~~~~
 
@@ -376,6 +405,34 @@ of sorting to gain searching benefits. If we can sort once and then
 search many times, the cost of the sort is not so significant. However,
 for large lists, sorting even once can be so expensive that simply
 performing a sequential search from the start may be the best choice.
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: BSRCH_1
+      :correct: b
+      :answer_a: 11, 5, 6, 8
+      :answer_b: 12, 6, 11, 8
+      :answer_c: 3, 5, 6, 8
+      :answer_d: 18, 12, 6, 8
+      :feedback_a:  Looks like you might be guilty of an off-by-one error.  Remember the first position is index 0.
+      :feedback_b:  Binary search starts at the midpoint and halves the list each time.
+      :feedback_c: Binary search does not start at the beginning and search sequentially, its starts in the middle and halves the list after each compare.
+      :feedback_d: It appears that you are starting from the end and halving the list each time.
+
+      Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm.  Which group of numbers correctly shows the sequence of comoparisons used to find the key 8.
+
+   .. mchoicemf:: BSRCH_1
+      :correct: d
+      :answer_a: 11, 14, 17
+      :answer_b: 18, 17, 15
+      :answer_c: 14, 17, 15
+      :answer_d: 12, 17, 15
+      :feedback_a:  Looks like you might be guilty of an off-by-one error.  Remember the first position is index 0.
+      :feedback_b:  Remember binary search starts in the middle and halves the list.
+      :feedback_c:  Looks like you might be off by one, be careful that you are calculating the midpont using integer arithmetic.
+      :feedback_d: Binary search starts at the midpoint and halves the list each time. It is done when the list is empty.
+
+      Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm.  Which group of numbers correctly shows the sequence of comoparisons used to search for the key 16?
 
 Hashing
 ~~~~~~~
@@ -736,6 +793,21 @@ use a searching technique to decide whether the item is present. The
 advantage is that on the average there are likely to be many fewer items
 in each slot, so the search is perhaps more efficient. We will look at
 the analysis for hashing at the end of this section.
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: HASH_1
+      :correct: b
+      :answer_a: 100, __, __, 113, 114, 105, 116, 117, 97, 108, 99
+      :answer_b: 99, 100, __, 113, 114, __, 116, 117, 105, 97, 108
+      :answer_c: 100, 113, 117, 97, 14, 108, 116, 105, 99, __, __
+      :answer_d: 97, 99, 100, 105, 108, 113, 114, 116, 117, __, __
+      :feedback_a:  It looks like you may have been doing modulo 2 arithmentic.  You need to use the hash table size as the modulo value.
+      :feedback_b:  Using modulo 11 arithmetic and linear probing gives these values
+      :feedback_c: It looks like you are using modulo 10 arithmetic, use the table size.
+      :feedback_d: Hashing does not mean inserting items into the table in sorted order.
+
+      Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values:  113 , 117 , 97 , 100 , 114 , 108 , 116 , 105 , 99 Which of the following best demonstrates the contents of the has table after all the keys have been inserted using linear probing?
 
 Implementing the ``Map`` Abstract Data Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

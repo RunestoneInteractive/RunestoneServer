@@ -628,7 +628,10 @@ Note that it is a much more simple example file in that the exit is very close t
 
     searchFrom(myMaze, myMaze.startRow, myMaze.startCol)
 
-    
+.. admonition:: Self Check
+
+   Modify the maze search program so that the calls to searchFrom are in a different order.  Watch the program run. Can you explain why the behavior is different?  Can you predict what path the turtle will follow for a given change in order?
+   
 Dynamic Programming
 -------------------
 
