@@ -674,7 +674,7 @@ resulting string.
 
    .. fillintheblank:: baseconvert3
       :correct: \\b10\\b
-      :feedback: You may need to modify the baseConverter function, or simply find a pattern in the conversion of bases.
+      :feedback1: ('.*', 'You may need to modify the baseConverter function, or simply find a pattern in the conversion of bases.')
 
       What is value of 26 expressed in base 26 ___
 
@@ -1156,19 +1156,21 @@ this as an exercise at the end of the chapter.
    .. fillintheblank:: postfix1
       :casei:
       :correct: \\b10\\s+3\\s+5\\s*\\*\\s*16\\s+4\\s*-\\s*/\\s*\\+
-      :feedback:  If you can't do this on your own.
+      :feedback1:  ('10.*3.*5.*16.*4', 'The numbers appear to be in the correct order check your operators')
+      :feedback2: ('.*', 'Remember the numbers will be in the same order as the original equation')
 
-      Without using the activecode infixToPostfix function, convert the following expression to postfix 10 + 3 * 5 / (16 - 4) ___
+      Without using the activecode infixToPostfix function, convert the following expression to postfix <br> 10 + 3 * 5 / (16 - 4) ___
 
    .. fillintheblank:: postfix2
       :correct: \\b9\\b
+      :feedback1: ('.*', "Remember to push each intermediate result back on the stack" )
 
       17 10 + 3 * 9 / == ___
 
    .. fillintheblank:: postfix3
       :correct: 5\\s+3\\s+4\\s+2\\s*-\\s*\\^\\s*\\*
-      :feedback: Hint: You only need to add one line to the function!!
-      
+      :feedback1: ('.*', 'Hint: You only need to add one line to the function!!')
+
       Modify the infixToPostfix function so that it can convert the following expression:  5 * 3 ^ (4 - 2)   Paste the answer here: ___
 
 
