@@ -59,17 +59,21 @@ def getprog():
     if sid:
         query = codetbl.sid == sid and codetbl.acid == acid
     else:
-        query = codetbl.sid == auth.user.username and codetbl.acid == acid
+        if auth.user:
+            query = codetbl.sid == auth.user.username and codetbl.acid == acid
+        else:
+            query = None
 
-    result = db(query)
     res = {}
-    if not result.isempty():
-        res['acid'] = acid
-        res['source'] = result.select(orderby=~codetbl.timestamp).first().code
-        if sid:
-            res['sid'] = sid
-    else:
-        logging.debug("Did not find anything to load for %s"%sid)
+    if query:            
+        result = db(query)
+        if not result.isempty():
+            res['acid'] = acid
+            res['source'] = result.select(orderby=~codetbl.timestamp).first().code
+            if sid:
+                res['sid'] = sid
+        else:
+            logging.debug("Did not find anything to load for %s"%sid)
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 

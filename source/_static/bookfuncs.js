@@ -233,7 +233,7 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
 
     edNode = document.getElementById(acblockid);
-
+    if (edNode.children.length == 0 ) {
     //edNode.style.display = 'none';
     edNode.style.backgroundColor = "white";
     var editor;
@@ -266,17 +266,19 @@ function createActiveCode(divid,suppliedSource,sid) {
     runButton.onclick = myRun;
     edNode.appendChild(runButton);
     if (sid === undefined) { // We don't need load and save buttons for grading
-        var saveButton = document.createElement("input");
-        saveButton.setAttribute('type','button');
-        saveButton.setAttribute('value','save');
-        saveButton.onclick = mySave;
-        edNode.appendChild(saveButton);
+        if(isLoggedIn() == true) {
+            var saveButton = document.createElement("input");
+            saveButton.setAttribute('type','button');
+            saveButton.setAttribute('value','save');
+            saveButton.onclick = mySave;
+            edNode.appendChild(saveButton);
 
-        var loadButton = document.createElement("input");
-        loadButton.setAttribute('type','button');
-        loadButton.setAttribute('value','load');
-        loadButton.onclick = myLoad;
-        edNode.appendChild(loadButton);
+            var loadButton = document.createElement("input");
+            loadButton.setAttribute('type','button');
+            loadButton.setAttribute('value','load');
+            loadButton.onclick = myLoad;
+            edNode.appendChild(loadButton);
+        }
     }
     edNode.appendChild(document.createElement('br'));
     var newCanvas = edNode.appendChild(document.createElement("canvas"));
@@ -298,6 +300,7 @@ function createActiveCode(divid,suppliedSource,sid) {
         suppliedSource = suppliedSource.replace(new RegExp('%27','g'),"'");
         editor.setValue(suppliedSource);
     }
+}
    // $('#'+divid).modal({minHeight:700, minWidth: 410, maxWidth:450, containerCss:{width:420, height:750}});
 }
 
@@ -352,6 +355,7 @@ function gotUser(data, status, whatever) {
                 }
             } else {
                 mess = d.email;
+                eBookConfig.isLoggedIn = true;
             }
         } catch(err) {
             if (eBookConfig.loginRequired) {
@@ -373,6 +377,12 @@ function shouldLogin() {
     return sli;
 }
 
+function isLoggedIn() {
+    if (typeof eBookConfig.isLoggedIn !== undefined ){
+        return eBookConfig.isLoggedIn;
+    }
+    return false;
+}
 function addUserToFooter() {
     // test to see if online before doing this.
     if (shouldLogin()) {
