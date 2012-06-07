@@ -417,6 +417,13 @@ to see that :math:`T(n)` then follows the quadratic function as
    Write two Python functions to find the minimum number in a list.  The first function should compare each number to every other number on the list. :math:`O(n^2)`.  The second function should be linear :math:`O(n)`.
 
 
+.. video::  findMinVid
+   :controls:
+   :thumb: ../_static/function_intro.png
+
+   http://knuth.luther.edu/~pythonworks/pythondsVideos/findmin.mov
+   http://knuth.luther.edu/~pythonworks/pythondsVideos/findmin.webm
+
 An Anagram Detection Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1060,7 +1067,12 @@ the Python wiki has a nice time complexity page that can be found at
 
       Which of the above dictionary operations is O(1)?
 
+.. video::  pythonopsperf
+   :controls:
+   :thumb: ../_static/function_intro.png
 
+   http://knuth.luther.edu/~pythonworks/pythondsVideos/pythonops.mov
+   http://knuth.luther.edu/~pythonworks/pythondsVideos/pythonops.webm
 
 Summary
 -------
