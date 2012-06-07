@@ -199,6 +199,30 @@ action as we perform the sequence of operations from
     >>> q.size()
     2
 
+.. admonition:: Self Check
+
+   .. mchoicemf:: queue_1
+      :correct: b
+      :iscode:
+      :answer_a: 'hello', 'dog'
+      :answer_b: 'dog', 3
+      :answer_c: 'hello', 3
+      :answer_d: 'hello', 'dog', 3
+      :feedback_a: Remember the first thing added to the queue is the first thing removed.  FIFO
+      :feedback_b: Yes, first in first out means that hello is gone
+      :feedback_c: Queues, and Stacks are both data structures where you can only access the first and the last thing.
+      :feedback_d: Ooops, maybe you missed the dequeue call at the end?
+
+      Suppose you have the following series of queue operations.
+
+      q = Queue()
+      q.enqueue('hello')
+      q.enqueue('dog')
+      q.enqueue(3)
+      q.dequeue()
+
+      What items are left on the queue?
+
 Simulation: Hot Potato
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -301,7 +325,7 @@ might be whether the printer is capable of handling a certain amount of
 work. If it cannot, students will be waiting too long for printing and
 may miss their next class.
 
-{} Consider the following situation in a computer science laboratory. On
+Consider the following situation in a computer science laboratory. On
 any average day about 10 students are working in the lab at any given
 hour. These students typically print up to twice during that time, and
 the length of these tasks ranges from 1 to 20 pages. The printer in the
@@ -334,13 +358,13 @@ from 1 to 20 is equally likely, the actual length for a print task can
 be simulated by using a random number between 1 and 20 inclusive. This
 means that there is equal chance of any length from 1 to 20 appearing.
 
-{} If there are 10 students in the lab and each prints twice, then there
+If there are 10 students in the lab and each prints twice, then there
 are 20 print tasks per hour on average. What is the chance that at any
 given second, a print task is going to be created? The way to answer
 this is to consider the ratio of tasks to time. Twenty tasks per hour
 means that on average there will be one task every 180 seconds:
 
-:math:`$\label{taskequation}
+:math:`\label{taskequation}
 \frac {20\ tasks}{1\ hour}
 \times
 \frac {1\ hour}  {60\ minutes}
@@ -348,7 +372,7 @@ means that on average there will be one task every 180 seconds:
 \frac {1\ minute} {60\ seconds}
 =
 \frac {1\ task} {180\ seconds}
-$`
+`
 
 For every second we can simulate the chance that a print task occurs by
 generating a random number between 1 and 180 inclusive. If the number is
@@ -623,3 +647,85 @@ However, it is important to remember that the simulation is only as good
 as the assumptions that are used to build it. Real data about the number
 of print tasks per hour and the number of students per hour was
 necessary to construct a robust simulation.
+
+.. admonition:: Self Check
+   
+   How would you modify the printer simulation to reflect a larger number of students?  Suppose that the number of students was doubled.  You make need to make some reasonable assumptions about how this simulation was put together but what would you change?  Modify the code.  Also suppose that the length of the average print task was cut in half.  Change the code to reflect that change.  Finally How would you parametertize the number of students, rather than changing the code we would like
+   to make the number of students a parameter of the simulation.
+
+   .. actex:: print_sim_selfcheck
+
+         from pythonds.basic.queue import Queue
+
+         import random
+
+         class Printer:
+             def __init__(self, ppm):
+                 self.pagerate = ppm
+                 self.currentTask = None
+                 self.timeRemaining = 0
+
+             def tick(self):
+                 if self.currentTask != None:
+                     self.timeRemaining = self.timeRemaining - 1
+                     if self.timeRemaining <= 0:
+                         self.currentTask = None
+
+             def busy(self):
+                 if self.currentTask != None:
+                     return True
+                 else:
+                     return False
+
+             def startNext(self,newtask):
+                 self.currentTask = newtask
+                 self.timeRemaining = newtask.getPages() * 60/self.pagerate
+
+         class Task:
+             def __init__(self,time):
+                 self.timestamp = time
+                 self.pages = random.randrange(1,21)
+
+             def getStamp(self):
+                 return self.timestamp
+
+             def getPages(self):
+                 return self.pages
+
+             def waitTime(self, currenttime):
+                 return currenttime - self.timestamp
+
+
+         def simulation(numSeconds, pagesPerMinute):
+
+             labprinter = Printer(pagesPerMinute)
+             printQueue = Queue()
+             waitingtimes = []
+
+             for currentSecond in range(numSeconds):
+
+               if newPrintTask():
+                  task = Task(currentSecond)
+                  printQueue.enqueue(task)
+
+               if (not labprinter.busy()) and (not printQueue.isEmpty()):
+                 nexttask = printQueue.dequeue()
+                 waitingtimes.append(nexttask.waitTime(currentSecond))
+                 labprinter.startNext(nexttask)
+
+               labprinter.tick()
+
+             averageWait=sum(waitingtimes)/len(waitingtimes)
+             print("Average Wait %6.2f secs %3d tasks remaining." % (averageWait,printQueue.size()))
+
+         def newPrintTask():
+             num = random.randrange(1,181)
+             if num == 180:
+                 return True
+             else:
+                 return False
+
+         for i in range(10):
+             simulation(3600,5)
+
+
