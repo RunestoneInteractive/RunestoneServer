@@ -797,15 +797,28 @@ the analysis for hashing at the end of this section.
 .. admonition:: Self Check
 
    .. mchoicemf:: HASH_1
+      :correct: c
+      :answer_a: 1, 10
+      :answer_b: 13, 0
+      :answer_c: 1, 0
+      :answer_d: 2, 3
+      :feedback_a:  Be careful to use modulo not integer division
+      :feedback_b:  Don't divide by two, use the modulo operator.
+      :feedback_c: 27 % 13 == 1 and 130 % 13 == 0
+      :feedback_d: Use the modulo operator
+
+      In a hash table of size 13 which index positions would the following two keys map to?  27,  130
+
+   .. mchoicemf:: HASH_2
       :correct: b
       :answer_a: 100, __, __, 113, 114, 105, 116, 117, 97, 108, 99
       :answer_b: 99, 100, __, 113, 114, __, 116, 117, 105, 97, 108
       :answer_c: 100, 113, 117, 97, 14, 108, 116, 105, 99, __, __
-      :answer_d: 97, 99, 100, 105, 108, 113, 114, 116, 117, __, __
+      :answer_d: 117, 114, 108, 116, 105, 99, __, __, 97, 100, 113
       :feedback_a:  It looks like you may have been doing modulo 2 arithmentic.  You need to use the hash table size as the modulo value.
       :feedback_b:  Using modulo 11 arithmetic and linear probing gives these values
       :feedback_c: It looks like you are using modulo 10 arithmetic, use the table size.
-      :feedback_d: Hashing does not mean inserting items into the table in sorted order.
+      :feedback_d: Be careful to use modulo not integer division.
 
       Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values:  113 , 117 , 97 , 100 , 114 , 108 , 116 , 105 , 99 Which of the following best demonstrates the contents of the has table after all the keys have been inserted using linear probing?
 
