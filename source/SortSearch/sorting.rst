@@ -233,8 +233,21 @@ Finally, here is ``shortBubbleSort`` in codelens.
     shortBubbleSort(alist)
     print(alist)
  
- 
- 
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_1
+       :correct: b
+       :answer_a: [1, 9, 19, 7, 3, 10, 13, 15, 8, 12]
+       :answer_b: [1, 3, 7, 9, 10, 8, 12, 13, 15, 19]
+       :answer_c: [1, 7, 3, 9, 10, 13, 8, 12, 15, 19]
+       :answer_d: [1, 9, 19, 7, 3, 10, 13, 15, 8, 12]
+       :feedback_a:  This answer represents three swaps.  A pass means that you continue swapping all the way to the end of the list.
+       :feedback_b:  Very Good
+       :feedback_c: A bubble sort contines to swap numbers up to index position passnum.  But remember that passnum starts at the length of the list - 1.
+       :feedback_d: You have been doing an insertion sort, not a bubble sort.
+
+       Suppose you have the following list of numbers to sort: <br>
+       [19, 1, 9, 7, 3, 10, 13, 15, 8, 12] which list represents the partially sorted list after three complete passes of bubble sort?
  
 The Selection Sort
 ~~~~~~~~~~~~~~~~~~
@@ -312,6 +325,24 @@ due to the reduction in the number of exchanges, the selection sort
 typically executes faster in benchmark studies. In fact, for our list,
 the bubble sort makes 20 exchanges, while the selection sort makes only
 8.
+
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_2
+      :correct: d
+      :answer_a: [7, 11, 12, 1, 6, 14, 8, 18, 19, 20]
+      :answer_b: [7, 11, 12, 14, 19, 1, 6, 18, 8, 20]
+      :answer_c: [11, 7, 12, 13, 1, 6, 8, 18, 19, 20]
+      :answer_d: [11, 7, 12, 14, 8, 1, 6, 18, 19, 20]
+      :feedback_a: Selection sort is similar to bubble sort (which you appear to have done) but uses fewer swaps
+      :feedback_b: This looks like an insertion sort.
+      :feedback_c: This one looks similar to the correct answer but instead of swapping the numbers have been shifted to the left to make room for the correct numbers.
+      :feedback_d: Selection sort improves upon bubble sort by making fewer swaps.
+
+      Suppose you have the following list of numbers to sort: <br>
+      [11, 7, 12, 14, 19, 1, 6, 18, 8, 20] which list represents the partially sorted list after three complete passes of selection sort?
+
 
 The Insertion Sort
 ~~~~~~~~~~~~~~~~~~
@@ -416,6 +447,22 @@ studies, insertion sort will show very good performance.
     alist = [54,26,93,17,77,31,44,55,20]
     insertionSort(alist)
     print(alist)
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_3
+      :correct: c
+      :answer_a: [4, 5, 12, 15, 14, 10, 8, 18, 19, 20]
+      :answer_b: [15, 5, 4, 10, 12, 8, 14, 18, 19, 20]
+      :answer_c: [4, 5, 15, 18, 12, 19, 14, 10, 8, 20]
+      :answer_d: [15, 5, 4, 18, 12, 19, 14, 8, 10, 20]
+      :feedback_a: This is a bubble sort.
+      :feedback_b:  This is the result of selection sort.
+      :feedback_c: Insertion sort works at the start of the list.  Each pass produces a longer sorted list.
+      :feedback_d: Insertion sort works on the front of the list not the end.
+
+       Suppose you have the following list of numbers to sort: <br>
+       [15, 5, 4, 18, 12, 19, 14, 10, 8, 20] which list represents the partially sorted list after three complete passes of insertion sort?
 
 The Shell Sort
 ~~~~~~~~~~~~~~
@@ -575,6 +622,24 @@ above. For the increments shown in :ref:`Listing 5 <lst_shell>`, the performance
 :math:`O(n^{2})`. By changing the increment, for example using
 :math:`2^{k}-1` (1, 3, 7, 15, 31, and so on), a shell sort can perform
 at :math:`O(n^{\frac {3}{2}})`.
+
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_4
+      :correct: 
+      :answer_a: [5, 3, 8, 7, 16, 19, 9, 17, 20, 12]
+      :answer_b: [3, 7, 5, 8, 9, 12, 19, 16, 20, 17]
+      :answer_c: [3, 5, 7, 8, 9, 12, 16, 17, 19, 20]
+      :answer_d: [5, 16, 20, 3, 8, 12, 9, 17, 20, 7]
+      :feedback_a:  Each group of numbers represented by index positions 3 apart are sorted correctly.
+      :feedback_b:  This solution is for a gap size of two.
+      :feedback_c: This is list completely sorted, you have gone too far.
+      :feedback_d: The gap size of three indicates that the group represented by every third number e.g. 0, 3, 6, 9  and 1, 4, 7 and 2, 5, 8 are sorted not groups of 3.
+      :iscode:
+
+      Given the following list of numbers:  [5, 16, 20, 12, 3, 8, 9, 17, 19, 7]
+      Which answer illustrates the contents of the list after all swapping is complete for a gap size of 3?
 
 The Merge Sort
 ~~~~~~~~~~~~~~
@@ -748,6 +813,35 @@ space to hold the two halves as they are extracted with the slicing
 operations. This additional space can be a critical factor if the list
 is large and can make this sort problematic when working on large data
 sets.
+
+
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_5
+      :correct: b
+      :answer_a: [16, 49, 39, 27, 43, 34, 46, 40]
+      :answer_b: [21,1]
+      :answer_c: [21, 1, 26, 45]
+      :answer_d: [21]
+      :feedback_a: This is the second half of the list.
+      :feedback_b: Yes, mergesort will continue to recursively move toward the beginning of the list until it hits a base case.
+      :feedback_c: Remember mergesort doesn't work on the right half of the list until the left half is completely sorted.
+      :feedback_d: This is the list after 4 recursive calls
+
+      Given the following list of numbers: <br> [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40] <br> which answer illustrates the list to be sorted after 3 recursive calls to mergesort?
+
+   .. mchoicemf:: question_sort_6
+      :correct: c
+      :answer_a: [21, 1] and [26, 45]
+      :answer_b: [[1, 2, 9, 21, 26, 28, 29, 45] and [16, 27, 34, 39, 40, 43, 46, 49]
+      :answer_c: [21] and [1]
+      :answer_d: [9] and [16]
+      :feedback_a: The first two lists merged will be base case lists, we have not yet reached a base case.
+      :feedback_b: These will be the last two lists merged
+      :feedback_c: The lists [21] and [1] are the first two base cases encountered by mergesort and will therefore be the first two lists merged.
+      :feedback_d: Although 9 and 16 are next to each other they are in different halves of the list starting with the first split.
+
+      Given the following list of numbers: <br> [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40] <br> which answer illustrates the first two lists to be merged?
 
 The Quick Sort
 ~~~~~~~~~~~~~~
@@ -965,3 +1059,30 @@ toward the middle of the list, the median of three will choose a better
 is somewhat sorted to begin with. We leave the implementation of this
 pivot value selection as an exercise.
 
+.. admonition:: Self Check
+
+   .. mchoicemf:: question_sort_7
+      :correct: d
+      :answer_a: [9, 3, 10, 13, 12]
+      :answer_b: [9, 3, 10, 13, 12, 14]
+      :answer_c: [9, 3, 10, 13, 12, 14, 17, 16, 15, 19]
+      :answer_d: [9, 3, 10, 13, 12, 14, 19, 16, 15, 17]
+      :feedback_a: Its important to remember that quicksort works on the entire list and sorts it in place.
+      :feedback_b: Remember quicksort works on the entire list and sorts it in place.
+      :feedback_c: The first partitioning works on the entire list, and the second partitioning works on the left partition not the right.
+      :feedback_d: The first partitioning works on the entire list, and the second partitioning works on the left partition.
+
+      Given the following list of numbers [14, 17, 13, 15, 19, 10, 3, 16, 9, 12] which answer shows the contents of the list after the second partitioning according to the quicksort algorithm?
+
+   .. mchoicemf:: question_sort_8
+       :correct: b
+       :answer_a: 1
+       :answer_b: 9
+       :answer_c: 16
+       :answer_d: 19
+       :feedback_a: The three numbers used in selecting the pivot are 1, 9, 19.  1 is not the median, and would be a very bad choice for the pivot since it is the smallest number in the list. 
+       :feedback_b:  Good job.
+       :feedback_c: although 16 would be the median of 1, 16, 19 the middle is at len(list) // 2.
+       :feedback_d: the three numbers used in selecting the pivot are 1, 9, 19.  9 is the median.  19 would be a bad choice since it is almost the largest.
+
+       Given the following list of numbers [1, 20, 11, 5, 2, 9, 16, 14, 13, 19] what would be the first pivot value using the median of 3 method?
