@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 COURSEID = devcourse
-APPNAME = courselib
+APPNAME = runestone
 LOGLEVEL = 10
 COURSEURL = http://127.0.0.1:8000
 LOGINREQ = true
