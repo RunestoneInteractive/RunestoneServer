@@ -7,7 +7,7 @@ db.define_table('useinfo',
   Field('act','string'),
   Field('div_id','string'),
   Field('course_id','string'),
-  migrate=settings.migrate
+  migrate='runestone_useinfo.table'
 )
 
 db.define_table('code',
@@ -17,5 +17,5 @@ db.define_table('code',
   Field('grade','double'),
   Field('sid','string'),
   Field('timestamp','datetime'),
-  migrate=settings.migrate
+  migrate='runestone_code.table'
 )
