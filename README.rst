@@ -67,9 +67,9 @@ If you get an error at this point the most likely reason is that the settings fi
 
 	if 'local' in uname()[1] or 'Darwin' in uname()[0]:
         settings.database_uri = 'sqlite://storage.sqlite'
-	elif 'webfaction' in uname()[1]:
-	        settings.database_uri = 'postgres://bnmnetp_courselib:secret@web318.webfaction.com/bnmnetp_courselib'
-	elif 'luther' in uname()[1]:
+	elif 'webfaction' in uname()[1]:  # production is on webfaction
+	        settings.database_uri = 'postgres://production_db:secret@production_server.com/production_db'
+	elif 'luther' in uname()[1]:   # this is my beta machine
 	        settings.database_uri = 'sqlite://storage.sqlite'
 	else:
 	        raise RuntimeError('Host unknown, senttings not configured')    
