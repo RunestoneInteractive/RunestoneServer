@@ -46,7 +46,7 @@ crud, service, plugins = Crud(db), Service(), PluginManager()
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
   Field('course_id','string'),
-  migrate=settings.migprefix+'courses.table'
+  migrate=settings.migrate
   )
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_id='devcourse')
@@ -80,7 +80,7 @@ db.define_table('auth_user',
       requires=IS_IN_DB(db,db.courses.id,'%(course_id)s'),
       widget=SQLFORM.widgets.options.widget   ),
     format='%(username)s',
-    migrate=settings.migprefix+'auth_user.table')
+    migrate=settings.migrate)
 
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -90,7 +90,7 @@ db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
                                IS_NOT_IN_DB(db, db.auth_user.email))
-auth.define_tables(migrate=settings.migprefix)
+auth.define_tables(migrate=settings.migrate)
 
 
 ## configure email
