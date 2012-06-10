@@ -3,6 +3,7 @@ settings = Storage()
 from os import uname
 
 settings.migrate = True
+settings.migprefix = 'runestonebeta_'
 settings.title = 'Runestone Interactive'
 settings.subtitle = 'eBooks for Python'
 settings.author = 'Brad Miller'

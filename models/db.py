@@ -11,7 +11,7 @@
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(settings.database_uri)    
+    db = DAL(settings.database_uri,fake_migrate_all=False)    
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore')
@@ -46,7 +46,7 @@ crud, service, plugins = Crud(db), Service(), PluginManager()
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
   Field('course_id','string'),
-  migrate='runestone_courses.table'
+  migrate=settings.migprefix+'courses.table'
   )
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_id='devcourse')
@@ -80,7 +80,7 @@ db.define_table('auth_user',
       requires=IS_IN_DB(db,db.courses.id,'%(course_id)s'),
       widget=SQLFORM.widgets.options.widget   ),
     format='%(username)s',
-    migrate='runestone_auth_user.table')
+    migrate=settings.migprefix+'auth_user.table')
 
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -90,7 +90,7 @@ db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
                                IS_NOT_IN_DB(db, db.auth_user.email))
-auth.define_tables(migrate='runestone_')
+auth.define_tables(migrate=settings.migprefix)
 
 
 ## configure email
