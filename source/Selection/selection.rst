@@ -292,7 +292,7 @@ There is no limit on the number of statements that can appear under the two clau
 
 .. admonition:: Lab
 
-    * `Approximating Pi with Simulation <montepi.html>`_ In this guided lab exercise we will work
+    * `Approximating Pi with Simulation <../Labs/montepi.html>`_ In this guided lab exercise we will work
       through a problem solving exercise related to approximating the value of pi using random numbers.
 
 .. admonition:: Scratch Editor

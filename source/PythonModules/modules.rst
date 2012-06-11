@@ -288,7 +288,7 @@ get random behavior each time you execute.
 
 .. admonition:: Lab
 
-    * `Sine Wave <sinlab.html>`_ In this guided lab exercise we will have the turtle plot a sine wave.
+    * `Sine Wave <../Labs/sinlab.html>`_ In this guided lab exercise we will have the turtle plot a sine wave.
 
 **Check your understanding**
 

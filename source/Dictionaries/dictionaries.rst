@@ -317,14 +317,14 @@ return if the key is not in the dictionary (which would be 0 since it is sparse)
 
 .. admonition:: Lab
 
-    * `Counting Letters <lab12_01.html>`_ In this guided lab exercise we will work
+    * `Counting Letters <../Labs/lab12_01.html>`_ In this guided lab exercise we will work
       through a problem solving exercise that will use dictionaries to generalize the solution
       to counting the occurrences of all letters in a string.
 
 
 .. admonition:: Lab
 
-    * `Letter Count Histogram <lab12_02.html>`_ Combine the previous lab with the histogram example.
+    * `Letter Count Histogram <../Labs/lab12_02.html>`_ Combine the previous lab with the histogram example.
 
 
 

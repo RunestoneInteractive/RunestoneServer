@@ -947,7 +947,7 @@ demonstrates two:
 
 .. admonition:: Lab
 
-    * `Drawing a Circle <lab04_01.html>`_ In this guided lab exercise we will work
+    * `Drawing a Circle <../Labs/lab04_01.html>`_ In this guided lab exercise we will work
       through a simple problem solving exercise related to drawing a circle with the turtle.
 
 .. index:: flow of execution

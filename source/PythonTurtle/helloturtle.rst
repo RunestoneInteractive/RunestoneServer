@@ -765,7 +765,7 @@ color, or to put her pen down and draw a line, or to change her shape, etc.)
 
 .. admonition:: Lab
 
-    * `Turtle Race <lab03_01.html>`_ In this guided lab exercise we will work
+    * `Turtle Race <../Labs/lab03_01.html>`_ In this guided lab exercise we will work
       through a simple problem solving exercise related to having some turtles
       race.
 
