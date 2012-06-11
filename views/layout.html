@@ -21,14 +21,7 @@ Released   : 20081122
       <script type="text/javascript">
     var eBookConfig = {}
     var portPart = ''
-    {{ if request.env.server_port != '80': }}
-        portPart = ':{{=request.env.server_port}}'
-        {{pass}}
-    eBookConfig.host = 'http://{{=request.env.server_name}}'
-    if (eBookConfig.host.indexOf('unknown') >= 0) {
-        eBookConfig.host = 'http://127.0.0.1'
-    }
-    eBookConfig.host = eBookConfig.host + portPart
+    eBookConfig.host = 'http://{{=request.env.http_host}}'
     eBookConfig.app = eBookConfig.host+'/{{=request.application}}'
     eBookConfig.ajaxURL = eBookConfig.app+'/ajax/'
     eBookConfig.logLevel = 10
