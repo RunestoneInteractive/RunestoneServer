@@ -103,7 +103,7 @@ function buildIndexFile(projname)
    data = {}
    data.projectname=projname;
    data.toc=txt
-   jQuery.post('/courselib/designer/makefile.json',data,buildSuccess)
+   jQuery.post(eBookConfig.app +'/designer/makefile.json',data,buildSuccess)
 }
 
 function displayItems(boxid)
