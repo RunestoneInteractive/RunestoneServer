@@ -10,7 +10,7 @@ LOGINREQ = true
 #
 #
 TEMPLATEDEFS  = -A course_id=$(COURSEID) -A appname=$(APPNAME) -A loglevel=$(LOGLEVEL) -A course_url=$(COURSEURL) -A login_required=$(LOGINREQ)
-SPHINXOPTS    = -a -E $(TEMPLATEDEFS)
+SPHINXOPTS    = -a -E 
 #SPHINXOPTS    = 
 SPHINXBUILD   = sphinx-build
 PAPER         =
@@ -19,7 +19,7 @@ BUILDDIR      = static/$(COURSEID)
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
-ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) $(TEMPLATEDEFS) source
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
@@ -63,7 +63,7 @@ thinkcspy: LOGINREQ=false
 thinkcspy:
 	cp source/OldIndexAndConfFiles/index-thinkcs source/index.rst
 	cp source/OldIndexAndConfFiles/thinkcs-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/thinkcspy/doctrees -a -E -A project='How to Think Like a Computer Scientist Interactive Edition' $(TEMPLATEDEFS) source static/$(COURSEID)
+	$(SPHINXBUILD) -d static/thinkcspy/doctrees $(SPHINXOPTS) -A project='How to Think Like a Computer Scientist Interactive Edition' $(TEMPLATEDEFS) source static/$(COURSEID)
 	cp source/OldIndexAndConfFiles/index-master source/index.rst
 	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
 
@@ -72,7 +72,7 @@ pythonds: LOGINREQ=false
 pythonds:
 	cp source/OldIndexAndConfFiles/index-pythonds source/index.rst
 	cp source/OldIndexAndConfFiles/pythonds-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/pythonds/doctrees -a -E -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
+	$(SPHINXBUILD) -d static/pythonds/doctrees $(SPHINXOPTS) -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
 	cp source/OldIndexAndConfFiles/index-master source/index.rst
 	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
 
@@ -81,7 +81,7 @@ luther151:	COURSEURL=http://interactivepython.org
 luther151:
 	cp source/OldIndexAndConfFiles/index-pythonds source/index.rst
 	cp source/OldIndexAndConfFiles/pythonds-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/pythonds/doctrees -a -E -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
+	$(SPHINXBUILD) -d static/pythonds/doctrees $(SPHINXOPTS) -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
 	cp source/OldIndexAndConfFiles/index-master source/index.rst
 	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
 
