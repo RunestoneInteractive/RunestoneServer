@@ -7,7 +7,7 @@
 
 {{end}}
 
-{{ if mess:}}
+{{ if 'mess' in globals():}}
     <h1>{{=mess}}</h1>
     You can access your course here:  <a href="/{{=request.application}}/{{=course_url}}">Here</a>
 

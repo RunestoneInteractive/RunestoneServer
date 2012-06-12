@@ -115,6 +115,20 @@ def build():
 
         return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html' )       
     else:
+
+        cid = db.courses.update_or_insert(course_id=request.vars.projectname)
+
+        # if make instructor add row to auth_membership
+        if request.vars.instructor == "yes":
+            gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
+            db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
+
+        # update instructor record to have course_id be this course
+        # if the above update_or_insert on project does nothing (meaning this is a duplicate)
+        # then do not change teh instructors cid.
+        if cid:
+            db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        
         moddata = {}
         
         rows = db(db.modules.id>0).select()
