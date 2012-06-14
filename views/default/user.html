@@ -10,7 +10,7 @@
 <table cellpadding="10px">
   <tr>
 <td>
-  <video controls width="300">
+  <video controls width="300" id="runestonevid">
     <source src="{{=URL(c='static',f='_images/runestone.mov')}}" type="video/mp4"></source>
     <source src="{{=URL(c='static',f='_images/runestone.webm')}}" type="video/webm"></source>    
   </video>
@@ -54,3 +54,31 @@
       jQuery("#web2py_user_form input:visible:enabled:first").focus();
       //--></script>
 
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", init, false);
+    
+    function init(){
+      var video = document.getElementById("runestonevid");
+      video.addEventListener("play", videoPlay, false);
+      video.addEventListener("pause", videoPause, false);
+      video.addEventListener("ended", videoEnd, false);
+      console.log(video);
+    }
+        
+    function videoPlay(event) {
+      trackEvent('Play', 'My Video'); 
+    }
+    
+    function videoPause(event) {
+      trackEvent('Pause', 'My Video'); 
+    }
+    
+    function videoEnd(event) {
+      trackEvent('Ended', 'My Video'); 
+    }
+    
+    function trackEvent(action, title) {
+      alert('tracking' + action)
+      _gaq.push(['_trackEvent', 'Videos', action, title]);
+    }
+</script>
