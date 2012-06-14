@@ -1,25 +1,30 @@
 {{extend 'layout.html'}}
 
-<h1>Instructors Page</h1>
-<h3>Build Your Own Course</h3>
-<ul>
-	<li>
-		<a href="/{{=request.application}}/designer">Create a Custom Course</a>
-	</li>
-</ul>
+<h1>Instructor's Dashboard</h1>
+
 <h3>Administer Your Course</h3>
 <ul>
-	<li>
-	<a href="/{{=request.application}}">Take me to my Course</a>
-	</li>
 	<li>
 	<a href="/{{=request.application}}/admin/listassignments">List and Grade Assignments</a>
 	</li>
 	<li>
 		<a href="/{{=request.application}}/admin/showlog">Show Course Logs</a>
 	</li>
+	<li>
+	<a href="/{{=request.application}}">Take me to my Course</a>
+	</li>
+
 </ul>
-	<h3>Contribute</h3>
+
+<h3>Build Your Own Course</h3>
+<ul>
+	<li>
+		<a href="/{{=request.application}}/designer">Create a Custom Course</a>
+	</li>
+</ul>
+
+
+<h3>Contribute to the Project</h3>
 <ul>
 	<li>
 		<a href="https://github.com/bnmnetp/runestone/issues/new">Submit an Exercise</a>
