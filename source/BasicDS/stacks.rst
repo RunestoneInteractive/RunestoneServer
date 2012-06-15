@@ -309,6 +309,13 @@ benchmark testing.
       testEqual(revstring('1234567890'),'0987654321')
 
 
+.. video:: stack1_video
+    :controls:
+    :thumb: ../_static/activecodethumb.png
+
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack1.mov
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack1.webm
+
 Simple Balanced Parentheses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -677,6 +684,14 @@ resulting string.
       :feedback1: ('.*', 'You may need to modify the baseConverter function, or simply find a pattern in the conversion of bases.')
 
       What is value of 26 expressed in base 26 ___
+
+
+.. video:: video_Stack2
+    :controls:
+    :thumb: ../_static/activecodethumb.png
+
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack2.mov
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack2.webm
 
 Infix, Prefix and Postfix Expressions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1174,4 +1189,10 @@ this as an exercise at the end of the chapter.
       Modify the infixToPostfix function so that it can convert the following expression:  5 * 3 ^ (4 - 2)   Paste the answer here: ___
 
 
+.. video:: video_Stack3
+    :controls:
+    :thumb: ../_static/activecodethumb.png
+
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack3.mov
+    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack3.webm
 
