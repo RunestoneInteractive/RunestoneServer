@@ -56,8 +56,9 @@ def getprog():
     codetbl = db.code
     acid = request.vars.acid
     sid = request.vars.sid
+
     if sid:
-        query = codetbl.sid == sid and codetbl.acid == acid
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid))
     else:
         if auth.user:
             query = codetbl.sid == auth.user.username and codetbl.acid == acid
@@ -69,7 +70,9 @@ def getprog():
         result = db(query)
         if not result.isempty():
             res['acid'] = acid
-            res['source'] = result.select(orderby=~codetbl.timestamp).first().code
+            r = result.select(orderby=~codetbl.timestamp).first().code
+            print r
+            res['source'] = r
             if sid:
                 res['sid'] = sid
         else:
