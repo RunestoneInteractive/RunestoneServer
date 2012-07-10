@@ -154,6 +154,7 @@ function runit(myDiv,theButton,includes) {
     try {
         Sk.importMainWithBody("<stdin>", false, prog);
     } catch (e) {
+        logBookEvent({'event':'ac_error','act':e.toString(), 'div_id':myDiv})
         alert(e);
     }
     if (! Sk.isTurtleProgram ) {
