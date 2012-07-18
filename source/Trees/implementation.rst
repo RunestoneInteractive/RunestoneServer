@@ -219,9 +219,46 @@ structure resulting from this set of calls.
     print getRightChild(getRightChild(r))
     
 
+.. admonition:: Self Check
 
-{fig:makeTreess}
+   .. mchoicemf:: mctree_1
+      :correct: c
+      :answer_a: ['a', ['b', [], []], ['c', [], ['d', [], []]]]
+      :answer_b: ['a', ['c', [], ['d', ['e', [], []], []]], ['b', [], []]]
+      :answer_c: ['a', ['b', [], []], ['c', [], ['d', ['e', [], []], []]]]
+      :answer_d: ['a', ['b', [], ['d', ['e', [], []], []]], ['c', [], []]]
+      :feedback_a: Not quite, this tree is missing the 'e' node.
+      :feedback_b: This is close, but if you carefully you will see that the left and right children of the root are swapped.
+      :feedback_c: Very good
+      :feedback_d: This is close, but the left and right child names have been swapped along with the underlying structures.
+      :iscode:
 
+      Given the following statments:
+
+      x = BinaryTree('a')
+      insertLeft(x,'b')
+      insertRight(x,'c')
+      insertRight(getRightChild(x),'d')
+      insertLeft(getRightChild(getRightChild(x)),'e')    
+
+      Which of the answers is the correct representation of the tree?
+
+   Write a function ``buildTree`` that returns a tree using the list of lists functions that looks like this:
+
+   .. image:: Figures/tree_ex.png
+
+   .. actex:: mctree_2
+
+      from test import testEqual
+      
+      def buildTree():
+          pass
+          
+      ttree = buildTree()
+      testEqual(getRootVal(getRightChild(ttree)),'c')
+      testEqual(getRootVal(getRightChild(getLeftChild(ttree))),'d')      
+      testEqual(getRootVal(getRightChild(getRightChild(ttree))),'f')            
+      
 Nodes and References
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -350,4 +387,23 @@ tree as a binary tree itself. {
     r.getRightChild().setRootVal('hello')
     print(r.getRightChild().getRootVal())
 
+
+.. admonition:: Self Check
+
+   Write a function ``buildTree`` that returns a tree using the nodes and references implementation that looks like this:
+
+   .. image:: Figures/tree_ex.png
+
+   .. actex:: mctree_3
+
+      from test import testEqual
+      
+      def buildTree():
+          pass
+
+      ttree = buildTree()
+
+      testEqual(ttree.getRightChild().getRootVal(),'c')
+      testEqual(ttree.getLeftChild().getRightChild().getRootVal(),'d')
+      testEqual(ttree.getRightChild().getLeftChild().getRootVal(),'e')
 
