@@ -61,7 +61,7 @@ def getprog():
         query = ((codetbl.sid == sid) & (codetbl.acid == acid))
     else:
         if auth.user:
-            query = codetbl.sid == auth.user.username and codetbl.acid == acid
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid))
         else:
             query = None
 
