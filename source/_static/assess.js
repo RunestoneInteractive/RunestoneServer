@@ -45,7 +45,7 @@ var feedBack = function(divid,correct,feedbackText) {
       $(divid).html('You are Correct!');
       $(divid).css('background-color','#C8F4AD');
    	} else {
-	    $(divid).html("Inorrect.  " + feedbackText );
+	    $(divid).html("Incorrect.  " + feedbackText );
       $(divid).css('background-color','#F4F4AD');		
 	}
 };
@@ -79,7 +79,7 @@ var feedBackMCMF = function(divid,correct,feedbackText) {
 		$(divid).html('Correct!  ' + feedbackText);
         $(divid).css('background-color','#C8F4AD');
 	} else {
-		$(divid).html("Inorrect.  " + feedbackText );
+		$(divid).html("Incorrect.  " + feedbackText );
         $(divid).css('background-color','#F4F4AD');
 	}
 };
