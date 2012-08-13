@@ -25,7 +25,21 @@ def listassignments():
     rset = q.select(db.code.acid,orderby=db.code.acid,distinct=True)
     return dict(exercises=rset,course_id=course.course_id)
 
-
+@auth.requires_membership('instructor')
+def listassessments():
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
+    query = '''select div_id,  
+                     (select count(*) from useinfo where div_id = oui.div_id and course_id = '%s'),
+                     count(*) * 1.0 / 
+                         (select count(*) 
+                          from useinfo 
+                          where div_id = oui.div_id and course_id = '%s' ) as pct 
+               from useinfo oui 
+               where event = 'mChoice' and act like '%%:correct' 
+                     and course_id = '%s' group by div_id order by pct;''' % (course.course_id,course.course_id,course.course_id)
+    rset = db.executesql(query)
+    return dict(solutions=rset)
+    
 @auth.requires_membership('instructor')
 def gradeassignment():
     sid = request.vars.student
