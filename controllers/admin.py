@@ -61,7 +61,7 @@ def assessdetail():
                 correct = answer
         else:
             currentAnswers.sort()
-            resultList.append((sid,currentAnswers))
+            resultList.append((currentSid,currentAnswers))
             currentAnswers = [row.act.split(':')[1]]
             
             currentSid = row.sid
