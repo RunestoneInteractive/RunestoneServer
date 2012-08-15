@@ -39,7 +39,42 @@ def listassessments():
                      and course_id = '%s' group by div_id order by pct;''' % (course.course_id,course.course_id,course.course_id)
     rset = db.executesql(query)
     return dict(solutions=rset)
-    
+
+@auth.requires_membership('instructor')
+def assessdetail():
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
+    q = db( (db.useinfo.div_id == request.vars.id) & (db.useinfo.course_id == course.course_id) )
+    res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+
+    currentSid = res[0].sid
+    currentAnswers = []
+    answerDict = {}
+    totalAnswers = 0
+    resultList = []
+    correct = ''
+    for row in res:
+        if row.sid == currentSid:
+            answer = row.act.split(':')[1]
+            currentAnswers.append(answer)
+            answerDict[answer] = answerDict.get(answer,0) + 1
+            if row.act.split(':')[2] == 'correct':
+                correct = answer
+        else:
+            currentAnswers.sort()
+            resultList.append((sid,currentAnswers))
+            currentAnswers = [row.act.split(':')[1]]
+            
+            currentSid = row.sid
+
+        totalAnswers += 1
+
+    currentAnswers.sort()
+    resultList.append((currentSid,currentAnswers))
+
+    return dict(reslist=resultList, answerDict=answerDict, correct=correct)
+        
+
+
 @auth.requires_membership('instructor')
 def gradeassignment():
     sid = request.vars.student
@@ -104,7 +139,6 @@ def buildmodulelist():
 
     session.flash = 'Module Database Rebuild Finished'
     redirect('/%s/admin'%request.application)
-
 
 
 
