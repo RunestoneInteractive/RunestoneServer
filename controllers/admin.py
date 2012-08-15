@@ -53,10 +53,12 @@ def assessdetail():
     resultList = []
     correct = ''
     for row in res:
+        answer = row.act.split(':')[1]        
+        answerDict[answer] = answerDict.get(answer,0) + 1
+        totalAnswers += 1
+
         if row.sid == currentSid:
-            answer = row.act.split(':')[1]
             currentAnswers.append(answer)
-            answerDict[answer] = answerDict.get(answer,0) + 1
             if row.act.split(':')[2] == 'correct':
                 correct = answer
         else:
@@ -66,7 +68,7 @@ def assessdetail():
             
             currentSid = row.sid
 
-        totalAnswers += 1
+
 
     currentAnswers.sort()
     resultList.append((currentSid,currentAnswers))
