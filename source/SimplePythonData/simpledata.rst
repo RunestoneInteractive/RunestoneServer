@@ -1081,8 +1081,8 @@ a variable, which means the same as incrementing it by 1.
      eBook, you can have a look here.  There are also instructions for
      installing Python on your computer here.
 
-   * `Topic 2: <http://diveintopython3.org>`_ Dive Into Python 3,
-     this is another oline textbook by Mark Pilgrim.  If you've had some
+   * `Topic 2: <http://interactivepython.org/courselib/static/diveintopython3/index.html>`_ Dive Into Python 3,
+     this is an online textbook by Mark Pilgrim.  If you've had some
      programming experience already this book takes you off the deep end with
      both feet.
 
