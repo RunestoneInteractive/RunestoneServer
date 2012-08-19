@@ -116,10 +116,9 @@ function runit(myDiv,theButton,includes) {
     }
     var editor = cm_editors[myDiv+"_code"];
     if (editor.acEditEvent) {
-        logBookEvent({'event':'activecode','act': 'edit', 'div_id':myDiv}); // Log the run event
+        logBookEvent({'event':'activecode','act': 'edit', 'div_id':myDiv}); // Log the edit event
         editor.acEditEvent = false;
     }
-    logBookEvent({'event':'activecode','act': 'run', 'div_id':myDiv}); // Log the run event
     var prog = "";
     var text = "";
     if (includes !== undefined ) {
@@ -153,8 +152,9 @@ function runit(myDiv,theButton,includes) {
             });
     try {
         Sk.importMainWithBody("<stdin>", false, prog);
+        logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':'success'}); // Log the run event
     } catch (e) {
-        logBookEvent({'event':'ac_error','act':e.toString(), 'div_id':myDiv})
+        logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':e.toString()}); // Log the run event
         alert(e);
     }
     if (! Sk.isTurtleProgram ) {
@@ -166,6 +166,13 @@ function logBookEvent(eventInfo) {
     eventInfo.course = eBookConfig.course
     if (eBookConfig.logLevel > 0){
        jQuery.get(eBookConfig.ajaxURL+'hsblog',eventInfo); // Log the run event
+    }
+}
+
+function logRunEvent(eventInfo) {
+    eventInfo.course = eBookConfig.course
+    if (eBookConfig.logLevel > 0){
+       jQuery.post(eBookConfig.ajaxURL+'runlog',eventInfo); // Log the run event
     }
 }
 

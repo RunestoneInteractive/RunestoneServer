@@ -19,3 +19,13 @@ db.define_table('code',
   Field('timestamp','datetime'),
   migrate=settings.migrate
 )
+
+db.define_table('acerror_log',
+                Field('timestamp','datetime'),
+                Field('sid','string'),
+                Field('div_id','string'),                                
+                Field('course_id','string'),                
+                Field('code','text'),
+                Field('emessage','text'),
+                migrate=settings.migrate
+                )
