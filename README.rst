@@ -88,7 +88,9 @@ How to Contribute
 -----------------
 
 #. Get a github (free) account.
-#. Make a fork of this project.  That will create a repository in your account for you to have read/write access to.  
+#. Make a fork of this project.  That will create a repository in your
+   account for you to have read/write access to.  Very nice, complete
+   instructions for making a Fork are here:  ``https://help.github.com/articles/fork-a-repo``
 #. Clone the repository under your account to your local machine.
 #. Check the issues list, or add your own favorite feature.  commit and pull to your fork at will!
 #. test
