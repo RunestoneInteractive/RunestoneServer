@@ -114,6 +114,7 @@ function runit(myDiv,theButton,includes) {
     if (theButton !== undefined) {
         Sk.runButton = theButton;
     }
+    $("#"+myDiv+"_errinfo").remove()
     var editor = cm_editors[myDiv+"_code"];
     if (editor.acEditEvent) {
         logBookEvent({'event':'activecode','act': 'edit', 'div_id':myDiv}); // Log the edit event
@@ -155,12 +156,67 @@ function runit(myDiv,theButton,includes) {
         logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':'success'}); // Log the run event
     } catch (e) {
         logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':e.toString()}); // Log the run event
-        alert(e);
+        //alert(e);
+	addErrorMessage(e,myDiv)
     }
     if (! Sk.isTurtleProgram ) {
         $(theButton).removeAttr('disabled');
     }
 }
+
+function addErrorMessage(err, myDiv) {
+    var errHead = $('<h3>').html('Error')
+    var divEl = document.getElementById(myDiv)
+    var eContainer = divEl.appendChild(document.createElement('div'))
+    eContainer.className = 'error'
+    eContainer.id = myDiv + '_errinfo'
+    eContainer.appendChild(errHead[0])
+    var errText = eContainer.appendChild(document.createElement('pre'))
+    var errString = err.toString()
+    errText.innerHTML = errString
+    var to = errString.indexOf(":")
+    var errName = errString.substring(0,to)
+    $(eContainer).append('<h3>Description</h3>')
+    var errDesc = eContainer.appendChild(document.createElement('p'))
+    errDesc.innerHTML = errorText[errName]
+    $(eContainer).append('<h3>To Fix</h3>')
+    var errFix = eContainer.appendChild(document.createElement('p'))
+    errFix.innerHTML = errorText[errName+'Fix']
+    var moreInfo = '../ErrorHelp/'+errDesc.toLowerCase()+'.html'
+}
+
+var errorText = {}
+
+errorText.ParseError = "A parse error means that Python does not understand the syntax on the line the error message points out.  Common examples are forgetting commas beteween arguments or forgetting a : on a for statement"
+errorText.ParseErrorFix = "To fix a parse error you just need to look carefully at the line with the error.  Make sure it conforms to all of Pythons rules."
+errorText.TypeError = "Type errors most often occur when an expression tries to combine two objects with types that should not be combined.  Like raising a string to a power"
+errorText.TypeErrorFix = "To fix a type error you will most likely need to trace through your code and make sure the variables have the types you expect them to have.  It may be helpful to print out each variable along the way to be sure its value is what you think it should be."
+errorText.NameError = "A name error almost always means that you have used a variable before it has a value.  Often this may be a simple typo, so check the spelling carefully."
+errorText.NameErrorFix = "Check the right hand side of assignment statements and your function calls, this is the most likely place for a NameError to be found."
+errorText.ValueError = ""
+errorText.ValueErrorFix = ""
+errorText.AttributeError = ""
+errorText.AttributeErrorFix = ""
+errorText.TokenError= ""
+errorText.TokenErrorFix= ""
+errorText.Error = ""
+errorText.ErrorFix = ""
+errorText.SyntaxError = ""
+errorText.SyntaxErrorFix = ""
+errorText.IndexError = ""
+errorText.IndexErrorFix = ""
+errorText.URIError = ""
+errorText.URIErrorFix = ""
+errorText.ImportError = ""
+errorText.ImportErrorFix = ""
+errorText.ReferenceError = ""
+errorText.ReferenceErrorFix = ""
+errorText.ZeroDivisionError = ""
+errorText.ZeroDivisionErrorFix = ""
+errorText.RangeError = ""
+errorText.RangeErrorFix = ""
+errorText.InternalError = "An Internal error may mean that you've triggered a bug in our Python"
+errorText.InternalErrorFix = "Report this error, along with your code as a bug."
 
 function logBookEvent(eventInfo) {
     eventInfo.course = eBookConfig.course

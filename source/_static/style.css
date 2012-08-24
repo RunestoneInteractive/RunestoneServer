@@ -327,3 +327,7 @@ div.versioninfo {
     line-height: 1.3em;
     font-size: 0.9em;
 }
+
+div.error {
+    background-color: #F4F4AD;
+}
