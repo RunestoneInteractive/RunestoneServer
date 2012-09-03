@@ -10,18 +10,49 @@
     <link href="/{{=request.application}}/static/{{=course_id}}/_static/theme/default.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js"></script>
     <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"></script>
+    <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.js"></script>
+    <script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
+    <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.tablesorter.js"></script>
+<style type="text/css" media="screen">
+#content {
+	width: 900px;
+}
+
+th {
+	text-decoration: underline;
+}
+</style>
 
 </head>
 <body>
-<table>
+<table id="studentlist" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Username</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th></th>
+			<th>Code</th>
+			<th>Grade</th>
+		</tr>
+	</thead>
+
 {{ for s in solutions: }}
     <tr>
-        <td>{{ =s[1] }}</td>
+        <td>{{ =s[1] }}</td><td>{{ =s[4] }}</td><td>{{ =s[5]}} </td>
         <td><button onclick="createActiveCode('{{ =s[0] }}',undefined,'{{ =s[1] }}')">grade</button></td>
         <td><div id="{{ =s[0] }}_{{ =s[1] }}"></div></td>
         <td><input type="text" value= "{{=s[2]}}" onchange="sendGrade(this.value,'{{ =s[1] }}','{{ =s[0] }}', {{=s[3]}});" /></td>
     </tr>
 {{ pass }}
 </table>
+
+<script>
+$(document).ready(function() 
+    { 
+        $("#studentlist").tablesorter(); 
+    } 
+); 
+</script>
 </body>
 </html>

@@ -182,13 +182,13 @@ function addErrorMessage(err, myDiv) {
     $(eContainer).append('<h3>To Fix</h3>')
     var errFix = eContainer.appendChild(document.createElement('p'))
     errFix.innerHTML = errorText[errName+'Fix']
-    var moreInfo = '../ErrorHelp/'+errDesc.toLowerCase()+'.html'
+    var moreInfo = '../ErrorHelp/'+errName.toLowerCase()+'.html'
 }
 
 var errorText = {}
 
 errorText.ParseError = "A parse error means that Python does not understand the syntax on the line the error message points out.  Common examples are forgetting commas beteween arguments or forgetting a : on a for statement"
-errorText.ParseErrorFix = "To fix a parse error you just need to look carefully at the line with the error.  Make sure it conforms to all of Pythons rules."
+errorText.ParseErrorFix = "To fix a parse error you just need to look carefully at the line with the error and possibly the line before it.  Make sure it conforms to all of Python's rules."
 errorText.TypeError = "Type errors most often occur when an expression tries to combine two objects with types that should not be combined.  Like raising a string to a power"
 errorText.TypeErrorFix = "To fix a type error you will most likely need to trace through your code and make sure the variables have the types you expect them to have.  It may be helpful to print out each variable along the way to be sure its value is what you think it should be."
 errorText.NameError = "A name error almost always means that you have used a variable before it has a value.  Often this may be a simple typo, so check the spelling carefully."
@@ -199,8 +199,10 @@ errorText.AttributeError = "This error message is telling you that the object on
 errorText.AttributeErrorFix = "The most common variant of this message is that the object undefined does not have attribute X.  This tells you that the object on the left hand side of the dot is not what you think. Trace the variable back and print it out in various places until you discover where it becomes undefined.  Otherwise check the attribute on the right hand side of the dot for a typo."
 errorText.TokenError= "Most of the time this error indicates that you have forgotten a right parenthesis or have forgotten to close a pair of quotes."
 errorText.TokenErrorFix= "Check each line of your program and make sure that your parenthesis are balanced."
-errorText.Error = ""
-errorText.ErrorFix = ""
+errorText.TimeLimitError = "Your program is running too long.  Most programs in this book should run in less than 10 seconds easily. This probably indicates your program is in an infinite loop."
+errorText.TimeLimitErrorFix = "Add some print statements to figure out if your program is in an infinte loop.  If it is not you can increase the run time with sys.setExecutionLimit(msecs)"
+errorText.Error = "Your program is running for too long.  Most programs in this book should run in less than 30 seconds easily. This probably indicates your program is in an infinite loop."
+errorText.ErrorFix = "Add some print statements to figure out if your program is in an infinte loop.  If it is not you can increase the run time with sys.setExecutionLimit(msecs)"
 errorText.SyntaxError = "This message indicates that Python can't figure out the syntax of a particular statement.  Some examples are assigning to a literal, or a function call"
 errorText.SyntaxErrorFix = "Check your assignment statments and make sure that the left hand side of the assignment is a variable, not a literal or a function."
 errorText.IndexError = "This message means that you are trying to index past the end of a string or a list.  For example if your list has 3 things in it and you try to access the item at position 3 or more."
@@ -217,6 +219,8 @@ errorText.RangeError = "This message almost always shows up in the form of Maxim
 errorText.RangeErrorFix = "This always occurs when a function calls itself.  Its pretty likely that you are not doing this on purpose. Except in the chapter on recursion.  If you are in that chapter then its likely you haven't identified a good base case."
 errorText.InternalError = "An Internal error may mean that you've triggered a bug in our Python"
 errorText.InternalErrorFix = "Report this error, along with your code as a bug."
+errorText.IndentationError = "This error occurs when you have not indented your code properly.  This is most likely to happen as part of an if, for, while or def statement."
+errorText.IndentationErrorFix = "Check your if, def, for, and while statements to be sure the lines are properly indented beneath them.  Another source of this error comes from copying and pasting code where you have accidentally left some bits of code lying around that don't belong there anymore."
 
 function logBookEvent(eventInfo) {
     eventInfo.course = eBookConfig.course
