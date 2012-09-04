@@ -438,7 +438,9 @@ function gotUser(data, status, whatever) {
 
 function timedRefresh() {
 	timeoutPeriod = 4500000;  // 75 minutes
-	setTimeout("location.reload(true);",timeoutPeriod);
+	//setTimeout("location.reload(true);",timeoutPeriod);
+	$(document).bind("idle.idleTimer",function(){location.reload(true)});
+	$.idleTimer(timeoutPeriod);
 }
 // (<body onload="JavaScript:timedRefresh(5000);">
 
