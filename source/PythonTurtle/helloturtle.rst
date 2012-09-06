@@ -76,8 +76,6 @@ turtle and a half drawn rectangle.  Press the run button to try it and see.
     alex = turtle.Turtle()   # create a turtle named alex
     alex.forward(150)        # tell alex to move forward by 150 units
     alex.left(90)            # turn by 90 degrees
-    alex.forward(50)         # barb added this
-    alex.right(30)	         # barb added this too
     alex.forward(75)         # complete the second side of a rectangle
 
     
