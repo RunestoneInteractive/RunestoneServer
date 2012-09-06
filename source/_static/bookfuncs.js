@@ -424,6 +424,7 @@ function gotUser(data, status, whatever) {
             } else {
                 mess = d.email;
                 eBookConfig.isLoggedIn = true;
+				$(document).ready(timedRefresh)
             }
         } catch(err) {
             if (eBookConfig.loginRequired) {
@@ -438,11 +439,16 @@ function gotUser(data, status, whatever) {
 
 function timedRefresh() {
 	timeoutPeriod = 4500000;  // 75 minutes
-	//setTimeout("location.reload(true);",timeoutPeriod);
-	$(document).bind("idle.idleTimer",function(){location.reload(true)});
+	$(document).bind("idle.idleTimer",function(){
+		// After timeout period send the user back to the index.  This will force a login
+		// if needed when they want to go to a particular page.  This may not be perfect
+		// but its an easy way to make sure laptop users are properly logged in when they
+		// take quizzes and save stuff.
+		if (location.href.indexOf('index.html') < 0)
+			location.href = eBookConfig.app+'/static/'+eBookConfig.course + '/index.html'
+	});
 	$.idleTimer(timeoutPeriod);
 }
-// (<body onload="JavaScript:timedRefresh(5000);">
 
 function shouldLogin() {
     var sli = true;
@@ -478,4 +484,4 @@ if (typeof addingEditors == 'undefined') {
     $(document).ready(createEditors);
 }
 $(document).ready(addUserToFooter)
-$(document).ready(timedRefresh)
+
