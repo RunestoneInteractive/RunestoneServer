@@ -50,15 +50,15 @@ def saveprog():
     # query = codetbl.sid==auth.user.username and codetbl.acid==acid
     # result = db(query)
 
-    print 'inserting new', acid
     db.code.insert(sid=auth.user.username,
                    acid=acid,code=code,
                    timestamp=datetime.datetime.now(),
                    course_id=auth.user.course_id)
 
-    return acid
-#    response.headers.add_header('content-type','application/json')
-#    response.out.write(simplejson.dumps([acid]))
+
+    response.headers['content-type'] = 'application/json'
+    return json.dumps([acid])
+
 
 
 def getprog():
@@ -88,7 +88,6 @@ def getprog():
         if not result.isempty():
             res['acid'] = acid
             r = result.select(orderby=~codetbl.timestamp).first().code
-            print r
             res['source'] = r
             if sid:
                 res['sid'] = sid
