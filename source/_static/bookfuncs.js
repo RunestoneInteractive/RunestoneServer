@@ -424,7 +424,7 @@ function gotUser(data, status, whatever) {
             } else {
                 mess = d.email;
                 eBookConfig.isLoggedIn = true;
-				$(document).ready(timedRefresh)
+				timedRefresh();
             }
         } catch(err) {
             if (eBookConfig.loginRequired) {
