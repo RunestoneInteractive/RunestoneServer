@@ -244,8 +244,12 @@ function saveSuccess(data,status,whatever) {
     }
     else {
         var acid = eval(data)[0];
-        $('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
-        $('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
+		if (acid.indexOf("ERROR:") == 0) {
+			alert(acid);
+		} else {
+			$('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
+			$('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
+		}
     }
 }
 
