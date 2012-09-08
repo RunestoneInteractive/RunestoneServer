@@ -634,11 +634,11 @@ Here is the same program using ``elif``.
    :answer_c: III only
    :answer_d: II and III
    :answer_e: I, II, and III
-   :correct: d
+   :correct: b
    :feedback_a: You can not use a Boolean expression after an else.
-   :feedback_b: Yes, II will give the same result but so will III as well.  III is not as efficient since it will always execute the 2nd if.  
-   :feedback_c: Yes, III will give the same result but so will II and II is more efficient.  
-   :feedback_d: Yes, both II and III give the same result.
+   :feedback_b: Yes, II will give the same result.
+   :feedback_c: No, III will Not give the same result.  The first if statement will be true, but the second will be false, so the else part will execute.
+   :feedback_d: No, Although II is correct III will not give the same result.  Try it.
    :feedback_e: No, in I you can not have a Boolean expression after an else.
 
    Which of I, II, and III below gives the same result as the following nested if?
