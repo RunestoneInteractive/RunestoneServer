@@ -195,7 +195,7 @@ screen until we click on it.
    What does the line "import turtle" do?
 
 .. mchoicemf:: test_question3_1_2
-   :answer_a: This is simply for clarity.  It would also work to just type \"Turtle()\" instead of \"turtle.Turtle()\"
+   :answer_a: This is simply for clarity.  It would also work to just type "Turtle()" instead of "turtle.Turtle()"
    :answer_b: The period (.) is what tells Python that we want to invoke a new object.
    :answer_c: The first "turtle" (before the period) tells Python that we are referring to the turtle module, which is where the object "Turtle" is found.
    :correct: c
