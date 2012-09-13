@@ -31,6 +31,11 @@ eBookConfig.isLoggedIn = false;
 {% block footer %}
 {{ super() }}
 
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter)
+    $(document).ready(createEditors);
+</script>
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];

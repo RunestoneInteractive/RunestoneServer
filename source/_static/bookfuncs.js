@@ -65,13 +65,13 @@ function outf(text) {
     x = text;
     if (x.charAt(0) == '(') {
         x = x.slice(1,-1);
-	x = '['+x+']'
-	try {
+    x = '['+x+']'
+    try {
         var xl = eval(x);
         xl = xl.map(pyStr);
         x = xl.join(' ');
-	} catch(err) {
-	    }
+    } catch(err) {
+        }
     }
     text = x;
     text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br/>");
@@ -124,10 +124,10 @@ function runit(myDiv,theButton,includes) {
     var text = "";
     if (includes !== undefined ) {
         // iterate over the includes, in-order prepending to prog
-		for (var x in includes) {
-			text = cm_editors[includes[x] + "_code"].getValue();
-			prog = prog + text + "\n"
-		}
+        for (var x in includes) {
+            text = cm_editors[includes[x] + "_code"].getValue();
+            prog = prog + text + "\n"
+        }
     }
     prog = prog + editor.getValue();
     var mypre = document.getElementById(myDiv + "_pre");
@@ -157,7 +157,7 @@ function runit(myDiv,theButton,includes) {
     } catch (e) {
         logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':e.toString()}); // Log the run event
         //alert(e);
-	addErrorMessage(e,myDiv)
+    addErrorMessage(e,myDiv)
     }
     if (! Sk.isTurtleProgram ) {
         $(theButton).removeAttr('disabled');
@@ -244,12 +244,12 @@ function saveSuccess(data,status,whatever) {
     }
     else {
         var acid = eval(data)[0];
-		if (acid.indexOf("ERROR:") == 0) {
-			alert(acid);
-		} else {
-			$('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
-			$('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
-		}
+        if (acid.indexOf("ERROR:") == 0) {
+            alert(acid);
+        } else {
+            $('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
+            $('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
+        }
     }
 }
 
@@ -396,62 +396,57 @@ function sendGrade(grade,sid,acid,id) {
 }
 
 function gotUser(data, status, whatever) {
-    var mess;
-
-    if (data.indexOf('login') != -1) {
-        mess = "Redirect to Login";
+    var mess = '';
+    var caughtErr = false;
+    var d;
+    try {
+        d = eval(data)[0];
+    } catch (err) {
         if (eBookConfig.loginRequired) {
-            window.location.href=eBookConfig.app+'/default/user/login'
-            return
-        }
-    } else if (data.redirect) {
-        mess = "Not logged in";
-        if (eBookConfig.loginRequired) {
-            window.location.href=data.redirect
-            return
-        }
-    } else if (data == "") {
-        mess = "Not logged in"
-        $('button.ac_opt').hide();
-        $('span.loginout').html('<a href="'+ eBookConfig.app + '/default/user/login">login</a>')
-    } else {
-        try {
-            var d = eval(data)[0];
-            if (d.redirect) {
-                if (eBookConfig.loginRequired) {
-                    window.location.href=eBookConfig.app+'/default/user/login?_next='+window.location.href
-                } else {
-                    mess = "Not logged in";
-                    $('button.ac_opt').hide();
-                    $('span.loginout').html('<a href="'+ eBookConfig.app + '/default/user/login">login</a>')
-                }
+            if (confirm("Error: " + err.toString() + "Please report this error!  Click OK to continue without logging in.  Cancel to retry.")) {
+                caughtErr = true;
+                mess = "Not logged in";
             } else {
-                mess = d.email;
-                eBookConfig.isLoggedIn = true;
-				timedRefresh();
+                window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
             }
-        } catch(err) {
-            if (eBookConfig.loginRequired) {
-                window.location.href=eBookConfig.app+'/default/user/login?_next='+window.location.href
-            }
+        }
+    }
+    if (d.redirect) {
+        if (eBookConfig.loginRequired) {
+            window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
+        } else {
+            mess = "Not logged in";
+            $('button.ac_opt').hide();
+            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+        }
+    } else {
+        if (!caughtErr) {
+            mess = d.email;
+            eBookConfig.isLoggedIn = true;
+            timedRefresh();
         }
     }
     x = $(".footer").text();
     $(".footer").text(x + mess);
-    logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
+    logBookEvent({
+        'event': 'page',
+        'act': 'view',
+        'div_id': window.location.pathname
+    })
 }
 
+
 function timedRefresh() {
-	timeoutPeriod = 4500000;  // 75 minutes
-	$(document).bind("idle.idleTimer",function(){
-		// After timeout period send the user back to the index.  This will force a login
-		// if needed when they want to go to a particular page.  This may not be perfect
-		// but its an easy way to make sure laptop users are properly logged in when they
-		// take quizzes and save stuff.
-		if (location.href.indexOf('index.html') < 0)
-			location.href = eBookConfig.app+'/static/'+eBookConfig.course + '/index.html'
-	});
-	$.idleTimer(timeoutPeriod);
+    timeoutPeriod = 4500000;  // 75 minutes
+    $(document).bind("idle.idleTimer",function(){
+        // After timeout period send the user back to the index.  This will force a login
+        // if needed when they want to go to a particular page.  This may not be perfect
+        // but its an easy way to make sure laptop users are properly logged in when they
+        // take quizzes and save stuff.
+        if (location.href.indexOf('index.html') < 0)
+            location.href = eBookConfig.app+'/static/'+eBookConfig.course + '/index.html'
+    });
+    $.idleTimer(timeoutPeriod);
 }
 
 function shouldLogin() {
@@ -469,6 +464,7 @@ function isLoggedIn() {
     }
     return false;
 }
+
 function addUserToFooter() {
     // test to see if online before doing this.
     if (shouldLogin()) {
@@ -483,9 +479,3 @@ function addUserToFooter() {
 
 
 }
-if (typeof addingEditors == 'undefined') {
-    addingEditors = true;
-    $(document).ready(createEditors);
-}
-$(document).ready(addUserToFooter)
-
