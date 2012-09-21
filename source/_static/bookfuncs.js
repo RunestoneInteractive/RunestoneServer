@@ -406,6 +406,8 @@ function gotUser(data, status, whatever) {
             if (confirm("Error: " + err.toString() + "Please report this error!  Click OK to continue without logging in.  Cancel to retry.")) {
                 caughtErr = true;
                 mess = "Not logged in";
+	            $('button.ac_opt').hide();
+	            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
             } else {
                 window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
             }
