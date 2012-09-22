@@ -145,8 +145,8 @@ function runit(myDiv,theButton,includes) {
         }
     }
     // set execLimit in milliseconds  -- for student projects set this to 
-    // 30 seconds?
-    Sk.execLimit = 30000;
+    // 25 seconds -- just less than Chrome's own timer.
+    Sk.execLimit = 25000;
     // configure Skulpt output function, and module reader
     Sk.configure({output:outf,
                 read: builtinRead
