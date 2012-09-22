@@ -350,7 +350,12 @@ Take a look at the output produced when you press the ``run`` button.  There is 
    True or False: You can only have one active turtle at a time.  If you create a second one, you will no longer be able to access or use the first.
 
 .. index:: control flow, flow of execution
-  
+
+.. admonition:: Scratch Editor
+
+    .. actex:: turtle_scratch_1
+
+
 Flow of Execution of the for Loop
 ---------------------------------
 
@@ -674,6 +679,10 @@ Try it in codelens.
   :feedback_d: If range is passed only one argument, it interprets that argument as the end of the list (not inclusive).
 
   What happens if you give range only one argument?  For example: range(4)
+
+.. admonition:: Scratch Editor
+
+  .. actex:: turtle_scratch_2
 
 
 A Few More turtle Methods and Observations

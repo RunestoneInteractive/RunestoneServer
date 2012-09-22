@@ -1108,6 +1108,11 @@ a variable, which means the same as incrementing it by 1.
    </pre>
 
 
+.. admonition:: Scratch Editor
+
+   .. actex:: sf_scratch_1
+
+
 Glossary
 --------
 

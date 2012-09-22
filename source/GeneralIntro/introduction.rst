@@ -770,6 +770,10 @@ programs much easier for humans to parse.  Use them liberally!
 
    What are comments for?
 
+.. admonition:: Scratch Editor
+
+   .. actex:: introscratch_1
+
 
 Glossary
 --------
