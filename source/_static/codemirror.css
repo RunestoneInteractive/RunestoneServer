@@ -119,6 +119,7 @@
   border-left: 1px solid black;
   border-right: none;
   width: 0;
+  height: 1em;
 }
 .cm-keymap-fat-cursor pre.CodeMirror-cursor {
   width: auto;
