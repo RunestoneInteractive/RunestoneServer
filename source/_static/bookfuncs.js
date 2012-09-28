@@ -91,6 +91,7 @@ function createEditors() {
             indentUnit: 4,
             tabMode: "indent",
             matchBrackets: true,
+            extraKeys: {"Tab":"indentAuto"},
             onKeyEvent:handleEdKeys
         }
                 );
