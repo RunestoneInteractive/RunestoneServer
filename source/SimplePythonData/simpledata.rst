@@ -1147,9 +1147,6 @@ Glossary
         reading the source code) and has no effect on the execution of the
         program.
 
-    concatenate
-        To join two strings end-to-end.
-
     data type
         A set of values. The type of a value determines how it can be used in
         expressions. So far, the types you have seen are integers (``int``), 
