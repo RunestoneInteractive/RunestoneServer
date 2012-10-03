@@ -663,6 +663,8 @@ best you can do is create a new string that is a variation on the original.
 The solution here is to concatenate a new first letter onto a slice of
 ``greeting``. This operation has no effect on the original string.
 
+**Check your understanding**
+
 .. mchoicemf:: test_question8_7_1
    :answer_a: Ball
    :answer_b: Call
@@ -725,6 +727,48 @@ The loop variable ``achar`` is automatically reassigned each character in the st
 We will refer to this type of sequence iteration as **iteration by item**.  
 Note that it is only possible to process the characters one at a time from left to right.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_8_1
+   :answer_a: 10
+   :answer_b: 11
+   :answer_c: 12
+   :answer_d: Error, the for statement needs to use the range function.
+   :correct: c
+   :feedback_a: Iteration by item will process once for each item in the sequence.
+   :feedback_b: The blank is part of the sequence.
+   :feedback_c: Yes, there are 12 characters, including the blank.
+   :feedback_d: The for statement can iterate over a sequence item by item.
+
+
+   How many times is the word HELLO printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for ch in s:
+      print("HELLO")
+   </pre>
+   
+   
+   
+.. mchoicemf:: test_question8_8_2
+   :answer_a: 4
+   :answer_b: 5
+   :answer_c: 6
+   :answer_d: Error, the for statement cannot use slice.
+   :correct: b
+   :feedback_a: Slice returns a sequence that can be iterated over.
+   :feedback_b: Yes, The blank is part of the sequence returned by slice
+   :feedback_c: Check the result of s[3:8].  It does not include the item at index 8.
+   :feedback_d: Slice returns a sequence.
+
+
+   How many times is the word HELLO printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for ch in s[3:8]:
+      print("HELLO")
+   </pre>
+
 Traversal and the ``for`` Loop: By Index
 ----------------------------------------
 
@@ -768,6 +812,30 @@ well as up so the following code will print the characters from right to left.
 
 Trace the values of ``idx`` and satisfy yourself that they are correct.  In particular, note the start and end of the range.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_9_1
+   :answer_a: 0
+   :answer_b: 1
+   :answer_c: 2
+   :answer_d: Error, the for statement cannot have an if inside.
+   :correct: c
+   :feedback_a: The for loop visits each index but the selection only prints some of them.
+   :feedback_b: o is at positions 4 and 8
+   :feedback_c: Yes, it will print all the characters in even index positions.
+   :feedback_d: The for statement can have any statements inside, including if as well as for.
+
+
+   How many times is the letter o printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for idx in range(len(s)):
+      if idx % 2 == 0:
+         print(s[idx])
+   
+   </pre>
+
+
 Traversal and the ``while`` Loop
 --------------------------------
 
@@ -806,8 +874,27 @@ Here is the same example in codelens so that you can trace the values of the var
         print(fruit[position])
         position = position + 1
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_10_1
+   :answer_a: 0
+   :answer_b: 1
+   :answer_c: 2
+   :correct: a
+   :feedback_a: Yes, idx goes thru the odd numbers starting at 1.  o is at position 4 and 8.
+   :feedback_b: o is at positions 4 and 8.  idx starts at 1, not 0.
+   :feedback_c: There are 2 o characters but idx does not take on the correct index values.
 
 
+   How many times is the letter o printed by the following statements?
+   <pre>
+   s = "python rocks"
+   idx = 1
+   while idx < len(s):
+      print(s[idx])
+      idx = idx + 2
+   
+   </pre>
 
 .. index::
     single: in operator
@@ -900,7 +987,9 @@ Step thru the function using codelens to see the accumulator variable grow.
        
     print(removeVowels("compsci"))
 
-.. mchoicemf:: test_question8_9_1
+**Check your understanding**
+
+.. mchoicemf:: test_question8_11_1
    :answer_a: Ball
    :answer_b: BALL
    :answer_c: LLAB
