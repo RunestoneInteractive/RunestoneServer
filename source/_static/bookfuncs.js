@@ -89,9 +89,9 @@ function createEditors() {
                 singleLineStringErrors: false},
             lineNumbers: true,
             indentUnit: 4,
-            tabMode: "indent",
+            indentWithTabs: false,
             matchBrackets: true,
-            extraKeys: {"Tab":"indentAuto"},
+            extraKeys: {"Tab":"indentMore", "Shift-Tab": "indentLess"},
             onKeyEvent:handleEdKeys
         }
                 );
