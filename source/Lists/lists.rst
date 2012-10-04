@@ -62,6 +62,17 @@ As you would expect, we can also assign list values to variables and pass lists 
 
 .. _accessing-elements:
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_1_1 
+   :answer_a: False
+   :answer_b: True
+   :correct: a
+   :feedback_a: Yes, unlike strings, lists can consist of any type of Python data.
+   :feedback_b: Lists are heterogeneous, meaning they can have different types of data.
+
+   A list can contain only integer items.
+
 .. index:: list index, index, list traversal
 
 List Length
@@ -79,7 +90,36 @@ item when counting the length of the list.
     print(len(['spam!', 1, ['Brie', 'Roquefort', 'Pol le Veq'], [1, 2, 3]]))
 
 
+**Check your understanding**
 
+.. mchoicemf:: test_question9_2_1 
+   :answer_a: 4
+   :answer_b: 5
+   :correct: b
+   :feedback_a: len returns the actual number of items in the list, not the maximum index value.
+   :feedback_b: Yes, there are 5 items in this list.
+
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", 3.14, False]
+   print(len(alist))
+   </pre>
+   
+.. mchoicemf:: test_question9_2_2
+   :answer_a: 7
+   :answer_b: 8
+   :correct: a
+   :feedback_a: Yes, there are 7 items in this list even though two of them happen to also be lists.
+   :feedback_b: len returns the number of top level items in the list.  It does not count items in sublists.
+
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(len(alist))
+   </pre> 
+   
 Accessing Elements
 ------------------
 
@@ -98,12 +138,58 @@ of from the left.
     print(numbers[-2])
     print(numbers[len(numbers)-1]
     
+**Check your understanding**
  
-
-
-
-
-
+.. mchoicemf:: test_question9_3_1
+   :answer_a: [ ]
+   :answer_b: 3.14
+   :answer_c: False
+   :correct: b
+   :feedback_a: The empty list is at index 4.
+   :feedback_b: Yes, 3.14 is at index 5 since we start counting at 0 and sublists count as one item.
+   :feedback_c: False is at index 6.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(alist[5])
+   </pre>
+   
+.. mchoicemf:: test_question9_3_2
+   :answer_a: Error, you cannot use the upper method on a list.
+   :answer_b: 2
+   :answer_c: CAT
+   :correct: c
+   :feedback_a: alist[2] is the string cat so the upper method is legal
+   :feedback_b: 2 is the index.  We want the item at that index.
+   :feedback_c: Yes, the string cat is upper cased to become CAT.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(alist[2].upper())
+   </pre>
+   
+.. mchoicemf:: test_question9_3_3
+   :answer_a: 56
+   :answer_b: c
+   :answer_c: cat
+   :answer_d: Error, you cannot have two index values unless you are using slicing.
+   :correct: b
+   :feedback_a: Indexes start with 0, not 1.
+   :feedback_b: Yes, the first character of the string at index 2 is c 
+   :feedback_c: cat is the item at index 2 but then we index into it further.
+   :feedback_d: Using more than one index is fine.  You read it from left to right.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(alist[2][0])
+   </pre>
+   
 List Membership
 ---------------
 
@@ -116,6 +202,36 @@ used them previously with strings and they also work here.
 
     print("apple" in fruit)
     print("pear" in fruit)
+
+**Check your understanding**
+
+.. mchoicemf:: test_question9_4_1
+   :answer_a: True
+   :answer_b: False
+   :correct: a
+   :feedback_a: Yes, 3.14 is an item in the list alist.
+   :feedback_b: There are 7 items in the list, 3.14 is one of them. 
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(3.14 in alist)
+   </pre>
+
+.. mchoicemf:: test_question9_4_2
+   :answer_a: True
+   :answer_b: False
+   :correct: b
+   :feedback_a: in returns True for top level items only.  57 is in a sublist.
+   :feedback_b: Yes, 57 is not a top level item in alist.  It is in a sublist.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(57 in alist)
+   </pre>
 
 
 Concatenation and Repetition
@@ -160,7 +276,46 @@ In Python, there is a built-in function that can be called on any object to retu
     4300840544
     >>> 
 
+**Check your understanding**
 
+.. mchoicemf:: test_question9_5_1
+   :answer_a: 6
+   :answer_b: [1,2,3,4,5,6]
+   :answer_c: [1,3,5,2,4,6]
+   :answer_d: [3,7,11]
+   :correct: c
+   :feedback_a: Concatenation does not add the lengths of the lists.
+   :feedback_b: Concatenation does not reorder the items. 
+   :feedback_c: Yes, a new list with all the items of the first list followed by all those from the second.
+   :feedback_d: Concatenation does not add the individual items.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [1,3,5]
+   blist = [2,4,6]
+   print(alist + blist)
+   </pre>
+   
+   
+.. mchoicemf:: test_question9_5_2
+   :answer_a: 9
+   :answer_b: [1,1,1,3,3,3,5,5,5]
+   :answer_c: [1,3,5,1,3,5,1,3,5]
+   :answer_d: [3,9,15]
+   :correct: c
+   :feedback_a: Repetition does not multiply the lengths of the lists.  It repeats the items.
+   :feedback_b: Repetition does not repeat each item individually.
+   :feedback_c: Yes, the items of the list are repeated 3 times, one after another.
+   :feedback_d: Repetition does not multiply the individual items.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [1,3,5]
+   print(alist * 3)
+   </pre>
+   
 
 List Slices
 -----------
@@ -174,6 +329,25 @@ The slice operation we saw with strings also work on lists.  Remember that the f
     print(a_list[:4])
     print(a_list[3:])
     print(a_list[:])
+
+**Check your understanding**
+
+.. mchoicemf:: test_question9_6_1
+   :answer_a: [ [ ], 3.14, False]
+   :answer_b: [ [ ], 3.14]
+   :answer_c: [ [56, 57, "dog"], [ ], 3.14, False]
+   :correct: a
+   :feedback_a: Yes, the slice starts at index 4 and goes up to and including the last item.
+   :feedback_b: By leaving out the upper bound on the slice, we go up to and including the last item.
+   :feedback_c: Index values start at 0.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+   print(alist[4:])
+   </pre>
+
 
 .. index:: mutable, item assignment, immutable
     
@@ -237,6 +411,24 @@ desired location.
     alist[4:4] = ['e']
     print(alist)
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_7_1
+   :answer_a: [4,2,True,8,6,5]
+   :answer_b: [4,2,True,6,5]
+   :answer_c: Error, it is illegal to assign
+   :correct: b
+   :feedback_a: Item assignment does not insert the new item into the list.
+   :feedback_b: Yes, the value True is placed in the list at index 2.  It replaces 8.
+   :feedback_c: Item assignment is allowed with lists.  Lists are mutable.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   alist[2] = True
+   print(alist)
+   </pre>
 
 .. index:: del statement, statement; del
 
@@ -384,6 +576,24 @@ with mutable objects. Of course, for immutable objects, there's no problem.
 That's why Python is free to alias strings and integers when it sees an opportunity to
 economize.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_10_1
+   :answer_a: [4,2,8,6,5]
+   :answer_b: [4,2,8,999,5]
+   :correct: b
+   :feedback_a: blist is not a copy of alist, it is a reference to the list alist refers to.
+   :feedback_b: Yes, since alist and blist both reference the same list, changes to one also change the other.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   blist = alist
+   blist[3] = 999
+   print(alist)
+   </pre>
+
 .. index:: clone
 
 Cloning Lists
@@ -481,6 +691,45 @@ Here is the same example in codelens.  Step through the code until paying partic
 
     print(newlist)
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_12_1
+   :answer_a: [4,2,8,999,5,4,2,8,6,5]
+   :answer_b: [4,2,8,999,5]
+   :answer_c: [4,2,8,6,5]
+   :correct: c
+   :feedback_a: print(alist) not print(blist)
+   :feedback_b: blist is changed, not alist.
+   :feedback_c: Yes, alist was unchanged by the assignment statement. blist was a copy of the references in alist.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   blist = alist * 2
+   blist[3] = 999
+   print(alist)
+   </pre>
+
+.. mchoicemf:: test_question9_12_2
+   :answer_a: [4,2,8,999,5,4,2,8,999,5]
+   :answer_b: [[4,2,8,999,5],[4,2,8,999,5]]
+   :answer_c: [4,2,8,6,5]
+   :answer_d: [[4,2,8,999,5],[4,2,8,6,5]]
+   :correct: b
+   :feedback_a: [alist] * 2 creates a list containing alist repeated 2 times
+   :feedback_b: Yes, blist contains two references, both to alist.
+   :feedback_c: print(blist)
+   :feedback_d: blist contains two references, both to alist so changes to alist appear both times.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   blist = [alist] * 2
+   alist[3] = 999
+   print(blist)
+   </pre>
 
 
 .. index:: list; append
@@ -564,6 +813,83 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
 
     mylist = mylist.sort()   #probably an error
     print(mylist)
+
+**Check your understanding**
+
+.. mchoicemf:: test_question9_13_1
+   :answer_a: [4,2,8,6,5,False,True]
+   :answer_b: [4,2,8,6,5,True,False]
+   :answer_c: [True,False,4,2,8,6,5]
+   :correct: b
+   :feedback_a: True was added first, then False was added last.
+   :feedback_b: Yes, each item is added to the end of the list.
+   :feedback_c: append adds at the end, not the beginning.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   alist.append(True)
+   alist.append(False)
+   print(alist)
+   </pre>
+
+
+.. mchoicemf:: test_question9_13_2
+   :answer_a: [False,4,2,True,8,6,5]
+   :answer_b: [4,False,True,2,8,6,5]
+   :answer_c: [False,2,True,6,5]
+   :correct: a
+   :feedback_a: Yes, first True was added at index 2, then False was added at index 0.
+   :feedback_b: add will place items at the index position specified and move everything down to the right.
+   :feedback_c: add does not remove anything or replace anything.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   alist.add(2,True)
+   alist.add(0,False)
+   print(alist)
+   </pre>
+
+.. mchoicemf:: test_question9_13_3
+   :answer_a: [4,8,6]
+   :answer_b: [2,6,5]
+   :answer_c: [4,2,6]
+   :correct: c
+   :feedback_a: pop(2) removes the item at index 2, not the 2 itself.
+   :feedback_b: pop() removes the last item, not the first.
+   :feedback_c: Yes, first the 8 was removed, then the last item, which was 5.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   temp = alist.pop(2)
+   temp = alist.pop()
+   print(alist)
+   </pre>
+   
+   
+.. mchoicemf:: test_question9_13_4
+   :answer_a: [2,8,6,5]
+   :answer_b: [4,2,8,6,5]
+   :answer_c: 4
+   :answer_d: None
+   :correct: c
+   :feedback_a: alist is now the value that was returned from pop(0).
+   :feedback_b: pop(0) changes the list by removing the first item.
+   :feedback_c: Yes, first the 4 was removed from the list, then returned and assigned to alist.  The list is lost.
+   :feedback_d: pop(0) returns the first item in the list so alist has now been changed.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   alist = alist.pop(0)
+   print(alist)
+   </pre>
 
 .. admonition:: Scratch Editor
 
@@ -713,6 +1039,22 @@ It is also important to see that with append, the original list is simply modifi
 
 On the other hand, with concatenation, you will see that the `id` of the original list is not the same as the `id` of the result after the assignment statement. Step through both examples very slowly to see this important difference.
 
+**Check you understanding**
+
+.. mchoicemf:: test_question9_15_1
+   :answer_a: [4,2,8,6,5,999]
+   :answer_b: Error, you cannot concatenate a list with an integer.
+   :correct: b
+   :feedback_a: You cannot concatenate a list with an integer.
+   :feedback_b: Yes, in order to perform concatenation you would need to write alist+[999].  You must have two lists.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   alist = alist + 999
+   print(alist)
+   </pre>
 
 .. index:: for loop, enumerate
 
@@ -784,6 +1126,28 @@ list, so that we can assign a new value to it.
 
 	.. actex:: scratch_9_3
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_16_1
+   :answer_a: [4,2,8,6,5]
+   :answer_b: [4,2,8,6,5,5]
+   :answer_c: [9,7,13,11,10]
+   :answer_d: Error, you cannot concatenate inside an append.
+   :correct: c
+   :feedback_a: 5 is added to each item before the append is peformed.
+   :feedback_b: There are too many items in this list.  Only 5 append operations are performed.
+   :feedback_c: Yes, the for loop processes each item of the list.  5 is added before it is appended to blist.
+   :feedback_d: 5 is added to each item before the append is performed.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   blist = [ ]
+   for item in alist:
+      blist.append(item+5)
+   print(blist)
+   </pre>
 
 .. index:: parameter
 
@@ -967,6 +1331,26 @@ To write the ``primes_upto`` function we will use the ``is_prime`` function to f
 
 	.. actex:: scratch_9_5
 
+**Check your understanding**
+
+.. mchoicemf:: test_question9_20_1
+   :answer_a: [4,2,8,6,5]
+   :answer_b: [8,4,16,12,10]
+   :answer_c: 10
+   :answer_d: [10].
+   :correct: d
+   :feedback_a: Items from alist are doubled before being placed in blist.
+   :feedback_b: Not all the items in alist are to be included in blist.  Look at the if clause.
+   :feedback_c: The result needs to be a list.
+   :feedback_d: Yes, 5 is the only odd number in alist.  It is doubled before being placed in blist.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [4,2,8,6,5]
+   blist = [num*2 for num in alist if num%2==1]
+   print(blist)
+   </pre>
 
 .. index:: nested list, list; nested
        
@@ -993,7 +1377,28 @@ left to right.
 
 .. index:: matrix
 
+**Check your understanding**
 
+.. mchoicemf:: test_question9_21_1
+   :answer_a: 6
+   :answer_b: 8
+   :answer_c: 888
+   :answer_d: 999
+   :correct: c
+   :feedback_a: 6 is in the wrong list.  alist[1] refers to the second item in alist, namely [888,999].
+   :feedback_b: 8 is in the wrong list.  alist[1] refers to the second item in alist, namely [888,999].
+   :feedback_c: Yes, alist[0][1][0] is True and alist[1] is the second list, the first item is 888.
+   :feedback_d: alist[0][1][0] is False.  Take another look at the if statement.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   alist = [ [4, [True, False], 6, 8], [888, 999] ]
+   if alist[0][1][0]:
+      print(alist[1][0])
+   else:
+      print(alist[1][1])
+   </pre>
 
 .. index:: strings and lists, split, join
 
@@ -1045,6 +1450,30 @@ you can use empty glue or multi-character strings as glue.
 .. admonition:: Scratch Editor
 
 	.. actex:: scratch_9_6
+
+**Check your understanding**
+
+.. mchoicemf:: test_question9_22_1
+   :answer_a: Poe
+   :answer_b: EdgarAllanPoe
+   :answer_c: EAP
+   :answer_d: William Shakespeare
+   :correct: c
+   :feedback_a: Three characters but not the right ones.  namelist is the list of names.
+   :feedback_b: Too many characters in this case.  There should be a single letter from each name.
+   :feedback_c: Yes, split creates a list of the three names.  The for loop iterates thru the names and creates a string from the first characters.
+   :feedback_d: That does not make any sense.
+   
+   What is printed by the following statements?
+   
+   <pre>
+   myname = "Edgar Allan Poe"
+   namelist = myname.split()
+   init = ""
+   for aname in namelist:
+      init = init + aname[0]
+   print(init)
+   </pre>
 
     
 ``list`` Type Conversion Function
