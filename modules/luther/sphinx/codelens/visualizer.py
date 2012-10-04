@@ -19,69 +19,44 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-from pg_logger import exec_script_str, web_finalizer
+from pg_logger import exec_script_str
 import json
 
 def setup(app):
     app.add_directive('codelens',Codelens)
-    app.add_stylesheet('edu-python.css')
+    app.add_stylesheet('pytutor.css')
+    app.add_stylesheet('jquery-ui-1.8.21.custom.css')
 
+    app.add_javascript('d3.v2.min.js')
+    app.add_javascript('jquery.ba-bbq.min.js')
+    app.add_javascript('jquery.jsPlumb-1.3.10-all-min.js')
+    app.add_javascript('jquery-ui-1.8.21.custom.min.js')
     app.add_javascript('jquery.textarea.js')
-    app.add_javascript('edu-python.js')
+    app.add_javascript('pytutor.js')
 
 
 
 VIS = '''
-<table border="1" id="pyOutputPane_%(divid)s" class="pyOutputPane">
-<tr>
-<td valign="top">
-Source Code
-<br />
-
-<div id="pyCodeOutputDiv_%(divid)s" class="pyCodeOutputDiv">
-<table id="pyCodeOutput_%(divid)s" class="pyCodeOutput"></table>
-
-</div>
-
-<div id="vcrControls_%(divid)s" class="vcrControls">
-  <button id="jmpFirstInstr_%(divid)s", type="button">&lt;&lt; First</button>
-  <button id="jmpStepBack_%(divid)s", type="button">&lt; Back</button>
-  Step <span id="curInstr_%(divid)s">?</span> of <span id="totalInstrs_%(divid)s">?</span>
-  <button id="jmpStepFwd_%(divid)s", type="button">Forward &gt;</button>
-  <button id="jmpLastInstr_%(divid)s", type="button">Last &gt;&gt;</button>
-
-  <p><span id="warningOutput_%(divid)s" class="warningOutput"></span></p>
-</div>
-</td></tr>
-<tr>
-<td valign="top">
-
-<div id="dataViz_%(divid)s"></div>
-
-</td>
-</tr>
-<tr>
-<td>
-<div id="errorOutput_%(divid)s" class="errorOutput"></div>
-
-Program output:
-<br/>
-<pre id="pyStdout_%(divid)s" class="active_out"></pre>
-</td>
-</tr>
-</table>
-<p class="cl_caption"><span class="ac_caption_text"> %(caption)s</span></p>
-
+<div id=%(divid)s></div>
 '''
 
 DATA = '''
 <script type="text/javascript">
+%(tracedata)s
+
 $(document).ready(function() {
-    myvis = new PythonTutor.Visualizer(%(pycode)s,%(tracedata)s,'%(divid)s');
+    %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,{embeddedMode: true, editCodeBaseURL:'http://localhost'});
 });
 
+$(window).resize(function() {
+    %(divid)s_vis.redrawConnectors();
+});
 </script>
 '''
+
+#JS_VARNAME = ""
+#JS_VARVAL = ""
+
 
 class Codelens(Directive):
     required_arguments = 1
@@ -94,20 +69,31 @@ class Codelens(Directive):
     has_content = True
 
     def run(self):
+
+        self.JS_VARNAME = ""
+        self.JS_VARVAL = ""
+        def js_var_finalizer(input_code, output_trace):
+          ret = dict(code=input_code, trace=output_trace)
+          json_output = json.dumps(ret, indent=None)
+          self.JS_VARVAL = "var %s = %s;" % (self.JS_VARNAME, json_output)
+
+
         self.options['divid'] = self.arguments[0]
         if self.content:
             source = "\n".join(self.content)
         else:
             source = '\n'
 
-        tdata = exec_script_str(source,web_finalizer)
-        self.options['tracedata'] = tdata
-        self.options['pycode'] = json.dumps(source)
+        CUMULATIVE_MODE=False
+        #tdata = exec_script_str(source,web_finalizer)
+        self.JS_VARNAME = self.options['divid']+'_trace'
+        exec_script_str(source, CUMULATIVE_MODE, js_var_finalizer)
+        self.options['tracedata'] = self.JS_VARVAL
+#        self.options['pycode'] = json.dumps(source)
         res = VIS
         if 'caption' not in self.options:
             self.options['caption'] = ''
         if 'tracedata' in self.options:
             res += DATA
-
         return [nodes.raw('',res % self.options,format='html')]
 

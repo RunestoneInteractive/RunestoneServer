@@ -1,19 +1,28 @@
 # Online Python Tutor
-# Copyright (C) 2010 Philip J. Guo
 # https://github.com/pgbovine/OnlinePythonTutor/
-# 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright (C) 2010-2012 Philip J. Guo (philip@pgbovine.net)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+# Thanks to John DeNero for making the encoder work on both Python 2 and 3
 
 
 # Given an arbitrary piece of Python data, encode it in such a manner
@@ -24,94 +33,210 @@
 # to send to the front-end.
 #
 # Format:
+#   Primitives:
 #   * None, int, long, float, str, bool - unchanged
 #     (json.dumps encodes these fine verbatim)
-#   * list     - ['LIST', unique_id, elt1, elt2, elt3, ..., eltN]
-#   * tuple    - ['TUPLE', unique_id, elt1, elt2, elt3, ..., eltN]
-#   * set      - ['SET', unique_id, elt1, elt2, elt3, ..., eltN]
-#   * dict     - ['DICT', unique_id, [key1, value1], [key2, value2], ..., [keyN, valueN]]
-#   * instance - ['INSTANCE', class name, unique_id, [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
-#   * class    - ['CLASS', class name, unique_id, [list of superclass names], [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
-#   * circular reference - ['CIRCULAR_REF', unique_id]
-#   * other    - [<type name>, unique_id, string representation of object]
 #
-# the unique_id is derived from id(), which allows us to explicitly
-# capture aliasing of compound values
+#   Compound objects:
+#   * list     - ['LIST', elt1, elt2, elt3, ..., eltN]
+#   * tuple    - ['TUPLE', elt1, elt2, elt3, ..., eltN]
+#   * set      - ['SET', elt1, elt2, elt3, ..., eltN]
+#   * dict     - ['DICT', [key1, value1], [key2, value2], ..., [keyN, valueN]]
+#   * instance - ['INSTANCE', class name, [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
+#   * class    - ['CLASS', class name, [list of superclass names], [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
+#   * function - ['FUNCTION', function name, parent frame ID (for nested functions)]
+#   * module   - ['module', module name]
+#   * other    - [<type name>, string representation of object]
+#   * compound object reference - ['REF', target object's unique_id]
+#
+# the unique_id is derived from id(), which allows us to capture aliasing
 
-# Key: real ID from id()
-# Value: a small integer for greater readability, set by cur_small_id
-real_to_small_IDs = {}
-cur_small_id = 1
+
+# number of significant digits for floats
+FLOAT_PRECISION = 4
+
 
 import re, types
+import sys
 typeRE = re.compile("<type '(.*)'>")
 classRE = re.compile("<class '(.*)'>")
 
-def encode(dat, ignore_id=False):
-  def encode_helper(dat, compound_obj_ids):
+import inspect
+
+is_python3 = (sys.version_info[0] == 3)
+if is_python3:
+  long = None # Avoid NameError when evaluating "long"
+
+
+def is_class(dat):
+  """Return whether dat is a class."""
+  if is_python3:
+    return isinstance(dat, type)
+  else:
+    return type(dat) in (types.ClassType, types.TypeType)
+
+
+def is_instance(dat):
+  """Return whether dat is an instance of a class."""
+  if is_python3:
+    return isinstance(type(dat), type) and not isinstance(dat, type)
+  else:
+    # ugh, classRE match is a bit of a hack :(
+    return type(dat) == types.InstanceType or classRE.match(str(type(dat)))
+
+
+def get_name(obj):
+  """Return the name of an object."""
+  return obj.__name__ if hasattr(obj, '__name__') else get_name(type(obj))
+
+
+# Note that this might BLOAT MEMORY CONSUMPTION since we're holding on
+# to every reference ever created by the program without ever releasing
+# anything!
+class ObjectEncoder:
+  def __init__(self):
+    # Key: canonicalized small ID
+    # Value: encoded (compound) heap object
+    self.encoded_heap_objects = {}
+
+    self.id_to_small_IDs = {}
+    self.cur_small_ID = 1
+
+
+  def get_heap(self):
+    return self.encoded_heap_objects
+
+
+  def reset_heap(self):
+    # VERY IMPORTANT to reassign to an empty dict rather than just
+    # clearing the existing dict, since get_heap() could have been
+    # called earlier to return a reference to a previous heap state
+    self.encoded_heap_objects = {}
+
+  def set_function_parent_frame_ID(self, ref_obj, enclosing_frame_id):
+    assert ref_obj[0] == 'REF'
+    func_obj = self.encoded_heap_objects[ref_obj[1]]
+    assert func_obj[0] == 'FUNCTION'
+    func_obj[-1] = enclosing_frame_id
+
+
+  # return either a primitive object or an object reference;
+  # and as a side effect, update encoded_heap_objects
+  def encode(self, dat):
     # primitive type
-    if dat is None or \
-       type(dat) in (int, long, float, str, bool):
-      return dat
-    # compound type
+    if type(dat) in (int, long, float, str, bool, type(None)):
+      if type(dat) is float:
+        return round(dat, FLOAT_PRECISION)
+      else:
+        return dat
+
+    # compound type - return an object reference and update encoded_heap_objects
     else:
       my_id = id(dat)
 
-      global cur_small_id
-      if my_id not in real_to_small_IDs:
-        if ignore_id:
-          real_to_small_IDs[my_id] = 99999
-        else:
-          real_to_small_IDs[my_id] = cur_small_id
-        cur_small_id += 1
+      try:
+        my_small_id = self.id_to_small_IDs[my_id]
+      except KeyError:
+        my_small_id = self.cur_small_ID
+        self.id_to_small_IDs[my_id] = self.cur_small_ID
+        self.cur_small_ID += 1
 
-      if my_id in compound_obj_ids:
-        return ['CIRCULAR_REF', real_to_small_IDs[my_id]]
+      del my_id # to prevent bugs later in this function
 
-      new_compound_obj_ids = compound_obj_ids.union([my_id])
+      ret = ['REF', my_small_id]
+
+      # punt early if you've already encoded this object
+      if my_small_id in self.encoded_heap_objects:
+        return ret
+
+
+      # major side-effect!
+      new_obj = []
+      self.encoded_heap_objects[my_small_id] = new_obj
 
       typ = type(dat)
 
-      my_small_id = real_to_small_IDs[my_id]
-
       if typ == list:
-        ret = ['LIST', my_small_id]
-        for e in dat: ret.append(encode_helper(e, new_compound_obj_ids))
+        new_obj.append('LIST')
+        for e in dat:
+          new_obj.append(self.encode(e))
       elif typ == tuple:
-        ret = ['TUPLE', my_small_id]
-        for e in dat: ret.append(encode_helper(e, new_compound_obj_ids))
+        new_obj.append('TUPLE')
+        for e in dat:
+          new_obj.append(self.encode(e))
       elif typ == set:
-        ret = ['SET', my_small_id]
-        for e in dat: ret.append(encode_helper(e, new_compound_obj_ids))
+        new_obj.append('SET')
+        for e in dat:
+          new_obj.append(self.encode(e))
       elif typ == dict:
-        ret = ['DICT', my_small_id]
-        for (k,v) in dat.iteritems():
+        new_obj.append('DICT')
+        for (k, v) in dat.items():
           # don't display some built-in locals ...
-          if k not in ('__module__', '__return__'):
-            ret.append([encode_helper(k, new_compound_obj_ids), encode_helper(v, new_compound_obj_ids)])
-      elif typ in (types.InstanceType, types.ClassType, types.TypeType) or \
-           classRE.match(str(typ)):
-        # ugh, classRE match is a bit of a hack :(
-        if typ == types.InstanceType or classRE.match(str(typ)):
-          ret = ['INSTANCE', dat.__class__.__name__, my_small_id]
+          if k not in ('__module__', '__return__', '__locals__'):
+            new_obj.append([self.encode(k), self.encode(v)])
+      elif typ in (types.FunctionType, types.MethodType):
+        if is_python3:
+          argspec = inspect.getfullargspec(dat)
         else:
-          superclass_names = [e.__name__ for e in dat.__bases__]
-          ret = ['CLASS', dat.__name__, my_small_id, superclass_names]
+          argspec = inspect.getargspec(dat)
 
-        # traverse inside of its __dict__ to grab attributes
-        # (filter out useless-seeming ones):
-        user_attrs = sorted([e for e in dat.__dict__.keys() 
-                             if e not in ('__doc__', '__module__', '__return__')])
+        printed_args = [e for e in argspec.args]
+        if argspec.varargs:
+          printed_args.append('*' + argspec.varargs)
 
-        for attr in user_attrs:
-          ret.append([encode_helper(attr, new_compound_obj_ids), encode_helper(dat.__dict__[attr], new_compound_obj_ids)])
+        if is_python3:
+          if argspec.varkw:
+            printed_args.append('**' + argspec.varkw)
+          if argspec.kwonlyargs:
+            printed_args.extend(argspec.kwonlyargs)
+        else:
+          if argspec.keywords:
+            printed_args.append('**' + argspec.keywords)
+
+        func_name = get_name(dat)
+        pretty_name = func_name + '(' + ', '.join(printed_args) + ')'
+        new_obj.extend(['FUNCTION', pretty_name, None]) # the final element will be filled in later
+      elif typ is types.BuiltinFunctionType:
+        pretty_name = get_name(dat) + '(...)'
+        new_obj.extend(['FUNCTION', pretty_name, None])
+      elif is_class(dat) or is_instance(dat):
+        self.encode_class_or_instance(dat, new_obj)
+      elif typ is types.ModuleType:
+        new_obj.extend(['module', dat.__name__])
       else:
         typeStr = str(typ)
         m = typeRE.match(typeStr)
+
+        if not m:
+          m = classRE.match(typeStr)
+
         assert m, typ
-        ret = [m.group(1), my_small_id, str(dat)]
+        new_obj.extend([m.group(1), str(dat)])
 
       return ret
 
-  return encode_helper(dat, set())
+
+  def encode_class_or_instance(self, dat, new_obj):
+    """Encode dat as a class or instance."""
+    if is_instance(dat):
+      class_name = get_name(dat.__class__)
+      new_obj.extend(['INSTANCE', class_name])
+      # don't traverse inside modules, or else risk EXPLODING the visualization
+      if class_name == 'module':
+        return
+    else:
+      superclass_names = [e.__name__ for e in dat.__bases__ if e is not object]
+      new_obj.extend(['CLASS', get_name(dat), superclass_names])
+
+    # traverse inside of its __dict__ to grab attributes
+    # (filter out useless-seeming ones):
+    hidden = ('__doc__', '__module__', '__return__', '__dict__',
+        '__locals__', '__weakref__')
+    if hasattr(dat, '__dict__'):
+      user_attrs = sorted([e for e in dat.__dict__ if e not in hidden])
+    else:
+      user_attrs = []
+
+    for attr in user_attrs:
+      new_obj.append([self.encode(attr), self.encode(dat.__dict__[attr])])
 
