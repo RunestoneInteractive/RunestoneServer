@@ -25,19 +25,19 @@ import json
 def setup(app):
     app.add_directive('codelens',Codelens)
     app.add_stylesheet('pytutor.css')
-    app.add_stylesheet('jquery-ui-1.8.21.custom.css')
+    app.add_stylesheet('jquery-ui-1.8.24.custom.css')
 
     app.add_javascript('d3.v2.min.js')
     app.add_javascript('jquery.ba-bbq.min.js')
     app.add_javascript('jquery.jsPlumb-1.3.10-all-min.js')
-    app.add_javascript('jquery-ui-1.8.21.custom.min.js')
+    app.add_javascript('jquery-ui-1.8.24.custom.min.js')
     app.add_javascript('jquery.textarea.js')
     app.add_javascript('pytutor.js')
 
 
 
 VIS = '''
-<div id=%(divid)s></div>
+<div id="%(divid)s"></div>
 '''
 
 DATA = '''
@@ -45,7 +45,7 @@ DATA = '''
 %(tracedata)s
 
 $(document).ready(function() {
-    %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,{embeddedMode: true, editCodeBaseURL:'http://localhost'});
+    %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,{embeddedMode: true});
 });
 
 $(window).resize(function() {
@@ -85,11 +85,9 @@ class Codelens(Directive):
             source = '\n'
 
         CUMULATIVE_MODE=False
-        #tdata = exec_script_str(source,web_finalizer)
         self.JS_VARNAME = self.options['divid']+'_trace'
         exec_script_str(source, CUMULATIVE_MODE, js_var_finalizer)
         self.options['tracedata'] = self.JS_VARVAL
-#        self.options['pycode'] = json.dumps(source)
         res = VIS
         if 'caption' not in self.options:
             self.options['caption'] = ''

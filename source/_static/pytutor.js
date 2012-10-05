@@ -31,11 +31,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 <!-- requirements for pytutor.js -->
 <script type="text/javascript" src="js/d3.v2.min.js"></script>
-<script type="text/javascript" src="js/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="js/jquery.ba-bbq.min.js"></script> <!-- for handling back button and URL hashes -->
-<script type="text/javascript" src="js/jquery.jsPlumb-1.3.10-all-min.js "></script> <!-- for rendering SVG connectors -->
-<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script> <!-- for sliders and other UI elements -->
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery.jsPlumb-1.3.10-all-min.js "></script> <!-- for rendering SVG connectors
+                                                                                         DO NOT UPGRADE ABOVE 1.3.10 OR ELSE BREAKAGE WILL OCCUR -->
+<script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script> <!-- for sliders and other UI elements -->
+<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.24.custom.css" rel="stylesheet" />
 
 <script type="text/javascript" src="js/pytutor.js"></script>
 <link rel="stylesheet" href="css/pytutor.css"/>
@@ -1726,8 +1727,8 @@ ExecutionVisualizer.prototype.renderDataStructures = function() {
   // render all global variables IN THE ORDER they were created by the program,
   // in order to ensure continuity:
 
-  // Derive a list where each element contains a pair of
-  // [varname, value] as long as value is NOT undefined.
+  // Derive a list where each element contains varname
+  // as long as value is NOT undefined.
   // (Sometimes entries in curEntry.ordered_globals are undefined,
   // so filter those out.)
   var realGlobalsLst = [];
@@ -1736,41 +1737,43 @@ ExecutionVisualizer.prototype.renderDataStructures = function() {
 
     // (use '!==' to do an EXACT match against undefined)
     if (val !== undefined) { // might not be defined at this line, which is OKAY!
-      realGlobalsLst.push([varname, varname]); /* purposely map varname down both columns */
+      realGlobalsLst.push(varname);
     }
   });
 
   var globalsID = myViz.generateID('globals');
   var globalTblID = myViz.generateID('global_table');
 
-  var globalsD3 = myViz.domRootD3.select('#' + globalTblID)
+  var globalVarTable = myViz.domRootD3.select('#' + globalTblID)
     .selectAll('tr')
-    .data(realGlobalsLst, function(d) {
-      return d[0]; // use variable name as key
-    });
-    
+    .data(realGlobalsLst,
+          function(d) {return d;} // use variable name as key
+    );
 
-  // ENTER
-  globalsD3.enter()
-    .append('tr')
-    .selectAll('td.stackFrameVar,td.stackFrameValue')
-    .data(function(d, i){return d;}) /* map varname down both columns */
+  globalVarTable
     .enter()
+    .append('tr');
+
+
+  var globalVarTableCells = globalVarTable
+    .selectAll('td.stackFrameVar,td.stackFrameValue')
+    .data(function(d, i){return [d, d];}) /* map varname down both columns */
+
+  globalVarTableCells.enter()
     .append('td')
-    .attr('class', function(d, i) {return (i == 0) ? 'stackFrameVar' : 'stackFrameValue';})
-    .html(function(d, i) {
-      return (i == 0) ? d : '' /* initialize in each() later */;
-    })
+    .attr('class', function(d, i) {return (i == 0) ? 'stackFrameVar' : 'stackFrameValue';});
+
   // remember that the enter selection is added to the update
   // selection so that we can process it later ...
 
   // UPDATE
-  globalsD3
+  globalVarTableCells
     .order() // VERY IMPORTANT to put in the order corresponding to data elements
-    .selectAll('td')
-    .data(function(d, i){return d;}) /* map varname down both columns */
     .each(function(varname, i) {
-      if (i == 1) {
+      if (i == 0) {
+        $(this).html(varname);
+      }
+      else {
         var val = curEntry.globals[varname];
 
         // include type in repr to prevent conflating integer 5 with string "5"
@@ -1818,8 +1821,16 @@ ExecutionVisualizer.prototype.renderDataStructures = function() {
 
     });
 
-  // EXIT
-  globalsD3.exit()
+
+  globalVarTableCells.exit().remove();
+
+  globalVarTable.exit()
+    .each(function(d, i) {
+      // detach all stack_pointer connectors for divs that are being removed
+      $(this).find('.stack_pointer').each(function(i, sp) {
+        myViz.jsPlumbInstance.detachAllConnections($(sp).attr('id'));
+      });
+    })
     .remove();
 
 
@@ -1902,11 +1913,11 @@ ExecutionVisualizer.prototype.renderDataStructures = function() {
 
   var stackVarTableCells = stackVarTable
     .selectAll('td.stackFrameVar,td.stackFrameValue')
-    .data(function(d, i) {return [d, d] /* map identical data down both columns */;})
+    .data(function(d, i) {return [d, d] /* map identical data down both columns */;});
 
   stackVarTableCells.enter()
     .append('td')
-    .attr('class', function(d, i) {return (i == 0) ? 'stackFrameVar' : 'stackFrameValue';})
+    .attr('class', function(d, i) {return (i == 0) ? 'stackFrameVar' : 'stackFrameValue';});
 
   stackVarTableCells
     .order() // VERY IMPORTANT to put in the order corresponding to data elements
@@ -1971,10 +1982,22 @@ ExecutionVisualizer.prototype.renderDataStructures = function() {
 
   stackVarTableCells.exit().remove();
 
-  stackVarTable.exit().remove();
+  stackVarTable.exit()
+    .each(function(d, i) {
+      $(this).find('.stack_pointer').each(function(i, sp) {
+        // detach all stack_pointer connectors for divs that are being removed
+        myViz.jsPlumbInstance.detachAllConnections($(sp).attr('id'));
+      });
+    })
+    .remove();
 
   stackFrameDiv.exit()
-    //.each(function(frame, i) {console.log('DEL STACK FRAME', frame.unique_hash, i);})
+    .each(function(frame, i) {
+      $(this).find('.stack_pointer').each(function(i, sp) {
+        // detach all stack_pointer connectors for divs that are being removed
+        myViz.jsPlumbInstance.detachAllConnections($(sp).attr('id'));
+      });
+    })
     .remove();
 
 
