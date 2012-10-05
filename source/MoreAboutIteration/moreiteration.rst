@@ -357,7 +357,7 @@ turtle and then use conditionals to decide.  Here is one implementation:
 
 .. sourcecode:: python
 
-    def isInWindow(w,t):
+    def isInScreen(wn,t):
         leftBound = - wn.window_width()/2
         rightBound = wn.window_width()/2
         topBound = wn.window_height()/2
