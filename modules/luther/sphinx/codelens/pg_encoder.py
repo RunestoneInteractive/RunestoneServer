@@ -122,7 +122,8 @@ class ObjectEncoder:
 
   # return either a primitive object or an object reference;
   # and as a side effect, update encoded_heap_objects
-  def encode(self, dat):
+  def encode(self, dat, get_parent):
+    """Encode a data value DAT using the GET_PARENT function for parent ids."""
     # primitive type
     if type(dat) in (int, long, float, str, bool, type(None)):
       if type(dat) is float:
@@ -159,21 +160,21 @@ class ObjectEncoder:
       if typ == list:
         new_obj.append('LIST')
         for e in dat:
-          new_obj.append(self.encode(e))
+          new_obj.append(self.encode(e, get_parent))
       elif typ == tuple:
         new_obj.append('TUPLE')
         for e in dat:
-          new_obj.append(self.encode(e))
+          new_obj.append(self.encode(e, get_parent))
       elif typ == set:
         new_obj.append('SET')
         for e in dat:
-          new_obj.append(self.encode(e))
+          new_obj.append(self.encode(e, get_parent))
       elif typ == dict:
         new_obj.append('DICT')
         for (k, v) in dat.items():
           # don't display some built-in locals ...
           if k not in ('__module__', '__return__', '__locals__'):
-            new_obj.append([self.encode(k), self.encode(v)])
+            new_obj.append([self.encode(k, get_parent), self.encode(v, get_parent)])
       elif typ in (types.FunctionType, types.MethodType):
         if is_python3:
           argspec = inspect.getfullargspec(dat)
@@ -195,7 +196,11 @@ class ObjectEncoder:
 
         func_name = get_name(dat)
         pretty_name = func_name + '(' + ', '.join(printed_args) + ')'
-        new_obj.extend(['FUNCTION', pretty_name, None]) # the final element will be filled in later
+        encoded_val = ['FUNCTION', pretty_name, None]
+        if get_parent:
+          enclosing_frame_id = get_parent(dat)
+          encoded_val[2] = enclosing_frame_id
+        new_obj.extend(encoded_val)
       elif typ is types.BuiltinFunctionType:
         pretty_name = get_name(dat) + '(...)'
         new_obj.extend(['FUNCTION', pretty_name, None])
@@ -219,7 +224,16 @@ class ObjectEncoder:
   def encode_class_or_instance(self, dat, new_obj):
     """Encode dat as a class or instance."""
     if is_instance(dat):
-      class_name = get_name(dat.__class__)
+      if hasattr(dat, '__class__'):
+        # common case ...
+        class_name = get_name(dat.__class__)
+      else:
+        # super special case for something like
+        # "from datetime import datetime_CAPI" in Python 3.2,
+        # which is some weird 'PyCapsule' type ...
+        # http://docs.python.org/release/3.1.5/c-api/capsule.html
+        class_name = get_name(type(dat))
+
       new_obj.extend(['INSTANCE', class_name])
       # don't traverse inside modules, or else risk EXPLODING the visualization
       if class_name == 'module':
@@ -238,5 +252,5 @@ class ObjectEncoder:
       user_attrs = []
 
     for attr in user_attrs:
-      new_obj.append([self.encode(attr), self.encode(dat.__dict__[attr])])
+      new_obj.append([self.encode(attr, None), self.encode(dat.__dict__[attr], None)])
 

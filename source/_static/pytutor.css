@@ -55,12 +55,19 @@ div.ExecutionVisualizer #dataViz {
   margin-left: 30px;
 }
 
+div.ExecutionVisualizer div#codeDisplayDiv {
+  width: 550px;
+}
+
 div.ExecutionVisualizer div#pyCodeOutputDiv {
   max-width: 550px;
   max-height: 450px;
   /*max-height: 620px;*/
   overflow: auto;
   /*margin-bottom: 4px;*/
+
+  margin-left: auto;
+  margin-right: auto;
 }
 
 div.ExecutionVisualizer table#pyCodeOutput {
@@ -126,7 +133,7 @@ div.ExecutionVisualizer div#editCodeLinkDiv {
   margin-top: 12px;
   margin-bottom: 4px;
   */
-  margin: 6px auto;
+  margin: 8px auto;
 }
 
 div.ExecutionVisualizer #errorOutput {
@@ -141,7 +148,7 @@ div.ExecutionVisualizer #errorOutput {
 
 div.ExecutionVisualizer #vcrControls {
   margin: 15px auto;
-  width: 100%;
+  /*width: 100%;*/
   text-align: center;
 }
 
@@ -160,6 +167,10 @@ div.ExecutionVisualizer #pyStdout {
   font-size: 12pt;
   padding: 4px;
   font-family: Andale mono, monospace;
+
+  overflow: auto; /* to look pretty on IE */
+  /* make sure textarea doesn't grow and stretch */
+  resize: none;
 }
 
 
@@ -459,8 +470,11 @@ div.ExecutionVisualizer div#heapHeader {
 
 div.ExecutionVisualizer #executionSlider {
   width: 500px;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-bottom: 5px;
+
+  margin-left: auto;
+  margin-right: auto;
 }
 
 div.ExecutionVisualizer #executionSliderCaption {

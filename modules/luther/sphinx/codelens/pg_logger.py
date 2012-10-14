@@ -188,10 +188,12 @@ def visit_function_obj(v, ids_seen_set):
 
 class PGLogger(bdb.Bdb):
 
-    def __init__(self, cumulative_mode, finalizer_func):
+    def __init__(self, cumulative_mode, finalizer_func, disable_security_checks=False):
         bdb.Bdb.__init__(self)
         self.mainpyfile = ''
         self._wait_for_mainpyfile = 0
+
+        self.disable_security_checks = disable_security_checks
 
         # a function that takes the output trace as a parameter and
         # processes it
@@ -246,6 +248,12 @@ class PGLogger(bdb.Bdb):
 
     def get_frame_id(self, cur_frame):
       return self.frame_ordered_ids[cur_frame]
+
+    # Returns the (lexical) parent of a function value.
+    def get_parent_of_function(self, val):
+      if val not in self.closures:
+        return None
+      return self.get_frame_id(self.closures[val])
 
 
     # Returns the (lexical) parent frame of the function that was called
@@ -467,20 +475,7 @@ class PGLogger(bdb.Bdb):
             if k == '__module__':
               continue
 
-            encoded_val = self.encoder.encode(v)
-
-            # UGH, this is SUPER ugly but needed for nested function defs
-            #
-            # NB: Known limitation -- this will work only for functions
-            # defined on the top level, not those that are nested within,
-            # say, tuples or lists
-            if type(v) in (types.FunctionType, types.MethodType):
-              try:
-                enclosing_frame = self.closures[v]
-                enclosing_frame_id = self.get_frame_id(enclosing_frame)
-                self.encoder.set_function_parent_frame_ID(encoded_val, enclosing_frame_id)
-              except KeyError:
-                pass
+            encoded_val = self.encoder.encode(v, self.get_parent_of_function)
             encoded_locals[k] = encoded_val
 
 
@@ -590,20 +585,7 @@ class PGLogger(bdb.Bdb):
         # effects of aliasing later down the line ...
         encoded_globals = {}
         for (k, v) in get_user_globals(tos[0]).items():
-          encoded_val = self.encoder.encode(v)
-
-          # UGH, this is SUPER ugly but needed for nested function defs
-          #
-          # NB: Known limitation -- this will work only for functions
-          # defined on the top level, not those that are nested within,
-          # say, tuples or lists
-          if type(v) in (types.FunctionType, types.MethodType):
-            try:
-              enclosing_frame = self.closures[v]
-              enclosing_frame_id = self.get_frame_id(enclosing_frame)
-              self.encoder.set_function_parent_frame_ID(encoded_val, enclosing_frame_id)
-            except KeyError:
-              pass
+          encoded_val = self.encoder.encode(v, self.get_parent_of_function)
           encoded_globals[k] = encoded_val
 
           if k not in self.all_globals_in_order:
@@ -766,13 +748,12 @@ class PGLogger(bdb.Bdb):
           # memory bombs such as:
           #   x = 2
           #   while True: x = x*x
-          if resource_module_loaded:
-              pass
-            #-bnm-resource.setrlimit(resource.RLIMIT_AS, (200000000, 200000000))
-            #-bnm-resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
+          if resource_module_loaded and (not self.disable_security_checks):
+            resource.setrlimit(resource.RLIMIT_AS, (200000000, 200000000))
+            resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
 
             # protect against unauthorized filesystem accesses ...
-            #-bnm-resource.setrlimit(resource.RLIMIT_NOFILE, (0, 0)) # no opened files allowed
+            resource.setrlimit(resource.RLIMIT_NOFILE, (0, 0)) # no opened files allowed
 
             # VERY WEIRD. If you activate this resource limitation, it
             # ends up generating an EMPTY trace for the following program:
@@ -790,8 +771,8 @@ class PGLogger(bdb.Bdb):
             #
             # Of course, this isn't a foolproof solution by any means,
             # and it might lead to UNEXPECTED FAILURES later in execution.
-            #-bnm-del sys.modules['os']
-            #-bnm-del sys.modules['sys']
+            del sys.modules['os']
+            del sys.modules['sys']
 
           self.run(script_str, user_globals, user_globals)
         # sys.exit ...
@@ -860,7 +841,7 @@ class PGLogger(bdb.Bdb):
 
       self.trace = res
 
-      self.finalizer_func(self.executed_script, self.trace)
+      return self.finalizer_func(self.executed_script, self.trace)
 
 
 
@@ -874,4 +855,18 @@ def exec_script_str(script_str, cumulative_mode, finalizer_func):
     pass
   finally:
     logger.finalize()
+
+
+# disables security check and returns the result of finalizer_func
+# WARNING: ONLY RUN THIS LOCALLY and never over the web, since
+# security checks are disabled
+def exec_script_str_local(script_str, cumulative_mode, finalizer_func):
+  logger = PGLogger(cumulative_mode, finalizer_func, disable_security_checks=True)
+
+  try:
+    logger._runscript(script_str)
+  except bdb.BdbQuit:
+    pass
+  finally:
+    return logger.finalize()
 
