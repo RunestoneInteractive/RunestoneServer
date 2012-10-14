@@ -19,7 +19,7 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-from pg_logger import exec_script_str
+from pg_logger import exec_script_str_local
 import json
 
 def setup(app):
@@ -45,7 +45,12 @@ DATA = '''
 %(tracedata)s
 
 $(document).ready(function() {
-    %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,{embeddedMode: true});
+    %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,
+                                {embeddedMode: false, 
+                                verticalStack: true,
+                                redrawAllConnectorsOnHeightChange: true,
+                                codeDivWidth: 500
+                                });
 });
 
 $(window).resize(function() {
@@ -53,9 +58,6 @@ $(window).resize(function() {
 });
 </script>
 '''
-
-#JS_VARNAME = ""
-#JS_VARVAL = ""
 
 
 class Codelens(Directive):
@@ -72,10 +74,12 @@ class Codelens(Directive):
 
         self.JS_VARNAME = ""
         self.JS_VARVAL = ""
+
         def js_var_finalizer(input_code, output_trace):
+          global JS_VARNAME
           ret = dict(code=input_code, trace=output_trace)
           json_output = json.dumps(ret, indent=None)
-          self.JS_VARVAL = "var %s = %s;" % (self.JS_VARNAME, json_output)
+          return "var %s = %s;" % (self.JS_VARNAME, json_output)
 
 
         self.options['divid'] = self.arguments[0]
@@ -86,8 +90,8 @@ class Codelens(Directive):
 
         CUMULATIVE_MODE=False
         self.JS_VARNAME = self.options['divid']+'_trace'
-        exec_script_str(source, CUMULATIVE_MODE, js_var_finalizer)
-        self.options['tracedata'] = self.JS_VARVAL
+
+        self.options['tracedata'] = exec_script_str_local(source, CUMULATIVE_MODE, js_var_finalizer)
         res = VIS
         if 'caption' not in self.options:
             self.options['caption'] = ''
