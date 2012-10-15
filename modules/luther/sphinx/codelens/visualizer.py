@@ -38,7 +38,7 @@ def setup(app):
 
 VIS = '''
 <div id="%(divid)s"></div>
-'''
+<p class="cl_caption"><span class="cl_caption_text">%(caption)s (%(divid)s)</span> </p>'''
 
 DATA = '''
 <script type="text/javascript">
