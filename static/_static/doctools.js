@@ -64,14 +64,14 @@ jQuery.getQueryParameters = function(s) {
 /**
  * small function to check if an array contains
  * a given item.
- */
+ */ /*
 jQuery.contains = function(arr, item) {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i] == item)
       return true;
   }
   return false;
-};
+};  */
 
 /**
  * highlight a given string on a jquery object by wrapping it in

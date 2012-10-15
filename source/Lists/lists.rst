@@ -258,11 +258,11 @@ One way for us to make this more clear is to run a part of this example in codel
 
     fruit = ["apple","orange","banana","cherry"]
     numlist = [6,7]
+
     newlist = fruit + numlist
-    print(newlist)
 
     zeros = [0] * 4
-    print(zeros)
+
 
 
 The statement ``newlist = fruit + numlist`` creates a new list object with the contents of the list ``fruit`` followed by the contents of the list ``numlist``. We can see it is a new list by looking at the ids.  The id of ``newlist`` is not the same as the others.  It is extremely important to know whether you are creating a new list or just modifying an existing list.  Again, the ids can help.
@@ -377,11 +377,10 @@ Here is the same example in codelens so that you can step thru the statements an
 .. codelens:: item_assign
     
     fruit = ["banana", "apple", "cherry"]
-    print(fruit)
 
     fruit[0] = "pear"
     fruit[-1] = "orange"
-    print(fruit)
+
 
 
 By combining assignment with the slice operator we can update several elements at once.
@@ -523,12 +522,12 @@ There is one other important thing to notice about this reference diagram.  The 
 Here is the example in codelens.  Pay particular attention to the `id` values.
 
 .. codelens:: chp09_istrace
+    :showoutput:
     
     a = [81,82,83]
     b = [81,82,83]
 
     print(a is b)
-
     print(a == b)
 
 .. index:: aliases
@@ -554,7 +553,8 @@ Because the same list has two different names, ``a`` and ``b``, we say that it
 is **aliased**. Changes made with one alias affect the other.  In the codelens example below, the `ids` of ``a`` and ``b`` become the same after executing the assignment statement ``b = a``.
 
 .. codelens:: chp09_is3
-
+    :showoutput:
+    
     a = [81,82,83]
     b = [81,82,83]
 
@@ -609,7 +609,8 @@ Taking any slice of ``a`` creates a new list. In this case the slice happens to
 consist of the whole list.
 
 .. codelens:: chp09_is4
-
+    :showoutput:
+    
     a = [81,82,83]
 
     b = a[:]       # make a clone using slice
@@ -680,6 +681,7 @@ Now, what happens if we modify a value in ``origlist``.
 Here is the same example in codelens.  Step through the code until paying particular attention to the result of executing the assignment statement ``origlist[1] = 99``.
 
 .. codelens:: reprefstep
+    :showoutput:
 
     origlist = [45, 76, 34, 55]
 
@@ -1019,7 +1021,7 @@ Consider the following example.  The original list has 3 integers.  We want to a
 
     origlist.append("cat")
 
-    print(origlist)
+
 
 Here we have used ``append`` which simply modifies the list.  In order to use concatenation, we need to write an assignment statement that uses the accumulator pattern::
 
@@ -1033,7 +1035,6 @@ Note that the word "cat" needs to be placed in a list since the concatenation op
 
     origlist = origlist + ["cat"]
 
-    print(origlist)
 
 It is also important to see that with append, the original list is simply modified.  You can see this by watching the `id` of ``origlist``.  It stays the same before and after the append.
 
@@ -1198,9 +1199,9 @@ This can be easily seen in codelens.  Note that after the call to ``doubleStuff`
             aList[position] = 2 * aList[position]
 
     things = [2, 5, 9]
-    print(things)
+
     doubleStuff(things)
-    print(things)
+
 
 
 .. index:: side effect, modifier
@@ -1246,9 +1247,8 @@ Once again, codelens helps us to see the actual references and objects as they a
         return new_list
 
     things = [2, 5, 9]
-    print(things)
     things = doubleStuff(things)
-    print(things)
+
 
 
 .. admonition:: Scratch Editor
