@@ -46,7 +46,7 @@ DATA = '''
 
 $(document).ready(function() {
     %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,
-                                {embeddedMode: false, 
+                                {embeddedMode: %(embedded)s,
                                 verticalStack: true,
                                 redrawAllConnectorsOnHeightChange: true,
                                 codeDivWidth: 500
@@ -66,6 +66,7 @@ class Codelens(Directive):
     option_spec = {
         'tracedata':directives.unchanged,
         'caption':directives.unchanged,
+        'showoutput':directives.flag
     }
 
     has_content = True
@@ -90,6 +91,10 @@ class Codelens(Directive):
 
         CUMULATIVE_MODE=False
         self.JS_VARNAME = self.options['divid']+'_trace'
+        if 'showoutput' not in self.options:
+            self.options['embedded'] = 'true'  # to set embeddedmode to true
+        else:
+            self.options['embedded'] = 'false'
 
         self.options['tracedata'] = exec_script_str_local(source, CUMULATIVE_MODE, js_var_finalizer)
         res = VIS
