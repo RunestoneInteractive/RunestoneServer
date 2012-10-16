@@ -361,7 +361,7 @@ In each case the result is the value of the variable.
 To see this in even more detail, we can run the program using codelens.  
 
 .. codelens:: ch02_9_codelens
-
+    :showoutput:
 
     message = "What's up, Doc?"
     n = 17
@@ -413,7 +413,7 @@ assignment we even give it a value that is of a different type.
 
 
 .. codelens:: ch02_11
-
+    :showoutput:
 
     day = "Thursday"
     print(day)
@@ -704,7 +704,6 @@ compute the correct values.
     minutes =  secs_still_remaining // 60
     secs_finally_remaining = secs_still_remaining  % 60
 
-    print("Hrs=", hours, "mins=", minutes, "secs=", secs_finally_remaining)
 
 **Check your understanding**
 

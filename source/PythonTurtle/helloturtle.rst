@@ -386,7 +386,7 @@ the buttons.  You can see the value of ``friendName`` change as the loop iterate
 .. codelens:: vtest
 
     for friendName in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        print("Hi " + friendName + "  Please come to my party!")
+        message = "Hi " + friendName + "  Please come to my party!"
 
 .. index:: range function, chunking
 

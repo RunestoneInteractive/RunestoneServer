@@ -182,7 +182,7 @@ be made with a parameter value that is moving toward becoming the base case.  Th
 .. index:: recursion, recursive call, base case, infinite recursion, recursion; infinite
 
 
-.. activecode:: chp11_recursivesum
+.. codelens:: chp11_recursivesum
     
     def rSum(nestedNumList):
         if nestedNumList == []:
@@ -195,9 +195,12 @@ be made with a parameter value that is moving toward becoming the base case.  Th
                 return rSum(firstitem) + rSum(nestedNumList[1:])
 
 
-    print(rSum([]))
-    print(rSum([1,2,3,4]))
-    print(rSum([1,2,[4,5,6],7,8]))
+    result = rSum([])
+    l = [1,2,3,4]
+    result = rSum(l)
+    m = [4,5,6]
+    l = [1,2,m,7,8]
+    result = rSum(l)
 
 Note that three different calls are made to test the function.  In the first, list is empty.  This will test the base
 case.  In the second, the list has no nesting.  The third requires that all parts of the recursion are working.  Try them
@@ -207,6 +210,10 @@ and then make modifications to the lists to add deeper nesting.  You might even 
 
     print(rSum([[[[[[[[[[]]]]]]]]]]))
 
+
+.. admonition:: Scratch Editor
+
+  .. actex:: recursion_scratch_1
 
 
 Glossary

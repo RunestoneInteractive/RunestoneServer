@@ -535,7 +535,8 @@ Here is a complete program that defines values for ``x`` and ``y``.  Run the pro
 If you are still a bit unsure, here is the same selection as part of a codelens example.  Step through it to see how the correct ``print`` is chosen.
 
 .. codelens:: sel1
-
+    :showoutput:
+    
     x = 10
     y = 10
 
@@ -766,7 +767,8 @@ with a few other actual parameters to see what is printed.
 Here is the same program in codelens.
 
 .. codelens:: ch06_boolcodelens
-
+    :showoutput:
+    
     def isDivisible(x, y):
         if x % y == 0:
             result = True 

@@ -31,15 +31,12 @@ Spanish. For this dictionary, the keys are strings.
 One way to create a dictionary is to start with the empty dictionary and add
 **key-value pairs**. The empty dictionary is denoted ``{}``
 
-.. activecode:: chp12_dict1
+.. codelens:: chp12_dict1
     
     eng2sp = {}
-    print(eng2sp)
     eng2sp['one'] = 'uno'
-    print(eng2sp)
     eng2sp['two'] = 'dos'
     eng2sp['three'] = 'tres'
-    print(eng2sp)
 
 
 The first assignment creates a dictionary named ``eng2sp``.  The other
@@ -57,7 +54,7 @@ For our purposes we can think of this ordering as unpredictable.
 Another way to create a dictionary is to provide a list of key-value pairs
 using the same syntax as the previous output.
 
-.. activecode:: chp12_dict2
+.. codelens:: chp12_dict2
     
     
     eng2sp = {'three': 'tres', 'one': 'uno', 'two': 'dos'}
@@ -69,15 +66,20 @@ ordering.
 
 Here is how we use a key to look up the corresponding value.
 
-.. activecode:: chp12_dict3
+.. codelens:: chp12_dict3
     
 
     eng2sp = {'three': 'tres', 'one': 'uno', 'two': 'dos'}
 
-    print(eng2sp['two'])
+    value = eng2sp['two']
 
 
 The key ``'two'`` yields the value ``'dos'``.
+
+.. admonition:: Scratch Editor
+
+  .. actex:: dict_scratch_1
+
 
 **Check your understanding**
 
@@ -119,40 +121,44 @@ The ``del`` statement removes a key-value pair from a dictionary. For example,
 the following dictionary contains the names of various fruits and the number of
 each fruit in stock.  If someone buys all of the pears, we can remove the entry from the dictionary.
 
-.. activecode:: ch12_dict4
+.. codelens:: ch12_dict4
     
     inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
-    print(inventory)
     
     del inventory['pears']
-    print(inventory)
+
 
 Dictionaries are also mutable.  As we've seen before with lists, this means that the dictionary can
 be modified by referencing an association on the left hand side of the assignment statement.  In the previous
 example, instead of deleting the entry for ``pears``, we could have set the inventory to ``0``.
 
-.. activecode:: ch12_dict4a
+.. codelens:: ch12_dict4a
     
     inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
-    print(inventory)
     
     inventory['pears'] = 0
-    print(inventory)
+
 
 
 Similarily,
 a new shipment of 200 bananas arriving could be handled like this.
 
-.. activecode:: ch12_dict5
+.. codelens:: ch12_dict5
 
     inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}    
     inventory['bananas'] = inventory['bananas'] + 200
-    print(inventory)
 
-    print(len(inventory))
+
+    numItems = len(inventory)
 
 Notice that there are now 512 bananas---the dictionary has been modified.  Note also that the ``len`` function also works on dictionaries.  It returns the number
 of key-value pairs:
+
+
+.. admonition:: Scratch Editor
+
+  .. actex:: dict_scratch_2
+
 
 **Check your understanding**
 
