@@ -1753,6 +1753,12 @@ Exercises
     .. actex:: ex_9_5
 
 
+#. Write a function ``sum_of_squares(xs)`` that computes the sum
+   of the squares of the numbers in the list ``xs``.  For example,
+   ``sum_of_squares([2, 3, 4])`` should return 4+9+16 which is 29:
+
+    .. actex:: ex_7_11
+
 #. Write a function to count how many odd numbers are in a list.
 
     .. actex:: ex_9_6

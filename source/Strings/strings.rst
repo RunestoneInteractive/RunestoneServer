@@ -1610,6 +1610,12 @@ Exercises
 
    .. actex:: ex_8_4
 
+
+#. Write a function that will return the number of digits in an integer.
+
+    .. actex:: ex_7_10
+
+
 #. Write a function that reverses its string argument.
 
    .. actex:: ex_8_5

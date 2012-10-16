@@ -78,39 +78,6 @@ The assignment statement, ``theSum = theSum + aNumber``, updates ``theSum`` each
     .. actex:: scratch_7_2
 
 
-**Check your understanding**
-
-.. mchoicemf:: test_question7_2a_1
-   :answer_a: True
-   :answer_b: False
-   :correct: a
-   :feedback_a: Although the while loop uses a different syntax, it is just as powerful as a for-loop and often more flexible. 
-   :feedback_b: Often a for-loop is more natural and convenient for a task, but that same task can always be expressed using a while loop.
-
-   True or False: You can rewrite any for-loop as a while-loop.
-   
-.. mchoicemf:: test_question7_2a_2
-   :answer_a: n starts at 10 and is incremented by 1 each time through the loop, so it will always be positive
-   :answer_b: answer starts at 1 and is incremented by n each time, so it will always be positive
-   :answer_c: You cannot compare n to 0 in while loop.  You must compare it to another variable.
-   :answer_d: In the while loop body, we must set n False, and this code does not do that.  
-   :correct: a
-   :feedback_a: The loop will run as long as n is positive.  In this case, we can see that n will never become non-positive. 
-   :feedback_b: While it is true that answer will always be positive, answer is not considered in the loop condition.
-   :feedback_c: It is perfectly valid to compare n to 0.  Though indirectly, this _is_ what causes the infinite loop.
-   :feedback_d: The loop condition must become False for the loop to terminate, but n by itself is not the condition in this case.
-
-   The following code contains an infinite loop.  Which is the best explanation for why the loop does not terminate?
-     <pre>
-     n = 10
-     answer = 1
-     while ( n > 0 ):
-       answer = answer + n
-	   n = n + 1
-     print answer
-     </pre>
-
-
 The ``while`` Statement
 -----------------------
 
@@ -1287,16 +1254,6 @@ these building blocks.
     .. actex:: ex_7_9
 
       
-#. Write a function that will return the number of digits in an integer.
-
-    .. actex:: ex_7_10
-
-
-#. Write a function ``sum_of_squares(xs)`` that computes the sum
-   of the squares of the numbers in the list ``xs``.  For example,
-   ``sum_of_squares([2, 3, 4])`` should return 4+9+16 which is 29:
-
-    .. actex:: ex_7_11
 
 #. Modify the the Random turtle walk program so that the turtle turns around
    when it hits the wall and goes the other direction.  This bouncing off the
