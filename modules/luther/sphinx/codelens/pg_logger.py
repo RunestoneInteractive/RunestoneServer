@@ -52,7 +52,7 @@ import pg_encoder
 MAX_EXECUTED_LINES = 300
 
 #DEBUG = False
-DEBUG = True
+DEBUG = False
 
 
 # simple sandboxing scheme:
