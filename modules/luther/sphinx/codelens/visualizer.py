@@ -51,6 +51,7 @@ $(document).ready(function() {
                                 redrawAllConnectorsOnHeightChange: true,
                                 codeDivWidth: 500
                                 });
+    attachLoggers(%(divid)s_vis,'%(divid)s');
 });
 
 $(window).resize(function() {
