@@ -67,6 +67,16 @@ thinkcspy:
 	cp source/OldIndexAndConfFiles/index-master source/index.rst
 	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
 
+overview: COURSEID=overview
+overview: LOGINREQ=false
+overview:
+	cp source/OldIndexAndConfFiles/index-overview source/index.rst
+	cp source/OldIndexAndConfFiles/overview-conf.py source/conf.py
+	$(SPHINXBUILD) -d static/overview/doctrees $(SPHINXOPTS) -A project='Overview of Runestone Interactive Tools' $(TEMPLATEDEFS) source static/$(COURSEID)
+	cp source/OldIndexAndConfFiles/index-master source/index.rst
+	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
+
+
 pythonds: COURSEID=pythonds
 pythonds: LOGINREQ=false
 pythonds:
