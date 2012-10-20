@@ -67,7 +67,7 @@ working anonymously, then you will lose your work at the end of the session.
 Activecode is even capable of executing graphical programs using the built in Python turtle module.  In the example below, we import the turtle module, create a turtle, and move it around using simple commands like forward and left.  
 
 
-.. activecode:: ch03_1
+.. activecode:: codeexample1
     :nopre:
 
     import turtle            # allows us to use the turtles library
@@ -76,15 +76,67 @@ Activecode is even capable of executing graphical programs using the built in Py
     alex = turtle.Turtle()   # create a turtle named alex
     alex.forward(150)        # tell alex to move forward by 150 units
     alex.left(90)            # turn by 90 degrees
-    alex.forward(75)         # complete the second side of a rectangle
+    alex.forward(75)         # tell alex to move forward by 75 units
     
     for i in range(20):
        alex.forward(2*i)
        alex.left(90)
        
        
-Try changing the statement range(20) to be range(30).  When you execute this code, notice the change that occurs.  Try some other
-changes and see what happens.  If you ever want to go back to the original example, simply reload the page in the browser.
+Try changing the for statement with range(20) to be range(30).  When you execute this code, notice the change that occurs.  Try some other
+changes and see what happens.  If you ever want to go back to the original example, simply reload the page in the browser.  One of
+the great things about activecode is that you can experiment as much as you want.  This can be very helpful as you
+are learning to program.
+
+Finally, here is an even more interesting graphics program.  This one uses the turtle and the idea of recursion to construct a type of
+fractal called a Sierpinski Triangle.  Once you run the program, try experimenting with the number of triangle levels.  You
+can find this on line 39 (it is currently set to 3).  Try 4!
+
+.. activecode:: codeexample2
+
+    import turtle
+
+    def drawTriangle(points,color,myTurtle):
+        myTurtle.fillcolor(color)
+        myTurtle.up()
+        myTurtle.goto(points[0][0],points[0][1])
+        myTurtle.down()
+        myTurtle.begin_fill()
+        myTurtle.goto(points[1][0],points[1][1])
+        myTurtle.goto(points[2][0],points[2][1])
+        myTurtle.goto(points[0][0],points[0][1])
+        myTurtle.end_fill()
+
+    def getMid(p1,p2):
+        return ( (p1[0]+p2[0]) / 2, (p1[1] + p2[1]) / 2)
+
+    def sierpinski(points,degree,myTurtle):
+        colormap = ['blue','red','green','white','yellow',
+                    'violet','orange']
+        drawTriangle(points,colormap[degree],myTurtle)
+        if degree > 0:
+            sierpinski([points[0],
+                            getMid(points[0], points[1]),
+                            getMid(points[0], points[2])],
+                       degree-1, myTurtle)
+            sierpinski([points[1],
+                            getMid(points[0], points[1]),
+                            getMid(points[1], points[2])],
+                       degree-1, myTurtle)
+            sierpinski([points[2],
+                            getMid(points[2], points[1]),
+                            getMid(points[0], points[2])],
+                       degree-1, myTurtle)
+
+    def main():
+       myTurtle = turtle.Turtle()
+       myWin = turtle.Screen()
+       myPoints = [[-100,-50],[0,100],[100,-50]]
+       sierpinski(myPoints,3,myTurtle)
+       myWin.exitonclick()
+
+    main()
+
 
 
 The CodeLens Tool
