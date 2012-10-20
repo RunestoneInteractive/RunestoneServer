@@ -27,9 +27,18 @@ if (!window.console || !console.firebug) {
 }
  */
 
-/**
- * small helper function to urldecode strings
- */
+ /**
+  * small helper function to urldecode strings
+  */
+ jQuery.urldecode = function(x) {
+   return decodeURIComponent(x).replace(/\+/g, ' ');
+ }
+
+ /**
+  * small helper function to urlencode strings
+  */
+ jQuery.urlencode = encodeURIComponent;
+
 
 /**
  * This function returns the parsed url parameters of the
