@@ -15,6 +15,8 @@ Released   : 20081122
   <title>
    {{=response.title or request.application}}
   </title>
+
+<meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
   {{response.files.append(URL(request.application,'static','plugin_layouts/layouts/Abrasive/style.css'))}}
   {{response.files.append(URL('static','plugin_layouts/superfish.js'))}}
   {{include 'web2py_ajax.html'}}
