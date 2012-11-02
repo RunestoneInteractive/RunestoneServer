@@ -1003,7 +1003,7 @@ Step thru the function using codelens to see the accumulator variable grow.
    s = "ball"
    r = ""
    for item in s:
-      r = s.upper() + r
+      r = item.upper() + r
    print(r)
    </pre>
 
