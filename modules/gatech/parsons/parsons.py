@@ -34,7 +34,7 @@ def setup(app):
     app.add_javascript('js-parsons/lib/underscore-min.js')
     app.add_javascript('js-parsons/lib/lis.js')
     app.add_javascript('js-parsons/parsons.js')
-    app.add_javascript('js-parsons/parsons-noconflict.js')
+    app.add_javascript('parsons-noconflict.js')
 
 
 class ParsonsProblem(Directive):
@@ -59,25 +59,30 @@ class ParsonsProblem(Directive):
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
 	<div style="clear:left;"></div>
+        <div id="parsons-message-%(unique_id)s" style="background: pink; padding: 1em;"></div>
         <a href="#" id="newInstanceLink-%(unique_id)s">Reset</a>
         <a href="#" id="feedbackLink-%(unique_id)s">Get feedback</a>
         </div>
 
     <script>
-		var initial = 'def traverse_in_order(binary_node):\\n' +
-                  '  if binary_node:\\n' +
-					        '    foo\\n' +
-                  '  foo-1\\n';
-		var parson;
-
-	function displayErrors(fb) {
-	    if(fb.errors.length > 0) {
-                alert(fb.errors[0]);
-	    }
-	} 
-
         $pjQ(document).ready(function(){
-            var pp_%(unique_id)s = new ParsonsWidget({
+            var msgBox = $("#parsons-message-%(unique_id)s");
+            msgBox.hide();
+	    var displayErrors = function (fb) {
+	        if(fb.errors.length > 0) {
+                    msgBox.fadeIn(500);
+                    msgBox.css("background-color","pink");
+                    msgBox.html(fb.errors[0]);
+
+	        } else {
+                    msgBox.css("background-color","white");
+                    msgBox.html("Perfect!")
+                    msgBox.fadeOut(3000);
+                }
+	    }
+ 
+
+                var pp_%(unique_id)s = new ParsonsWidget({
                 'sortableId': 'parsons-sortableCode-%(unique_id)s',
 		'trashId': 'parsons-sortableTrash-%(unique_id)s',
                 'max_wrong_lines': 1,
