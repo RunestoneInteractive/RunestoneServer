@@ -53,6 +53,8 @@ class ParsonsProblem(Directive):
         template_values = {}
         template_values['unique_id'] = self.lineno
         template_values['code'] = "\n".join(self.content)
+        template_values['divid'] = self.arguments[0]
+
         TEMPLATE = '''
         <div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
@@ -73,8 +75,11 @@ class ParsonsProblem(Directive):
                     msgBox.fadeIn(500);
                     msgBox.css("background-color","pink");
                     msgBox.html(fb.errors[0]);
+                    var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s")
+                    logBookEvent({'event':'parsons', 'act':hash, 'div_id':'%(divid)s'});
 
 	        } else {
+                    logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s}');
                     msgBox.css("background-color","white");
                     msgBox.html("Perfect!")
                     msgBox.fadeOut(3000);
@@ -82,12 +87,12 @@ class ParsonsProblem(Directive):
 	    }
  
 
-                var pp_%(unique_id)s = new ParsonsWidget({
+        var pp_%(unique_id)s = new ParsonsWidget({
                 'sortableId': 'parsons-sortableCode-%(unique_id)s',
 		'trashId': 'parsons-sortableTrash-%(unique_id)s',
                 'max_wrong_lines': 1,
                 'feedback_cb' : displayErrors
-            });
+        });
         pp_%(unique_id)s.init($pjQ("#parsons-orig-%(unique_id)s").text());
 	pp_%(unique_id)s.shuffleLines();
             $pjQ("#newInstanceLink-%(unique_id)s").click(function(event){
