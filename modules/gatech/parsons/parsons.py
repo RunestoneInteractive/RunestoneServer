@@ -72,14 +72,14 @@ class ParsonsProblem(Directive):
             msgBox.hide();
 	    var displayErrors = function (fb) {
 	        if(fb.errors.length > 0) {
+                    var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
                     msgBox.fadeIn(500);
                     msgBox.css("background-color","pink");
                     msgBox.html(fb.errors[0]);
-                    var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s")
                     logBookEvent({'event':'parsons', 'act':hash, 'div_id':'%(divid)s'});
 
 	        } else {
-                    logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s}');
+                    logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s'});
                     msgBox.css("background-color","white");
                     msgBox.html("Perfect!")
                     msgBox.fadeOut(3000);
@@ -95,13 +95,32 @@ class ParsonsProblem(Directive):
         });
         pp_%(unique_id)s.init($pjQ("#parsons-orig-%(unique_id)s").text());
 	pp_%(unique_id)s.shuffleLines();
+        if(localStorage.getItem('%(divid)s') && localStorage.getItem('%(divid)s-trash')) {
+            try {
+                var solution = localStorage.getItem('%(divid)s');
+                var trash = localStorage.getItem('%(divid)s-trash');
+                pp_%(unique_id)s.createHTMLFromHashes(solution,trash);
+                pp_%(unique_id)s.getFeedback();
+            } catch(err) {
+                var text = "An error occured restoring old %(divid)s state.  Error: ";
+                console.log(text + err.message);
+            }
+
+        }
             $pjQ("#newInstanceLink-%(unique_id)s").click(function(event){
                 event.preventDefault();
                 pp_%(unique_id)s.shuffleLines();
             });
             $pjQ("#feedbackLink-%(unique_id)s").click(function(event){
                 event.preventDefault();
+
+                var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
+                localStorage.setItem('%(divid)s',hash);
+                hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableTrash-%(unique_id)s");
+                localStorage.setItem('%(divid)s-trash',hash);
+
                 pp_%(unique_id)s.getFeedback();
+
             });
             
         });
