@@ -57,9 +57,14 @@ a notation (a program) that can be followed by a computer.  These programs are w
 
 .. parsonsprob:: question1_100_2
 
-   A
-      Indent B
-   C
+   Block One
+   Block Two
+   =====
+      Indent One
+      Indent Two
+   =====
+   Block Three
+   Block Four
 
 .. mchoicemf:: question1_1_1
    :answer_a: To think like a computer.

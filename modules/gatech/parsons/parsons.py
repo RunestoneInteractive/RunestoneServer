@@ -15,6 +15,7 @@
 #
 __author__ = 'hewner'
 
+import re
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
@@ -52,7 +53,11 @@ class ParsonsProblem(Directive):
 
         template_values = {}
         template_values['unique_id'] = self.lineno
-        template_values['code'] = "\n".join(self.content)
+        if '=====' in self.content:
+            template_values['code'] = self.parse_multiline_parsons(self.content);
+        else:
+            template_values['code'] = "\n".join(self.content)
+
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
@@ -133,5 +138,23 @@ class ParsonsProblem(Directive):
         return [nodes.raw('',TEMPLATE % template_values, format='html')]
 
 
+    def parse_multiline_parsons(self, lines):
+        current_block = []
+        results = []
+        for line in lines:
+            if(line == '====='):
+                results.append(self.convert_leading_whitespace_for_block(current_block))
+                current_block = []
+            else:
+                current_block.append(line)
+        results.append(self.convert_leading_whitespace_for_block(current_block))
+        return "\n".join(results)
 
-
+    def convert_leading_whitespace_for_block(self, block):
+        whitespaceMatcher = re.compile("^\s*")
+        initialWhitespace = whitespaceMatcher.match(block[0]).end()
+        result = block[0]
+        for line in block[1:]:
+            result += '\\n' # not a line break...the literal characters \n
+            result += line[initialWhitespace:]
+        return result
