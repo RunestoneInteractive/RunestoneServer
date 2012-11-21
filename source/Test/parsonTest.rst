@@ -49,11 +49,12 @@ a notation (a program) that can be followed by a computer.  These programs are w
 
 **Check your understanding**
 
+Construct a block of code that correctly implements the accumulator pattern.
 .. parsonsprob:: question1_100_1
 
-   A
-   B
-      Indent C
+   x = 0
+   for i in range(10)
+      x = x + 1
 
 .. parsonsprob:: question1_100_2
 
