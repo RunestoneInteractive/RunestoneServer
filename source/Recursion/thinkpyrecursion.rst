@@ -279,14 +279,15 @@ Glossary
 Exercises
 ---------
 
-#.
+#. Study the following source code:
+
    .. sourcecode:: python
-    
+
         def swap(x, y):      # incorrect version
              print("before swap statement: id(x):", id(x), "id(y):", id(y))
              x, y = y, x
              print "after swap statement: id(x):", id(x), "id(y):", id(y))
-    
+
         (a, b) = (0, 1)
         print( "before swap function call: id(a):", id(a), "id(b):", id(b)
         swap(a, b)
@@ -295,14 +296,14 @@ Exercises
    Run this program and describe the results. Use the results to explain
    why this version of ``swap`` does not work as intended. What will be the
    values of ``a`` and ``b`` after the call to ``swap``?
-   
+
 #. Modify the Koch fractal program so that it draws a Koch snowflake, like this:
 
    .. image:: Figures/koch_snowflake.png
-   
-   
-.. index:: fractal; Cesaro torn square
-   
+
+
+   .. index:: fractal; Cesaro torn square
+
 #. Draw a Cesaro torn square fractal, of the order given by the user.  A torn square 
    consists of four torn lines.   We show four different squares of orders 0,1,2,3.     
    In this example, the angle of the tear is 10 degrees.   
@@ -310,33 +311,33 @@ Exercises
    or perhaps let the user input the angle of the tear. 
 
    .. image:: Figures/cesaro_torn_square.png
-   
-.. index:: fractal; Sierpinski triangle
-   
+
+   .. index:: fractal; Sierpinski triangle
+
 #. A Sierpinski triangle of order 0 is an equilateral triangle.  
    An order 1 triangle can be drawn by drawing 3 smaller triangles 
    (shown slightly disconnected here, just to help our understanding).   
    Higher order 2 and 3 triangles are also shown.  
    Adapt the Koch snowflake program to draw Sierpinski triangles of any order 
    input by the user.   
-   
+
    .. image:: Figures/sierpinski_original.png
-  
+
 #. Adapt the above program to draw its three major sub-triangles in different colours, 
    as shown here in this order 4 case:
 
    .. image:: Figures/sierpinski_colour.png
-   
+
 #. Create a module named ``seqtools.py``. Add the functions ``encapsulate`` and 
    ``insert_in_middle`` from the chapter. Add tests which test that these
    two functions work as intended with all three sequence types.
-   
-   
-   
+
+
+
 #. Add each of the following functions to ``seqtools.py``:
 
    .. sourcecode:: python
-    
+
         def make_empty(seq): pass  
         def insert_at_end(val, seq): pass
         def insert_in_front(val, seq): pass
@@ -347,7 +348,7 @@ Exercises
         def count(val, seq): pass     
         def reverse(seq): pass
         def sort_sequence(seq): pass
-        
+
         def testsuite():
             test(make_empty([1, 2, 3, 4]), [])
             test(make_empty(('a', 'b', 'c')), ())
@@ -392,15 +393,15 @@ Exercises
             test(sort_sequence([3, 4, 6, 7, 8, 2]),  [2, 3, 4, 6, 7, 8])
             test(sort_sequence((3, 4, 6, 7, 8, 2)),  (2, 3, 4, 6, 7, 8))
             test(sort_sequence("nothappy"), 'ahnoppty')
-         
+
    As usual, work on each of these one at a time until they pass all the tests.
-   
+
    .. admonition:: But do you really want to do this?
-   
+
        Disclaimer.  These exercises illustrate nicely that the sequence abstraction is
        general, (because slicing, indexing, and concatenation is so general), so it is possible to 
        write general functions that work over all sequence types.  Nice lesson about generalization!
-       
+
        Another view is that tuples are different from lists and strings precisely 
        because you want to think about them very differently. 
        It usually doesn't make sense to sort the fields of the `julia`
@@ -408,10 +409,10 @@ Exercises
        *even if Python lets you do so!*  
        Tuple fields get their meaning from their position in the tuple.  
        Don't mess with that.
-       
+
        Use lists for "many things of the same type", like an 
        enrollment of many students for a course.
-       
+
        Use tuples for "fields of different types that make up a compound record". 
   
    
