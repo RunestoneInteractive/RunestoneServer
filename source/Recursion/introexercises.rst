@@ -41,8 +41,12 @@ Programming Exercises
 
 #. Write a recursive function to compute the factorial of a number.
 
+   .. actex:: ex_rec_1
+
 #. Write a recursive function to reverse a list.
 
+   .. actex:: ex_rec_2
+   
 #. Modify the recursive tree program using one or all of the following
    ideas:
 
@@ -63,17 +67,26 @@ Programming Exercises
 
    If you implement all of the above ideas you will have a very
    realistic looking tree.
+   
+   .. actex:: ex_rec_3
 
 #. Find or invent an algorithm for drawing a fractal mountain. Hint: One
    approach to this uses triangles again.
+
+   .. actex:: ex_rec_4
 
 #. Write a recursive function to compute the Fibonacci sequence. How
    does the performance of the recursive function compare to that of an
    iterative version?
 
+   .. actex:: ex_rec_5
+
 #. Using the turtle graphics module, write a recursive program to
    display a Hilbert curve.
 
+   .. actex:: ex_rec_6
+   
 #. Using the turtle graphics module, write a recursive program to
    display a Koch snowflake.
 
+   .. actex:: ex_rec_7
