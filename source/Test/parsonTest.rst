@@ -49,11 +49,23 @@ a notation (a program) that can be followed by a computer.  These programs are w
 
 **Check your understanding**
 
-.. parsonsprob:: question1_100_1
+.. parsonsprob:: question1_100_3
 
-   A
-   B
-      Indent C
+   Solve this problem.
+   -----
+   def findmax(alist):
+   =====
+      if len(alist) == 0:
+         return None
+   =====
+      curmax = alist[0]
+      for item in alist:
+   =====
+         if item &gt; curmax:
+   =====
+            curmax = item
+   =====
+      return curmax
 
 .. parsonsprob:: question1_100_2
 
