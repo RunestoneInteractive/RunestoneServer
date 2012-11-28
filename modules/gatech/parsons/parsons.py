@@ -47,7 +47,35 @@ class ParsonsProblem(Directive):
 
     def run(self):
         """
-        TODO: Put some example here
+
+   Instructions for solving the problem should be written and then a line with ----- 
+   signals the beginning of the code.  If you want more than one line in a single
+   code block, seperate your code blocks with =====.
+
+   Both the instructions sections and code blocks are optional. If you don't include any
+   =====, the code will assume you want each line to be its own code block.
+
+Example:
+
+.. parsonsprob:: unqiue_problem_id_here
+
+   Solve my really cool parsons problem...if you can.
+   -----
+   def findmax(alist):
+   =====
+      if len(alist) == 0:
+         return None
+   =====
+      curmax = alist[0]
+      for item in alist:
+   =====
+         if item &gt; curmax:
+   =====
+            curmax = item
+   =====
+      return curmax
+
+
         """
 
 
