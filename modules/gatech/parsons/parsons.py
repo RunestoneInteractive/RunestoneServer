@@ -47,20 +47,57 @@ class ParsonsProblem(Directive):
 
     def run(self):
         """
-        TODO: Put some example here
+
+   Instructions for solving the problem should be written and then a line with ----- 
+   signals the beginning of the code.  If you want more than one line in a single
+   code block, seperate your code blocks with =====.
+
+   Both the instructions sections and code blocks are optional. If you don't include any
+   =====, the code will assume you want each line to be its own code block.
+
+Example:
+
+.. parsonsprob:: unqiue_problem_id_here
+
+   Solve my really cool parsons problem...if you can.
+   -----
+   def findmax(alist):
+   =====
+      if len(alist) == 0:
+         return None
+   =====
+      curmax = alist[0]
+      for item in alist:
+   =====
+         if item &gt; curmax:
+   =====
+            curmax = item
+   =====
+      return curmax
+
+
         """
 
 
         template_values = {}
         template_values['unique_id'] = self.lineno
-        if '=====' in self.content:
-            template_values['code'] = self.parse_multiline_parsons(self.content);
+        template_values['instructions'] = ""
+        code = self.content
+
+        if '-----' in self.content:
+            index = self.content.index('-----')
+            template_values['instructions'] = "\n".join(self.content[:index])
+            code = self.content[index + 1:]
+
+        if '=====' in code:
+            template_values['code'] = self.parse_multiline_parsons(code);
         else:
-            template_values['code'] = "\n".join(self.content)
+            template_values['code'] = "\n".join(code)
 
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
+        %(instructions)s
         <div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
