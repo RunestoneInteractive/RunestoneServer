@@ -97,6 +97,11 @@ div.sphinxsidebar {
     text-align: left;
 }
 
+div.sphinxsidebar a:hover {
+    background-color: #d0d0d0;
+}
+
+
 div.sphinxsidebar h3, div.sphinxsidebar h4 {
     margin: 1em 0 0.5em 0;
     font-size: 1em;

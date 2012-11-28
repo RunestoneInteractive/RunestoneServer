@@ -116,7 +116,9 @@ Recursion
 .. toctree::
    :maxdepth: 2
 
-   Recursion/thinkpyrecursion.rst
+   Recursion/recursionsimple.rst
+   Recursion/graphical.rst
+   Recursion/introexercises.rst
 
 
 Defining Classes

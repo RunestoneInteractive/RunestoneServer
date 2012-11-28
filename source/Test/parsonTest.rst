@@ -49,7 +49,15 @@ a notation (a program) that can be followed by a computer.  These programs are w
 
 **Check your understanding**
 
-.. parsonsprob:: question1_100_3
+.. parsonsprob:: question1_100_4
+
+   Construct a block of code that correctly implements the accumulator pattern.
+   -----
+   x = 0
+   for i in range(10)
+      x = x + 1
+
+.. parsonsprob:: question1_100_5
 
    Solve this problem.
    -----
@@ -66,17 +74,6 @@ a notation (a program) that can be followed by a computer.  These programs are w
             curmax = item
    =====
       return curmax
-
-.. parsonsprob:: question1_100_2
-
-   Block One
-   Block Two
-   =====
-      Indent One
-      Indent Two
-   =====
-   Block Three
-   Block Four
 
 .. mchoicemf:: question1_1_1
    :answer_a: To think like a computer.
