@@ -1,3 +1,98 @@
+var createHTML_MCMFRandom=function(divid,qnum,qtext,answerString,feedString,corrAnswer)
+{
+            var j;
+            var ar= new Array();
+            var fr= new Array();
+            var ansArray= new Array();
+            var feedArray=new Array();
+            var hash=new Array();
+            
+            arr=answerString.split(",");
+            fr=feedString.split("::");
+            
+            for(j=0;j<arr.length-1;j++)
+            {
+            ansArray[j]=arr[j];
+            hash[ansArray[j]]=fr[j];
+            }
+            
+            var i = ansArray.length;
+            if ( i == 0 ) return false;
+            while ( --i ) {
+            var j = Math.floor( Math.random() * ( i + 1 ) );
+            var tempi = ansArray[i];
+            var tempj = ansArray[j];
+            ansArray[i] = tempj;
+            ansArray[j] = tempi;
+            }
+            
+            for(i=0;i<ansArray.length;i++)
+            {
+            var k=ansArray[i];
+            feedArray[i]=hash[k];
+            }
+            
+            var o1="<input type='radio' name='group1' value='0'/>"+"<label for= 'opt_1'>  a) "+ansArray[0]+"</label><br />";
+            var o2="<input type='radio' name='group1' value='1'/>"+"<label for= 'opt_2'>  b) "+ansArray[1]+"</label><br />";
+            var o3="<input type='radio' name='group1' value='2'/>"+"<label for= 'opt_3'>  c) "+ansArray[2]+"</label><br />";
+            var o4="<input type='radio' name='group1' value='3'/>"+"<label for= 'opt_4'>  d) "+ansArray[3]+"</label><br />";
+                        
+            var qdiv=divid+"_question";
+            var opdiv1 = divid+ "_op1";
+            var opdiv2 = divid+ "_op2";
+            var opdiv3 = divid+ "_op3";
+            var opdiv4 = divid+ "_op4";
+            var resdiv = "#"+divid+"_test";
+            
+            $("#"+qdiv).html("<br>"+qnum+" "+ qtext);
+            $("#"+opdiv1).html(o1);
+            $("#"+opdiv2).html(o2);
+            $("#"+opdiv3).html(o3);
+            $("#"+opdiv4).html(o4);
+            
+            var index=ansArray.indexOf(corrAnswer);
+            add_button(divid,index,feedArray);  
+};
+            
+var add_button=function(divid,expected,feedArray)
+{
+    var bdiv = divid+"_bt";
+    var element = document.createElement("input");
+    element.setAttribute("type", "button");
+    element.setAttribute("value", "Check Me!");
+    element.setAttribute("name", "do check");
+    element.onclick=function(){checkMCMFRandom(divid,expected,feedArray);};
+    $("#"+bdiv).html(element);
+};
+
+var checkMCMFRandom=function(divid,expected,feed)
+{
+    var given;
+    var feedback = null;
+	var buttonObjs = document.forms[divid+"_form"].elements.group1;
+	for (var i = buttonObjs.length - 1; i >= 0; i--) {
+		if (buttonObjs[i].checked) {
+			given = buttonObjs[i].value;
+            feedback = feed[i];
+		}
+	}
+	// log the answer
+    var answerInfo = 'answer:' + given + ":" + (given == expected ? 'correct' : 'no');
+    logBookEvent({'event':'mChoice','act': answerInfo, 'div_id':divid}); 
+    
+    // give the user feedback
+	feedbackMCMFRandom('#'+divid+'_feedback',given == expected, feedback);
+};
+
+var feedbackMCMFRandom = function(divid,correct,feedbackText) {
+	if (correct) {
+		$(divid).html('Correct!!  ' + feedbackText);
+        $(divid).css('background-color','#C8F4AD');
+	} else {
+		$(divid).html("Incorrect.  " + feedbackText );
+        $(divid).css('background-color','#F4F4AD');
+	}
+};
 
 var checkMe = function(divid, expected, feedback) {
 	var given;
@@ -45,7 +140,7 @@ var feedBack = function(divid,correct,feedbackText) {
       $(divid).html('You are Correct!');
       $(divid).css('background-color','#C8F4AD');
    	} else {
-	    $(divid).html("Inorrect.  " + feedbackText );
+	    $(divid).html("Incorrect.  " + feedbackText );
       $(divid).css('background-color','#F4F4AD');		
 	}
 };
@@ -76,10 +171,10 @@ var checkMCMF = function(divid, expected, feedbackArray) {
 
 var feedBackMCMF = function(divid,correct,feedbackText) {
 	if (correct) {
-		$(divid).html('Correct!  ' + feedbackText);
+		$(divid).html('Correct!!  ' + feedbackText);
         $(divid).css('background-color','#C8F4AD');
 	} else {
-		$(divid).html("Inorrect.  " + feedbackText );
+		$(divid).html("Incorrect.  " + feedbackText );
         $(divid).css('background-color','#F4F4AD');
 	}
 };

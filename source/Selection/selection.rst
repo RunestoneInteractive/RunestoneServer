@@ -210,10 +210,10 @@ Level     Category        Operators
    :answer_c: ((((5*3) &gt; 10) and 4)+6) == 11
    :answer_d: ((5*3) &gt; (10 and (4+6))) == 11
    :correct: a
-   :feedback_a: Yes, * and + are the strongest binding, followed by &gt; and ==, and then the keyword &quot;and&quot;
-   :feedback_b: Arithmetic operators (*, +) bind stronger than comparison operators (&gt;, ==)
-   :feedback_c: This grouping assumes Python simply binds from left to right, which is incorrect.  It follows the binding precedence listed in the table in this section.
-   :feedback_d: This grouping assumes that &quot;and&quot; has a stronger binding precedence than ==, which is not true. 
+   :feedback_a: Yes, * and + have higher precedence, followed by &gt; and ==, and then the keyword &quot;and&quot;
+   :feedback_b: Arithmetic operators (*, +) have higher precedence than comparison operators (&gt;, ==)
+   :feedback_c: This grouping assumes Python simply evaluates from left to right, which is incorrect.  It follows the precedence listed in the table in this section.
+   :feedback_d: This grouping assumes that &quot;and&quot; has a higher precedence than ==, which is not true. 
 
    Which of the following properly expresses the  precedence of operators (using parentheses) in the following expression: 5*3 > 10 and 4+6==11
 
@@ -803,7 +803,7 @@ Here is the same program in codelens.
    :answer_b: No
    :correct: a
    :feedback_a: It is perfectly valid to return the result of evaluating a Boolean expression.
-   :feedback_b: x +y &lt;z is a valid Boolean expression, which will evaluate to True or False.  It is perfectly legal to return True or False from a function, and to have the statement to be evaluated in the same line as the return keyword.
+   :feedback_b: x +y < z is a valid Boolean expression, which will evaluate to True or False.  It is perfectly legal to return True or False from a function, and to have the statement to be evaluated in the same line as the return keyword.
 
    Is the following statement legal in Python (assuming x, y and z are defined to be numbers)?
    <pre>
