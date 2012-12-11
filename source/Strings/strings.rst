@@ -97,6 +97,47 @@ The repetition is done before the concatenation.  If you want to cause the conca
 done first, you will need to use parenthesis.
 
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_1_1 
+   :answer_a: python rocks
+   :answer_b: python
+   :answer_c: pythonrocks
+   :answer_d: Error, you cannot add two strings together.
+   :correct: c
+   :feedback_a: Concatenation does not automatically add a space.
+   :feedback_b: The expression s+t is evaluated first, then the resulting string is printed.
+   :feedback_c: Yes, the two strings are glued end to end.
+   :feedback_d: The + operator has different meanings depending on the operands, in this case, two strings.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python"
+   t = "rocks"
+   print(s+t)
+   </pre>
+
+.. mchoicemf:: test_question8_1_2
+   :answer_a: python!!!
+   :answer_b: python!python!python!
+   :answer_c: pythonpythonpython!
+   :answer_d: Error, you cannot perform concatenation and repetition at the same time.
+   :correct: a
+   :feedback_a: Yes, repetition has precedence over concatenation
+   :feedback_b: Repetition is done first.
+   :feedback_c: The repetition operator is working on the excl variable.
+   :feedback_d: The + and * operator are defined for strings as well as numbers.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python"
+   excl = "!"
+   print(s+excl*3)
+   </pre>
+
+
 Index Operator: Working with the Characters of a String
 -------------------------------------------------------
 
@@ -140,6 +181,44 @@ expression so long as it evaluates to a valid index value.
 Note that indexing returns a *string* --- Python has no special type for a single character.
 It is just a string of length 1.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_2_1
+   :answer_a: t
+   :answer_b: h
+   :answer_c: c
+   :answer_d: Error, you cannot use the [ ] operator with a string.
+   :correct: b
+   :feedback_a: Index locations do not start with 1, they start with 0.
+   :feedback_b: Yes, index locations start with 0.
+   :feedback_c: s[-3] would return c, counting from right to left.
+   :feedback_d: [ ] is the index operator
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[3])
+   </pre>
+
+
+.. mchoicemf:: test_question8_2_2
+   :answer_a: tr
+   :answer_b: ps
+   :answer_c: nn
+   :answer_d: Error, you cannot use the [ ] operator with the + operator.
+   :correct: a
+   :feedback_a: Yes, indexing operator has precedence over concatenation.
+   :feedback_b: p is at location 0, not 2.
+   :feedback_c: n is at location 5, not 2.
+   :feedback_d: [ ] operator returns a string that can be concatenated with another string.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[2] + s[-5])
+   </pre>
 
 
 String Methods
@@ -232,10 +311,42 @@ change the original.  You can also consult the `Python documentation for strings
     print(food.index("e"))
 
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_3_1
+   :answer_a: 0
+   :answer_b: 2
+   :answer_c: 3
+   :correct: c
+   :feedback_a: There are definitely o and p characters.
+   :feedback_b: There are 2 o characters but what about p?
+   :feedback_c: Yes, add the number of o characters and the number of p characters.
 
 
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s.count("o") + s.count("p"))
+   </pre>
 
 
+.. mchoicemf:: test_question8_3_2
+   :answer_a: yyyyy
+   :answer_b: 55555
+   :answer_c: n
+   :answer_d: Error, you cannot combine all those things together.
+   :correct: a
+   :feedback_a: Yes, s[1] is y and the index of n is 5, so 5 y characters
+   :feedback_b: Close.  5 is not repeated, it is the number of times to repeat.
+   :feedback_c: This expression uses the index of n
+   :feedback_d: This is fine, the repetition operator used the result of indexing and the index method.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[1]*s.index("n"))
+   </pre>
 
 .. index::
     single: len function
@@ -291,6 +402,42 @@ two lines of code from above.
     
     lastch = fruit[len(fruit)-1]
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_4_1
+   :answer_a: 11
+   :answer_b: 12
+   :correct: b
+   :feedback_a: The blank counts as a character.
+   :feedback_b: Yes, there are 12 characters in the string.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(len(s))
+   </pre>
+
+
+.. mchoicemf:: test_question8_4_2
+   :answer_a: o
+   :answer_b: r
+   :answer_c: s
+   :answer_d: Error, len(s) is 12 and there is no index 12.
+   :correct: b
+   :feedback_a: Take a look at the index calculation again, len(s)-5.
+   :feedback_b: Yes, len(s) is 12 and 12-5 is 7.  Use 7 as index and remember to start counting with 0.
+   :feedback_c: s is at index 11
+   :feedback_d: You subtract 5 before using the index operator so it will work.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[len(s)-5])
+   </pre>
+
+
 The Slice Operator
 ------------------
 
@@ -323,6 +470,45 @@ end of the string.
     print(fruit[3:])
 
 What do you think ``fruit[:]`` means?
+
+**Check your understanding**
+
+.. mchoicemf:: test_question8_5_1
+   :answer_a: python
+   :answer_b: rocks
+   :answer_c: hon r
+   :answer_d: Error, you cannot have two numbers inside the [ ].
+   :correct: c
+   :feedback_a: That would be s[0:6].
+   :feedback_b: That would be s[7:].
+   :feedback_c: Yes, start with the character at index 3 and go up to but not include the character at index 8.
+   :feedback_d: This is called slicing, not indexing.  It requires a start and an end.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[3:8])
+   </pre>
+
+
+.. mchoicemf:: test_question8_5_2
+   :answer_a: rockrockrock
+   :answer_b: rock rock rock
+   :answer_c: rocksrocksrocks
+   :answer_d: Error, you cannot use repetition with slicing.
+   :correct: a
+   :feedback_a: Yes, rock starts at 7 and goes thru 10.  Repeat it 3 times.
+   :feedback_b: Repetition does not add a space.
+   :feedback_c: Slicing will not include the character at index 11.  Just up to it (10 in this case).
+   :feedback_d: The slice will happen first, then the repetition.  So it is ok.
+
+
+   What is printed by the following statements?
+   <pre>
+   s = "python rocks"
+   print(s[7:11]*3)
+   </pre>
 
 
 .. index:: string comparison, comparison of strings
@@ -402,6 +588,49 @@ There is also a similar function called ``chr`` that converts integers into thei
 
 One thing to note in the last two examples is the fact that the space character has an ordinal value (32).  Even though you don't see it, it is an actual character.  We sometimes call it a *nonprinting* character.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_6_1
+   :answer_a: True
+   :answer_b: False
+   :correct: a
+   :feedback_a: Both match up to the g but Dog is shorter than Doghouse so it comes first in the dictionary.
+   :feedback_b: Strings are compared character by character.
+   
+   Evaluate the following comparison:
+   <pre>
+   "Dog" < "Doghouse"
+   </pre>
+   
+   
+.. mchoicemf:: test_question8_6_2
+   :answer_a: True
+   :answer_b: False
+   :answer_c: They are the same word
+   :correct: b
+   :feedback_a: d is greater than D according to the ord function (68 versus 100).
+   :feedback_b: Yes, upper case is less than lower case according to the ordinal values of the characters.
+   :feedback_c: Python is case sensitive meaning that upper case and lower case characters are different.
+   
+   Evaluate the following comparison:
+   <pre>
+   "dog" < "Dog"
+   </pre>
+   
+  
+.. mchoicemf:: test_question8_6_3
+   :answer_a: True
+   :answer_b: False
+   :correct: b
+   :feedback_a: d is greater than D.
+   :feedback_b: The length does not matter.
+
+   Evaluate the following comparison:
+   <pre>
+   "dog" < "Doghouse"
+   </pre>
+
+   
 
 .. index:: mutable, immutable, runtime error
 
@@ -434,7 +663,23 @@ best you can do is create a new string that is a variation on the original.
 The solution here is to concatenate a new first letter onto a slice of
 ``greeting``. This operation has no effect on the original string.
 
+**Check your understanding**
 
+.. mchoicemf:: test_question8_7_1
+   :answer_a: Ball
+   :answer_b: Call
+   :answer_c: Error
+   :correct: c
+   :feedback_a: Assignment is not allowed with strings.
+   :feedback_b: Assignment is not allowed with strings.
+   :feedback_c: Yes, strings are immutable.
+
+   What is printed by the following statements:
+   <pre>
+   s = "Ball"
+   s[0] = "C"
+   print(s)
+   </pre>
 
 
 .. index:: traversal, for loop, concatenation, abecedarian series
@@ -482,6 +727,48 @@ The loop variable ``achar`` is automatically reassigned each character in the st
 We will refer to this type of sequence iteration as **iteration by item**.  
 Note that it is only possible to process the characters one at a time from left to right.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_8_1
+   :answer_a: 10
+   :answer_b: 11
+   :answer_c: 12
+   :answer_d: Error, the for statement needs to use the range function.
+   :correct: c
+   :feedback_a: Iteration by item will process once for each item in the sequence.
+   :feedback_b: The blank is part of the sequence.
+   :feedback_c: Yes, there are 12 characters, including the blank.
+   :feedback_d: The for statement can iterate over a sequence item by item.
+
+
+   How many times is the word HELLO printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for ch in s:
+      print("HELLO")
+   </pre>
+   
+   
+   
+.. mchoicemf:: test_question8_8_2
+   :answer_a: 4
+   :answer_b: 5
+   :answer_c: 6
+   :answer_d: Error, the for statement cannot use slice.
+   :correct: b
+   :feedback_a: Slice returns a sequence that can be iterated over.
+   :feedback_b: Yes, The blank is part of the sequence returned by slice
+   :feedback_c: Check the result of s[3:8].  It does not include the item at index 8.
+   :feedback_d: Slice returns a sequence.
+
+
+   How many times is the word HELLO printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for ch in s[3:8]:
+      print("HELLO")
+   </pre>
+
 Traversal and the ``for`` Loop: By Index
 ----------------------------------------
 
@@ -525,6 +812,30 @@ well as up so the following code will print the characters from right to left.
 
 Trace the values of ``idx`` and satisfy yourself that they are correct.  In particular, note the start and end of the range.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_9_1
+   :answer_a: 0
+   :answer_b: 1
+   :answer_c: 2
+   :answer_d: Error, the for statement cannot have an if inside.
+   :correct: c
+   :feedback_a: The for loop visits each index but the selection only prints some of them.
+   :feedback_b: o is at positions 4 and 8
+   :feedback_c: Yes, it will print all the characters in even index positions.
+   :feedback_d: The for statement can have any statements inside, including if as well as for.
+
+
+   How many times is the letter o printed by the following statements?
+   <pre>
+   s = "python rocks"
+   for idx in range(len(s)):
+      if idx % 2 == 0:
+         print(s[idx])
+   
+   </pre>
+
+
 Traversal and the ``while`` Loop
 --------------------------------
 
@@ -563,8 +874,27 @@ Here is the same example in codelens so that you can trace the values of the var
         print(fruit[position])
         position = position + 1
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_10_1
+   :answer_a: 0
+   :answer_b: 1
+   :answer_c: 2
+   :correct: a
+   :feedback_a: Yes, idx goes thru the odd numbers starting at 1.  o is at position 4 and 8.
+   :feedback_b: o is at positions 4 and 8.  idx starts at 1, not 0.
+   :feedback_c: There are 2 o characters but idx does not take on the correct index values.
 
 
+   How many times is the letter o printed by the following statements?
+   <pre>
+   s = "python rocks"
+   idx = 1
+   while idx < len(s):
+      print(s[idx])
+      idx = idx + 2
+   
+   </pre>
 
 .. index::
     single: in operator
@@ -657,6 +987,25 @@ Step thru the function using codelens to see the accumulator variable grow.
        
     print(removeVowels("compsci"))
 
+**Check your understanding**
+
+.. mchoicemf:: test_question8_11_1
+   :answer_a: Ball
+   :answer_b: BALL
+   :answer_c: LLAB
+   :correct: c
+   :feedback_a: Each item is converted to upper case before concatenation.
+   :feedback_b: Each character is converted to upper case but the order is wrong.
+   :feedback_c: Yes, the order is reversed due to the order of the concatenation.
+
+   What is printed by the following statements:
+   <pre>
+   s = "ball"
+   r = ""
+   for item in s:
+      r = item.upper() + r
+   print(r)
+   </pre>
 
 Turtles and Strings and L-Systems
 ---------------------------------
@@ -1260,6 +1609,12 @@ Exercises
 #. Print out a neatly formatted multiplication table, up to 12 x 12.
 
    .. actex:: ex_8_4
+
+
+#. Write a function that will return the number of digits in an integer.
+
+    .. actex:: ex_7_10
+
 
 #. Write a function that reverses its string argument.
 

@@ -7,7 +7,7 @@ logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
-def hsblog():
+def hsblog():    # Human Subjects Board Log
     if auth.user:
         sid = auth.user.username
     else:
@@ -20,7 +20,24 @@ def hsblog():
 
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
 
-
+def runlog():    # Log errors and runs with code
+    if auth.user:
+        sid = auth.user.username
+    else:
+        sid = request.client+"@anon.user"
+    div_id = request.vars.div_id
+    course = request.vars.course
+    code = request.vars.code
+    ts = datetime.datetime.now()
+    error_info = request.vars.errinfo
+    if error_info != 'success':
+        event = 'ac_error'
+        act = error_info
+    else:
+        act = 'run'
+        event = 'activecode'
+    db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
 #
 #  Ajax Handlers for saving and restoring active code blocks
 #
@@ -29,19 +46,21 @@ def saveprog():
     acid = request.vars.acid
     code = request.vars.code
 
-    # codetbl = db.code
-    # query = codetbl.sid==auth.user.username and codetbl.acid==acid
-    # result = db(query)
+    response.headers['content-type'] = 'application/json'
 
-    print 'inserting new', acid
-    db.code.insert(sid=auth.user.username,
-                   acid=acid,code=code,
-                   timestamp=datetime.datetime.now(),
-                   course_id=auth.user.course_id)
+    try:
+        db.code.insert(sid=auth.user.username,
+            acid=acid,code=code,
+            timestamp=datetime.datetime.now(),
+            course_id=auth.user.course_id)
+    except Exception as e:
+        if not auth.user:
+            return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+        else:
+            return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
 
-    return acid
-#    response.headers.add_header('content-type','application/json')
-#    response.out.write(simplejson.dumps([acid]))
+    return json.dumps([acid])
+
 
 
 def getprog():
@@ -56,11 +75,12 @@ def getprog():
     codetbl = db.code
     acid = request.vars.acid
     sid = request.vars.sid
+
     if sid:
-        query = codetbl.sid == sid and codetbl.acid == acid
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid))
     else:
         if auth.user:
-            query = codetbl.sid == auth.user.username and codetbl.acid == acid
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid))
         else:
             query = None
 
@@ -69,7 +89,8 @@ def getprog():
         result = db(query)
         if not result.isempty():
             res['acid'] = acid
-            res['source'] = result.select(orderby=~codetbl.timestamp).first().code
+            r = result.select(orderby=~codetbl.timestamp).first().code
+            res['source'] = r
             if sid:
                 res['sid'] = sid
         else:

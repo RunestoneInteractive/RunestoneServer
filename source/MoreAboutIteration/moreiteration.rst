@@ -324,7 +324,7 @@ turtle and then use conditionals to decide.  Here is one implementation:
 
 .. sourcecode:: python
 
-    def isInWindow(w,t):
+    def isInScreen(wn,t):
         leftBound = - wn.window_width()/2
         rightBound = wn.window_width()/2
         topBound = wn.window_height()/2
@@ -1254,16 +1254,6 @@ these building blocks.
     .. actex:: ex_7_9
 
       
-#. Write a function that will return the number of digits in an integer.
-
-    .. actex:: ex_7_10
-
-
-#. Write a function ``sum_of_squares(xs)`` that computes the sum
-   of the squares of the numbers in the list ``xs``.  For example,
-   ``sum_of_squares([2, 3, 4])`` should return 4+9+16 which is 29:
-
-    .. actex:: ex_7_11
 
 #. Modify the the Random turtle walk program so that the turtle turns around
    when it hits the wall and goes the other direction.  This bouncing off the

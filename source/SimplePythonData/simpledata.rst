@@ -361,7 +361,7 @@ In each case the result is the value of the variable.
 To see this in even more detail, we can run the program using codelens.  
 
 .. codelens:: ch02_9_codelens
-
+    :showoutput:
 
     message = "What's up, Doc?"
     n = 17
@@ -413,7 +413,7 @@ assignment we even give it a value that is of a different type.
 
 
 .. codelens:: ch02_11
-
+    :showoutput:
 
     day = "Thursday"
     print(day)
@@ -704,7 +704,6 @@ compute the correct values.
     minutes =  secs_still_remaining // 60
     secs_finally_remaining = secs_still_remaining  % 60
 
-    print("Hrs=", hours, "mins=", minutes, "secs=", secs_finally_remaining)
 
 **Check your understanding**
 
@@ -1081,8 +1080,8 @@ a variable, which means the same as incrementing it by 1.
      eBook, you can have a look here.  There are also instructions for
      installing Python on your computer here.
 
-   * `Topic 2: <http://diveintopython3.org>`_ Dive Into Python 3,
-     this is another oline textbook by Mark Pilgrim.  If you've had some
+   * `Topic 2: <http://interactivepython.org/courselib/static/diveintopython3/index.html>`_ Dive Into Python 3,
+     this is an online textbook by Mark Pilgrim.  If you've had some
      programming experience already this book takes you off the deep end with
      both feet.
 
@@ -1106,6 +1105,11 @@ a variable, which means the same as incrementing it by 1.
    x = x - 1
    print (x)
    </pre>
+
+
+.. admonition:: Scratch Editor
+
+   .. actex:: sf_scratch_1
 
 
 Glossary
@@ -1141,9 +1145,6 @@ Glossary
         Information in a program that is meant for other programmers (or anyone
         reading the source code) and has no effect on the execution of the
         program.
-
-    concatenate
-        To join two strings end-to-end.
 
     data type
         A set of values. The type of a value determines how it can be used in

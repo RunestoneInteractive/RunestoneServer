@@ -6,6 +6,9 @@
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
 
+.. meta::
+   :description: An interactive version of How to Think Like a Computer Scientist.  Learn to program in Python using this online textbook.
+   :keywords: python, turtle graphics, computer science
 
 ======================================
 How to Think Like a Computer Scientist
@@ -122,7 +125,9 @@ Recursion
 .. toctree::
    :maxdepth: 2
 
-   Recursion/thinkpyrecursion.rst
+   Recursion/recursionsimple.rst
+   Recursion/graphical.rst
+   Recursion/introexercises.rst
 
 
 Defining Classes

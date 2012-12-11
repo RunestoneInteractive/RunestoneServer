@@ -223,10 +223,13 @@ the end of the file.
                                                       a parameter than only n characters 
                                                       will be returned if the line is longer 
                                                       than ``n``. 
-``readlines(n)``          ``filevar.readlines()``     Returns a list of ``n`` strings, each 
+``readlines(n)``          ``filevar.readlines()``     Returns a list of strings, each 
                                                       representing a single line of the file. 
                                                       If n is not provided then all lines of
-                                                      the file are returned. 
+                                                      the file are returned. If n is provided
+                                                      then n characters are read but n is 
+                                                      rounded up so that an entire line is
+                                                      returned.
 ======================== =========================== ===================================== 
 
 Now lets look at another method of reading our file using a ``while`` loop.  This important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.

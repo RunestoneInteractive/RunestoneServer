@@ -65,13 +65,13 @@ function outf(text) {
     x = text;
     if (x.charAt(0) == '(') {
         x = x.slice(1,-1);
-	x = '['+x+']'
-	try {
+    x = '['+x+']'
+    try {
         var xl = eval(x);
         xl = xl.map(pyStr);
         x = xl.join(' ');
-	} catch(err) {
-	    }
+    } catch(err) {
+        }
     }
     text = x;
     text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br/>");
@@ -89,8 +89,9 @@ function createEditors() {
                 singleLineStringErrors: false},
             lineNumbers: true,
             indentUnit: 4,
-            tabMode: "indent",
+            indentWithTabs: false,
             matchBrackets: true,
+            extraKeys: {"Tab":"indentMore", "Shift-Tab": "indentLess"},
             onKeyEvent:handleEdKeys
         }
                 );
@@ -114,20 +115,20 @@ function runit(myDiv,theButton,includes) {
     if (theButton !== undefined) {
         Sk.runButton = theButton;
     }
+    $("#"+myDiv+"_errinfo").remove()
     var editor = cm_editors[myDiv+"_code"];
     if (editor.acEditEvent) {
-        logBookEvent({'event':'activecode','act': 'edit', 'div_id':myDiv}); // Log the run event
+        logBookEvent({'event':'activecode','act': 'edit', 'div_id':myDiv}); // Log the edit event
         editor.acEditEvent = false;
     }
-    logBookEvent({'event':'activecode','act': 'run', 'div_id':myDiv}); // Log the run event
     var prog = "";
     var text = "";
     if (includes !== undefined ) {
         // iterate over the includes, in-order prepending to prog
-		for (var x in includes) {
-			text = cm_editors[includes[x] + "_code"].getValue();
-			prog = prog + text + "\n"
-		}
+        for (var x in includes) {
+            text = cm_editors[includes[x] + "_code"].getValue();
+            prog = prog + text + "\n"
+        }
     }
     prog = prog + editor.getValue();
     var mypre = document.getElementById(myDiv + "_pre");
@@ -145,26 +146,99 @@ function runit(myDiv,theButton,includes) {
         }
     }
     // set execLimit in milliseconds  -- for student projects set this to 
-    // 30 seconds?
-    Sk.execLimit = 30000;
+    // 25 seconds -- just less than Chrome's own timer.
+    Sk.execLimit = 25000;
     // configure Skulpt output function, and module reader
     Sk.configure({output:outf,
                 read: builtinRead
             });
     try {
         Sk.importMainWithBody("<stdin>", false, prog);
+        logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':'success'}); // Log the run event
     } catch (e) {
-        alert(e);
+        logRunEvent({'div_id':myDiv, 'code':prog, 'errinfo':e.toString()}); // Log the run event
+        //alert(e);
+    addErrorMessage(e,myDiv)
     }
     if (! Sk.isTurtleProgram ) {
         $(theButton).removeAttr('disabled');
     }
+    if (allVisualizers !== undefined) {
+        $.each(allVisualizers, function(i, e) {
+            e.redrawConnectors();
+          });
+    }
 }
+
+function addErrorMessage(err, myDiv) {
+    var errHead = $('<h3>').html('Error')
+    var divEl = document.getElementById(myDiv)
+    var eContainer = divEl.appendChild(document.createElement('div'))
+    eContainer.className = 'error'
+    eContainer.id = myDiv + '_errinfo'
+    eContainer.appendChild(errHead[0])
+    var errText = eContainer.appendChild(document.createElement('pre'))
+    var errString = err.toString()
+    errText.innerHTML = errString
+    var to = errString.indexOf(":")
+    var errName = errString.substring(0,to)
+    $(eContainer).append('<h3>Description</h3>')
+    var errDesc = eContainer.appendChild(document.createElement('p'))
+    errDesc.innerHTML = errorText[errName]
+    $(eContainer).append('<h3>To Fix</h3>')
+    var errFix = eContainer.appendChild(document.createElement('p'))
+    errFix.innerHTML = errorText[errName+'Fix']
+    var moreInfo = '../ErrorHelp/'+errName.toLowerCase()+'.html'
+}
+
+var errorText = {}
+
+errorText.ParseError = "A parse error means that Python does not understand the syntax on the line the error message points out.  Common examples are forgetting commas beteween arguments or forgetting a : on a for statement"
+errorText.ParseErrorFix = "To fix a parse error you just need to look carefully at the line with the error and possibly the line before it.  Make sure it conforms to all of Python's rules."
+errorText.TypeError = "Type errors most often occur when an expression tries to combine two objects with types that should not be combined.  Like raising a string to a power"
+errorText.TypeErrorFix = "To fix a type error you will most likely need to trace through your code and make sure the variables have the types you expect them to have.  It may be helpful to print out each variable along the way to be sure its value is what you think it should be."
+errorText.NameError = "A name error almost always means that you have used a variable before it has a value.  Often this may be a simple typo, so check the spelling carefully."
+errorText.NameErrorFix = "Check the right hand side of assignment statements and your function calls, this is the most likely place for a NameError to be found."
+errorText.ValueError = "A ValueError most often occurs when you pass a parameter to a function and the function is expecting one type and you pass another."
+errorText.ValueErrorFix = "The error message gives you a pretty good hint about the name of the function as well as the value that is incorrect.  Look at the error message closely and then trace back to the variable containing the problematic value."
+errorText.AttributeError = "This error message is telling you that the object on the left hand side of the dot, does not have the attribute or method on the right hand side."
+errorText.AttributeErrorFix = "The most common variant of this message is that the object undefined does not have attribute X.  This tells you that the object on the left hand side of the dot is not what you think. Trace the variable back and print it out in various places until you discover where it becomes undefined.  Otherwise check the attribute on the right hand side of the dot for a typo."
+errorText.TokenError= "Most of the time this error indicates that you have forgotten a right parenthesis or have forgotten to close a pair of quotes."
+errorText.TokenErrorFix= "Check each line of your program and make sure that your parenthesis are balanced."
+errorText.TimeLimitError = "Your program is running too long.  Most programs in this book should run in less than 10 seconds easily. This probably indicates your program is in an infinite loop."
+errorText.TimeLimitErrorFix = "Add some print statements to figure out if your program is in an infinte loop.  If it is not you can increase the run time with sys.setExecutionLimit(msecs)"
+errorText.Error = "Your program is running for too long.  Most programs in this book should run in less than 30 seconds easily. This probably indicates your program is in an infinite loop."
+errorText.ErrorFix = "Add some print statements to figure out if your program is in an infinte loop.  If it is not you can increase the run time with sys.setExecutionLimit(msecs)"
+errorText.SyntaxError = "This message indicates that Python can't figure out the syntax of a particular statement.  Some examples are assigning to a literal, or a function call"
+errorText.SyntaxErrorFix = "Check your assignment statments and make sure that the left hand side of the assignment is a variable, not a literal or a function."
+errorText.IndexError = "This message means that you are trying to index past the end of a string or a list.  For example if your list has 3 things in it and you try to access the item at position 3 or more."
+errorText.IndexErrorFix = "Remember that the first item in a list or string is at index position 0, quite often this message comes about because you are off by one.  Remember in a list of length 3 the last legal index is 2"
+errorText.URIError = ""
+errorText.URIErrorFix = ""
+errorText.ImportError = "This error message indicates that you are trying to import a module that does not exist"
+errorText.ImportErrorFix = "One problem may simply be that you have a typo.  It may also be that you are trying to import a module that exists in 'real' Python, but does not exist in this book.  If this is the case, please submit a feature request to have the module added."
+errorText.ReferenceError = "This is most likely an internal error, particularly if the message references the console."
+errorText.ReferenceErrorFix = "Try refreshing the webpage, and if the error continues, submit a bug report along with your code"
+errorText.ZeroDivisionError = "This tells you that you are trying to divide by 0. Typically this is because the value of the variable in the denominator of a division expression has the value 0"
+errorText.ZeroDivisionErrorFix = "You may need to protect against dividing by 0 with an if statment, or you may need to rexamine your assumptions about the legal values of variables, it could be an earlier statment that is unexpectedly assigning a value of zero to the variable in question."
+errorText.RangeError = "This message almost always shows up in the form of Maximum call stack size exceeded."
+errorText.RangeErrorFix = "This always occurs when a function calls itself.  Its pretty likely that you are not doing this on purpose. Except in the chapter on recursion.  If you are in that chapter then its likely you haven't identified a good base case."
+errorText.InternalError = "An Internal error may mean that you've triggered a bug in our Python"
+errorText.InternalErrorFix = "Report this error, along with your code as a bug."
+errorText.IndentationError = "This error occurs when you have not indented your code properly.  This is most likely to happen as part of an if, for, while or def statement."
+errorText.IndentationErrorFix = "Check your if, def, for, and while statements to be sure the lines are properly indented beneath them.  Another source of this error comes from copying and pasting code where you have accidentally left some bits of code lying around that don't belong there anymore."
 
 function logBookEvent(eventInfo) {
     eventInfo.course = eBookConfig.course
     if (eBookConfig.logLevel > 0){
        jQuery.get(eBookConfig.ajaxURL+'hsblog',eventInfo); // Log the run event
+    }
+}
+
+function logRunEvent(eventInfo) {
+    eventInfo.course = eBookConfig.course
+    if (eBookConfig.logLevel > 0){
+       jQuery.post(eBookConfig.ajaxURL+'runlog',eventInfo); // Log the run event
     }
 }
 
@@ -176,8 +250,12 @@ function saveSuccess(data,status,whatever) {
     }
     else {
         var acid = eval(data)[0];
-        $('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
-        $('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
+        if (acid.indexOf("ERROR:") == 0) {
+            alert(acid);
+        } else {
+            $('#'+acid+' .CodeMirror').css('border-top', '2px solid #aaa');
+            $('#'+acid+' .CodeMirror').css('border-bottom', '2px solid #aaa');
+        }
     }
 }
 
@@ -324,48 +402,59 @@ function sendGrade(grade,sid,acid,id) {
 }
 
 function gotUser(data, status, whatever) {
-    var mess;
-
-    if (data.indexOf('login') != -1) {
-        mess = "Redirect to Login";
+    var mess = '';
+    var caughtErr = false;
+    var d;
+    try {
+        d = eval(data)[0];
+    } catch (err) {
         if (eBookConfig.loginRequired) {
-            window.location.href=eBookConfig.app+'/default/user/login'
-            return
-        }
-    } else if (data.redirect) {
-        mess = "Not logged in";
-        if (eBookConfig.loginRequired) {
-            window.location.href=data.redirect
-            return
-        }
-    } else if (data == "") {
-        mess = "Not logged in"
-        $('button.ac_opt').hide();
-        $('span.loginout').html('<a href="'+ eBookConfig.app + '/default/user/login">login</a>')
-    } else {
-        try {
-            var d = eval(data)[0];
-            if (d.redirect) {
-                if (eBookConfig.loginRequired) {
-                    window.location.href=eBookConfig.app+'/default/user/login?_next='+window.location.href
-                } else {
-                    mess = "Not logged in";
-                    $('button.ac_opt').hide();
-                    $('span.loginout').html('<a href="'+ eBookConfig.app + '/default/user/login">login</a>')
-                }
+            if (confirm("Error: " + err.toString() + "Please report this error!  Click OK to continue without logging in.  Cancel to retry.")) {
+                caughtErr = true;
+                mess = "Not logged in";
+	            $('button.ac_opt').hide();
+	            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
             } else {
-                mess = d.email;
-                eBookConfig.isLoggedIn = true;
+                window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
             }
-        } catch(err) {
-            if (eBookConfig.loginRequired) {
-                window.location.href=eBookConfig.app+'/default/user/login?_next='+window.location.href
-            }
+        }
+    }
+    if (d.redirect) {
+        if (eBookConfig.loginRequired) {
+            window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
+        } else {
+            mess = "Not logged in";
+            $('button.ac_opt').hide();
+            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+        }
+    } else {
+        if (!caughtErr) {
+            mess = d.email;
+            eBookConfig.isLoggedIn = true;
+            timedRefresh();
         }
     }
     x = $(".footer").text();
     $(".footer").text(x + mess);
-    logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
+    logBookEvent({
+        'event': 'page',
+        'act': 'view',
+        'div_id': window.location.pathname
+    })
+}
+
+
+function timedRefresh() {
+    timeoutPeriod = 4500000;  // 75 minutes
+    $(document).bind("idle.idleTimer",function(){
+        // After timeout period send the user back to the index.  This will force a login
+        // if needed when they want to go to a particular page.  This may not be perfect
+        // but its an easy way to make sure laptop users are properly logged in when they
+        // take quizzes and save stuff.
+        if (location.href.indexOf('index.html') < 0)
+            location.href = eBookConfig.app+'/static/'+eBookConfig.course + '/index.html'
+    });
+    $.idleTimer(timeoutPeriod);
 }
 
 function shouldLogin() {
@@ -383,6 +472,7 @@ function isLoggedIn() {
     }
     return false;
 }
+
 function addUserToFooter() {
     // test to see if online before doing this.
     if (shouldLogin()) {
@@ -397,8 +487,30 @@ function addUserToFooter() {
 
 
 }
-if (typeof addingEditors == 'undefined') {
-    addingEditors = true;
-    $(document).ready(createEditors);
+
+/*
+Since I don't want to modify the codelens code I'll attach the logging functionality this way.
+This actually seems like a better way to do it maybe across the board to separate logging
+from the real funcionality.  It would also allow a better way of turning off/on logging..
+As long as Philip doesn't go and change the id values for the buttons and slider this will
+continue to work.... In the best of all worlds we might add a function to the visualizer to
+return the buttons, but I'm having a hard time thinking of any other use for that besides mine.
+*/
+function attachLoggers(codelens,divid) {
+    codelens.domRoot.find("#jmpFirstInstr").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'first', 'div_id':divid});
+    });
+    codelens.domRoot.find("#jmpLastInstr").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'last', 'div_id':divid});
+    });
+    codelens.domRoot.find("#jmpStepBack").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'back', 'div_id':divid});
+    });
+    codelens.domRoot.find("#jmpStepFwd").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'fwd', 'div_id':divid});
+    });
+    codelens.domRoot.find("#executionSlider").bind('slide',function(evt,ui) {
+        logBookEvent({'event':'codelens', 'act': 'slide', 'div_id':divid});
+    });
+
 }
-$(document).ready(addUserToFooter)

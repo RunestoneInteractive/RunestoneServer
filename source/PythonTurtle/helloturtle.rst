@@ -76,8 +76,6 @@ turtle and a half drawn rectangle.  Press the run button to try it and see.
     alex = turtle.Turtle()   # create a turtle named alex
     alex.forward(150)        # tell alex to move forward by 150 units
     alex.left(90)            # turn by 90 degrees
-    alex.forward(50)         # barb added this
-    alex.right(30)	         # barb added this too
     alex.forward(75)         # complete the second side of a rectangle
 
     
@@ -352,7 +350,12 @@ Take a look at the output produced when you press the ``run`` button.  There is 
    True or False: You can only have one active turtle at a time.  If you create a second one, you will no longer be able to access or use the first.
 
 .. index:: control flow, flow of execution
-  
+
+.. admonition:: Scratch Editor
+
+    .. actex:: turtle_scratch_1
+
+
 Flow of Execution of the for Loop
 ---------------------------------
 
@@ -383,7 +386,7 @@ the buttons.  You can see the value of ``friendName`` change as the loop iterate
 .. codelens:: vtest
 
     for friendName in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        print("Hi " + friendName + "  Please come to my party!")
+        message = "Hi " + friendName + "  Please come to my party!"
 
 .. index:: range function, chunking
 
@@ -676,6 +679,10 @@ Try it in codelens.
   :feedback_d: If range is passed only one argument, it interprets that argument as the end of the list (not inclusive).
 
   What happens if you give range only one argument?  For example: range(4)
+
+.. admonition:: Scratch Editor
+
+  .. actex:: turtle_scratch_2
 
 
 A Few More turtle Methods and Observations

@@ -60,6 +60,8 @@ In this lab we will try to gain a bit more information about the 3n+1 sequence. 
 
 	Create a simple for loop using a loop variable called ``start`` that provides values from 1 up to 50.  Call the ``seq3np1`` function once for each value of ``start``.  Modify the print statement to also print the value of ``start``.
 
+#. Use the turtle graphics to graph the number of iterations.  This provides an interesting visual that allows you to see the relative number of iterations for each value.  You will probably want to use setworldcoordinates to make your graph an appropriate scale.  You should also use the turtle to write out the loop varable and the number of iterations if the number of iterations is more than 100.
+
 #. Keep track of the maximum number of iterations.
 
 	Scanning this list of results causes us to ask the following question: `What is the longest sequence?` The easiest way to compute this is to keep track of the largest count seen so far.  Each time we generate a new count, we check to see if it is larger than what we think is the largest.  If it is greater, we update our largest so far and go on to the next count.

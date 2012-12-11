@@ -1,0 +1,3 @@
+[submodule "source/_static/js-parsons"]
+	path = source/_static/js-parsons
+	url = https://github.com/vkaravir/js-parsons

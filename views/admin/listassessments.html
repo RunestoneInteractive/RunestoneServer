@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+
+<table>
+<tr>
+  <th>Question ID</th>
+  <th>Number of Tries</th>
+  <th>Percent Correct</th>
+</tr>
+{{for row in solutions:}}
+    <tr>
+        <td><a href="/{{=request.application}}/admin/assessdetail?id={{=row[0]}}">{{=row[0]}}</a></td>
+	<td>{{=row[1]}}</td>
+	<td>{{=row[2]}}</td>
+    </tr>  
+    {{pass}}
+
+</table>	

@@ -1,0 +1,5 @@
+{{extend 'layout.html'}}
+
+<h2>Student Activity Summary</h2>
+{{=SQLTABLE(grid,headers={'useinfo.sid':'Student','COUNT(useinfo.id)':'Number','MAX(useinfo.timestamp)':'Last Activity'})}}
+

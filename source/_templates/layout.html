@@ -15,6 +15,8 @@ eBookConfig.logLevel = {{loglevel}},
 eBookConfig.loginRequired = {{login_required}}
 eBookConfig.isLoggedIn = false;
 </script>
+<script type="text/javascript" charset="utf-8" src="{{course_url}}/{{appname}}/static/js/jquery.idle-timer.js">
+</script>
 {% endblock %}
 
 
@@ -28,6 +30,11 @@ eBookConfig.isLoggedIn = false;
 
 {% block footer %}
 {{ super() }}
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter)
+    $(document).ready(createEditors);
+</script>
 
 <script type="text/javascript">
 

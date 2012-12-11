@@ -172,7 +172,7 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
    :answer_d: x &gt; 0 and x &lt; 5
    :correct: d
    :feedback_a: Each comparison must be between exactly two values.  In this case the right-hand expression &lt; 5 lacks a value on its left.
-   :feedback_b: This is not legal syntax in Python.  To make multiple comparisons you must use and or or.
+   :feedback_b: This is tricky.  Although most other programming languages do not allow this syntax, in Python, this syntax is allowed.  However, you should not use it.  Instead, make multiple comparisons by using and or or.
    :feedback_c: Although this is legal Python syntax, the expression is incorrect.  It will evaluate to true for all numbers that are either greater than 0 or less than 5.  Because all numbers are either greater than 0 or less than 5, this expression will always be True.
    :feedback_d: Yes, with an and keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true.
 
@@ -328,9 +328,9 @@ There is no limit on the number of statements that can appear under the two clau
    What does the following code print (choose from output a, b, c or nothing).
    <pre>
    if (4 + 5 == 10):
-       print TRUE
+       print("TRUE")
    else:
-       print FALSE
+       print("FALSE")
    </pre>
    a.
    <pre>
@@ -360,10 +360,10 @@ There is no limit on the number of statements that can appear under the two clau
    What does the following code print?
    <pre>
    if (4 + 5 == 10):
-       print TRUE
+       print("TRUE")
    else:
-       print FALSE
-   print TRUE
+       print("FALSE")
+   print("TRUE")
    </pre>
     a.
    <pre>
@@ -535,7 +535,8 @@ Here is a complete program that defines values for ``x`` and ``y``.  Run the pro
 If you are still a bit unsure, here is the same selection as part of a codelens example.  Step through it to see how the correct ``print`` is chosen.
 
 .. codelens:: sel1
-
+    :showoutput:
+    
     x = 10
     y = 10
 
@@ -634,11 +635,11 @@ Here is the same program using ``elif``.
    :answer_c: III only
    :answer_d: II and III
    :answer_e: I, II, and III
-   :correct: d
+   :correct: b
    :feedback_a: You can not use a Boolean expression after an else.
-   :feedback_b: Yes, II will give the same result but so will III as well.  III is not as efficient since it will always execute the 2nd if.  
-   :feedback_c: Yes, III will give the same result but so will II and II is more efficient.  
-   :feedback_d: Yes, both II and III give the same result.
+   :feedback_b: Yes, II will give the same result.
+   :feedback_c: No, III will Not give the same result.  The first if statement will be true, but the second will be false, so the else part will execute.
+   :feedback_d: No, Although II is correct III will not give the same result.  Try it.
    :feedback_e: No, in I you can not have a Boolean expression after an else.
 
    Which of I, II, and III below gives the same result as the following nested if?
@@ -766,7 +767,8 @@ with a few other actual parameters to see what is printed.
 Here is the same program in codelens.
 
 .. codelens:: ch06_boolcodelens
-
+    :showoutput:
+    
     def isDivisible(x, y):
         if x % y == 0:
             result = True 
@@ -938,6 +940,16 @@ Exercises
     
     .. actex:: ex_6_6
 
+        from test import testEqual
+
+        def findHypot(a,b):
+            # your code here
+
+        testEqual(findHypot(12.0,5.0), 13.0)
+        testEqual(findHypot(14.0,48.0), 50.0)
+        testEqual(findHypot(21.0,72.0), 75.0)
+        testEqual(findHypot(1,1.73205), 1.999999)
+
 #. Write a function called ``is_even(n)`` that takes an integer as an argument
    and returns ``True`` if the argument is an **even number** and ``False`` if
    it is **odd**.
@@ -945,15 +957,45 @@ Exercises
     
    .. actex:: ex_6_7
 
+       from test import testEqual
+
+       def is_even(n):
+           # your code here
+
+       testEqual(is_even(10), True)
+       testEqual(is_even(5), False)
+       testEqual(is_even(1), False)
+       testEqual(is_even(0), True)
+
 #. Now write the function ``is_odd(n)`` that returns ``True`` when ``n`` is odd
    and ``False`` otherwise.
 
    .. actex:: ex_6_8
 
+       from test import testEqual
+
+       def is_odd(n):
+           # your code here
+
+       testEqual(is_odd(10), False)
+       testEqual(is_odd(5), True)
+       testEqual(is_odd(1), True)
+       testEqual(is_odd(0), False)
+
 #. Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its 
    argument is an odd integer.
 
    .. actex:: ex_6_9
+
+       from test import testEqual
+
+       def is_odd(n):
+           # your code here
+
+       testEqual(is_odd(10), False)
+       testEqual(is_odd(5), True)
+       testEqual(is_odd(1), True)
+       testEqual(is_odd(0), False)
 
 
 #.  Write a function ``is_rightangled`` which, given the length of three sides of a triangle, 
@@ -973,10 +1015,34 @@ Exercises
    
 
     .. actex:: ex_6_10
+    
+        from test import testEqual
+
+        def is_rightangled(a,b,c):
+            # your code here
+
+        testEqual(is_rightangled(1.5,2.0,2.5), True)
+        testEqual(is_rightangled(4.0,8.0,16.0), False)
+        testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
+        testEqual(is_rightangled(4.1,8.2,9.16787), True)
+        testEqual(is_rightangled(4.1,8.2,9.168), False)
+        testEqual(is_rightangled(0.5,0.4,0.64031), True)
 
 #.  Extend the above program so that the sides can be given to the function in any order.
 
     .. actex:: ex_6_11
+
+        from test import testEqual
+
+        def is_rightangled(a,b,c):
+            # your code here
+
+        testEqual(is_rightangled(1.5,2.0,2.5), True)
+        testEqual(is_rightangled(16.0,4.0,8.0, False)
+        testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
+        testEqual(is_rightangled(9.16787,4.1,8.2), True)
+        testEqual(is_rightangled(4.1,8.2,9.168), False)
+        testEqual(is_rightangled(0.5,0.64031,0.4), True)
 
 #.  A year is a **leap year** if it is divisible by 4 unless it is a century that is not divisible by 400.
     Write a function that takes a year as a parameter and returns ``True`` if the year is a leap year, ``False`` otherwise.

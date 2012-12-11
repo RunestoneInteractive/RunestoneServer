@@ -268,6 +268,7 @@ The examples in this book use a mixture of the standard Python  interpreter, sou
 will be able to tell which is which by looking for either the Python prompt in the case of a shell mode program, the *run* button for the activecode, or the *forward/backward* buttons for codelens.
 
 .. codelens:: firstexample
+    :showoutput:
 
     print("My first program adds two numbers, 2 and 3:")
     print(2 + 3)
@@ -769,6 +770,10 @@ programs much easier for humans to parse.  Use them liberally!
    :feedback_d: Even small programs benefit from comments.
 
    What are comments for?
+
+.. admonition:: Scratch Editor
+
+   .. actex:: introscratch_1
 
 
 Glossary

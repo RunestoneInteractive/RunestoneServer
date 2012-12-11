@@ -15,6 +15,8 @@ Released   : 20081122
   <title>
    {{=response.title or request.application}}
   </title>
+
+<meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
   {{response.files.append(URL(request.application,'static','plugin_layouts/layouts/Abrasive/style.css'))}}
   {{response.files.append(URL('static','plugin_layouts/superfish.js'))}}
   {{include 'web2py_ajax.html'}}
@@ -43,12 +45,7 @@ div.error { background-color: red; color: white; padding: 3px; }
   <div id="wrapper">
    <div id="header">
     <div id="logo">
-     <h1>
-      {{=response.title or request.application}}
-     </h1>
-     <h2>
-      {{=response.subtitle or '=response.subtitle'}}
-     </h2>
+    <img src="{{=URL(c='static',f='_images/rsi_logo.jpg')}}">
     </div>
     <!-- end #logo -->
     <div id="menu">
@@ -110,14 +107,36 @@ div.error { background-color: red; color: white; padding: 3px; }
           </ul>
           </li>        
 
+
+        <li>
+         <h2>
+          Students
+         </h2>
+         <ul>
+          <li>
+           <a href="{{=URL(c='default',f='user/register')}}">
+            Register
+           </a>
+          </li>
+          <li>
+           <a href="https://github.com/bnmnetp/runestone/issues/new">
+            Report a problem
+           </a>
+          </li>
+         </ul>
+        </li>
+
+
+
+
         <li>
          <h2>
           Instructors
          </h2>
          <ul>
           <li>
-           <a href="{{=URL(c='designer',f='index')}}">
-            Create a Custom Course
+           <a href="{{=URL(c='admin',f='index')}}">
+            Instructor's Dashboard
            </a>
           </li>
           <li>

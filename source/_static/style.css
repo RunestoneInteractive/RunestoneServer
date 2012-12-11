@@ -84,6 +84,8 @@ div.related ul li a:hover {
 
 div.sphinxsidebarwrapper {
     padding: 0;
+    position: fixed;
+    width: 220px;
 }
 
 div.sphinxsidebar {
@@ -94,6 +96,11 @@ div.sphinxsidebar {
     font-size: 1em;
     text-align: left;
 }
+
+div.sphinxsidebar a:hover {
+    background-color: #d0d0d0;
+}
+
 
 div.sphinxsidebar h3, div.sphinxsidebar h4 {
     margin: 1em 0 0.5em 0;
@@ -326,4 +333,8 @@ div.versioninfo {
     padding: 8px;
     line-height: 1.3em;
     font-size: 0.9em;
+}
+
+div.error {
+    background-color: #F4F4AD;
 }
