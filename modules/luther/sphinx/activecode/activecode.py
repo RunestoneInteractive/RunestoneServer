@@ -33,6 +33,12 @@ def setup(app):
     app.add_javascript('skulpt.js')
     app.add_javascript('builtin.js')
 
+    app.add_node(ActivcodeNode, html=(visit_ac_node, depart_ac_node))
+
+    app.connect('doctree-resolved',process_activcode_nodes)
+    app.connect('env-purge-doc', purge_activecodes)
+
+
 EDIT = '''
 <div id="%(divid)s" >
 <textarea cols="50" rows="12" id="%(divid)s_code" class="active_code">
@@ -60,6 +66,43 @@ END = '''
 </div>
 
 '''
+class ActivcodeNode(nodes.General, nodes.Element):
+    def __init__(self,content):
+        """
+
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        super(ActivcodeNode,self).__init__()
+        self.ac_components = content
+
+# self for these functions is an instance of the writer class.  For example
+# in html, self is sphinx.writers.html.SmartyPantsHTMLTranslator
+# The node that is passed as a parameter is an instance of our node class.
+def visit_ac_node(self,node):
+    print self.settings.env.activecodecounter
+
+    res = EDIT
+    if 'nocanvas' not in node.ac_components:
+        res += CANVAS
+    if 'nopre' not in node.ac_components:
+        res += PRE
+    res += END
+    res = res % node.ac_components
+    res = res.replace("u'","'")  # hack:  there must be a better way to include the list and avoid unicode strings
+    
+    self.body.append(res)
+
+def depart_ac_node(self,node):
+    print 'goodbye activecode'
+
+
+def process_activcode_nodes(app,env,docname):
+    print "processing ", docname
+
+def purge_activecodes(app,env,docname):
+    print "processing ", docname
 
 class ActiveCode(Directive):
     required_arguments = 1
@@ -73,30 +116,31 @@ class ActiveCode(Directive):
     }
 
     def run(self):
+        env = self.state.document.settings.env
+
+        # keep track of how many activecodes we have.... could be used to automatically make a unique id for them.
+        if not hasattr(env,'activecodecounter'):
+            env.activecodecounter = 0
+        env.activecodecounter += 1
+
         self.options['divid'] = self.arguments[0]
         if self.content:
             source = "\n".join(self.content)
         else:
             source = '\n'
 
-        self.options['initialcode'] = source
-        if 'caption' not in self.options:
-            self.options['caption'] = ''
-        res = EDIT
-        if 'nocanvas' not in self.options:
-            res += CANVAS
-        if 'nopre' not in self.options:
-            res += PRE
         if 'include' not in self.options:
             self.options['include'] = 'undefined'
         else:
             lst = self.options['include'].split(',')
             lst = [x.strip() for x in lst]
             self.options['include'] = lst
-        res += END
-        res = res % self.options
-        res = res.replace("u'","'")  # hack:  there must be a better way to include the list and avoid unicode strings
-        return [nodes.raw('',res ,format='html')]
+        
+        self.options['initialcode'] = source
+        if 'caption' not in self.options:
+            self.options['caption'] = ''
+        #        return [nodes.raw('',res ,format='html')]
+        return [ActivcodeNode(self.options)]
 
 
 EXEDIT = '''
@@ -121,8 +165,7 @@ class ActiveExercise(Directive):
         res = EXEDIT
 
         return [nodes.raw('',res % self.options,format='html')]
-        
-        
+
+
 if __name__ == '__main__':
     a = ActiveCode()
-
