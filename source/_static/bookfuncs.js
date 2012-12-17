@@ -514,3 +514,10 @@ function attachLoggers(codelens,divid) {
     });
 
 }
+
+function redrawAllVisualizerArrows() {
+    if (allVisualizers !== undefined) {
+	for(var v in allVisualizers)
+	    allVisualizers[v].redrawConnectors();
+    }
+}

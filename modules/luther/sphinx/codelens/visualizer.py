@@ -43,18 +43,25 @@ VIS = '''
 DATA = '''
 <script type="text/javascript">
 %(tracedata)s
+var %(divid)s_vis;
 
 $(document).ready(function() {
     %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,
                                 {embeddedMode: %(embedded)s,
                                 verticalStack: true,
-                                redrawAllConnectorsOnHeightChange: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
                                 codeDivWidth: 500
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
+    allVisualizers.push(%(divid)s_vis);    
 });
 
-$(window).resizeo(function() {
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
     %(divid)s_vis.redrawConnectors();
 });
 </script>
@@ -104,4 +111,3 @@ class Codelens(Directive):
         if 'tracedata' in self.options:
             res += DATA
         return [nodes.raw('',res % self.options,format='html')]
-
