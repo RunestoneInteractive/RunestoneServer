@@ -3,6 +3,8 @@ errors/*
 sessions/*
 127.0.0.1-*
 databases/*
+*.o
+*~
 
 databases/storage.sqlite
 data/*
@@ -23,3 +25,6 @@ static/luther151/
 static/COSC122/
 static/python4bio/
 /.idea/
+/static/overview/
+\#*\#
+TAGS
