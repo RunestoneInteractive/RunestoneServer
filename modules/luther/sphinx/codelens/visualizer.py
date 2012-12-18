@@ -31,7 +31,6 @@ def setup(app):
     app.add_javascript('codelens/v3/js/jquery.ba-bbq.min.js')
     app.add_javascript('codelens/v3/js/jquery.jsPlumb-1.3.10-all-min.js')
     app.add_javascript('codelens/v3/js/jquery-ui-1.8.24.custom.min.js')
-    app.add_javascript('codelens/v3/js/jquery.textarea.js')
     app.add_javascript('codelens/v3/js/pytutor.js')
 
 
