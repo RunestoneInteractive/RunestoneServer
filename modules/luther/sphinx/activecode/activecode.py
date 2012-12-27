@@ -30,8 +30,8 @@ def setup(app):
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
     app.add_javascript('python.js')
-    app.add_javascript('skulpt.js')
-    app.add_javascript('builtin.js')
+    app.add_javascript('skulpt/dist/skulpt.js')
+    app.add_javascript('skulpt/dist/builtin.js')
 
 EDIT = '''
 <div id="%(divid)s" >

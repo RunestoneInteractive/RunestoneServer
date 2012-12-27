@@ -4,3 +4,6 @@
 [submodule "source/_static/codelens"]
 	path = source/_static/codelens
 	url = git@github.com:pgbovine/OnlinePythonTutor.git
+[submodule "source/_static/skulpt"]
+	path = source/_static/skulpt
+	url = git@github.com:bnmnetp/skulpt.git
