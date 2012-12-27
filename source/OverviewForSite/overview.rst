@@ -153,7 +153,7 @@ more complex aspects of Python.
 Self-Check Questions
 --------------------
 
-Finally, it is also possible to embed simple multiple choice questions into the text.  These
+Finally, it is also possible to embed simple questions into the text.  These
 questions provide a way for the students to check themselves as they go along.  The questions also provide feedback so that you can
 understand why an answer may or may not be correct.
 
@@ -190,6 +190,26 @@ correct number as well as the feedback for each.
 
    Which colors might be found in a rainbow? (choose all that are correct)
 
+Another type of question allows you as the instructor to ask for a value.  You can test for the value using Pythons regular expressions.  For example:
+
+.. fillintheblank:: baseconvert1
+   :correct: \\b31\\b
+
+   What is value of 25 expressed as an octal number (base 8) ___
+
+And finally here is a way of giving your students some simple programming problems where the code is already there for them but not indented or in the correct order.  Use drag-and-drop to get everthing right.
+
+**Check your understanding**
+
+.. parsonsprob:: question1_100_4
+
+   Construct a block of code that correctly implements the accumulator pattern.
+   -----
+   x = 0
+   for i in range(10)
+      x = x + 1
+
+We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
 What To Do Now
 --------------
@@ -200,5 +220,5 @@ site and choosing the courseware examples that we have already created.  The fir
 of computer science and helps you learn Python programming.  The second course, **Problem Solving with Algorithms and Data Structures Using Python**, is a thorough introduction to data structures and algorithms using Python.  Topics include stacks,
 queues, trees, graphs, and recursion.
 
-We hope you will find these tools and materials useful.  If you want to get more involved, feel free to download the tools and write your own courseware.  Everything you need can be found in the current github repository.
+We hope you will find these tools and materials useful.  If you want to get more involved, feel free to download the tools and write your own courseware.  Everything you need can be found in the current `github repository <http://github.com/bnmnetp/runestone>`_.
 
