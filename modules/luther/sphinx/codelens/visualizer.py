@@ -24,15 +24,14 @@ import json
 
 def setup(app):
     app.add_directive('codelens',Codelens)
-    app.add_stylesheet('pytutor.css')
-    app.add_stylesheet('jquery-ui-1.8.24.custom.css')
+    app.add_stylesheet('codelens/v3/css/pytutor.css')
+    app.add_stylesheet('codelens/v3/css/ui-lightness/jquery-ui-1.8.24.custom.css')
 
-    app.add_javascript('d3.v2.min.js')
-    app.add_javascript('jquery.ba-bbq.min.js')
-    app.add_javascript('jquery.jsPlumb-1.3.10-all-min.js')
-    app.add_javascript('jquery-ui-1.8.24.custom.min.js')
-    app.add_javascript('jquery.textarea.js')
-    app.add_javascript('pytutor.js')
+    app.add_javascript('codelens/v3/js/d3.v2.min.js')
+    app.add_javascript('codelens/v3/js/jquery.ba-bbq.min.js')
+    app.add_javascript('codelens/v3/js/jquery.jsPlumb-1.3.10-all-min.js')
+    app.add_javascript('codelens/v3/js/jquery-ui-1.8.24.custom.min.js')
+    app.add_javascript('codelens/v3/js/pytutor.js')
 
 
 
@@ -43,16 +42,23 @@ VIS = '''
 DATA = '''
 <script type="text/javascript">
 %(tracedata)s
+var %(divid)s_vis;
 
 $(document).ready(function() {
     %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,
                                 {embeddedMode: %(embedded)s,
                                 verticalStack: true,
-                                redrawAllConnectorsOnHeightChange: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
                                 codeDivWidth: 500
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
+    allVisualizers.push(%(divid)s_vis);    
 });
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
 
 $(window).resize(function() {
     %(divid)s_vis.redrawConnectors();
@@ -104,4 +110,3 @@ class Codelens(Directive):
         if 'tracedata' in self.options:
             res += DATA
         return [nodes.raw('',res % self.options,format='html')]
-

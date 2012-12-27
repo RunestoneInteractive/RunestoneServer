@@ -1,11 +1,21 @@
 {{extend 'layout.html'}}
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 {{block statusbar}}
 {{end}}
 
 {{ if 'static' in request.env.query_string:}}
 <h2>Welcome</h2>
 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
+<p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p><div class="fb-like" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>
 {{else:}}
 <table cellpadding="10px">
   <tr>
@@ -17,7 +27,8 @@
 </td>
 <td>
 <h2>Learn more about Runestone Interactive</h2>    
-<p>The video here will give you a bit of an overview of what our interactive books are all about.  Please watch it.  Another way to learn about our books is to click on <a href="{{=URL(c='static',f='overview/OverviewForSite/overview.html')}}">this demonstration</a>. If you are ready to start learning interactively, click on one of the titles below.</p>
+<p>The video here will give you a bit of an overview of what our interactive books are all about.  Please watch it.  Another way to learn about our books is to click on <a href="{{=URL(c='static',f='overview/OverviewForSite/overview.html')}}">this demonstration</a>. If you are ready to start learning interactively, click on one of the titles below.</p><p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p><div class="fb-like" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>
+
 </td>
 </tr>
 </table>
@@ -32,6 +43,8 @@
 <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
 <div id="loginexp">
 <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry we have no plans to spam you with email, and we would never ever sell your contact information to anyone.  If you are student that is part of a course, please register and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
+<a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="false">Follow @iRunestone</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
 
 <div id="web2py_user_form">

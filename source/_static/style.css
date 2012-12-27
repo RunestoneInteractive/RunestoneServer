@@ -86,12 +86,17 @@ div.sphinxsidebarwrapper {
     padding: 0;
     position: fixed;
     width: 220px;
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: visible;
+    top: 25px;
+    bottom: 0;
 }
 
 div.sphinxsidebar {
     margin: 0;
     padding: 0.5em 15px 15px 0;
-    width: 210px;
+    width: 220px;
     float: right;
     font-size: 1em;
     text-align: left;
