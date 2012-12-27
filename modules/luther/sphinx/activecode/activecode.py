@@ -81,7 +81,7 @@ class ActivcodeNode(nodes.General, nodes.Element):
 # in html, self is sphinx.writers.html.SmartyPantsHTMLTranslator
 # The node that is passed as a parameter is an instance of our node class.
 def visit_ac_node(self,node):
-    print self.settings.env.activecodecounter
+    #print self.settings.env.activecodecounter
 
     res = EDIT
     if 'nocanvas' not in node.ac_components:
@@ -91,18 +91,24 @@ def visit_ac_node(self,node):
     res += END
     res = res % node.ac_components
     res = res.replace("u'","'")  # hack:  there must be a better way to include the list and avoid unicode strings
-    
+
     self.body.append(res)
 
 def depart_ac_node(self,node):
-    print 'goodbye activecode'
+    ''' This is called at the start of processing an activecode node.  If activecode had recursive nodes
+        etc and did not want to do all of the processing in visit_ac_node any finishing touches could be
+        added here.
+    '''
+    pass
 
 
 def process_activcode_nodes(app,env,docname):
-    print "processing ", docname
+    pass
+
 
 def purge_activecodes(app,env,docname):
-    print "processing ", docname
+    pass
+
 
 class ActiveCode(Directive):
     required_arguments = 1
@@ -135,7 +141,7 @@ class ActiveCode(Directive):
             lst = self.options['include'].split(',')
             lst = [x.strip() for x in lst]
             self.options['include'] = lst
-        
+
         self.options['initialcode'] = source
         if 'caption' not in self.options:
             self.options['caption'] = ''
