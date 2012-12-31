@@ -843,15 +843,15 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    :answer_c: [False,2,True,6,5]
    :correct: a
    :feedback_a: Yes, first True was added at index 2, then False was added at index 0.
-   :feedback_b: add will place items at the index position specified and move everything down to the right.
-   :feedback_c: add does not remove anything or replace anything.
+   :feedback_b: insert will place items at the index position specified and move everything down to the right.
+   :feedback_c: insert does not remove anything or replace anything.
    
    What is printed by the following statements?
    
    <pre>
    alist = [4,2,8,6,5]
-   alist.add(2,True)
-   alist.add(0,False)
+   alist.insert(2,True)
+   alist.insert(0,False)
    print(alist)
    </pre>
 
