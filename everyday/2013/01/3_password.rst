@@ -1,6 +1,5 @@
-Generating a Password
-=====================
-
+Solution: A Better Password Generator
+=====================================
 
 Yesterday we looked at a simple password generator to make a string from a group
 of random characters.   Your assignment was to improve on that to add capital
@@ -54,4 +53,39 @@ password, and the capital letters in the second half of the password.
        mypw = mypw[0:replace_index] + mypw[replace_index].upper() + mypw[replace_index+1:]
 
    print(mypw)
+
+
+Now lets look at two of the statements in the above example in detail::
+
+       mypw = mypw[0:replace_index] + str(random.randrange(10)) + mypw[replace_index+1:]
+
+This line uses the slice operator to keep all the characters from the beginning of
+the string up to, but not including, the character we want to replace
+``mypw[0:replace_index]`` next, we select a random digit and convert it to a
+string using the ``str`` function.  Finally we concatenate the rest of the
+password starting with the character after the one we replaced going to the end of
+the string ``mypw[replace_index+1:]``  the ``[n:]`` notation means start at
+character n and go to the end of the string.
+
+The other line that uses cancatenation and slicing is::
+
+       mypw = mypw[0:replace_index] + mypw[replace_index].upper() + mypw[replace_index+1:]
+       
+This uses the exact same slicing concepts as in the previous example, but rather
+than choosing a new random upper case letter we use the string method ``.upper()``
+to replace the lower case character with its upper case counter part.
+
+Now there are many other ways to code this program.  If you know about ``if
+statements`` (`read here
+<http://interactivepython.org/courselib/static/thinkcspy/Selection/selection.html>`_)
+or would like to learn about if statements this can be written in a completely
+different way.  For example you might use one or more variables to remember
+whether you have used a number or a capital letter.  Or you might write some code
+to determine whether the password has a capital letter or a number in it.
+
+For our next installment, we are going to look at a password generator that is
+inspired by my favorite comic: 
+
+.. image:: http://imgs.xkcd.com/comics/password_strength.png
+   :width: 500
 
