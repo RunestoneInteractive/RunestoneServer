@@ -55,7 +55,16 @@ password, and the capital letters in the second half of the password.
    print(mypw)
 
 
-Now lets look at two of the statements in the above example in detail::
+Now lets look at a few of the statements in the above example in detail.  First
+lets consider the two ``for statements.``  The first ``for statement`` uses range
+``len(mypw)//2`` This ensures that we are only going to replace characters at
+index positions 0 through the halfway point.  The second for statement uses
+``range(len(mypw)//2,len(mypw))`` to ensure that we replace characters in the
+second half of the list.  If you aren't convinced that this works you should
+revisit the ``range`` function or experiment with the range function in an
+activecode window.
+
+Next consider the following statment::
 
        mypw = mypw[0:replace_index] + str(random.randrange(10)) + mypw[replace_index+1:]
 
@@ -83,9 +92,74 @@ different way.  For example you might use one or more variables to remember
 whether you have used a number or a capital letter.  Or you might write some code
 to determine whether the password has a capital letter or a number in it.
 
+Before we move on, I want to give you one more example of how to write this
+program that combines `lists
+<http://interactivepython.org/courselib/static/thinkcspy/Lists/lists.html>`_, with
+another important string method.  Very often 
+you will find yourself wanting to shift back and forth between lists of things and
+strings.  In particular in this example we will use the ``join`` method to
+construct a string from a list of characters.
+
+The idea behind this solution is to create a list of characters that include all
+of our requirements: upper case, lower case, and numbers.  We'll create a list of
+characters that looks like this::
+
+    ['a', 'T', '1', 'h', 'X', '6', 's', 'v']
+
+Now this list has a definite pattern to it:  lower case, followed by upper case,
+followed by a number, with the last few characters all in lower case.  Since a
+pattern like this isn't a good thing in passwords, we will use the ``shuffle``
+function in the ``random`` module to randomly scramble the list.
+
+Here is the code:
+
+.. activecode:: gen_pw_4
+
+   import random
+   
+   alphabet = "abcdefghijklmnopqrstuvwxyz"
+   upperalphabet = alphabet.upper()
+   pw_len = 8
+   pwlist = []
+
+   for i in range(pw_len//3):
+       pwlist.append(alphabet[random.randrange(len(alphabet))])
+       pwlist.append(upperalphabet[random.randrange(len(upperalphabet))])
+       pwlist.append(str(random.randrange(10)))
+   for i in range(pw_len-len(pwlist)):
+       pwlist.append(alphabet[random.randrange(len(alphabet))])
+
+   random.shuffle(pwlist)
+   pwstring = "".join(pwlist)
+
+   print(pwstring)
+
+At this point you may have a question about why we have two ``for loops`` in the
+above program.  Notice the call to range in the first loop:  ``range(pw_len//3)``.
+Because each pass through the loop adds three things to the list we only want to
+go through the list ``pw_len//3`` times or we would create a list of strings that
+is way too long.  What is the purpose of the next loop?  To fill out any remaining
+characters that are needed in case our password length is not evenly divisible
+by 3.  Another approach would be to simply over fill the list in the first place
+and use the slice operator to cut it back to the right size.  See if you can
+modify the code above to do that.
+
 For our next installment, we are going to look at a password generator that is
 inspired by my favorite comic: 
 
 .. image:: http://imgs.xkcd.com/comics/password_strength.png
    :width: 500
 
+But while you are waiting, here's a little assignment for you that is just a bit
+of a diversion from the password project.  Suppose you couldn't use the shuffle
+method from the random module.
+
+* Write a python program that takes a string and shuffles the characters in the
+  string into a random order.
+
+  .. actex:: ex_1_3_1
+
+* Redo the above program but assume you have a list of characters rather than a
+  string.
+
+  .. actex:: ex_1_3_2
