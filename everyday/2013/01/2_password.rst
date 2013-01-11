@@ -1,4 +1,3 @@
-
 Generating a Password
 =====================
 
