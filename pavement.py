@@ -14,11 +14,11 @@ options(
         sourcedir="everyday",
         ),
 
-    html = Bunch(
+    everyday = Bunch(
         outdir="static/everyday",
         template_args={'course_id':'everyday',
                        'login_required':'false',
-                       'appname':'courselib',
+                       'appname':'runestone',
                        'loglevel':10,
                        'course_url':'http://127.0.0.1:8000' }
         ),
@@ -35,6 +35,10 @@ options(
 
     )
 )
+
+@task
+def everyday(options):
+    paverutils.run_sphinx(options,'everyday')
 
 @task
 def thinkcspy(options):
