@@ -81,3 +81,4 @@ If you are brand new to Python and/or programming, here are some links that can 
 * `Strings <http://interactivepython.org/courselib/static/thinkcspy/Strings/strings.html>`_
 
 
+.. index:: string, random, slice, password

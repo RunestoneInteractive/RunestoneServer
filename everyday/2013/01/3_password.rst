@@ -163,3 +163,6 @@ method from the random module.
   string.
 
   .. actex:: ex_1_3_2
+
+.. index:: string, list, join, random, slice, password
+
