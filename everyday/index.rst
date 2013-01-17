@@ -13,7 +13,8 @@ Contents:
 
    2013/01/1_welcome.rst
    2013/01/2_password.rst
-   2013/01/3_password.rst   
+   2013/01/3_password.rst
+   2013/01/4_password.rst      
 
 
 Indices and tables
