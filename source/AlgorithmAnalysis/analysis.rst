@@ -670,7 +670,7 @@ problem.
        :answer_b: O(n^2)
        :answer_c: O(log n)
        :answer_d: O(n^3)
-       :correct: a
+       :correct: c
        :feedback: Look carefully at the loop variable i.  Notice that the value of i is cut in half each time through the loop.  This is a big hint that the performance is better than O(n)
 
        Given the following code fragment what is its Big-O running time?
