@@ -52,7 +52,7 @@ $(document).ready(function() {
                                 codeDivWidth: 500
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
-    allVisualizers.push(%(divid)s_vis);    
+    allVisualizers.push(%(divid)s_vis);
 });
 
 if (allVisualizers === undefined) {
@@ -73,7 +73,11 @@ class Codelens(Directive):
     option_spec = {
         'tracedata':directives.unchanged,
         'caption':directives.unchanged,
-        'showoutput':directives.flag
+        'showoutput':directives.flag,
+        'question':directives.unchanged,
+        'correct':directives.unchanged,
+        'feedback':directives.unchanged,
+        'breakline':directives.nonnegative_int
     }
 
     has_content = True
@@ -82,6 +86,10 @@ class Codelens(Directive):
 
         self.JS_VARNAME = ""
         self.JS_VARVAL = ""
+
+        def raw_dict(input_code, output_trace):
+          ret = dict(code=input_code, trace=output_trace)
+          return ret
 
         def js_var_finalizer(input_code, output_trace):
           global JS_VARNAME
@@ -103,10 +111,31 @@ class Codelens(Directive):
         else:
             self.options['embedded'] = 'false'
 
-        self.options['tracedata'] = exec_script_str_local(source, CUMULATIVE_MODE, js_var_finalizer)
+
+
+        if 'question' in self.options:
+            curTrace = exec_script_str_local(source, CUMULATIVE_MODE, raw_dict)
+            self.inject_questions(curTrace)
+            json_output = json.dumps(curTrace, indent=None)
+            self.options['tracedata'] = "var %s = %s;" % (self.JS_VARNAME, json_output)
+        else:
+            self.options['tracedata'] = exec_script_str_local(source, CUMULATIVE_MODE, js_var_finalizer)
+
         res = VIS
         if 'caption' not in self.options:
             self.options['caption'] = ''
         if 'tracedata' in self.options:
             res += DATA
         return [nodes.raw('',res % self.options,format='html')]
+
+    def inject_questions(self,curTrace):
+        if 'breakline' not in self.options:
+            raise RuntimeError('Must have breakline option')
+        breakline = self.options['breakline']
+        for frame in curTrace.trace:
+            if frame['line'] == breakline:
+                frame['question'] = dict(text=self.options['question'],
+                                      correct = self.options['correct'],
+                                      div = self.options['divid']+'_modal',
+                                      feedback = self.options['feedback'] )
+        
