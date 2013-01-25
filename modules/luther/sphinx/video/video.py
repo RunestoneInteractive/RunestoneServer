@@ -23,7 +23,6 @@ from docutils.parsers.rst import Directive
 def setup(app):
     app.add_directive('video',Video)
     app.add_stylesheet('video.css')
-    app.add_javascript('simplemodal.js')
 
 CODE = """\
 <a id="%(divid)s_thumb" > <img src="%(thumb)s" /></a>
