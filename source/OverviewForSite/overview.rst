@@ -211,6 +211,21 @@ And finally here is a way of giving your students some simple programming proble
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
+
+.. codelens:: codelens_question
+    :question: What is the value of tot after this line?
+    :breakline: 4
+    :feedback: hello world
+    :correct: globals.tot
+
+    tot = 0
+    prod = 1
+    for i in range(10):
+       tot = tot + i
+       prod = prod * i
+
+
+
 What To Do Now
 --------------
 
