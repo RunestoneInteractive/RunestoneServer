@@ -209,13 +209,16 @@ And finally here is a way of giving your students some simple programming proble
    for i in range(10)
       x = x + 1
 
-We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
+Here is a different sort of codelens visualization.  Some codelens blocks can have
+questions embedded in them that will ask you a question about the value of a
+variable, or which line will be the next line to execute.  This example asks you
+to keep track of the ``tot`` variable as you step through the loop.
 
 .. codelens:: codelens_question
-    :question: What is the value of tot after this line?
+    :question: What is the value of tot after the line with the red arrow executes?
     :breakline: 4
-    :feedback: hello world
+    :feedback: Use the global variables box to look at the current values of tot and i.
     :correct: globals.tot
 
     tot = 0
@@ -224,6 +227,8 @@ We are working on additional question types as well.  Give us your feedback on o
        tot = tot + i
        prod = prod * i
 
+
+We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
 
 What To Do Now
