@@ -46,7 +46,7 @@ QUESTION = '''
     <h3>Check your understanding</h3>
     %(question)s
     <input id="basic-textbox" type="textbox" />
-    <button onclick="traceQCheckMe('basic-textbox','%(divid)s','%(correct)s')">Check
+    <button id="%(divid)s_tracecheck" onclick="traceQCheckMe('basic-textbox','%(divid)s','%(correct)s')">Check
     Me</button>
     <button onclick="closeModal('%(divid)s')">Continue...</button>
     <p class="feedbacktext"></p>
@@ -67,6 +67,12 @@ $(document).ready(function() {
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
     allVisualizers.push(%(divid)s_vis);
+});
+
+$(document).ready(function() {
+    $("#%(divid)s_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'%(divid)s'});
+        });
 });
 
 if (allVisualizers === undefined) {
