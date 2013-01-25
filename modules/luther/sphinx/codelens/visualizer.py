@@ -25,8 +25,10 @@ import json
 def setup(app):
     app.add_directive('codelens',Codelens)
     app.add_stylesheet('codelens/v3/css/pytutor.css')
+    app.add_stylesheet('codelens/v3/css/basic.css')
     app.add_stylesheet('codelens/v3/css/ui-lightness/jquery-ui-1.8.24.custom.css')
 
+    app.add_javascript('codelens/v3/js/jquery.simplemodal.js')
     app.add_javascript('codelens/v3/js/d3.v2.min.js')
     app.add_javascript('codelens/v3/js/jquery.ba-bbq.min.js')
     app.add_javascript('codelens/v3/js/jquery.jsPlumb-1.3.10-all-min.js')
@@ -38,6 +40,18 @@ def setup(app):
 VIS = '''
 <div id="%(divid)s"></div>
 <p class="cl_caption"><span class="cl_caption_text">%(caption)s (%(divid)s)</span> </p>'''
+
+QUESTION = '''
+<div id="%(divid)s_modal" class="basic-modal-content">
+    <h3>Check your understanding</h3>
+    %(question)s
+    <input id="basic-textbox" type="textbox" />
+    <button onclick="traceQCheckMe('basic-textbox','%(divid)s','%(correct)s')">Check
+    Me</button>
+    <button onclick="closeModal('%(divid)s')">Continue...</button>
+    <p class="feedbacktext"></p>
+</div>
+'''
 
 DATA = '''
 <script type="text/javascript">
@@ -124,6 +138,8 @@ class Codelens(Directive):
         res = VIS
         if 'caption' not in self.options:
             self.options['caption'] = ''
+        if 'question' in self.options:
+            res += QUESTION
         if 'tracedata' in self.options:
             res += DATA
         return [nodes.raw('',res % self.options,format='html')]
@@ -132,10 +148,9 @@ class Codelens(Directive):
         if 'breakline' not in self.options:
             raise RuntimeError('Must have breakline option')
         breakline = self.options['breakline']
-        for frame in curTrace.trace:
+        for frame in curTrace['trace']:
             if frame['line'] == breakline:
                 frame['question'] = dict(text=self.options['question'],
                                       correct = self.options['correct'],
                                       div = self.options['divid']+'_modal',
                                       feedback = self.options['feedback'] )
-        
