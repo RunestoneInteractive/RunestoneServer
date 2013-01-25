@@ -81,6 +81,42 @@ $(window).resize(function() {
 '''
 
 
+# Some documentation to help the author.
+# Here's and example of a single stack frame.
+# you might ask a qestion about the value of a global variable
+# in which case the correct answer is expressed as:
+#
+# globals.a
+#
+# You could ask about a value on the heap
+#
+# heap.variable
+#
+# You could ask about a local variable -- not shown here.
+#
+# locals.variable
+#
+# You could even ask about what line is going to be executed next
+#
+# line
+# {
+#   "ordered_globals": [
+#     "a",
+#     "b"
+#   ],
+#   "stdout": "1\n",
+#   "func_name": "<module>",
+#   "stack_to_render": [],
+#   "globals": {
+#     "a": 1,
+#     "b": 1
+#   },
+#   "heap": {},
+#   "line": 5,
+#   "event": "return"
+# }
+
+
 class Codelens(Directive):
     required_arguments = 1
     optional_arguments = 1
