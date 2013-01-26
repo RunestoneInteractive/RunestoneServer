@@ -45,8 +45,8 @@ QUESTION = '''
 <div id="%(divid)s_modal" class="basic-modal-content">
     <h3>Check your understanding</h3>
     %(question)s
-    <input id="basic-textbox" type="textbox" />
-    <button id="%(divid)s_tracecheck" onclick="traceQCheckMe('basic-textbox','%(divid)s','%(correct)s')">Check
+    <input id="%(divid)s_textbox" type="textbox" />
+    <button id="%(divid)s_tracecheck" onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">Check
     Me</button>
     <button onclick="closeModal('%(divid)s')">Continue...</button>
     <p class="feedbacktext"></p>
