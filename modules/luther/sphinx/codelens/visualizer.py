@@ -49,7 +49,7 @@ QUESTION = '''
     <button id="%(divid)s_tracecheck" onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">Check
     Me</button>
     <button onclick="closeModal('%(divid)s')">Continue...</button>
-    <p class="feedbacktext"></p>
+    <p id="%(divid)s_feedbacktext" class="feedbacktext"></p>
 </div>
 '''
 
