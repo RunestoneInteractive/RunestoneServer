@@ -228,6 +228,25 @@ to keep track of the ``tot`` variable as you step through the loop.
        prod = prod * i
 
 
+Here's another example that asks the student to predict which line will be the
+next line executed.
+
+.. codelens:: codelens_question_line
+    :question: After the line with the red arrow is executed, which will be next?
+    :breakline: 3
+    :feedback: Remember that in an if/else statement only one block is executed.
+    :correct: line
+
+    x = 2
+    y = 0
+    if x % 2 == 1:
+        print 'x is odd'
+        y = y + x
+    else:
+        print 'x is even'
+        y = y - x
+
+
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
 
