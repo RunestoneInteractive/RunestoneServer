@@ -73,5 +73,16 @@ is called for.
 
 Notice that the code has not really changed exept that we have encapsulated our
 algorithm inside a function definition, and added a ``return`` statement at the
-end.
+end.  Now we can use the altscore function to calculate a score any word in our
+wordlist.  Lets use the score function and something called list comprehensions to
+create four lists of words, four, five, six, and seven letter words.  Further, we
+will limit the words we keep to those that have a score of .7 or better.
 
+First, we will do this the long way around and then show the beauty and elegance
+of a list comprehension.
+
+.. codelens:: filterlist_1
+
+   fours = []
+   for word in wordlist:
+   
