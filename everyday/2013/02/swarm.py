@@ -4,10 +4,12 @@ import turtle
 import random
 from math import cos, radians
 
-swarmSize = 25
+swarmSize = 100
 t = turtle.Turtle()
 win = turtle.Screen()
+win.setworldcoordinates(-600,-600,600,600)
 t.speed(10)
+win.tracer(15)
 
 swarm = []
 
