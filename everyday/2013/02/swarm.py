@@ -4,7 +4,7 @@ import turtle
 import random
 from math import cos, radians
 
-swarmSize = 100
+swarmSize = 25
 t = turtle.Turtle()
 win = turtle.Screen()
 win.setworldcoordinates(-600,-600,600,600)
@@ -12,6 +12,18 @@ t.speed(10)
 win.tracer(15)
 
 swarm = []
+
+
+def getNewHeading(i):
+    minangle = 999
+    for j in range(swarmSize):
+        if i != j:
+            head = swarm[i].towards(swarm[j]) - swarm[i].heading()
+            infront = cos(radians(head))
+            if infront > 0:
+                if head < minangle:
+                    minangle = head
+    return minangle
 
 for i in range(swarmSize):
     nt = turtle.Turtle()
@@ -24,14 +36,7 @@ for i in range(swarmSize):
 for turn in range(100):
     newhead = []
     for i in range(swarmSize):
-        minangle = 999
-        for j in range(swarmSize):
-            if i != j:
-                head = swarm[i].towards(swarm[j])-swarm[i].heading()
-                infront = cos(radians(head))
-                if infront > 0:
-                    if head < minangle:
-                        minangle = head
+        minangle = getNewHeading(i)
         if minangle == 999:
             newhead.append(swarm[i].heading())
         else:
