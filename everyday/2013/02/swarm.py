@@ -1,49 +1,69 @@
 __author__ = 'millbr02'
 
-import turtle
+from turtle import Turtle, Screen
 import random
 from math import cos, radians
 
-swarmSize = 25
-t = turtle.Turtle()
-win = turtle.Screen()
-win.setworldcoordinates(-600,-600,600,600)
-t.speed(10)
-win.tracer(15)
 
-swarm = []
+class Schooler(Turtle):
+    swarm = []
 
+    def __init__(self):
+        Turtle.__init__(self)
+        self.up()
+        self.setheading(random.randrange(360))
+        self.setpos(random.randrange(-300,300),random.randrange(-300,300))
+        self.down()
+        self.newHead = None
+        Schooler.swarm.append(self)
 
-def getNewHeading(i):
-    minangle = 999
-    for j in range(swarmSize):
-        if i != j:
-            head = swarm[i].towards(swarm[j]) - swarm[i].heading()
-            infront = cos(radians(head))
-            if infront > 0:
-                if head < minangle:
-                    minangle = head
-    return minangle
-
-for i in range(swarmSize):
-    nt = turtle.Turtle()
-    swarm.append(nt)
-    nt.up()
-    nt.setheading(random.randrange(360))
-    nt.setpos(random.randrange(-300,300),random.randrange(-300,300))
-    nt.down()
-
-for turn in range(100):
-    newhead = []
-    for i in range(swarmSize):
-        minangle = getNewHeading(i)
+    def getNewHeading(self):
+        minangle = 999
+        swarmSize = len(Schooler.swarm)
+        for j in range(swarmSize):
+            if self != Schooler.swarm[j]:
+                head = self.towards(Schooler.swarm[j]) - self.heading()
+                infront = cos(radians(head))
+                if infront > 0:
+                    if head < minangle:
+                        minangle = head
         if minangle == 999:
-            newhead.append(swarm[i].heading())
+            self.newHead = self.heading()
         else:
-            newhead.append(minangle+swarm[i].heading())
+            self.newHead = minangle+self.heading()
+
+    def setHeadingAndMove(self):
+        self.setheading(self.newHead)
+        self.newHead = None
+        self.forward(10)
+
+class FocalFish(Schooler):
+
+    def getNewHeading(self):
+        swarmSize = len(Schooler.swarm)
+
+
+
+def main():
+    swarmSize = 25
+    t = Turtle()
+    win = Screen()
+    win.setworldcoordinates(-600,-600,600,600)
+    t.speed(10)
+    t.hideturtle()
+    win.tracer(15)
 
     for i in range(swarmSize):
-        swarm[i].setheading(newhead[i])
-        swarm[i].forward(10)
+        Schooler()
 
-win.exitonclick()
+    for turn in range(100):
+        for schooler in Schooler.swarm:
+            schooler.getNewHeading()
+
+        for schooler in Schooler.swarm:
+            schooler.setHeadingAndMove()
+
+    win.exitonclick()
+
+
+main()
