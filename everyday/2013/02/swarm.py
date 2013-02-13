@@ -12,7 +12,7 @@ class Schooler(Turtle):
         Turtle.__init__(self)
         self.up()
         self.setheading(random.randrange(360))
-        self.setpos(random.randrange(-300,300),random.randrange(-300,300))
+        self.setpos(random.randrange(-200,200),random.randrange(-200,200))
         self.down()
         self.newHead = None
         Schooler.swarm.append(self)
@@ -49,33 +49,37 @@ class FocalFish(Schooler):
             if self != other:
                 dist = self.distance(other)
                 if dist <= self.repulse:
-                    repulsion.append((dist,other))
+                    repulsion.append(other)
                 elif dist <= self.align:
-                    alignment.append((dist,other))
+                    alignment.append(other)
                 elif dist <= self.attract:
-                    attraction.append((dist,other))
+                    attraction.append(other)
 
+        self.newHead = newHead1 = newHead2 = newHead3 = self.heading()
         if repulsion:
-            repulsion.sort()
-            nbr = repulsion[0][1]
-            self.newHead = nbr.heading()+90
+            x = 0
+            y = 0
+            for o in repulsion:
+                x = x + o.xcor()
+                y = y + o.ycor()
+
+            newHead1 = self.towards(x/len(repulsion),y/len(repulsion)) + 180
 
         elif alignment:
-#            alignment.sort()
-#            nbr = alignment[0][1]
-#            self.newHead = (nbr.heading() + self.heading()) // 2
             hs = self.heading()
             for other in alignment:
-                hs = hs + other[1].heading()
-            self.newHead = hs // (len(alignment)+1)
+                hs = hs + other.heading()
+            newHead2 = hs // (len(alignment)+1)
 
         elif attraction:
-            attraction.sort()
-            nbr = attraction[0][1]
-            self.newHead = self.towards(nbr)
+            x = 0
+            y = 0
+            for o in attraction:
+                x = x + o.xcor()
+                y = y + o.ycor()
+            newHead3 = self.towards(x/len(attraction),y/len(attraction))
 
-        else:
-            self.newHead = self.heading()
+        self.newHead = (newHead1+newHead2+newHead3) / 3
 
 
 
@@ -89,7 +93,7 @@ def main():
     win.tracer(15)
 
     for i in range(swarmSize):
-        FocalFish()
+        Schooler()
 
     for turn in range(1000):
         for schooler in Schooler.swarm:
