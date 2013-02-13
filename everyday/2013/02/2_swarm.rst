@@ -29,7 +29,14 @@ The procedure for this is pretty easy.  Lets iterate through all the other organ
 3. Change our heading to go directly toward that organism.
 
 
-Here is a first try at implementing, and graphically showing the algorithm I've just described.
+Here is a first try at implementing, and graphically showing the algorithm
+I've just described.  **Warning** this is ugly code.  This example took me 20
+ minutes to hack together, with little forethought or planning.  But as you
+ can see it works.  As it turns out its really nothing like a swarm or a
+ school of fish but more of a giant follow the leader game.  What is
+ interesting to me is that in just a short coding session implementing a
+ single rule you do get something that looks like there is a pattern to the
+ behavior.
 
 .. activecode:: follow_the_leader
 
@@ -81,6 +88,33 @@ Here is a first try at implementing, and graphically showing the algorithm I've 
 
     win.exitonclick()
 
+Even though, as I said, the code above is ugly there are a couple of things I
+would point out that are important. The expression ``cos(radians(head))``
+determines whether the other object -- ``swarm[j]`` is in front of or behind
+the object ``swarm[i]``. We define "in front of" to be based on the heading of
+the object ``swarm[i]``.  This is important because we are assuming that you
+can only see objects in front of you.
+
+Now the list, ``newhead`` is important, because when we are doing a
+simulation, that is simulating a bunch of things **simultaneously** you have
+to do things in the simulation in two steps.
+
+1.  Each object must make a decision about their new heading.
+2.  Each object takes action on their decision.
+
+Although in the real world all of these decisions and actions happen in
+parallel in the non-parallel simulation we do them in two stages to simulate
+the parallelism.  In code this plays out by having each object in the swarm
+make a decision about what its new heading will be and recording that
+decision in ``newhead``.  Once all of the decisions are made then we can go
+back and implement the decisions and update our display of the world
+``swarm[i].setheading(newhead[i])``  This is a good example of parallel array
+ construction.  Where the new heading for ``swarm[i]`` is in ``newhead[i]``.
+
+
+With the initial implementation out of the way, lets look at a much nicer and
+cleaner version that illustrates some nice Object Oriented Programming
+techniques.
 
 An Object Oriented Implementation
 ---------------------------------
