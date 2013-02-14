@@ -1,13 +1,18 @@
 .. This document is Licensed Creative Commons:
    Attribution, Share Alike by Brad Miller, Luther College 2013
 
-Swarming Intelligence
-=====================
+Kill Decision meets Finding Nemo
+================================
 
 This week's post is inspired by the book *Kill Decision* by Daniel Suarez.
-Suarez is a relatively new Techno-Thriller author, and I love his books.  In this book, unmanned drones already exist and are causing some major problems.  How do
-these drones know what to do if they are not controlled remotely?  How do they fight?  Thats the scary part.  It turns out they get their fighting instincts from some of
-the fiercest killers on the planet... Weaver ants.  The female protagonist studies the social structure of ants, (she's a myrmecologist) however unknown forces have taken the algorithm she has developed to implant in unmanned drones.
+Suarez is a relatively new Techno-Thriller author, and I love his books. In
+this book, unmanned drones already exist and are causing some major problems.
+How do these drones know what to do if they are not controlled remotely? How do
+they fight? Thats the scary part. It turns out they get their fighting
+instincts from some of the fiercest killers on the planet... Weaver ants. The
+female protagonist studies the social structure of ants, (she's a
+myrmecologist) however unknown forces have taken the algorithm she has
+developed to implant in unmanned drones.
 
 
 This video shows you everything you need to understand about how ants are attracted to pheromones and will sense the pheromones and move toward them.  In the video the blue blobs are patches of food, and the purple blog is the nest.  When ants find food they head back to the nest, but they also leave behind a trail of pheromones that other ants can follow.  the stronger the scent the whiter the trail.  Yuu can see how quickly the majority of the ants get to the strongest trail.  In the case of drones in the book getting food equals killing people and tearing apart things.
@@ -22,17 +27,24 @@ read more about intelligence that arises from simple organisms and behavior
 check out *Turtles, Termites, and Traffic Jams* by Mitchel Resnick.
 
 
-The ant intelligence in *Kill Decision* got me to thinking about swarming and
-schooling algorithms and whether or not I could implemented something really simple in Python.  I've always been interested to investigate how Pixar made
-the giant stampede of wildebeest in Lion King, or how the sardines in Nemo
-were modelled.  Although there are many `swarming algorithms <http://en.wikipedia.org/wiki/Swarm_intelligence>`_ that are used to solve really hard problems I'm going to go with something simple and graphical.
+The ant intelligence in *Kill Decision* got me to thinking about swarming bees
+and schooling fish and flocking birds. Have you ever wondered how such creaters
+with supposedly no intelligence form themselves into groups that seemingly
+exhibit intelligent behavior? It turns out that there has been a lot of
+computer science work on this over the years, so I looked at some schooling
+algorithms and I wondered whether or not I could implemented something really
+simple in Python. I've always been interested to investigate how Pixar made the
+giant stampede of wildebeest in Lion King, or how the sardines in Nemo were
+modelled. Although there are many `swarming algorithms
+<http://en.wikipedia.org/wiki/Swarm_intelligence>`_ that are used to solve
+really hard problems I'm going to go with something simple and graphical.
 
 First Example
 -------------
 
 Here's a simple example Suppose you have a bird or a fish and the only rule they have for where to go next is to head directly for the fish or bird that is "most directly in their line of vision."
 
-The procedure for this is pretty easy.  Lets iterate through all the other organisms around us.
+The procedure for this is pretty easy.  First, iterate through all the other organisms in our simulated world.  As we iterate we will:
 
 1. Eliminate all of those that are behind us.  Lets assume that our organisms can only see things in front of them.
 2. Of all the things in front of us choose the one that is most closely aligned with our own heading.
@@ -59,7 +71,7 @@ behavior.
     win = turtle.Screen()
     win.setworldcoordinates(-600,-600,600,600)
     t.speed(10)
-    win.tracer(15)
+    t.tracer(15)
 
     swarm = []
 
@@ -134,7 +146,7 @@ An Object Oriented Implementation
 
 .. activecode:: second_try
 
-    import turtle
+    from turtle import Turtle, Screen
     import random
     from math import cos, radians
 
@@ -169,35 +181,35 @@ An Object Oriented Implementation
             self.forward(10)
 
 
-        def main():
-            swarmSize = 25
-            t = Turtle()
-            win = Screen()
-            win.setworldcoordinates(-600,-600,600,600)
-            t.speed(10)
-            t.hideturtle()
-            win.tracer(15)
+    def main():
+        swarmSize = 25
+        t = Turtle()
+        win = Screen()
+        win.setworldcoordinates(-600,-600,600,600)
+        t.speed(10)
+        t.tracer(15)
+        t.hideturtle()
 
-            for i in range(swarmSize):
-                Schooler()
+        for i in range(swarmSize):
+            Schooler()
 
-            for turn in range(100):
-                for schooler in Schooler.swarm:
-                    schooler.getNewHeading()
+        for turn in range(50):
+            for schooler in Schooler.swarm:
+                schooler.getNewHeading()
 
-                for schooler in Schooler.swarm:
-                    schooler.setHeadingAndMove()
+            for schooler in Schooler.swarm:
+                schooler.setHeadingAndMove()
 
-            win.exitonclick()
+        win.exitonclick()
 
     main()
 
-Although this implementation does exactly the same thing as the first one you will
-hopefully find this one easier to read and follow.  There are a couple of
-very important things about this code to notice.  First, the class Schooler,
-is a subclass of Turtle.  That is ``Schooler ISA Turtle``.  This has some
-really great side effects in that all of the Turtle methods for getting
-location and heading are availalbe as ``self.`` methods.
+Although this implementation does exactly the same thing as the first one you
+will hopefully find this one easier to read and follow. There are a couple of
+very important things about this code to notice. First, the class Schooler, is
+a subclass of Turtle. That is, ``Schooler ISA Turtle``. This has some really
+great side effects in that all of the Turtle methods for getting location and
+heading are availalbe as ``self.`` methods.
 
 We can also eliminate the parallel list construction used to hold the new
 position for the Schooler.  The new position becomes an instance variable of
@@ -244,11 +256,11 @@ In the diagram you can see that you can classify all the other organisms (Fish) 
 
 Once you have these rules calculated it is fun to experiment a bit.  Should you try to apply all three rules all the time?  Or should you only apply the rule in the closest zone that has fish in it?  If you apply the rules for more than one zone how should you combine the headings for the different zones?
 
-If you have an interesting solution, please post it to the comments, it should be interesting to experiment.  Next time we'll look at some solutions and think about what would happen if a fish was a 'leader' and or how a school/swarm would respond to an obstacle.
+If you have an interesting solution, please post it to the comments, it should be interesting to experiment.  Next time we'll look at some solutions and think about what would happen if a certain fish in the school was a 'leader' and or how a school/swarm would respond to an obstacle.
 
 .. actex:: focalfish_1
 
-    import turtle
+    from turtle import Turtle, Screen
     import random
     from math import cos, radians
 
@@ -283,27 +295,26 @@ If you have an interesting solution, please post it to the comments, it should b
             self.forward(10)
 
 
-        def main():
-            swarmSize = 25
-            t = Turtle()
-            win = Screen()
-            win.setworldcoordinates(-600,-600,600,600)
-            t.speed(10)
-            t.hideturtle()
-            win.tracer(15)
+    def main():
+        swarmSize = 25
+        t = Turtle()
+        win = Screen()
+        win.setworldcoordinates(-600,-600,600,600)
+        t.speed(10)
+        t.tracer(15)
+        t.hideturtle()
 
-            for i in range(swarmSize):
-                Schooler()
+        for i in range(swarmSize):
+            Schooler()
 
-            for turn in range(100):
-                for schooler in Schooler.swarm:
-                    schooler.getNewHeading()
+        for turn in range(100):
+            for schooler in Schooler.swarm:
+                schooler.getNewHeading()
 
-                for schooler in Schooler.swarm:
-                    schooler.setHeadingAndMove()
+            for schooler in Schooler.swarm:
+                schooler.setHeadingAndMove()
 
-            win.exitonclick()
-
+        win.exitonclick()
 
         main()
 
@@ -314,9 +325,9 @@ and enjoy the behavior of the sardines in a completely new light.
 Links
 ~~~~~
 
-* `about classes <http://interactivepython.org/courselib/static/thinkcspy/Classes/classesintro.html>`_
+* `About classes <http://interactivepython.org/courselib/static/thinkcspy/Classes/classesintro.html>`_
 
-* `inheritance <http://interactivepython.org/courselib/static/pythonds/Introduction/introduction.html#inheritance-logic-gates-and-circuits>`_
+* `Inheritance <http://interactivepython.org/courselib/static/pythonds/Introduction/introduction.html#inheritance-logic-gates-and-circuits>`_
 
 * Boids_
 

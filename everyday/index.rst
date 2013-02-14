@@ -15,8 +15,9 @@ Contents:
    2013/01/2_password.rst
    2013/01/3_password.rst
    2013/01/4_password.rst
-   2013/01/5_password.rst         
+   2013/01/5_password.rst
    2013/02/1_primes.rst
+   2013/02/2_swarm.rst
 
 
 Indices and tables
