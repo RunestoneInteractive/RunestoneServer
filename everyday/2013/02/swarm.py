@@ -13,7 +13,7 @@ class Schooler(Turtle):
         self.up()
         self.setheading(random.randrange(360))
         self.setpos(random.randrange(-200,200),random.randrange(-200,200))
-        self.down()
+        #self.down()
         self.newHead = None
         Schooler.swarm.append(self)
 
@@ -29,9 +29,14 @@ class Schooler(Turtle):
             self.newHead = self.heading()
         else:
             self.newHead = minangle+self.heading()
+    def inFrontOf(self,other):
+        head = self.towards(other) - self.heading()
+        if cos(radians(head)) > 0:
+            return True
+        return False
 
     def setHeadingAndMove(self):
-        self.setheading(self.newHead)
+        self.setheading(self.newHead%360)
         self.newHead = None
         self.forward(10)
 
@@ -55,7 +60,8 @@ class FocalFish(Schooler):
                 elif dist <= self.attract:
                     attraction.append(other)
 
-        self.newHead = newHead1 = newHead2 = newHead3 = self.heading()
+        self.newHead = self.heading()
+
         if repulsion:
             x = 0
             y = 0
@@ -63,13 +69,13 @@ class FocalFish(Schooler):
                 x = x + o.xcor()
                 y = y + o.ycor()
 
-            newHead1 = self.towards(x/len(repulsion),y/len(repulsion)) + 180
+            self.newHead = self.towards(x/len(repulsion),y/len(repulsion)) + 180
 
         elif alignment:
             hs = self.heading()
             for other in alignment:
                 hs = hs + other.heading()
-            newHead2 = hs // (len(alignment)+1)
+            self.newHead = hs // (len(alignment)+1)
 
         elif attraction:
             x = 0
@@ -77,10 +83,34 @@ class FocalFish(Schooler):
             for o in attraction:
                 x = x + o.xcor()
                 y = y + o.ycor()
-            newHead3 = self.towards(x/len(attraction),y/len(attraction))
+            self.newHead = self.towards(x/len(attraction),y/len(attraction))
 
-        self.newHead = (newHead1+newHead2+newHead3) / 3
+class ObstacleFish(FocalFish):
+    def getNewHeading(self):
+        avoiding = False
+        for o in Obstacle.obstacles:
+            if self.inFrontOf(o) and self.distance(o) < 40:
+                angleTo = (self.towards(o) - self.heading())%360
+                if angleTo < 45:
+                    print "taking leftward evasive ", angleTo
+                    self.newHead = self.heading() - 25
+                    avoiding = True
+                elif angleTo > 315:
+                    self.newHead = self.heading() + 25
+                    print "taking rightward evasive ", angleTo
+                    avoiding = True
+        if not avoiding:
+            #FocalFish.getNewHeading(self)
+            super(ObstacleFish,self).getNewHeading()
 
+class Obstacle(Turtle):
+    obstacles = []
+    def __init__(self):
+        Turtle.__init__(self)
+        self.up()
+        self.setpos(random.randrange(-200,200),random.randrange(-200,200))
+        self.shape('circle')
+        Obstacle.obstacles.append(self)
 
 
 def main():
@@ -93,7 +123,10 @@ def main():
     win.tracer(15)
 
     for i in range(swarmSize):
-        Schooler()
+        ObstacleFish()
+
+    for i in range(5):
+        Obstacle()
 
     for turn in range(1000):
         for schooler in Schooler.swarm:
