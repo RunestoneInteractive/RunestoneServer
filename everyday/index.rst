@@ -18,7 +18,7 @@ Contents:
    2013/01/5_password.rst
    2013/02/1_primes.rst
    2013/02/2_swarm.rst
-
+   2013/02/3_school.rst
 
 Indices and tables
 ==================

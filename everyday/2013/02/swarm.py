@@ -29,6 +29,7 @@ class Schooler(Turtle):
             self.newHead = self.heading()
         else:
             self.newHead = minangle+self.heading()
+            
     def inFrontOf(self,other):
         head = self.towards(other) - self.heading()
         if cos(radians(head)) > 0:
@@ -92,12 +93,12 @@ class ObstacleFish(FocalFish):
             if self.inFrontOf(o) and self.distance(o) < 40:
                 angleTo = (self.towards(o) - self.heading())%360
                 if angleTo < 45:
-                    print "taking leftward evasive ", angleTo
+                    print ("taking leftward evasive ", angleTo)
                     self.newHead = self.heading() - 25
                     avoiding = True
                 elif angleTo > 315:
                     self.newHead = self.heading() + 25
-                    print "taking rightward evasive ", angleTo
+                    print ("taking rightward evasive ", angleTo)
                     avoiding = True
         if not avoiding:
             #FocalFish.getNewHeading(self)
@@ -113,6 +114,19 @@ class Obstacle(Turtle):
         Obstacle.obstacles.append(self)
 
 
+class LeaderFish(ObstacleFish):
+    def __init__(self):
+        super(LeaderFish,self).__init__()
+        self.color('red','red')
+
+    def getNewHeading(self):
+        if random.randrange(100) == 0:
+            print ("whimsically changing direction")
+            self.newHead = random.randrange(360)
+        else:
+            self.newHead = self.heading()
+        return
+
 def main():
     swarmSize = 100
     t = Turtle()
@@ -120,10 +134,13 @@ def main():
     win.setworldcoordinates(-600,-600,600,600)
     t.speed(10)
     t.hideturtle()
-    win.tracer(15)
+    t.tracer(15)
 
     for i in range(swarmSize):
-        LeaderFish()
+        if random.randrange(100) == 0:
+            LeaderFish()
+        else:
+            ObstacleFish()
 
     for i in range(5):
         Obstacle()
@@ -136,27 +153,6 @@ def main():
             schooler.setHeadingAndMove()
 
     win.exitonclick()
-
-class LeaderFish(ObstacleFish):
-    def __init__(self):
-        super(LeaderFish,self).__init__()
-        if random.randrange(100) == 0:
-            self.amLeader = True
-            self.color('red','red')
-            print "I'm a leader!!!"
-        else:
-            self.amLeader = False
-
-    def getNewHeading(self):
-        if self.amLeader:
-            if random.randrange(100) == 0:
-                print "whimsically changing direction"
-                self.newHead = random.randrange(360)
-            else:
-                self.newHead = self.heading()
-            return
-        else:
-            super(LeaderFish,self).getNewHeading()
 
 
 main()
