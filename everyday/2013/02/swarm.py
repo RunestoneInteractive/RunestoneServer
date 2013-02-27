@@ -108,7 +108,7 @@ class Obstacle(Turtle):
     def __init__(self):
         Turtle.__init__(self)
         self.up()
-        self.setpos(random.randrange(-200,200),random.randrange(-200,200))
+        self.setpos(random.randrange(-500,500),random.randrange(-500,500))
         self.shape('circle')
         Obstacle.obstacles.append(self)
 
@@ -123,7 +123,7 @@ def main():
     win.tracer(15)
 
     for i in range(swarmSize):
-        ObstacleFish()
+        LeaderFish()
 
     for i in range(5):
         Obstacle()
@@ -136,6 +136,27 @@ def main():
             schooler.setHeadingAndMove()
 
     win.exitonclick()
+
+class LeaderFish(ObstacleFish):
+    def __init__(self):
+        super(LeaderFish,self).__init__()
+        if random.randrange(100) == 0:
+            self.amLeader = True
+            self.color('red','red')
+            print "I'm a leader!!!"
+        else:
+            self.amLeader = False
+
+    def getNewHeading(self):
+        if self.amLeader:
+            if random.randrange(100) == 0:
+                print "whimsically changing direction"
+                self.newHead = random.randrange(360)
+            else:
+                self.newHead = self.heading()
+            return
+        else:
+            super(LeaderFish,self).getNewHeading()
 
 
 main()
