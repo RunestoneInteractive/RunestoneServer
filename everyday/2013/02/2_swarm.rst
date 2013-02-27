@@ -23,7 +23,7 @@ This video shows you everything you need to understand about how ants are attrac
 
 
 The rest of the story you'll have to read for yourself [1]_.  If you want to
-read more about intelligence that arises from simple organisms and behavior
+readd more about intelligence that arises from simple organisms and behavior
 check out *Turtles, Termites, and Traffic Jams* by Mitchel Resnick.
 
 
