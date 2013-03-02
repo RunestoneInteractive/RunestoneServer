@@ -29,7 +29,6 @@ class Schooler(Turtle):
             self.newHead = self.heading()
         else:
             self.newHead = minangle+self.heading()
-            
     def inFrontOf(self,other):
         head = self.towards(other) - self.heading()
         if cos(radians(head)) > 0:
@@ -41,52 +40,8 @@ class Schooler(Turtle):
         self.newHead = None
         self.forward(10)
 
-class FocalFish(Schooler):
-    repulse = 10
-    align = 50
-    attract = 600
 
-    def getNewHeading(self):
-        repulsion = []
-        alignment = []
-        attraction = []
-
-        for other in Schooler.swarm:
-            if self != other:
-                dist = self.distance(other)
-                if dist <= self.repulse:
-                    repulsion.append(other)
-                elif dist <= self.align:
-                    alignment.append(other)
-                elif dist <= self.attract:
-                    attraction.append(other)
-
-        self.newHead = self.heading()
-
-        if repulsion:
-            x = 0
-            y = 0
-            for o in repulsion:
-                x = x + o.xcor()
-                y = y + o.ycor()
-
-            self.newHead = self.towards(x/len(repulsion),y/len(repulsion)) + 180
-
-        elif alignment:
-            hs = self.heading()
-            for other in alignment:
-                hs = hs + other.heading()
-            self.newHead = hs // (len(alignment)+1)
-
-        elif attraction:
-            x = 0
-            y = 0
-            for o in attraction:
-                x = x + o.xcor()
-                y = y + o.ycor()
-            self.newHead = self.towards(x/len(attraction),y/len(attraction))
-
-class ObstacleFish(FocalFish):
+class ObstacleFish(Schooler):
     def getNewHeading(self):
         avoiding = False
         for o in Obstacle.obstacles:
@@ -100,9 +55,56 @@ class ObstacleFish(FocalFish):
                     self.newHead = self.heading() + 25
                     print ("taking rightward evasive ", angleTo)
                     avoiding = True
+        return avoiding
+
+
+class FocalFish(ObstacleFish):
+    repulse = 10
+    align = 50
+    attract = 600
+
+    def getNewHeading(self):
+        repulsion = []
+        alignment = []
+        attraction = []
+
+        avoiding = super(FocalFish,self).getNewHeading()
         if not avoiding:
-            #FocalFish.getNewHeading(self)
-            super(ObstacleFish,self).getNewHeading()
+            for other in Schooler.swarm:
+                if self != other:
+                    dist = self.distance(other)
+                    if dist <= self.repulse:
+                        repulsion.append(other)
+                    elif dist <= self.align:
+                        alignment.append(other)
+                    elif dist <= self.attract:
+                        attraction.append(other)
+
+            self.newHead = self.heading()
+
+            if repulsion:
+                x = 0
+                y = 0
+                for o in repulsion:
+                    x = x + o.xcor()
+                    y = y + o.ycor()
+
+                self.newHead = self.towards(x/len(repulsion),y/len(repulsion)) + 180
+
+            elif alignment:
+                hs = self.heading()
+                for other in alignment:
+                    hs = hs + other.heading()
+                self.newHead = hs // (len(alignment)+1)
+
+            elif attraction:
+                x = 0
+                y = 0
+                for o in attraction:
+                    x = x + o.xcor()
+                    y = y + o.ycor()
+                self.newHead = self.towards(x/len(attraction),y/len(attraction))
+
 
 class Obstacle(Turtle):
     obstacles = []
@@ -120,12 +122,14 @@ class LeaderFish(ObstacleFish):
         self.color('red','red')
 
     def getNewHeading(self):
-        if random.randrange(100) == 0:
-            print ("whimsically changing direction")
-            self.newHead = random.randrange(360)
-        else:
-            self.newHead = self.heading()
-        return
+        avoiding = super(LeaderFish,self).getNewHeading()
+        if not avoiding:
+            if random.randrange(100) == 0:
+                print ("whimsically changing direction")
+                self.newHead = random.randrange(360)
+            else:
+                self.newHead = self.heading()
+            return
 
 def main():
     swarmSize = 100
@@ -140,7 +144,7 @@ def main():
         if random.randrange(100) == 0:
             LeaderFish()
         else:
-            ObstacleFish()
+            FocalFish()
 
     for i in range(5):
         Obstacle()
