@@ -4,7 +4,7 @@ Runestone Interactive Tools and Content
 Important Notice
 ----------------
 
-This is the consolidated repository for all work related to our interactive textbook project.  If you were using the 
+This is the consolidated repository for all work related to our interactive textbook project.  If you were using the
 thinkcspy repository and the eBookExtensions repository you will find all of that work here.  Thanks.
 
 Dependencies
@@ -22,6 +22,23 @@ Follow the instructions there to download and install Sphinx.
 If you want to run a full blown server -- so you can save activecode assignments etc. then you will need to download and install web2py.  http://web2py.com
 
 After you install web2py go to the applications folder and check out this repository.  This will be installed as a web2py application automatically.
+
+Cloneing The Runestone Project and its submodules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This project consists of the main repository, plus *submodules* for codelens, parsons-problems, and skulpt.  In order to get all of the source you need you will need to do the following:
+
+::
+
+    $ git clone https://github.com/bnmnetp/runestone.git
+    $ cd runestone
+    $ git submodule init
+    $ git submodule update
+
+If you are using a GUI git client you may simply get prompted to update the submodules and all will be taken care of for you.  Newer versions of git also support::
+
+    $ git clone --recursive https://github.com/bnmnetp/runestone.git
+
 
 Building the Book
 -----------------
@@ -59,7 +76,7 @@ Running the Server
 
 Once you've built the book using the steps above.  You can start the web2py development server by simply running ::
 
-	python web2py.py.  
+	python web2py.py.
 
 This will bring up a little gui where you can make up an admin password and click start server.  When the server is running your browswer will open to the welcome application. Unless you've changed the default application as described above.  To see this app simply use the url:  http://127.0.0.1/courselib    -- From there you can register yourself as a user for dev course, which will redirect you to the index for devcourse.  Or if you have built them, you can click on the link for How to think..., or Problem Solving...
 
@@ -72,7 +89,7 @@ If you get an error at this point the most likely reason is that the settings fi
 	elif 'luther' in uname()[1]:   # this is my beta machine
 	        settings.database_uri = 'sqlite://storage.sqlite'
 	else:
-	        raise RuntimeError('Host unknown, senttings not configured')    
+	        raise RuntimeError('Host unknown, senttings not configured')
 
 For  your own personal development, you want the first clause of the if statment to match.
 
