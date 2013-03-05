@@ -6,10 +6,10 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-    
+
 ..  shortname:: PythonModules
 ..  description:: What is a module and how do we use them (math, random)
- 
+
 Modules and Getting Help
 ========================
 
@@ -20,8 +20,8 @@ Modules
     :controls:
     :thumb: ../_static/modules.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/modules.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/modules.webm
+    http://media.interactivepython.org/thinkcsVideos/modules.mov
+    http://media.interactivepython.org/thinkcsVideos/modules.webm
 
 A **module** is a file containing Python definitions and statements intended
 for use in other Python programs. There are many Python modules that come with
@@ -47,17 +47,17 @@ that are defined inside.
 Here we are using ``Screen`` and ``Turtle``, both of which are defined inside the turtle module.
 
 But what if no one had told us about turtle?  How would we know
-that it exists. How would we know what it can do for us? The answer is to ask for help and the best place to get 
+that it exists. How would we know what it can do for us? The answer is to ask for help and the best place to get
 help about the Python programming environment is to consult with the Python Documentation.
 
 
 The  `Python Documentation <http://docs.python.org/py3k/>`_ site for Python version 3 (the home page is shown below) is an extremely useful reference
-for all aspects of Python.  
-The site contains 
-a listing of all the standard modules that are available with Python 
-(see `Global Module Index <http://docs.python.org/py3k/py-modindex.html>`_).  
+for all aspects of Python.
+The site contains
+a listing of all the standard modules that are available with Python
+(see `Global Module Index <http://docs.python.org/py3k/py-modindex.html>`_).
 You will also see that there is a `Language Reference <http://docs.python.org/py3k/reference/index.html>`_
-and a `Tutorial <http://docs.python.org/py3k/tutorial/index.html>`_, as well as 
+and a `Tutorial <http://docs.python.org/py3k/tutorial/index.html>`_, as well as
 installation instructions, how-tos, and frequently asked questions.  We encourage you to become familiar with this site
 and to use it often.
 
@@ -78,13 +78,13 @@ You can see that all the turtle functionality that we have talked about is there
 
 .. admonition:: Note: Python modules and limitations with activecode
 
-	Throughout the chapters of this book, activecode windows allow you to practice the Python that you are learning.  
-	We mentioned in the first chapter that programming is normally done using some type of development 
+	Throughout the chapters of this book, activecode windows allow you to practice the Python that you are learning.
+	We mentioned in the first chapter that programming is normally done using some type of development
 	environment and that the
 	activecode used here was strictly to help us learn.  It is not the way we write production programs.
 
-	To that end, it is necessary to mention that many of the  modules available in standard Python 
-	will **not** work in the activecode environment.  In fact, only turtle, math, and random have been 
+	To that end, it is necessary to mention that many of the  modules available in standard Python
+	will **not** work in the activecode environment.  In fact, only turtle, math, and random have been
 	ported at this point.  If you wish to explore any
 	additional modules, you will need to also explore using a more robust development environment.
 
@@ -98,16 +98,16 @@ You can see that all the turtle functionality that we have talked about is there
    :correct: a
    :feedback_a: A module can be reused in different programs.
    :feedback_b: While a module is separate block of code, it is separate from a program.
-   :feedback_c: The call to a feature within a module may be one line of code, but modules are usually multiple lines of code separate from the program	
+   :feedback_c: The call to a feature within a module may be one line of code, but modules are usually multiple lines of code separate from the program
    :feedback_d: Each module has its own documentation, but the module itself is more than just documentation.
 
    In Python a module is:
 
 .. mchoicemf:: question4_1_2
-   :answer_a: Go to the Python Documentation site. 
+   :answer_a: Go to the Python Documentation site.
    :answer_b: Look at the import statements of the program you are working with or writing.
    :answer_c: Ask the professor
-   :answer_d: Look in this textbook.  
+   :answer_d: Look in this textbook.
    :correct: a
    :feedback_a: The site contains a listing of all the standard modules that are available with Python.
    :feedback_b: The import statements only tell you what modules are currently being used in the program, not how to use them or what they contain.
@@ -115,8 +115,8 @@ You can see that all the turtle functionality that we have talked about is there
    :feedback_d: This book only explains a portion of the modules available.  For a full listing you should look elsewhere.
 
    To find out information on the standard modules available with Python you should:
-   
-.. mchoicemf:: question4_1_3 
+
+.. mchoicemf:: question4_1_3
    :answer_a: True
    :answer_b: False
    :correct: b
@@ -142,7 +142,7 @@ the reference diagrams we saw earlier for simple variables.
 .. image:: Figures/modreference.png
 
 In order to use something contained in a module, we use the `dot` notation, providing the module name and the specific item joined together with a "dot".  For example, to use the ``Turtle`` class, we say ``turtle.Turtle``.  You should read
-this as: "In the module turtle, access the Python element called Turtle".  
+this as: "In the module turtle, access the Python element called Turtle".
 
 We will now turn our attention to a few other modules that you might find useful.
 
@@ -151,8 +151,8 @@ We will now turn our attention to a few other modules that you might find useful
     :controls:
     :thumb: ../_static/mathrandommodule.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/mathrandommodule.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/mathrandommodule.webm
+    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.mov
+    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.webm
 
 
 The `math` module
@@ -165,7 +165,7 @@ As we noted above, when we ``import math``, we create a reference to a module ob
 
 .. image:: Figures/mathmod.png
 
-Here are some items from the math module in action.  If you want more information, you can check out the 
+Here are some items from the math module in action.  If you want more information, you can check out the
 `Math Module <http://docs.python.org/py3k/library/math.html#module-math>`_ Python Documentation.
 
 .. activecode:: chmodule_02
@@ -173,13 +173,13 @@ Here are some items from the math module in action.  If you want more informatio
     import math
 
     print(math.pi)
-    print(math.e)    
+    print(math.e)
 
     print(math.sqrt(2.0))
 
     print(math.sin(math.radians(90)))   # sin of 90 degrees
-    
- 
+
+
 
 ..  Like almost all other programming languages, angles are expressed in *radians*
 .. rather than degrees.  There are two functions ``radians`` and ``degrees`` to
@@ -189,7 +189,7 @@ Notice another difference between this module and our use of ``turtle``.
 In  ``turtle`` we create objects (either ``Turtle`` or ``Screen``) and call methods on those objects.  Remember that
 a turtle is a data object (recall ``alex`` and ``tess``).  We need to create one in order to use it.  When we say
 ``alex = turtle.Turtle()``, we are calling the constructor for the Turtle class which returns a single turtle object.
- 
+
 
 Mathematical functions do not need to be constructed.  They simply
 perform a task.
@@ -199,17 +199,17 @@ specific item form the module (``math.sqrt``).  You can think of this as lastnam
 family and the firstname is the individual entry in the module.
 
 If you have not done so already, take a look at the documentation
-for the math module.  
+for the math module.
 
 **Check your understanding**
 
 .. mchoicemf:: question4_2_1
-   :answer_a: import math 
-   :answer_b: include math 
+   :answer_a: import math
+   :answer_b: include math
    :answer_c: use math
    :answer_d:  You don’t need a statement.  You can always use the math module
    :correct: a
-   :feedback_a: The module must be imported before you can use anything declared inside the module. 
+   :feedback_a: The module must be imported before you can use anything declared inside the module.
    :feedback_b: The correct term is not include, but you are close.
    :feedback_c: You will be using parts of the module, but that is not the right term.
    :feedback_d: You cannot use a Python module without a statement at the top of your program that explicitly tells Python you want to use the module.
@@ -228,14 +228,14 @@ We often want to use **random numbers** in programs.  Here are a few typical use
 * To simulate possible rainfall when we make a computerized model for
   estimating the environmental impact of building a dam,
 * For encrypting your banking session on the Internet.
-  
+
 Python provides a module ``random`` that helps with tasks like this.  You can
 take a look at it in the documentation.  Here are the key things we can do with it.
 
 .. activecode:: chmodule_rand
 
     import random
-    
+
     prob = random.random()
     print(prob)
 
@@ -243,17 +243,17 @@ take a look at it in the documentation.  Here are the key things we can do with 
     print(diceThrow)
 
 Press the run button a number of times.  Note that the values change each time.  These are random numbers.
-    
+
 The ``randrange`` function generates an integer between its lower and upper
 argument, using the same semantics as ``range`` --- so the lower bound is included, but
-the upper bound is excluded.   All the values have an equal probability of occurring  
-(i.e. the results are *uniformly* distributed). 
+the upper bound is excluded.   All the values have an equal probability of occurring
+(i.e. the results are *uniformly* distributed).
 
 The ``random()`` function returns a floating point number in the range [0.0, 1.0) --- the
 square bracket means "closed interval on the left" and the round parenthesis means
 "open interval on the right".  In other words, 0.0 is possible, but all returned
 numbers will be strictly less than 1.0.  It is usual to *scale* the results after
-calling this method, to get them into a range suitable for your application.  
+calling this method, to get them into a range suitable for your application.
 
 In the
 case shown here, we've converted the result of the method call to a number in
@@ -264,7 +264,7 @@ If you continue to press the run button you will see random values between 0.0 a
 .. activecode:: chmodule_rand2
 
     import random
-    
+
     prob = random.random()
     result = prob * 5
     print(result)
@@ -274,8 +274,8 @@ If you continue to press the run button you will see random values between 0.0 a
 
 
 
-.. index:: deterministic algorithm,  algorithm; deterministic, unit tests   
-   
+.. index:: deterministic algorithm,  algorithm; deterministic, unit tests
+
 It is important to note that
 random number generators are based on a **deterministic** algorithm --- repeatable and predictable.
 So they're called **pseudo-random** generators --- they are not genuinely random.
@@ -294,21 +294,21 @@ get random behavior each time you execute.
 
 .. mchoicemf:: question4_4_1
    :answer_a: math.pi
-   :answer_b: math(pi) 
-   :answer_c: pi.math 
+   :answer_b: math(pi)
+   :answer_c: pi.math
    :answer_d: math->pi
    :correct: a
    :feedback_a: To invoke or reference something contained in a module you use the dot (.) notation.
-   :feedback_b: This is the syntax for calling a function, not referencing an item in a module.  
+   :feedback_b: This is the syntax for calling a function, not referencing an item in a module.
    :feedback_c: The module name must come first when accessing values and functions with a module.
    :feedback_d: The -> notation is not used in Python.
 
-   Which of the following is the correct way to reference the value pi within the math module.   Assume you have already imported the math module. 
-   
+   Which of the following is the correct way to reference the value pi within the math module.   Assume you have already imported the math module.
+
 .. mchoicemf:: question4_4_2
    :answer_a: the math module
    :answer_b: the random module
-   :answer_c: the turtle module 
+   :answer_c: the turtle module
    :answer_d: the game module
    :correct: b
    :feedback_a: While you might want to use the math module for other numerical computations in your program, it does not contain functions that are likely to help you simulate a dice roll.
@@ -318,7 +318,7 @@ get random behavior each time you execute.
 
    Which module would you most likely use if you were writing a function to simulate rolling dice?
 
-   
+
 .. mchoicemf:: question4_4_3
    :answer_a: prob = random.randrange(1, 101)
    :answer_b: prob = random.randrange(1, 100)
@@ -329,9 +329,9 @@ get random behavior each time you execute.
    :feedback_b: This will generate a number between 1 and 100, but does not include 100.  The highest value generated will be 99.
    :feedback_c: This will generate a number between 0 and 100.  The lowest value generated is 0.  The highest value generated will be 100.
    :feedback_d: This will generate a number between 0 and 100, but does not include 100.  The lowest value generated is 0 and the highest value generated will be 99.
-   
+
    The correct code to generate a random number between 1 and 100 (inclusive) is:
-   
+
 .. mchoicemf:: question4_4_4
    :answer_a: There is no computer on the stage for the drawing.
    :answer_b: Because computers don’t really generate random numbers, they generate pseudo-random numbers.
@@ -342,7 +342,7 @@ get random behavior each time you execute.
    :feedback_b: Computers generate random numbers using a deterministic algorithm.  This means that if anyone ever found out the algorithm they could accurately predict the next value to be generated and would always win the lottery.
    :feedback_c: This might happen if the same seed value was used over and over again, but they could make sure this was not the case.
    :feedback_d: While a programmer would need to ensure the computer did not select the same number more than once, it is easy to ensure this.
-   
+
    One reason that lotteries don’t use computers to generate random numbers is:
 
 Glossary
@@ -357,12 +357,12 @@ Glossary
 	    A place where you can go to get detailed information about aspects of your
 	    programming language.
 
-         
+
     module
         A file containing Python definitions and statements intended for use in
         other Python programs. The contents of a module are made available to
         the other program by using the *import* statement.
-        
+
 
     pseudo-random number
 		A number that is not genuinely random but is instead created algorithmically.

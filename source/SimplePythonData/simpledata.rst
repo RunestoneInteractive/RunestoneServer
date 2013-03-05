@@ -6,7 +6,7 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-    
+
 ..  shortname:: SimplePythonData
 ..  description:: An introduction to data and variables in python
 
@@ -25,11 +25,11 @@ Variables, Expressions and Statements
     :controls:
     :thumb: ../_static/valuesNtypes.png
 
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/TypesNTypeConversion.mov
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/TypesNTypeConversion.webm
+    http://media.interactivepython.org/thinkcsVideos/TypesNTypeConversion.mov
+    http://media.interactivepython.org/thinkcsVideos/TypesNTypeConversion.webm
 
 In order to get started learning any programming language there are a number of
-concepts and ideas that are necessary.  
+concepts and ideas that are necessary.
 The goal of this chapter is to introduce you to the basic vocabulary of programming and some of the fundamental
 building blocks of Python.
 
@@ -44,7 +44,7 @@ result when we added ``2 + 3``), and ``"Hello, World!"``.  We often refer to the
 .. note::
 	Actually, the 2 and the 3 that are part of the addition above are values(objects) as well.
 
-These objects are classified into different **classes**, or **data types**: ``4`` 
+These objects are classified into different **classes**, or **data types**: ``4``
 is an *integer*, and ``"Hello, World!"`` is a *string*, so-called because it
 contains a string or sequence of letters. You (and the interpreter) can identify strings
 because they are enclosed in quotation marks.
@@ -60,7 +60,7 @@ If you are not sure what class a value falls into, Python has a function called
     print("Hello, World")
 
 Not surprisingly, strings belong to the class **str** and integers belong to the
-class **int**. 
+class **int**.
 
 .. note::
 
@@ -74,7 +74,7 @@ display the prompt for the next use.
 
 .. sourcecode:: python
 
-	Python 3.1.2 (r312:79360M, Mar 24 2010, 01:33:18) 
+	Python 3.1.2 (r312:79360M, Mar 24 2010, 01:33:18)
 	[GCC 4.0.1 (Apple Inc. build 5493)] on darwin
 	Type "help", "copyright", "credits" or "license" for more information.
 	>>> type("Hello, World!")
@@ -83,15 +83,15 @@ display the prompt for the next use.
 	<class 'int'>
 	>>> "Hello, World"
 	'Hello, World'
-	>>> 
+	>>>
 
 Note that in the last example, we simply ask the shell to evaluate the string "Hello, World".  The result is as you might expect, the string itself.
 
 Continuing with our discussion of data types, numbers with a decimal point belong to a class
 called **float**, because these numbers are represented in a format called
 *floating-point*.  At this stage, you can treat the words *class* and *type*
-interchangeably.  We'll come back to a deeper understanding of what a class 
-is in later chapters. 
+interchangeably.  We'll come back to a deeper understanding of what a class
+is in later chapters.
 
 .. activecode:: ch02_2
     :nocanvas:
@@ -121,12 +121,12 @@ quotes (``"``), or three of each (``'''`` or ``"""``)
     print(type("""and this.""") )
     print(type('''and even this...''') )
 
-    
+
 Double quoted strings can contain single quotes inside them, as in ``"Bruce's
 beard"``, and single quoted strings can have double quotes inside them, as in
-``'The knights who say "Ni!"'``. 
+``'The knights who say "Ni!"'``.
 Strings enclosed with three occurrences of either quote symbol are called
-triple quoted strings.  They can contain either single or double quotes: 
+triple quoted strings.  They can contain either single or double quotes:
 
 .. activecode:: ch02_5
     :nocanvas:
@@ -154,7 +154,7 @@ three-of-a-kind quotes to surround your strings.  Once it has parsed the text of
 your program or command, the way it stores the value is identical in all cases,
 and the surrounding quotes are not part of the value. But when the interpreter
 wants to display a string, it has to decide which quotes to use to make it look
-like a string. 
+like a string.
 
 .. activecode:: ch02_7
     :nocanvas:
@@ -190,7 +190,7 @@ as you separate them by commas.  Notice that the values are separated by spaces 
 Remember not to put commas or spaces in your integers, no
 matter how big they are. Also revisit what we said in the previous chapter:
 formal languages are strict, the notation is concise, and even the smallest
-change might mean something quite different from what you intended. 
+change might mean something quite different from what you intended.
 
 **Check your understanding**
 
@@ -200,7 +200,7 @@ change might mean something quite different from what you intended.
    :answer_c: Use it in a known equation and print the result.
    :answer_d: Look at the declaration of the variable.
    :correct: b
-   :feedback_a: You may be able to determine the data type based on the printed value, but it may also be  deceptive, like when a string prints, there are no quotes around it. 
+   :feedback_a: You may be able to determine the data type based on the printed value, but it may also be  deceptive, like when a string prints, there are no quotes around it.
    :feedback_b: The type function will tell you the class the value belongs to.
    :feedback_c: Only numeric values can be used in equations.
    :feedback_d: In Python variables are not declared.
@@ -219,17 +219,17 @@ change might mean something quite different from what you intended.
    :feedback_d: Strings can be enclosed in single quotes.
 
    What is the data type of 'this is what kind of data'?
-    
+
 
 .. index:: type converter functions, int, float, str, truncation
 
 Type conversion functions
 -------------------------
-    
+
 Sometimes it is necessary to convert values from one type to another.  Python provides
 a few simple functions that will allow us to do that.  The functions `int`, `float` and `str`
 will (attempt to) convert their arguments into types `int`, `float` and `str`
-respectively.  We call these **type conversion** functions.  
+respectively.  We call these **type conversion** functions.
 
 The `int` function can take a floating point number or a string, and turn it
 into an int. For floating point numbers, it *discards* the decimal portion of
@@ -288,7 +288,7 @@ quotes are removed.  However, if we print the type, we can see that it is defini
 
    What value is printed by the following statement:
    <pre>
-   print( int(53.785) )  
+   print( int(53.785) )
    </pre>
 
 .. index:: variable, assignment, assignment statement, state snapshot
@@ -300,8 +300,8 @@ Variables
     :controls:
     :thumb: ../_static/assignment.png
 
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/Variables.mov
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/Variables.webm
+    http://media.interactivepython.org/thinkcsVideos/Variables.mov
+    http://media.interactivepython.org/thinkcsVideos/Variables.webm
 
 One of the most powerful features of a programming language is the ability to
 manipulate **variables**. A variable is a name that refers to a value.
@@ -309,7 +309,7 @@ manipulate **variables**. A variable is a name that refers to a value.
 **Assignment statements** create new variables and also give them values to refer to.
 
 .. sourcecode:: python
-    
+
     message = "What's up, Doc?"
     n = 17
     pi = 3.14159
@@ -325,14 +325,14 @@ side of the operator, with a *value*, on the right hand side.  This is why you
 will get an error if you enter:
 
 .. sourcecode:: python
-    
+
     17 = n
-    
+
 .. tip::
 
    When reading or writing code, say to yourself "n is assigned 17" or "n gets
    the value 17" or "n is a reference to the object 17" or "n refers to the object 17".  Don't say "n equals 17".
-      
+
 A common way to represent variables on paper is to write the name with an arrow
 pointing to the variable's value. This kind of figure, known as a **reference diagram**, is often called a **state
 snapshot** because it shows what state each of the variables is in at a
@@ -357,8 +357,8 @@ by the variable.
     print(n)
     print(pi)
 
-In each case the result is the value of the variable. 
-To see this in even more detail, we can run the program using codelens.  
+In each case the result is the value of the variable.
+To see this in even more detail, we can run the program using codelens.
 
 .. codelens:: ch02_9_codelens
     :showoutput:
@@ -427,7 +427,7 @@ assignment we even give it a value that is of a different type.
 
 A great deal of programming is about having the computer remember things,
 e.g.  *The number of missed calls on your phone*, and then arranging to update
-or change the variable when you miss another call. 
+or change the variable when you miss another call.
 
 **Check your understanding**
 
@@ -465,7 +465,7 @@ names with multiple words, such as ``my_name`` or ``price_of_tea_in_china``.
 There are some situations in which names beginning with an underscore have
 special meaning, so a safe rule for beginners is to start all names with a
 letter.
- 
+
 If you give a variable an illegal name, you get a syntax error.  In the example below, each
 of the variable names is illegal.
 
@@ -490,7 +490,7 @@ Python introduce or eliminate one or two):
 and      as       assert   break    class    continue
 def      del      elif     else     except   exec
 finally  for      from     global   if       import
-in       is       lambda   nonlocal not      or       
+in       is       lambda   nonlocal not      or
 pass     raise    return   try      while    with
 yield    True     False    None
 ======== ======== ======== ======== ======== ========
@@ -509,8 +509,8 @@ remember, what the variable is used for.
     they've called some variable ``average`` or ``pi``, it will somehow
     automagically calculate an average, or automagically associate the variable
     ``pi`` with the value 3.14159.  No! The computer doesn't attach semantic
-    meaning to your variable names. 
-   
+    meaning to your variable names.
+
     So you'll find some instructors who deliberately don't choose meaningful
     names when they teach beginners --- not because they don't think it is a
     good habit, but because they're trying to reinforce the message that you,
@@ -526,7 +526,7 @@ remember, what the variable is used for.
    :correct: b
    :feedback_a: -  The + character is not allowed in variable names.
    :feedback_b: -  The + character is not allowed in variable names (everything else in this name is fine).
-   
+
    True or False:  the following is a legal variable name in Python:   A_good_grade_is_A+
 
 
@@ -539,8 +539,8 @@ Statements and Expressions
     :controls:
     :thumb: ../_static/expressions.png
 
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/Expressions.mov
-    http://knuth.luther.edu/~bmiller/thinkcsVideos/Expressions.webm
+    http://media.interactivepython.org/thinkcsVideos/Expressions.mov
+    http://media.interactivepython.org/thinkcsVideos/Expressions.webm
 
 A **statement** is an instruction that the Python interpreter can execute. We
 have only seen the assignment statement so far.  Some other kinds of statements
@@ -560,10 +560,10 @@ to functions. Expressions need to be evaluated.  If you ask Python to ``print`` 
     print(1 + 1)
     print(len("hello"))
 
-    
+
 In this example ``len`` is a built-in Python function that returns the number
 of characters in a string.  We've previously seen the ``print`` and the
-``type`` functions, so this is our third example of a function! 
+``type`` functions, so this is our third example of a function!
 
 The *evaluation of an expression* produces a value, which is why expressions
 can appear on the right hand side of assignment statements. A value all by
@@ -589,8 +589,8 @@ If we take a look at this same example in the Python shell, we will see one of t
 	3.14
 	>>> y
 	3.14
-	>>> 
-	
+	>>>
+
 Note that when we enter the assignment statement, ``y = 3.14``, only the prompt is returned.  There is no value.  This
 is due to the fact that statements, such as the assignment statement, do not return a value.  They are simply executed.
 
@@ -608,11 +608,11 @@ multiplication and division. The values the operator works on are called
 
 The following are all legal Python expressions whose meaning is more or less
 clear::
-    
-    20 + 32   
-    hour - 1   
-    hour * 60 + minute  
-    minute / 60   
+
+    20 + 32
+    hour - 1
+    hour * 60 + minute
+    minute / 60
     5 ** 2
     (5 + 9) * (15 - 7)
 
@@ -644,13 +644,13 @@ For example, what if we wanted to convert 645 minutes into hours.
 
 
 In Python 3, the division operator uses the token `/` which always evaluates to a floating point
-result.  
+result.
 
 In the previous example, what we might have wanted to know was how many *whole* hours there
 are, and how many minutes remain.  Python gives us two different flavors of
 the division operator.  The second, called **integer division**, uses the token
 `//`.  It always *truncates* its result down to the next smallest integer (to
-the left on the number line).  
+the left on the number line).
 
 .. activecode:: ch02_17
     :nocanvas:
@@ -661,7 +661,7 @@ the left on the number line).
     hours = minutes // 60
     print(hours)
 
-    
+
 Take care that you choose the correct flavor of the division operator.  If
 you're working with expressions where you need floating point values, use the
 division operator `/`.  If you want an integer result, use `//`.
@@ -692,7 +692,7 @@ example, ``x % 10`` yields the right-most digit of ``x`` (in base 10).
 Similarly ``x % 100`` yields the last two digits.
 
 Finally, returning to our time example, the remainder operator is extremely useful for doing conversions, say from seconds,
-to hours, minutes and seconds. 
+to hours, minutes and seconds.
 If we start with a number of seconds, say 7684, the following program uses integer division and remainder to convert to an easier form.  Step through it to be sure you understand how the division and remainder operators are being used to
 compute the correct values.
 
@@ -707,7 +707,7 @@ compute the correct values.
 
 **Check your understanding**
 
-.. mchoicemf:: test_question2_6_1 
+.. mchoicemf:: test_question2_6_1
    :answer_a: 4.5
    :answer_b: 5
    :answer_c: 4
@@ -717,24 +717,24 @@ compute the correct values.
    :feedback_b: The / operator does exact division and returns a floating point result.
    :feedback_c: The / operator does exact division and returns a floating point result.
    :feedback_d: The / operator does exact division and returns a floating point result.
-   
+
    What is printed from the following statement?
    <pre>
    print (18 / 4)
    </pre>
 
-	
+
 .. mchoicemf:: test_question2_6_2
    :answer_a: 4.25
    :answer_b: 5
-   :answer_c: 4 
+   :answer_c: 4
    :answer_d: 2
    :correct: c
-   :feedback_a: -  The // operator does integer division and returns an integer result 
+   :feedback_a: -  The // operator does integer division and returns an integer result
    :feedback_b: - The // operator does integer division and returns an integer result, but it truncates the result of the division.  It does not round.
    :feedback_c: - The // operator does integer division and returns the truncated integer result
    :feedback_d: - The // operator does integer division and returns the result of the division on an integer (not the remainder).
-   
+
    What is printed from the following statement?
    <pre>
    print (18 // 4)
@@ -744,13 +744,13 @@ compute the correct values.
 .. mchoicemf:: test_question2_6_3
    :answer_a: 4.25
    :answer_b: 5
-   :answer_c: 4 
+   :answer_c: 4
    :answer_d: 2
    :correct: d
-   :feedback_a: The % operator returns the remainder after division. 
-   :feedback_b: The % operator returns the remainder after division. 
-   :feedback_c: The % operator returns the remainder after division. 
-   :feedback_d: The % operator returns the remainder after division. 
+   :feedback_a: The % operator returns the remainder after division.
+   :feedback_b: The % operator returns the remainder after division.
+   :feedback_c: The % operator returns the remainder after division.
+   :feedback_d: The % operator returns the remainder after division.
 
    What is printed from the following statement?
    <pre>
@@ -768,8 +768,8 @@ Input
     :controls:
     :thumb: ../_static/inputthumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/input.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/input.webm
+    http://media.interactivepython.org/thinkcsVideos/input.mov
+    http://media.interactivepython.org/thinkcsVideos/input.webm
 
 
 The program in the previous section works fine but is very limited in that it only works with one value for ``total_secs``.  What if we wanted to rewrite the program so that it was more general.  One thing we could
@@ -806,7 +806,7 @@ we will convert that string to an integer.  From there the process is the same a
 
     str_seconds = input("Please enter the number of seconds you wish to convert")
     total_secs = int(str_seconds)
-    
+
     hours = total_secs // 3600
     secs_still_remaining = total_secs % 3600
     minutes =  secs_still_remaining // 60
@@ -820,7 +820,7 @@ The result is referred to by ``total_secs``.  Now, each time you run the program
 
 **Check your understanding**
 
-.. mchoicemf:: test_question2_7_1 
+.. mchoicemf:: test_question2_7_1
    :answer_a: &lt;class 'str'&gt;
    :answer_b: &lt;class 'int'&gt;
    :answer_c: &lt;class 18&gt;
@@ -848,22 +848,22 @@ Order of Operations
     :controls:
     :thumb: ../_static/precedencethumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/precedence.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/precedence.webm
+    http://media.interactivepython.org/thinkcsVideos/precedence.mov
+    http://media.interactivepython.org/thinkcsVideos/precedence.webm
 
 
 .. video:: associativityvid
     :controls:
     :thumb: ../_static/associativitythumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/associativity.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/associativity.webm
+    http://media.interactivepython.org/thinkcsVideos/associativity.mov
+    http://media.interactivepython.org/thinkcsVideos/associativity.webm
 
 
 
 When more than one operator appears in an expression, the order of evaluation
 depends on the **rules of precedence**. Python follows the same precedence
-rules for its mathematical operators that mathematics does. 
+rules for its mathematical operators that mathematics does.
 
 
 
@@ -881,12 +881,12 @@ rules for its mathematical operators that mathematics does.
 #. Multiplication and both division operators have the same
    precedence, which is higher than addition and subtraction, which
    also have the same precedence. So ``2*3-1`` yields 5 rather than 4, and
-   ``5-2*2`` is 1, not 6.  
+   ``5-2*2`` is 1, not 6.
 #. Operators with the *same* precedence are
    evaluated from left-to-right. In algebra we say they are *left-associative*.
    So in the expression ``6-3+2``, the subtraction happens first, yielding 3.
    We then add 2 to get the result 5. If the operations had been evaluated from
-   right to left, the result would have been ``6-(3+2)``, which is 1.  
+   right to left, the result would have been ``6-(3+2)``, which is 1.
 
 .. (The
 ..   acronym PEDMAS could mislead you to thinking that division has higher
@@ -908,11 +908,11 @@ rules for its mathematical operators that mathematics does.
         print((2 ** 3) ** 2)   # use parentheses to force the order you want!
 
 .. The immediate mode command prompt of Python is great for exploring and
-.. experimenting with expressions like this.       
+.. experimenting with expressions like this.
 
-**Check your understanding**    
+**Check your understanding**
 
-.. mchoicemf:: test_question2_8_1 
+.. mchoicemf:: test_question2_8_1
    :answer_a: 14
    :answer_b: 24
    :answer_c: 3
@@ -921,7 +921,7 @@ rules for its mathematical operators that mathematics does.
    :feedback_a: Using parentheses, the expression is evaluated as (2*5) first, then (10 // 3), then (16-3), and then (13+1).
    :feedback_b: Remember that * has precedence over  -.
    :feedback_c: Remember that // has precedence over -.
-   :feedback_d: Remember that // does integer division.  
+   :feedback_d: Remember that // does integer division.
 
    What is the value of the following expression:
    <pre>
@@ -929,17 +929,17 @@ rules for its mathematical operators that mathematics does.
    </pre>
 
 
-.. mchoicemf:: test_question2_8_2 
+.. mchoicemf:: test_question2_8_2
    :answer_a: 768
    :answer_b: 128
    :answer_c: 12
    :answer_d: 256
    :correct: a
-   :feedback_a: Exponentiation has precedence over multiplication, but its precedence goes from right to left!  So 2 ** 3 is 8, 2 ** 8 is 256 and 256 * 3 is 768.  
-   :feedback_b: Exponentiation (**) is processed right to left, so take 2 ** 3 first.  
+   :feedback_a: Exponentiation has precedence over multiplication, but its precedence goes from right to left!  So 2 ** 3 is 8, 2 ** 8 is 256 and 256 * 3 is 768.
+   :feedback_b: Exponentiation (**) is processed right to left, so take 2 ** 3 first.
    :feedback_c: There are two exponentiations.
    :feedback_d: Remember to multiply by 3.
-   
+
    What is the value of the following expression:
    <pre>
    2 ** 2 ** 3 * 3
@@ -948,14 +948,14 @@ rules for its mathematical operators that mathematics does.
 
 
 Reassignment
------------- 
+------------
 
 .. video:: reassignmentvid
     :controls:
     :thumb: ../_static/reassignmentthumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/reassignment.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/reassignment.webm
+    http://media.interactivepython.org/thinkcsVideos/reassignment.mov
+    http://media.interactivepython.org/thinkcsVideos/reassignment.webm
 
 
 As we have mentioned previously, it is legal to make more than one assignment to the
@@ -963,7 +963,7 @@ same variable. A new assignment makes an existing variable refer to a new value
 (and stop referring to the old value).
 
 .. activecode:: ch07_reassign1
-    
+
     bruce = 5
     print(bruce)
     bruce = 7
@@ -977,17 +977,17 @@ the value (the object) that ``bruce`` refers to.
 Here is what **reassignment** looks like in a reference diagram:
 
 .. image:: Figures/reassign1.png
-   :alt: reassignment 
+   :alt: reassignment
 
 
 
 It is important to note that in mathematics, a statement of equality is always true.  If ``a is equal to b``
 now, then ``a will always equal to b``. In Python, an assignment statement can make
-two variables equal, but because of the possibility of reassignment, 
+two variables equal, but because of the possibility of reassignment,
 they don't have to stay that way:
 
 .. activecode:: ch07_reassign2
-    
+
     a = 5
     b = a    # after executing this line, a and b are now equal
     print(a,b)
@@ -1007,7 +1007,7 @@ Line 4 changes the value of ``a`` but does not change the value of
 
 **Check your understanding**
 
-.. mchoicemf:: test_question2_9_1 
+.. mchoicemf:: test_question2_9_1
    :answer_a: x is 15 and y is 15
    :answer_b: x is 22 and y is 22
    :answer_c: x is 15 and y is 22
@@ -1034,14 +1034,14 @@ Updating Variables
     :controls:
     :thumb: ../_static/updatethumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/update.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/update.webm
+    http://media.interactivepython.org/thinkcsVideos/update.mov
+    http://media.interactivepython.org/thinkcsVideos/update.webm
 
 One of the most common forms of reassignment is an **update** where the new
 value of the variable depends on the old.  For example,
 
 .. sourcecode:: python
-    
+
     x = x + 1
 
 This means get the current value of x, add one, and then update x with the new
@@ -1087,7 +1087,7 @@ a variable, which means the same as incrementing it by 1.
 
 **Check your understanding**
 
-.. mchoicemf:: test_question2_10_1 
+.. mchoicemf:: test_question2_10_1
    :answer_a: 12
    :answer_b: -1
    :answer_c: 11
@@ -1126,17 +1126,17 @@ Glossary
         confusing to new programmers. In the following assignment:
 
         .. sourcecode:: python
-    
+
              n = n + 1
 
         ``n`` plays a very different role on each side of the ``=``. On the
         right it is a *value* and makes up part of the *expression* which will
         be evaluated by the Python interpreter before assigning it to the name
         on the left.
-        
+
     assignment token
         ``=`` is Python's assignment token, which should not be confused
-        with the mathematical comparison operator using the same symbol.    
+        with the mathematical comparison operator using the same symbol.
 
     class
 		see **data type** below
@@ -1148,7 +1148,7 @@ Glossary
 
     data type
         A set of values. The type of a value determines how it can be used in
-        expressions. So far, the types you have seen are integers (``int``), 
+        expressions. So far, the types you have seen are integers (``int``),
         floating-point numbers (``float``), and strings (``str``).
 
     decrement
@@ -1174,7 +1174,7 @@ Glossary
         Both as a noun and as a verb, increment means to increase by 1.
 
     initialization (of a variable)
-        To initialize a variable is to give it an initial value.  
+        To initialize a variable is to give it an initial value.
         Since in Python variables don't exist
         until they are assigned values, they are initialized when they are
         created.  In other programming languages this is not the case, and
@@ -1213,7 +1213,7 @@ Glossary
 
     reference diagram
         A picture showing a variable with an arrow pointing to the value (object) that the variable refers to. See also **state snapshot**.
-        
+
     rules of precedence
         The set of rules governing the order in which expressions involving
         multiple operators and operands are evaluated.
@@ -1236,7 +1236,7 @@ Glossary
 
     value
         A number or string (or other things to be named later) that can be
-        stored in a variable or computed in an expression.  
+        stored in a variable or computed in an expression.
 
     variable
         A name that refers to a value.
@@ -1274,17 +1274,17 @@ Exercises
 
 2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
    in 51 hours.  At what time does the alarm go off?
-   
+
    .. actex:: ex_2_2
 
 #. Write a Python program to solve the general version of the above problem.
-   Ask the user for the time now (in hours), and ask for the number of hours to wait.  
+   Ask the user for the time now (in hours), and ask for the number of hours to wait.
    Your program should output what the time will be on the clock when the alarm goes off.
 
    .. actex:: ex_2_3
 
 #. You go on a wonderful holiday
-   leaving on day number 3 (a Wednesday).  You return home after 137 nights. 
+   leaving on day number 3 (a Wednesday).  You return home after 137 nights.
    Write a general version of the program which asks for the starting day number, and
    the length of your stay, and it will tell you the number of day of the week you will return on.
 
@@ -1315,12 +1315,12 @@ Exercises
    variable `P`, assign to `n` the value 12, and assign to `r` the interest
    rate of 8% (0.08).  Then have the program prompt the user for the number of years,
    `t`, that the money will be compounded for.  Calculate and print the final
-   amount after `t` years.      
+   amount after `t` years.
 
    .. actex:: ex_2_7
 
 
-#. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message 
+#. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
    back to the user with the answer.
 
    .. actex:: ex_2_8
@@ -1330,7 +1330,7 @@ Exercises
 
    .. actex:: ex_2_9
 
-#. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of 
+#. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
    gallons used.  Print a nice message with the answer.
 
    .. actex:: ex_2_10

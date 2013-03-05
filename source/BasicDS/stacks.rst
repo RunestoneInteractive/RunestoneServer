@@ -1,11 +1,11 @@
 ..  Copyright (C)  Brad Miller, David Ranum
     Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or 
-    any later version published by the Free Software Foundation; with 
-    Invariant Sections being Forward, Prefaces, and Contributor List, 
+    under the terms of the GNU Free Documentation License, Version 1.3 or
+    any later version published by the Free Software Foundation; with
+    Invariant Sections being Forward, Prefaces, and Contributor List,
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
-    
+
 ..  shortname:: Stacks
 ..  description:: This is the introduction to the stack data structure
 
@@ -116,21 +116,21 @@ far right.
 
 .. _tbl_stackops:
 
-============================ ======================== ================== 
-         **Stack Operation**       **Stack Contents**   **Return Value** 
-============================ ======================== ================== 
-             ``s.isEmpty()``                   ``[]``           ``True`` 
-               ``s.push(4)``                  ``[4]``                    
-           ``s.push('dog')``            ``[4,'dog']``                    
-                ``s.peek()``            ``[4,'dog']``          ``'dog'`` 
-            ``s.push(True)``       ``[4,'dog',True]``                    
-                ``s.size()``       ``[4,'dog',True]``              ``3`` 
-             ``s.isEmpty()``       ``[4,'dog',True]``          ``False`` 
-             ``s.push(8.4)``   ``[4,'dog',True,8.4]``                    
-                 ``s.pop()``       ``[4,'dog',True]``            ``8.4`` 
-                 ``s.pop()``            ``[4,'dog']``           ``True`` 
-                ``s.size()``            ``[4,'dog']``              ``2`` 
-============================ ======================== ================== 
+============================ ======================== ==================
+         **Stack Operation**       **Stack Contents**   **Return Value**
+============================ ======================== ==================
+             ``s.isEmpty()``                   ``[]``           ``True``
+               ``s.push(4)``                  ``[4]``
+           ``s.push('dog')``            ``[4,'dog']``
+                ``s.peek()``            ``[4,'dog']``          ``'dog'``
+            ``s.push(True)``       ``[4,'dog',True]``
+                ``s.size()``       ``[4,'dog',True]``              ``3``
+             ``s.isEmpty()``       ``[4,'dog',True]``          ``False``
+             ``s.push(8.4)``   ``[4,'dog',True,8.4]``
+                 ``s.pop()``       ``[4,'dog',True]``            ``8.4``
+                 ``s.pop()``            ``[4,'dog']``           ``True``
+                ``s.size()``            ``[4,'dog']``              ``2``
+============================ ======================== ==================
 
     Sample Stack Operations
 
@@ -191,7 +191,7 @@ action as we perform the sequence of operations from
 
 .. activecode:: stack_ex_1
    :include:  stack_1
-   
+
    s=Stack()
    print(s.isEmpty())
    s.push(4)
@@ -204,7 +204,7 @@ action as we perform the sequence of operations from
    print(s.pop())
    print(s.pop())
    print(s.size())
-    
+
 
 
 It is important to note that we could have chosen to implement the stack
@@ -260,7 +260,7 @@ benchmark testing.
 
    .. multiplechoice:: stack_1
       :iscode:
-      :answer_a: 'x' 
+      :answer_a: 'x'
       :answer_b: 'y'
       :answer_c: 'z'
       :answer_d: The stack is empty
@@ -283,7 +283,7 @@ benchmark testing.
       :answer_d: 'z'
       :correct: c
       :feedback: none
-	  
+
 	  Given the following sequence of stack operations, what is the top item on the stack?
 	  m = Stack()
 	  m.push('x')
@@ -297,7 +297,7 @@ benchmark testing.
    characters in a string.
 
    .. actex:: stack_stringrev
-      
+
       from test import testEqual
       from pythonds.basic.stack import Stack
 
@@ -313,8 +313,8 @@ benchmark testing.
     :controls:
     :thumb: ../_static/activecodethumb.png
 
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack1.mov
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack1.webm
+    http://media.interactivepython.org/pythondsVideos/Stack1.mov
+    http://media.interactivepython.org/pythondsVideos/Stack1.webm
 
 Simple Balanced Parentheses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -378,7 +378,7 @@ problem.
 
 .. _fig_parmatch:
 
-.. figure:: Figures/simpleparcheck.png    
+.. figure:: Figures/simpleparcheck.png
 
    Matching Parentheses
 
@@ -409,7 +409,7 @@ this algorithm is shown in :ref:`Listing 3 <lst_parcheck1>`.
             symbol = symbolString[index]
             if symbol == "(":
                 s.push(symbol)
-            else: 
+            else:
                 if s.isEmpty():
                     balanced = False
                 else:
@@ -421,7 +421,7 @@ this algorithm is shown in :ref:`Listing 3 <lst_parcheck1>`.
             return True
         else:
             return False
-    
+
     print(parChecker('((()))'))
     print(parChecker('(()'))
 
@@ -452,11 +452,11 @@ as
 
 ::
 
-    { { ( [ ] [ ] ) } ( ) } 
+    { { ( [ ] [ ] ) } ( ) }
 
-    [ [ { { ( ( ) ) } } ] ] 
+    [ [ { { ( ( ) ) } } ] ]
 
-    [ ] [ ] [ ] ( ) { } 
+    [ ] [ ] [ ] ( ) { }
 
 are properly balanced in that not only does each opening symbol have a
 corresponding closing symbol, but the types of symbols match as well.
@@ -465,7 +465,7 @@ Compare those with the following strings that are not balanced:
 
 ::
 
-    ( [ ) ] 
+    ( [ ) ]
 
     ( ( ( ) ] ) )
 
@@ -588,18 +588,18 @@ right-hand end of the string. The binary string is then returned.
    from pythonds.basic.stack import Stack
    def divideBy2(decNumber):
        remstack = Stack()
-   
+
        while decNumber > 0:
            rem = decNumber % 2
            remstack.push(rem)
            decNumber = decNumber // 2
-   
+
        binString = ""
        while not remstack.isEmpty():
            binString = binString + str(remstack.pop())
-   
+
        return binString
-       
+
    print(divideBy2(42))
 
 The algorithm for binary conversion can easily be extended to perform
@@ -690,8 +690,8 @@ resulting string.
     :controls:
     :thumb: ../_static/activecodethumb.png
 
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack2.mov
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack2.webm
+    http://media.interactivepython.org/pythondsVideos/Stack2.mov
+    http://media.interactivepython.org/pythondsVideos/Stack2.webm
 
 Infix, Prefix and Postfix Expressions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -766,12 +766,12 @@ relative to one another.
 
 .. _tbl_example1:
 
-============================ ======================= ======================== 
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression** 
-============================ ======================= ======================== 
-                       A + B                  \+ A B                    A B + 
-                  A + B \* C             \+ A \* B C               A B C \* + 
-============================ ======================= ======================== 
+============================ ======================= ========================
+        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+============================ ======================= ========================
+                       A + B                  \+ A B                    A B +
+                  A + B \* C             \+ A \* B C               A B C \* +
+============================ ======================= ========================
 
      Examples of Infix, Prefix, and Postfix
 
@@ -797,11 +797,11 @@ ways, this makes infix the least desirable notation to use.
 
 .. _tbl_parexample:
 
-============================ ======================= ======================== 
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression** 
-============================ ======================= ======================== 
-                (A + B) \* C              \* + A B C               A B + C \* 
-============================ ======================= ======================== 
+============================ ======================= ========================
+        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+============================ ======================= ========================
+                (A + B) \* C              \* + A B C               A B + C \*
+============================ ======================= ========================
 
     An Expression with Parentheses
 
@@ -812,14 +812,14 @@ operations being performed.
 
 .. _tbl_example3:
 
-============================ ======================= ======================== 
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression** 
-============================ ======================= ======================== 
-              A + B \* C + D        \+ \+ A \* B C D           A B C \* + D + 
-          (A + B) \* (C + D)          \* + A B + C D           A B + C D + \* 
-             A \* B + C \* D        \+ \* A B \* C D          A B \* C D \* + 
-               A + B + C + D          \+ + + A B C D            A B + C + D + 
-============================ ======================= ======================== 
+============================ ======================= ========================
+        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+============================ ======================= ========================
+              A + B \* C + D        \+ \+ A \* B C D           A B C \* + D +
+          (A + B) \* (C + D)          \* + A B + C D           A B + C D + \*
+             A \* B + C \* D        \+ \* A B \* C D          A B \* C D \* +
+               A + B + C + D          \+ + + A B C D            A B + C + D +
+============================ ======================= ========================
 
     Additional Examples of Infix, Prefix, and Postfix
 
@@ -1042,7 +1042,7 @@ A few examples of execution in the Python shell are shown below.
     'A B + C *'
     >>> infixtopostfix("A + B * C")
     'A B C * +'
-    >>> 
+    >>>
 
 Postfix Evaluation
 ^^^^^^^^^^^^^^^^^^
@@ -1193,6 +1193,6 @@ this as an exercise at the end of the chapter.
     :controls:
     :thumb: ../_static/activecodethumb.png
 
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack3.mov
-    http://knuth.luther.edu/~pythonworks/pythondsVideos/Stack3.webm
+    http://media.interactivepython.org/pythondsVideos/Stack3.mov
+    http://media.interactivepython.org/pythondsVideos/Stack3.webm
 

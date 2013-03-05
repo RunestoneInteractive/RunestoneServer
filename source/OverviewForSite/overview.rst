@@ -32,8 +32,8 @@ on the video shown below, you will hear us talk about the tools that will be des
     :controls:
     :thumb: ../_static/activecodethumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/activecodelens.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/activecodelens.webm
+    http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
+    http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
 
 ActiveCode Windows
 ------------------
@@ -44,7 +44,7 @@ typical textbooks allow you to read about programming but don't allow you to pra
 in the text itself (right from the web browser).  Although this is certainly not the way real programs are written, it provides an excellent
 environment for learning a programming language like Python since you can experiment with the language as you are reading.
 
-Take a look at the activecode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below. 
+Take a look at the activecode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below.
 
 .. activecode:: codeexample1
 
@@ -52,19 +52,19 @@ Take a look at the activecode interpreter in action.  If we take a simple Python
    print(2 + 3)
 
 
-Now try modifying the activecode program shown above.  First, modify the string in the first print statement 
+Now try modifying the activecode program shown above.  First, modify the string in the first print statement
 by changing the word *adds* to the word *multiplies*.  Now press *run*.  You can see that the result of the program
 has changed.  However, it still prints "5" as the answer.  Modify the second print statement by changing the
 addition symbol, the "+", to the multiplication symbol, "*".  Press *run* to see the new results.
 You can do this as many times as you like.  You can even start completely over by simply deleting all the code from the window.
 
 If you are a registered user and have logged in,
-it is possible to save the changes you make for reloading later. *Save* and *Load* buttons will appear that allow you to keep one copy of the program you are working on.  
+it is possible to save the changes you make for reloading later. *Save* and *Load* buttons will appear that allow you to keep one copy of the program you are working on.
 Note that these saved programs can be accessed from anywhere if you have logged in.  However, if you are
 working anonymously, then you will lose your work at the end of the session.
 
 
-Activecode is even capable of executing graphical programs that use the built in Python turtle module.    
+Activecode is even capable of executing graphical programs that use the built in Python turtle module.
 The program shown below is a very interesting graphics program that uses the turtle and the idea of recursion to construct a type of
 fractal called a Sierpinski Triangle.  Once you run the program, try experimenting with the number of triangle levels.  You
 can find this on line 39 (it is currently set to 3).  Try 4!
@@ -254,7 +254,7 @@ What To Do Now
 --------------
 
 Now that you have seen some of these tools in action, you can do more exploration by going back to the Runestone Interactive
-site and choosing the courseware examples that we have already created.  The first, 
+site and choosing the courseware examples that we have already created.  The first,
 **How to Think Like a Computer Scientist: Interactive Edition**, provides an introductory course.  This course covers the basic ideas
 of computer science and helps you learn Python programming.  The second course, **Problem Solving with Algorithms and Data Structures Using Python**, is a thorough introduction to data structures and algorithms using Python.  Topics include stacks,
 queues, trees, graphs, and recursion.

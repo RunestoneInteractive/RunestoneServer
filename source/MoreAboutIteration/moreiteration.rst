@@ -6,7 +6,7 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-    
+
 ..  shortname:: MoreAboutIteration
 ..  description:: This module has more information about iteration and while loops
 
@@ -17,15 +17,15 @@ Iteration Revisited
 
 .. index::
     single: statement; assignment
-   
-    
+
+
 Computers are often used to automate repetitive tasks. Repeating identical or
 similar tasks without making errors is something that computers do well and
 people do poorly.
 
 Repeated execution of a sequence of statements is called **iteration**.  Because
 iteration is so common, Python provides several language features to make it
-easier. We've already seen the ``for`` statement in Chapter 3.  This is a very common 
+easier. We've already seen the ``for`` statement in Chapter 3.  This is a very common
 form of iteration in Python. In this chapter
 we are also going to look at the ``while`` statement --- another way to have your
 program do iteration.
@@ -48,8 +48,8 @@ We saw this example in an earlier chapter.
 
     for f in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
         invitation = "Hi " + f + ".  Please come to my party on Saturday!"
-        print(invitation) 
-        
+        print(invitation)
+
 
 We have also seen iteration paired with the update idea to form the accumulator pattern.  For example, to compute
 the sum of the first n integers, we could create a for loop using the ``range`` to produce the numbers 1 thru n.
@@ -85,18 +85,18 @@ The ``while`` Statement
    :controls:
    :thumb: ../_static/whileloop.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/whileloop.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/whileloop.webm
+   http://media.interactivepython.org/thinkcsVideos/whileloop.mov
+   http://media.interactivepython.org/thinkcsVideos/whileloop.webm
 
 There is another Python statement that can also be used to build an iteration.  It is called the ``while`` statement.
-The ``while`` statement provides a much more general mechanism for iterating.  Similar to the ``if`` statement, it uses 
+The ``while`` statement provides a much more general mechanism for iterating.  Similar to the ``if`` statement, it uses
 a boolean expression to control the flow of execution.  The body of while will be repeated as long as the controlling boolean expression evaluates to ``True``.
 
 The following figure shows the flow of control.
 
 .. image:: Figures/while_flow.png
 
-We can use the ``while`` loop to create any type of iteration we wish, including anything that we have previously done with a ``for`` loop.  For example, the program in the previous section could be rewritten using ``while``.  
+We can use the ``while`` loop to create any type of iteration we wish, including anything that we have previously done with a ``for`` loop.  For example, the program in the previous section could be rewritten using ``while``.
 Instead of relying on the ``range`` function to produce the numbers for our summation, we will need to produce them ourselves.  To to this, we will create a variable called ``aNumber`` and initialize it to 1, the first number in the summation.  Every iteration will add ``aNumber`` to the running total until all the values have been used.
 In order to control the iteration, we must create a boolean expression that evaluates to ``True`` as long as we want to keep adding values to our running total.  In this case, as long as ``aNumber`` is less than or equal to the bound, we should keep going.
 
@@ -105,17 +105,17 @@ In order to control the iteration, we must create a boolean expression that eval
 Here is a new version of the summation program that uses a while statement.
 
 .. activecode:: ch07_while1
-    
+
     def sumTo(aBound):
         """ Return the sum of 1+2+3 ... n """
-        
+
         theSum  = 0
         aNumber = 1
         while aNumber <= aBound:
             theSum = theSum + aNumber
             aNumber = aNumber + 1
         return theSum
-        
+
     print(sumTo(4))
 
     print(sumTo(1000))
@@ -124,27 +124,27 @@ Here is a new version of the summation program that uses a while statement.
 
 You can almost read the ``while`` statement as if it were in natural language. It means,
 while ``aNumber`` is less than or equal to ``aBound``, continue executing the body of the loop. Within
-the body, each time, update ``theSum`` using the accumulator pattern and increment ``aNumber``. After the body of the loop, we go back up to the condition of the ``while`` and reevaluate it.  When ``aNumber`` becomes greater than ``aBound``, the condition fails and flow of control continues to the ``return`` statement.  
+the body, each time, update ``theSum`` using the accumulator pattern and increment ``aNumber``. After the body of the loop, we go back up to the condition of the ``while`` and reevaluate it.  When ``aNumber`` becomes greater than ``aBound``, the condition fails and flow of control continues to the ``return`` statement.
 
 The same program in codelens will allow you to observe the flow of execution.
 
 .. codelens:: ch07_while2
-    
+
     def sumTo(aBound):
         """ Return the sum of 1+2+3 ... n """
-        
+
         theSum  = 0
         aNumber = 1
         while aNumber <= aBound:
             theSum = theSum + aNumber
             aNumber = aNumber + 1
         return theSum
-        
+
     print(sumTo(4))
 
 
 
-.. note:: The names of the variables have been chosen to help readability.  
+.. note:: The names of the variables have been chosen to help readability.
 
 More formally, here is the flow of execution for a ``while`` statement:
 
@@ -163,7 +163,7 @@ loop, the statements inside the loop are never executed.
 
 The body of the loop should change the value of one or more variables so that
 eventually the condition becomes ``False`` and the loop terminates. Otherwise the
-loop will repeat forever. This is called an **infinite loop**. 
+loop will repeat forever. This is called an **infinite loop**.
 An endless
 source of amusement for computer scientists is the observation that the
 directions on shampoo, lather, rinse, repeat, are an infinite loop.
@@ -171,13 +171,13 @@ directions on shampoo, lather, rinse, repeat, are an infinite loop.
 In the case shown above, we can prove that the loop terminates because we
 know that the value of ``n`` is finite, and we can see that the value of ``v``
 increments each time through the loop, so eventually it will have to exceed ``n``. In
-other cases, it is not so easy to tell.  
+other cases, it is not so easy to tell.
 
 .. note::
 
 	Introduction of the while statement causes us to think about the types of iteration we have seen.  The ``for`` statement will always iterate through a sequence of values like the list of names for the party or the list of numbers created by ``range``.  Since we know that it will iterate once for each value in the collection, it is often said that a ``for`` loop creates a
 	**definite iteration** because we definitely know how many times we are going to iterate.  On the other
-	hand, the ``while`` statement is dependent on a condition that needs to evaluate to ``False`` in order 
+	hand, the ``while`` statement is dependent on a condition that needs to evaluate to ``False`` in order
 	for the loop to terminate.  Since we do not necessarily know when this will happen, it creates what we
 	call **indefinite iteration**.  Indefinite iteration simply means that we don't know how many times we will repeat but eventually the condition controlling the iteration will fail and the iteration will stop. (Unless we have an infinite loop which is of course a problem)
 
@@ -185,8 +185,8 @@ What you will notice here is that the ``while`` loop is more work for
 you --- the programmer --- than the equivalent ``for`` loop.  When using a ``while``
 loop you have to control the loop variable yourself.  You give it an initial value, test
 for completion, and then make sure you change something in the body so that the loop
-terminates.   
-        
+terminates.
+
 So why have two kinds of loop if ``for`` looks easier?  This next example shows an indefinite iteration where
 we need the extra power that we get from the ``while`` loop.
 
@@ -200,18 +200,18 @@ we need the extra power that we get from the ``while`` loop.
    :answer_a: True
    :answer_b: False
    :correct: a
-   :feedback_a: Although the while loop uses a different syntax, it is just as powerful as a for-loop and often more flexible. 
+   :feedback_a: Although the while loop uses a different syntax, it is just as powerful as a for-loop and often more flexible.
    :feedback_b: Often a for-loop is more natural and convenient for a task, but that same task can always be expressed using a while loop.
 
    True or False: You can rewrite any for-loop as a while-loop.
-   
+
 .. mchoicemf:: test_question7_2_2
    :answer_a: n starts at 10 and is incremented by 1 each time through the loop, so it will always be positive
    :answer_b: answer starts at 1 and is incremented by n each time, so it will always be positive
    :answer_c: You cannot compare n to 0 in while loop.  You must compare it to another variable.
-   :answer_d: In the while loop body, we must set n False, and this code does not do that.  
+   :answer_d: In the while loop body, we must set n False, and this code does not do that.
    :correct: a
-   :feedback_a: The loop will run as long as n is positive.  In this case, we can see that n will never become non-positive. 
+   :feedback_a: The loop will run as long as n is positive.  In this case, we can see that n will never become non-positive.
    :feedback_b: While it is true that answer will always be positive, answer is not considered in the loop condition.
    :feedback_c: It is perfectly valid to compare n to 0.  Though indirectly, this is what causes the infinite loop.
    :feedback_d: The loop condition must become False for the loop to terminate, but n by itself is not the condition in this case.
@@ -354,7 +354,7 @@ Here is the full version of our random walk program.
 
     import random
     import turtle
-       
+
     def isInScreen(w,t):
         leftBound = - w.window_width()/2
         rightBound = w.window_width()/2
@@ -403,7 +403,7 @@ program into a couple of parts is another example of functional decomposition.
 
 
 
-.. index:: 3n + 1 sequence  
+.. index:: 3n + 1 sequence
 
 **Check your understanding**
 
@@ -412,12 +412,12 @@ program into a couple of parts is another example of functional decomposition.
    :answer_b: only a for-loop
    :answer_c: only a while-loop
    :correct: a
-   :feedback_a: Although you do not know how many iterations you loop will run before the program starts running, once you have chosen your random integer, Python knows exactly how many iterations the loop will run, so either a for-loop or a while-loop will work. 
+   :feedback_a: Although you do not know how many iterations you loop will run before the program starts running, once you have chosen your random integer, Python knows exactly how many iterations the loop will run, so either a for-loop or a while-loop will work.
    :feedback_b: As you learned in section 7.2, a while-loop can always be used for anything a for-loop can be used for.
    :feedback_c: Although you do not know how many iterations you loop will run before the program starts running, once you have chosen your random integer, Python knows exactly how many iterations the loop will run, so this is an example of definite iteration.
 
    Which type of loop can be used to perform the following iteration: You choose a positive integer at random and then print the numbers from 1 up to and including the selected integer.
-   
+
 .. mchoicemf:: test_question7_3_2
    :answer_a: Returns True if the turtle is still on the screen and False if the turtle is no longer on the screen.
    :answer_b: Uses a while loop to move the turtle randomly until it goes off the screen.
@@ -428,23 +428,23 @@ program into a couple of parts is another example of functional decomposition.
    :feedback_b: The isInScreen function does not contain a while-loop.  That loop is outside the isInScreen function.
    :feedback_c: The isInScreen function does not move the turtle.
    :feedback_d: While the isInScreen function does use the size of the window and position of the turtle, it does not return the turtle position.
-   
+
    In the random walk program in this section, what does the isInScreen function do?
-        
+
 The 3n + 1 Sequence
 -------------------
 
 As another example of indefinite iteration, let's look at a sequence that has fascinated mathematicians for many years.
 The rule  for creating the sequence is to start from
 some given ``n``, and to generate
-the next term of the sequence from ``n``, either by halving ``n``, 
+the next term of the sequence from ``n``, either by halving ``n``,
 whenever ``n`` is even, or else by multiplying it by three and adding 1 when it is odd.  The sequence
-terminates when ``n`` reaches 1. 
+terminates when ``n`` reaches 1.
 
 This Python function captures that algorithm.  Try running this program several times supplying different values for n.
 
 .. activecode:: ch07_indef1
-    
+
     def seq3np1(n):
         """ Print the 3n+1 sequence from n, terminating when it reaches 1."""
         while n != 1:
@@ -458,24 +458,24 @@ This Python function captures that algorithm.  Try running this program several 
     seq3np1(3)
 
 
-    
-                
+
+
 The condition for this loop is ``n != 1``.  The loop will continue running until
 ``n == 1`` (which will make the condition false).
 
 Each time through the loop, the program prints the value of ``n`` and then
 checks whether it is even or odd using the remainder operator. If it is even, the value of ``n`` is divided
-by 2 using integer division. If it is odd, the value is replaced by ``n * 3 + 1``.  
+by 2 using integer division. If it is odd, the value is replaced by ``n * 3 + 1``.
 Try some other examples.
-    
+
 Since ``n`` sometimes increases and sometimes decreases, there is no obvious
 proof that ``n`` will ever reach 1, or that the program terminates. For some
 particular values of ``n``, we can prove termination. For example, if the
 starting value is a power of two, then the value of ``n`` will be even each
-time through the loop until it reaches 1. 
+time through the loop until it reaches 1.
 
-You might like to have some fun and see if you can find a small starting 
-number that needs more than a hundred steps before it terminates. 
+You might like to have some fun and see if you can find a small starting
+number that needs more than a hundred steps before it terminates.
 
 
 .. admonition:: Lab
@@ -485,17 +485,17 @@ number that needs more than a hundred steps before it terminates.
 
 Particular values aside, the interesting question is whether we can prove that
 this sequence terminates for *all* values of ``n``. So far, no one has been able
-to prove it *or* disprove it!   
+to prove it *or* disprove it!
 
 Think carefully about what would be needed for a proof or disproof of the hypothesis
 *"All positive integers will eventually converge to 1"*.  With fast computers we have
-been able to test every integer up to very large values, and so far, they all 
+been able to test every integer up to very large values, and so far, they all
 eventually end up at 1.  But this doesn't mean that there might not be some
-as-yet untested number which does not reduce to 1.   
+as-yet untested number which does not reduce to 1.
 
 You'll notice that if you don't stop when you reach one, the sequence gets into
 its own loop:  1, 4, 2, 1, 4, 2, 1, 4, and so on.  One possibility is that there might
-be other cycles that we just haven't found.  
+be other cycles that we just haven't found.
 
 .. admonition:: Choosing between ``for`` and ``while``
 
@@ -506,18 +506,18 @@ be other cycles that we just haven't found.
    So any problem like "iterate this weather model run for 1000 cycles", or "search this
    list of words", "check all integers up to 10000 to see which are prime" suggest that a ``for`` loop is best.
 
-   By contrast, if you are required to repeat some computation until some condition is 
-   met, as we did in this 3n + 1 problem, you'll need a ``while`` loop. 
+   By contrast, if you are required to repeat some computation until some condition is
+   met, as we did in this 3n + 1 problem, you'll need a ``while`` loop.
 
-   As we noted before, the first case is called **definite iteration** --- we have some definite bounds for 
+   As we noted before, the first case is called **definite iteration** --- we have some definite bounds for
    what is needed.   The latter case is called **indefinite iteration** --- we are not sure
-   how many iterations we'll need --- we cannot even establish an upper bound!    
+   how many iterations we'll need --- we cannot even establish an upper bound!
 
 
 
-.. There are also some great visualization tools becoming available to help you 
-.. trace and understand small fragments of Python code.  The one we recommend is at 
-.. http://netserv.ict.ru.ac.za/python3_viz 
+.. There are also some great visualization tools becoming available to help you
+.. trace and understand small fragments of Python code.  The one we recommend is at
+.. http://netserv.ict.ru.ac.za/python3_viz
 
 .. admonition:: Scratch Editor
 
@@ -540,7 +540,7 @@ be other cycles that we just haven't found.
    :feedback_b: It has not been disproven that the 3n+1 sequence will terminate for all values of n.  In other words, there might be some value for n such that this sequence does not terminate. We just have not found it yet.
    :feedback_c: That this sequence terminates for all values of n has not been proven or disproven so no one knows whether the while loop will always terminate or not.
 
-   Consider the code that prints the 3n+1 sequence in ActiveCode box 6.  Will the while loop in this code always terminate for any value of n?      
+   Consider the code that prints the 3n+1 sequence in ActiveCode box 6.  Will the while loop in this code always terminate for any value of n?
 
 
 Newton's Method
@@ -555,20 +555,20 @@ approximation, you can compute a better approximation with the following
 formula:
 
 .. sourcecode:: python
-    
+
     better =  1/2 * (approx + n/approx)
-    
+
 Execute this algorithm a few times using your calculator.  Can you
 see why each iteration brings your estimate a little closer?  One of the amazing
 properties of this particular algorithm is how quickly it converges to an accurate
-answer.    
+answer.
 
 The following implementation of Newton's method requires two parameters.  The first is the
 value whose square root will be approximated.  The second is the number of times to iterate the
 calculation yielding a better result.
 
 .. activecode:: chp07_newtonsdef
-    
+
     def newtonSqrt(n, howmany):
         approx = 0.5 * n
         for i in range(howmany):
@@ -583,13 +583,13 @@ calculation yielding a better result.
 
 You may have noticed that the second and third calls to ``newtonSqrt`` in the previous example both returned the same value for the square root of 10.  Using 10 iterations instead of 5 did not improve the the value.  In general, Newton's algorithm will eventually reach a point where the new approximation is no better than the previous.  At that point, we could simply stop.
 In other words, by repeatedly applying this formula until the better approximation gets close
-enough to the previous one, we can write a function for computing the square root that uses the number of iterations necessary and no more.  
+enough to the previous one, we can write a function for computing the square root that uses the number of iterations necessary and no more.
 
 This implementation, shown in codelens,
 uses a ``while`` condition to execute until the approximation is no longer changing.  Each time thru the loop we compute a "better" approximation using the formula described earlier.  As long as the "better" is different, we try again.  Step thru the program and watch the approximations get closer and closer.
 
 .. codelens:: chp07_newtonswhile
-    
+
     def newtonSqrt(n):
         approx = 0.5 * n
         better = 0.5 * (approx + n/approx)
@@ -605,7 +605,7 @@ uses a ``while`` condition to execute until the approximation is no longer chang
 	The ``while`` statement shown above uses comparison of two floating point numbers in the condition.  Since floating point numbers are themselves approximation of real numbers in mathematics, it is often
 	better to compare for a result that is within some small threshold of the value you are looking for.
 
-.. index:: algorithm 
+.. index:: algorithm
 
 
 .. admonition:: Scratch Editor
@@ -636,16 +636,16 @@ carry out. They are mechanical processes in which each step follows from the
 last according to a simple set of rules.
 
 On the other hand, understanding that hard problems can be solved by step-by-step
-algorithmic processess is one of the major simplifying breakthroughs that has 
+algorithmic processess is one of the major simplifying breakthroughs that has
 had enormous benefits.  So while the execution of the algorithm
-may be boring and may require no intelligence, algorithmic or computational 
+may be boring and may require no intelligence, algorithmic or computational
 thinking is having a vast impact.  It is the process of designing algorithms that is interesting,
 intellectually challenging, and a central part of what we call programming.
 
 Some of the things that people do naturally, without difficulty or conscious
 thought, are the hardest to express algorithmically.  Understanding natural
 language is a good example. We all do it, but so far no one has been able to
-explain *how* we do it, at least not in the form of a step-by-step mechanical 
+explain *how* we do it, at least not in the form of a step-by-step mechanical
 algorithm.
 
 
@@ -686,8 +686,8 @@ left column and 2 raised to the power of that value in the right column:
 .. activecode:: ch07_table1
 
     print("n",'\t',"2**n")     #table column headings
-    print("---",'\t',"-----")   
- 
+    print("---",'\t',"-----")
+
     for x in range(13):        # generate values for columns
         print(x, '\t', 2**x)
 
@@ -733,7 +733,7 @@ column does not depend on the number of digits in the first column.
   :feedback_b: Tabs and spaces will sometimes make output appear visually different.
   :feedback_c: A tab has a pre-defined width that is equal to a given number of spaces.
   :feedback_d: You may use spaces to create tables.  The columns might look jagged, or they might not, depending on the width of the items in each column.
-  
+
   What is the difference between a tab (\t) and a sequence of spaces?
 
 2-Dimensional Iteration: Image Processing
@@ -787,7 +787,7 @@ a module called **image**.  The image module defines two classes: ``Image`` and 
 
 Each Pixel object has three attributes: the red intensity, the green intensity, and the blue intensity.  A pixel provides three methods
 that allow us to ask for the intensity values.  They are called ``getRed``, ``getGreen``, and ``getBlue``.  In addition, we can ask a
-pixel to change an intensity value using its ``setRed``, ``setGreen``, and ``setBlue`` methods. 
+pixel to change an intensity value using its ``setRed``, ``setGreen``, and ``setBlue`` methods.
 
 
     ============  ================            ===============================================
@@ -807,7 +807,7 @@ We then print the current amount of red, change the amount of red, and finally, 
 the same as the current amount of green.
 
 .. activecode::  pixelex1a
-    
+
     import image
 
     p = image.Pixel(45,76,200)
@@ -829,7 +829,7 @@ the same as the current amount of green.
    :feedback_b: The closer the values are to 0, the darker the color will appear.
    :feedback_c: The first value in RGB is the red value.  The second is the green.  This color has no green in it.
    :feedback_d: The first value in RGB is the red value.  The second is the green.  This color has no green in it.
-  
+
    If you have a pixel whose RGB value is (20, 0, 0), what color will this pixel appear to be?
 
 Image Objects
@@ -839,16 +839,16 @@ Image Objects
 To access the pixels in a real image, we need to first create an ``Image`` object.  Image objects can be created in two
 ways.  First, an Image object can be made from the
 files that store digital images.  The image object has an attribute corresponding to the width, the height, and the
-collection of pixels in the image.  
+collection of pixels in the image.
 
 It is also possible to create an Image object that is "empty".  An ``EmptyImage`` has a width and a height.  However, the
 pixel collection consists of only "White" pixels.
 
 We can ask an image object to return its size using the ``getWidth`` and ``getHeight`` methods.  We can also get a pixel from a particular location in the image using ``getPixel`` and change the pixel at
-a particular location using ``setPixel``. 
+a particular location using ``setPixel``.
 
 
-The Image class is shown below.  Note that the first two entries show how to create image objects.  The parameters are 
+The Image class is shown below.  Note that the first two entries show how to create image objects.  The parameters are
 different depending on whether you are using an image file or creating an empty image.
 
     =================== =============================== ==================================================
@@ -890,7 +890,7 @@ on its basic color intensities.
 
 
 When you run the program you can see that the image has a width of 400 pixels and a height of 244 pixels.  Also, the
-pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few other pixel locations by changing the ``getPixel`` arguments and rerunning the program. 
+pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few other pixel locations by changing the ``getPixel`` arguments and rerunning the program.
 
 **Check your understanding**
 
@@ -902,21 +902,21 @@ pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few othe
    :correct: a
    :feedback_a: Yes, the RGB values are 149 132 122 at row 100 and column 30.
    :feedback_b: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
-   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(100,30).  
+   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(100,30).
    :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
-  
+
    In the example in ActiveCode box 10, what are the RGB values of the pixel at row 100, column 30?
-   
+
 
 Image Processing and Nested Iteration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Image processing** refers to the ability to manipulate the individual pixels in a digital image.  In order to process
 all of the pixels, we need to be able to systematically visit all of the rows and columns in the image.  The best way
-to do this is to use **nested iteration**.  
+to do this is to use **nested iteration**.
 
 Nested iteration simply means that we will place one iteration construct inside of another.  We will call these two
-iterations the **outer iteration** and the **inner iteration**.  
+iterations the **outer iteration** and the **inner iteration**.
 To see how this works, consider the simple iteration below.
 
 .. sourcecode:: python
@@ -966,7 +966,7 @@ The resulting code will look like the following.  We are now free to do anything
 	for col in range(img.getWidth()):
 	    for row in range(img.getHeight()):
 	        #do something with the pixel at position (col,row)
-	
+
 One of the easiest image processing algorithms will create what is known as a **negative** image.  A negative image simply means that
 each pixel will be the `opposite` of what it was originally.  But what does opposite mean?
 
@@ -998,9 +998,9 @@ The program below implements this algorithm using the previous image.  Run it to
 
     for col in range(img.getWidth()):
         for row in range(img.getHeight()):
-           p = img.getPixel(col,row)    
+           p = img.getPixel(col,row)
 
-           newred = 255-p.getRed()    
+           newred = 255-p.getRed()
            newgreen = 255-p.getGreen()
            newblue = 255-p.getBlue()
 
@@ -1030,7 +1030,7 @@ Finally, we need to insert the new pixel into the empty image in the same locati
 
 	From the gray scale you can create **black white** by setting a threshold and selecting to either insert a white pixel or a black pixel into the empty image.
 
-	You can also do some complex arithmetic and create interesting effects, such as 
+	You can also do some complex arithmetic and create interesting effects, such as
 	`Sepia Tone <http://en.wikipedia.org/wiki/Sepia_tone#Sepia_toning>`_
 
 .. admonition:: Scratch Editor
@@ -1054,12 +1054,12 @@ What remains is to focus on ways that we can better represent our problems in te
    :feedback_b: The inner for-loop controls the second digit (j).  The inner for-loop must complete before the outer for-loop advances.
    :feedback_c: The inner for-loop controls the second digit (j).  Notice that the inner for-loop is over the list [0, 1].
    :feedback_d: The outer for-loop runs 3 times (0, 1, 2) and the inner for-loop runs twice for each time the outer for-loop runs, so this code prints exactly 6 lines.
-  
+
    What will the following nested for-loop print?  (Note, if you are having trouble with this question, review CodeLens 3).
     <pre>
     for i in range(3):
       for j in range(2):
-        print(i,j)  
+        print(i,j)
     </pre>
     a.
     <pre>
@@ -1079,12 +1079,12 @@ What remains is to focus on ways that we can better represent our problems in te
     1   1
     2   1
     </pre>
-    c. 
+    c.
     <pre>
     0   0
-    0   1 
+    0   1
     0   2
-    1   0 
+    1   0
     1   1
     1   2
     </pre>
@@ -1092,7 +1092,7 @@ What remains is to focus on ways that we can better represent our problems in te
     <pre>
     0   1
     0   1
-    0   1 
+    0   1
     </pre>
 
 
@@ -1106,7 +1106,7 @@ What remains is to focus on ways that we can better represent our problems in te
    :feedback_b: Because the red value varies from pixel to pixel, this will not look like a solid red rectangle.  For it to look like a solid red rectangle each pixel would have to have exactly the same red value.
    :feedback_c: If you remove the blue and green values from the pixels, the image will look different, even though there does not appear to be any blue or green in the original image (remember that other colors are made of combinations of red, green and blue).
    :feedback_d: Because we have changed the value of the pixels from what they were in the original ActiveCode box code, the image will not be the same.
-  
+
    What would the image produced from ActiveCode box 12 look like if you replaced the lines:
    <pre>
    newred = 255-p.getRed()
@@ -1130,10 +1130,10 @@ If you want to try some image processing on your own, outside of the textbook yo
 
    import cImage as image
    img = image.Image("myfile.gif")
-   
+
 .. admonition:: Note
 
-   One important caveat about using ``cImage.py`` is that it will only work with GIF files unless you also install the Python Image Library.  The easiest version to install is called ``Pillow``.  If you have the ``pip`` command installed on your computer this is really easy to install, with ``pip install pillow`` otherwise you will need to follow the instructions on the `Python Package Index <https://pypi.python.org/pypi/Pillow/>`_ page.  With Pillow installed you will be able to use almost any kind of image that you download. 
+   One important caveat about using ``cImage.py`` is that it will only work with GIF files unless you also install the Python Image Library.  The easiest version to install is called ``Pillow``.  If you have the ``pip`` command installed on your computer this is really easy to install, with ``pip install pillow`` otherwise you will need to follow the instructions on the `Python Package Index <https://pypi.python.org/pypi/Pillow/>`_ page.  With Pillow installed you will be able to use almost any kind of image that you download.
 
 
 Glossary
@@ -1147,7 +1147,7 @@ Glossary
 
     body
         The statements inside a loop.
-        
+
 
     counter
         A variable used to count something, usually initialized to zero and
@@ -1159,10 +1159,10 @@ Glossary
 
 
     definite iteration
-        A loop where we have an upper bound on the number of times the 
+        A loop where we have an upper bound on the number of times the
         body will be executed.  Definite iteration is usually best coded
-        as a ``for`` loop.    
-        
+        as a ``for`` loop.
+
 
 
     escape sequence
@@ -1182,8 +1182,8 @@ Glossary
 
     indefinite iteration
         A loop where we just need to keep going until some condition is met.
-        A ``while`` statement is used for this case.      
-        
+        A ``while`` statement is used for this case.
+
 
 
     iteration
@@ -1195,47 +1195,47 @@ Glossary
 
     loop variable
         A variable used as part of the terminating condition of a loop.
-     
 
-    
+
+
     nested loop
         A loop inside the body of another loop.
-    
+
     newline
         A special character that causes the cursor to move to the beginning of
         the next line.
-        
-        
+
+
     reassignment
         Making more than one assignment to the same variable during the
         execution of a program.
-    
 
-     
+
+
     tab
         A special character that causes the cursor to move to the next tab stop
         on the current line.
-        
 
-        
+
+
 Exercises
 ---------
 
-This chapter showed us how to sum a list of items, 
+This chapter showed us how to sum a list of items,
 and how to count items.  The counting example also had an ``if`` statement
 that let us only count some selected items.  In the previous
 chapter we also showed a function ``find_first_2_letter_word`` that allowed
-us an "early exit" from inside a loop by using ``return`` when some condition occurred.  
-We now also have ``break`` to exit a loop (but not the enclosing function, and 
+us an "early exit" from inside a loop by using ``return`` when some condition occurred.
+We now also have ``break`` to exit a loop (but not the enclosing function, and
 ``continue`` to abandon the current iteration of the loop without ending the loop.
 
 Composition of list traversal, summing, counting, testing conditions
 and early exit is a rich collection of building blocks that can be combined
-in powerful ways to create many functions that are all slightly different.  
+in powerful ways to create many functions that are all slightly different.
 
 The first six questions are typical functions you should be able to write using only
 these building blocks.
-   
+
 
    
 #. Add a print function to Newton's ``sqrt`` function that
@@ -1244,11 +1244,11 @@ these building blocks.
 
     .. actex:: ex_7_7
 
-   
+
 #. Write a function ``print_triangular_numbers(n)`` that prints out the first
    n triangular numbers. A call to ``print_triangular_numbers(5)`` would
    produce the following output::
-    
+
        1       1
        2       3
        3       6
@@ -1259,14 +1259,14 @@ these building blocks.
 
    .. actex:: ex_7_8
 
-   
+
 #. Write a function, ``is_prime``, which takes a single integer argument
    and returns ``True`` when the argument is a *prime number* and ``False``
    otherwise.
-   
+
     .. actex:: ex_7_9
 
-      
+
 
 #. Modify the the Random turtle walk program so that the turtle turns around
    when it hits the wall and goes the other direction.  This bouncing off the
@@ -1302,7 +1302,7 @@ these building blocks.
    times past.  The formula for creating a sepia tone is as follows:
 
    .. sourcecode:: python
-   
+
         newR = (R × 0.393 + G × 0.769 + B × 0.189)
         newG = (R × 0.349 + G × 0.686 + B × 0.168)
         newB = (R × 0.272 + G × 0.534 + B × 0.131)

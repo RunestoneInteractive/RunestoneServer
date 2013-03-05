@@ -41,7 +41,7 @@ Algorithms
 
 If problem solving is a central part of computer science, then the solutions that you create through
 the problem solving process are also important.  In computer science, we refer to these solutions
-as **algorithms**.  An algorithm is a step by step list of instructions that if followed exactly will solve the problem under consideration.  
+as **algorithms**.  An algorithm is a step by step list of instructions that if followed exactly will solve the problem under consideration.
 
 Our goal in computer science is to take a problem and develop an algorithm that can serve as a general solution.  Once we have such a solution, we can use our computer to automate the execution.  As noted
 above, programming is a skill which allows a computer scientist to take an algorithm and represent it in
@@ -115,7 +115,7 @@ languages. Loosely speaking, computers can only execute programs written in
 low-level languages. Thus, programs written in a high-level language have to be
 processed before they can run. This extra processing takes some time, which is
 a small disadvantage of high-level languages.
-However, the advantages to high-level languages are enormous. 
+However, the advantages to high-level languages are enormous.
 
 First, it is much easier to program in a
 high-level language. Programs written in a high-level language take less time
@@ -146,7 +146,7 @@ without further translation.
 
 .. image:: Figures/compile.png
    :alt: Compile illustration
-    
+
 Many modern languages use both processes. They are first compiled into a lower
 level language, called **byte code**, and then interpreted by a program called
 a **virtual machine**. Python uses both processes, but because of the way
@@ -159,7 +159,7 @@ and the interpreter immediately shows the result.  The example below shows the P
 .. sourcecode:: python
 
     $ python3
-    Python 3.2 (r32:88445, Mar 25 2011, 19:28:28) 
+    Python 3.2 (r32:88445, Mar 25 2011, 19:28:28)
     [GCC 4.5.2] on linux2
     Type "help", "copyright", "credits" or "license" for more information.
     >>> 2 + 3
@@ -182,7 +182,7 @@ example, we used a text editor to create a source code file named ``firstprogram
 the following contents:
 
 .. sourcecode:: python
-   
+
     print("My first program adds two numbers, 2 and 3:")
     print(2 + 3)
 
@@ -192,10 +192,10 @@ By convention, files that contain Python programs have names that end with
 programs identify a file as containing python code.
 
 .. sourcecode:: python
-    
+
     $ python firstprogram.py
     My first program adds two numbers, 2 and 3:
-    5    
+    5
 
 These examples show Python being run from a Unix command line. In other
 development environments, the details of executing programs may differ. Also,
@@ -205,8 +205,8 @@ most programs are more interesting than this one.
 
 	If you would like to learn more about installing and using Python, here are some video links.
 	`Installing Python for Windows <http://youtu.be/9EfGpN1Pnsg>`__ shows you how to install the Python environment under
-	Windows Vista, 
-	`Installing Python for Mac <http://youtu.be/MEmEJCLLI2k>`__ shows you how to install under Mac OS/X, and 
+	Windows Vista,
+	`Installing Python for Mac <http://youtu.be/MEmEJCLLI2k>`__ shows you how to install under Mac OS/X, and
 	`Installing Python for Linux <http://youtu.be/RLPYBxfAud4>`__ shows you how to install from the Linux
 	command line.
 	`Using Python <http://youtu.be/kXbpB5_ywDw>`__ shows you some details about the Python shell and source code.
@@ -235,9 +235,9 @@ most programs are more interesting than this one.
    :feedback_a: In this case high and low have nothing to do with altitude.
    :feedback_b: High and low have nothing to do with the type of device you are programming for.  Instead, look at what it takes to run the program written in the language.
    :feedback_c: Python is a high level language but must be interpreted into machine code (binary) before it can be executed.
-   :feedback_d: While it is true that it is generally easier to program in a high-level language and programs written in a high-level language are usually shorter, this is not always the case. 
+   :feedback_d: While it is true that it is generally easier to program in a high-level language and programs written in a high-level language are usually shorter, this is not always the case.
 
-   
+
     What is the difference between a high-level programming language and a low-level programming language?
 
 .. mchoicemf:: question1_2_3
@@ -251,7 +251,7 @@ most programs are more interesting than this one.
    :feedback_c: Both compilers and interpreters are software.
    :feedback_d: Compilers can produce object code or byte code depending on the language.  An interpreter produces neither.
 
-   Pick the best replacements for 1 and 2 in the following sentence.<br>  When comparing compilers and interpreters, a compiler is like 1 while an interpreter is like 2.  
+   Pick the best replacements for 1 and 2 in the following sentence.<br>  When comparing compilers and interpreters, a compiler is like 1 while an interpreter is like 2.
 
 Special Ways to Execute Python in this Book
 -------------------------------------------
@@ -260,18 +260,18 @@ Special Ways to Execute Python in this Book
     :controls:
     :thumb: ../_static/activecodethumb.png
 
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/activecodelens.mov
-    http://knuth.luther.edu/~pythonworks/thinkcsVideos/activecodelens.webm
+    http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
+    http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
 
 This book provides two additional ways to execute Python programs.  Both techniques are designed to assist you as you
-learn the Python programming language.  They will help you increase your understanding of how Python programs work.  
+learn the Python programming language.  They will help you increase your understanding of how Python programs work.
 
 
 First, you can write, modify, and execute programs using a unique **activecode** interpreter that allows you to execute Python code right
 in the text itself (right from the web browser).  Although this is certainly not the way real programs are written, it provides an excellent
 environment for learning a programming language like Python since you can experiment with the language as you are reading.
 
-Take a look at the activecode interpreter in action.  If we use the Python code from the previous example and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below. 
+Take a look at the activecode interpreter in action.  If we use the Python code from the previous example and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below.
 
 .. activecode:: ch01_1
 
@@ -279,7 +279,7 @@ Take a look at the activecode interpreter in action.  If we use the Python code 
    print(2 + 3)
 
 
-Now try modifying the activecode program shown above.  First, modify the string in the first print statement 
+Now try modifying the activecode program shown above.  First, modify the string in the first print statement
 by changing the word *adds* to the word *multiplies*.  Now press *run*.  You can see that the result of the program
 has changed.  However, it still prints "5" as the answer.  Modify the second print statement by changing the
 addition symbol, the "+", to the multiplication symbol, "*".  Press *run* to see the new results.
@@ -311,7 +311,7 @@ will be able to tell which is which by looking for either the Python prompt in t
    :feedback_a: You can (and should) save the contents of the activecode window.
    :feedback_b: You are not limited to running the examples that are already there.  Try   adding to them and creating your own.
    :feedback_c: The activecode interpreter will allow you type Python code into the textbox and then you can see it execute as the interpreter interprets and executes the source code.
-   :feedback_d: Although you can (and should) verify that your code is correct by examining its output, activecode will not directly tell you whether you have correctly implemented your program. 
+   :feedback_d: Although you can (and should) verify that your code is correct by examining its output, activecode will not directly tell you whether you have correctly implemented your program.
 
    The activecode interpreter allows you to (select all that apply):
 
@@ -380,7 +380,7 @@ instructions.
    :feedback_a: It is just step-by-step instructions that the computer can understand and execute.  Programs often implement algorithms, but note that algorithms are typically less precise than programs and do not have to be written in a programming language.
    :feedback_b: True, but not in this context.  We mean a program as related to a computer.
    :feedback_c: A program can perform a computation, but by itself it is not one.
-   :feedback_d: Programs often implement algorithms, but they are not the same thing.  An algorithm is a step by step list of instructions, but those instructions are not necessarily precise enough for a computer to follow.  A program must be written in a programming language that the computer knows how to interpret. 
+   :feedback_d: Programs often implement algorithms, but they are not the same thing.  An algorithm is a step by step list of instructions, but those instructions are not necessarily precise enough for a computer to follow.  A program must be written in a programming language that the computer knows how to interpret.
 
    A program is:
 
@@ -414,7 +414,7 @@ between them in order to track them down more quickly.
    :feedback_a: Programming errors are called bugs and the process of finding and removing them from a program is called debugging.
    :feedback_b: Maybe, but that is not what we are talking about in this context.
    :feedback_c: This is partially correct.  Debugging is more than just finding the bugs.
-   :feedback_d: This is partially correct.  Debugging is more than just fixing the bugs. What do you need to do before you can fix them? 
+   :feedback_d: This is partially correct.  Debugging is more than just fixing the bugs. What do you need to do before you can fix them?
 
    Debugging is:
 
@@ -427,7 +427,7 @@ Python can only execute a program if the program is syntactically correct;
 otherwise, the process fails and returns an error message.  **Syntax** refers
 to the structure of a program and the rules about that structure. For example,
 in English, a sentence must begin with a capital letter and end with a period.
-this sentence contains a **syntax error**. So does this one  
+this sentence contains a **syntax error**. So does this one
 
 For most readers, a few syntax errors are not a significant problem, which is
 why we can read the poetry of e. e. cummings without problems.
@@ -445,8 +445,8 @@ experience, though, you will make fewer errors and find them faster.
    :answer_b: Forgetting a colon at the end of a statement where one is required
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: b
-   :feedback_a: A syntax error is an error in the structure of the python code that can be detected before the program is executed.   Python cannot usually tell if you are trying to divide by 0 until it is executing your program (e.g., you might be asking the user for a value and then dividing by that value—you cannot know what value the user will enter before you run the program). 
-   :feedback_b: This is a problem with the formal structure of the program.  Python knows where colons are required and can detect when one is missing simply by looking at the code without running it.	
+   :feedback_a: A syntax error is an error in the structure of the python code that can be detected before the program is executed.   Python cannot usually tell if you are trying to divide by 0 until it is executing your program (e.g., you might be asking the user for a value and then dividing by that value—you cannot know what value the user will enter before you run the program).
+   :feedback_b: This is a problem with the formal structure of the program.  Python knows where colons are required and can detect when one is missing simply by looking at the code without running it.
    :feedback_c: This will produce the wrong answer, but Python will not consider it an error at all.  The programmer is the one who understands that the answer produced is wrong.
 
    Which of the following is a syntax error?
@@ -462,7 +462,7 @@ experience, though, you will make fewer errors and find them faster.
    :feedback_b: The compiler and / or interpreter is a computer program that determines if your program is written in a way that can be translated into machine language for execution.
    :feedback_c:  Okay, sort of.  But it is a special thing in the computer that does it.  The stand alone computer without this additional piece can not do it.
    :feedback_d: Maybe.  Your teacher and instructor may be able to find most of your syntax errors, but only because they have experience looking at code and possibly writing code.  With experience syntax errors are easier to find.  But we also have an automated way of finding these types of errors.
- 
+
 
    Who or what typically finds syntax errors?
 
@@ -487,7 +487,7 @@ chapters, so it might be a while before you encounter one.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: a
    :feedback_a: Python cannot reliably tell if you are trying to divide by 0 until it is executing your program (e.g., you might be asking the user for a value and then dividing by that value—you cannot know what value the user will enter before you run the program).
-   :feedback_b: This is a problem with the formal structure of the program.  Python knows where colons are required and can detect when one is missing simply by looking at the code without running it.	
+   :feedback_b: This is a problem with the formal structure of the program.  Python knows where colons are required and can detect when one is missing simply by looking at the code without running it.
    :feedback_c: This will produce the wrong answer, but Python will not consider it an error at all.  The programmer is the one who understands that the answer produced is wrong.
 
    Which of the following is a run-time error?
@@ -515,7 +515,7 @@ looking at the output of the program and trying to figure out what it is doing.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: c
    :feedback_a: A semantic error is an error in logic. The program does not produce the correct output because the problem is not solved correctly. This would be considered a run-time error.
-   :feedback_b: A semantic error is an error in logic. The program does not produce the correct output because the problem is not solved correctly. This would be considered a syntax error.	
+   :feedback_b: A semantic error is an error in logic. The program does not produce the correct output because the problem is not solved correctly. This would be considered a syntax error.
    :feedback_c: This will produce the wrong answer because the programmer implemented the solution incorrectly.
 
    Which of the following is a semantic error?
@@ -523,7 +523,7 @@ looking at the output of the program and trying to figure out what it is doing.
 
 .. index::
     single: Holmes, Sherlock
-    single: Doyle, Arthur Conan 
+    single: Doyle, Arthur Conan
     single: Linux
 
 Experimental Debugging
@@ -568,7 +568,7 @@ practices.
    :answer_d: There is no difference between them.
    :correct: a
    :feedback_a: Programming is the writing of the source code and debugging is the process of finding and correcting all the errors within the program until it is correct.
-   :feedback_b: Programming can be creative but it also follows a process and debugging can be creative in how you find the errors.	
+   :feedback_b: Programming can be creative but it also follows a process and debugging can be creative in how you find the errors.
    :feedback_c: Some people think that debugging is actually more fun than programming (they usually become good software testers).  Debugging is much like solving puzzles, which some people think is fun!
    :feedback_d: You cannot debug without first having a program, meaning that someone had to do the programming first.
 
@@ -639,10 +639,10 @@ structure, syntax, and semantics --- there are many differences:
     literalness
         Formal languages mean exactly what they say.  On the other hand,
         natural languages are full of idiom and metaphor. If someone says, "The
-        other shoe fell", there is probably no shoe and nothing falling.  
+        other shoe fell", there is probably no shoe and nothing falling.
 
         .. tip::
-        
+
             You'll need to find the original joke to understand the idiomatic
             meaning of the other shoe falling.  *Yahoo! Answers* thinks it
             knows!
@@ -686,7 +686,7 @@ natural languages, can make a big difference in a formal language.
    :answer_d: Tokens, structure, syntax, and semantics
    :correct: b
    :feedback_a: Actually both languages can be parsed (determining the structure of the sentence), but formal languages can be parsed more easily in software.
-   :feedback_b: All of these can be present in natural languages but cannot exist in formal languages.	
+   :feedback_b: All of these can be present in natural languages but cannot exist in formal languages.
    :feedback_c: There are several differences between the two but they are also similar.
    :feedback_d: These are the similarities between the two.
 
@@ -697,8 +697,8 @@ natural languages, can make a big difference in a formal language.
    :answer_b: False
    :correct: b
    :feedback_a: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.
-   :feedback_b: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.	
-   
+   :feedback_b: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.
+
    True or False:  Reading a program is like reading other kinds of text.
 
 
@@ -710,7 +710,7 @@ World!* because all it does is display the words, Hello, World!  In Python, the 
 looks like this.
 
 .. sourcecode:: python
-    
+
     print("Hello, World!")
 
 This is an example of using the **print function**, which doesn't actually
@@ -718,7 +718,7 @@ print anything on paper. It displays a value on the screen. In this case, the
 result is the words:
 
 .. sourcecode:: python
-    
+
     Hello, World!
 
 Here is the example in activecode.  Give it a try!
@@ -744,7 +744,7 @@ possible.
    :answer_d: Tells the computer to speak the information.
    :correct: b
    :feedback_a: Within the Python programming language, the print function has nothing to do with the printer.
-   :feedback_b: Yes, the print function is used to display the value of the thing being printed.  
+   :feedback_b: Yes, the print function is used to display the value of the thing being printed.
    :feedback_c: The format of the information is called its font and has nothing to do with the print function.
    :feedback_d: That would be a different function.
 
@@ -774,13 +774,13 @@ Here is a new version of *Hello, World!*.
     # Written by Joe Soap, December 2010.
     # Anyone may freely copy or modify this program.
     #---------------------------------------------------
-    
-    print("Hello, World!")     # Isn't this easy! 
-      
+
+    print("Hello, World!")     # Isn't this easy!
+
 Notice that when you run this program, it still only prints the phrase Hello, World!  None of the comments appear.
 You'll also notice that we've left a blank line in the program.  Blank lines
 are also ignored by the interpreter, but comments and blank lines can make your
-programs much easier for humans to parse.  Use them liberally! 
+programs much easier for humans to parse.  Use them liberally!
 
 **Check your understanding**
 
@@ -827,8 +827,8 @@ Glossary
     comment
         Information in a program that is meant for other programmers (or anyone
         reading the source code) and has no effect on the execution of the
-        program.    
-        
+        program.
+
     compile
         To translate a program written in a high-level language into a
         low-level language all at once, in preparation for later execution.
@@ -851,7 +851,7 @@ Glossary
     high-level language
         A programming language like Python that is designed to be easy for
         humans to read and write.
-    
+
     interpret
         To execute a program in a high-level language by translating it one
         line at a time.
@@ -892,7 +892,7 @@ Glossary
         Python shell types commands at the prompt (>>>), and presses the return
         key to send these commands immediately to the interpreter for
         processing.
-        
+
     runtime error
         An error that does not occur until the program has started to execute
         but that prevents the program from continuing.

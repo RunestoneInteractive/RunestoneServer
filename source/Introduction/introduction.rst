@@ -1,11 +1,11 @@
 ..  Copyright (C)  Brad Miller, David Ranum
     Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or 
-    any later version published by the Free Software Foundation; with 
-    Invariant Sections being Forward, Prefaces, and Contributor List, 
+    under the terms of the GNU Free Documentation License, Version 1.3 or
+    any later version published by the Free Software Foundation; with
+    Invariant Sections being Forward, Prefaces, and Contributor List,
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
-    
+
 ..  shortname:: DataStructureIntroductionPythonReview
 ..  description:: A general introduction to data structures and a review of python
 
@@ -328,7 +328,7 @@ and then evaluates the Python construct that you provide. For example,
 
     >>> print("Algorithms and Data Structures")
     Algorithms and Data Structures
-    >>> 
+    >>>
 
 shows the prompt, the ``print`` function, the result, and the next
 prompt.
@@ -401,19 +401,19 @@ and logical operators with examples shown in the session that follows.
 
 .. _tab_relational:
 
-=========================== ============== ================================================================= 
-         **Operation Name**   **Operator**                                                   **Explanation** 
-=========================== ============== ================================================================= 
-                  less than    :math:`<`                                                Less than operator 
-               greater than    :math:`>`                                             Greater than operator 
-         less than or equal   :math:`<=`                                    Less than or equal to operator 
-      greater than or equal   :math:`>=`                                 Greater than or equal to operator 
-                      equal   :math:`==`                                                 Equality operator 
-                  not equal   :math:`!=`                                                Not equal operator 
-                logical and  :math:`and`                          Both operands True for result to be True 
-                 logical or   :math:`or`        One or the other operand is True for the result to be True 
-                logical not  :math:`not`   Negates the truth value, False becomes True, True becomes False 
-=========================== ============== ================================================================= 
+=========================== ============== =================================================================
+         **Operation Name**   **Operator**                                                   **Explanation**
+=========================== ============== =================================================================
+                  less than    :math:`<`                                                Less than operator
+               greater than    :math:`>`                                             Greater than operator
+         less than or equal   :math:`<=`                                    Less than or equal to operator
+      greater than or equal   :math:`>=`                                 Greater than or equal to operator
+                      equal   :math:`==`                                                 Equality operator
+                  not equal   :math:`!=`                                                Not equal operator
+                logical and  :math:`and`                          Both operands True for result to be True
+                 logical or   :math:`or`        One or the other operand is True for the result to be True
+                logical not  :math:`not`   Negates the truth value, False becomes True, True becomes False
+=========================== ============== =================================================================
 
     Relational and Logical Operators
 
@@ -509,16 +509,16 @@ gives examples of their use.
 
 .. _tab_sequence:
 
-=========================== ============== ======================================== 
-         **Operation Name**   **Operator**                          **Explanation** 
-=========================== ============== ======================================== 
-                   indexing            [ ]          Access an element of a sequence 
+=========================== ============== ========================================
+         **Operation Name**   **Operator**                          **Explanation**
+=========================== ============== ========================================
+                   indexing            [ ]          Access an element of a sequence
               concatenation             \+          Combine sequences together
-                 repetition             \*   Concatenate a repeated number of times 
-                 membership             in     Ask whether an item is in a sequence 
-                     length            len  Ask the number of items in the sequence 
-                    slicing          [ : ]             Extract a part of a sequence 
-=========================== ============== ======================================== 
+                 repetition             \*   Concatenate a repeated number of times
+                 membership             in     Ask whether an item is in a sequence
+                     length            len  Ask the number of items in the sequence
+                    slicing          [ : ]             Extract a part of a sequence
+=========================== ============== ========================================
 
     Operations on Any Sequence in Python
 
@@ -558,20 +558,20 @@ use follow.
 
 .. _tab_listmethods:
 
-======================== ========================== ======================================================= 
-         **Method Name**                    **Use**                                         **Explanation** 
-======================== ========================== ======================================================= 
-              ``append``     ``alist.append(item)``                    Adds a new item to the end of a list 
-              ``insert``   ``alist.insert(i,item)``           Inserts an item at the ith position in a list 
-                 ``pop``            ``alist.pop()``             Removes and returns the last item in a list 
-                 ``pop``           ``alist.pop(i)``              Removes and returns the ith item in a list 
-                ``sort``           ``alist.sort()``                            Modifies a list to be sorted 
-             ``reverse``        ``alist.reverse()``                  Modifies a list to be in reverse order 
-                 ``del``           ``del alist[i]``                    Deletes the item in the ith position 
-               ``index``      ``alist.index(item)``   Returns the index of the first occurrence of ``item`` 
-               ``count``      ``alist.count(item)``           Returns the number of occurrences of ``item`` 
-              ``remove``     ``alist.remove(item)``                Removes the first occurrence of ``item`` 
-======================== ========================== ======================================================= 
+======================== ========================== =======================================================
+         **Method Name**                    **Use**                                         **Explanation**
+======================== ========================== =======================================================
+              ``append``     ``alist.append(item)``                    Adds a new item to the end of a list
+              ``insert``   ``alist.insert(i,item)``           Inserts an item at the ith position in a list
+                 ``pop``            ``alist.pop()``             Removes and returns the last item in a list
+                 ``pop``           ``alist.pop(i)``              Removes and returns the ith item in a list
+                ``sort``           ``alist.sort()``                            Modifies a list to be sorted
+             ``reverse``        ``alist.reverse()``                  Modifies a list to be in reverse order
+                 ``del``           ``del alist[i]``                    Deletes the item in the ith position
+               ``index``      ``alist.index(item)``   Returns the index of the first occurrence of ``item``
+               ``count``      ``alist.count(item)``           Returns the number of occurrences of ``item``
+              ``remove``     ``alist.remove(item)``                Removes the first occurrence of ``item``
+======================== ========================== =======================================================
 
     Methods Provided by Lists in Python
 
@@ -614,7 +614,7 @@ simple data objects such as integers can invoke methods in this way.
 
     >>> (54).__add__(21)
     75
-    >>> 
+    >>>
 
 In this fragment we are asking the integer object ``54`` to execute its
 ``add`` method (called ``__add__`` in Python) and passing it ``21`` as
@@ -642,7 +642,7 @@ illustrated below.
     [5, 7, 9]
     >>> list(range(10,1,-1))
     [10, 9, 8, 7, 6, 5, 4, 3, 2]
-    >>> 
+    >>>
 
 The range object represents a sequence of integers. By default, it will
 start with 0. If you provide more parameters, it will start and end at
@@ -668,7 +668,7 @@ by using quotation marks (either single or double).
     'DavidDavid'
     >>> len(myName)
     5
-    >>> 
+    >>>
 
 Since strings are sequences, all of the sequence operations described
 above work as you would expect. In addition, strings have a number of
@@ -679,7 +679,7 @@ methods, some of which are shown in :ref:`Table 4<tab_stringmethods>`. For exam
     >>> myName
     'David'
     >>> myName.upper()
-    'DAVID' 
+    'DAVID'
     >>> myName.center(10)
     '  David   '
     >>> myName.find('v')
@@ -695,17 +695,17 @@ whitespace characters such as tab, newline and space.
 
 .. _tab_stringmethods:
 
-======================== ========================= ============================================================= 
-         **Method Name**                   **Use**                                               **Explanation** 
-======================== ========================= ============================================================= 
-              ``center``     ``astring.center(w)``            Returns a string centered in a field of size ``w`` 
-               ``count``   ``astring.count(item)``   Returns the number of occurrences of ``item`` in the string 
-               ``ljust``      ``astring.ljust(w)``      Returns a string left-justified in a field of size ``w`` 
-               ``lower``       ``astring.lower()``                             Returns a string in all lowercase 
-               ``rjust``      ``astring.rjust(w)``     Returns a string right-justified in a field of size ``w`` 
-                ``find``    ``astring.find(item)``         Returns the index of the first occurrence of ``item`` 
-               ``split``  ``astring.split(schar)``                  Splits a string into substrings at ``schar`` 
-======================== ========================= ============================================================= 
+======================== ========================= =============================================================
+         **Method Name**                   **Use**                                               **Explanation**
+======================== ========================= =============================================================
+              ``center``     ``astring.center(w)``            Returns a string centered in a field of size ``w``
+               ``count``   ``astring.count(item)``   Returns the number of occurrences of ``item`` in the string
+               ``ljust``      ``astring.ljust(w)``      Returns a string left-justified in a field of size ``w``
+               ``lower``       ``astring.lower()``                             Returns a string in all lowercase
+               ``rjust``      ``astring.rjust(w)``     Returns a string right-justified in a field of size ``w``
+                ``find``    ``astring.find(item)``         Returns the index of the first occurrence of ``item``
+               ``split``  ``astring.split(schar)``                  Splits a string into substrings at ``schar``
+======================== ========================= =============================================================
 
     Methods Provided by Strings in Python
 
@@ -722,7 +722,7 @@ change is not allowed.
     >>> myList[0]=2**10
     >>> myList
     [1024, 3, True, 6.5]
-    >>> 
+    >>>
     >>> myName
     'David'
     >>> myName[0]='X'
@@ -731,7 +731,7 @@ change is not allowed.
       File "<pyshell#84>", line 1, in -toplevel-
         myName[0]='X'
     TypeError: object doesn't support item assignment
-    >>> 
+    >>>
 
 Tuples are very similar to lists in that they are heterogeneous
 sequences of data. The difference is that a tuple is immutable, like a
@@ -752,7 +752,7 @@ described above. For example,
     (2, True, 4.96, 2, True, 4.96, 2, True, 4.96)
     >>> myTuple[0:2]
     (2, True)
-    >>> 
+    >>>
 
 However, if you try to change an item in a tuple, you will get an error.
 Note that the error message provides location and reason for the
@@ -766,7 +766,7 @@ problem.
       File "<pyshell#137>", line 1, in -toplevel-
         myTuple[1]=False
     TypeError: object doesn't support item assignment
-    >>> 
+    >>>
 
 A set is an unordered collection of zero or more immutable Python data
 objects. Sets do not allow duplicates and are written as comma-delimited
@@ -781,7 +781,7 @@ a variable as below.
     >>> mySet = {3,6,"cat",4.5,False}
     >>> mySet
     {False, 4.5, 3, 6, 'cat'}
-    >>> 
+    >>>
 
 Even though sets are not considered to be sequential, they do support a
 few of the familiar operations presented earlier. :ref:`Table 5 <tab_setops>` reviews
@@ -789,16 +789,16 @@ these operations and the following session gives examples of their use.
 
 .. _tab_setops:
 
-=========================== ===================== =================================================================== 
-         **Operation Name**          **Operator**                                                     **Explanation** 
-=========================== ===================== =================================================================== 
-                 membership                    in                                                      Set membership 
-                     length                   len                                  Returns the cardinality of the set 
-                      ``|``   ``aset | otherset``                  Returns a new set with all elements from both sets 
-                      ``&``   ``aset & otherset``      Returns a new set with only those elements common to both sets 
-                      ``-``   ``aset - otherset``   Returns a new set with all items from the first set not in second 
-                     ``<=``  ``aset <= otherset``       Asks whether all elements of  the first set are in the second 
-=========================== ===================== =================================================================== 
+=========================== ===================== ===================================================================
+         **Operation Name**          **Operator**                                                     **Explanation**
+=========================== ===================== ===================================================================
+                 membership                    in                                                      Set membership
+                     length                   len                                  Returns the cardinality of the set
+                      ``|``   ``aset | otherset``                  Returns a new set with all elements from both sets
+                      ``&``   ``aset & otherset``      Returns a new set with only those elements common to both sets
+                      ``-``   ``aset - otherset``   Returns a new set with all items from the first set not in second
+                     ``<=``  ``aset <= otherset``       Asks whether all elements of  the first set are in the second
+=========================== ===================== ===================================================================
 
 
     Operations on a Set in Python
@@ -813,7 +813,7 @@ these operations and the following session gives examples of their use.
     True
     >>> "dog" in mySet
     False
-    >>> 
+    >>>
 
 Sets support a number of methods that should be familiar to those who
 have worked with them in a mathematics setting. :ref:`Table 6 <tab_setmethods>`
@@ -823,18 +823,18 @@ that can be used as well.
 
 .. _tab_setmethods:
 
-======================== ================================= ================================================================ 
-         **Method Name**                           **Use**                                                  **Explanation** 
-======================== ================================= ================================================================ 
-               ``union``          ``aset.union(otherset)``               Returns a new set with all elements from both sets 
-        ``intersection``   ``aset.intersection(otherset)``   Returns a new set with only those elements common to both sets 
-          ``difference``     ``aset.difference(otherset)``    Returns a new set with all items from first set not in second 
-            ``issubset``       ``aset.issubset(otherset)``            Asks whether all elements of one set are in the other 
-                 ``add``                ``aset.add(item)``                                             Adds item to the set 
-              ``remove``             ``aset.remove(item)``                                        Removes item from the set 
-                 ``pop``                    ``aset.pop()``                        Removes an arbitrary element from the set 
-               ``clear``                  ``aset.clear()``                                Removes all elements from the set 
-======================== ================================= ================================================================ 
+======================== ================================= ================================================================
+         **Method Name**                           **Use**                                                  **Explanation**
+======================== ================================= ================================================================
+               ``union``          ``aset.union(otherset)``               Returns a new set with all elements from both sets
+        ``intersection``   ``aset.intersection(otherset)``   Returns a new set with only those elements common to both sets
+          ``difference``     ``aset.difference(otherset)``    Returns a new set with all items from first set not in second
+            ``issubset``       ``aset.issubset(otherset)``            Asks whether all elements of one set are in the other
+                 ``add``                ``aset.add(item)``                                             Adds item to the set
+              ``remove``             ``aset.remove(item)``                                        Removes item from the set
+                 ``pop``                    ``aset.pop()``                        Removes an arbitrary element from the set
+               ``clear``                  ``aset.clear()``                                Removes all elements from the set
+======================== ================================= ================================================================
 
     Methods Provided by Sets in Python
 
@@ -872,7 +872,7 @@ that can be used as well.
     >>> mySet.clear()
     >>> mySet
     set()
-    >>> 
+    >>>
 
 Our final Python collection is an unordered structure called a
 **dictionary**. Dictionaries are collections of associated pairs of
@@ -883,7 +883,7 @@ comma-delimited key:value pairs enclosed in curly braces. For example,
 ::
 
     >>> capitals = {'Iowa':'DesMoines','Wisconsin':'Madison'}
-    >>> capitals  
+    >>> capitals
     {'Wisconsin': 'Madison', 'Iowa': 'DesMoines'}
     >>>
 
@@ -922,13 +922,13 @@ specify a return value instead.
 
 .. _tab_dictopers:
 
-===================== ================== ===================================================================== 
-         **Operator**            **Use**                                                       **Explanation** 
-===================== ================== ===================================================================== 
-               ``[]``      ``myDict[k]``       Returns the value associated with ``k``, otherwise its an error 
-               ``in``   ``key in adict``   Returns ``True`` if key is in the   dictionary, ``False`` otherwise 
-              ``del`` del ``adict[key]``                                Removes the entry from the  dictionary 
-===================== ================== ===================================================================== 
+===================== ================== =====================================================================
+         **Operator**            **Use**                                                       **Explanation**
+===================== ================== =====================================================================
+               ``[]``      ``myDict[k]``       Returns the value associated with ``k``, otherwise its an error
+               ``in``   ``key in adict``   Returns ``True`` if key is in the   dictionary, ``False`` otherwise
+              ``del`` del ``adict[key]``                                Removes the entry from the  dictionary
+===================== ================== =====================================================================
 
     Operators Provided by Dictionaries in Python
 
@@ -952,19 +952,19 @@ specify a return value instead.
     >>> phoneext.get("kent")
     >>> phoneext.get("kent","NO ENTRY")
     'NO ENTRY'
-    >>> 
+    >>>
 
 .. _tab_dictmethods:
 
-======================== ==================== =============================================================== 
-         **Method Name**              **Use**                                                 **Explanation** 
-======================== ==================== =============================================================== 
-                ``keys``     ``adict.keys()``       Returns the keys of the dictionary in a dict_keys object 
-              ``values``   ``adict.values()``   Returns the values of the dictionary in a dict_values object 
-               ``items``    ``adict.items()``             Returns the key-value pairs in a dict_items object 
-                 ``get``     ``adict.get(k)``     Returns the value associated with ``k``, ``None`` otherwise 
-                 ``get`` ``adict.get(k,alt)``      Returns the value associated with ``k``, ``alt`` otherwise 
-======================== ==================== =============================================================== 
+======================== ==================== ===============================================================
+         **Method Name**              **Use**                                                 **Explanation**
+======================== ==================== ===============================================================
+                ``keys``     ``adict.keys()``       Returns the keys of the dictionary in a dict_keys object
+              ``values``   ``adict.values()``   Returns the values of the dictionary in a dict_values object
+               ``items``    ``adict.items()``             Returns the key-value pairs in a dict_items object
+                 ``get``     ``adict.get(k)``     Returns the value associated with ``k``, ``None`` otherwise
+                 ``get`` ``adict.get(k,alt)``      Returns the value associated with ``k``, ``alt`` otherwise
+======================== ==================== ===============================================================
 
     {Methods Provided by Dictionaries in Python} {dictmethods}
 
@@ -1003,7 +1003,7 @@ that is provided.
 .. activecode::  strstuff
 
     aName = input("Please enter your name ")
-    print("Your name in all capitals is ",aName.upper(), 
+    print("Your name in all capitals is ",aName.upper(),
           "and has length", len(aName))
 
 It is important to note that the value returned from the ``input``
@@ -1040,7 +1040,7 @@ the following session:
     >>> print("Hello","World", sep="***")
     Hello***World
     >>> print("Hello","World", end="***")
-    Hello World***>>> 
+    Hello World***>>>
 
 It is often useful to have more control over the look of your output.
 Fortunately, Python provides us with an alternative called **formatted
@@ -1080,19 +1080,19 @@ various type specifications.
 
 .. _tab_fmta:
 
-========================== ==================================================================================================== 
-             **Character**                                                                                    **Output Format** 
-========================== ==================================================================================================== 
-               ``d``,``i``                                                                                              Integer 
-                     ``u``                                                                                     Unsigned integer 
-                     ``f``                                                                            Floating point as m.ddddd 
-                     ``e``                                                                      Floating point as m.ddddde+/-xx 
-                     ``E``                                                                      Floating point as m.dddddE+/-xx 
-                     ``g``   Use ``%e`` for exponents less than :math:`-4` or greater than :math:`+5`, otherwise use ``%f`` 
-                     ``c``                                                                                     Single character 
-                     ``s``   String, or any Python data object that can be converted to a string by using the ``str`` function. 
-                     ``%``                                                                         Insert a literal % character 
-========================== ==================================================================================================== 
+========================== ====================================================================================================
+             **Character**                                                                                    **Output Format**
+========================== ====================================================================================================
+               ``d``,``i``                                                                                              Integer
+                     ``u``                                                                                     Unsigned integer
+                     ``f``                                                                            Floating point as m.ddddd
+                     ``e``                                                                      Floating point as m.ddddde+/-xx
+                     ``E``                                                                      Floating point as m.dddddE+/-xx
+                     ``g``   Use ``%e`` for exponents less than :math:`-4` or greater than :math:`+5`, otherwise use ``%f``
+                     ``c``                                                                                     Single character
+                     ``s``   String, or any Python data object that can be converted to a string by using the ``str`` function.
+                     ``%``                                                                         Insert a literal % character
+========================== ====================================================================================================
 
     String Formatting Conversion Characters
 
@@ -1105,16 +1105,16 @@ explains these format modifiers
 
 .. _tab_fmtaddsa:
 
-========================= ============= ================================================================================================== 
-             **Modifier**   **Example**                                                                                    **Description** 
-========================= ============= ================================================================================================== 
-                   number      ``%20d``                                                               Put the value in a field width of 20 
-                        -     ``%-20d``                                        Put the value in a field 20 characters wide, left-justified 
-                        +     ``%+20d``                                       Put the value in a field 20 characters wide, right-justified 
-                        0     ``%020d``                           Put the value in a field 20 characters wide, fill in with leading zeros. 
-                        .    ``%20.2f``   Put the value in a field 20 characters wide with 2 characters to the right of the decimal point. 
-               ``(name)``  ``%(name)d``                              Get the value from the supplied dictionary using ``name`` as the key. 
-========================= ============= ================================================================================================== 
+========================= ============= ==================================================================================================
+             **Modifier**   **Example**                                                                                    **Description**
+========================= ============= ==================================================================================================
+                   number      ``%20d``                                                               Put the value in a field width of 20
+                        -     ``%-20d``                                        Put the value in a field 20 characters wide, left-justified
+                        +     ``%+20d``                                       Put the value in a field 20 characters wide, right-justified
+                        0     ``%020d``                           Put the value in a field 20 characters wide, fill in with leading zeros.
+                        .    ``%20.2f``   Put the value in a field 20 characters wide with 2 characters to the right of the decimal point.
+               ``(name)``  ``%(name)d``                              Get the value from the supplied dictionary using ``name`` as the key.
+========================= ============= ==================================================================================================
 
     Additional formatting options
 
@@ -1140,7 +1140,7 @@ modifier to specify the name of the key.
     >>> itemdict = {"item":"banana","cost":24}
     >>> print("The %(item)s costs %(cost)7.1f cents"%itemdict)
     The banana costs    24.0 cents
-    >>> 
+    >>>
 
 In addition to format strings that use format characters and format
 modifiers, Python strings also include a ``format`` method that can be
@@ -1205,7 +1205,7 @@ long as the collection is a sequence. So, for example,
 
     >>> for item in [1,3,6,2,5]:
     ...    print(item)
-    ... 
+    ...
     1
     3
     6
@@ -1223,13 +1223,13 @@ over a range of values. The statement
 
     >>> for item in range(5):
     ...    print(item**2)
-    ... 
+    ...
     0
     1
     4
     9
     16
-    >>> 
+    >>>
 
 will perform the ``print`` function five times. The ``range`` function
 will return a range object representing the sequence 0,1,2,3,4 and each
@@ -1337,22 +1337,22 @@ Regardless, the next action is to compute the square root.
 .. admonition:: Self Check
 
     Test your understanding of what we have covered so far by trying the following
-    exercise.  Modify the code from activecode_7 so that the final list only contains 
+    exercise.  Modify the code from activecode_7 so that the final list only contains
     a single copy of each letter.
-  
+
     .. activecode:: self_check_1
-  
+
        # the answer is: ['c', 'a', 't', 'd', 'o', 'g', 'r', 'b', 'i']
 
-    
+
 
 
 .. video:: list_unique
    :controls:
    :thumb: ../_static/videothumb.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/list_unique.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/list_unique.webm
+   http://media.interactivepython.org/pythondsVideos/list_unique.mov
+   http://media.interactivepython.org/pythondsVideos/list_unique.webm
 
 Returning to lists, there is an alternative method for creating a list
 that uses iteration and selection constructs. The is known as a **list
@@ -1369,7 +1369,7 @@ like to create a list of the first 10 perfect squares, we could use a
 
     >>> sqlist
     [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
-    >>> 
+    >>>
 
 Using a list comprehension, we can do this in one step as
 
@@ -1378,7 +1378,7 @@ Using a list comprehension, we can do this in one step as
     >>> sqlist=[x*x for x in range(1,11)]
     >>> sqlist
     [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
-    >>> 
+    >>>
 
 The variable ``x`` takes on the values 1 through 10 as specified by the
 ``for`` construct. The value of ``x*x`` is then computed and added to
@@ -1391,7 +1391,7 @@ certain items get added. For example,
     >>> sqlist=[x*x for x in range(1,11) if x%2 != 0]
     >>> sqlist
     [1, 9, 25, 49, 81]
-    >>> 
+    >>>
 
 This list comprehension constructed a list that only contained the
 squares of the odd numbers in the range from 1 to 10. Any sequence that
@@ -1402,16 +1402,16 @@ a new list.
 
     >>>[ch.upper() for ch in 'comprehension' if ch not in 'aeiou']
     ['C', 'M', 'P', 'R', 'H', 'N', 'S', 'N']
-    >>> 
+    >>>
 
 .. admonition:: Self Check
 
     Test your understanding of list comprehensions by redoing activecode 7
-    using list comprehensions.  For extra bonus points see if you can figure out 
+    using list comprehensions.  For extra bonus points see if you can figure out
     how to remove the duplicates using comprehensions too.
-  
+
     .. activecode:: self_check_2
-  
+
        # the answer is: ['c', 'a', 't', 'd', 'o', 'g', 'r', 'a', 'b', 'b', 'i', 't']
 
 
@@ -1419,8 +1419,8 @@ a new list.
    :controls:
    :thumb: ../_static/videothumb.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/listcomp.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/listcomp.webm
+   http://media.interactivepython.org/pythondsVideos/listcomp.mov
+   http://media.interactivepython.org/pythondsVideos/listcomp.webm
 
 
 Exception Handling
@@ -1477,7 +1477,7 @@ exception.
       File "<pyshell#102>", line 1, in <module>
         print(math.sqrt(anumber))
     ValueError: math domain error
-    >>> 
+    >>>
 
 We can handle this exception by calling the print function from within a
 ``try`` block. A corresponding ``except`` block “catches” the exception
@@ -1492,11 +1492,11 @@ occurs. For example:
            print("Bad Value for square root")
            print("Using absolute value instead")
            print(math.sqrt(abs(anumber)))
-        
+
     Bad Value for square root
     Using absolute value instead
     4.79583152331
-    >>> 
+    >>>
 
 will catch the fact that an exception is raised by ``sqrt`` and will
 instead print the messages back to the user and use the absolute value
@@ -1518,11 +1518,11 @@ termination is something explicitly created by the programmer.
     ...    raise RuntimeError("You can't use a negative number")
     ... else:
     ...    print(math.sqrt(anumber))
-    ... 
+    ...
     Traceback (most recent call last):
       File "<stdin>", line 2, in <module>
     RuntimeError: You can't use a negative number
-    >>> 
+    >>>
 
 There are many kinds of exceptions that can be raised in addition to the
 ``RuntimeError`` shown above. See the Python reference manual for a list
@@ -1543,12 +1543,12 @@ value you pass into it.
 
     >>> def square(n):
     ...    return n**2
-    ... 
+    ...
     >>> square(3)
     9
     >>> square(square(3))
     81
-    >>> 
+    >>>
 
 The syntax for this function definition includes the name, ``square``,
 and a parenthesized list of formal parameters. For this function, ``n``
@@ -1601,7 +1601,7 @@ marker. Any characters that follow the # on a line are ignored.
    Here's a self check that really covers everything so far.  You may have
    heard of the infinite monkey theorem?  The theorem states that a monkey hitting keys at random on a typewriter keyboard for an infinite amount of time will almost surely type a given text, such as the complete works of William Shakespeare.  Well, suppose we replace a monkey with a Python function.  How long do you think it would take for a Python function to generate just one sentence of Shakespeare?  The sentence we'll shoot for is:  "methinks it is like a weasel"
 
-   You're not going to want to run this one in the browser, so fire up your favorite Python IDE.  The way we'll simulate this is to write a function that generates a string that is 27 characters long by choosing random letters from the 26 letters in the alphabet plus the space.  We'll write another function that will score each generated string by comparing the randomly generated string to the goal.  
+   You're not going to want to run this one in the browser, so fire up your favorite Python IDE.  The way we'll simulate this is to write a function that generates a string that is 27 characters long by choosing random letters from the 26 letters in the alphabet plus the space.  We'll write another function that will score each generated string by comparing the randomly generated string to the goal.
 
    A third function will repeatedly call generate and score, then if 100% of the letters are correct we are done.  If the letters are not correct then we will generate a whole new string.To make it easier to follow your program's progress this third function should print out the best string generated so far and its score every 1000 tries.
 
@@ -1614,8 +1614,8 @@ marker. Any characters that follow the # on a line are ignored.
    :controls:
    :thumb: ../_static/videothumb.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/monkeys.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/monkeys.webm
+   http://media.interactivepython.org/pythondsVideos/monkeys.mov
+   http://media.interactivepython.org/pythondsVideos/monkeys.webm
 
 
 Object-Oriented Programming in Python: Defining Classes
@@ -1672,7 +1672,7 @@ this example,
     class Fraction:
 
        #the methods go here
-       
+
 
 provides the framework for us to define the methods. The first method
 that all classes should provide is the constructor. The constructor
@@ -1766,7 +1766,7 @@ in order to do its job.
     3 / 5
     >>> print(myf)
     <__main__.Fraction instance at 0x40bce9ac>
-    >>> 
+    >>>
 
 In Python, all classes have a set of standard methods that are provided
 but may not work properly. One of these, ``__str__``, is the method to
@@ -1801,12 +1801,12 @@ various ways that this function is used.
     >>> print(myf)
     3/5
     >>> print("I ate", myf, "of the pizza")
-    I ate 3/5 of the pizza 
+    I ate 3/5 of the pizza
     >>> myf.__str__()
     '3/5'
     >>> str(myf)
     '3/5'
-    >>> 
+    >>>
 
 We can override many other methods for our new ``Fraction`` class. Some
 of the most important of these are the basic arithmetic operations. We
@@ -1823,9 +1823,9 @@ to add two fractions, we get the following:
     Traceback (most recent call last):
       File "<pyshell#173>", line 1, in -toplevel-
         f1+f2
-    TypeError: unsupported operand type(s) for +: 
+    TypeError: unsupported operand type(s) for +:
               'instance' and 'instance'
-    >>> 
+    >>>
 
 If you look closely at the error, you see that the problem is that the
 “+” operator does not understand the ``Fraction`` operands.
@@ -1875,7 +1875,7 @@ when a Python statement is broken across more than one line.
     >>> f3=f1+f2
     >>> print(f3)
     6/8
-    >>> 
+    >>>
 
 The addition method works as we desire, but one thing could be better.
 Note that :math:`6/8` is the correct result
@@ -1929,7 +1929,7 @@ the bottom by 2 creates a new fraction, :math:`3/4` (see
     >>> f3=f1+f2
     >>> print(f3)
     3/4
-    >>> 
+    >>>
 
 .. _lst_newaddmethod:
 
@@ -1986,7 +1986,7 @@ are other relational operators that can be overridden. For example, the
         def __eq__(self, other):
             firstnum = self.num * other.den
             secondnum = other.num * self.den
-            
+
             return firstnum == secondnum
 
 The complete ``Fraction`` class, up to this point, is shown in
@@ -2015,11 +2015,11 @@ methods as exercises.
             newden = self.den * otherfraction.den
             common = gcd(newnum,newden)
             return Fraction(newnum//common,newden//common)
-        
+
         def __eq__(self, other):
             firstnum = self.num * other.den
             secondnum = other.num * self.den
-            
+
             return firstnum == secondnum
 
    x = Fraction(1,2)
@@ -2037,8 +2037,8 @@ methods as exercises.
    :controls:
    :thumb: ../_static/videothumb.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/fraction.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/fraction.webm
+   http://media.interactivepython.org/pythondsVideos/fraction.mov
+   http://media.interactivepython.org/pythondsVideos/fraction.webm
 
 Inheritance: Logic Gates and Circuits
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2439,7 +2439,7 @@ circuit. For example:
     Pin A input for gate G2-->1
     Pin B input for gate G2-->1
     0
-    >>> 
+    >>>
 
 A complete listing of the circuit simulation classes is available on the
 companion website for this book ``http://www.pythonworks.org``.
@@ -2479,7 +2479,7 @@ companion website for this book ``http://www.pythonworks.org``.
                   return int(input("Enter Pin A input for gate "+self.getName()+"-->"))
               else:
                   return self.pinA.getFrom().getOutput()
-              
+
           def getPinB(self):
               if self.pinB == None:
                   return int(input("Enter Pin B input for gate "+self.getName()+"-->"))
@@ -2495,7 +2495,7 @@ companion website for this book ``http://www.pythonworks.org``.
                   else:
                       print("Cannot Connect: NO EMPTY PINS on this gate")
 
-              
+
       class AndGate(BinaryGate):
 
           def __init__(self,n):
@@ -2509,7 +2509,7 @@ companion website for this book ``http://www.pythonworks.org``.
                   return 1
               else:
                   return 0
-              
+
       class OrGate(BinaryGate):
 
           def __init__(self,n):
@@ -2536,14 +2536,14 @@ companion website for this book ``http://www.pythonworks.org``.
                   return int(input("Enter Pin input for gate "+self.getName()+"-->"))
               else:
                   return self.pin.getFrom().getOutput()
-              
+
           def setNextPin(self,source):
               if self.pin == None:
                   self.pin = source
               else:
                   print("Cannot Connect: NO EMPTY PINS on this gate")
 
-             
+
       class NotGate(UnaryGate):
 
           def __init__(self,n):
@@ -2563,20 +2563,20 @@ companion website for this book ``http://www.pythonworks.org``.
               self.togate = tgate
 
               tgate.setNextPin(self)
-          
+
           def getFrom(self):
               return self.fromgate
 
           def getTo(self):
               return self.togate
 
-          
+
 
       def main():
          g1 = AndGate("G1")
 
          print(g1.getOutput())
-         
+
       main()
 
 
@@ -2584,8 +2584,8 @@ companion website for this book ``http://www.pythonworks.org``.
    :controls:
    :thumb: ../_static/videothumb.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/logicgates.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/logicgates.webm
+   http://media.interactivepython.org/pythondsVideos/logicgates.mov
+   http://media.interactivepython.org/pythondsVideos/logicgates.webm
 
 
 .. .. admonition:: Self  Check Challenge
@@ -2594,7 +2594,7 @@ companion website for this book ``http://www.pythonworks.org``.
 
 ..    .. image:: Figures/flipflop.png
 
-..    This is a challenge problem because the entire 
+..    This is a challenge problem because the entire
 ..    Note if the initial inputs to Reset and Set are both 0 then the output of the flip-flop is 0.  But if the Set input is toggled to 1 then the output becomes 1.  The great thing is that when the set input goes to 0 the output stays 1, until the reset input is toggled to 1 which resets the output of the circuit back to zero.
 
 
@@ -2633,21 +2633,21 @@ Summary
 Key Terms
 ---------
 
-=========================== =================== ======================== 
-         abstract data type         abstraction                algorithm 
-=========================== =================== ======================== 
-                      class          computable         data abstraction 
-             data structure           data type            deep equality 
-                 dictionary       encapsulation                exception 
-            format operator   formatted strings       HAS-A relationship 
- implementation-independent  information hiding              inheritance 
-      inheritance hierarchy           interface        IS-A relationship 
-                       list  list comprehension                   method 
-                 mutability              object   procedural abstraction 
-                programming              prompt                 ``self`` 
-           shallow equality          simulation                   string 
-                   subclass          superclass              truth table 
-=========================== =================== ======================== 
+=========================== =================== ========================
+         abstract data type         abstraction                algorithm
+=========================== =================== ========================
+                      class          computable         data abstraction
+             data structure           data type            deep equality
+                 dictionary       encapsulation                exception
+            format operator   formatted strings       HAS-A relationship
+ implementation-independent  information hiding              inheritance
+      inheritance hierarchy           interface        IS-A relationship
+                       list  list comprehension                   method
+                 mutability              object   procedural abstraction
+                programming              prompt                 ``self``
+           shallow equality          simulation                   string
+                   subclass          superclass              truth table
+=========================== =================== ========================
 
 {tab:keywords}
 

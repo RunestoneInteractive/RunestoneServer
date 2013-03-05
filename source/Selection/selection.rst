@@ -6,7 +6,7 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-    
+
 ..  shortname:: Selection
 ..  description:: This module introduces the selection control structures (if, ifelse, elif)
 
@@ -24,7 +24,7 @@ Decisions and Selection
     single: boolean expression
     single: expression; boolean
     single: logical operator
-    single: operator; logical 
+    single: operator; logical
     single: operator; comparison
     single: comparison operator
 
@@ -35,8 +35,8 @@ Boolean Values and Boolean Expressions
    :controls:
    :thumb: ../_static/booleanexpressions.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/booleanexpressions.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/booleanexpressions.webm
+   http://media.interactivepython.org/thinkcsVideos/booleanexpressions.mov
+   http://media.interactivepython.org/thinkcsVideos/booleanexpressions.webm
 
 The Python type for storing true and false values is called ``bool``, named
 after the British mathematician, George Boole. George Boole created *Boolean
@@ -47,7 +47,7 @@ is important, since ``true`` and ``false`` are not boolean values (remember Pyth
 sensitive).
 
 .. activecode:: ch05_1
-    
+
     print(True)
     print(type(True))
     print(type(False))
@@ -69,7 +69,7 @@ The equality operator, ``==``, compares two values and produces a boolean value 
 two values are equal to one another.
 
 .. activecode:: ch05_2
-    
+
     print(5 == 5)
     print(5 == 6)
 
@@ -79,7 +79,7 @@ to ``True``.  In the second statement, 5 is not equal to 6, so we get ``False``.
 The ``==`` operator is one of six common **comparison operators**; the others are:
 
 .. sourcecode:: python
-    
+
     x != y               # x is not equal to y
     x > y                # x is greater than y
     x < y                # x is less than y
@@ -93,13 +93,13 @@ is an assignment operator and ``==`` is a comparison operator. Also, there is
 no such thing as ``=<`` or ``=>``.
 
 .. With reassignment it is especially important to distinguish between an
-.. assignment statement and a boolean expression that tests for equality. 
-.. Because Python uses the equal token (``=``) for assignment, 
+.. assignment statement and a boolean expression that tests for equality.
+.. Because Python uses the equal token (``=``) for assignment,
 .. it is tempting to interpret a statement like
 .. ``a = b`` as a boolean test.  Unlike mathematics, it is not!  Remember that the Python token
 .. for the equality operator is ``==``.
 
-Note too that an equality test is symmetric, but assignment is not. For example, 
+Note too that an equality test is symmetric, but assignment is not. For example,
 if ``a == 7`` then ``7 == a``. But in Python, the statement ``a = 7``
 is legal and ``7 = a`` is not. (Can you explain why?)
 
@@ -127,8 +127,8 @@ is legal and ``7 = a`` is not. (Can you explain why?)
 
 .. index::
     single: logical operator
-    single: operator; logical 
-    
+    single: operator; logical
+
 Logical operators
 -----------------
 
@@ -150,7 +150,7 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
 
     x = 5
     print(x>0 and x<10)
- 
+
     n = 25
     print(n%2 == 0 or n%3 == 0)
 
@@ -181,7 +181,7 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
 Precedence of Operators
 -----------------------
 
-We have now added a number of additional operators to those we learned in the previous chapters.  It is important to understand how these operators relate to the others with respect to operator precedence.  Python will always evaluate the arithmetic operators first (** is highest, then multiplication/division, then addition/subtraction).  Next comes the relational operators.  Finally, the logical operators are done last.  This means that the expression ``x*5 >= 10 and y-6 <= 20`` will be evaluated so as to first perform the arithmetic and then check the relationships.  The ``and`` will be done last.  Although many programmers might place parenthesis around the two relational expressions, it is not necessary. 
+We have now added a number of additional operators to those we learned in the previous chapters.  It is important to understand how these operators relate to the others with respect to operator precedence.  Python will always evaluate the arithmetic operators first (** is highest, then multiplication/division, then addition/subtraction).  Next comes the relational operators.  Finally, the logical operators are done last.  This means that the expression ``x*5 >= 10 and y-6 <= 20`` will be evaluated so as to first perform the arithmetic and then check the relationships.  The ``and`` will be done last.  Although many programmers might place parenthesis around the two relational expressions, it is not necessary.
 
 The following table summarizes the operator precedence from highest to lowest.  A complete table for the entire language can be found in the `Python Documentation <http://docs.python.org/py3k/reference/expressions.html#expression-lists>`_.
 
@@ -213,7 +213,7 @@ Level     Category        Operators
    :feedback_a: Yes, * and + are the strongest binding, followed by &gt; and ==, and then the keyword &quot;and&quot;
    :feedback_b: Arithmetic operators (*, +) bind stronger than comparison operators (&gt;, ==)
    :feedback_c: This grouping assumes Python simply binds from left to right, which is incorrect.  It follows the binding precedence listed in the table in this section.
-   :feedback_d: This grouping assumes that &quot;and&quot; has a stronger binding precedence than ==, which is not true. 
+   :feedback_d: This grouping assumes that &quot;and&quot; has a stronger binding precedence than ==, which is not true.
 
    Which of the following properly expresses the  precedence of operators (using parentheses) in the following expression: 5*3 > 10 and 4+6==11
 
@@ -235,8 +235,8 @@ Conditional Execution: Binary Selection
    :controls:
    :thumb: ../_static/binaryselection.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/binaryselection.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/binaryselection.webm
+   http://media.interactivepython.org/thinkcsVideos/binaryselection.mov
+   http://media.interactivepython.org/thinkcsVideos/binaryselection.webm
 
 
 In order to write useful programs, we almost always need the ability to check
@@ -245,13 +245,13 @@ also referred to as **conditional statements** give us this ability. The simples
 statement.  This is sometimes referred to as **binary selection** since there are two possible paths of execution.
 
 .. activecode:: ch05_4
-    
+
     x = 15
 
     if x % 2 == 0:
         print(x, "is even")
     else:
-        print(x, "is odd")    
+        print(x, "is odd")
 
 
 The syntax for an ``if`` statement looks like this:
@@ -265,11 +265,11 @@ The syntax for an ``if`` statement looks like this:
 
 The boolean expression after the ``if`` statement is called the **condition**.
 If it is true, then the indented statements get executed. If not, then the statements
-indented under the `else` clause get executed. 
+indented under the `else` clause get executed.
 
-.. sidebar::  Flowchart of a **if** statement with an **else** 
+.. sidebar::  Flowchart of a **if** statement with an **else**
 
-   .. image:: Figures/flowchart_if_else.png  
+   .. image:: Figures/flowchart_if_else.png
 
 
 
@@ -279,15 +279,15 @@ line begins with the keyword ``if`` followed by a *boolean expression* and ends 
 a colon (:).
 
 The indented statements that follow are called a **block**. The first
-unindented statement marks the end of the block. 
+unindented statement marks the end of the block.
 
 Each of the statements inside the first block of statements is executed in order if the boolean
-expression evaluates to ``True``. The entire first block of statements 
+expression evaluates to ``True``. The entire first block of statements
 is skipped if the boolean expression evaluates to ``False``, and instead
-all the statements under the ``else`` clause are executed. 
+all the statements under the ``else`` clause are executed.
 
 There is no limit on the number of statements that can appear under the two clauses of an
-``if`` statement, but there has to be at least one statement in each block.  
+``if`` statement, but there has to be at least one statement in each block.
 
 
 .. admonition:: Lab
@@ -396,28 +396,28 @@ Omitting the `else` Clause: Unary Selection
    :controls:
    :thumb: ../_static/unaryselection.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/unaryselection.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/unaryselection.webm
+   http://media.interactivepython.org/thinkcsVideos/unaryselection.mov
+   http://media.interactivepython.org/thinkcsVideos/unaryselection.webm
 
 
 
 
-.. sidebar::  Flowchart of an **if** with no **else** 
+.. sidebar::  Flowchart of an **if** with no **else**
 
    .. image:: Figures/flowchart_if_only.png
 
-Another form of the ``if`` statement is one in which the ``else`` clause is omitted entirely.  
+Another form of the ``if`` statement is one in which the ``else`` clause is omitted entirely.
 This creates what is sometimes called **unary selection**.
 In this case, when the condition evaluates to ``True``, the statements are
 executed, otherwise the flow of execution continues to the statement after the ``if``.
 
-      
+
 .. activecode:: ch05_unaryselection
-    
+
     x = 10
     if x < 0:
         print("The negative number ",  x, " is not valid here.")
-    print("This is always printed")   
+    print("This is always printed")
 
 
 What would be printed if the value of `` x`` is negative?  Try it.
@@ -454,7 +454,7 @@ What would be printed if the value of `` x`` is negative?  Try it.
    b.
    <pre>
    The negative number -10 is not valid here
-   This is always printed 
+   This is always printed
    </pre>
    c.
    <pre>
@@ -468,7 +468,7 @@ What would be printed if the value of `` x`` is negative?  Try it.
    :feedback_a: Every else-block must have exactly one corresponding if-block.  If you want to chain if-else statements together, you must use the else if construct, described in section 6.7.
    :feedback_b: This will cause an error because the second else-block is not attached to a corresponding if-block.
 
-   Will the following code cause an error? 
+   Will the following code cause an error?
    <pre>
    x = -10
    if x < 0:
@@ -499,10 +499,10 @@ The following pattern of selection shows how we might decide how they are relate
         else:
             print("x and y must be equal")
 
-The outer conditional contains two branches. 
+The outer conditional contains two branches.
 The second branch (the else from the outer) contains another ``if`` statement, which
 has two branches of its own. Those two branches could contain
-conditional statements as well.  
+conditional statements as well.
 
 The flow of control can be seen in this flowchart illustration.
 
@@ -531,12 +531,12 @@ Here is a complete program that defines values for ``x`` and ``y``.  Run the pro
 	In some programming languages, matching the if and the else is a problem.  However, in Python this is not the case.
 	The indentation pattern tells us exactly which else
 	belongs to which if.
-        
+
 If you are still a bit unsure, here is the same selection as part of a codelens example.  Step through it to see how the correct ``print`` is chosen.
 
 .. codelens:: sel1
     :showoutput:
-    
+
     x = 10
     y = 10
 
@@ -575,7 +575,7 @@ If you are still a bit unsure, here is the same selection as part of a codelens 
    </pre>
 
 .. index::
-    single: chained conditional 
+    single: chained conditional
     single: conditional; chained
 
 Chained conditionals
@@ -584,9 +584,9 @@ Chained conditionals
 Python provides an alternative way to write nested selection such as the one shown in the previous section.
 This is sometimes referred to as a **chained
 conditional**
-   
+
 .. sourcecode:: python
-    
+
     if x < y:
         print("x is less than y")
     elif x > y:
@@ -596,8 +596,8 @@ conditional**
 
 The flow of control can be drawn in a different orientation but the resulting pattern is identical to the one shown above.
 
-.. image:: Figures/flowchart_chained_conditional.png        
-        
+.. image:: Figures/flowchart_chained_conditional.png
+
 ``elif`` is an abbreviation of ``else if``. Again, exactly one branch will be
 executed. There is no limit of the number of ``elif`` statements but only a
 single (and optional) final ``else`` statement is allowed and it must be the last
@@ -658,7 +658,7 @@ Here is the same program using ``elif``.
    <pre>
    if x < 0:
        print("The negative number ",  x, " is not valid here.")
-   else (x > 0): 
+   else (x > 0):
        print(x, " is a positive number")
    else:
        print(x, " is 0")
@@ -667,16 +667,16 @@ Here is the same program using ``elif``.
      <pre>
    if x < 0:
        print("The negative number ",  x, " is not valid here.")
-   elif (x > 0): 
+   elif (x > 0):
        print(x, " is a positive number")
    else:
        print(x, " is 0")
    </pre>
-   III. 
+   III.
      <pre>
    if x < 0:
        print("The negative number ",  x, " is not valid here.")
-   if (x > 0): 
+   if (x > 0):
        print(x, " is a positive number")
    else:
        print(x, " is 0")
@@ -688,8 +688,8 @@ Here is the same program using ``elif``.
    :answer_c: c
    :correct: c
    :feedback_a: While the value in x is less than the value in y (3 is less than 5) it is not less than the value in z (3 is not less than 2).
-   :feedback_b: The value in y is not less than the value in x (5 is not less than 3).  
-   :feedback_c: Since the first two Boolean expressions are false the else will be executed.   
+   :feedback_b: The value in y is not less than the value in x (5 is not less than 3).
+   :feedback_c: Since the first two Boolean expressions are false the else will be executed.
 
    What will the following code print if x = 3, y = 5, and z = 2?
    <pre>
@@ -700,7 +700,7 @@ Here is the same program using ``elif``.
    else:
        print ("c")
    </pre>
-  
+
 
 Boolean Functions
 -----------------
@@ -709,14 +709,14 @@ Functions can return boolean values, which is often convenient for hiding
 complicated tests inside functions. For example:
 
 .. activecode:: ch06_boolfun1
-    
+
     def isDivisible(x, y):
         if x % y == 0:
-            result = True 
+            result = True
         else:
             result = False
 
-        return result 
+        return result
 
     print(isDivisible(10,5))
 
@@ -730,7 +730,7 @@ condition of the ``if`` statement is itself a boolean expression. We can return
 it directly, avoiding the ``if`` statement altogether:
 
 .. sourcecode:: python
-    
+
     def isDivisible(x, y):
         return x % y == 0
 
@@ -738,7 +738,7 @@ it directly, avoiding the ``if`` statement altogether:
 Boolean functions are often used in conditional statements:
 
 .. sourcecode:: python
-    
+
     if isDivisible(x, y):
         ... # do something ...
     else:
@@ -750,12 +750,12 @@ but the extra comparison is  not necessary.  The following example shows the ``i
 with a few other actual parameters to see what is printed.
 
 .. activecode:: ch06_boolfun2
-    
+
     def isDivisible(x, y):
         if x % y == 0:
-            result = True 
+            result = True
         else:
-            result = False 
+            result = False
 
         return result
 
@@ -768,12 +768,12 @@ Here is the same program in codelens.
 
 .. codelens:: ch06_boolcodelens
     :showoutput:
-    
+
     def isDivisible(x, y):
         if x % y == 0:
-            result = True 
+            result = True
         else:
-            result = False 
+            result = False
 
         return result
 
@@ -888,56 +888,56 @@ Exercises
 
         .. actex:: ex_6_1
 
-   
+
 #.  Give the **logical opposites** of these conditions.  You are not allowed to use the ``not`` operator.
-    
-    #.  ``a > b`` 
+
+    #.  ``a > b``
     #.  ``a >= b``
     #.  ``a >= 18  and  day == 3``
     #.  ``a >= 18  and  day != 3``
-    
+
         .. actex:: ex_6_2
-    
-#.  Write a function which is given an exam mark, and it returns a string --- the grade for that mark --- according to this 
-    scheme:   
-    
-    .. table::  
-    
+
+#.  Write a function which is given an exam mark, and it returns a string --- the grade for that mark --- according to this
+    scheme:
+
+    .. table::
+
        =======   =====
        Mark      Grade
        =======   =====
-       >= 90     A  
-       [80-90)   B   
-       [70-80)   C   
-       [60-70)   D 
-       < 60      F   
-       =======   =====    
-    
-    The square and round brackets denote closed and open intervals. 
+       >= 90     A
+       [80-90)   B
+       [70-80)   C
+       [60-70)   D
+       < 60      F
+       =======   =====
+
+    The square and round brackets denote closed and open intervals.
     A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.
-    
-    Let ``xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]`` 
-    
+
+    Let ``xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]``
+
     Test your function by printing the mark and the grade for all the elements in this list.
-    
+
     .. actex:: ex_6_3
 
-#.  Modify the turtle bar chart program so that the bar for any value 
+#.  Modify the turtle bar chart program so that the bar for any value
     of 200 or more is filled with red, values between [100 and 200) are filled yellow,
-    and bars representing values less than 100 are filled green.    
-  
+    and bars representing values less than 100 are filled green.
+
     .. actex:: ex_6_4
 
-#.  In the turtle bar chart program, what do you expect to happen if one or more 
+#.  In the turtle bar chart program, what do you expect to happen if one or more
     of the data values in the list is negative?   Try it out.  Change the
     program so that when it prints the text value for the negative bars, it puts
-    the text below the bottom of the bar. 
-  
+    the text below the bottom of the bar.
+
     .. actex:: ex_6_5
 
 #.  Write a function ``findHypot`` which, given the length of two sides of a right-angled triangle, returns
     the length of the hypotenuse.  (Hint:  ``x ** 0.5`` will return the square root, or use ``sqrt`` from the math module)
-    
+
     .. actex:: ex_6_6
 
         from test import testEqual
@@ -954,7 +954,7 @@ Exercises
    and returns ``True`` if the argument is an **even number** and ``False`` if
    it is **odd**.
 
-    
+
    .. actex:: ex_6_7
 
        from test import testEqual
@@ -982,7 +982,7 @@ Exercises
        testEqual(is_odd(1), True)
        testEqual(is_odd(0), False)
 
-#. Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its 
+#. Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its
    argument is an odd integer.
 
    .. actex:: ex_6_9
@@ -998,24 +998,24 @@ Exercises
        testEqual(is_odd(0), False)
 
 
-#.  Write a function ``is_rightangled`` which, given the length of three sides of a triangle, 
+#.  Write a function ``is_rightangled`` which, given the length of three sides of a triangle,
     will determine whether the triangle is right-angled.  Assume that the third argument to the
-    function is always the longest side.  It will return ``True`` if the triangle 
-    is right-angled, or ``False`` otherwise.  
-    
+    function is always the longest side.  It will return ``True`` if the triangle
+    is right-angled, or ``False`` otherwise.
+
     Hint: floating point arithmetic is not always exactly accurate,
-    so it is not safe to test floating point numbers for equality. 
+    so it is not safe to test floating point numbers for equality.
     If a good programmer wants to know whether
     ``x`` is equal or close enough to ``y``, they would probably code it up as
-    
+
     .. sourcecode:: python
-    
+
       if  abs(x-y) < 0.000001:      # if x is approximately equal to y
-          ...    
-   
+          ...
+
 
     .. actex:: ex_6_10
-    
+
         from test import testEqual
 
         def is_rightangled(a,b,c):

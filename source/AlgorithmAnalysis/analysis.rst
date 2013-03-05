@@ -1,8 +1,8 @@
 ..  Copyright (C)  Brad Miller, David Ranum
     Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or 
-    any later version published by the Free Software Foundation; with 
-    Invariant Sections being Forward, Prefaces, and Contributor List, 
+    under the terms of the GNU Free Documentation License, Version 1.3 or
+    any later version published by the Free Software Foundation; with
+    Invariant Sections being Forward, Prefaces, and Contributor List,
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
 
@@ -180,7 +180,7 @@ adding the first 100,000 integers?
     Sum is 5000050000 required  0.0194821 seconds
     Sum is 5000050000 required  0.0178988 seconds
     Sum is 5000050000 required  0.0188949 seconds
-    >>> 
+    >>>
 
 Again, the time required for each run, although longer, is very
 consistent, averaging about 10 times more seconds. For ``n`` equal to
@@ -330,19 +330,19 @@ these distinctions so they are not misled by one particular case.
 
 .. _tbl_fntable:
 
-================= ============= 
-         **f(n)**      **Name** 
-================= ============= 
-      :math:`1`      Constant 
- :math:`\log n`   Logarithmic 
-      :math:`n`        Linear 
-:math:`n\log n`    Log Linear 
-  :math:`n^{2}`     Quadratic 
-  :math:`n^{3}`         Cubic 
-  :math:`2^{n}`   Exponential 
-================= ============= 
+================= =============
+         **f(n)**      **Name**
+================= =============
+      :math:`1`      Constant
+ :math:`\log n`   Logarithmic
+      :math:`n`        Linear
+:math:`n\log n`    Log Linear
+  :math:`n^{2}`     Quadratic
+  :math:`n^{3}`         Cubic
+  :math:`2^{n}`   Exponential
+================= =============
 
-    {Common Functions for Big-O} 
+    {Common Functions for Big-O}
 
 A number of very common order of magnitude functions will come up over
 and over as you study algorithms. These are shown in :ref:`Table 1 <tbl_fntable>`. In
@@ -421,8 +421,8 @@ to see that :math:`T(n)` then follows the quadratic function as
    :controls:
    :thumb: ../_static/function_intro.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/findmin.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/findmin.webm
+   http://media.interactivepython.org/pythondsVideos/findmin.mov
+   http://media.interactivepython.org/pythondsVideos/findmin.webm
 
 An Anagram Detection Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -479,7 +479,7 @@ replacement. :ref:`Listing 6 <lst_anagramSolution>` shows this function.
 
         return stillOK
 
-    print(anagramSolution1('abcd','dcba'))  
+    print(anagramSolution1('abcd','dcba'))
 
 To analyze this algorithm, we need to note that each of the *n*
 characters in ``s1`` will cause an iteration through up to *n*
@@ -631,7 +631,7 @@ determine the best use of computing resources given a particular
 problem.
 
 .. admonition:: Self Check
-   
+
    .. multiplechoice:: analysis_1
        :iscode:
        :answer_a: O(n)
@@ -820,26 +820,26 @@ from the numbers above.
 
 .. _tbl_listbigo:
 
-================== ================== 
-         Operation   Big-O Efficiency 
-================== ================== 
-          index []               O(1) 
-  index assignment               O(1) 
-            append               O(1) 
-             pop()               O(1) 
-            pop(i)               O(n) 
-    insert(i,item)               O(n) 
-      del operator               O(n) 
-         iteration               O(n) 
-     contains (in)               O(n) 
-   get slice [x:y]               O(k) 
-         del slice               O(n) 
-         set slice             O(n+k) 
-           reverse               O(n) 
-       concatenate               O(k) 
-              sort         O(n log n) 
-          multiply              O(nk) 
-================== ================== 
+================== ==================
+         Operation   Big-O Efficiency
+================== ==================
+          index []               O(1)
+  index assignment               O(1)
+            append               O(1)
+             pop()               O(1)
+            pop(i)               O(n)
+    insert(i,item)               O(n)
+      del operator               O(n)
+         iteration               O(n)
+     contains (in)               O(n)
+   get slice [x:y]               O(k)
+         del slice               O(n)
+         set slice             O(n+k)
+           reverse               O(n)
+       concatenate               O(k)
+              sort         O(n log n)
+          multiply              O(nk)
+================== ==================
 
     Big-O Efficiency of Python List Operations
 
@@ -967,16 +967,16 @@ that a dictionary could be implemented.
 
 .. _tbl_dictbigo:
 
-================== ================== 
-         operation   Big-O Efficiency 
-================== ================== 
-              copy               O(n) 
-          get item               O(1) 
-          set item               O(1) 
-       delete item               O(1) 
-     contains (in)               O(1) 
-         iteration               O(n) 
-================== ================== 
+================== ==================
+         operation   Big-O Efficiency
+================== ==================
+              copy               O(n)
+          get item               O(1)
+          set item               O(1)
+       delete item               O(1)
+     contains (in)               O(1)
+         iteration               O(n)
+================== ==================
 
     {Big-O Efficiency of Python Dictionary Operations}
 
@@ -1071,8 +1071,8 @@ the Python wiki has a nice time complexity page that can be found at
    :controls:
    :thumb: ../_static/function_intro.png
 
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/pythonops.mov
-   http://knuth.luther.edu/~pythonworks/pythondsVideos/pythonops.webm
+   http://media.interactivepython.org/pythondsVideos/pythonops.mov
+   http://media.interactivepython.org/pythondsVideos/pythonops.webm
 
 Summary
 -------
@@ -1086,12 +1086,12 @@ Summary
 Key Terms
 ---------
 
-========================= ================ ==================== 
-             average case   Big-O notation          brute force 
-             checking off      exponential               linear 
-               log linear      logarithmic   order of magnitude 
-                quadratic  time complexity           worst case 
-========================= ================ ==================== 
+========================= ================ ====================
+             average case   Big-O notation          brute force
+             checking off      exponential               linear
+               log linear      logarithmic   order of magnitude
+                quadratic  time complexity           worst case
+========================= ================ ====================
 
 Discussion Questions
 --------------------

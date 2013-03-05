@@ -6,7 +6,7 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-    
+
 ..  shortname:: IntroToFunctions
 ..  description:: This is the introduction to the idea of defining and calling a function.
 
@@ -21,24 +21,24 @@ Functions
 
 Functions
 ---------
-      
+
 .. video:: function_intro
    :controls:
    :thumb: ../_static/function_intro.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/FunctionsIntro.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/FunctionsIntro.webm
+   http://media.interactivepython.org/thinkcsVideos/FunctionsIntro.mov
+   http://media.interactivepython.org/thinkcsVideos/FunctionsIntro.webm
 
 In Python, a **function** is a named sequence of statements
 that belong together.  Their primary purpose is to help us
 organize programs into chunks that match how we think about
 the solution to the problem.
 
- 
+
 The syntax for a **function definition** is:
 
 .. sourcecode:: python
-    
+
     def NAME( PARAMETERS ):
         STATEMENTS
 
@@ -58,8 +58,8 @@ pattern:
    indented the same amount -- *4 spaces is the Python standard* -- from
    the header line.
 
-We've already seen the `for` loop which follows this pattern.   
-   
+We've already seen the `for` loop which follows this pattern.
+
 In a function definition, the keyword in the header is ``def``, which is
 followed by the name of the function and some *parameters* enclosed in
 parentheses. The parameter list may be empty, or it may contain any number of
@@ -71,29 +71,29 @@ need to receive from the user of the function.  When you use a function, you pro
 
 The figure below shows this relationship.  A function needs certain information to do its work.  These values, often called **arguments** or **actual parameters**, are passed to the function by the user.
 
-.. image:: Figures/blackboxproc.png    
+.. image:: Figures/blackboxproc.png
 
 This type of diagram is often called a **black-box diagram** because it only states the requirements from the perspective of the user.  The user must know the name of the function and what arguments need to be passed.  The details of how the function works are hidden inside the "black-box".
 
 Suppose we're working with turtles and a common operation we need is to draw
 squares.  It would make sense if we did not have to duplicate all the steps each time we want to make a square.   "Draw a square" can be thought of as an *abstraction* of a number of smaller steps.  We will need to provide two pieces of information for the function to do its work: a turtle to do the drawing and a size for the side of the square.  We could represent this using the following black-box diagram.
 
-.. image:: Figures/turtleproc.png    
+.. image:: Figures/turtleproc.png
 
 Here is a function to capture this idea.  Give it a try.
 
 .. activecode:: ch04_1
 
-    import turtle 
+    import turtle
 
     def drawSquare(t, sz):
-        """Make turtle t draw a square of with side sz."""    
-        
+        """Make turtle t draw a square of with side sz."""
+
         for i in range(4):
-            t.forward(sz)             
+            t.forward(sz)
             t.left(90)
-      
-      
+
+
     wn = turtle.Screen()              # Set up the window and its attributes
     wn.bgcolor("lightgreen")
 
@@ -108,20 +108,20 @@ of the square we want drawn.  In the function definition they are called ``t`` a
 ends --- it depends on the indentation and the blank lines don't count for
 this purpose!
 
-.. admonition::  docstrings 
+.. admonition::  docstrings
 
     If the first thing after the function header is a string (some tools insist that
-    it must be a triple-quoted string), it is called a **docstring** 
-    and gets special treatment in Python and in some of the programming tools.  
+    it must be a triple-quoted string), it is called a **docstring**
+    and gets special treatment in Python and in some of the programming tools.
 
     Another way to retrieve this information is to use the interactive
     interpreter, and enter the expression ``<function_name>.__doc__``, which will retrieve the
     docstring for the function.  So the string you write as documentation at the start of a function is
     retrievable by python tools *at runtime*.  This is different from comments in your code,
-    which are completely eliminated when the program is parsed. 
-    
+    which are completely eliminated when the program is parsed.
+
     By convention, Python programmers use docstrings for the key documentation of
-    their functions.    
+    their functions.
 
 Defining a new function does not make the function run. To do that we need a
 **function call**.  This is also known as a **function invocation**. We've already seen how to call some built-in functions like
@@ -129,7 +129,7 @@ Defining a new function does not make the function run. To do that we need a
 executed followed by a list of values, called *arguments*, which are assigned
 to the parameters in the function definition.  So in the second to the last line of
 the program, we call the function, and pass ``alex`` as the turtle to be manipulated,
-and 50 as the size of the square we want. 
+and 50 as the size of the square we want.
 
 .. The parameters being sent to the function, sometimes referred to as the **actual parameters** or **arguments**,
 .. represent the specific data items that the function will use when it is executing.
@@ -138,24 +138,24 @@ and 50 as the size of the square we want.
 
 
 
-Once we've defined a function, we can call it as often as we like and its 
+Once we've defined a function, we can call it as often as we like and its
 statements will be executed each time we call it.  In this case, we could use it to get
-one of our turtles to draw a square and then we can move the turtle and have it draw a different square in a 
+one of our turtles to draw a square and then we can move the turtle and have it draw a different square in a
 different location.  Note that we lift the tail so that when ``alex`` moves there is no trace.  We put the tail
 back down before drawing the next square.
 
 .. activecode:: ch04_1a
 
-    import turtle 
+    import turtle
 
     def drawSquare(t, sz):
-        """Make turtle t draw a square of with side sz."""    
-        
+        """Make turtle t draw a square of with side sz."""
+
         for i in range(4):
-            t.forward(sz)             
+            t.forward(sz)
             t.left(90)
-      
-      
+
+
     wn = turtle.Screen()          # Set up the window and its attributes
     wn.bgcolor("lightgreen")
 
@@ -178,13 +178,13 @@ been defined, we can call it as many times as we like with whatever actual param
 
     import turtle
 
-    def drawMulticolorSquare(t, sz):  
+    def drawMulticolorSquare(t, sz):
         """Make turtle t draw a multi-colour square of sz."""
         for i in ['red','purple','hotpink','blue']:
             t.color(i)
             t.forward(sz)
             t.left(90)
- 
+
     wn = turtle.Screen()             # Set up the window and its attributes
     wn.bgcolor("lightgreen")
 
@@ -228,7 +228,7 @@ been defined, we can call it as many times as we like with whatever actual param
    :feedback_a: Functions have little effect on how fast the program runs.
    :feedback_b: While functions are not required, they help the programmer better think about the solution by organizing pieces of the solution into logical chunks that can be reused.
    :feedback_c: In the first several chapters, youíve seen many examples of Python programs written without the use of functions.  While writing and using functions is desirable and essential for good programming style as your programs get longer, it is not required.
-   :feedback_d: Not all functions calculate values.  
+   :feedback_d: Not all functions calculate values.
 
    What is one main purpose of a function?
 
@@ -237,7 +237,7 @@ been defined, we can call it as many times as we like with whatever actual param
    :answer_b: def drawCircle:
    :answer_c: drawCircle(t, sz):
    :answer_d: def drawCircle(t, sz)
-   :correct: a 
+   :correct: a
    :feedback_a: A function may take zero or more parameters.  It does not have to have two.  In this case the size of the circle might be specified in the body of the function.
    :feedback_b: A function needs to specify its parameters in its header.
    :feedback_c: A function definition needs to include the keyword def.
@@ -273,7 +273,7 @@ been defined, we can call it as many times as we like with whatever actual param
    :answer_d: t, sz, i
    :correct: c
    :feedback_a: i is a variable used inside of the function, but not a parameter, which is passed in to the function.
-   :feedback_b: t is only one of the parameters to this function.   
+   :feedback_b: t is only one of the parameters to this function.
    :feedback_c: Yes, the function specifies two parameters: t and sz.
    :feedback_d: the parameters include only those variables whose values that the function expects to receive as input.  They are specified in the header of the function.
 
@@ -385,9 +385,9 @@ to stress it, a *non-fruitful* function.
 
 
 Fruitful functions still allow the user to provide information (arguments).  However there is now an additional
-piece of data that is returned from the function.  
+piece of data that is returned from the function.
 
-.. image:: Figures/blackboxfun.png    
+.. image:: Figures/blackboxfun.png
 
 
 How do we write our own fruitful function?  Lets start with a very simple
@@ -396,7 +396,7 @@ as a parameter and return the result of squaring that number.  Here is the
 black-box diagram with the Python code following.
 
 
-.. image:: Figures/squarefun.png    
+.. image:: Figures/squarefun.png
 
 .. activecode:: ch04_square
 
@@ -656,8 +656,8 @@ But this example demonstrates that that is clearly not how Python operates.
    :answer_b: The range of code where a variable has a certain value.
    :answer_c: Its name
    :correct: b
-   :feedback_a: Value is the contents of the variable.  Scope concerns where the variable is &quot;known&quot;.  
-   :feedback_b: 
+   :feedback_a: Value is the contents of the variable.  Scope concerns where the variable is &quot;known&quot;.
+   :feedback_b:
    :feedback_c: The name of a variable is just an identifier or alias.  Scope concerns where the variable is &quot;known&quot;.
 
    What is a variable's scope?
@@ -691,8 +691,8 @@ The Accumulator Pattern
    :controls:
    :thumb: ../_static/accumulatorpattern.png
 
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/accumulatorpattern.mov
-   http://knuth.luther.edu/~pythonworks/thinkcsVideos/accumulatorpattern.webm
+   http://media.interactivepython.org/thinkcsVideos/accumulatorpattern.mov
+   http://media.interactivepython.org/thinkcsVideos/accumulatorpattern.webm
 
 In the previous example, we wrote a function that computes the square of a number.  The algorithm we used
 in the function was simple: multiply the number by itself.
@@ -702,10 +702,10 @@ of multiplication.
 If you want to multiply two numbers together, the most basic approach is to think of it as repeating the process of
 adding one number to itself.  The number of repetitions is where the second number comes into play.  For example, if we
 wanted to multiply three and five, we could think about it as adding three to itself five times.  Three plus three is six, plus three is nine, plus three is 12, and finally plus three is 15.  Generalizing this, if we want to implement
-the idea of squaring a number, call it `n`, we would add `n` to itself `n` times.  
+the idea of squaring a number, call it `n`, we would add `n` to itself `n` times.
 
 Do this by hand first and try to isolate exactly what steps you take.  You'll
-find you need to keep some "running total" of the sum so far, either on a piece 
+find you need to keep some "running total" of the sum so far, either on a piece
 of paper, or in your head.  Remembering things from one step to the next is
 precisely why we have variables in a program.  This means that we will need some variable
 to remember the "running total".  It should be initialized with a value of zero.  Then, we need to **update** the "running total" the correct number of times.  For each repetition, we'll want
@@ -783,7 +783,7 @@ Here is the same program in codelens.  Step thru the function and watch the "run
    :correct: a
    :feedback_a: The variable runningtotal will be reset to 0 each time through the loop.   However because this assignment happens as the first instruction, the next instruction in the loop will set it back to x.   When the loop finishes, it will have the value x, which is what is returned.
    :feedback_b: Assignment statements are perfectly legal inside loops and will not cause an error.
-   :feedback_c: By putting the statement that sets runningtotal to 0 inside the loop, that statement gets executed every time through the loop, instead of once before the loop begins.  The result is that runningtotal is ìclearedî (reset to 0) each time through the loop. 
+   :feedback_c: By putting the statement that sets runningtotal to 0 inside the loop, that statement gets executed every time through the loop, instead of once before the loop begins.  The result is that runningtotal is ìclearedî (reset to 0) each time through the loop.
    :feedback_d: The line runningtotal=0 is the first line in the for loop, but immediately after this line, the line runningtotal = runningtotal + x will execute, giving runningtotal a non-zero value  (assuming x is non-zero).
 
    Consider the following code:
@@ -794,8 +794,8 @@ Here is the same program in codelens.  Step thru the function and watch the "run
            runningtotal = runningtotal + x
        return runningtotal
    </pre>
-   What happens if you put the initialization of runningtotal (the    
-   line runningtotal = 0) inside the for loop as the first 
+   What happens if you put the initialization of runningtotal (the
+   line runningtotal = 0) inside the for loop as the first
    instruction in the loop?
 
 Functions can call other functions
@@ -862,18 +862,18 @@ this rather nice code that can draw a rectangle.
     def drawRectangle(t, w, h):
         """Get turtle t to draw a rectangle of width w and height h."""
         for i in range(2):
-            t.forward(w)             
+            t.forward(w)
             t.left(90)
             t.forward(h)
             t.left(90)
-            
+
 The parameter names are deliberately chosen as single letters to ensure they're not misunderstood.
 In real programs, once you've had more experience, we will insist on better variable names than this.
 The point is that the program doesn't "understand" that you're drawing a rectangle or that the
-parameters represent the width and the height.  Concepts like rectangle, width, and height are 
-the meaning we humans have, not concepts that the program or the computer understands.    
+parameters represent the width and the height.  Concepts like rectangle, width, and height are
+the meaning we humans have, not concepts that the program or the computer understands.
 
-*Thinking like a computer scientist* involves looking for patterns and 
+*Thinking like a computer scientist* involves looking for patterns and
 relationships.  In the code above, we've done that to some extent.  We did
 not just draw four sides. Instead, we spotted that we could draw the
 rectangle as two halves and used a loop to repeat that pattern twice.
@@ -881,7 +881,7 @@ rectangle as two halves and used a loop to repeat that pattern twice.
 But now we might spot that a square is a special kind of rectangle.  A square
 simply uses the same value for both the height and the width.
 We already have a function that draws a rectangle, so we can use that to draw
-our square. 
+our square.
 
 .. sourcecode:: python
 
@@ -897,7 +897,7 @@ Here is the entire example with the necessary set up code.
     def drawRectangle(t, w, h):
         """Get turtle t to draw a rectangle of width w and height h."""
         for i in range(2):
-            t.forward(w)             
+            t.forward(w)
             t.left(90)
             t.forward(h)
             t.left(90)
@@ -920,11 +920,11 @@ There are some points worth noting here:
 
 * Functions can call other functions.
 * Rewriting `drawSquare` like this captures the relationship
-  that we've spotted.  
+  that we've spotted.
 * A caller of this function might say `drawSquare(tess, 50)`.  The parameters
   of this function, ``tx`` and ``sz``, are assigned the values of the tess object, and
   the int 50 respectively.
-* In the body of the function they are just like any other variable. 
+* In the body of the function they are just like any other variable.
 * When the call is made to `drawRectangle`, the values in variables `tx` and `sz`
   are fetched first, then the call happens.  So as we enter the top of
   function `drawRectangle`, its variable `t` is assigned the tess object, and `w` and
@@ -936,11 +936,11 @@ new functions. Actually, there are a lot of reasons, but this example
 demonstrates two:
 
 #. Creating a new function gives you an opportunity to name a group of
-   statements. Functions can simplify a program by hiding a complex computation 
-   behind a single command. The function (including its name) can capture your 
-   mental chunking, or *abstraction*, of the problem.  
-#. Creating a new function can make a program smaller by eliminating repetitive 
-   code.  
+   statements. Functions can simplify a program by hiding a complex computation
+   behind a single command. The function (including its name) can capture your
+   mental chunking, or *abstraction*, of the problem.
+#. Creating a new function can make a program smaller by eliminating repetitive
+   code.
 #. Sometimes you can write functions that allow you to solve a specific
    problem using a more general solution.
 
@@ -969,7 +969,7 @@ Execution always begins at the first statement of the program.  Statements are
 executed one at a time, in order, from top to bottom.
 Function definitions do not alter the flow of execution of the program, but
 remember that statements inside the function are not executed until the
-function is called. 
+function is called.
 
 .. Although it is not common, you can define one function
 .. inside another. In this case, the inner definition isn't executed until the
@@ -1005,7 +1005,7 @@ until you reach a point where that function is called.
     single: statement; import
     single: composition
     single: function; composition
-    
+
 
 .. index:: bar chart
 
@@ -1023,7 +1023,7 @@ until you reach a point where that function is called.
    :answer_e: 1, 5, 9, 10, 6, 2, 3, 7, 11
    :correct: e
    :feedback_a: Although Python typically processes lines in order from top to bottom, function definitions and calls are an exception to this rule.
-   :feedback_b: Although Python typically processes lines in order from top to bottom, function definitions and calls are an exception to this rule.  Although this order skips blank lines, it still lists the lines of code in order. 
+   :feedback_b: Although Python typically processes lines in order from top to bottom, function definitions and calls are an exception to this rule.  Although this order skips blank lines, it still lists the lines of code in order.
    :feedback_c: This is close, in that Python will not execute the functions until after they are called, but there are two problems here.  First, Python does not know which lines are function definitions until it processes them, so it must at least process the function headers before skipping over the functions. Section, notice that line 10 involves a function call.  Python must execute the function square before moving on to line 11.
    :feedback_d: This is close, in that Python will not execute the functions until after they are called, but there is one problem here.  Python does not know which lines are function definitions until it processes them, so it must at least process the function headers before skipping over the functions.
    :feedback_e: Python starts at line 1, notices that it is a function definition and skips over all of the lines in the function definition until it finds a line that it no longer included in the function (line 5).  It then notices line 5 is also a function definition and again skips over the function body to line 9.  On line 10 it notices it has a function to execute, so it goes back and executes the body of that function.  Notice that that function includes another function call.  Finally, it will return to line 11 after the function square is complete.
@@ -1033,11 +1033,11 @@ until you reach a point where that function is called.
    1	def pow(b, p):
    2	    y = b ** p
    3	    return y
-   4	
+   4
    5	def square(x):
    6	    a = pow(x, 2)
    7	    return a
-   8	
+   8
    9	n = 5
    10   result = square(n)
    11   print(result)
@@ -1060,11 +1060,11 @@ until you reach a point where that function is called.
    1	def pow(b, p):
    2	    y = b ** p
    3	    return y
-   4	
+   4
    5	def square(x):
    6	    a = pow(x, 2)
    7	    return a
-   8	
+   8
    9	n = 5
    10   result = square(n)
    11   print(result)
@@ -1077,16 +1077,16 @@ A Turtle Bar Chart
 Recall from our discussion of modules that there were a number of things that turtles can do.
 Here are a couple more tricks (remember that they are all described in the module documentation).
 
-* We can get a turtle to display text on the canvas at the turtle's current position.  The method is called `write`.  
+* We can get a turtle to display text on the canvas at the turtle's current position.  The method is called `write`.
   For example,   ``alex.write("Hello")`` would write the string `hello` at the current position.
 * One can fill a shape (circle, semicircle, triangle, etc.) with a fill color.  It is a two-step process.
   First you call the method `begin_fill`, for example ``alex.begin_fill()``.  Then you draw the shape.
-  Finally, you call `end_fill` ( ``alex.end_fill()``). 
+  Finally, you call `end_fill` ( ``alex.end_fill()``).
 * We've previously set the color of our turtle - we can now also set it's fill color, which need not
-  be the same as the turtle and the pen color.  To do this, we use a method called `fillcolor`, 
-  for example, ``alex.fillcolor("red")``.   
-  
-  
+  be the same as the turtle and the pen color.  To do this, we use a method called `fillcolor`,
+  for example, ``alex.fillcolor("red")``.
+
+
 Ok, so can we get tess to draw a bar chart?  Let us start with some data to be charted,
 
 ``xs = [48, 117, 200, 240, 160, 260, 220]``
@@ -1110,26 +1110,26 @@ a number of times, it makes sense to create a function, ``drawBar``, that will n
         t.right(90)
         t.forward(height)        # And down again!
         t.left(90)               # put the turtle facing the way we found it.
-        
-    ...    
-    for v in xs:                 # assume xs and tess are ready 
-        drawBar(tess, v)    
+
+    ...
+    for v in xs:                 # assume xs and tess are ready
+        drawBar(tess, v)
 
 
 
 It is a nice start!  The important thing here
 was the mental chunking.  To solve the problem we first broke it into smaller pieces.  In particular,
-our chunk 
+our chunk
 is to draw one bar.  We then implemented that chunk with a function. Then, for the whole
 chart, we repeatedly called our function.
 
 Next, at the top of each bar, we'll print the value of the data.
-We'll do this in the body of ``drawBar``, by adding   ``t.write('  ' + str(height))`` 
+We'll do this in the body of ``drawBar``, by adding   ``t.write('  ' + str(height))``
 as the new third line of the body.
-We've put a little space in front of the number, and turned the 
+We've put a little space in front of the number, and turned the
 number into a string.  Without this extra space we tend
-to cramp our text awkwardly against the bar to the left.   
-Finally, we'll add the two methods needed  to fill each bar.  
+to cramp our text awkwardly against the bar to the left.
+Finally, we'll add the two methods needed  to fill each bar.
 
 The one remaining problem is related the fact that our turtle lives in a world where the center is at position (0,0).  In this problem, it would help if (0,0) were in the lower left hand corner.  To solve this we can use our ``setworldcoordinates`` method to rescale the window.  While we are at it, we should make the window fit the data.  The tallest bar will correspond to the maximum data value.  The width of the window will need to be proportional to the number of bars (the number of data values) where each has a width of 40.  Using this information, we can compute the coordinate
 system that makes sense for the data set.  To make it look nice, we'll add a bit of space at the bottom and at the left as a border.
@@ -1190,7 +1190,7 @@ Glossary
     argument
         A value provided to a function when the function is called. This value
         is assigned to the corresponding parameter in the function.  The argument
-        can be the result of an expression which may involve operators, 
+        can be the result of an expression which may involve operators,
         operands and calls to other fruitful functions.
 
     body
@@ -1210,11 +1210,11 @@ Glossary
         The syntax of a compound statement looks like this:
 
         .. sourcecode:: python
-        
+
             keyword expression:
                 statement
                 statement ...
-                                               
+
     docstring
         If the first thing in a function body is a string (or, we'll see later, in other situations
         too) that is attached to the function as its ``__doc__`` attribute.
@@ -1237,7 +1237,7 @@ Glossary
     function definition
         A statement that creates a new function, specifying its name,
         parameters, and the statements it executes.
-        
+
     fruitful function
         A function that returns a value when it is called.
 
@@ -1247,27 +1247,27 @@ Glossary
 
     import statement
         A statement which permits functions and variables defined in another Python
-        module to be brought into the environment of another script.  To use the 
+        module to be brought into the environment of another script.  To use the
         features of the turtle, we need to first import the turtle module.
-        
+
     lifetime
         Variables and objects have lifetimes --- they are created at some point during
-        program execution, and will be destroyed at some time. 
-        
+        program execution, and will be destroyed at some time.
+
     local variable
         A variable defined inside a function. A local variable can only be used
         inside its function.  Parameters of a function are also a special kind
         of local variable.
 
     parameter
-        A name used inside a function to refer to the value which was passed 
+        A name used inside a function to refer to the value which was passed
         to it as an argument.
-           
+
     refactor
-        A fancy word to describe reorganizing your program code, usually to make 
+        A fancy word to describe reorganizing your program code, usually to make
         it more understandable.  Typically, we have a program that is already working,
         then we go back to "tidy it up".  It often involves choosing better variable
-        names, or spotting repeated patterns and moving that code into a function.    
+        names, or spotting repeated patterns and moving that code into a function.
 
 
 
@@ -1277,9 +1277,9 @@ Exercises
 #.  Use the drawsquare function we wrote in this chapter in a program to draw
     the image shown below.
     Assume each side is 20 units.
-    (Hint: notice that the turtle has already moved away from the ending point of the last 
+    (Hint: notice that the turtle has already moved away from the ending point of the last
     square when the program ends.)
-    
+
     .. image:: Figures/five_squares.png
 
     .. actex:: ex_5_1
@@ -1290,9 +1290,9 @@ Exercises
             """Get turtle t to draw a square of sz side"""
 
             for i in range(4):
-                t.forward(sz)             
+                t.forward(sz)
                 t.left(90)
-            
+
         wn = turtle.Screen()
         wn.bgcolor("lightgreen")
 
@@ -1303,10 +1303,10 @@ Exercises
 
         wn.exitonclick()
 
-    
+
 #.  Write a program to draw this. Assume the innermost square is 20 units per side,
-    and each successive square is 20 units bigger, per side, than the one inside it.   
-    
+    and each successive square is 20 units bigger, per side, than the one inside it.
+
     .. image:: Figures/nested_squares.png
 
 
@@ -1324,25 +1324,25 @@ Exercises
 
 #. Draw this pretty pattern.
 
-    .. image:: Figures/tess08.png    
-   
+    .. image:: Figures/tess08.png
+
     .. actex:: ex_5_4
 
 #.  The two spirals in this picture differ only by the turn angle.  Draw both.
 
     .. image:: Figures/tess_spirals.png
        :height: 240
-       
+
     .. actex:: ex_5_5
 
-#.  Write a non-fruitful function `drawEquitriangle(someturtle, somesize)` which calls `drawPoly` from the 
-    previous question to have its turtle draw a equilateral triangle. 
-    
+#.  Write a non-fruitful function `drawEquitriangle(someturtle, somesize)` which calls `drawPoly` from the
+    previous question to have its turtle draw a equilateral triangle.
+
     .. actex:: ex_5_6
 
 
 
-#.  Write a fruitful function `sumTo(n)` that returns the sum of all integer numbers up to and 
+#.  Write a fruitful function `sumTo(n)` that returns the sum of all integer numbers up to and
     including `n`.   So `sumTo(10)` would be `1+2+3...+10` which would return the value 55.  Use the
     equation  (n * (n + 1)) / 2.
 
@@ -1381,15 +1381,15 @@ Exercises
 #.  Write a non-fruitful function to draw a five pointed star, where the length of each side is 100 units.
 
     .. image:: Figures/star.png
-     
+
     .. actex:: ex_5_9
 
-#.  Extend your program above.  Draw five stars, but between each, pick up the pen, 
+#.  Extend your program above.  Draw five stars, but between each, pick up the pen,
     move forward by 350 units, turn right by 144, put the pen down, and draw the next star.
     You'll get something like this:
-    
+
     .. image:: Figures/five_stars.png
-    
+
     What would it look like if you didn't pick up the pen?
 
     .. actex:: ex_5_10
@@ -1408,7 +1408,7 @@ Exercises
     .. actex:: ex_5_12
 
 
-#.  Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and 
+#.  Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and
     including `n`.   This time use the accumulator pattern.
 
     .. actex:: ex_5_13
@@ -1425,7 +1425,7 @@ Exercises
         testEqual(sumTo(1),1)
 
 
-#.  Write a function called `mySqrt` that will approximate the square root of a number, call it n, by using 
+#.  Write a function called `mySqrt` that will approximate the square root of a number, call it n, by using
     Newton's algorithm.
     Newton's approach is an iterative guessing algorithm where the initial guess is n/2 and each subsequent guess
     is computed using   the formula:  newguess = (1/2) * (oldguess + (n/oldguess)).
