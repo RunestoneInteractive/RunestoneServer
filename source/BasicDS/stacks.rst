@@ -615,7 +615,7 @@ interpreted as
 
 and
 
-:math:`15\times16^{1} + 9\times16^{0}`
+:math:`14\times16^{1} + 9\times16^{0}`
 
 The function ``divideBy2`` can be modified to accept not only a decimal
 value but also a base for the intended conversion. The “Divide by 2”
