@@ -23,7 +23,7 @@ If you want to run a full blown server -- so you can save activecode assignments
 
 After you install web2py go to the applications folder and check out this repository.  This will be installed as a web2py application automatically.
 
-Cloneing The Runestone Project and its submodules
+Cloning The Runestone Project and its submodules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project consists of the main repository, plus *submodules* for codelens, parsons-problems, and skulpt.  In order to get all of the source you need you will need to do the following:
