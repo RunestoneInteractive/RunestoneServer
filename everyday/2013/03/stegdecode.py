@@ -10,7 +10,7 @@ for row in range(fg.getHeight()):
         fgg = fgpix.getGreen()
         fgb = fgpix.getBlue()
                 
-        if fgr % 2 == 0 and fgg % 2 == 0:
+        if fgr % 2 == 0: #and fgg % 2 == 0:
             newPix = myimage.Pixel(255,255,255)
         else:
             newPix = myimage.Pixel(0,0,0)

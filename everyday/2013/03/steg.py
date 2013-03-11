@@ -18,12 +18,12 @@ for row in range(fg.getHeight()):
 
         if msr == 0:
             fgr = fgr & 0xfe
-            fgg = fgg & 0xfe
-            fgb = fgb & 0xfe
+#            fgg = fgg & 0xfe
+#            fgb = fgb & 0xfe
         else:
             fgr = fgr | 0x01
-            fgg = fgg | 0x01
-            fgb = fgb | 0x01
+#            fgg = fgg | 0x01
+#            fgb = fgb | 0x01
 
         newPix = myimage.Pixel(fgr,fgg,fgb)
         newIm.setPixel(col,row,newPix)
