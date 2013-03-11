@@ -1,7 +1,7 @@
 .. This document is Licensed Creative Commons:
-   
+
 Attribution, Share Alike
-   
+
 Its Only a Little Math
 ======================
 
@@ -189,7 +189,7 @@ Lets unpack the ``all`` statement a bit into two lines that are **almost** equiv
     mylist = [primeCandidate % p for p in primes]
     all(mylist)
 
-Now, mylist is going to contain a bunch of numbers.  If all the numbers are non zero then none of the previous primes in the list ``primes`` divide evenly into ``primeCandidate`` and we know that ``primeCandidate`` itself is a prime number!  If, however, one of the numbers in mylist is 0 then we know it is divisible by another number besides 1 and itself and primeCandidate is not a number.
+Now, mylist is going to contain a bunch of numbers.  If all the numbers are non zero then none of the previous primes in the list ``primes`` divide evenly into ``primeCandidate`` and we know that ``primeCandidate`` itself is a prime number!  If, however, one of the numbers in mylist is 0 then we know it is divisible by another number besides 1 and itself and primeCandidate is not a prime number.
 
  Now, you will notice that I emphasized the word **almost** just a few lines back.  The reason for this is that ``mylist`` is really a list created by a list comprehension.  By embedding a list comprehension like statement as the parameter to a function, we actually are creating a generator to pass to the function!  Here's proof::
 
