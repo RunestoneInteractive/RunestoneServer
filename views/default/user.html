@@ -22,11 +22,11 @@
 <td>
   <video controls width="300" id="runestonevid">
     <source src="{{=URL(c='static',f='_images/runestone.mov')}}" type="video/mp4"></source>
-    <source src="{{=URL(c='static',f='_images/runestone.webm')}}" type="video/webm"></source>    
+    <source src="{{=URL(c='static',f='_images/runestone.webm')}}" type="video/webm"></source>
   </video>
 </td>
 <td>
-<h2>Learn more about Runestone Interactive</h2>    
+<h2>Learn more about Runestone Interactive</h2>
 <p>The video here will give you a bit of an overview of what our interactive books are all about.  Please watch it.  Another way to learn about our books is to click on <a href="{{=URL(c='static',f='overview/OverviewForSite/overview.html')}}">this demonstration</a>. If you are ready to start learning interactively, click on one of the titles below.</p><p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p><div class="fb-like" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>
 
 </td>
@@ -36,10 +36,13 @@
 <h2>Try These Interactive Books</h2>
 <ul class="booktitle">
   <li class="booktitle"><a href="{{=URL(c='static',f='thinkcspy/index.html')}}">How to Think Like a Computer Scientist:  Interactive Edition</a></li>
+  <ul><li>An introductory text for people with no programming experience </li></ul>
   <li class="booktitle"><a href="{{=URL(c='static',f='pythonds/index.html')}}">Problem
-  Solving with Algorithms and Data Structures Using Python</a></li> 
+  Solving with Algorithms and Data Structures Using Python</a></li>
+  <ul><li>A Data Structures and Algorithms text suitable for CS2</li></ul>
   <li class="booktitle"><a href="{{=URL(c='everyday',f='index')}}">Everyday
   Python Blog</a></li>
+  <ul><li>Motivating Examples of solving real world problems with Python</li></ul>
 </ul>
 
 <div>
@@ -72,7 +75,7 @@
 
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", init, false);
-    
+
     function init(){
       var video = document.getElementById("runestonevid");
       video.addEventListener("play", videoPlay, false);
@@ -80,19 +83,19 @@ document.addEventListener("DOMContentLoaded", init, false);
       video.addEventListener("ended", videoEnd, false);
       console.log(video);
     }
-        
+
     function videoPlay(event) {
-      trackEvent('Play', 'My Video'); 
+      trackEvent('Play', 'My Video');
     }
-    
+
     function videoPause(event) {
-      trackEvent('Pause', 'My Video'); 
+      trackEvent('Pause', 'My Video');
     }
-    
+
     function videoEnd(event) {
-      trackEvent('Ended', 'My Video'); 
+      trackEvent('Ended', 'My Video');
     }
-    
+
     function trackEvent(action, title) {
       _gaq.push(['_trackEvent', 'Videos', action, title]);
     }

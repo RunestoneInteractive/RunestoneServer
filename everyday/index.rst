@@ -19,6 +19,7 @@ Contents:
    2013/02/1_primes.rst
    2013/02/2_swarm.rst
    2013/02/3_school.rst
+   2013/03/1_steganography.rst
 
 Indices and tables
 ==================
