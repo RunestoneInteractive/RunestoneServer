@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. meta::
+   :description: Motivating examples of solving real world problems with Python -- in context.
+   :keywords: python, everyday, contextual learning, example, tutorial
+
+
 Welcome to the Everyday Python Project
 ======================================
 
