@@ -209,7 +209,7 @@ we need the extra power that we get from the ``while`` loop.
    :answer_a: n starts at 10 and is incremented by 1 each time through the loop, so it will always be positive
    :answer_b: answer starts at 1 and is incremented by n each time, so it will always be positive
    :answer_c: You cannot compare n to 0 in while loop.  You must compare it to another variable.
-   :answer_d: In the while loop body, we must set n False, and this code does not do that.  
+   :answer_d: In the while loop body, we must set n to False, and this code does not do that.  
    :correct: a
    :feedback_a: The loop will run as long as n is positive.  In this case, we can see that n will never become non-positive. 
    :feedback_b: While it is true that answer will always be positive, answer is not considered in the loop condition.
@@ -222,7 +222,7 @@ we need the extra power that we get from the ``while`` loop.
      answer = 1
      while ( n > 0 ):
        answer = answer + n
-	   n = n + 1
+       n = n + 1
      print answer
      </pre>
 
@@ -1039,7 +1039,7 @@ Finally, we need to insert the new pixel into the empty image in the same locati
 
 
 
-You have just passed a very important point in your study of Python programming.  Even though there is much more that we will do, you have learned all of the basic building blocks that are necessary to solve many interesting problems.  From and algorithm point of view, you can now implement selection and iteration.  You can also solve problems by breaking them down into smaller parts, writing functions for those parts, and then calling the functions to complete the implementation.
+You have just passed a very important point in your study of Python programming.  Even though there is much more that we will do, you have learned all of the basic building blocks that are necessary to solve many interesting problems.  From an algorithm point of view, you can now implement selection and iteration.  You can also solve problems by breaking them down into smaller parts, writing functions for those parts, and then calling the functions to complete the implementation.
 What remains is to focus on ways that we can better represent our problems in terms of the data that we manipulate.  We will now turn our attention to studying the main data collections provided by Python.
 
 **Check your understanding**

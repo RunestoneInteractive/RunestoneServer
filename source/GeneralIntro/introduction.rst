@@ -57,7 +57,7 @@ a notation (a program) that can be followed by a computer.  These programs are w
    :correct: c
    :feedback_a: Computers do not think, they only do what we humans tell them to do via programs.
    :feedback_b: While it is necessary for most computer scientists to know how to write code, it is not the most important skill.
-   :feedback_c: Computer scientists are all about solving problems.  We use computers to automate those solutions and do things faster and more accurate than we can do by hand or manually.
+   :feedback_c: Computer scientists are all about solving problems.  We use computers to automate solutions to problems and to do things faster and more accurately than we can do by hand or manually.
    :feedback_d: Computer science and math are similar in many ways and it helps to have a strong mathematical foundation, but you do not have to be good at math to be a good computer scientist.
 
    What is the most important skill for a computer scientist?
@@ -65,13 +65,13 @@ a notation (a program) that can be followed by a computer.  These programs are w
 .. mchoicemf:: question1_1_2
    :answer_a: A solution to a problem that can be solved by a computer.
    :answer_b: A step by step list of instructions that if followed exactly will solve the problem under consideration.
-   :answer_c: A series of instructions implemented in a programming language
-   :answer_d: A special kind of notation used by computer scientists
+   :answer_c: A series of instructions implemented in a programming language.
+   :answer_d: A special kind of notation used by computer scientists.
    :correct: b
-   :feedback_a: While it is true that algorithms often do solve problems, this is not the best answer.  An algorithm is more than just the solution to the problem for a computer.  An algorithm can be used to solve all sorts of problem, including those that have nothing to do with computers.
+   :feedback_a: While it is true that algorithms often do solve problems, this is not the best answer.  An algorithm is more than just the solution to the problem for a computer.  An algorithm can be used to solve all sorts of problems, including those that have nothing to do with computers.
    :feedback_b: Algorithms are like recipes:  they must be followed exactly, they must be clear and unambiguous, and they must end.
-   :feedback_c: Programming languages are used to express algorithms but an algorithm does not have to be expressed in terms of a programming language.
-   :feedback_d: Computer scientists sometimes use special notation to illustrate or document an algorithm, but this is not the definition of an algorithm.
+   :feedback_c: Programming languages are used to express algorithms, but an algorithm does not have to be expressed in terms of a programming language.
+   :feedback_d: Computer scientists sometimes use a special notation to illustrate or document an algorithm, but this is not the definition of an algorithm.
 
    An algorithm is:
 
@@ -188,10 +188,10 @@ most programs are more interesting than this one.
 **Check your understanding**
 
 .. mchoicemf:: question1_2_1
-   :answer_a: The instructions in a program, stored in a file
-   :answer_b: The language that you are programming in (e.g., Python)
-   :answer_c: The environment/tool in which you are programming
-   :answer_d: The number (or “code”) that you must input at the top of each program to tell the computer how to execute your program.
+   :answer_a: the instructions in a program, stored in a file.
+   :answer_b: the language that you are programming in (e.g., Python).
+   :answer_c: the environment/tool in which you are programming.
+   :answer_d: the number (or “code”) that you must input at the top of each program to tell the computer how to execute your program.
    :correct: a
    :feedback_a: The file that contains the instructions written in the high level language is called the source code file.
    :feedback_b: This language is simply called the programming language, or simply the language.
@@ -277,10 +277,10 @@ will be able to tell which is which by looking for either the Python prompt in t
 **Check your understanding**
 
 .. mchoicema:: question1_3_1
-   :answer_a: Save programs and reload saved programs.
-   :answer_b: Type in Python source code.
-   :answer_c: Execute Python code right in the text itself within the web browser.
-   :answer_d: Receive a yes/no answer about whether your code is correct or not.
+   :answer_a: save programs and reload saved programs.
+   :answer_b: type in Python source code.
+   :answer_c: execute Python code right in the text itself within the web browser.
+   :answer_d: receive a yes/no answer about whether your code is correct or not.
    :correct: a,b,c
    :feedback_a: You can (and should) save the contents of the activecode window.
    :feedback_b: You are not limited to running the examples that are already there.  Try   adding to them and creating your own.
@@ -290,15 +290,15 @@ will be able to tell which is which by looking for either the Python prompt in t
    The activecode interpreter allows you to (select all that apply):
 
 .. mchoicema:: question1_3_2
-   :answer_a: Measure the speed of a program’s execution
-   :answer_b: Control the step by step execution of a program.
-   :answer_c: Write and execute your own Python code
-   :answer_d: Execute the Python code that is in Codelens.
+   :answer_a: measure the speed of a program’s execution.
+   :answer_b: control the step by step execution of a program.
+   :answer_c: write and execute your own Python code.
+   :answer_d: execute the Python code that is in codelens.
    :correct: b,d
-   :feedback_a: In fact, CodeLens steps through each line one by one as you click, which is MUCH slower than the Python interpreter.
+   :feedback_a: In fact, codelens steps through each line one by one as you click, which is MUCH slower than the Python interpreter.
    :feedback_b: By using codelens, you can control the execution of a program step by step.  You can even go backwards!
-   :feedback_c: CodeLens works only for the pre-programmed examples.
-   :feedback_d: Execute the Python code that is in Codelens.
+   :feedback_c: Codelens works only for the pre-programmed examples.
+   :feedback_d: By stepping forward through the Python code in codelens, you are executing the Python program.
 
    Codelens allows you to (select all that apply):
 
@@ -346,10 +346,10 @@ instructions.
 **Check your understanding**
 
 .. mchoicemf:: question1_4_1
-   :answer_a: A sequence of instructions that specifies how to perform a computation.
-   :answer_b: Something you follow along at a play or concert.
-   :answer_c: A computation, even a symbolic computation.
-   :answer_d: The same thing as an algorithm
+   :answer_a: a sequence of instructions that specifies how to perform a computation.
+   :answer_b: something you follow along at a play or concert.
+   :answer_c: a computation, even a symbolic computation.
+   :answer_d: the same thing as an algorithm.
    :correct: a
    :feedback_a: It is just step-by-step instructions that the computer can understand and execute.  Programs often implement algorithms, but note that algorithms are typically less precise than programs and do not have to be written in a programming language.
    :feedback_b: True, but not in this context.  We mean a program as related to a computer.
@@ -380,15 +380,15 @@ between them in order to track them down more quickly.
 **Check your understanding**
 
 .. mchoicemf:: question1_5_1
-   :answer_a: Tracking down programming errors and correcting them.
-   :answer_b: Removing all the bugs from your house.
-   :answer_c: Finding all the bugs in the program.
-   :answer_d: Fixing the bugs in the program.
+   :answer_a: tracking down programming errors and correcting them.
+   :answer_b: removing all the bugs from your house.
+   :answer_c: finding all the bugs in the program.
+   :answer_d: fixing the bugs in the program.
    :correct: a
    :feedback_a: Programming errors are called bugs and the process of finding and removing them from a program is called debugging.
    :feedback_b: Maybe, but that is not what we are talking about in this context.
-   :feedback_c: This is partially correct.  Debugging is more than just finding the bugs.
-   :feedback_d: This is partially correct.  Debugging is more than just fixing the bugs. What do you need to do before you can fix them? 
+   :feedback_c: This is partially correct.  But, debugging is more than just finding the bugs.  What do you need to do once you find them?
+   :feedback_d: This is partially correct.  But, debugging is more than just fixing the bugs. What do you need to do before you can fix them? 
 
    Debugging is:
 
@@ -415,8 +415,8 @@ experience, though, you will make fewer errors and find them faster.
 **Check your understanding**
 
 .. mchoicemf:: question1_6_1
-   :answer_a: Attempting to divide by 0
-   :answer_b: Forgetting a colon at the end of a statement where one is required
+   :answer_a: Attempting to divide by 0.
+   :answer_b: Forgetting a colon at the end of a statement where one is required.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: b
    :feedback_a: A syntax error is an error in the structure of the python code that can be detected before the program is executed.   Python cannot usually tell if you are trying to divide by 0 until it is executing your program (e.g., you might be asking the user for a value and then dividing by that value—you cannot know what value the user will enter before you run the program). 
@@ -427,15 +427,15 @@ experience, though, you will make fewer errors and find them faster.
 
 
 .. mchoicemf:: question1_6_2
-   :answer_a: Programmer
-   :answer_b: Compiler / Interpreter
-   :answer_c: Computer
-   :answer_d: Teacher / Instructor
+   :answer_a: The programmer.
+   :answer_b: The compiler / interpreter.
+   :answer_c: The computer.
+   :answer_d: The teacher / instructor.
    :correct: b
-   :feedback_a: Programmers rarely find all the syntax errors, we have a program that will do it for us.
+   :feedback_a: Programmers rarely find all the syntax errors, there is a computer program that will do it for us.
    :feedback_b: The compiler and / or interpreter is a computer program that determines if your program is written in a way that can be translated into machine language for execution.
-   :feedback_c:  Okay, sort of.  But it is a special thing in the computer that does it.  The stand alone computer without this additional piece can not do it.
-   :feedback_d: Maybe.  Your teacher and instructor may be able to find most of your syntax errors, but only because they have experience looking at code and possibly writing code.  With experience syntax errors are easier to find.  But we also have an automated way of finding these types of errors.
+   :feedback_c: Well, sort of.  But it is a special thing in the computer that does it.  The stand alone computer without this additional piece can not do it.
+   :feedback_d: Your teacher and instructor may be able to find most of your syntax errors, but only because they have experience looking at code and possibly writing code.  With experience syntax errors are easier to find.  But we also have an automated way of finding these types of errors.
  
 
    Who or what typically finds syntax errors?
@@ -456,8 +456,8 @@ chapters, so it might be a while before you encounter one.
 **Check your understanding**
 
 .. mchoicemf:: question1_7_1
-   :answer_a: Attempting to divide by 0
-   :answer_b: Forgetting a colon at the end of a statement where one is required
+   :answer_a: Attempting to divide by 0.
+   :answer_b: Forgetting a colon at the end of a statement where one is required.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: a
    :feedback_a: Python cannot reliably tell if you are trying to divide by 0 until it is executing your program (e.g., you might be asking the user for a value and then dividing by that value—you cannot know what value the user will enter before you run the program).
@@ -484,13 +484,13 @@ looking at the output of the program and trying to figure out what it is doing.
 **Check your understanding**
 
 .. mchoicemf:: question1_8_1
-   :answer_a: Attempting to divide by 0
-   :answer_b: Forgetting a semi-colon at the end of a statement where one is required
+   :answer_a: Attempting to divide by 0.
+   :answer_b: Forgetting a semi-colon at the end of a statement where one is required.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: c
-   :feedback_a: A semantic error is an error in logic. The program does not produce the correct output because the problem is not solved correctly. This would be considered a run-time error.
-   :feedback_b: A semantic error is an error in logic. The program does not produce the correct output because the problem is not solved correctly. This would be considered a syntax error.	
-   :feedback_c: This will produce the wrong answer because the programmer implemented the solution incorrectly.
+   :feedback_a: A semantic error is an error in logic. In this case the program does not produce the correct output because the problem is not solved correctly. This would be considered a run-time error.
+   :feedback_b: A semantic error is an error in logic. In this case the program does not produce the correct output because the code can not be processed by the compiler or interpreter. This would be considered a syntax error.	
+   :feedback_c: This will produce the wrong answer because the programmer implemented the solution incorrectly.  This is a semantic error.
 
    Which of the following is a semantic error?
 
@@ -536,13 +536,13 @@ practices.
 **Check your understanding**
 
 .. mchoicemf:: question1_9_1
-   :answer_a: Programming is the process of gradually debugging a program until it does what you want.
-   :answer_b: Programming is creative and debugging is routine.
-   :answer_c: Programming is fun and debugging is work.
-   :answer_d: There is no difference between them.
+   :answer_a: programming is the process of writing and gradually debugging a program until it does what you want.
+   :answer_b: programming is creative and debugging is routine.
+   :answer_c: programming is fun and debugging is work.
+   :answer_d: there is no difference between them.
    :correct: a
    :feedback_a: Programming is the writing of the source code and debugging is the process of finding and correcting all the errors within the program until it is correct.
-   :feedback_b: Programming can be creative but it also follows a process and debugging can be creative in how you find the errors.	
+   :feedback_b: Programming can be creative, but it also follows a process and debugging can involve creativity in how you find the errors.	
    :feedback_c: Some people think that debugging is actually more fun than programming (they usually become good software testers).  Debugging is much like solving puzzles, which some people think is fun!
    :feedback_d: You cannot debug without first having a program, meaning that someone had to do the programming first.
 
@@ -654,13 +654,13 @@ natural languages, can make a big difference in a formal language.
 **Check your understanding**
 
 .. mchoicemf:: question1_10_1
-   :answer_a: Natural languages can be parsed while formal languages cannot.
-   :answer_b: Ambiguity, redundancy, and literalness
-   :answer_c: There are no differences between natural and formal languages.
-   :answer_d: Tokens, structure, syntax, and semantics
+   :answer_a: natural languages can be parsed while formal languages cannot.
+   :answer_b: ambiguity, redundancy, and literalness.
+   :answer_c: there are no differences between natural and formal languages.
+   :answer_d: tokens, structure, syntax, and semantics.
    :correct: b
    :feedback_a: Actually both languages can be parsed (determining the structure of the sentence), but formal languages can be parsed more easily in software.
-   :feedback_b: All of these can be present in natural languages but cannot exist in formal languages.	
+   :feedback_b: All of these can be present in natural languages, but cannot exist in formal languages.	
    :feedback_c: There are several differences between the two but they are also similar.
    :feedback_d: These are the similarities between the two.
 
@@ -712,10 +712,10 @@ possible.
 **Check your understanding**
 
 .. mchoicemf:: question1_11_1
-   :answer_a: Sends information to the printer to be printed on paper.
-   :answer_b: Displays a value on the screen.
-   :answer_c: Tells the computer to put the information in print, rather than cursive, format.
-   :answer_d: Tells the computer to speak the information.
+   :answer_a: sends information to the printer to be printed on paper.
+   :answer_b: displays a value on the screen.
+   :answer_c: tells the computer to put the information in print, rather than cursive, format.
+   :answer_d: tells the computer to speak the information.
    :correct: b
    :feedback_a: Within the Python programming language, the print function has nothing to do with the printer.
    :feedback_b: Yes, the print function is used to display the value of the thing being printed.  
@@ -761,8 +761,8 @@ programs much easier for humans to parse.  Use them liberally!
 .. mchoicemf:: question1_12_1
    :answer_a: To tell the computer what you mean in your program.
    :answer_b: For the people who are reading your code to know, in natural language, what the program is doing.
-   :answer_c: None, they are extraneous information that is not needed.
-   :answer_d: None in a short program.  They are only needed for really large programs.
+   :answer_c: Nothing, they are extraneous information that is not needed.
+   :answer_d: Nothing in a short program.  They are only needed for really large programs.
    :correct: b
    :feedback_a: Comments are ignored by the computer.
    :feedback_b: The computer ignores comments.  It’s for the humans that will “consume” your program.

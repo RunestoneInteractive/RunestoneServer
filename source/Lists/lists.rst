@@ -136,7 +136,7 @@ of from the left.
     print(numbers[2])
     print(numbers[9-8])
     print(numbers[-2])
-    print(numbers[len(numbers)-1]
+    print(numbers[len(numbers)-1])
     
 **Check your understanding**
  

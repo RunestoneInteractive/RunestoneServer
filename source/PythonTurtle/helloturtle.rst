@@ -174,14 +174,14 @@ screen until we click on it.
 **Check your understanding**
 
 .. mchoicemf:: test_question3_1_1
-   :answer_a: It creates a new turtle object that can be used for drawing 
-   :answer_b: It allows us to create a data object called a Turtle that can be used for drawing
-   :answer_c: It makes the turtle draw half of a rectangle on the screen
-   :answer_d: Nothing, it is unnecessary
+   :answer_a: It creates a new turtle object that can be used for drawing.
+   :answer_b: It defines the module turtle which will allow you to create a Turtle object and draw with it.
+   :answer_c: It makes the turtle draw half of a rectangle on the screen.
+   :answer_d: Nothing, it is unnecessary.
    :correct: b
-   :feedback_a: The line &quotalex = turtle.Turtle()&quot is what actually creates the turtle object 
-   :feedback_b: This line imports the module called turtle, which has all the built in functions for drawing on the screen with the Turtle object
-   :feedback_c: This functionality is performed with the lines &quotalex.forward(150)&quot, &quotalex.left(90)&quot, and &quotalex.forward(75)&quot
+   :feedback_a: The line &quotalex = turtle.Turtle()&quot is what actually creates the turtle object.
+   :feedback_b: This line imports the module called turtle, which has all the built in functions for drawing on the screen with the Turtle object.
+   :feedback_c: This functionality is performed with the lines: &quotalex.forward(150)&quot, "&quotlex.left(90)&quot, and &quotalex.forward(75)&quot
    :feedback_d: If we leave it out, Python will give an error saying that it does not know about the name &quotturtle&quot when it reaches the line &quotwn = turtle.Screen()&quot
    
    Consider the following code:
@@ -197,7 +197,7 @@ screen until we click on it.
    What does the line "import turtle" do?
 
 .. mchoicemf:: test_question3_1_2
-   :answer_a: This is simply for clarity.  It would also work to just type "Turtle()" instead of "turtle.Turtle()"
+   :answer_a: This is simply for clarity.  It would also work to just type "Turtle()" instead of "turtle.Turtle()".
    :answer_b: The period (.) is what tells Python that we want to invoke a new object.
    :answer_c: The first "turtle" (before the period) tells Python that we are referring to the turtle module, which is where the object "Turtle" is found.
    :correct: c
@@ -211,8 +211,8 @@ screen until we click on it.
    :answer_a: True
    :answer_b: False
    :correct: a
-   :feedback_a: In the chapter you saw one named alex and one named tess, but any legal variable name is allowed.
-   :feedback_b: A Turtle, like any data, can be assigned to a variable that can have whatever name you choose as long as it follows the naming conventions from Chapter 2.
+   :feedback_a: In this chapter you saw one named alex and one named tess, but any legal variable name is allowed.
+   :feedback_b:A variable, including one referring to a Turtle object, can have whatever name you choose as long as it follows the naming conventions from Chapter 2.
    
    True or False: A Turtle object can have any name that follows the naming rules from Chapter 2.
 
@@ -481,7 +481,7 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
    :correct: c
    :feedback_a: The loop body prints one line, but the body will execute exactly one time for each element in the list [5, 4, 3, 2, 1, 0]. 
    :feedback_b: Although the biggest number in the list is 5, there are actually 6 elements in the list.
-   :feedback_c: The loop body will execute (and print one line) for each of the 6 elements in the list [5, 4, 3, 2, 1, 0]
+   :feedback_c: The loop body will execute (and print one line) for each of the 6 elements in the list [5, 4, 3, 2, 1, 0].
    :feedback_d: The loop body will not execute more times than the number of elements in the list.
 
    In the following code, how many lines does this code print? 
@@ -491,9 +491,9 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
    </pre>
    
 .. mchoicemf:: test_question3_4_2
-   :answer_a: They are indented to the same degree from the loop header
-   :answer_b: There is always exactly one line in the loop body
-   :answer_c: The loop body ends with a semi-colon (;) which is not shown in the code above 
+   :answer_a: They are indented to the same degree from the loop header.
+   :answer_b: There is always exactly one line in the loop body.
+   :answer_c: The loop body ends with a semi-colon (;) which is not shown in the code above.
    :correct: a
    :feedback_a: The loop body can have any number of lines, all indented from the loop header.
    :feedback_b: The loop body may have more than one line.
@@ -519,13 +519,13 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
       </pre>
 
 .. mchoicemf:: test_question3_4_4
-      :answer_a: Draw one side of a square, using the same color each time.
-      :answer_b: Draw one side of a square, using a different color each time.
-      :answer_c: Draw a complete square.
+      :answer_a: Draw a square using the same color for each side.
+      :answer_b: Draw a square using a different color for each side.
+      :answer_c: Draw one side of a square.
       :correct: a
-      :feedback_a: The items in the list are not actually used to control the color of the turtle because aColor is never used inside the loop.
+      :feedback_a: The items in the list are not actually used to control the color of the turtle because aColor is never used inside the loop.  But, the loop will execute once for each color in the list.
       :feedback_b: Notice that aColor is never actually used inside the loop.
-      :feedback_c: The body of the loop only contains two instructions: go forward and turn left.  This is not enough to draw a complete square.
+      :feedback_c: While the body of the loop only draws one side of the square it will be  repeated once for each item in the list.
    
       Consider the following code:
       <pre>
@@ -663,7 +663,7 @@ Try it in codelens.
   :answer_c: Range should generate a list starting at 3 that stops at 10 (including 10).
   :answer_d: Range should generate a list using every 10th number between the start and the stopping number.  
   :correct: a
-  :feedback_a: Range will generate the list [3, 5, 7, 9]
+  :feedback_a: Range will generate the list [3, 5, 7, 9].
   :feedback_b: The first argument (3) tells range what number to start at.
   :feedback_c: Range will always stop at the number before (not including) the specified ending point for the list.
   :feedback_d: The third argument (2) tells range how many numbers to skip between each element in the list.
