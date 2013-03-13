@@ -70,15 +70,15 @@ turtle and a half drawn rectangle.  Press the run button to try it and see.
 
 .. activecode:: ch03_1
     :nopre:
+    :tour_1: "Overall Tour"; 1-6: Example01_Tour01_Line01; 3: Example01_Tour01_Line02; 4: Example01_Tour01_Line03; 5: Example01_Tour01_Line04; 6: Example01_Tour01_Line05;
+    :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 2: Example01_Tour02_Line02; 3: Example01_Tour02_Line03; 4: Example01_Tour02_Line04; 5: Example01_Tour02_Line05; 6: Example01_Tour02_Line06;
 
-    import turtle            # allows us to use the turtles library
-    wn = turtle.Screen()     # creates a graphics window
-    alex = turtle.Turtle()   # create a turtle named alex
-    alex.forward(150)        # tell alex to move forward by 150 units
-    alex.left(90)            # turn by 90 degrees
-    alex.forward(75)         # complete the second side of a rectangle
-
-    
+    import turtle            	# allows us to use the turtles library
+    wn = turtle.Screen()    	# creates a graphics window
+    alex = turtle.Turtle()   	# create a turtle named alex
+    alex.forward(150)        	# tell alex to move forward by 150 units
+    alex.left(90)           		# turn by 90 degrees
+    alex.forward(75)         	# complete the second side of a rectangle
 
 
 Here are a couple of things you'll need to understand about this program. 
@@ -118,30 +118,32 @@ will make alex red, and the line that it draws will be red too.
 
 The color of the turtle, the width of its pen(tail), the position of the turtle
 within the window, which way it is facing, and so on are all part of its
-current **state**.   Similarly, the window object has a background color.
+current **state**.   Similarly, the window object has a background co lor.
 These are all part of the state of the window object.
 
 Quite a number of methods exist that allow us to modify the turtle and the
 window objects.  We'll just show a couple. We've only commented those
 lines that are different from the previous example.  Note also that we've now called our turtle object *tess*.
-    
+
 .. activecode:: ch03_2
-    
+    :nopre:
+    :tour_1: "Overall Tour"; 1-10: Example02_Tour01_Line01; 4: Example02_Tour01_Line02; 6: Example02_Tour01_Line03; 7: Example02_Tour01_Line04; 8: Example02_Tour01_Line05; 10: Example02_Tour01_Line06; 11: Example02_Tour01_Line07; 12: Example02_Tour01_Line08; 14: Example02_Tour01_Line09; 
+    :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 3: Example01_Tour02_Line02; 4: Example02_Tour02_Line03; 6: Example02_Tour02_Line04; 7: Example02_Tour02_Line05; 8: Example02_Tour02_Line06; 10: Example02_Tour02_Line07; 11: Example02_Tour02_Line08; 12: Example02_Tour02_Line09; 14: Example02_Tour02_Line10;
+
     import turtle
 
     wn = turtle.Screen()
-    wn.bgcolor("lightgreen")         # set the window background color
+    wn.bgcolor("lightgreen")       	# set the window background color
 
     tess = turtle.Turtle()
-    tess.color("blue")               # make tess blue
-    tess.pensize(3)                  # set the width of her pen
+    tess.color("blue")               	# make tess blue
+    tess.pensize(3)                 	# set the width of her pen
 
     tess.forward(50)
-    tess.left(120)
+    tess.left(120) 
     tess.forward(50)
 
     wn.exitonclick()
-
 
 
 The last line plays a very important role. The wn variable refers to the window shown
@@ -214,6 +216,21 @@ screen until we click on it.
    
    True or False: A Turtle object can have any name that follows the naming rules from Chapter 2.
 
+.. mchoicemf:: test_question3_1_4
+   :answer_a: <br /><img src="../_static/test1Alt1.png" alt="right turn of 90 degrees before drawing">
+   :answer_b: <br /><img src="../_static/test1Alt2.png" alt="left turn of 180 degrees before drawing">
+   :answer_c: <br /><img src="../_static/test1Alt3.png" alt="left turn of 270 degrees before drawing">
+   :answer_d: <br /><img src="../_static/test1Alt4.png" alt="right turn of 45 degrees before drawing">
+   :answer_e: <br /><img src="../_static/test1correct.png" alt="left turn of 90 degrees before drawing">
+   :correct: e
+   :feedback_a: This code would turn the turtle to the south before drawing
+   :feedback_b: This code would turn the turtle to the west before drawing
+   :feedback_c: This code would turn the turtle to the south before drawing
+   :feedback_d: This code would turn the turtle to the southeast before drawing.
+   :feedback_e: Yes, the turtle starts facing east, so to turn it north you can turn left 90 or right 270 degrees.
+   
+   Which of the following would produce the following image? <br /><img src="../_static/turtleTest1.png" alt="long line to north with shorter line to west on top">
+
 .. index:: instance
   
 Instances --- A Herd of Turtles
@@ -227,39 +244,41 @@ pen.  So here is what happens when alex completes a square and tess
 completes her triangle:
 
 .. activecode:: ch03_3
-   :nopre:
+    :nopre:
+    :tour_1: "Overall Tour"; 1-31: Example03_Tour01_Line01; 1-3: Example03_Tour01_Line02; 6-8: Example03_Tour01_Line03; 10: Example03_Tour01_Line04; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour01_Line06; 19-20: Example03_Tour01_Line07; 22-29: Example03_Tour01_Line08; 31: Example03_Tour01_Line09; 
+    :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 2: Example01_Tour02_Line02; 3: Example02_Tour02_Line03; 6: Example02_Tour02_Line04; 7: Example03_Tour02_Line05; 8: Example03_Tour02_Line06; 10: Example01_Tour02_Line03; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour02_Line09; 12-13: Example03_Tour02_Line10; 12: Example03_Tour02_Line11; 13: Example03_Tour02_Line12; 14-15: Example03_Tour02_Line13; 14: Example03_Tour02_Line14; 15: Example03_Tour02_Line15; 16-17: Example03_Tour02_Line16; 16: Example03_Tour02_Line17; 17: Example03_Tour02_Line18; 19-20: Example03_Tour01_Line07; 19: Example03_Tour02_Line20; 20: Example03_Tour02_Line21; 22-29: Example03_Tour01_Line08; 10: Example03_Tour02_Line23; 22-23: Example03_Tour02_Line24; 22: Example03_Tour02_Line25; 23: Example03_Tour02_Line26; 24-25: Example03_Tour02_Line27; 26-27: Example03_Tour02_Line28; 28-29: Example03_Tour02_Line29; 31: Example02_Tour02_Line10;
+       
+    import turtle
+    wn = turtle.Screen()             # Set up the window and its attributes
+    wn.bgcolor("lightgreen")
 
-   import turtle
-   wn = turtle.Screen()             # Set up the window and its attributes
-   wn.bgcolor("lightgreen")
 
+    tess = turtle.Turtle()           # create tess and set some attributes
+    tess.color("hotpink")
+    tess.pensize(5)
 
-   tess = turtle.Turtle()           # create tess and set some attributes
-   tess.color("hotpink")
-   tess.pensize(5)
+    alex = turtle.Turtle()           # create alex
 
-   alex = turtle.Turtle()           # create alex
+    tess.forward(80)                 # Let tess draw an equilateral triangle
+    tess.left(120)
+    tess.forward(80)
+    tess.left(120)
+    tess.forward(80)
+    tess.left(120)                   # complete the triangle
 
-   tess.forward(80)                 # Let tess draw an equilateral triangle
-   tess.left(120)
-   tess.forward(80)
-   tess.left(120)
-   tess.forward(80)
-   tess.left(120)                   # complete the triangle
-
-   tess.right(180)                  # turn tess around
-   tess.forward(80)                 # move her away from the origin
+    tess.right(180)                  # turn tess around
+    tess.forward(80)                 # move her away from the origin
  
-   alex.forward(50)                 # make alex draw a square
-   alex.left(90)
-   alex.forward(50)
-   alex.left(90)
-   alex.forward(50)
-   alex.left(90)
-   alex.forward(50)
-   alex.left(90)
+    alex.forward(50)                 # make alex draw a square
+    alex.left(90)
+    alex.forward(50)
+    alex.left(90)
+    alex.forward(50)
+    alex.left(90)
+    alex.forward(50)
+    alex.left(90)
 
-   wn.exitonclick()
+    wn.exitonclick()
 
 
 Here are some *How to think like a computer scientist* observations:
@@ -311,17 +330,14 @@ we'd like to send them each an email inviting them to our party.  We
 don't quite know how to send email yet, so for the moment we'll just print a
 message for each friend.
 
-.. activecode:: ch03_4
-    :nocanvas:
-
-    for friendName in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        print("Hi ", friendName, "  Please come to my party on Saturday!")
+.. activecode:: ch03_4    :nocanvas:    :tour_1: "Overall Tour"; 1-2: Example04_Tour01_Line01; 2: Example04_Tour01_Line02; 1: Example04_Tour01_Line03;    for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
+        print("Hi " + name + "  Please come to my party on Saturday!")
       
 
 Take a look at the output produced when you press the ``run`` button.  There is one line printed for each friend.  Here's how it works:
 
 
-* **friendName** in this ``for`` statement is called the **loop variable**.  
+* **name** in this ``for`` statement is called the **loop variable**.  
 * The list of names in the square brackets is called a Python **list**.  Lists are very useful.  We will have much
   more to say about them later.
 * Line 2  is the **loop body**.  The loop body is always
@@ -381,12 +397,12 @@ This flowchart shows the exact steps and logic of how the ``for`` statement exec
 
 A codelens demonstration is a good way to help you visualize exactly how the flow of control
 works with the for loop.  Try stepping forward and backward through the program by pressing
-the buttons.  You can see the value of ``friendName`` change as the loop iterates thru the list of friends.  
+the buttons.  You can see the value of ``name`` change as the loop iterates thru the list of friends.  
 
 .. codelens:: vtest
 
-    for friendName in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        message = "Hi " + friendName + "  Please come to my party!"
+    for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
+        print("Hi " + name + "  Please come to my party on Saturday!")
 
 .. index:: range function, chunking
 
