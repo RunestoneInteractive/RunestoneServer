@@ -5,6 +5,7 @@ sessions/*
 databases/*
 *.o
 *~
+.DS_Store
 
 databases/storage.sqlite
 data/*
