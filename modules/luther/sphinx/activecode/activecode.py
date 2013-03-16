@@ -28,8 +28,6 @@ def setup(app):
     app.add_stylesheet('theme/default.css')
     app.add_stylesheet('activecode.css')
 
-    app.add_javascript('jquery-1.8.2.js')
-    app.add_javascript('jquery-ui.js')
     app.add_javascript('jquery.highlight.js')
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
