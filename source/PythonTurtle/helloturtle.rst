@@ -129,7 +129,7 @@ lines that are different from the previous example.  Note also that we've now ca
 
 .. activecode:: ch03_2
     :nopre:
-    :tour_1: "Overall Tour"; 1-10: Example02_Tour01_Line01; 4: Example02_Tour01_Line02; 6: Example02_Tour01_Line03; 7: Example02_Tour01_Line04; 8: Example02_Tour01_Line05; 10: Example02_Tour01_Line06; 11: Example02_Tour01_Line07; 12: Example02_Tour01_Line08; 14: Example02_Tour01_Line09; 
+    :tour_1: "Overall Tour"; 1-10: Example02_Tour01_Line01; 4: Example02_Tour01_Line02; 6: Example02_Tour01_Line03; 7: Example02_Tour01_Line04; 8: Example02_Tour01_Line05; 10: Example02_Tour01_Line06; 11: Example02_Tour01_Line07; 12: Example02_Tour01_Line08; 14: Example02_Tour01_Line09;
     :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 3: Example01_Tour02_Line02; 4: Example02_Tour02_Line03; 6: Example02_Tour02_Line04; 7: Example02_Tour02_Line05; 8: Example02_Tour02_Line06; 10: Example02_Tour02_Line07; 11: Example02_Tour02_Line08; 12: Example02_Tour02_Line09; 14: Example02_Tour02_Line10;
 
     import turtle
@@ -142,7 +142,7 @@ lines that are different from the previous example.  Note also that we've now ca
     tess.pensize(3)                 	# set the width of her pen
 
     tess.forward(50)
-    tess.left(120) 
+    tess.left(120)
     tess.forward(50)
 
     wn.exitonclick()
@@ -214,8 +214,8 @@ screen until we click on it.
    :answer_b: False
    :correct: a
    :feedback_a: In this chapter you saw one named alex and one named tess, but any legal variable name is allowed.
-   :feedback_b:A variable, including one referring to a Turtle object, can have whatever name you choose as long as it follows the naming conventions from Chapter 2.
-   
+   :feedback_b: A variable, including one referring to a Turtle object, can have whatever name you choose as long as it follows the naming conventions from Chapter 2.
+
    True or False: A Turtle object can have any name that follows the naming rules from Chapter 2.
 
 .. mchoicemf:: test_question3_1_4
@@ -230,7 +230,7 @@ screen until we click on it.
    :feedback_c: This code would turn the turtle to the south before drawing
    :feedback_d: This code would turn the turtle to the southeast before drawing.
    :feedback_e: Yes, the turtle starts facing east, so to turn it north you can turn left 90 or right 270 degrees.
-   
+
    Which of the following would produce the following image? <br /><img src="../_static/turtleTest1.png" alt="long line to north with shorter line to west on top">
 
 .. index:: instance
@@ -246,10 +246,10 @@ pen.  So here is what happens when alex completes a square and tess
 completes her triangle:
 
 .. activecode:: ch03_3
-    :nopre:
-    :tour_1: "Overall Tour"; 1-31: Example03_Tour01_Line01; 1-3: Example03_Tour01_Line02; 6-8: Example03_Tour01_Line03; 10: Example03_Tour01_Line04; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour01_Line06; 19-20: Example03_Tour01_Line07; 22-29: Example03_Tour01_Line08; 31: Example03_Tour01_Line09; 
-    :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 2: Example01_Tour02_Line02; 3: Example02_Tour02_Line03; 6: Example02_Tour02_Line04; 7: Example03_Tour02_Line05; 8: Example03_Tour02_Line06; 10: Example01_Tour02_Line03; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour02_Line09; 12-13: Example03_Tour02_Line10; 12: Example03_Tour02_Line11; 13: Example03_Tour02_Line12; 14-15: Example03_Tour02_Line13; 14: Example03_Tour02_Line14; 15: Example03_Tour02_Line15; 16-17: Example03_Tour02_Line16; 16: Example03_Tour02_Line17; 17: Example03_Tour02_Line18; 19-20: Example03_Tour01_Line07; 19: Example03_Tour02_Line20; 20: Example03_Tour02_Line21; 22-29: Example03_Tour01_Line08; 10: Example03_Tour02_Line23; 22-23: Example03_Tour02_Line24; 22: Example03_Tour02_Line25; 23: Example03_Tour02_Line26; 24-25: Example03_Tour02_Line27; 26-27: Example03_Tour02_Line28; 28-29: Example03_Tour02_Line29; 31: Example02_Tour02_Line10;
-       
+   :nopre:
+   :tour_1: "Overall Tour"; 1-31: Example03_Tour01_Line01; 1-3: Example03_Tour01_Line02; 6-8: Example03_Tour01_Line03; 10: Example03_Tour01_Line04; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour01_Line06; 19-20: Example03_Tour01_Line07; 22-29: Example03_Tour01_Line08; 31: Example03_Tour01_Line09;
+   :tour_2: "Line by Line Tour"; 1: Example01_Tour02_Line01; 2: Example01_Tour02_Line02; 3: Example02_Tour02_Line03; 6: Example02_Tour02_Line04; 7: Example03_Tour02_Line05; 8: Example03_Tour02_Line06; 10: Example01_Tour02_Line03; 6,10: Example03_Tour01_Line05; 12-17: Example03_Tour02_Line09; 12-13: Example03_Tour02_Line10; 12: Example03_Tour02_Line11; 13: Example03_Tour02_Line12; 14-15: Example03_Tour02_Line13; 14: Example03_Tour02_Line14; 15: Example03_Tour02_Line15; 16-17: Example03_Tour02_Line16; 16: Example03_Tour02_Line17; 17: Example03_Tour02_Line18; 19-20: Example03_Tour01_Line07; 19: Example03_Tour02_Line20; 20: Example03_Tour02_Line21; 22-29: Example03_Tour01_Line08; 10: Example03_Tour02_Line23; 22-23: Example03_Tour02_Line24; 22: Example03_Tour02_Line25; 23: Example03_Tour02_Line26; 24-25: Example03_Tour02_Line27; 26-27: Example03_Tour02_Line28; 28-29: Example03_Tour02_Line29; 31: Example02_Tour02_Line10;
+
     import turtle
     wn = turtle.Screen()             # Set up the window and its attributes
     wn.bgcolor("lightgreen")
@@ -270,7 +270,7 @@ completes her triangle:
 
     tess.right(180)                  # turn tess around
     tess.forward(80)                 # move her away from the origin
- 
+
     alex.forward(50)                 # make alex draw a square
     alex.left(90)
     alex.forward(50)
@@ -346,12 +346,12 @@ message for each friend.
 
 .. activecode:: ch03_4    :nocanvas:    :tour_1: "Overall Tour"; 1-2: Example04_Tour01_Line01; 2: Example04_Tour01_Line02; 1: Example04_Tour01_Line03;    for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
         print("Hi " + name + "  Please come to my party on Saturday!")
-      
+
 
 Take a look at the output produced when you press the ``run`` button.  There is one line printed for each friend.  Here's how it works:
 
 
-* **name** in this ``for`` statement is called the **loop variable**.  
+* **name** in this ``for`` statement is called the **loop variable**.
 * The list of names in the square brackets is called a Python **list**.  Lists are very useful.  We will have much
   more to say about them later.
 * Line 2  is the **loop body**.  The loop body is always
@@ -411,7 +411,7 @@ This flowchart shows the exact steps and logic of how the ``for`` statement exec
 
 A codelens demonstration is a good way to help you visualize exactly how the flow of control
 works with the for loop.  Try stepping forward and backward through the program by pressing
-the buttons.  You can see the value of ``name`` change as the loop iterates thru the list of friends.  
+the buttons.  You can see the value of ``name`` change as the loop iterates thru the list of friends.
 
 .. codelens:: vtest
 
@@ -540,7 +540,7 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
       :feedback_a: The items in the list are not actually used to control the color of the turtle because aColor is never used inside the loop.  But, the loop will execute once for each color in the list.
       :feedback_b: Notice that aColor is never actually used inside the loop.
       :feedback_c: While the body of the loop only draws one side of the square it will be  repeated once for each item in the list.
-   
+
       Consider the following code:
       <pre>
       for aColor in ["yellow", "red", "green", "blue"]:
