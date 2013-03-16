@@ -208,14 +208,14 @@ change might mean something quite different from what you intended.
    How can you determine the type of a variable?
 
 .. mchoicemf:: test_question2_1_2
-   :answer_a: character
-   :answer_b: integer
-   :answer_c: float
-   :answer_d: string
+   :answer_a: Character
+   :answer_b: Integer
+   :answer_c: Float
+   :answer_d: String
    :correct: d
    :feedback_a: It is not a single character.
    :feedback_b: The data is not numeric.
-   :feedback_c: The value is not numeric with a decimal.
+   :feedback_c: The value is not numeric with a decimal point.
    :feedback_d: Strings can be enclosed in single quotes.
 
    What is the data type of 'this is what kind of data'?
@@ -276,7 +276,7 @@ quotes are removed.  However, if we print the type, we can see that it is defini
 **Check your understanding**
 
 .. mchoicemf:: test_question2_2_1
-   :answer_a: Nothing, it generates a runtime error.
+   :answer_a: Nothing is printed. It generates a runtime error.
    :answer_b: 53
    :answer_c: 54
    :answer_d: 53.785
@@ -284,9 +284,9 @@ quotes are removed.  However, if we print the type, we can see that it is defini
    :feedback_a: The statement is valid Python code.  It calls the int function on 53.785 and then prints the value that is returned.
    :feedback_b: The int function truncates all values after the decimal and prints the integer value.
    :feedback_c: When converting to an integer, the int function does not round.
-   :feedback_d: The int function removes the fractional part of 53.785 and returns an integer, which is what is printed.
+   :feedback_d: The int function removes the fractional part of 53.785 and returns an integer, which is then printed.
 
-   What value is printed by the following statement:
+   What value is printed when the following statement executes?
    <pre>
    print( int(53.785) )
    </pre>
@@ -432,17 +432,17 @@ or change the variable when you miss another call.
 **Check your understanding**
 
 .. mchoicemf:: test_question2_3_2
-   :answer_a: Nothing is printed, a runtime error occurs.
+   :answer_a: Nothing is printed. A runtime error occurs.
    :answer_b: Thursday
    :answer_c: 32.5
    :answer_d: 19
    :correct: d
-   :feedback_a: It is not illegal to change the type of data that a variable holds.
+   :feedback_a: It is legal to change the type of data that a variable holds in Python.
    :feedback_b: This is the first value assigned to the variable day, but the next statements reassign that variable to new values.
    :feedback_c: This is the second value assigned to the variable day, but the next statement reassigns that variable to a new value.
    :feedback_d: The variable day will contain the last value assigned to it when it is printed.
 
-   What is printed after the following set of statements?
+   What is printed when the following statements execute?
    <pre>
    day = "Thursday"
    day = 32.5
@@ -717,8 +717,8 @@ compute the correct values.
    :feedback_b: The / operator does exact division and returns a floating point result.
    :feedback_c: The / operator does exact division and returns a floating point result.
    :feedback_d: The / operator does exact division and returns a floating point result.
-
-   What is printed from the following statement?
+   
+   What value is printed when the following statement executes?
    <pre>
    print (18 / 4)
    </pre>
@@ -732,10 +732,10 @@ compute the correct values.
    :correct: c
    :feedback_a: -  The // operator does integer division and returns an integer result
    :feedback_b: - The // operator does integer division and returns an integer result, but it truncates the result of the division.  It does not round.
-   :feedback_c: - The // operator does integer division and returns the truncated integer result
+   :feedback_c: - The // operator does integer division and returns the truncated integer result.
    :feedback_d: - The // operator does integer division and returns the result of the division on an integer (not the remainder).
-
-   What is printed from the following statement?
+   
+   What value is printed when the following statement executes?
    <pre>
    print (18 // 4)
    </pre>
@@ -752,7 +752,7 @@ compute the correct values.
    :feedback_c: The % operator returns the remainder after division.
    :feedback_d: The % operator returns the remainder after division.
 
-   What is printed from the following statement?
+   What value is printed when the following statement executes?
    <pre>
    print (18 % 4)
    </pre>
@@ -831,7 +831,7 @@ The result is referred to by ``total_secs``.  Now, each time you run the program
    :feedback_c: 18 is the value of what the user typed, not the type of the data.
    :feedback_d: 18 is the value of what the user typed, not the type of the data.
 
-   What is printed from the following statements?
+   What is printed when the following statements execute?
    <pre>
    n = input("Please enter your age: ")
    # user types in 18
@@ -1091,15 +1091,15 @@ a variable, which means the same as incrementing it by 1.
    :answer_a: 12
    :answer_b: -1
    :answer_c: 11
-   :answer_d: Nothing.  An error occurs because x can never be equal to x - 1
+   :answer_d: Nothing.  An error occurs because x can never be equal to x - 1.
    :correct: c
    :feedback_a: The value of x changes in the second statement.
-   :feedback_b: In the second statement, evaluate the current value of x before subtracting 1.
+   :feedback_b: In the second statement, substitute the current value of x before subtracting 1.
    :feedback_c: Yes, this statement sets the value of x equal to the current value minus 1.
    :feedback_d: Remember that variables in Python are different from variables in math in that they (temporarily) hold values, but can be reassigned.
 
 
-   What is printed by the following statements?
+   What is printed when the following statements execute?
    <pre>
    x = 12
    x = x - 1

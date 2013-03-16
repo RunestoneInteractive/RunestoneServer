@@ -1,0 +1,36 @@
+.modal-profile {
+	display:none;
+    min-height: 520px;
+    overflow: hidden;
+	width: 570px;
+	padding:25px;
+	border:1px solid #fff;
+	box-shadow: 0px 2px 7px #292929;
+	-moz-box-shadow: 0px 2px 7px #292929;
+	-webkit-box-shadow: 0px 2px 7px #292929;
+	border-radius:10px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	background: #f2f2f2;
+	z-index:50;
+}
+
+.modal-lightsout {
+	display:none;
+    position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	z-index:25;
+	background:#000 ;
+}
+
+.modal-close-profile {
+	display:none;
+	position:absolute;
+    height: 43px;
+	width: 43px;
+    background-image: url('close.png');
+	top:1px;
+	right:0.5px;
+}

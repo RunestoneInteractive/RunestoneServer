@@ -26,10 +26,15 @@ def setup(app):
     app.add_directive('actex',ActiveExercise)
     app.add_stylesheet('codemirror.css')
     app.add_stylesheet('theme/default.css')
+    app.add_stylesheet('activecode.css')
 
+    app.add_javascript('jquery-1.8.2.js')
+    app.add_javascript('jquery-ui.js')
+    app.add_javascript('jquery.highlight.js')
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
     app.add_javascript('python.js')
+    app.add_javascript('activecode.js')
     app.add_javascript('skulpt/dist/skulpt.js')
     app.add_javascript('skulpt/dist/builtin.js')
 
@@ -39,14 +44,26 @@ def setup(app):
     app.connect('env-purge-doc', purge_activecodes)
 
 
-EDIT = '''
+
+EDIT1 = '''
 <div id="%(divid)s" >
+<br/>
 <textarea cols="50" rows="12" id="%(divid)s_code" class="active_code">
 %(initialcode)s
-
 </textarea>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
+
 <button onclick="runit('%(divid)s',this, %(include)s);">Run</button>
+'''
+
+
+AUDIO = '''
+<input type="button" id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
+'''
+
+EDIT2 = '''
+<div id="cont"></div>
+
 <button class="ac_opt" onclick="saveEditor('%(divid)s');">Save</button>
 <button class="ac_opt" onclick="requestCode('%(divid)s');">Load</button>
 <br />
@@ -60,6 +77,7 @@ PRE = '''
 <pre id="%(divid)s_pre" class="active_out">
 
 </pre>
+
 '''
 
 END = '''
@@ -83,7 +101,11 @@ class ActivcodeNode(nodes.General, nodes.Element):
 def visit_ac_node(self,node):
     #print self.settings.env.activecodecounter
 
-    res = EDIT
+    res = EDIT1
+    if 'tour_1' not in node.ac_components:
+        res += EDIT2
+    else:
+        res += AUDIO + EDIT2
     if 'nocanvas' not in node.ac_components:
         res += CANVAS
     if 'nopre' not in node.ac_components:
@@ -118,7 +140,12 @@ class ActiveCode(Directive):
         'nocanvas':directives.flag,
         'nopre':directives.flag,
         'caption':directives.unchanged,
-        'include':directives.unchanged
+        'include':directives.unchanged,
+        'tour_1':directives.unchanged,
+        'tour_2':directives.unchanged,
+        'tour_3':directives.unchanged,
+        'tour_4':directives.unchanged,
+        'tour_5':directives.unchanged
     }
 
     def run(self):
@@ -135,6 +162,31 @@ class ActiveCode(Directive):
         else:
             source = '\n'
 
+        self.options['initialcode'] = source
+
+        str=source.replace("\n","*nline*")
+        str0=str.replace("\"","*doubleq*")
+        str1=str0.replace("(","*open*")
+        str2=str1.replace(")","*close*")
+        str3=str2.replace("'","*singleq*")
+        self.options['argu']=str3
+
+        complete=""
+        no_of_buttons=0
+        okeys = self.options.keys()
+        for k in okeys:
+            if '_' in k:
+                x,label = k.split('_')
+                no_of_buttons=no_of_buttons+1
+                complete=complete+self.options[k]+"*atype*"
+
+        newcomplete=complete.replace("\"","*doubleq*")
+        self.options['ctext'] = newcomplete
+        self.options['no_of_buttons'] = no_of_buttons
+
+        if 'caption' not in self.options:
+            self.options['caption'] = ''
+
         if 'include' not in self.options:
             self.options['include'] = 'undefined'
         else:
@@ -142,10 +194,7 @@ class ActiveCode(Directive):
             lst = [x.strip() for x in lst]
             self.options['include'] = lst
 
-        self.options['initialcode'] = source
-        if 'caption' not in self.options:
-            self.options['caption'] = ''
-        #        return [nodes.raw('',res ,format='html')]
+
         return [ActivcodeNode(self.options)]
 
 
@@ -154,7 +203,6 @@ EXEDIT = '''
 <div id="%(divid)s"></div>
 <br />
 '''
-
 
 class ActiveExercise(Directive):
     required_arguments = 1
