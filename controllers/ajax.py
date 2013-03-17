@@ -1,6 +1,7 @@
 import json
 import datetime
 import logging
+import time
 
 logger = logging.getLogger("web2py.app.eds")
 logger.setLevel(logging.DEBUG)
@@ -8,10 +9,16 @@ logger.setLevel(logging.DEBUG)
 response.headers['Access-Control-Allow-Origin'] = '*'
 
 def hsblog():    # Human Subjects Board Log
+    setCookie = False
     if auth.user:
         sid = auth.user.username
     else:
-        sid = request.client+"@anon.user"
+        if request.cookies.has_key('ipuser'):
+            sid = request.cookies['ipuser'].value
+            setCookie = True
+        else:
+            sid = str(int(time.time()*1000))+"@"+request.client
+            setCookie = True
     act = request.vars.act
     div_id = request.vars.div_id
     event = request.vars.event
@@ -19,12 +26,25 @@ def hsblog():    # Human Subjects Board Log
     ts = datetime.datetime.now()
 
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    response.headers['content-type'] = 'application/json'
+    res = {'log':True}
+    if setCookie:
+        response.cookies['ipuser'] = sid
+        response.cookies['ipuser']['expires'] = 24*3600*90
+        response.cookies['ipuser']['path'] = '/'
+    return json.dumps(res)
 
 def runlog():    # Log errors and runs with code
+    setCookie = False
     if auth.user:
         sid = auth.user.username
     else:
-        sid = request.client+"@anon.user"
+        if request.cookies.has_key('ipuser'):
+            sid = request.cookies['ipuser'].value
+            setCookie = True
+        else:
+            sid = str(int(time.time()*1000))+"@"+request.client
+            setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code
@@ -38,6 +58,15 @@ def runlog():    # Log errors and runs with code
         event = 'activecode'
     db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    response.headers['content-type'] = 'application/json'
+    res = {'log':True}
+    if setCookie:
+        response.cookies['ipuser'] = sid
+        response.cookies['ipuser']['expires'] = 24*3600*90
+        response.cookies['ipuser']['path'] = '/'
+    return json.dumps(res)
+
+
 #
 #  Ajax Handlers for saving and restoring active code blocks
 #
@@ -85,7 +114,7 @@ def getprog():
             query = None
 
     res = {}
-    if query:            
+    if query:
         result = db(query)
         if not result.isempty():
             res['acid'] = acid
