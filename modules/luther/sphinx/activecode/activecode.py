@@ -43,15 +43,18 @@ def setup(app):
 
 
 
-EDIT1 = '''
+START = '''
 <div id="%(divid)s" >
+'''
+
+EDIT1 = '''
 <br/>
 <textarea cols="50" rows="12" id="%(divid)s_code" class="active_code">
 %(initialcode)s
 </textarea>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
 
-<button onclick="runit('%(divid)s',this, %(include)s);">Run</button>
+<button id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
 
 
@@ -82,6 +85,18 @@ END = '''
 </div>
 
 '''
+
+AUTO = '''
+<script type="text/javascript">
+$(document).ready(function() {
+    $(window).load(function() {
+        var runb = document.getElementById("%(divid)s_runb");
+        runit('%(divid)s',runb, %(include)s);
+    });
+});
+</script>
+'''
+
 class ActivcodeNode(nodes.General, nodes.Element):
     def __init__(self,content):
         """
@@ -98,16 +113,21 @@ class ActivcodeNode(nodes.General, nodes.Element):
 # The node that is passed as a parameter is an instance of our node class.
 def visit_ac_node(self,node):
     #print self.settings.env.activecodecounter
-
-    res = EDIT1
+    res = START
+    if 'above' in node.ac_components:
+        res += CANVAS
+    res += EDIT1
     if 'tour_1' not in node.ac_components:
         res += EDIT2
     else:
         res += AUDIO + EDIT2
-    if 'nocanvas' not in node.ac_components:
-        res += CANVAS
+    if 'above' not in node.ac_components:
+        if 'nocanvas' not in node.ac_components:
+            res += CANVAS
     if 'nopre' not in node.ac_components:
         res += PRE
+    if 'autorun' in node.ac_components:
+        res += AUTO
     res += END
     res = res % node.ac_components
     res = res.replace("u'","'")  # hack:  there must be a better way to include the list and avoid unicode strings
@@ -137,6 +157,8 @@ class ActiveCode(Directive):
     option_spec = {
         'nocanvas':directives.flag,
         'nopre':directives.flag,
+        'above':directives.flag,  # put the canvas above the code
+        'autorun':directives.flag,
         'caption':directives.unchanged,
         'include':directives.unchanged,
         'tour_1':directives.unchanged,

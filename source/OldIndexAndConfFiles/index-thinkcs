@@ -25,138 +25,44 @@ by Brad Miller and David Ranum
 
    Luther College
 
-General Introduction
-::::::::::::::::::::
+
+.. activecode:: welcome
+   :above:
+   :autorun:
+
+   import turtle
+   import random
+
+   def main():
+       tList = []
+       head = 0
+       for i in range(10):
+           nt = turtle.Turtle()   # Make a new turtle, initialize values
+           nt.setheading(head)
+           nt.pensize(2)
+           nt.color(random.randrange(256),random.randrange(256),random.randrange(256))
+           nt.speed(10)
+           nt.tracer(23,0)
+           tList.append(nt)       # Add the new turtle to the list
+           head = head + 360/10
+
+       for i in range(100):
+           moveTurtles(tList,15,i)
+
+       w = tList[0]
+       w.up()
+       w.goto(-100,-100)
+       w.write("Think Like a Computer Scientist",True,"center","30px Arial")
+
+   def moveTurtles(turtleList,dist,angle):
+       for turtle in turtleList:   # Make every turtle on the list do the same actions.
+           turtle.forward(dist)
+           turtle.right(angle)
+
+   main()
+
 
 .. toctree::
-   :maxdepth: 2
-
-   GeneralIntro/introduction.rst
-
-
-Simple Python Data
-::::::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   SimplePythonData/simpledata.rst
-
-Python Turtle Graphics
-::::::::::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   PythonTurtle/helloturtle.rst
-
-
-Python Modules
-::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   PythonModules/modules.rst
-
-Functions
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Functions/functions.rst
-
-Selection
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Selection/selection.rst
-
-
-More About Iteration
-::::::::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   MoreAboutIteration/moreiteration.rst
-
-
-Strings
-:::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Strings/strings.rst
-
-Lists
-:::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Lists/lists.rst
-
-
-Files
-:::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Files/files.rst
-
-
-Dictionaries
-::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Dictionaries/dictionaries.rst
-
-Recursion
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Recursion/recursionsimple.rst
-   Recursion/graphical.rst
-   Recursion/introexercises.rst
-
-
-Defining Classes
-::::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Classes/classesintro.rst
-   Classes/fractions.rst
-
-
-Acknowledgements
-::::::::::::::::
-.. toctree::
-    :maxdepth: 1
-
-    FrontBackMatter/copyright.rst
-    FrontBackMatter/prefaceinteractive.rst
-    FrontBackMatter/foreword.rst
-    FrontBackMatter/preface.rst
-    FrontBackMatter/preface2e.rst
-    FrontBackMatter/contrib.rst
-    FrontBackMatter/fdl-1.3.rst
-
-Indices and tables
-::::::::::::::::::
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   :hidden:
+   
+   toc
