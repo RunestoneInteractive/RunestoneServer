@@ -118,9 +118,35 @@ Defining Classes
    Classes/classesintro.rst
    Classes/fractions.rst
 
+Labs
+::::
+
+.. toctree::
+   :maxdepth: 1
+
+   Labs/astronomylab.rst
+   Labs/lab03_01.rst
+   Labs/lab04_01.rst
+   Labs/lab04_01a.rst
+   Labs/lab12_01.rst
+   Labs/lab12_02.rst
+   Labs/montepi.rst
+   Labs/pythonshell.rst
+   Labs/sequencelab.rst
+   Labs/sinlab.rst
+
+Appendices
+::::::::::
+
+.. toctree::
+   :maxdepth: 1
+
+   Appendices/errorsAndDebug.rst
+   SimplePythonData/at_1_1.rst
 
 Acknowledgements
 ::::::::::::::::
+
 .. toctree::
     :maxdepth: 1
 
