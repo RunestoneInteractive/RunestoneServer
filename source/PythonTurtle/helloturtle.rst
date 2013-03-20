@@ -185,7 +185,7 @@ screen until we click on it.
    :correct: b
    :feedback_a: The line &quotalex = turtle.Turtle()&quot is what actually creates the turtle object.
    :feedback_b: This line imports the module called turtle, which has all the built in functions for drawing on the screen with the Turtle object.
-   :feedback_c: This functionality is performed with the lines: &quotalex.forward(150)&quot, "&quotlex.left(90)&quot, and &quotalex.forward(75)&quot
+   :feedback_c: This functionality is performed with the lines: &quotalex.forward(150)&quot, &quotlex.left(90)&quot, and &quotalex.forward(75)&quot
    :feedback_d: If we leave it out, Python will give an error saying that it does not know about the name &quotturtle&quot when it reaches the line &quotwn = turtle.Screen()&quot
 
    Consider the following code:
