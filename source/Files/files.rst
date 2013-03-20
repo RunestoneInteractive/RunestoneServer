@@ -1,11 +1,11 @@
 ..  Copyright (C)  Brad Miller, David Ranum
     Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or 
-    any later version published by the Free Software Foundation; with 
-    Invariant Sections being Forward, Prefaces, and Contributor List, 
+    under the terms of the GNU Free Documentation License, Version 1.3 or
+    any later version published by the Free Software Foundation; with
+    Invariant Sections being Forward, Prefaces, and Contributor List,
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
-    
+
 ..  shortname:: Files
 ..  description:: This is the introduction to the basic idea of a text file
 
@@ -23,9 +23,9 @@ In Python, we must **open** files before we can use them and **close** them when
 ================ ======================== =====================================================
 **Method Name**   **Use**                  **Explanation**
 ================ ======================== =====================================================
-``open``          ``open(filename,'r')``    Open a file called filename and use it for reading.  This will return a reference to a file object. 
-``open``          ``open(filename,'w')``    Open a file called filename and use it for writing.  This will also return a reference to a file object. 
-``close``        ``filevariable.close()``   File use is complete. 
+``open``          ``open(filename,'r')``    Open a file called filename and use it for reading.  This will return a reference to a file object.
+``open``          ``open(filename,'w')``    Open a file called filename and use it for writing.  This will also return a reference to a file object.
+``close``        ``filevariable.close()``   File use is complete.
 ================ ======================== =====================================================
 
 Finding a File on your Disk
@@ -77,7 +77,7 @@ other years. The format of the data file is as follows
     Tony Romo QB, DAL   148 213 1605    11  7   69.5%   94.9
     Jay Cutler QB, CHI  261 432 3274    23  16  60.4%   86.3
     Jon Kitna QB, DAL   209 318 2365    16  12  65.7%   88.9
-    Tom Brady QB, NE    324 492 3900    36  4   65.9%   111.0   
+    Tom Brady QB, NE    324 492 3900    36  4   65.9%   111.0
     Ben Roethlisberger QB, PIT  240 389 3200    17  5   61.7%   97.0
     Kerry Collins QB, TEN   160 278 1823    14  8   57.6%   82.2
     Derek Anderson QB, ARI  169 327 2065    7   10  51.7%   65.9
@@ -136,7 +136,7 @@ is as follows:
 To process all of our quarterback data, we will use a *for* loop to iterate over the lines of the file. Using
 the ``split`` method, we can break each line into a list containing all the fields of interest about the
 quarterback. We can then take the values corresponding to first name, lastname, and passer rating to
-construct a simple sentence as shown in :ref:`Listing 1 <readingfile1>`. 
+construct a simple sentence as shown in :ref:`Listing 1 <readingfile1>`.
 
 .. _readingfile1:
 
@@ -182,7 +182,7 @@ the end of the file.
     >>> aline = infile.readline()
     >>> aline
     'Colt McCoy QB, CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n'
-    >>> 
+    >>>
     >>> infile = open("qbdata.txt","r")
     >>> linelist = infile.readlines()
     >>> print(len(linelist))
@@ -192,7 +192,7 @@ the end of the file.
      'Josh Freeman QB, TB\t291\t474\t3451\t25\t6\t61.4%\t95.9\n',
      'Michael Vick QB, PHI\t233\t372\t3018\t21\t6\t62.6%\t100.2\n',
      'Matt Schaub QB, HOU\t365\t574\t4370\t24\t12\t63.6%\t92.0\n']
-    >>> 
+    >>>
     >>> infile = open("qbdata.txt","r")
     >>> filestring = infile.read()
     >>> print(len(filestring))
@@ -208,29 +208,29 @@ the end of the file.
 
 .. _filemethods2a:
 
-======================== =========================== ===================================== 
+======================== =========================== =====================================
 **Method Name**           **Use**                     **Explanation**
-======================== =========================== ===================================== 
-``write``                 ``filevar.write(astring)``  Add astring to the end of the file. 
-                                                      filevar must refer to a file that has 
-                                                      been  opened for writing. 
-``read(n)``               ``filevar.read()``          Reads and returns a string of ``n`` 
-                                                      characters, or the entire file as a 
-                                                      single string if  n is not provided. 
+======================== =========================== =====================================
+``write``                 ``filevar.write(astring)``  Add astring to the end of the file.
+                                                      filevar must refer to a file that has
+                                                      been  opened for writing.
+``read(n)``               ``filevar.read()``          Reads and returns a string of ``n``
+                                                      characters, or the entire file as a
+                                                      single string if  n is not provided.
 ``readline(n)``           ``filevar.readline()``      Returns the next line of the file with
-                                                      all text up to and including the 
-                                                      newline character. If n is provided as 
-                                                      a parameter than only n characters 
-                                                      will be returned if the line is longer 
-                                                      than ``n``. 
-``readlines(n)``          ``filevar.readlines()``     Returns a list of strings, each 
-                                                      representing a single line of the file. 
+                                                      all text up to and including the
+                                                      newline character. If n is provided as
+                                                      a parameter than only n characters
+                                                      will be returned if the line is longer
+                                                      than ``n``.
+``readlines(n)``          ``filevar.readlines()``     Returns a list of strings, each
+                                                      representing a single line of the file.
                                                       If n is not provided then all lines of
                                                       the file are returned. If n is provided
-                                                      then n characters are read but n is 
+                                                      then n characters are read but n is
                                                       rounded up so that an entire line is
                                                       returned.
-======================== =========================== ===================================== 
+======================== =========================== =====================================
 
 Now lets look at another method of reading our file using a ``while`` loop.  This important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
 
@@ -260,9 +260,9 @@ Glossary
       When you are done with a file, you should close it.
 
    read
-	  Will read the entire contents of a file as a string.  This is often used in an assignment statement 
+	  Will read the entire contents of a file as a string.  This is often used in an assignment statement
 	  so that a variable can reference the contents of the file.
-	
+
    readline
       Will read a single line from the file, up to and including the first instance of the newline character.
 
@@ -288,14 +288,14 @@ The following sample file contains one line for each student in an imaginary cla
    students that have more than six quiz scores.
 
    .. actex:: ex_10_1
-   
+
 #. Using the text file ``student_data.dat`` write a program that calculates the average grade
    for each student, and print out the student's name along with their average grade.
 
    .. actex:: ex_10_2
 
 #. Using the text file ``student_data.dat`` write a program that calculates the minimum
-   and maximum grade grade for each student.  Print out the students name along with their    
+   and maximum grade grade for each student.  Print out the students name along with their
    minimum and maximum scores.
 
    .. actex:: ex_10_3
@@ -327,40 +327,40 @@ The following sample file contains one line for each student in an imaginary cla
     96 48
     77 67
 	</pre>
-	
-	
-	
-4. 	Using the data file ``lab_data.data`` each line contains a an x,y coordinate pair. 
+
+
+
+4.  Using the data file ``lab_data.data`` each line contains a an x,y coordinate pair.
     Write a function called ``plotRegression`` that reads the data from this file
-    and uses a turtle to plot those points and a best fit line according to the following 
+    and uses a turtle to plot those points and a best fit line according to the following
     formulas
-    
+
 	.. math::
 
-	   y = \bar{y} + m(x - \bar{x})
-	   
-	   m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}
+       y = \bar{y} + m(x - \bar{x})
+
+       m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}
 
 	Where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
-	values and :math:`n` is the number of points.  If you are not familiar with the 
+	values and :math:`n` is the number of points.  If you are not familiar with the
 	mathematical :math:`\sum` it is the sum operation.  For example :math:`\sum{x_i}`
 	means to add up all the x values.
 
-	Your program should analyze the points and correctly scale the window using 
+	Your program should analyze the points and correctly scale the window using
 	``setworldcoordinates`` so that that each point can be plotted.  Then you should
-	draw the best fit line, in a different color, through the points.	
+	draw the best fit line, in a different color, through the points.
 
     .. actex:: ex_10_4
 
 
-5.  At the end of this chapter is a very long file called ``mystery.dat`` The lines of this 
+5.  At the end of this chapter is a very long file called ``mystery.dat`` The lines of this
     file contain either the word UP or DOWN or a pair of numbers.  UP and DOWN are instructions
     for a turtle to lift up or put down its tail.  The pair of numbers are some x,y coordinates.
     Write a program that reads the file ``mystery.dat`` and uses the turtle to draw the picture
     described by the commands and the set of points.
-    
+
     .. actex:: ex_10_5
-    
+
 
 .. raw:: html
 
@@ -773,4 +773,3 @@ The following sample file contains one line for each student in an imaginary cla
    -116 -201
    </pre>
    mystery.dat
-   
