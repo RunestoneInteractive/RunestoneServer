@@ -64,9 +64,11 @@ release = '3.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*', 
+exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
                      'Graphs/*', 'Trees/*', 'AlgorithmAnalysis/*', 'BasicDS/*',
-                     'SortSearch/*']
+                     'SortSearch/*','_static/*','ErrorHelp/*','Test/*','OverviewForSite/*',
+                     'Appendices/app_*','Recursion/recursioncomplex*','Recursion/recursionexercises.rst',
+                     'Recursion/thinkpyrecursion.rst','Functions/morefunctions.rst','Introduction/introduction.rst']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
