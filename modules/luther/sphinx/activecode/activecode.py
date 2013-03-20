@@ -71,7 +71,6 @@ EDIT2 = '''
 
 <button class="ac_opt" onclick="saveEditor('%(divid)s');">Save</button>
 <button class="ac_opt" onclick="requestCode('%(divid)s');">Load</button>
-<br />
 '''
 
 CANVAS = '''
