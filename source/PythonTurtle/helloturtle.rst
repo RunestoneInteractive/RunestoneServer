@@ -10,6 +10,8 @@
 ..  shortname:: HelloTurtle
 ..  description:: An introduction to using the turtle module in python
 
+.. _hello_turtles:
+
 Hello, Little Turtles!
 ======================
 

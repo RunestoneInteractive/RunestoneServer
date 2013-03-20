@@ -14,12 +14,10 @@
 How to Think Like a Computer Scientist
 ======================================
 
-.. image:: _static/python-logo.png
-    :scale: 75%
-    :alt: ThinkCSPy Logo
 
 Learning with Python: Interactive Edition (Using Python 3.x)
 ------------------------------------------------------------
+
 
 by Brad Miller and David Ranum
 
@@ -78,10 +76,10 @@ Benefits of an Interactive Textbook
 Next Steps
 ----------
 
-1. Get an overview of the features in this book  `Click Here <http://interactivepython.org/courselib/static/overview/OverviewForSite/overview.html>`_
-2. Check out a sample chapter
-3. Check out the :ref:`t_o_c`
-
+* Get an overview of the features in this book  `Click Here <http://interactivepython.org/courselib/static/overview/OverviewForSite/overview.html>`_
+* Check out a sample chapter :ref:`hello_turtles`
+* Check out the :ref:`t_o_c`
+* Take me to Chapter 1  :ref:`the_way_of_the_program`
 
 .. toctree::
    :hidden:

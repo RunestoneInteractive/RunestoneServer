@@ -10,6 +10,8 @@
 ..  shortname:: GeneralIntroduction
 ..  description:: This is a general introduction to computer science.
 
+.. _the_way_of_the_program:
+
 The Way of the Program
 ======================
 
@@ -388,7 +390,7 @@ between them in order to track them down more quickly.
    :feedback_a: Programming errors are called bugs and the process of finding and removing them from a program is called debugging.
    :feedback_b: Maybe, but that is not what we are talking about in this context.
    :feedback_c: This is partially correct.  But, debugging is more than just finding the bugs.  What do you need to do once you find them?
-   :feedback_d: This is partially correct.  But, debugging is more than just fixing the bugs. What do you need to do before you can fix them? 
+   :feedback_d: This is partially correct.  But, debugging is more than just fixing the bugs. What do you need to do before you can fix them?
 
    Debugging is:
 
@@ -436,7 +438,7 @@ experience, though, you will make fewer errors and find them faster.
    :feedback_b: The compiler and / or interpreter is a computer program that determines if your program is written in a way that can be translated into machine language for execution.
    :feedback_c: Well, sort of.  But it is a special thing in the computer that does it.  The stand alone computer without this additional piece can not do it.
    :feedback_d: Your teacher and instructor may be able to find most of your syntax errors, but only because they have experience looking at code and possibly writing code.  With experience syntax errors are easier to find.  But we also have an automated way of finding these types of errors.
- 
+
 
    Who or what typically finds syntax errors?
 
@@ -489,7 +491,7 @@ looking at the output of the program and trying to figure out what it is doing.
    :answer_c: Forgetting to divide by 100 when printing a percentage amount.
    :correct: c
    :feedback_a: A semantic error is an error in logic. In this case the program does not produce the correct output because the problem is not solved correctly. This would be considered a run-time error.
-   :feedback_b: A semantic error is an error in logic. In this case the program does not produce the correct output because the code can not be processed by the compiler or interpreter. This would be considered a syntax error.	
+   :feedback_b: A semantic error is an error in logic. In this case the program does not produce the correct output because the code can not be processed by the compiler or interpreter. This would be considered a syntax error.
    :feedback_c: This will produce the wrong answer because the programmer implemented the solution incorrectly.  This is a semantic error.
 
    Which of the following is a semantic error?
@@ -542,7 +544,7 @@ practices.
    :answer_d: there is no difference between them.
    :correct: a
    :feedback_a: Programming is the writing of the source code and debugging is the process of finding and correcting all the errors within the program until it is correct.
-   :feedback_b: Programming can be creative, but it also follows a process and debugging can involve creativity in how you find the errors.	
+   :feedback_b: Programming can be creative, but it also follows a process and debugging can involve creativity in how you find the errors.
    :feedback_c: Some people think that debugging is actually more fun than programming (they usually become good software testers).  Debugging is much like solving puzzles, which some people think is fun!
    :feedback_d: You cannot debug without first having a program, meaning that someone had to do the programming first.
 
@@ -660,7 +662,7 @@ natural languages, can make a big difference in a formal language.
    :answer_d: tokens, structure, syntax, and semantics.
    :correct: b
    :feedback_a: Actually both languages can be parsed (determining the structure of the sentence), but formal languages can be parsed more easily in software.
-   :feedback_b: All of these can be present in natural languages, but cannot exist in formal languages.	
+   :feedback_b: All of these can be present in natural languages, but cannot exist in formal languages.
    :feedback_c: There are several differences between the two but they are also similar.
    :feedback_d: These are the similarities between the two.
 
