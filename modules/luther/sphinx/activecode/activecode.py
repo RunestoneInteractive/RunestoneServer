@@ -49,14 +49,18 @@ START = '''
 
 EDIT1 = '''
 <br/>
+<div id="%(divid)s_code_div" style="display: %(hidecode)s">
 <textarea cols="50" rows="12" id="%(divid)s_code" class="active_code">
 %(initialcode)s
 </textarea>
+</div>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
 
 <button id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
-
+UNHIDE='''
+<button id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh()">Show/Hide Code</button>
+'''
 
 AUDIO = '''
 <input type="button" id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
@@ -71,7 +75,9 @@ EDIT2 = '''
 '''
 
 CANVAS = '''
-<canvas id="%(divid)s_canvas" height="400" width="400" style="border-style: solid; display: none"></canvas>
+<div style="text-align: center">
+<canvas id="%(divid)s_canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
 '''
 
 PRE = '''
@@ -124,6 +130,8 @@ def visit_ac_node(self,node):
     if 'above' not in node.ac_components:
         if 'nocanvas' not in node.ac_components:
             res += CANVAS
+    if node.ac_components['hidecode'] == 'none':
+        res += UNHIDE
     if 'nopre' not in node.ac_components:
         res += PRE
     if 'autorun' in node.ac_components:
@@ -161,6 +169,7 @@ class ActiveCode(Directive):
         'autorun':directives.flag,
         'caption':directives.unchanged,
         'include':directives.unchanged,
+        'hidecode':directives.unchanged,
         'tour_1':directives.unchanged,
         'tour_2':directives.unchanged,
         'tour_3':directives.unchanged,
@@ -214,6 +223,10 @@ class ActiveCode(Directive):
             lst = [x.strip() for x in lst]
             self.options['include'] = lst
 
+        if 'hidecode' in self.options:
+            self.options['hidecode'] = 'none'
+        else:
+            self.options['hidecode'] = 'block'
 
         return [ActivcodeNode(self.options)]
 
