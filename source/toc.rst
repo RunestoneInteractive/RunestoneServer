@@ -1,3 +1,5 @@
+.. _t_o_c:
+
 Table of Contents
 :::::::::::::::::
 
