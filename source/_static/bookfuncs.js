@@ -163,7 +163,7 @@ function runit(myDiv,theButton,includes) {
     if (! Sk.isTurtleProgram ) {
         $(theButton).removeAttr('disabled');
     }
-    if (allVisualizers !== undefined) {
+    if (typeof(allVisualizers) != "undefined") {
         $.each(allVisualizers, function(i, e) {
             e.redrawConnectors();
           });
