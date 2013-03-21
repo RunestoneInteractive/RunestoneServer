@@ -145,7 +145,7 @@ function runit(myDiv,theButton,includes) {
             Sk.tg.turtleList = [];
         }
     }
-    // set execLimit in milliseconds  -- for student projects set this to 
+    // set execLimit in milliseconds  -- for student projects set this to
     // 25 seconds -- just less than Chrome's own timer.
     Sk.execLimit = 25000;
     // configure Skulpt output function, and module reader
@@ -275,7 +275,7 @@ function saveEditor(divName) {
 
 function requestCode(divName,sid) {
     var editor = cm_editors[divName+"_code"];
-    
+
 
     var data = {acid: divName}
     if (sid !== undefined) {
@@ -520,4 +520,22 @@ function redrawAllVisualizerArrows() {
 	for(var v in allVisualizers)
 	    allVisualizers[v].redrawConnectors();
     }
+}
+
+function getNumUsers() {
+    $.getJSON(eBookConfig.ajaxURL+'getnumusers',setNumUsers)
+}
+
+function getOnlineUsers() {
+    $.getJSON(eBookConfig.ajaxURL+'getnumonline',setOnlineUsers)
+}
+
+function setOnlineUsers(data) {
+    var d = data[0]
+    $("#numuserspan").text(d.online);
+}
+
+function setNumUsers(data) {
+    var d = data[0]
+    $("#totalusers").text(d.numusers);
 }

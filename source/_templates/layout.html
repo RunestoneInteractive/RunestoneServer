@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block extrahead %}
-<script type="text/javascript"> 
+<script type="text/javascript">
 eBookConfig = {}
 eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000',
 eBookConfig.app = eBookConfig.host+'/{{appname}}',
@@ -35,7 +35,7 @@ eBookConfig.isLoggedIn = false;
 
 {%- block sidebarlogo %}
 {%- if logo %}
-  <p class="logo"><a href="{{ pathto(master_doc) }}">
+  <p class="logo"><a href="{{ pathto('index') }}">
     <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo" title="Click for Main Table of Contents"/>
   </a></p>
 {%- endif %}
@@ -52,6 +52,8 @@ eBookConfig.isLoggedIn = false;
 <script type="text/javascript" charset="utf-8">
     $(document).ready(addUserToFooter)
     $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
 </script>
 
 <script type="text/javascript">
