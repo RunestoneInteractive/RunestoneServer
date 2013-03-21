@@ -145,3 +145,23 @@ def getuser():
     logging.debug("returning login info: %s",res)
     return json.dumps([res])
 
+def getnumonline():
+    response.headers['content-type'] = 'application/json'
+
+    try:
+        query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
+        rows = db.executesql(query)
+    except:
+        rows = [[21]]
+
+    res = {'online':rows[0][0]}
+    return json.dumps([res])
+
+def getnumusers():
+    response.headers['content-type'] = 'application/json'
+
+    query = """select count(*) from (select distinct(sid) from useinfo) as X """
+    rows = db.executesql(query)
+
+    res = {'numusers':rows[0][0]}
+    return json.dumps([res])
