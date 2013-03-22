@@ -7,7 +7,7 @@ Getting Around The Book
 This diagram gives you a few quick hints on how to get around the textbook.
 
 .. image:: _static/navhelp.png
-   :width: 500
+   :width: 100%
 
 
 Activecode
