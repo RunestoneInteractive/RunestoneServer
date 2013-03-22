@@ -66,7 +66,7 @@ release = '3.0'
 # directories to ignore when looking for source files.
 exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
                      'Graphs/*', 'Trees/*', 'AlgorithmAnalysis/*', 'BasicDS/*',
-                     'SortSearch/*','_static/*','ErrorHelp/*','Test/*','OverviewForSite/*',
+                     'SortSearch/*','_static/skulpt/doc/*','ErrorHelp/*','Test/*','OverviewForSite/*',
                      'Appendices/app_*','Recursion/recursioncomplex*','Recursion/recursionexercises.rst',
                      'Recursion/thinkpyrecursion.rst','Functions/morefunctions.rst','Introduction/introduction.rst']
 
