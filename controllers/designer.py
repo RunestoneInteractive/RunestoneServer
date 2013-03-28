@@ -4,6 +4,7 @@ from os import path
 import os
 import shutil
 import sys
+import re
 
 from docutils.utils import SystemMessage
 
@@ -30,16 +31,16 @@ def index():
     rendered by views/default/index.html or views/generic.html
     """
     #response.flash = "Welcome to CourseWare Manager!"
-    
+
     basicvalues = {}
     basicvalues["message"]=T('Welcome to CourseWare Builder')
-    basicvalues["descr"]=T('''This tool allows you to create your own courseware by choosing from a catalog of modules.  
+    basicvalues["descr"]=T('''This tool allows you to create your own courseware by choosing from a catalog of modules.
     To begin, enter a project name below.''')
     #return dict(message=T('Welcome to CourseWare Manager'))
     return basicvalues
 
 def build():
-    
+
     buildvalues = {}
     buildvalues['pname']=request.vars.projectname
     buildvalues['pdescr']=request.vars.projectdescription
@@ -65,18 +66,20 @@ def build():
 
         # Now Copy the whole source directory to tmp
         workingdir = request.folder
-        sourcedir = path.join(workingdir,'tmp',request.vars.projectname)
+        sourcedir = path.join(workingdir,request.vars.projectname)
+        if os.path.exists(sourcedir) or re.search(r'[ &]',request.vars.projectname):
+            return dict(mess='You may not use %s for your course name'%request.vars.projectname,success=False)
 
         shutil.copytree(path.join(workingdir,'source'),sourcedir)
 
         conffile = request.vars.coursetype + '-conf.py'
         indexfile = 'index-' + request.vars.coursetype
         # copy the config file to conf.py
-        shutil.copy(path.join(workingdir,'source','OldIndexAndConfFiles',conffile),
+        shutil.copy(path.join(workingdir,request.vars.coursetype,'conf.py'),
             path.join(sourcedir,'conf.py'))
 
         # copy the index file
-        shutil.copy(path.join(workingdir,'source','OldIndexAndConfFiles',indexfile),
+        shutil.copy(path.join(workingdir,request.vars.coursetype,'index.rst'),
             path.join(sourcedir,'index.rst'))
 
         # set the courseid
@@ -113,7 +116,7 @@ def build():
 
         shutil.rmtree(sourcedir)
 
-        return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html' )       
+        return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html',success=True )
     else:
 
         cid = db.courses.update_or_insert(course_id=request.vars.projectname)
@@ -128,27 +131,27 @@ def build():
         # then do not change teh instructors cid.
         if cid:
             db(db.auth_user.id == auth.user.id).update(course_id = cid)
-        
+
         moddata = {}
-        
+
         rows = db(db.modules.id>0).select()
         for row in rows:
             moddata[row.id]=[row.shortname,row.description,row.pathtofile]
-        
+
         buildvalues['moddata']=  moddata   #actually come from source files
-        
+
         return buildvalues
-    
+
 def makefile():
-    
+
     p = request.vars.toc
 
-        
-                  
+
+
     pcode = request.vars.projectname
     row = db(db.projects.projectcode==pcode).select()
     title = row[0].description
-    
+
     workingdir = request.folder
     sourcedir = path.join(workingdir,'tmp',pcode)
 
@@ -157,23 +160,23 @@ def makefile():
     os.mkdir(sourcedir)
 
     f = open(path.join(sourcedir,"index.rst"),"w")
-    
+
     f.write('''.. Copyright (C)  Brad Miller, David Ranum
    Permission is granted to copy, distribute and/or modify this document
-   under the terms of the GNU Free Documentation License, Version 1.3 or 
-   any later version published by the Free Software Foundation; with 
-   Invariant Sections being Forward, Prefaces, and Contributor List, 
+   under the terms of the GNU Free Documentation License, Version 1.3 or
+   any later version published by the Free Software Foundation; with
+   Invariant Sections being Forward, Prefaces, and Contributor List,
    no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
    is included in the section entitled "GNU Free Documentation License".''' + "\n\n")
 
-                  
+
     f.write("="*len(title) + "\n")
     f.write(title + "\n")
     f.write("="*len(title) + "\n\n")
-    
+
     toc = request.vars.toc
     parts = toc.split(" ")
-    
+
     idx = 0
     while idx<len(parts):
         item = parts[idx]
@@ -198,9 +201,9 @@ def makefile():
             f.write("\n" + topic + "\n" + ":"*len(topic) + "\n\n")
             f.write('''.. toctree::
    :maxdepth: 2 \n\n''')
-                
-    
-    
+
+
+
     f.write('''\nAcknowledgements
 ::::::::::::::::
 
@@ -245,7 +248,7 @@ def makefile():
     app.build(force_all, filenames)
 
     shutil.rmtree(sourcedir)
-    
+
     yoururlpath=path.join('/',request.application,"static",coursename,"index.html")
 
     return dict(message=T("Here is the link to your new eBook"),yoururl=yoururlpath)

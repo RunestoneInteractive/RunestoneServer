@@ -14,7 +14,7 @@ Description: <input type="text" size="100" value="Enter a short description" nam
 
 <p>If you would like to use a copy of one of our ready-made books select it below:</p>
 
-<input type="radio" name="coursetype" value="thinkcs" /> How to Think Like a Computer Scientist: Interactive Edition<br />
+<input type="radio" name="coursetype" value="thinkcspy" /> How to Think Like a Computer Scientist: Interactive Edition<br />
 <input type="radio" name="coursetype" value="pythonds" /> Problem Solving with Algorithms and Data Structures<br />
 OR<br />
 <input type="radio" name="coursetype" value="custom" /> Build a Custom Course <br /> <br />
@@ -26,13 +26,16 @@ OR<br />
 <input type="submit" value="Submit" />
 </form>
 
-<div style="align: center;">
+<div id="spinner_div" style="align: center; display: none;">
+    <p>Your course is being prepared for you.  This may take several minutes to complete.  When the course is finished you will be asked to logout and then log in again to be taken to your course.  Because you created the course you are set up as the instructor.</p>
 	<img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
 </div>
 {{pass}}
 
 <script type="text/javascript">
 	function unhide_img(id) {
+        var d = document.getElementById('spinner_div')
+        d.style.display = "block";
 		var i = document.getElementById('spinner');
 		i.style.display = "block";
 	}

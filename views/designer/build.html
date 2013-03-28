@@ -9,18 +9,21 @@
 
 {{ if 'mess' in globals():}}
     <h1>{{=mess}}</h1>
-    You can access your course here:  <a href="/{{=request.application}}/{{=course_url}}">Here</a>
-
+    {{if success:}}
+    To access your new course you will need to logout, and then log in again.  After login you will be taken to the home page for your course. <a href="/{{=request.application}}/default/user/logout">Logout</a>
+    {{else:}}
+    Please use the back button to back up and use a different name.  Your name should not contain spaces or special characters, especially the &amp; character.
+    {{pass}}
 {{ else: }}
     <h4>Module Index</h4>
-         
+
     <div id="boxA" class="homeboxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
         {{dragitemidx = 0}}
         {{for item in moddata.keys():}}
                 {{dragitemidx = dragitemidx + 1}}
                 {{idstr = str(item)}}
                 <div id={{=idstr}} data-filename="{{=moddata[item][2]}}" class="word" draggable="true" onclick="showDetails({{=item}})" ondragstart="drag(event)">
-                    
+
                     <a onmouseover='this.style.cursor="pointer" ' onfocus='this.blur();' onclick="document.getElementById('PopUp').style.display = 'block' " >{{=moddata[item][0]}}</a>
     	<div id='PopUp' style='display: none; position: absolute; left: 500px; top: 100px; border: solid black 1px; padding: 10px; background-color: rgb(255,255,225); text-align: justify; font-size: 12px; width: 135px;'>
     	{{=moddata[item][1]}}
@@ -28,7 +31,7 @@
     	<div style='text-align: right;'><a onmouseover='this.style.cursor="pointer" ' style='font-size: 12px;' onfocus='this.blur();' onclick="document.getElementById('PopUp').style.display = 'none' " >Close</a></div>
     	</div>
        </div>
-                
+
                 <a onmouseover='this.style.cursor="pointer" ' onfocus='this.blur();' onclick="document.getElementById('PopUp{{=idstr}}').style.display = 'block' " >{{=moddata[item][0]}}</a>
 	<div id='PopUp{{=idstr}}' style='display: none; position: absolute; left: 500px; top: 100px; border: solid black 1px; padding: 10px; background-color: rgb(255,255,225); text-align: justify; font-size: 12px; width: 135px;'>
 	{{=moddata[item][1]}}
@@ -36,8 +39,8 @@
 	<div style='text-align: right;'><a onmouseover='this.style.cursor="pointer" ' style='font-size: 12px;' onfocus='this.blur();' onclick="document.getElementById('PopUp{{=idstr}}').style.display = 'none' " >Close</a></div>
 	</div>
    </div>
-            
-            
+
+
     {{pass}}
 
     </div>
@@ -51,7 +54,7 @@
     <button type="button" onclick="buildIndexFile('{{=pname}}')">Create Index</button>
 
     <div id="chapterboxes">
-         <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">     
+         <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
              <input id="title" type="text" value="Your Section Title Here" name="label" />
          </div>
 
