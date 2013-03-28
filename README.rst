@@ -19,6 +19,10 @@ http://sphinx.pocoo.org
 
 Follow the instructions there to download and install Sphinx.
 
+Next install paver, version 1.2.0 is current as of this writing.  If you have ``pip`` installed its as easy as ``pip install paver`` if not, then follow the instructions `On the paver github page <http://paver.github.com/paver/#installation>`_
+
+Once paver is installed you will also need to install sphincontrib-paverutils, again the easiest route is to use ``pip install sphinxcontrib-paverutils``
+
 If you want to run a full blown server -- so you can save activecode assignments etc. then you will need to download and install web2py.  http://web2py.com
 
 After you install web2py go to the applications folder and check out this repository.  This will be installed as a web2py application automatically.
@@ -43,14 +47,14 @@ If you are using a GUI git client you may simply get prompted to update the subm
 Building the Book
 -----------------
 
-Once you the above installed, you can type ``make all`` from the command
+Once you the above installed, you can type ``paver allbooks`` from the command
 line and that will build the following targets:
 
 * How to Think Like a Computer Scientist
 * Problem Solving with algorithms and Data Structures using Python
 * A development version of everything combined (devcourse)
 
-You can quickly check the build by opening the file static/devcourse/index.html in your browser.
+You can quickly check the build by opening the file ``static/devcourse/index.html`` in your browser.
 
 Now before you start web2py its convenient to make runestone the default application.  In the top level web2py directory copy routes.example.py to routes.py and Modify the three lines that contain the word runestone to look like this::
 
