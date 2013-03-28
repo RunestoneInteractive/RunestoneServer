@@ -1,8 +1,8 @@
 ..  Copyright (C)  Brad Miller, David Ranum
     Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or 
-    any later version published by the Free Software Foundation; with 
-    Invariant Sections being Forward, Prefaces, and Contributor List, 
+    under the terms of the GNU Free Documentation License, Version 1.3 or
+    any later version published by the Free Software Foundation; with
+    Invariant Sections being Forward, Prefaces, and Contributor List,
     no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
     is included in the section entitled "GNU Free Documentation License".
 
@@ -209,6 +209,32 @@ Graphs and Graph Algorithms
    Graphs/graphshortpath.rst
    Graphs/graphexercises.rst
 
+Labs
+::::
+
+.. toctree::
+   :maxdepth: 1
+
+   Labs/astronomylab.rst
+   Labs/lab03_01.rst
+   Labs/lab04_01.rst
+   Labs/lab04_01a.rst
+   Labs/lab12_01.rst
+   Labs/lab12_02.rst
+   Labs/montepi.rst
+   Labs/pythonshell.rst
+   Labs/sequencelab.rst
+   Labs/sinlab.rst
+
+Appendices
+::::::::::
+
+.. toctree::
+   :maxdepth: 1
+
+   Appendices/errorsAndDebug.rst
+   SimplePythonData/at_1_1.rst
+
 
 Acknowledgements
 ::::::::::::::::
@@ -230,3 +256,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. toctree::
+   :hidden:
+
+   navhelp

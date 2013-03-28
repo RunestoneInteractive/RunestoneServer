@@ -61,7 +61,21 @@ options(
                        'loglevel':10,
                        'course_url':'http://127.0.0.1:8000' }
 
+    ),
+
+    devcourse = Bunch(
+        builddir="static/devcourse",
+        sourcedir="source",
+        outdir="static/devcourse",
+        confdir="devcourse",
+        template_args={'course_id':'devcourse',
+                       'login_required':'true',
+                       'appname':'runestone',
+                       'loglevel':10,
+                       'course_url':'http://127.0.0.1:8000' }
+
     )
+
 
 )
 
@@ -85,3 +99,15 @@ def pythonds(options):
 def overview(options):
     paverutils.run_sphinx(options,'overview')
 
+@task
+def devcourse(options):
+    sh('cp %s/index.rst %s' % (options.devcourse.confdir,options.devcourse.sourcedir))
+
+    paverutils.run_sphinx(options,'devcourse')
+
+@task
+def allbooks(options):
+    thinkcspy(options)
+    pythonds(options)
+    devcourse(options)
+    overview(options)

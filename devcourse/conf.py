@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath('../modules'))
 extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta','gatech.parsons']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['../source/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -64,7 +64,9 @@ release = '3.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*']
+exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
+            'Appendices/app_*', 'ErrorHelp/parseerror.rst','Functions/morefunctions.rst',
+            'Recursion/thinkpyrecursion.rst','Test/*','_static/skulpt/doc/*', 'toc.rst']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -112,7 +114,7 @@ html_short_title ='Python Courseware'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "_static/logo.jpg"
+html_logo = "../source/_static/logo.jpg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -122,7 +124,7 @@ html_logo = "_static/logo.jpg"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['../source/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

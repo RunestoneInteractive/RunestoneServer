@@ -68,7 +68,7 @@ exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*'
                     'Classes/*','Dictionaries/*', 'Files/*', 'Functions/*', 'GeneralIntro/*',
                     'Labs/*','MoreAboutIteration/*','PythonModules/*','PythonTurtle/*',
                     'Selection/*','SimplePythonData/*','Test/*', 'Appendices/app_*',
-                     '_static/skulpt/doc/*','toc.rst','navhelp.rst', 'Strings/strings.rst',
+                     '_static/skulpt/doc/*','toc.rst', 'Strings/strings.rst',
                      'Recursion/introexercises.rst','Recursion/thinkpyrecursion.rst',
                      'Lists/lists.rst','FrontBackMatter/*','ErrorHelp/parseerror.rst',
                      'Appendices/errorsAndDebug.rst']
