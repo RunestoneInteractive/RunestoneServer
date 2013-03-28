@@ -129,6 +129,8 @@ def visit_ac_node(self,node):
     if 'above' not in node.ac_components:
         if 'nocanvas' not in node.ac_components:
             res += CANVAS
+    if 'hidecode' not in node.ac_components:
+        node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
         res += UNHIDE
     if 'nopre' not in node.ac_components:
@@ -168,7 +170,7 @@ class ActiveCode(Directive):
         'autorun':directives.flag,
         'caption':directives.unchanged,
         'include':directives.unchanged,
-        'hidecode':directives.unchanged,
+        'hidecode':directives.flag,
         'tour_1':directives.unchanged,
         'tour_2':directives.unchanged,
         'tour_3':directives.unchanged,
