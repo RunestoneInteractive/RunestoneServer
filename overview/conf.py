@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath('../modules'))
 extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['../source/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -37,10 +37,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'toc'
+master_doc = 'index'
 
 # General information about the project.
-project = u'How to Think Like a Computer Scientist'
+project = u'Runestone Interactive Overview'
 copyright = u'2012, Brad Miller, David Ranum'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -66,9 +66,12 @@ release = '3.0'
 # directories to ignore when looking for source files.
 exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
                      'Graphs/*', 'Trees/*', 'AlgorithmAnalysis/*', 'BasicDS/*',
-                     'SortSearch/*','_static/skulpt/doc/*','ErrorHelp/*','Test/*','OverviewForSite/*',
-                     'Appendices/app_*','Recursion/recursioncomplex*','Recursion/recursionexercises.rst',
-                     'Recursion/thinkpyrecursion.rst','Functions/morefunctions.rst','Introduction/introduction.rst']
+                     'SortSearch/*', 'Appendices/*','Classes/*','Dictionaries/*',
+                     'ErrorHelp/*', 'Files/*','FrontBackMatter/*', 'Functions/*',
+                     'GeneralInro/*', 'Introduction/*', 'Labs/*', 'Lists/*', 'MiscHelpers/*',
+                     'MoreAboutIteration/*', 'OriginalIllustrations/*', 'PythonModules/*',
+                     'PythonTurtle/*', 'Recursion/*', 'Selection/*', 'SimlePythonData/*',
+                     'Strings/*']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -109,14 +112,14 @@ html_style = "style.css"
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = 'How to Think like a Computer Scientist: Interactive Edition'
+html_title = 'Runestone Interactive Overiew'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title ='How to Think Like a Computer Scientist'
+html_short_title ='Runestone Interactive Overview'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "_static/logo.jpg"
+html_logo = "../source/_static/logo.jpg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -126,7 +129,7 @@ html_logo = "_static/logo.jpg"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['../source/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -189,7 +192,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'ProblemSolvingwithAlgorithmsandDataStructures.tex', u'Problem Solving with Algorithms and Data Structures',
+  ('index', 'RunestoneInteractiveOverview.tex', u'Runestone Interactive Overview',
    u'Brad Miller, David Ranum', 'manual'),
 ]
 
@@ -219,7 +222,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'problemsolvingwithalgorithmsanddatastructures', u'Problem Solving with Algorithms and Data Structures Documentation',
+    ('index', 'runestoneinteractiveoverview', u'Runestone Interactive Overview Documentation',
      [u'Brad Miller, David Ranum'], 1)
 ]
 

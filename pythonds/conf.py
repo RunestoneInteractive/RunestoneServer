@@ -25,10 +25,10 @@ sys.path.insert(0, os.path.abspath('../modules'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons']
+extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta','gatech.parsons']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['../source/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Runestone Interactive Overview'
+project = u'Problem Solving with Algorithms and Data Structures'
 copyright = u'2012, Brad Miller, David Ranum'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -64,14 +64,14 @@ release = '3.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*', 
-                     'Graphs/*', 'Trees/*', 'AlgorithmAnalysis/*', 'BasicDS/*',
-                     'SortSearch/*', 'Appendices/*','Classes/*','Dictionaries/*',
-                     'ErrorHelp/*', 'Files/*','FrontBackMatter/*', 'Functions/*',
-                     'GeneralInro/*', 'Introduction/*', 'Labs/*', 'Lists/*', 'MiscHelpers/*',
-                     'MoreAboutIteration/*', 'OriginalIllustrations/*', 'PythonModules/*',
-                     'PythonTurtle/*', 'Recursion/*', 'Selection/*', 'SimlePythonData/*', 
-                     'Strings/*']
+exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
+                    'Classes/*','Dictionaries/*', 'Files/*', 'Functions/*', 'GeneralIntro/*',
+                    'Labs/*','MoreAboutIteration/*','PythonModules/*','PythonTurtle/*',
+                    'Selection/*','SimplePythonData/*','Test/*', 'Appendices/app_*',
+                     '_static/skulpt/doc/*','toc.rst','navhelp.rst', 'Strings/strings.rst',
+                     'Recursion/introexercises.rst','Recursion/thinkpyrecursion.rst',
+                     'Lists/lists.rst','FrontBackMatter/*','ErrorHelp/parseerror.rst',
+                     'Appendices/errorsAndDebug.rst']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -112,14 +112,14 @@ html_style = "style.css"
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = 'Runestone Interactive Overiew'
+html_title = 'Problem Solving with Algorithms and Data Structures'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title ='Runestone Interactive Overview'
+html_short_title ='Problem Solving with Algorithms and Data Structures'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "_static/logo.jpg"
+html_logo = "../source/_static/logo.jpg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -129,7 +129,7 @@ html_logo = "_static/logo.jpg"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['../source/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -192,7 +192,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'RunestoneInteractiveOverview.tex', u'Runestone Interactive Overview',
+  ('index', 'ProblemSolvingwithAlgorithmsandDataStructures.tex', u'Problem Solving with Algorithms and Data Structures',
    u'Brad Miller, David Ranum', 'manual'),
 ]
 
@@ -222,7 +222,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'runestoneinteractiveoverview', u'Runestone Interactive Overview Documentation',
+    ('index', 'problemsolvingwithalgorithmsanddatastructures', u'Problem Solving with Algorithms and Data Structures Documentation',
      [u'Brad Miller, David Ranum'], 1)
 ]
 

@@ -25,10 +25,10 @@ sys.path.insert(0, os.path.abspath('../modules'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta','gatech.parsons']
+extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['../source/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -37,10 +37,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = 'toc'
 
 # General information about the project.
-project = u'Python Courseware'
+project = u'How to Think Like a Computer Scientist'
 copyright = u'2012, Brad Miller, David Ranum'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -64,7 +64,11 @@ release = '3.0'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*']
+exclude_patterns = ['ActiveIndexFiles/*','OldIndexAndConfFiles/*','ExtraStuff/*',
+                     'Graphs/*', 'Trees/*', 'AlgorithmAnalysis/*', 'BasicDS/*',
+                     'SortSearch/*','_static/skulpt/doc/*','ErrorHelp/*','Test/*','OverviewForSite/*',
+                     'Appendices/app_*','Recursion/recursioncomplex*','Recursion/recursionexercises.rst',
+                     'Recursion/thinkpyrecursion.rst','Functions/morefunctions.rst','Introduction/introduction.rst']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -105,14 +109,14 @@ html_style = "style.css"
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = 'Python Courseware'
+html_title = 'How to Think like a Computer Scientist: Interactive Edition'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title ='Python Courseware'
+html_short_title ='How to Think Like a Computer Scientist'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "_static/logo.jpg"
+html_logo = "../source/_static/logo.jpg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -122,7 +126,7 @@ html_logo = "_static/logo.jpg"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['../source/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

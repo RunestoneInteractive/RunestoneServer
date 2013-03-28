@@ -3,22 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. meta::
+   :description: An interactive version of Problem Solving with Algorithms and Data Structures using Python.
+   :keywords: python, data structures, computer science
+
 ==============================================================
 Welcome to Problem Solving with Algorithms and Data Structures
 ==============================================================
 
+.. image:: _static/PythonDScover.jpg
+    :alt: PythonDS Cover
+
 By Brad Miller and David Ranum, Luther College
 
-CS1
-:::
-
-.. toctree::
-   :maxdepth: 2
-
-   introduction.rst
-   simpledata.rst
-   helloturtle.rst
-   functions.rst
 
 Introduction
 ::::::::::::
@@ -66,7 +63,7 @@ Sorting and Searching
 
 .. toctree::
    :maxdepth: 2
-   
+
    SortSearch/searching.rst
    SortSearch/sorting.rst
    SortSearch/sortsearchexercises.rst
@@ -97,19 +94,11 @@ Graphs and Graph Algorithms
    Graphs/graphdfs.rst
    Graphs/graphshortpath.rst
    Graphs/graphexercises.rst
-   
+
 
 Acknowledgements
 ::::::::::::::::
-.. toctree::
-    :maxdepth: 1
 
-    copyright.rst
-    prefaceinteractive.rst
-    foreword.rst
-    preface.rst
-    preface2e.rst
-    contrib.rst
 
 Indices and tables
 ::::::::::::::::::

@@ -30,7 +30,7 @@ on the video shown below, you will hear us talk about the tools that will be des
 
 .. video:: videoinfo
     :controls:
-    :thumb: ../_static/activecodethumb.png
+    :thumb: _static/activecodethumb.png
 
     http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
     http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
