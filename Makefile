@@ -10,8 +10,8 @@ LOGINREQ = true
 #
 #
 TEMPLATEDEFS  = -A course_id=$(COURSEID) -A appname=$(APPNAME) -A loglevel=$(LOGLEVEL) -A course_url=$(COURSEURL) -A login_required=$(LOGINREQ)
-SPHINXOPTS    = -a -E 
-#SPHINXOPTS    = 
+SPHINXOPTS    = -a -E
+#SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = static/$(COURSEID)
@@ -23,7 +23,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) $(T
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html thinkcspy pythonds dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext 
+.PHONY: help clean html thinkcspy pythonds dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext
 
 help:
 	@echo "Please use \'make <target>' where <target> is one of"
@@ -54,46 +54,17 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)
-	@echo
-	@echo "Build finished. The HTML pages are in $(BUILDDIR)"
+	paver devcourse
 
-thinkcspy: COURSEID=thinkcspy
-thinkcspy: LOGINREQ=false
 thinkcspy:
-	cp source/OldIndexAndConfFiles/index-thinkcs source/index.rst
-	cp source/OldIndexAndConfFiles/thinkcs-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/thinkcspy/doctrees $(SPHINXOPTS) -A project='How to Think Like a Computer Scientist Interactive Edition' $(TEMPLATEDEFS) source static/$(COURSEID)
-	cp source/OldIndexAndConfFiles/index-master source/index.rst
-	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
+	paver thinkcspy
 
-overview: COURSEID=overview
-overview: LOGINREQ=false
 overview:
-	cp source/OldIndexAndConfFiles/index-overview source/index.rst
-	cp source/OldIndexAndConfFiles/overview-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/overview/doctrees $(SPHINXOPTS) -A project='Overview of Runestone Interactive Tools' $(TEMPLATEDEFS) source static/$(COURSEID)
-	cp source/OldIndexAndConfFiles/index-master source/index.rst
-	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
+	paver overview
 
-
-pythonds: COURSEID=pythonds
-pythonds: LOGINREQ=false
 pythonds:
-	cp source/OldIndexAndConfFiles/index-pythonds source/index.rst
-	cp source/OldIndexAndConfFiles/pythonds-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/pythonds/doctrees $(SPHINXOPTS) -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
-	cp source/OldIndexAndConfFiles/index-master source/index.rst
-	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
+	paver pythonds
 
-luther151:	COURSEID=luther151
-luther151:	COURSEURL=http://interactivepython.org
-luther151:
-	cp source/OldIndexAndConfFiles/index-pythonds source/index.rst
-	cp source/OldIndexAndConfFiles/pythonds-conf.py source/conf.py
-	$(SPHINXBUILD) -d static/pythonds/doctrees $(SPHINXOPTS) -D project='Problem Solving with Algorithms and Data Structures' $(TEMPLATEDEFS) source static/$(COURSEID)
-	cp source/OldIndexAndConfFiles/index-master source/index.rst
-	cp source/OldIndexAndConfFiles/master-conf.py source/conf.py
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
