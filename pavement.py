@@ -7,6 +7,11 @@ paver.setuputils.install_distutils_tasks()
 
 from sphinxcontrib import paverutils
 
+# You will want to change these for your own environment
+master_url = 'http://127.0.0.1:8000'
+master_app = 'runestone'
+
+
 options(
     sphinx = Bunch(
         docroot=".",
@@ -19,9 +24,9 @@ options(
         confidir="everyday",
         template_args={'course_id':'everyday',
                        'login_required':'false',
-                       'appname':'runestone',
+                       'appname':master_app,
                        'loglevel':10,
-                       'course_url':'http://127.0.0.1:8000' }
+                       'course_url':master_url }
         ),
 
     thinkcspy = Bunch(
@@ -31,9 +36,9 @@ options(
         confdir="thinkcspy",
         template_args={'course_id':'thinkcspy',
                        'login_required':'false',
-                       'appname':'runestone',
+                       'appname':master_app,
                        'loglevel':10,
-                       'course_url':'http://127.0.0.1:8000' }
+                       'course_url':master_url }
 
     ),
 
@@ -44,9 +49,9 @@ options(
         confdir="pythonds",
         template_args={'course_id':'pythonds',
                        'login_required':'false',
-                       'appname':'runestone',
+                       'appname':master_app,
                        'loglevel':10,
-                       'course_url':'http://127.0.0.1:8000' }
+                       'course_url':master_url }
 
     ),
 
@@ -57,9 +62,9 @@ options(
         confdir="overview",
         template_args={'course_id':'overview',
                        'login_required':'false',
-                       'appname':'runestone',
+                       'appname':master_app,
                        'loglevel':10,
-                       'course_url':'http://127.0.0.1:8000' }
+                       'course_url':master_url }
 
     ),
 
@@ -70,9 +75,9 @@ options(
         confdir="devcourse",
         template_args={'course_id':'devcourse',
                        'login_required':'true',
-                       'appname':'runestone',
+                       'appname':master_app,
                        'loglevel':10,
-                       'course_url':'http://127.0.0.1:8000' }
+                       'course_url':master_url }
 
     )
 
