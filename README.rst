@@ -23,6 +23,9 @@ Next install paver, version 1.2.0 is current as of this writing.  If you have ``
 
 Once paver is installed you will also need to install sphincontrib-paverutils, again the easiest route is to use ``pip install sphinxcontrib-paverutils``
 
+**Warning**  The current sphinxcontrib-paverutils is not compatible with Paver 1.2.  either install paver 1.1.4 or clone the repository:  https://bitbucket.org/bnmnetp/sphinx-contrib and run  ``python setup.py install`` in the paverutils directory.
+
+
 If you want to run a full blown server -- so you can save activecode assignments etc. then you will need to download and install web2py.  http://web2py.com
 
 After you install web2py go to the applications folder and check out this repository.  This will be installed as a web2py application automatically.
