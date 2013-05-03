@@ -421,7 +421,7 @@ performing a sequential search from the start may be the best choice.
 
       Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm.  Which group of numbers correctly shows the sequence of comoparisons used to find the key 8.
 
-   .. mchoicemf:: BSRCH_1
+   .. mchoicemf:: BSRCH_2
       :correct: d
       :answer_a: 11, 14, 17
       :answer_b: 18, 17, 15
