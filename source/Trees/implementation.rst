@@ -323,7 +323,7 @@ Listing {lst:inleft}.
 We must consider two cases for insertion. The first case is
 characterized by a node with no existing left child. When there is no
 left child, simply add a node to the tree. The second case is
-characterized by a node with an existing right child. In the second
+characterized by a node with an existing left child. In the second
 case, we insert a node and push the existing child down one level in the
 tree. The second case is handled by the ``else`` statement on line
 {lst:inilinsrt} of Listing {lst:inleft}.
