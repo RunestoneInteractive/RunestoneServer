@@ -1282,7 +1282,7 @@ a score for a computer science test.
     else:
        if score >=80:
           print('B')
-       else
+       else:
           if score >= 70:
              print('C')
           else:
