@@ -899,11 +899,11 @@ pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few othe
    :answer_b: 183 179 170
    :answer_c: 165 161 158
    :answer_d: 201 104 115
-   :correct: a
-   :feedback_a: Yes, the RGB values are 149 132 122 at row 100 and column 30.
-   :feedback_b: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
-   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(100,30).
-   :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
+   :correct: b
+   :feedback_a: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
+   :feedback_b: Yes, the RGB values are 183 179 170 at row 100 and column 30.
+   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(30,100).
+   :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(30,100).
 
    In the example in ActiveCode box 10, what are the RGB values of the pixel at row 100, column 30?
 
