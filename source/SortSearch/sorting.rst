@@ -602,7 +602,7 @@ an insertion sort with an increment of one.
             alist[position]=currentvalue
             
     alist = [54,26,93,17,77,31,44,55,20]
-    #shellSort(alist)
+    shellSort(alist)
     print(alist)
 
 
@@ -786,7 +786,7 @@ list that can be immediately merged with other sorted lists.
         print("Merging ",alist)
         
     alist = [54,26,93,17,77,31,44,55,20]
-    #mergeSort(alist)
+    mergeSort(alist)
     print(alist)
 
 
@@ -1028,7 +1028,7 @@ implements the process described earlier.
        return rightmark
        
     alist = [54,26,93,17,77,31,44,55,20]
-    #quickSort(alist)
+    quickSort(alist)
     print(alist)
 
 To analyze the ``quickSort`` function, note that for a list of length
