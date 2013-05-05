@@ -62,6 +62,7 @@ db.define_table('courses',
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_id='devcourse')
 
+
 ########################################
 db.define_table('auth_user',
     Field('username', type='string',
@@ -71,6 +72,7 @@ db.define_table('auth_user',
     Field('last_name', type='string',
           label=T('Last Name')),
     Field('email', type='string',
+          requires=IS_EMAIL(banned='^.*shoeonlineblog\.com$'),
           label=T('Email')),
     Field('password', type='password',
           readable=False,
