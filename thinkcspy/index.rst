@@ -19,6 +19,10 @@
 .. centered:: by Brad Miller and David Ranum
 .. centered:: Luther College
 
+
+.. Based on the Original work by:  Jeffrey Elkner, Allen B. Downey, and Chris Meyers
+.. link to http://www.openbookproject.net/thinkcs/python/english2e/
+
 .. raw:: html
 
     <p>Welcome! Take a tour, experiment with Python, join <span id="totalusers"></span> other readers in learning
