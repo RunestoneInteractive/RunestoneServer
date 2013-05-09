@@ -431,6 +431,7 @@ function gotUser(data, status, whatever) {
         if (!caughtErr) {
             mess = d.email;
             eBookConfig.isLoggedIn = true;
+			enableUserHighlights();
             timedRefresh();
         }
     }

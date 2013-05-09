@@ -1,0 +1,66 @@
+.my-highlighted-text{
+	background-color:#FFFF99;
+}
+.social-highlighted-text{
+	background-color:#FFCCCC;
+}
+.highlight-option-box{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+.highlight-option-box li{ 
+	height:24px;
+}
+.dropdown-menu{
+	background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    float: left;
+    left: 0;
+    list-style: none outside none;
+    margin: 1px 0 0;
+    min-width: 160px;
+    padding: 4px 0;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+}
+.dropdown-menu ul {
+    list-style: disc outside none;
+    margin: 0 0 9px 25px;
+    padding: 0;
+}
+
+.sidebar-highlights{
+    background-color:#FFFF99;
+}
+div.documentwrapper {
+	border : 0 none;
+}
+div.bodywrapper {
+	border-right: 0 none;
+}
+div.sphinxsidebar {
+	border-left: 1px solid #CCCCCC;
+	padding-left: 10px;
+}
+.body>.section .section{
+	padding-top: 1px;
+}
+#jump-to-chapter{
+	background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    letter-spacing: 0.015em;
+    line-height: 120%;
+    padding: 0.5em;
+}
+#navigation-links{
+	background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+	padding:10px;
+	margin:10px;
+}
