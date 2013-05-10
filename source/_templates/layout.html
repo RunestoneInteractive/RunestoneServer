@@ -29,6 +29,12 @@ eBookConfig.isLoggedIn = false;
 
 {% endblock %}
 
+{% set css_files = css_files + ["_static/user-highlights.css"] %}
+{% set script_files = script_files + ["_static/rangy-core.js"] %}
+{% set script_files = script_files + ["_static/rangy-textrange.js"] %}
+{% set script_files = script_files + ["_static/rangy-cssclassapplier.js"] %}
+{% set script_files = script_files + ["_static/user-highlights.js"] %}
+
 
 {% block htmlblock %}
 <html  xmlns="http://www.w3.org/1999/xhtml" manifest="/build/_static/cache.manifest">
