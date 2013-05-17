@@ -35,6 +35,7 @@ div.document {
     text-align: left;
     background-image: url(contents.png);
     background-repeat: repeat-x;
+	min-height: 550px;
 }
 
 div.bodywrapper {

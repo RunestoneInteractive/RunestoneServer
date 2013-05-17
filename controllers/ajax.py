@@ -165,3 +165,87 @@ def getnumusers():
 
     res = {'numusers':rows[0][0]}
     return json.dumps([res])
+
+#
+#  Ajax Handlers to save / delete and restore user highlights
+#
+def savehighlight():
+    parentClass = request.vars.parentClass
+    range = request.vars.range
+    method = request.vars.method
+    page = request.vars.page
+    pageSection = request.vars.pageSection
+    course = request.vars.course
+
+    print 'inserting new highlight'
+    insert_id = db.user_highlights.insert(created_on=datetime.datetime.now(),
+                   user_id=auth.user.id,
+                   course_id=course,
+                   parent_class=parentClass,
+                   range=range,
+                   chapter_url=page,
+                   sub_chapter_url=pageSection,
+                   method = method)
+    return str(insert_id)
+
+def deletehighlight():
+    uniqueId = request.vars.uniqueId
+
+    print 'deleting highlight'
+    db(db.user_highlights.id == uniqueId).update(is_active = 0)
+
+def gethighlights():
+    '''
+    return all the highlights for a given user, on a given page 
+    :Parameters:
+        - `page`: the page to search the highlights on
+        - `course`: the course to search the highlights in
+    :Return:
+        - json object containing a list of matching highlights
+    '''
+    page = request.vars.page
+    course = request.vars.course
+
+    result = db((db.user_highlights.user_id == auth.user.id) & (db.user_highlights.chapter_url == page) & (db.user_highlights.course_id == course) & (db.user_highlights.is_active == 1)).select()
+    rowarray_list = []
+    for row in result:
+        res = {}
+        res['range'] = row.range
+        res['uniqueId'] = row.id
+        res['parentClass'] = row.parent_class
+        res['pageSection'] = row.sub_chapter_url
+        res['method'] = row.method
+        rowarray_list.append(res)
+    return json.dumps(rowarray_list)
+
+#
+#  Ajax Handlers to update and retreive the last position of the user in the course
+#
+def updatelastpage():
+    lastPageUrl = request.vars.lastPageUrl
+    lastPageHash = request.vars.lastPageHash
+    lastPageChapter = request.vars.lastPageChapter
+    lastPageSubchapter = request.vars.lastPageSubchapter
+    lastPageScrollLocation = request.vars.lastPageScrollLocation
+    course = request.vars.course
+
+    res = db((db.user_state.user_id == auth.user.id) & (db.user_state.course_id == course))
+    res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash, last_page_chapter = lastPageChapter, last_page_subchapter = lastPageSubchapter, last_page_scroll_location = lastPageScrollLocation, last_page_accessed_on = datetime.datetime.now())
+
+def getlastpage():
+    course = request.vars.course
+
+    result = db((db.user_state.user_id == auth.user.id) & (db.user_state.course_id == course)).select(db.user_state.last_page_url, db.user_state.last_page_hash, db.user_state.last_page_chapter, db.user_state.last_page_scroll_location, db.user_state.last_page_subchapter)
+    rowarray_list = []
+    if result:
+        for row in result:
+            res = {}
+            res['lastPageUrl'] = row.last_page_url
+            res['lastPageHash'] = row.last_page_hash
+            res['lastPageChapter'] = row.last_page_chapter
+            res['lastPageSubchapter'] = row.last_page_subchapter
+            res['lastPageScrollLocation'] = row.last_page_scroll_location
+            rowarray_list.append(res)
+        return json.dumps(rowarray_list)
+    else:
+        db.user_state.insert(user_id=auth.user.id, course_id=course)
