@@ -227,7 +227,7 @@ the list only in the case where we do not find the item.
 .. admonition:: Self Check
 
    .. mchoicemf:: question_SRCH_1
-      :correct:
+      :correct: d
       :answer_a: 5
       :answer_b: 10
       :answer_c: 4
