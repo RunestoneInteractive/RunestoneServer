@@ -44,11 +44,12 @@ CODE = """\
 """
 
 class Disqus(Directive):
-    required_arguments = 1
+    required_arguments = 0
     optional_arguments = 0
     final_argument_whitespace = True
-    has_content = True
+    has_content = False
     option_spec = {'shortname':directives.unchanged_required}
+
 
     def run(self):
         """
@@ -57,5 +58,5 @@ class Disqus(Directive):
         :return:
         """
         opts = {}
-        opts['shortname'] = self.content[0]
-        return [nodes.raw('', CODE, format='html')]
+        res = CODE % self.options
+        return [nodes.raw('', res, format='html')]

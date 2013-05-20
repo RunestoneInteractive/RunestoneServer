@@ -246,6 +246,14 @@ next line executed.
         print 'x is even'
         y = y - x
 
+Disqus Comment Box
+------------------
+
+A comment box allowing users to add comments and start discussions can be added. You must provide the Disqus shortname for your site, which can be obtained by 
+registering with Disqus.
+
+.. disqus:: 
+    :shortname: interactivepython
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
