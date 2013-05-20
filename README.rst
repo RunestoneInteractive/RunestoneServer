@@ -15,15 +15,15 @@ can build and use this eBook.
 
 First get Sphinx, Version 1.1.x is current as of this writing.
 
-http://sphinx.pocoo.org
+http://sphinx.pocoo.org
 
 Follow the instructions there to download and install Sphinx.
 
-Next install paver, version 1.2.0 is current as of this writing.  If you have ``pip`` installed its as easy as ``pip install paver`` if not, then follow the instructions `On the paver github page <http://paver.github.com/paver/#installation>`_
+Next install paver, version 1.2.0 is current as of this writing.  If you have ``pip`` installed its as easy as ``pip install paver`` if not, then follow the instructions `on the paver github page <http://paver.github.com/paver/#installation>`_
 
 Once paver is installed you will also need to install sphincontrib-paverutils, again the easiest route is to use ``pip install sphinxcontrib-paverutils``
 
-**Warning**  The current sphinxcontrib-paverutils is not compatible with Paver 1.2.  either install paver 1.1.4 or clone the repository:  https://bitbucket.org/bnmnetp/sphinx-contrib and run  ``python setup.py install`` in the paverutils directory.
+**Warning**:  The current sphinxcontrib-paverutils is not compatible with Paver 1.2.  either install paver 1.1.4 or clone the repository:  https://bitbucket.org/bnmnetp/sphinx-contrib and run  ``python setup.py install`` in the paverutils directory.
 
 
 If you want to run a full blown server -- so you can save activecode assignments etc. then you will need to download and install web2py.  http://web2py.com
@@ -98,14 +98,23 @@ If you get an error at this point the most likely reason is that the settings fi
 	else:
 	        raise RuntimeError('Host unknown, senttings not configured')
 
-For  your own personal development, you want the first clause of the if statment to match.
+For your own personal development, you want the first clause of the if statement to match. If you are on a Unix-like system,
+you can replace 'Darwin' with the result of running ``uname`` at a terminal. Another option is to replace 'local' with
+your computer's hostname.
 
 Final Configuration
 -------------------
+To use the admin functionalities you are going to want to do one more bit of configuration:
 
-To use the admin functionalities you are going to want to do one more bit of configuration.  Using the appadmin functionality of web2py.  Open ``http://127.0.0.1:8000/runestone/appadmin``  Login using the password you supplied.  click on the link for ``insert new auth_group`` and add instructor as a role.  Description can be whatever you want.
+* Click the "Register" link in the upper right corner of the browser window.
+* Fill in the form to create a user account for yourself.
 
-Now go back to the appadmin/index page and click on ``insert new auth_membership``  seleect yourself, and instructor as the two values and click submit.  You are now an instructor.
+Now, create an 'instructors' user group and add your new user account to it using the appadmin 
+functionality of web2py:
+
+* Open ``http://127.0.0.1:8000/runestone/appadmin``. Login using the password you supplied when you ran web2py.
+* Click the link for ``insert new auth_group`` and add ``instructor`` as a role. Description can be whatever you want.
+* Go back to the appadmin/index page and click on ``insert new auth_membership``. Select your user account and the new instructor group as the two values and click submit.  You are now an instructor.
 
 
 How to Contribute
