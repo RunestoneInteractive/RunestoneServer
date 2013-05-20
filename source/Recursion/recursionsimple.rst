@@ -398,8 +398,6 @@ call. The code for this modified algorithm is shown in
 
 .. activecode:: lst_recstack
 
-    from pythonds.basic.stack import Stack
-    
     rStack = Stack()
 
     def toStr(n,base):
