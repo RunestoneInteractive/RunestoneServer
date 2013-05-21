@@ -48,7 +48,9 @@ class Disqus(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = False
-    option_spec = {'shortname':directives.unchanged_required}
+    option_spec = {'shortname':directives.unchanged_required,
+                   'identifier':directives.unchanged_required
+                  }
 
 
     def run(self):
@@ -57,6 +59,5 @@ class Disqus(Directive):
         :param self:
         :return:
         """
-        opts = {}
         res = CODE % self.options
         return [nodes.raw('', res, format='html')]

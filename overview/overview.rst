@@ -250,10 +250,11 @@ Disqus Comment Box
 ------------------
 
 A comment box allowing users to add comments and start discussions can be added. You must provide the Disqus shortname for your site, which can be obtained by 
-registering with Disqus.
+registering with Disqus. You must also provide an identifier for the specific page you want users to comment on.
 
 .. disqus:: 
     :shortname: interactivepython
+    :identifier: overview
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
