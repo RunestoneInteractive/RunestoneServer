@@ -29,7 +29,7 @@ CODE = """\
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = '%(shortname)s'; // required: replace example with your forum shortname
     var disqus_developer = 1;
-    var disqus_identifier = '{{pagename}}';
+    var disqus_identifier = '%(identifier)s';
     /* * * DON'T EDIT BELOW THIS LINE * * */
     if (disqus_identifier.indexOf("index") < 0) {   // dont show the comments index
         (function() {
