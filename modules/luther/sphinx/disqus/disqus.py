@@ -28,7 +28,7 @@ CODE = """\
     function %(identifier)s(source) { 
         if (window.DISQUS) {
 
-            jQuery('#disqus_thread').insertAfter(source); //append the HTML after the link
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
 
             //if Disqus exists, call it's reset method with new parameters
             DISQUS.reset({
@@ -40,17 +40,18 @@ CODE = """\
             });
 
         } else {
-
             //insert a wrapper in HTML after the relevant "show comments" link
-            jQuery('<div id="disqus_thread"></div>').insertAfter(source);
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
             disqus_shortname = '%(shortname)s';    
-            disqus_identifier = '%(identifier)s'; //set the identifier argument
-            disqus_url = 'http://www.%(identifier)s.com/#!'; //set the permalink argument
+            disqus_identifier = '%(identifier)s';
+            disqus_url = 'http://www.%(identifier)s.com/#!'; 
 
             //append the Disqus embed script to HTML
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-            jQuery('head').append(dsq);
+            $('head').append(dsq);
 
         }
     }
