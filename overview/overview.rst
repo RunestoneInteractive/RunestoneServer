@@ -256,7 +256,6 @@ A comment box allowing users to add comments and start discussions can be added.
     :identifier: post1
 
 
-
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
 

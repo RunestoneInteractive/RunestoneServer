@@ -77,26 +77,14 @@
   -o-border-radius: 0;
   border-radius: 0;
   border-width: 0; margin: 0; padding: 0; background: transparent;
-  font-family: Monaco, Courier New, monospace;
+  font-family: inherit;
   font-size: inherit;
   padding: 0; margin: 0;
   white-space: pre;
   word-wrap: normal;
   line-height: inherit;
   color: inherit;
-}
-
-.admonition .CodeMirror pre {
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
-  border-width: 0; margin: 0; padding: 0; background: transparent;
-  font-family:  Monaco, Courier New, monospace;
-  font-size: inherit;
-  padding: 0; margin: 0;
-  white-space: pre;
-  word-wrap: normal;
+  overflow: visible;
 }
 
 .CodeMirror-wrap pre {
@@ -119,7 +107,6 @@
   border-left: 1px solid black;
   border-right: none;
   width: 0;
-  height: 1em;
 }
 .cm-keymap-fat-cursor pre.CodeMirror-cursor {
   width: auto;
@@ -163,13 +150,15 @@ div.CodeMirror-selected { background: #d9d9d9; }
 .cm-s-default span.cm-error {color: #f00;}
 .cm-s-default span.cm-qualifier {color: #555;}
 .cm-s-default span.cm-builtin {color: #30a;}
-.cm-s-default span.cm-bracket {color: #cc7;}
+.cm-s-default span.cm-bracket {color: #997;}
 .cm-s-default span.cm-tag {color: #170;}
 .cm-s-default span.cm-attribute {color: #00c;}
 .cm-s-default span.cm-header {color: blue;}
 .cm-s-default span.cm-quote {color: #090;}
 .cm-s-default span.cm-hr {color: #999;}
 .cm-s-default span.cm-link {color: #00c;}
+span.cm-negative {color: #d44;}
+span.cm-positive {color: #292;}
 
 span.cm-header, span.cm-strong {font-weight: bold;}
 span.cm-em {font-style: italic;}
@@ -187,6 +176,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
    background-position: right;
    background-repeat: no-repeat;
 }
+
 
 
 @media print {
