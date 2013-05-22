@@ -25,7 +25,7 @@ def setup(app):
 
 CODE = """\
 <script type="text/javascript">
-    function %(identifier)s(source) { 
+    function %(identifier)s_disqus(source) { 
         if (window.DISQUS) {
 
             $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
@@ -35,7 +35,7 @@ CODE = """\
                 reload: true,
                 config: function () {
                     this.page.identifier = '%(identifier)s';
-                    this.page.url = 'http://www.%(identifier)s.com/#!';
+                    this.page.url = 'http://%(identifier)s.interactivepython.com/#!';
                 }
             });
 
@@ -46,7 +46,7 @@ CODE = """\
             // set Disqus required vars
             disqus_shortname = '%(shortname)s';    
             disqus_identifier = '%(identifier)s';
-            disqus_url = 'http://www.%(identifier)s.com/#!'; 
+            disqus_url = 'http://%(identifier)s.interactivepython.com/#!'; 
 
             //append the Disqus embed script to HTML
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -61,7 +61,7 @@ CODE = """\
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = '%(shortname)s'; // required: replace example with your forum shortname
     var disqus_identifier = '%(identifier)s';
-    var disqus_url = 'http://www.%(identifier)s.com/#!'; 
+    var disqus_url = 'http://%(identifier)s.interactivepython.com/#!'; 
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function () {
@@ -72,7 +72,7 @@ CODE = """\
     }());
     </script>
 
-<a href="#disqus_thread" data-disqus-identifier="%(identifier)s" onclick="%(identifier)s(this);">Show Comments</a>
+<a href="#disqus_thread" data-disqus-identifier="%(identifier)s" onclick="%(identifier)s_disqus(this);">Show Comments</a>
 """
 
 class Disqus(Directive):
