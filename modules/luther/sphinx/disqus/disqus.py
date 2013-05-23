@@ -20,10 +20,7 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 
 
-def setup(app):
-    app.add_directive('disqus', Disqus)
-
-CODE = """\
+DISQUS_BOX = """\
 <script type="text/javascript">
     function %(identifier)s_disqus(source) { 
         if (window.DISQUS) {
@@ -56,8 +53,10 @@ CODE = """\
         }
     }
 </script>
+"""
 
-    <script type="text/javascript">
+DISQUS_LINK = """
+<script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = '%(shortname)s'; // required: replace example with your forum shortname
     var disqus_identifier = '%(identifier)s';
@@ -70,18 +69,50 @@ CODE = """\
         s.src = '//' + disqus_shortname + '.disqus.com/count.js';
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
-    </script>
+</script>
 
 <a href="#disqus_thread" data-disqus-identifier="%(identifier)s" onclick="%(identifier)s_disqus(this);">Show Comments</a>
 """
 
-class Disqus(Directive):
+
+def setup(app):
+    app.add_directive('disqus', DisqusDirective)
+    
+    app.add_node(DisqusNode, html=(visit_disqus_node, depart_disqus_node))
+    app.connect('doctree-resolved' ,process_disqus_nodes)
+    app.connect('env-purge-doc', purge_disqus_nodes)
+
+class DisqusNode(nodes.General, nodes.Element):
+    def __init__(self,content):
+        super(DisqusNode,self).__init__()
+        self.disqus_components = content
+
+
+def visit_disqus_node(self, node):
+    res = DISQUS_BOX   
+    res += DISQUS_LINK
+
+    res = res % node.disqus_components
+
+    self.body.append(res)
+
+def depart_disqus_node(self,node):
+    pass
+
+def process_disqus_nodes(app, env, docname):
+    pass
+
+def purge_disqus_nodes(app, env, docname):
+    pass
+
+
+class DisqusDirective(Directive):
     required_arguments = 0
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = False
     option_spec = {'shortname':directives.unchanged_required,
-                   'identifier':directives.unchanged_required,
+                   'identifier':directives.unchanged_required
                   }
 
 
@@ -91,5 +122,6 @@ class Disqus(Directive):
         :param self:
         :return:
         """
-        res = CODE % self.options
-        return [nodes.raw('', res, format='html')]
+
+        return [DisqusNode(self.options)]
+

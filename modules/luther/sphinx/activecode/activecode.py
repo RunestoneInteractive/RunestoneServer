@@ -27,10 +27,10 @@ def setup(app):
     app.add_stylesheet('codemirror.css')
     app.add_stylesheet('theme/default.css')
     app.add_stylesheet('activecode.css')
-    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')
+    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')  # needed for tabbed exercises
 
     app.add_javascript('jquery.highlight.js')
-    app.add_javascript('jquery-ui-1.10.3.custom.min.js')
+    app.add_javascript('jquery-ui-1.10.3.custom.min.js') # needed for tabbed exercises
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
     app.add_javascript('python.js')
