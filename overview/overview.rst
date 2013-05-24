@@ -36,6 +36,7 @@ on the video shown below, you will hear us talk about the tools that will be des
     http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
     http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
 
+
 ActiveCode Windows
 ------------------
 
@@ -255,6 +256,28 @@ A comment box allowing users to add comments and start discussions can be added.
 .. disqus::
     :shortname: interactivepython
     :identifier: post1
+
+
+Tabbed Question
+---------------
+
+Any of the existing question types can be placed in a tabbed exhibit-style question. This can be used for example to provide a Disqus discussion box specifically related to a certain question.
+
+.. tabbed:: exercise1
+    
+    .. tab:: Question
+        
+        Write a program that prints "Hello, world".
+            
+        .. activecode:: helloworld
+
+            print("Hello, world")
+
+    .. tab:: Discussion
+        
+        .. disqus::
+            :shortname: interactivepython
+            :identifier: helloworlddiscussion
 
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
