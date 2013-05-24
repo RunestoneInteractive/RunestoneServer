@@ -27,8 +27,10 @@ def setup(app):
     app.add_stylesheet('codemirror.css')
     app.add_stylesheet('theme/default.css')
     app.add_stylesheet('activecode.css')
+    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')  # needed for tabbed exercises
 
     app.add_javascript('jquery.highlight.js')
+    app.add_javascript('jquery-ui-1.10.3.custom.min.js') # needed for tabbed exercises
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
     app.add_javascript('python.js')
@@ -238,10 +240,17 @@ EXEDIT = '''
 <br />
 '''
 
+ODDEXEDIT = '''
+<button id="butt_%(divid)s" onclick="createOddActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
+<div id="%(divid)s"></div>
+<br />
+'''
+
 class ActiveExercise(Directive):
     required_arguments = 1
     optional_arguments = 0
     has_content = True
+    option_spec = {'is_odd':directives.flag}
 
     def run(self):
         self.options['divid'] = self.arguments[0]
@@ -250,7 +259,11 @@ class ActiveExercise(Directive):
         else:
             source = ''
         self.options['source'] = source.replace('"','%22').replace("'",'%27')
-        res = EXEDIT
+
+        if 'is_odd' in self.options:
+            res = ODDEXEDIT
+        else:
+            res = EXEDIT
 
         return [nodes.raw('',res % self.options,format='html')]
 

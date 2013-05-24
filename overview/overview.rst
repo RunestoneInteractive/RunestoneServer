@@ -7,6 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
 ..  shortname:: Overview
 ..  description:: This is an overview chapter for the web site.
 
@@ -254,7 +255,6 @@ A comment box allowing users to add comments and start discussions can be added.
 .. disqus::
     :shortname: interactivepython
     :identifier: post1
-
 
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
