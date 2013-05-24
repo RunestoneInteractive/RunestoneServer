@@ -265,7 +265,7 @@ Any of the existing question types can be placed in a tabbed exhibit-style quest
 
 .. tabbed:: exercise1
     
-    .. tab:: Question
+    .. tab:: Question 1
         
         Write a program that prints "Hello, world".
             
@@ -278,6 +278,7 @@ Any of the existing question types can be placed in a tabbed exhibit-style quest
         .. disqus::
             :shortname: interactivepython
             :identifier: helloworlddiscussion
+
 
 
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.

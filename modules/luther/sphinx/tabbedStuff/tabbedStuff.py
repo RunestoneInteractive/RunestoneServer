@@ -35,7 +35,7 @@ BEGIN = """<div id='%(divid)s'>"""
 
 TABLIST_BEGIN = """<ul>"""
 
-TABLIST_ELEMENT = """<li><a href='#%(divid)s-%(tabname)s'><span>%(tabname)s</span></a></li>"""
+TABLIST_ELEMENT = """<li><a href='#%(divid)s-%(tabname)s'><span>%(tabfriendlyname)s</span></a></li>"""
 
 TABLIST_END = """</ul>"""
 
@@ -63,8 +63,9 @@ def visit_tab_node(self, node):
     divid = node.parent.divid 
     tabname = node.tabname
 
+    # remove spaces from tabname to allow it to be used as the div id.
     res = TABDIV_BEGIN % {'divid':divid,
-                          'tabname':tabname}
+                          'tabname':tabname.replace(" ", "")}
     self.body.append(res)
 
 def depart_tab_node(self,node):
@@ -87,10 +88,14 @@ def visit_tabbedstuff_node(self, node):
     res = BEGIN % {'divid':divid}
     res += TABLIST_BEGIN
     
-    # make the tab list (<ul>)
+    # make the tab list (<ul>).
+    # tabfriendlyname can contain spaces and will be displayed as the name of the tab.
+    # tabname is the same as tabfriendlyname but with spaces removed, so it can be 
+    # used as the div id.
     for tab in tabs:
         res += TABLIST_ELEMENT % {'divid':divid,
-                                  'tabname':tab.tabname}  
+                                  'tabfriendlyname':tab.tabname,  
+                                  'tabname':tab.tabname.replace(" ", "")}  
 
     res += TABLIST_END  # </ul>
 
