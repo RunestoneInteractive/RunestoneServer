@@ -25,7 +25,6 @@ def setup(app):
     app.add_directive('activecode',ActiveCode)
     app.add_directive('actex',ActiveExercise)
     app.add_stylesheet('codemirror.css')
-    app.add_stylesheet('theme/default.css')
     app.add_stylesheet('activecode.css')
     app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')
 
