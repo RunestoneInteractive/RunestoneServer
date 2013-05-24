@@ -263,6 +263,26 @@ that were visited during the insertion process.
 
    Inserting a Node with Key = 19
 
+.. admonition:: Self Check
+
+    .. mchoicemf:: bst_1
+       :correct: b
+       :answer_a: <img src="../_static/bintree_a.png">
+       :feedback_a: Remember, starting at the root keys less than the root must be in the left subtree, while keys greater than the root go in the right subtree.
+       :answer_b: <img src="../_static/bintree_b.png">
+       :feedback_b: good job.
+       :answer_c: <img src="../_static/bintree_c.png">       
+       :feedback_c: This looks like a binary tree that satisfies the full tree property needed for a heap.
+
+       Which of the trees shows a correct binary search tree given that the keys were
+       inserted in the following order 5, 30, 2, 40, 25, 4.
+
+    .. .. mchoicema:: bst_2
+    ..     :correct: a,c
+
+    ..     Which the following sequences of insertions would produce the binary search tree shown below?
+
+
 Once the tree is constructed, the next task is to implement the
 retrieval of a value for a given key. The ``get`` method is even easier
 than the ``put`` method because it simply searches the tree recursively
