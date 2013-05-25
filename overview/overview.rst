@@ -11,6 +11,13 @@
 ..  shortname:: Overview
 ..  description:: This is an overview chapter for the web site.
 
+.. setup for automatic question numbering.
+
+.. qnum::
+   :start: 1
+   :prefix: sc-1-
+
+
 An Overview of Runestone Interactive
 ====================================
 

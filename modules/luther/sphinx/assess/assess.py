@@ -22,12 +22,12 @@ import json
 import random
 
 def setup(app):
-    app.add_directive('multiplechoice',MultipleChoice)
     app.add_directive('mchoicemf',MChoiceMF)
     app.add_directive('mchoicema',MChoiceMA)
     app.add_directive('fillintheblank',FillInTheBlank)
     app.add_directive('mcmfrandom',MChoiceRandomMF)
     app.add_directive('addbutton',AddButton)
+    app.add_directive('qnum',QuestionNumber)    
 
     app.add_javascript('assess.js')
 
@@ -65,89 +65,75 @@ class AddButton(Directive):
         res += TEMPLATE_END % self.options
         return [nodes.raw('',res , format='html')]
 
-####################
-
-class MultipleChoice(Directive):
-    required_arguments = 1
-    optional_arguments = 1
-    final_argument_whitespace = True
-    has_content = True
-    option_spec = {'answer_a':directives.unchanged,
-        'answer_b':directives.unchanged,    
-        'answer_c':directives.unchanged,
-        'answer_d':directives.unchanged,
-        'answer_e':directives.unchanged,
-        'correct':directives.unchanged,
-        'feedback':directives.unchanged,
-            'iscode':directives.flag
+class QuestionNumber(Directive):
+    """Set Parameters for Question Numbering"""
+    required_arguments = 0
+    optional_arguments = 3
+    has_content = False
+    option_spec = { 'prefix': directives.unchanged,
+        'suffix': directives.unchanged,
+        'start': directives.positive_int
     }
-    
+
     def run(self):
-        """
-            process the multiplechoice directive and generate html for output.
-            :param self:
-            :return:
-            .. multiplechoice:: qname
-            :iscode: boolean
-            :answer_a: possible answer  -- what follows _ is label
-            :answer_b: possible answer
-            ...  
-            :answer_e: possible answer                      
-            :correct: b
-            :feedback: -- displayed if wrong
-            
-            Question text
-            ...
-            """
-        
-        TEMPLATE_START = '''
-            <div id="%(divid)s">
-            <p>%(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
-            '''
-        
-        OPTION = '''
-            <input type="radio" name="group1" value="%(alabel)s" id="%(divid)s_opt_%(alabel)s" />
-            <label for= "%(divid)s_opt_%(alabel)s">  %(alabel)s) %(atext)s</label><br />
-            '''
-        
-        TEMPLATE_END = '''
-            <input type="button" name="do answer" 
-            value="Check Me" onclick="checkMe('%(divid)s','%(correct)s','%(feedback)s')"/> 
-            </form>
-            <div id="%(divid)s_feedback">
-            </div>
-            </div>
-            '''   
-        
+        env = self.state.document.settings.env
+
+        if 'start' in self.options:
+            env.assesscounter = self.options['start'] - 1
+
+        if 'prefix' in self.options:
+            env.assessprefix = self.options['prefix']
+
+        if 'suffix' in self.options:
+            env.assesssuffix = self.options['suffix']
+
+        return []
+
+
+
+class Assessment(Directive):
+    """Base Class for assessments"""
+
+    def getNumber(self):
+        env = self.state.document.settings.env
+        if not hasattr(env,'assesscounter'):
+            env.assesscounter = 0
+        env.assesscounter += 1
+
+        res = "Q_%d"
+
+        if hasattr(env,'assessprefix'):
+            res = env.assessprefix + "%d"
+
+        res = res % env.assesscounter
+
+        if hasattr(env, 'assesssuffix'):
+            res += env.assesssuffix
+
+        return res
+
+
+    def run(self):
+
+        self.options['qnumber'] = self.getNumber()
         
         self.options['divid'] = self.arguments[0]
+        
         if self.content:
             if 'iscode' in self.options:
                 self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
             else:
                 self.options['bodytext'] = "\n".join(self.content)
-        
-        res = ""
-        res = TEMPLATE_START % self.options
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if '_' in k:
-                x,label = k.split('_')
-                self.options['alabel'] = label
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-        
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+        else:
+            self.content['bodytext'] = '\n'
+
+
 
 #####################
 # multiple choice question with multiple feedback
 # author - Barb Ericson
 # author - Anusha 
-class MChoiceMF(Directive):
+class MChoiceMF(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -163,7 +149,7 @@ class MChoiceMF(Directive):
         'feedback_c':directives.unchanged,
         'feedback_d':directives.unchanged,
         'feedback_e':directives.unchanged,
-            'iscode':directives.flag
+        'iscode':directives.flag
     }
     
     def run(self):
@@ -209,27 +195,8 @@ class MChoiceMF(Directive):
             </div>
             </div>
             '''   
-        
-        
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        else:
-            self.options['bodytext'] = "\n"
+        super(MChoiceMF,self).run()
+
         
         res = ""
         res = TEMPLATE_START % self.options
@@ -257,7 +224,7 @@ class MChoiceMF(Directive):
 # multiple choice question with multiple correct answers
 # author - Barb Ericson
 
-class MChoiceMA(Directive):
+class MChoiceMA(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -317,24 +284,9 @@ class MChoiceMA(Directive):
             </div>
             '''   
         
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        
+
+        super(MChoiceMA,self).run()
+
         res = ""
         res = TEMPLATE_START % self.options
         feedbackStr = "["
@@ -358,7 +310,7 @@ class MChoiceMA(Directive):
 
 ################################
 
-class FillInTheBlank(Directive):
+class FillInTheBlank(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -390,7 +342,7 @@ class FillInTheBlank(Directive):
         TEMPLATE_START = '''
             <div id="%(divid)s">
             <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
-            <p>%(bodytext)s</p>
+            <p>%(qnumber)s: %(bodytext)s</p>
             '''
         
         TEMPLATE_END = '''
@@ -403,14 +355,9 @@ class FillInTheBlank(Directive):
             '''   
         
         BLANK = '''<input type="text" name="blank" />'''
-        
-        self.options['divid'] = self.arguments[0]
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        
+
+        super(FillInTheBlank,self).run()
+
         self.options['bodytext'] = self.options['bodytext'].replace('___',BLANK)
         
         #if 'feedback' not in self.options:
@@ -439,7 +386,7 @@ class FillInTheBlank(Directive):
 
 #####################
 # display a multiple choice question with feedback that randomizes the answers
-class MChoiceRandomMF(Directive):
+class MChoiceRandomMF(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -503,26 +450,8 @@ class MChoiceRandomMF(Directive):
             '''   
         
         
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        else:
-            self.options['bodytext'] = "\n"
-        
+        super(MChoiceRandomMF,self).run()
+
         res = ""
         res = TEMPLATE_START % self.options
         feedbackStr = "["
@@ -557,7 +486,7 @@ class MChoiceRandomMF(Directive):
         self.options['f']=feed
 
         op=self.options['correct'];
-        #self.options['option']=op;
+
         if(op=='a'):
             index=0
         elif(op=='b'):
