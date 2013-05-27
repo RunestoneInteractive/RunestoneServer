@@ -107,6 +107,12 @@ class MChoiceNode(nodes.General, nodes.Element):
 def visit_mc_node(self,node):
     res = ""
     res = node.template_start % node.mc_options
+
+    self.body.append(res)
+
+
+def depart_mc_node(self,node):
+    res = node.template_form_start % node.mc_options
     feedbackStr = "["
     currFeedback = ""
     # Add all of the possible answers
@@ -124,11 +130,7 @@ def visit_mc_node(self,node):
     # store the feedback array with key feedback minus last comma
     node.mc_options['feedback'] = feedbackStr[0:-2] + "]"
 
-    self.body.append(res)
-
-
-def depart_mc_node(self,node):
-    res = node.template_end % node.mc_options
+    res += node.template_end % node.mc_options
 
     self.body.append(res)
 
@@ -218,8 +220,7 @@ class MChoiceMF(Assessment):
             """
         TEMPLATE_START = '''
             <div id="%(divid)s">
-            <p>%(qnumber)s: %(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
+            <span class="qnumber">%(qnumber)s:</span>
             '''
         
         OPTION = '''
@@ -228,6 +229,7 @@ class MChoiceMF(Assessment):
             '''
         
         TEMPLATE_END = '''
+
             <script>
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
@@ -245,8 +247,11 @@ class MChoiceMF(Assessment):
 
         mcNode = MChoiceNode(self.options)
         mcNode.template_start = TEMPLATE_START
+        mcNode.template_form_start = '''<form name="%(divid)s_form" method="get" action="" onsubmit="return false;">'''
         mcNode.template_option = OPTION
         mcNode.template_end = TEMPLATE_END
+
+        self.state.nested_parse(self.content, self.content_offset, mcNode)
 
         return [mcNode]
 
