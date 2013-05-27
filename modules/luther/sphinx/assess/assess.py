@@ -31,6 +31,8 @@ def setup(app):
 
     app.add_javascript('assess.js')
 
+    app.add_node(MChoiceNode, html=(visit_mc_node, depart_mc_node))
+
 class AddButton(Directive):
     required_arguments = 1
     optional_arguments = 1
@@ -88,6 +90,47 @@ class QuestionNumber(Directive):
             env.assesssuffix = self.options['suffix']
 
         return []
+
+
+class MChoiceNode(nodes.General, nodes.Element):
+    def __init__(self,content):
+        """
+
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        super(MChoiceNode,self).__init__()
+        self.mc_options = content
+
+
+def visit_mc_node(self,node):
+    res = ""
+    res = node.template_start % node.mc_options
+    feedbackStr = "["
+    currFeedback = ""
+    # Add all of the possible answers
+    okeys = node.mc_options.keys()
+    okeys.sort()
+    for k in okeys:
+        if 'answer_' in k:  
+            x,label = k.split('_') 
+            node.mc_options['alabel'] = label 
+            node.mc_options['atext'] = node.mc_options[k]
+            res += node.template_option % node.mc_options
+            currFeedback = "feedback_" + label
+            feedbackStr = feedbackStr + "'" + node.mc_options[currFeedback] + "', "
+    
+    # store the feedback array with key feedback minus last comma
+    node.mc_options['feedback'] = feedbackStr[0:-2] + "]"
+
+    self.body.append(res)
+
+
+def depart_mc_node(self,node):
+    res = node.template_end % node.mc_options
+
+    self.body.append(res)
 
 
 
@@ -197,27 +240,15 @@ class MChoiceMF(Assessment):
             '''   
         super(MChoiceMF,self).run()
 
+
         
-        res = ""
-        res = TEMPLATE_START % self.options
-        feedbackStr = "["
-        currFeedback = ""
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if 'answer_' in k:  
-                x,label = k.split('_') 
-                self.options['alabel'] = label 
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-                currFeedback = "feedback_" + label
-                feedbackStr = feedbackStr + "'" + self.options[currFeedback] + "', "
-        
-        # store the feedback array with key feedback minus last comma
-        self.options['feedback'] = feedbackStr[0:-2] + "]"
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+
+        mcNode = MChoiceNode(self.options)
+        mcNode.template_start = TEMPLATE_START
+        mcNode.template_option = OPTION
+        mcNode.template_end = TEMPLATE_END
+
+        return [mcNode]
 
 
 #####################
