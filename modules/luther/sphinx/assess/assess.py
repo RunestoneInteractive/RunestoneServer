@@ -32,6 +32,7 @@ def setup(app):
     app.add_javascript('assess.js')
 
     app.add_node(MChoiceNode, html=(visit_mc_node, depart_mc_node))
+    app.add_node(FITBNode, html=(visit_fitb_node, depart_fitb_node))    
 
 class AddButton(Directive):
     required_arguments = 1
@@ -145,7 +146,7 @@ class Assessment(Directive):
             env.assesscounter = 0
         env.assesscounter += 1
 
-        res = "Q_%d"
+        res = "Q-%d"
 
         if hasattr(env,'assessprefix'):
             res = env.assessprefix + "%d"
@@ -163,14 +164,19 @@ class Assessment(Directive):
         self.options['qnumber'] = self.getNumber()
         
         self.options['divid'] = self.arguments[0]
-        
+
+        if self.content[0][:2] == '..':  # first line is a directive
+            self.content[0] = self.options['qnumber'] + ': \n\n' + self.content[0]
+        else:
+            self.content[0] = self.options['qnumber'] + ': ' + self.content[0]
+
         if self.content:
             if 'iscode' in self.options:
                 self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
             else:
                 self.options['bodytext'] = "\n".join(self.content)
         else:
-            self.content['bodytext'] = '\n'
+            self.options['bodytext'] = '\n'
 
 
 
@@ -220,7 +226,6 @@ class MChoiceMF(Assessment):
             """
         TEMPLATE_START = '''
             <div id="%(divid)s">
-            <span class="qnumber">%(qnumber)s:</span>
             '''
         
         OPTION = '''
@@ -235,7 +240,7 @@ class MChoiceMF(Assessment):
             </script>
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)"/> 
-            </form>
+            </form><br />
             <div id="%(divid)s_feedback">
             </div>
             </div>
@@ -302,8 +307,6 @@ class MChoiceMA(Assessment):
             """
         TEMPLATE_START = '''
             <div id="%(divid)s">
-            <p>%(qnumber)s: %(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             '''
         
         OPTION = '''
@@ -314,7 +317,7 @@ class MChoiceMA(Assessment):
         TEMPLATE_END = '''
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)"/> 
-            </form>
+            </form><br />
             <div id="%(divid)s_feedback">
             </div>
             </div>
@@ -323,28 +326,61 @@ class MChoiceMA(Assessment):
 
         super(MChoiceMA,self).run()
 
-        res = ""
-        res = TEMPLATE_START % self.options
-        feedbackStr = "["
-        currFeedback = ""
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if 'answer_' in k:  
-                x,label = k.split('_') 
-                self.options['alabel'] = label 
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-                currFeedback = "feedback_" + label
-                feedbackStr = feedbackStr + "'" + self.options[currFeedback] + "', ";
-        
-        self.options['feedback'] = feedbackStr[0:-2] + "]";
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+        mcNode = MChoiceNode(self.options)
+        mcNode.template_start = TEMPLATE_START
+        mcNode.template_form_start = '''<form name="%(divid)s_form" method="get" action="" onsubmit="return false;">'''
+        mcNode.template_option = OPTION
+        mcNode.template_end = TEMPLATE_END
+
+        self.state.nested_parse(self.content, self.content_offset, mcNode)
+
+        return [mcNode]
+
 
 
 ################################
+
+class FITBNode(nodes.General, nodes.Element):
+    def __init__(self,content):
+        """
+
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        super(FITBNode,self).__init__()
+        self.fitb_options = content
+
+
+def visit_fitb_node(self,node):
+        BLANK = '''<input type="text" name="blank" />'''
+
+        node.fitb_options['bodytext'] = node.fitb_options['bodytext'].replace('___',BLANK)
+        
+        fbl = []
+        for k in sorted(node.fitb_options.keys()):
+            if 'feedback' in k:
+                pair = eval(node.fitb_options[k])
+                p1 = pair[1].replace('"','&quot;')
+                p1 = p1.replace("'",'&acute;')
+                newpair = (pair[0],p1)
+                fbl.append(newpair)
+        
+        if 'casei' in node.fitb_options:
+            node.fitb_options['casei'] = 'true'
+        else:
+            node.fitb_options['casei'] = 'false'
+        node.fitb_options['fbl'] = json.dumps(fbl).replace('"',"'")
+        res = ""
+        res = node.template_start % node.fitb_options
+        
+        res += node.template_end % node.fitb_options
+
+        self.body.append(res)
+
+def depart_fitb_node(self,node):
+    pass
+
 
 class FillInTheBlank(Assessment):
     required_arguments = 1
@@ -378,7 +414,7 @@ class FillInTheBlank(Assessment):
         TEMPLATE_START = '''
             <div id="%(divid)s">
             <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
-            <p>%(qnumber)s: %(bodytext)s</p>
+            <p>%(bodytext)s</p>
             '''
         
         TEMPLATE_END = '''
@@ -389,34 +425,14 @@ class FillInTheBlank(Assessment):
             </div>
             </div>
             '''   
-        
-        BLANK = '''<input type="text" name="blank" />'''
 
         super(FillInTheBlank,self).run()
 
-        self.options['bodytext'] = self.options['bodytext'].replace('___',BLANK)
-        
-        #if 'feedback' not in self.options:
-        #    self.options['feedback'] = 'No Hints'
-        fbl = []
-        for k in sorted(self.options.keys()):
-            if 'feedback' in k:
-                pair = eval(self.options[k])
-                p1 = pair[1].replace('"','&quot;')
-                p1 = p1.replace("'",'&acute;')
-                newpair = (pair[0],p1)
-                fbl.append(newpair)
-        
-        if 'casei' in self.options:
-            self.options['casei'] = 'true'
-        else:
-            self.options['casei'] = 'false'
-        self.options['fbl'] = json.dumps(fbl).replace('"',"'")
-        res = ""
-        res = TEMPLATE_START % self.options
-        
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+        fitbNode = FITBNode(self.options)
+        fitbNode.template_start = TEMPLATE_START
+        fitbNode.template_end = TEMPLATE_END
+
+        return [fitbNode]
 
 
 
