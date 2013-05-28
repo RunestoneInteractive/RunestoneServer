@@ -10,8 +10,14 @@
 ..  shortname:: Dictionaries
 ..  description:: This is the introduction to the dictionary data type
 
+
+.. qnum::
+   :prefix: dict-
+   :start: 1
+
 Dictionaries
 ============
+
 
 .. index:: dictionary, mapping type, key, value, key-value pair
 
@@ -107,10 +113,11 @@ The key ``'two'`` yields the value ``'dos'``.
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23}
-   print(mydict["dog"])
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23}
+     print(mydict["dog"])
+
 
 .. index:: del statement, statement; del
 
@@ -176,11 +183,12 @@ of key-value pairs:
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23}
-   mydict["mouse"] = mydict["cat"] + mydict["dog"]
-   print(mydict["mouse"])
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23}
+     mydict["mouse"] = mydict["cat"] + mydict["dog"]
+     print(mydict["mouse"])
+
 
 
 
@@ -302,12 +310,13 @@ in the case where the key is not present.
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   keylist = list(mydict.keys())
-   keylist.sort()
-   print(keylist[3])
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+     keylist = list(mydict.keys())
+     keylist.sort()
+     print(keylist[3])
+   
    
    
 .. mchoicemf:: test_question11_3_2
@@ -324,11 +333,12 @@ in the case where the key is not present.
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   answer = mydict.get("cat")//mydict.get("dog")
-   print(answer)
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+     answer = mydict.get("cat")//mydict.get("dog")
+     print(answer)
+
    
    
 .. mchoicemf:: test_question11_3_3
@@ -340,10 +350,11 @@ in the case where the key is not present.
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   print("dog" in mydict)
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+     print("dog" in mydict)
+
 
 
 .. mchoicemf:: test_question11_3_4
@@ -355,10 +366,11 @@ in the case where the key is not present.
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   print(23 in mydict)
-   </pre>
+   .. sourcecode:: python
+
+      mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+      print(23 in mydict)
+
 
 
 .. mchoicemf:: test_question11_3_5
@@ -375,15 +387,16 @@ in the case where the key is not present.
    
    What is printed by the following statements?
    
-   <pre>
-   total = 0
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   for akey in mydict:
-      if len(akey) > 3:
-         total = total + mydict[akey]
-   print(total)
+   .. sourcecode:: python
+
+      total = 0
+      mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+      for akey in mydict:
+         if len(akey) > 3:
+            total = total + mydict[akey]
+      print(total)
    
-   </pre>
+
 
 .. index:: aliases
 
@@ -432,12 +445,13 @@ If you want to modify a dictionary and keep a copy of the original, use the dict
    
    What is printed by the following statements?
    
-   <pre>
-   mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-   yourdict = mydict
-   yourdict["elephant"] = 999
-   print(mydict["elephant"])
-   </pre>
+   .. sourcecode:: python
+
+     mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
+     yourdict = mydict
+     yourdict["elephant"] = 999
+     print(mydict["elephant"])
+
 
 .. index:: matrix
 

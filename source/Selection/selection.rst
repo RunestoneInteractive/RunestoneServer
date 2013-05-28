@@ -10,6 +10,10 @@
 ..  shortname:: Selection
 ..  description:: This module introduces the selection control structures (if, ifelse, elif)
 
+.. qnum::
+   :prefix: sel-
+   :start: 1
+
 Decisions and Selection
 =======================
 
@@ -315,9 +319,9 @@ There is no limit on the number of statements that can appear under the two clau
    How many statements can appear in each block (the if and the else) in a conditional statement?
 
 .. mchoicemf:: test_question6_4_2
-   :answer_a: Output a
-   :answer_b: Output b
-   :answer_c: Output c
+   :answer_a: TRUE
+   :answer_b: FALSE
+   :answer_c: TRUE<br>    FALSE
    :answer_d: Nothing will be printed
    :correct: b
    :feedback_a: TRUE is printed by the if-block, which only executes if the conditional (in this case, 4+5 == 10) is true.  In this case 5+4 is not equal to 10.
@@ -326,25 +330,14 @@ There is no limit on the number of statements that can appear under the two clau
    :feedback_d: Python will always execute either the if-block (if the condition is true) or the else-block (if the condition is false).  It would never skip over both blocks.
 
    What does the following code print (choose from output a, b, c or nothing).
-   <pre>
-   if (4 + 5 == 10):
-       print("TRUE")
-   else:
-       print("FALSE")
-   </pre>
-   a.
-   <pre>
-   TRUE
-   </pre>
-   b.
-   <pre>
-   FALSE
-   </pre>
-   c.
-   <pre>
-   TRUE
-   FALSE
-   </pre>
+
+   .. code-block:: python
+
+     if (4 + 5 == 10):
+         print("TRUE")
+     else:
+         print("FALSE")
+
 
 .. mchoicemf:: test_question6_4_3
    :answer_a: Output a
@@ -358,33 +351,31 @@ There is no limit on the number of statements that can appear under the two clau
    :feedback_d: To print these three lines, Python would have to execute both blocks in the if-else statement, which it can never do.
 
    What does the following code print?
-   <pre>
-   if (4 + 5 == 10):
-       print("TRUE")
-   else:
-       print("FALSE")
-   print("TRUE")
-   </pre>
-    a.
-   <pre>
-   TRUE
-   </pre>
-   b.
-   <pre>
-   TRUE
-   FALSE
-   </pre>
-   c.
-   <pre>
-   FALSE
-   TRUE
-   </pre>
-   d.
-   <pre>
-   TRUE
-   FALSE
-   TRUE
-   </pre>
+
+   .. code-block:: python
+
+     if (4 + 5 == 10):
+         print("TRUE")
+     else:
+         print("FALSE")
+     print("TRUE")
+
+   ::
+
+      a. TRUE
+
+      b.
+         TRUE
+         FALSE
+
+      c.
+         FALSE
+         TRUE
+      d.
+         TRUE
+         FALSE
+         TRUE
+
 
 
 .. index:: alternative execution, branch, wrapping code in a function
@@ -441,25 +432,26 @@ What would be printed if the value of `` x`` is negative?  Try it.
    :feedback_d: It is valid to have an if-block without a corresponding else-block (though you cannot have an else-block without a corresponding if-block).
 
    What does the following code print?
-   <pre>
-   x = -10
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   print("This is always printed")
-   </pre>
-   a.
-   <pre>
-   This is always printed
-   </pre>
-   b.
-   <pre>
-   The negative number -10 is not valid here
-   This is always printed
-   </pre>
-   c.
-   <pre>
-   The negative number -10 is not valid here
-   </pre>
+
+   .. code-block:: python
+     
+     x = -10
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     print("This is always printed")
+
+   ::
+
+     a.
+     This is always printed
+
+     b.
+     The negative number -10 is not valid here
+     This is always printed
+
+     c.
+     The negative number -10 is not valid here
+
 
 .. mchoicemf:: test_question6_5_2
    :answer_a: No
@@ -469,15 +461,16 @@ What would be printed if the value of `` x`` is negative?  Try it.
    :feedback_b: This will cause an error because the second else-block is not attached to a corresponding if-block.
 
    Will the following code cause an error?
-   <pre>
-   x = -10
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   else:
-       print(x, " is a positive number")
-   else:
-       print("This is always printed")
-   </pre>
+
+   .. code-block:: python
+
+     x = -10
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     else:
+         print(x, " is a positive number")
+     else:
+         print("This is always printed")
 
 .. index::
     single: nested conditionals
@@ -563,16 +556,18 @@ If you are still a bit unsure, here is the same selection as part of a codelens 
    :feedback_b: This is a legal nested if-else statement.  The inner if-else statement is contained completely within the body of the outer else-block.
 
    Will the following code cause an error?
-   <pre>
-   x = -10
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   else:
-       if x > 0:
-           print(x, " is a positive number")
-       else:
-           print(x," is 0")
-   </pre>
+
+   .. code-block:: python
+
+     x = -10
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     else:
+         if x > 0:
+             print(x, " is a positive number")
+         else:
+             print(x," is 0")
+
 
 .. index::
     single: chained conditional
@@ -643,44 +638,51 @@ Here is the same program using ``elif``.
    :feedback_e: No, in I you can not have a Boolean expression after an else.
 
    Which of I, II, and III below gives the same result as the following nested if?
-   <pre>
-   # nested if-else statement
-   x = -10
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   else:
-       if x > 0:
-           print(x, " is a positive number")
-       else:
-           print(x, " is 0")
-   </pre>
-   I.
-   <pre>
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   else (x > 0):
-       print(x, " is a positive number")
-   else:
-       print(x, " is 0")
-   </pre>
-   II.
-     <pre>
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   elif (x > 0):
-       print(x, " is a positive number")
-   else:
-       print(x, " is 0")
-   </pre>
-   III.
-     <pre>
-   if x < 0:
-       print("The negative number ",  x, " is not valid here.")
-   if (x > 0):
-       print(x, " is a positive number")
-   else:
-       print(x, " is 0")
-   </pre>
+
+   .. code-block:: python
+
+     # nested if-else statement
+     x = -10
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     else:
+         if x > 0:
+             print(x, " is a positive number")
+         else:
+             print(x, " is 0")
+
+     I.
+
+   .. code-block:: python
+
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     else (x > 0):
+         print(x, " is a positive number")
+     else:
+         print(x, " is 0")
+
+     II.
+   .. code-block:: python
+
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     elif (x > 0):
+         print(x, " is a positive number")
+     else:
+         print(x, " is 0")
+
+     III.
+
+   .. code-block:: python
+
+     if x < 0:
+         print("The negative number ",  x, " is not valid here.")
+     if (x > 0):
+         print(x, " is a positive number")
+     else:
+         print(x, " is 0")
+
 
 .. mchoicemf:: test_question6_7_2
    :answer_a: a
@@ -692,14 +694,16 @@ Here is the same program using ``elif``.
    :feedback_c: Since the first two Boolean expressions are false the else will be executed.
 
    What will the following code print if x = 3, y = 5, and z = 2?
-   <pre>
-   if x < y and x < z:
-       print ("a")
-   elif y < x and y < z:
-       print ("b")
-   else:
-       print ("c")
-   </pre>
+
+   .. code-block:: python
+
+     if x < y and x < z:
+         print ("a")
+     elif y < x and y < z:
+         print ("b")
+     else:
+         print ("c")
+
 
 
 Boolean Functions
@@ -808,9 +812,11 @@ Here is the same program in codelens.
    :feedback_b: x +y < z is a valid Boolean expression, which will evaluate to True or False.  It is perfectly legal to return True or False from a function, and to have the statement to be evaluated in the same line as the return keyword.
 
    Is the following statement legal in Python (assuming x, y and z are defined to be numbers)?
-   <pre>
-   return x + y < z
-   </pre>
+
+   .. code-block:: python
+
+     return x + y < z
+
 
 
 

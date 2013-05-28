@@ -10,6 +10,10 @@
 ..  shortname:: IntroToFunctions
 ..  description:: This is the introduction to the idea of defining and calling a function.
 
+.. qnum::
+   :prefix: func-
+   :start: 1
+   
 Functions
 =========
 
@@ -37,7 +41,7 @@ the solution to the problem.
 
 The syntax for a **function definition** is:
 
-.. sourcecode:: python
+.. code-block:: python
 
     def NAME( PARAMETERS ):
         STATEMENTS
@@ -257,13 +261,15 @@ been defined, we can call it as many times as we like with whatever actual param
    :feedback_d: This is a comment stating what the function does.
 
    What is the name of the following function?
-   <pre>
-   def drawSquare(t, sz):
-       """Make turtle t draw a square of with side sz."""
-       for i in range(4):
-           t.forward(sz)
-           t.left(90)
-   </pre>
+
+   .. code-block:: python
+
+     def drawSquare(t, sz):
+         """Make turtle t draw a square of with side sz."""
+         for i in range(4):
+             t.forward(sz)
+             t.left(90)
+
 
 
 .. mchoicemf:: test_question5_1_5
@@ -278,13 +284,15 @@ been defined, we can call it as many times as we like with whatever actual param
    :feedback_d: the parameters include only those variables whose values that the function expects to receive as input.  They are specified in the header of the function.
 
    What are the parameters of the following function?
-   <pre>
-   def drawSquare(t, sz):
-       """Make turtle t draw a square of with side sz."""
-       for i in range(4):
-	   t.forward(sz)
-	   t.left(90)
-   </pre>
+
+   .. code-block:: python
+
+     def drawSquare(t, sz):
+         """Make turtle t draw a square of with side sz."""
+         for i in range(4):
+       t.forward(sz)
+       t.left(90)
+
 
 
 .. mchoicemf:: test_question5_1_6
@@ -301,13 +309,15 @@ been defined, we can call it as many times as we like with whatever actual param
    :feedback_e: Since alex was already previously defined and 10 is a value, we have passed in two correct values for this function.
 
    Considering the function below, which of the following statements correctly invokes, or calls, this function (i.e., causes it to run)?  Assume we already have a turtle named alex.
-   <pre>
-   def drawSquare(t, sz):
-       """Make turtle t draw a square of with side sz."""
-       for i in range(4):
-           t.forward(sz)
-	   t.left(90)
-   </pre>
+
+   .. code-block:: python
+
+     def drawSquare(t, sz):
+         """Make turtle t draw a square of with side sz."""
+         for i in range(4):
+             t.forward(sz)
+       t.left(90)
+
 
 
 .. mchoicemf:: test_question5_1_7
@@ -507,11 +517,13 @@ function returns.
    :feedback_d: Functions can return any legal data, including (but not limited to) numbers, strings, turtles, etc.
 
    What is wrong with the following function definition:
-   <pre>
-   def addEm(x, y, z):
-       return x+y+z
-       print('the answer is', x+y+z)
-   </pre>
+
+   .. code-block:: python
+
+     def addEm(x, y, z):
+         return x+y+z
+         print('the answer is', x+y+z)
+
 
 .. mchoicemf:: test_question5_2_2
    :answer_a: Nothing (no value)
@@ -523,10 +535,12 @@ function returns.
    :feedback_c: x+y+z calculates a number (assuming x+y+z are numbers) which represents the sum of the values x, y and z.
 
    What will the following function return?
-   <pre>
+
+   .. code-block:: python
+
    def addEm(x, y, z):
        print x+y+z
-   </pre>
+
 
 Variables and parameters are local
 ----------------------------------
@@ -787,13 +801,15 @@ Here is the same program in codelens.  Step thru the function and watch the "run
    :feedback_d: The line runningtotal=0 is the first line in the for loop, but immediately after this line, the line runningtotal = runningtotal + x will execute, giving runningtotal a non-zero value  (assuming x is non-zero).
 
    Consider the following code:
-   <pre>
-   def square(x):
-       runningtotal = 0
-       for counter in range(x):
-           runningtotal = runningtotal + x
-       return runningtotal
-   </pre>
+
+   .. code-block:: python
+
+     def square(x):
+         runningtotal = 0
+         for counter in range(x):
+             runningtotal = runningtotal + x
+         return runningtotal
+
    What happens if you put the initialization of runningtotal (the
    line runningtotal = 0) inside the for loop as the first
    instruction in the loop?
@@ -857,7 +873,7 @@ However, it is the case that drawing the bottom and right sides are the
 same sequence as drawing the top and left sides.  So we eventually come up with
 this rather nice code that can draw a rectangle.
 
-.. sourcecode:: python
+.. code-block:: python
 
     def drawRectangle(t, w, h):
         """Get turtle t to draw a rectangle of width w and height h."""
@@ -883,7 +899,7 @@ simply uses the same value for both the height and the width.
 We already have a function that draws a rectangle, so we can use that to draw
 our square.
 
-.. sourcecode:: python
+.. code-block:: python
 
     def drawSquare(tx, sz):        # a new version of drawSquare
         drawRectangle(tx, sz, sz)
@@ -1029,19 +1045,22 @@ until you reach a point where that function is called.
    :feedback_e: Python starts at line 1, notices that it is a function definition and skips over all of the lines in the function definition until it finds a line that it no longer included in the function (line 5).  It then notices line 5 is also a function definition and again skips over the function body to line 9.  On line 10 it notices it has a function to execute, so it goes back and executes the body of that function.  Notice that that function includes another function call.  Finally, it will return to line 11 after the function square is complete.
 
    Consider the following Python code. Note that line numbers are included on the left.
-   <pre>
-   1	def pow(b, p):
-   2	    y = b ** p
-   3	    return y
-   4
-   5	def square(x):
-   6	    a = pow(x, 2)
-   7	    return a
-   8
-   9	n = 5
-   10   result = square(n)
-   11   print(result)
-   </pre>
+
+   .. code-block:: python
+      :linenos:
+
+      def pow(b, p):
+          y = b ** p
+          return y
+     
+      def square(x):
+          a = pow(x, 2)
+          return a
+     
+      n = 5
+      result = square(n)
+      print(result)
+
    Which of the following best reflects the order in which these lines of code are processed in Python?
 
 .. mchoicemf:: test_question5_6_2
@@ -1056,19 +1075,22 @@ until you reach a point where that function is called.
    :feedback_d: Notice that pow is called from within square with a base (b) of 5 and a power (p) of two.
 
    Consider the following Python code. Note that line numbers are included on the left.
-   <pre>
-   1	def pow(b, p):
-   2	    y = b ** p
-   3	    return y
-   4
-   5	def square(x):
-   6	    a = pow(x, 2)
-   7	    return a
-   8
-   9	n = 5
-   10   result = square(n)
-   11   print(result)
-   </pre>
+
+   .. code-block:: python
+      :linenos:
+
+      def pow(b, p):
+          y = b ** p
+          return y
+     
+      def square(x):
+          a = pow(x, 2)
+          return a
+     
+      n = 5
+      result = square(n)
+      print(result)
+
    What does this function print?
 
 A Turtle Bar Chart
@@ -1099,7 +1121,7 @@ Here is what we would like to create.
 We can quickly see that drawing a bar will be similar to drawing a rectangle or a square.  Since we will need to do it
 a number of times, it makes sense to create a function, ``drawBar``, that will need a turtle and the height of the bar.  We will assume that the width of the bar will be 40 units.  Once we have the function, we can use a simple for loop to process the list of data values.
 
-.. sourcecode:: python
+.. code-block:: python
 
     def drawBar(t, height):
         """ Get turtle t to draw one bar, of height. """
@@ -1138,42 +1160,42 @@ Here is the complete program.  Try it and then change the data to see that it ca
 
 .. activecode:: ch05_barchart
 
-	import turtle
+  import turtle
 
-	def drawBar(t, height):
-	    """ Get turtle t to draw one bar, of height. """
-	    t.begin_fill()               # start filling this shape
-	    t.left(90)
-	    t.forward(height)
-	    t.write('  '+ str(height))
-	    t.right(90)
-	    t.forward(40)
-	    t.right(90)
-	    t.forward(height)
-	    t.left(90)
-	    t.end_fill()                 # stop filling this shape
-
-
-
-	xs = [48,117,200,240,160,260,220]  # here is the data
-	maxheight = max(xs)
-	numbars = len(xs)
-	border = 10
-
-	tess = turtle.Turtle()           # create tess and set some attributes
-	tess.color("blue")
-	tess.fillcolor("red")
-	tess.pensize(3)
-
-	wn = turtle.Screen()             # Set up the window and its attributes
-	wn.bgcolor("lightgreen")
-	wn.setworldcoordinates(0-border,0-border,40*numbars+border,maxheight+border)
+  def drawBar(t, height):
+      """ Get turtle t to draw one bar, of height. """
+      t.begin_fill()               # start filling this shape
+      t.left(90)
+      t.forward(height)
+      t.write('  '+ str(height))
+      t.right(90)
+      t.forward(40)
+      t.right(90)
+      t.forward(height)
+      t.left(90)
+      t.end_fill()                 # stop filling this shape
 
 
-	for a in xs:
-	    drawBar(tess, a)
 
-	wn.exitonclick()
+  xs = [48,117,200,240,160,260,220]  # here is the data
+  maxheight = max(xs)
+  numbars = len(xs)
+  border = 10
+
+  tess = turtle.Turtle()           # create tess and set some attributes
+  tess.color("blue")
+  tess.fillcolor("red")
+  tess.pensize(3)
+
+  wn = turtle.Screen()             # Set up the window and its attributes
+  wn.bgcolor("lightgreen")
+  wn.setworldcoordinates(0-border,0-border,40*numbars+border,maxheight+border)
+
+
+  for a in xs:
+      drawBar(tess, a)
+
+  wn.exitonclick()
 
 
 
@@ -1209,7 +1231,7 @@ Glossary
 
         The syntax of a compound statement looks like this:
 
-        .. sourcecode:: python
+        .. code-block:: python
 
             keyword expression:
                 statement

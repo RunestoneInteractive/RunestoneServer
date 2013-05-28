@@ -10,6 +10,10 @@
 ..  shortname:: SimplePythonData
 ..  description:: An introduction to data and variables in python
 
+.. qnum::
+   :prefix: sdat-
+   :start: 1
+
 Variables, Expressions and Statements
 =====================================
 

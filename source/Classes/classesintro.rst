@@ -10,6 +10,11 @@
 ..  shortname:: IntroToClasses
 ..  description:: This is the introduction to the idea of building a class
 
+.. qnum::
+   :prefix: cls-
+   :start: 1
+
+
 Classes and Objects - the Basics
 ================================
 

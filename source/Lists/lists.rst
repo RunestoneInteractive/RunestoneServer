@@ -11,7 +11,12 @@
 ..  description:: The basic list data type in python
     
 .. index:: list, element, sequence, collection    
-    
+
+.. qnum::
+   :prefix: list-
+   :start: 1
+
+
 Lists
 =====
 
@@ -101,10 +106,11 @@ item when counting the length of the list.
 
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", 3.14, False]
-   print(len(alist))
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", 3.14, False]
+     print(len(alist))
+   
    
 .. mchoicemf:: test_question9_2_2
    :answer_a: 7
@@ -115,10 +121,10 @@ item when counting the length of the list.
 
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(len(alist))
-   </pre> 
+
+   .. code-block:: python
+      alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+      print(len(alist))
    
 Accessing Elements
 ------------------
@@ -151,10 +157,11 @@ of from the left.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(alist[5])
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(alist[5])
+
    
 .. mchoicemf:: test_question9_3_2
    :answer_a: Error, you cannot use the upper method on a list.
@@ -167,10 +174,11 @@ of from the left.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(alist[2].upper())
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(alist[2].upper())
+
    
 .. mchoicemf:: test_question9_3_3
    :answer_a: 56
@@ -185,10 +193,11 @@ of from the left.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(alist[2][0])
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(alist[2][0])
+
    
 List Membership
 ---------------
@@ -214,10 +223,11 @@ used them previously with strings and they also work here.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(3.14 in alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(3.14 in alist)
+
 
 .. mchoicemf:: test_question9_4_2
    :answer_a: True
@@ -228,10 +238,11 @@ used them previously with strings and they also work here.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(57 in alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(57 in alist)
+
 
 
 Concatenation and Repetition
@@ -291,11 +302,12 @@ In Python, there is a built-in function that can be called on any object to retu
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [1,3,5]
-   blist = [2,4,6]
-   print(alist + blist)
-   </pre>
+   .. code-block:: python
+
+     alist = [1,3,5]
+     blist = [2,4,6]
+     print(alist + blist)
+
    
    
 .. mchoicemf:: test_question9_5_2
@@ -311,10 +323,11 @@ In Python, there is a built-in function that can be called on any object to retu
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [1,3,5]
-   print(alist * 3)
-   </pre>
+   .. code-block:: python
+
+     alist = [1,3,5]
+     print(alist * 3)
+
    
 
 List Slices
@@ -343,10 +356,11 @@ The slice operation we saw with strings also work on lists.  Remember that the f
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
-   print(alist[4:])
-   </pre>
+   .. code-block:: python
+   
+     alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
+     print(alist[4:])
+
 
 
 .. index:: mutable, item assignment, immutable
@@ -423,11 +437,12 @@ desired location.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   alist[2] = True
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     alist[2] = True
+     print(alist)
+
 
 .. index:: del statement, statement; del
 
@@ -587,12 +602,13 @@ economize.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   blist = alist
-   blist[3] = 999
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     blist = alist
+     blist[3] = 999
+     print(alist)
+
 
 .. index:: clone
 
@@ -706,12 +722,13 @@ Here is the same example in codelens.  Step through the code until paying partic
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   blist = alist * 2
-   blist[3] = 999
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     blist = alist * 2
+     blist[3] = 999
+     print(alist)
+
 
 .. mchoicemf:: test_question9_12_2
    :answer_a: [4,2,8,999,5,4,2,8,999,5]
@@ -726,12 +743,13 @@ Here is the same example in codelens.  Step through the code until paying partic
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   blist = [alist] * 2
-   alist[3] = 999
-   print(blist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     blist = [alist] * 2
+     alist[3] = 999
+     print(blist)
+
 
 
 .. index:: list; append
@@ -829,12 +847,13 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   alist.append(True)
-   alist.append(False)
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     alist.append(True)
+     alist.append(False)
+     print(alist)
+
 
 
 .. mchoicemf:: test_question9_13_2
@@ -848,12 +867,13 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   alist.insert(2,True)
-   alist.insert(0,False)
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     alist.insert(2,True)
+     alist.insert(0,False)
+     print(alist)
+
 
 .. mchoicemf:: test_question9_13_3
    :answer_a: [4,8,6]
@@ -866,12 +886,13 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   temp = alist.pop(2)
-   temp = alist.pop()
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     temp = alist.pop(2)
+     temp = alist.pop()
+     print(alist)
+
    
    
 .. mchoicemf:: test_question9_13_4
@@ -887,11 +908,12 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   alist = alist.pop(0)
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     alist = alist.pop(0)
+     print(alist)
+
 
 .. admonition:: Scratch Editor
 
@@ -1051,11 +1073,12 @@ On the other hand, with concatenation, you will see that the `id` of the origina
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   alist = alist + 999
-   print(alist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     alist = alist + 999
+     print(alist)
+
 
 .. index:: for loop, enumerate
 
@@ -1142,13 +1165,14 @@ list, so that we can assign a new value to it.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   blist = [ ]
-   for item in alist:
-      blist.append(item+5)
-   print(blist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     blist = [ ]
+     for item in alist:
+        blist.append(item+5)
+     print(blist)
+
 
 .. index:: parameter
 
@@ -1346,11 +1370,12 @@ To write the ``primes_upto`` function we will use the ``is_prime`` function to f
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [4,2,8,6,5]
-   blist = [num*2 for num in alist if num%2==1]
-   print(blist)
-   </pre>
+   .. code-block:: python
+
+     alist = [4,2,8,6,5]
+     blist = [num*2 for num in alist if num%2==1]
+     print(blist)
+
 
 .. index:: nested list, list; nested
        
@@ -1392,13 +1417,14 @@ left to right.
    
    What is printed by the following statements?
    
-   <pre>
-   alist = [ [4, [True, False], 6, 8], [888, 999] ]
-   if alist[0][1][0]:
-      print(alist[1][0])
-   else:
-      print(alist[1][1])
-   </pre>
+   .. code-block:: python
+
+     alist = [ [4, [True, False], 6, 8], [888, 999] ]
+     if alist[0][1][0]:
+        print(alist[1][0])
+     else:
+        print(alist[1][1])
+
 
 .. index:: strings and lists, split, join
 
@@ -1466,14 +1492,15 @@ you can use empty glue or multi-character strings as glue.
    
    What is printed by the following statements?
    
-   <pre>
-   myname = "Edgar Allan Poe"
-   namelist = myname.split()
-   init = ""
-   for aname in namelist:
-      init = init + aname[0]
-   print(init)
-   </pre>
+   .. code-block:: python
+
+     myname = "Edgar Allan Poe"
+     namelist = myname.split()
+     init = ""
+     for aname in namelist:
+        init = init + aname[0]
+     print(init)
+
 
     
 ``list`` Type Conversion Function

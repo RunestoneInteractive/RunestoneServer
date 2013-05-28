@@ -10,6 +10,10 @@
 ..  shortname:: HelloTurtle
 ..  description:: An introduction to using the turtle module in python
 
+.. qnum::
+   :prefix: trl-
+   :start: 1
+
 .. _hello_turtles:
 
 Hello, Little Turtles!
@@ -189,14 +193,15 @@ screen until we click on it.
    :feedback_d: If we leave it out, Python will give an error saying that it does not know about the name &quotturtle&quot when it reaches the line &quotwn = turtle.Screen()&quot
 
    Consider the following code:
-   <pre>
-   import turtle
-   wn = turtle.Screen()
-   alex = turtle.Turtle()
-   alex.forward(150)
-   alex.left(90)
-   alex.forward(75)
-   </pre>
+
+   .. code-block:: python
+
+     import turtle
+     wn = turtle.Screen()
+     alex = turtle.Turtle()
+     alex.forward(150)
+     alex.left(90)
+     alex.forward(75)
 
    What does the line "import turtle" do?
 
@@ -209,7 +214,7 @@ screen until we click on it.
    :feedback_b: The period separates the module name from the object name.  The parentheses at the end are what tell Python to invoke a new object.
    :feedback_c: Yes, the Turtle type is defined in the module turtle.  Remember that Python is case sensitive and Turtle is different from turtle.
 
-   Why do we type "turtle.Turtle()" to get a new Turtle object?
+   Why do we type ``turtle.Turtle()`` to get a new Turtle object?
 
 .. mchoicemf:: test_question3_1_3
    :answer_a: True
@@ -346,7 +351,11 @@ we'd like to send them each an email inviting them to our party.  We
 don't quite know how to send email yet, so for the moment we'll just print a
 message for each friend.
 
-.. activecode:: ch03_4    :nocanvas:    :tour_1: "Overall Tour"; 1-2: Example04_Tour01_Line01; 2: Example04_Tour01_Line02; 1: Example04_Tour01_Line03;    for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
+.. activecode:: ch03_4
+    :nocanvas:
+    :tour_1: "Overall Tour"; 1-2: Example04_Tour01_Line01; 2: Example04_Tour01_Line02; 1: Example04_Tour01_Line03;
+
+    for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
         print("Hi " + name + "  Please come to my party on Saturday!")
 
 
@@ -501,10 +510,12 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
    :feedback_d: The loop body will not execute more times than the number of elements in the list.
 
    In the following code, how many lines does this code print?
-   <pre>
-   for number in [5, 4, 3, 2, 1, 0]:
-       print("I have", number, "cookies.  Iím going to eat one.")
-   </pre>
+
+   .. code-block:: python
+
+     for number in [5, 4, 3, 2, 1, 0]:
+         print("I have", number, "cookies.  Iím going to eat one.")
+
 
 .. mchoicemf:: test_question3_4_2
    :answer_a: They are indented to the same degree from the loop header.
@@ -529,10 +540,12 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
       :feedback_d: Python gives number the value of items in the list, one at a time, in order (from left to right).  number gets a new value each time the loop repeats.
 
       In the following code, what is the value of number the second time Python executes the loop?
-      <pre>
+
+      .. code-block:: python
+
          for number in [5, 4, 3, 2, 1, 0]:
              print("I have", number, "cookies.  Iím going to eat one.")
-      </pre>
+
 
 .. mchoicemf:: test_question3_4_4
       :answer_a: Draw a square using the same color for each side.
@@ -544,11 +557,13 @@ In this case, the value of ``aColor`` is used to change the color attribute of `
       :feedback_c: While the body of the loop only draws one side of the square it will be  repeated once for each item in the list.
 
       Consider the following code:
-      <pre>
-      for aColor in ["yellow", "red", "green", "blue"]:
-         alex.forward(50)
-         alex.left(90)
-      </pre>
+
+      .. code-block:: python
+
+        for aColor in ["yellow", "red", "green", "blue"]:
+           alex.forward(50)
+           alex.left(90)
+
       What does each iteration through the loop (i.e. "chunk of code") do?
 
 The range Function
