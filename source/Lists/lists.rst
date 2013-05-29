@@ -123,6 +123,7 @@ item when counting the length of the list.
    
 
    .. code-block:: python
+
       alist = [3, 67, "cat", [56, 57, "dog"], [ ], 3.14, False]
       print(len(alist))
    

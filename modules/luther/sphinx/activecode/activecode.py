@@ -234,27 +234,29 @@ class ActiveCode(Directive):
 
 
 
+EXEDIT = '''
+<button id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
+<div id="%(divid)s"></div>
+<br />
+'''
+
 class ActiveExercise(Directive):
     required_arguments = 1
     optional_arguments = 0
     has_content = True
-    option_spec = {}
 
     def run(self):
         self.options['divid'] = self.arguments[0]
-        self.options['caption'] = ''
-        self.options['include'] = 'undefined'
-
         if self.content:
             source = "\\n".join(self.content)
-
         else:
             source = ''
+        self.options['source'] = source.replace('"','%22').replace("'",'%27')
 
-        self.options['initialcode'] = source.replace('"','%22').replace("'",'%27')
+        res = EXEDIT
 
-        return_node = ActivcodeNode(self.options) 
-        return [return_node]
+        return [nodes.raw('',res % self.options,format='html')]
+
 
 
 if __name__ == '__main__':
