@@ -28,4 +28,4 @@ elif 'webfaction' in uname()[1]:
 elif 'luther' in uname()[1]:
 	settings.database_uri = 'sqlite://storage.sqlite'
 else:
-	raise RuntimeError('Host unknown, senttings not configured')	
+	raise RuntimeError('Host unknown, settings not configured')	
