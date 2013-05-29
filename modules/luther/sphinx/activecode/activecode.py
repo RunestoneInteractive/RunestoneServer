@@ -25,12 +25,11 @@ def setup(app):
     app.add_directive('activecode',ActiveCode)
     app.add_directive('actex',ActiveExercise)
     app.add_stylesheet('codemirror.css')
-    app.add_stylesheet('theme/default.css')
     app.add_stylesheet('activecode.css')
-    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')  # needed for tabbed exercises
+    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')
 
+    app.add_javascript('jquery-ui-1.10.3.custom.min.js')
     app.add_javascript('jquery.highlight.js')
-    app.add_javascript('jquery-ui-1.10.3.custom.min.js') # needed for tabbed exercises
     app.add_javascript('bookfuncs.js')
     app.add_javascript('codemirror.js')
     app.add_javascript('python.js')
@@ -234,38 +233,28 @@ class ActiveCode(Directive):
         return [ActivcodeNode(self.options)]
 
 
-EXEDIT = '''
-<button id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
-<div id="%(divid)s"></div>
-<br />
-'''
-
-ODDEXEDIT = '''
-<button id="butt_%(divid)s" onclick="createOddActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
-<div id="%(divid)s"></div>
-<br />
-'''
 
 class ActiveExercise(Directive):
     required_arguments = 1
     optional_arguments = 0
     has_content = True
-    option_spec = {'is_odd':directives.flag}
+    option_spec = {}
 
     def run(self):
         self.options['divid'] = self.arguments[0]
+        self.options['caption'] = ''
+        self.options['include'] = 'undefined'
+
         if self.content:
             source = "\\n".join(self.content)
+
         else:
             source = ''
-        self.options['source'] = source.replace('"','%22').replace("'",'%27')
 
-        if 'is_odd' in self.options:
-            res = ODDEXEDIT
-        else:
-            res = EXEDIT
+        self.options['initialcode'] = source.replace('"','%22').replace("'",'%27')
 
-        return [nodes.raw('',res % self.options,format='html')]
+        return_node = ActivcodeNode(self.options) 
+        return [return_node]
 
 
 if __name__ == '__main__':
