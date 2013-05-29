@@ -28,6 +28,21 @@ from scratch and write your own interactive textbook using the tools that we pro
 In order to see how the tools work, the following sections will show them in action.
 
 
+.. tabbed:: randomdiv
+    
+    .. tab:: Tab1
+        
+        .. video:: videoinfo
+            :controls:
+            :thumb: _static/activecodethumb.png
+
+            http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
+            http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
+
+    .. tab:: Tab 2
+        
+        hello world
+
 Embedded Videos
 ---------------
 
