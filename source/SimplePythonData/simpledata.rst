@@ -1256,25 +1256,41 @@ Glossary
 Exercises
 ---------
 
-1. Evaluate the following numerical expressions in your head, then use
-   the active code window to check your results:
+1.
 
-    #. ``5 ** 2``
-    #. ``9 * 5``
-    #. ``15 / 12``
-    #. ``12 / 15``
-    #. ``15 // 12``
-    #. ``12 // 15``
-    #. ``5 % 2``
-    #. ``9 % 5``
-    #. ``15 % 12``
-    #. ``12 % 15``
-    #. ``6 % 6``
-    #. ``0 % 7``
+.. tabbed:: q1
 
-  .. activecode:: ch02_ex1
+    .. tab:: Question
+        
+        Evaluate the following numerical expressions in your head, then use
+        the active code window to check your results:
 
-      print(5**2)
+        #. ``5 ** 2``
+        #. ``9 * 5``
+        #. ``15 / 12``
+        #. ``12 / 15``
+        #. ``15 // 12``
+        #. ``12 // 15``
+        #. ``5 % 2``
+        #. ``9 % 5``
+        #. ``15 % 12``
+        #. ``12 % 15``
+        #. ``6 % 6``
+        #. ``0 % 7``
+
+        .. activecode:: ch02_ex1
+
+           print(5**2)
+
+    .. tab:: Answer
+
+        Put some sort of answer here!
+
+    .. tab:: Discussion
+
+        .. disqus::
+            :shortname: interactivepython
+            :identifier: q1disqus
 
 2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
    in 51 hours.  At what time does the alarm go off?

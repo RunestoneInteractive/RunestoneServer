@@ -301,35 +301,6 @@ function loadEditor(data, status, whatever) {
     // need to get the divId back with the result...
 }
 
-function createOddActiveCode(divid,suppliedSource,sid)  {
-    /* Create 3 tabs for this exercise: an editor, containing a normal activecode block,
-       an Answer tab, containing an answer provided by the author, and a discussion tab
-       containing a Disqus commenting/discussion block specific to this exercise.
-    */
-    
-    // #divid will hold all 3 tabs
-    tabDiv = $("#"+divid);
-
-    // create the 3 tabs 
-    tabList = tabDiv.append("<ul></ul>").find("ul");
-    tabList.append("<li><a href='#" + divid + "-editor'><span>Editor</span></a></li>");
-    tabList.append("<li><a href='#" + divid + "-answer'><span>Answer</span></a></li>");
-    tabList.append("<li><a href='#" + divid + "-discussion'><span>Discussion</span></a></li>");
-        
-    // create the 3 divs corresponding to the 3 tabs
-    tabDiv.append("<div id='" + divid + "-editor'>Editor</div>");
-    tabDiv.append("<div id='" + divid + "-answer'>Answer</div>");
-    tabDiv.append("<div id='" + divid + "-discussion'>Discussion</div>");
-
-    // insert the activecode editor in the editor tab
-    createActiveCode(divid + '-editor', suppliedSource, sid)
-    
-    // init the jQuery tabs plugin
-    $(function() {
-        $( "#"+divid ).tabs();
-    });
-      
-}
 
 function createActiveCode(divid,suppliedSource,sid) {
     var eNode;
