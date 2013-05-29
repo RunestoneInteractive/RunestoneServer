@@ -10,6 +10,10 @@
 ..  shortname:: MoreAboutIteration
 ..  description:: This module has more information about iteration and while loops
 
+.. qnum::
+   :prefix: itr-
+   :start: 1
+
 Iteration Revisited
 ===================
 
@@ -217,14 +221,16 @@ we need the extra power that we get from the ``while`` loop.
    :feedback_d: The loop condition must become False for the loop to terminate, but n by itself is not the condition in this case.
 
    The following code contains an infinite loop.  Which is the best explanation for why the loop does not terminate?
-     <pre>
+
+   .. code-block:: python
+
      n = 10
      answer = 1
      while ( n > 0 ):
        answer = answer + n
        n = n + 1
      print answer
-     </pre>
+
 
 
 Randomly Walking Turtles
@@ -1056,44 +1062,48 @@ What remains is to focus on ways that we can better represent our problems in te
    :feedback_d: The outer for-loop runs 3 times (0, 1, 2) and the inner for-loop runs twice for each time the outer for-loop runs, so this code prints exactly 6 lines.
 
    What will the following nested for-loop print?  (Note, if you are having trouble with this question, review CodeLens 3).
-    <pre>
-    for i in range(3):
-      for j in range(2):
-        print(i,j)
-    </pre>
-    a.
-    <pre>
-    0	0
-    0	1
-    1	0
-    1	1
-    2	0
-    2	1
-    </pre>
-    b.
-    <pre>
-    0   0
-    1   0
-    2   0
-    0   1
-    1   1
-    2   1
-    </pre>
-    c.
-    <pre>
-    0   0
-    0   1
-    0   2
-    1   0
-    1   1
-    1   2
-    </pre>
-    d.
-    <pre>
-    0   1
-    0   1
-    0   1
-    </pre>
+
+   .. code-block:: python
+
+      for i in range(3):
+        for j in range(2):
+          print(i,j)
+
+   ::
+
+      a.
+
+      0	0
+      0	1
+      1	0
+      1	1
+      2	0
+      2	1
+
+      b.
+
+      0   0
+      1   0
+      2   0
+      0   1
+      1   1
+      2   1
+
+      c.
+
+      0   0
+      0   1
+      0   2
+      1   0
+      1   1
+      1   2
+
+      d.
+
+      0   1
+      0   1
+      0   1
+
 
 
 .. mchoicemf:: test_question7_8_3_2
@@ -1108,17 +1118,21 @@ What remains is to focus on ways that we can better represent our problems in te
    :feedback_d: Because we have changed the value of the pixels from what they were in the original ActiveCode box code, the image will not be the same.
 
    What would the image produced from ActiveCode box 12 look like if you replaced the lines:
-   <pre>
-   newred = 255-p.getRed()
-   newgreen = 255-p.getGreen()
-   newblue = 255-p.getBlue()
-   </pre>
+
+   .. code-block:: python
+
+      newred = 255-p.getRed()
+      newgreen = 255-p.getGreen()
+      newblue = 255-p.getBlue()
+
    with the lines:
-   <pre>
-   newred = p.getRed()
-   newgreen = 0
-   newblue = 0
-   </pre>
+
+   .. code-block:: python
+
+      newred = p.getRed()
+      newgreen = 0
+      newblue = 0
+
 
 
 Image Processing on Your Own

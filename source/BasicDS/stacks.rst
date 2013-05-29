@@ -258,14 +258,17 @@ benchmark testing.
 
 .. admonition:: Self Check
 
-   .. multiplechoice:: stack_1
+   .. mchoicemf:: stack_1
       :iscode:
       :answer_a: 'x'
       :answer_b: 'y'
       :answer_c: 'z'
       :answer_d: The stack is empty
       :correct: c
-      :feedback: Remember that a stack is built from the bottom up.
+      :feedback_a: Remember that a stack is built from the bottom up.
+      :feedback_b: Remember that a stack is built from the bottom up.
+      :feedback_c: Good job.
+      :feedback_d: Remember that a stack is built from the bottom up.
 
        Given the following sequence of stack operations what is the top item on the stack?
        m = Stack()
@@ -275,14 +278,17 @@ benchmark testing.
        m.push('z')
        m.peek()
 
-   .. multiplechoice:: stack_2
+   .. mchoicemf:: stack_2
       :iscode:
       :answer_a: 'x'
       :answer_b: the stack is empty
       :answer_c: an error will occur
       :answer_d: 'z'
       :correct: c
-      :feedback: none
+      :feedback_a: You may want to check out the docs for isEmpty
+      :feedback_b: There is an odd number of things on the stack but each time through the loop 2 things are popped.
+      :feedback_c: Good Job.
+      :feedback_d: You may want to check out the docs for isEmpty
 
 	  Given the following sequence of stack operations, what is the top item on the stack?
 	  m = Stack()
@@ -291,7 +297,7 @@ benchmark testing.
 	  m.push('z')
 	  while not m.isEmpty():
 	     m.pop()
-         m.pop()
+       m.pop()
 
    Write a function `revstring(mystr)` that uses a stack to reverse the
    characters in a string.

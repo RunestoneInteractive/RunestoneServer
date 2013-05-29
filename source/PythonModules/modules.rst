@@ -10,6 +10,10 @@
 ..  shortname:: PythonModules
 ..  description:: What is a module and how do we use them (math, random)
 
+.. qnum::
+   :prefix: mod-
+   :start: 1
+
 Modules and Getting Help
 ========================
 

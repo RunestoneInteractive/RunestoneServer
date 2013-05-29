@@ -632,14 +632,17 @@ problem.
 
 .. admonition:: Self Check
 
-   .. multiplechoice:: analysis_1
+   .. mchoicemf:: analysis_1
        :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
        :answer_d: O(n^3)
        :correct: b
-       :feedback: In an example like this you want to count the nested loops. especially the loops that are dependent on the same variable, in this case, n.
+       :feedback_a: In an example like this you want to count the nested loops. especially the loops that are dependent on the same variable, in this case, n.
+       :feedback_b: A singly nested loop like this is O(n^2)
+       :feedback_c: log n typically is indicated when the problem is iteratvely made smaller
+       :feedback_d: In an example like this you want to count the nested loops. especially the loops that are dependent on the same variable, in this case, n.
 
        Given the following code fragment, what is its Big-O running time?
        test = 0
@@ -647,14 +650,17 @@ problem.
           for j in range(n):
              test = test + i * j
 
-   .. multiplechoice:: analysis_2
+   .. mchoicemf:: analysis_2
        :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
        :answer_d: O(n^3)
        :correct: a
-       :feedback: Be careful, in counting loops you want to make sure the loops are nested.
+       :feedback_b: Be careful, in counting loops you want to make sure the loops are nested.
+       :feedback_d: Be careful, in counting loops you want to make sure the loops are nested.
+       :feedback_c: log n typically is indicated when the problem is iteratvely made smaller
+       :feedback_a: Even though there are two loops they are not nested.  You might think of this as O(2n) but we can ignore the constant 2.
 
        Given the following code fragment what is its Big-O running time?
        test = 0
@@ -664,14 +670,17 @@ problem.
        for j in range(n):
           test = test - 1
 
-   .. multiplechoice:: analysis_3
+   .. mchoicemf:: analysis_3
        :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
        :answer_d: O(n^3)
        :correct: c
-       :feedback: Look carefully at the loop variable i.  Notice that the value of i is cut in half each time through the loop.  This is a big hint that the performance is better than O(n)
+       :feedback_a: Look carefully at the loop variable i.  Notice that the value of i is cut in half each time through the loop.  This is a big hint that the performance is better than O(n)
+       :feedback_b: Check again, is this a nested loop?
+       :feedback_d: Check again, is this a nested loop?       
+       :feedback_c: The value of i is cut in half each time through the loop so it will only take log n iterations.
 
        Given the following code fragment what is its Big-O running time?
        i = n
@@ -1045,25 +1054,33 @@ the Python wiki has a nice time complexity page that can be found at
 
 .. admonition:: Self Check
 
-    .. multiplechoice:: mcpyperform
+    .. mchoicemf:: mcpyperform
        :answer_a: list.pop(0)
        :answer_b: list.pop()
        :answer_c: list.append()
        :answer_d: list[10]
        :answer_e: all of the above are O(1)
        :correct: a
-       :feedback: When you remove the first element of a list, all the other elements of the list must be shifted forward.
+       :feedback_a: When you remove the first element of a list, all the other elements of the list must be shifted forward.
+       :feedback_b: Removing an element from the end of the list is a constant operation.
+       :feedback_c: Appending to the end of the list is a constant operation
+       :feedback_d: Indexing a list is a constant operation
+       :feedback_e: There is one operation that requires all other list elements to be moved.
 
        Which of the above list operations is not O(1)?
 
-    .. multiplechoice:: mcpydictperf
+    .. mchoicemf:: mcpydictperf
       :answer_a: 'x' in mydict
       :answer_b: del mydict['x']
       :answer_c: mydict['x'] == 10
       :answer_d: mydict['x'] = mydict['x'] + 1
       :answer_e: all of the above are O(1)
       :correct: e
-      :feedback: The only dictionary operations that are not O(1) are those that require iteration.
+      :feedback_a: in is a constant operation for a dictionary because you do not have to iterate
+      :feedback_b: deleting an element from a dictionary is a constant operation
+      :feedback_c: Assignment to a dictionary key is constant
+      :feedback_d: Re-assignment to a dictionary key is constant
+      :feedback_e: The only dictionary operations that are not O(1) are those that require iteration.                  
 
       Which of the above dictionary operations is O(1)?
 

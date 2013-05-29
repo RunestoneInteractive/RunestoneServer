@@ -22,14 +22,17 @@ import json
 import random
 
 def setup(app):
-    app.add_directive('multiplechoice',MultipleChoice)
     app.add_directive('mchoicemf',MChoiceMF)
     app.add_directive('mchoicema',MChoiceMA)
     app.add_directive('fillintheblank',FillInTheBlank)
     app.add_directive('mcmfrandom',MChoiceRandomMF)
     app.add_directive('addbutton',AddButton)
+    app.add_directive('qnum',QuestionNumber)    
 
     app.add_javascript('assess.js')
+
+    app.add_node(MChoiceNode, html=(visit_mc_node, depart_mc_node))
+    app.add_node(FITBNode, html=(visit_fitb_node, depart_fitb_node))    
 
 class AddButton(Directive):
     required_arguments = 1
@@ -65,89 +68,123 @@ class AddButton(Directive):
         res += TEMPLATE_END % self.options
         return [nodes.raw('',res , format='html')]
 
-####################
-
-class MultipleChoice(Directive):
-    required_arguments = 1
-    optional_arguments = 1
-    final_argument_whitespace = True
-    has_content = True
-    option_spec = {'answer_a':directives.unchanged,
-        'answer_b':directives.unchanged,    
-        'answer_c':directives.unchanged,
-        'answer_d':directives.unchanged,
-        'answer_e':directives.unchanged,
-        'correct':directives.unchanged,
-        'feedback':directives.unchanged,
-            'iscode':directives.flag
+class QuestionNumber(Directive):
+    """Set Parameters for Question Numbering"""
+    required_arguments = 0
+    optional_arguments = 3
+    has_content = False
+    option_spec = { 'prefix': directives.unchanged,
+        'suffix': directives.unchanged,
+        'start': directives.positive_int
     }
-    
+
     def run(self):
+        env = self.state.document.settings.env
+
+        if 'start' in self.options:
+            env.assesscounter = self.options['start'] - 1
+
+        if 'prefix' in self.options:
+            env.assessprefix = self.options['prefix']
+
+        if 'suffix' in self.options:
+            env.assesssuffix = self.options['suffix']
+
+        return []
+
+
+class MChoiceNode(nodes.General, nodes.Element):
+    def __init__(self,content):
         """
-            process the multiplechoice directive and generate html for output.
-            :param self:
-            :return:
-            .. multiplechoice:: qname
-            :iscode: boolean
-            :answer_a: possible answer  -- what follows _ is label
-            :answer_b: possible answer
-            ...  
-            :answer_e: possible answer                      
-            :correct: b
-            :feedback: -- displayed if wrong
-            
-            Question text
-            ...
-            """
-        
-        TEMPLATE_START = '''
-            <div id="%(divid)s">
-            <p>%(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
-            '''
-        
-        OPTION = '''
-            <input type="radio" name="group1" value="%(alabel)s" id="%(divid)s_opt_%(alabel)s" />
-            <label for= "%(divid)s_opt_%(alabel)s">  %(alabel)s) %(atext)s</label><br />
-            '''
-        
-        TEMPLATE_END = '''
-            <input type="button" name="do answer" 
-            value="Check Me" onclick="checkMe('%(divid)s','%(correct)s','%(feedback)s')"/> 
-            </form>
-            <div id="%(divid)s_feedback">
-            </div>
-            </div>
-            '''   
-        
+
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        super(MChoiceNode,self).__init__()
+        self.mc_options = content
+
+
+def visit_mc_node(self,node):
+    res = ""
+    res = node.template_start % node.mc_options
+
+    self.body.append(res)
+
+
+def depart_mc_node(self,node):
+    res = node.template_form_start % node.mc_options
+    feedbackStr = "["
+    currFeedback = ""
+    # Add all of the possible answers
+    okeys = node.mc_options.keys()
+    okeys.sort()
+    for k in okeys:
+        if 'answer_' in k:  
+            x,label = k.split('_') 
+            node.mc_options['alabel'] = label 
+            node.mc_options['atext'] = node.mc_options[k]
+            res += node.template_option % node.mc_options
+            currFeedback = "feedback_" + label
+            feedbackStr = feedbackStr + "'" + node.mc_options[currFeedback] + "', "
+    
+    # store the feedback array with key feedback minus last comma
+    node.mc_options['feedback'] = feedbackStr[0:-2] + "]"
+
+    res += node.template_end % node.mc_options
+
+    self.body.append(res)
+
+
+
+class Assessment(Directive):
+    """Base Class for assessments"""
+
+    def getNumber(self):
+        env = self.state.document.settings.env
+        if not hasattr(env,'assesscounter'):
+            env.assesscounter = 0
+        env.assesscounter += 1
+
+        res = "Q-%d"
+
+        if hasattr(env,'assessprefix'):
+            res = env.assessprefix + "%d"
+
+        res = res % env.assesscounter
+
+        if hasattr(env, 'assesssuffix'):
+            res += env.assesssuffix
+
+        return res
+
+
+    def run(self):
+
+        self.options['qnumber'] = self.getNumber()
         
         self.options['divid'] = self.arguments[0]
+
+        if self.content[0][:2] == '..':  # first line is a directive
+            self.content[0] = self.options['qnumber'] + ': \n\n' + self.content[0]
+        else:
+            self.content[0] = self.options['qnumber'] + ': ' + self.content[0]
+
         if self.content:
             if 'iscode' in self.options:
                 self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
             else:
                 self.options['bodytext'] = "\n".join(self.content)
-        
-        res = ""
-        res = TEMPLATE_START % self.options
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if '_' in k:
-                x,label = k.split('_')
-                self.options['alabel'] = label
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-        
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+        else:
+            self.options['bodytext'] = '\n'
+
+
 
 #####################
 # multiple choice question with multiple feedback
 # author - Barb Ericson
 # author - Anusha 
-class MChoiceMF(Directive):
+class MChoiceMF(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -163,7 +200,7 @@ class MChoiceMF(Directive):
         'feedback_c':directives.unchanged,
         'feedback_d':directives.unchanged,
         'feedback_e':directives.unchanged,
-            'iscode':directives.flag
+        'iscode':directives.flag
     }
     
     def run(self):
@@ -189,8 +226,6 @@ class MChoiceMF(Directive):
             """
         TEMPLATE_START = '''
             <div id="%(divid)s">
-            <p>%(qnumber)s: %(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             '''
         
         OPTION = '''
@@ -199,65 +234,38 @@ class MChoiceMF(Directive):
             '''
         
         TEMPLATE_END = '''
+
             <script>
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)"/> 
-            </form>
+            </form><br />
             <div id="%(divid)s_feedback">
             </div>
             </div>
             '''   
+        super(MChoiceMF,self).run()
+
+
         
-        
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        else:
-            self.options['bodytext'] = "\n"
-        
-        res = ""
-        res = TEMPLATE_START % self.options
-        feedbackStr = "["
-        currFeedback = ""
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if 'answer_' in k:  
-                x,label = k.split('_') 
-                self.options['alabel'] = label 
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-                currFeedback = "feedback_" + label
-                feedbackStr = feedbackStr + "'" + self.options[currFeedback] + "', "
-        
-        # store the feedback array with key feedback minus last comma
-        self.options['feedback'] = feedbackStr[0:-2] + "]"
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+
+        mcNode = MChoiceNode(self.options)
+        mcNode.template_start = TEMPLATE_START
+        mcNode.template_form_start = '''<form name="%(divid)s_form" method="get" action="" onsubmit="return false;">'''
+        mcNode.template_option = OPTION
+        mcNode.template_end = TEMPLATE_END
+
+        self.state.nested_parse(self.content, self.content_offset, mcNode)
+
+        return [mcNode]
 
 
 #####################
 # multiple choice question with multiple correct answers
 # author - Barb Ericson
 
-class MChoiceMA(Directive):
+class MChoiceMA(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -299,8 +307,6 @@ class MChoiceMA(Directive):
             """
         TEMPLATE_START = '''
             <div id="%(divid)s">
-            <p>%(qnumber)s: %(bodytext)s</p>
-            <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             '''
         
         OPTION = '''
@@ -311,54 +317,72 @@ class MChoiceMA(Directive):
         TEMPLATE_END = '''
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)"/> 
-            </form>
+            </form><br />
             <div id="%(divid)s_feedback">
             </div>
             </div>
             '''   
         
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        
-        res = ""
-        res = TEMPLATE_START % self.options
-        feedbackStr = "["
-        currFeedback = ""
-        # Add all of the possible answers
-        okeys = self.options.keys()
-        okeys.sort()
-        for k in okeys:
-            if 'answer_' in k:  
-                x,label = k.split('_') 
-                self.options['alabel'] = label 
-                self.options['atext'] = self.options[k]
-                res += OPTION % self.options
-                currFeedback = "feedback_" + label
-                feedbackStr = feedbackStr + "'" + self.options[currFeedback] + "', ";
-        
-        self.options['feedback'] = feedbackStr[0:-2] + "]";
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+
+        super(MChoiceMA,self).run()
+
+        mcNode = MChoiceNode(self.options)
+        mcNode.template_start = TEMPLATE_START
+        mcNode.template_form_start = '''<form name="%(divid)s_form" method="get" action="" onsubmit="return false;">'''
+        mcNode.template_option = OPTION
+        mcNode.template_end = TEMPLATE_END
+
+        self.state.nested_parse(self.content, self.content_offset, mcNode)
+
+        return [mcNode]
+
 
 
 ################################
 
-class FillInTheBlank(Directive):
+class FITBNode(nodes.General, nodes.Element):
+    def __init__(self,content):
+        """
+
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        super(FITBNode,self).__init__()
+        self.fitb_options = content
+
+
+def visit_fitb_node(self,node):
+        BLANK = '''<input type="text" name="blank" />'''
+
+        node.fitb_options['bodytext'] = node.fitb_options['bodytext'].replace('___',BLANK)
+        
+        fbl = []
+        for k in sorted(node.fitb_options.keys()):
+            if 'feedback' in k:
+                pair = eval(node.fitb_options[k])
+                p1 = pair[1].replace('"','&quot;')
+                p1 = p1.replace("'",'&acute;')
+                newpair = (pair[0],p1)
+                fbl.append(newpair)
+        
+        if 'casei' in node.fitb_options:
+            node.fitb_options['casei'] = 'true'
+        else:
+            node.fitb_options['casei'] = 'false'
+        node.fitb_options['fbl'] = json.dumps(fbl).replace('"',"'")
+        res = ""
+        res = node.template_start % node.fitb_options
+        
+        res += node.template_end % node.fitb_options
+
+        self.body.append(res)
+
+def depart_fitb_node(self,node):
+    pass
+
+
+class FillInTheBlank(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -401,45 +425,20 @@ class FillInTheBlank(Directive):
             </div>
             </div>
             '''   
-        
-        BLANK = '''<input type="text" name="blank" />'''
-        
-        self.options['divid'] = self.arguments[0]
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        
-        self.options['bodytext'] = self.options['bodytext'].replace('___',BLANK)
-        
-        #if 'feedback' not in self.options:
-        #    self.options['feedback'] = 'No Hints'
-        fbl = []
-        for k in sorted(self.options.keys()):
-            if 'feedback' in k:
-                pair = eval(self.options[k])
-                p1 = pair[1].replace('"','&quot;')
-                p1 = p1.replace("'",'&acute;')
-                newpair = (pair[0],p1)
-                fbl.append(newpair)
-        
-        if 'casei' in self.options:
-            self.options['casei'] = 'true'
-        else:
-            self.options['casei'] = 'false'
-        self.options['fbl'] = json.dumps(fbl).replace('"',"'")
-        res = ""
-        res = TEMPLATE_START % self.options
-        
-        res += TEMPLATE_END % self.options
-        return [nodes.raw('',res , format='html')]
+
+        super(FillInTheBlank,self).run()
+
+        fitbNode = FITBNode(self.options)
+        fitbNode.template_start = TEMPLATE_START
+        fitbNode.template_end = TEMPLATE_END
+
+        return [fitbNode]
 
 
 
 #####################
 # display a multiple choice question with feedback that randomizes the answers
-class MChoiceRandomMF(Directive):
+class MChoiceRandomMF(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
@@ -503,26 +502,8 @@ class MChoiceRandomMF(Directive):
             '''   
         
         
-        self.options['divid'] = self.arguments[0] 
-        
-        # check for question
-        questionNum = "";
-        index = self.arguments[0].find("question");
-        if index >= 0:
-            questionNum = self.arguments[0];
-            questionNum = questionNum[(index + 8):];
-            questionNum = questionNum.replace("_",".");
-        
-        self.options['qnumber'] = questionNum;
-        
-        if self.content:
-            if 'iscode' in self.options:
-                self.options['bodytext'] = '<pre>' + "\n".join(self.content) + '</pre>'
-            else:
-                self.options['bodytext'] = "\n".join(self.content)
-        else:
-            self.options['bodytext'] = "\n"
-        
+        super(MChoiceRandomMF,self).run()
+
         res = ""
         res = TEMPLATE_START % self.options
         feedbackStr = "["
@@ -557,7 +538,7 @@ class MChoiceRandomMF(Directive):
         self.options['f']=feed
 
         op=self.options['correct'];
-        #self.options['option']=op;
+
         if(op=='a'):
             index=0
         elif(op=='b'):

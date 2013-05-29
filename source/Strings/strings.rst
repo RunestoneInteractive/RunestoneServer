@@ -10,6 +10,11 @@
 ..  shortname:: Strings
 ..  description:: Introduction to the string data type, operators, and methods.
 
+.. qnum::
+   :prefix: str-
+   :start: 1
+
+
 Strings
 =======
 
@@ -112,11 +117,14 @@ done first, you will need to use parenthesis.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python"
-   t = "rocks"
-   print(s+t)
-   </pre>
+   
+   .. code-block:: python
+
+      s = "python"
+      t = "rocks"
+      print(s+t)
+
+
 
 .. mchoicemf:: test_question8_1_2
    :answer_a: python!!!
@@ -131,11 +139,14 @@ done first, you will need to use parenthesis.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python"
-   excl = "!"
-   print(s+excl*3)
-   </pre>
+   
+   .. code-block:: python
+ 
+      s = "python"
+      excl = "!"
+      print(s+excl*3)
+
+
 
 
 Index Operator: Working with the Characters of a String
@@ -196,10 +207,13 @@ It is just a string of length 1.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[3])
-   </pre>
+      
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(s[3])
+
+
 
 
 .. mchoicemf:: test_question8_2_2
@@ -215,10 +229,13 @@ It is just a string of length 1.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[2] + s[-5])
-   </pre>
+   
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(s[2] + s[-5])
+
+
 
 
 String Methods
@@ -324,10 +341,13 @@ change the original.  You can also consult the `Python documentation for strings
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s.count("o") + s.count("p"))
-   </pre>
+   
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(s.count("o") + s.count("p"))
+
+
 
 
 .. mchoicemf:: test_question8_3_2
@@ -343,10 +363,12 @@ change the original.  You can also consult the `Python documentation for strings
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[1]*s.index("n"))
-   </pre>
+   
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(s[1]*s.index("n"))
+
 
 .. index::
     single: len function
@@ -413,10 +435,12 @@ two lines of code from above.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(len(s))
-   </pre>
+   
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(len(s))
+
 
 
 .. mchoicemf:: test_question8_4_2
@@ -432,10 +456,12 @@ two lines of code from above.
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[len(s)-5])
-   </pre>
+   
+   .. code-block:: python
+   
+      s = "python rocks"
+      print(s[len(s)-5])
+
 
 
 The Slice Operator
@@ -486,10 +512,12 @@ What do you think ``fruit[:]`` means?
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[3:8])
-   </pre>
+   
+   .. code-block:: python
+
+      s = "python rocks"
+      print(s[3:8])
+
 
 
 .. mchoicemf:: test_question8_5_2
@@ -505,10 +533,12 @@ What do you think ``fruit[:]`` means?
 
 
    What is printed by the following statements?
-   <pre>
-   s = "python rocks"
-   print(s[7:11]*3)
-   </pre>
+   
+   .. code-block:: python
+
+      s = "python rocks"
+      print(s[7:11]*3)
+
 
 
 .. index:: string comparison, comparison of strings
@@ -598,9 +628,11 @@ One thing to note in the last two examples is the fact that the space character 
    :feedback_b: Strings are compared character by character.
    
    Evaluate the following comparison:
-   <pre>
-   "Dog" < "Doghouse"
-   </pre>
+   
+   .. code-block:: python
+
+      "Dog" < "Doghouse"
+
    
    
 .. mchoicemf:: test_question8_6_2
@@ -613,9 +645,11 @@ One thing to note in the last two examples is the fact that the space character 
    :feedback_c: Python is case sensitive meaning that upper case and lower case characters are different.
    
    Evaluate the following comparison:
-   <pre>
-   "dog" < "Dog"
-   </pre>
+   
+   .. code-block:: python
+
+      "dog" < "Dog"
+
    
   
 .. mchoicemf:: test_question8_6_3
@@ -626,9 +660,11 @@ One thing to note in the last two examples is the fact that the space character 
    :feedback_b: The length does not matter.
 
    Evaluate the following comparison:
-   <pre>
-   "dog" < "Doghouse"
-   </pre>
+   
+   .. code-block:: python
+
+      "dog" < "Doghouse"
+
 
    
 
@@ -675,11 +711,13 @@ The solution here is to concatenate a new first letter onto a slice of
    :feedback_c: Yes, strings are immutable.
 
    What is printed by the following statements:
-   <pre>
-   s = "Ball"
-   s[0] = "C"
-   print(s)
-   </pre>
+   
+   .. code-block:: python
+
+      s = "Ball"
+      s[0] = "C"
+      print(s)
+
 
 
 .. index:: traversal, for loop, concatenation, abecedarian series
@@ -742,11 +780,13 @@ Note that it is only possible to process the characters one at a time from left 
 
 
    How many times is the word HELLO printed by the following statements?
-   <pre>
-   s = "python rocks"
-   for ch in s:
-      print("HELLO")
-   </pre>
+   
+   .. code-block:: python
+
+      s = "python rocks"
+      for ch in s:
+         print("HELLO")
+
    
    
    
@@ -763,11 +803,13 @@ Note that it is only possible to process the characters one at a time from left 
 
 
    How many times is the word HELLO printed by the following statements?
-   <pre>
-   s = "python rocks"
-   for ch in s[3:8]:
-      print("HELLO")
-   </pre>
+   
+   .. code-block:: python
+
+      s = "python rocks"
+      for ch in s[3:8]:
+         print("HELLO")
+
 
 Traversal and the ``for`` Loop: By Index
 ----------------------------------------
@@ -827,13 +869,15 @@ Trace the values of ``idx`` and satisfy yourself that they are correct.  In part
 
 
    How many times is the letter o printed by the following statements?
-   <pre>
-   s = "python rocks"
-   for idx in range(len(s)):
-      if idx % 2 == 0:
-         print(s[idx])
    
-   </pre>
+   .. code-block:: python
+
+      s = "python rocks"
+      for idx in range(len(s)):
+         if idx % 2 == 0:
+            print(s[idx])
+      
+
 
 
 Traversal and the ``while`` Loop
@@ -887,14 +931,16 @@ Here is the same example in codelens so that you can trace the values of the var
 
 
    How many times is the letter o printed by the following statements?
-   <pre>
-   s = "python rocks"
-   idx = 1
-   while idx < len(s):
-      print(s[idx])
-      idx = idx + 2
    
-   </pre>
+   .. code-block:: python
+
+      s = "python rocks"
+      idx = 1
+      while idx < len(s):
+         print(s[idx])
+         idx = idx + 2
+      
+
 
 .. index::
     single: in operator
@@ -999,13 +1045,15 @@ Step thru the function using codelens to see the accumulator variable grow.
    :feedback_c: Yes, the order is reversed due to the order of the concatenation.
 
    What is printed by the following statements:
-   <pre>
-   s = "ball"
-   r = ""
-   for item in s:
-      r = item.upper() + r
-   print(r)
-   </pre>
+   
+   .. code-block:: python
+
+      s = "ball"
+      r = ""
+      for item in s:
+         r = item.upper() + r
+      print(r)
+
 
 Turtles and Strings and L-Systems
 ---------------------------------

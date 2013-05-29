@@ -10,6 +10,10 @@
 ..  shortname:: GeneralIntroduction
 ..  description:: This is a general introduction to computer science.
 
+.. qnum::
+  :prefix: intr-
+  :start: 1
+
 .. _the_way_of_the_program:
 
 The Way of the Program

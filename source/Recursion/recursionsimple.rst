@@ -9,6 +9,12 @@
 ..  shortname:: IntroductionRecursion
 ..  description:: This is a simple introduction to the idea of recursion
 
+
+.. qnum::
+   :prefix: rec-
+   :start: 1
+
+
 Recursion
 ---------
 

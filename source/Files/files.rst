@@ -9,6 +9,10 @@
 ..  shortname:: Files
 ..  description:: This is the introduction to the basic idea of a text file
 
+.. qnum::
+   :prefix: file-
+   :start: 1
+
 Working with Data Files
 =======================
 

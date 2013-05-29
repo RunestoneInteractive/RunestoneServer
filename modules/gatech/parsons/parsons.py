@@ -19,6 +19,7 @@ import re
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
+from luther.sphinx.assess import Assessment
 
 def setup(app):
     app.add_directive('parsonsprob',ParsonsProblem)
@@ -38,7 +39,7 @@ def setup(app):
     app.add_javascript('parsons-noconflict.js')
 
 
-class ParsonsProblem(Directive):
+class ParsonsProblem(Assessment):
     required_arguments = 1
     optional_arguments = 0
     final_argument_whitespace = False
@@ -78,8 +79,8 @@ Example:
 
         """
 
-
         template_values = {}
+        template_values['qnumber'] = self.getNumber()        
         template_values['unique_id'] = self.lineno
         template_values['instructions'] = ""
         code = self.content
@@ -97,7 +98,7 @@ Example:
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
-        %(instructions)s
+        %(qnumber)s: %(instructions)s
         <div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
