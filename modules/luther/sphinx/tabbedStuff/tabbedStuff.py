@@ -48,7 +48,7 @@ END = """
     <script type='text/javascript'>
         // init the jQuery tabs plugin
         $(function() {
-            $("#%(divid)s").tabs();
+            $("#%(divid)s").tabs({"disabled":%(disabledtabs)s});
         });
     </script>
 """
@@ -105,8 +105,22 @@ def visit_tabbedstuff_node(self, node):
 def depart_tabbedstuff_node(self,node):
     divid = node.divid
 
+    disabled_tabs = node.tabbed_stuff_components['disabledtabs']
+
+    # this is kind of silly; the jQuery tab plugin starts indexing at 0, but there is only a 
+    # positive_int_list directives option type. So, we subtract 1 from each index.
+    disabled_tabs = [x - 1 for x in disabled_tabs]
+
+    # check to make sure that each of the tabs marked as disabled actually exist...
+    tabs = node.traverse(include_self=False, descend=True, condition=TabNode)
+    for i in disabled_tabs:
+        try:
+            temp = tabs[i]
+        except IndexError:
+            raise IndexError('Attempt to disable non-existent tab ' + str(i+1))
+
     # close the tab plugin div and init the jQuery plugin 
-    res = END % {'divid':divid}
+    res = END % {'divid':divid, 'disabledtabs':str(disabled_tabs)}
 
     self.body.append(res)
 
@@ -138,14 +152,17 @@ class TabbedStuffDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = True
-    option_spec = {}
+    option_spec = {"disabledtabs":directives.positive_int_list}
 
     def run(self):
         # Raise an error if the directive does not have contents.
         self.assert_has_content()
 
-        # Create the node, to be populated by "nested_parse".
         self.options['divid'] = self.arguments[0]
+        if 'disabledtabs' not in self.options:
+            self.options['disabledtabs'] = []
+
+        # Create the node, to be populated by "nested_parse".
         tabbedstuff_node = TabbedStuffNode(self.options)
 
         # Parse the directive contents (should be 1 or more tab directives)
