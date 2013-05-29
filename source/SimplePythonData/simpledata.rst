@@ -291,9 +291,11 @@ quotes are removed.  However, if we print the type, we can see that it is defini
    :feedback_d: The int function removes the fractional part of 53.785 and returns an integer, which is then printed.
 
    What value is printed when the following statement executes?
-   <pre>
-   print( int(53.785) )
-   </pre>
+
+   .. code-block:: python
+
+      print( int(53.785) )
+
 
 .. index:: variable, assignment, assignment statement, state snapshot
 
@@ -447,12 +449,14 @@ or change the variable when you miss another call.
    :feedback_d: The variable day will contain the last value assigned to it when it is printed.
 
    What is printed when the following statements execute?
-   <pre>
-   day = "Thursday"
-   day = 32.5
-   day = 19
-   print(day)
-   </pre>
+
+   .. code-block:: python
+
+     day = "Thursday"
+     day = 32.5
+     day = 19
+     print(day)
+
 
 .. index:: keyword, underscore character
 
@@ -723,9 +727,11 @@ compute the correct values.
    :feedback_d: The / operator does exact division and returns a floating point result.
    
    What value is printed when the following statement executes?
-   <pre>
-   print (18 / 4)
-   </pre>
+
+   .. code-block:: python
+
+      print (18 / 4)
+
 
 
 .. mchoicemf:: test_question2_6_2
@@ -740,9 +746,10 @@ compute the correct values.
    :feedback_d: - The // operator does integer division and returns the result of the division on an integer (not the remainder).
    
    What value is printed when the following statement executes?
-   <pre>
-   print (18 // 4)
-   </pre>
+
+   .. code-block:: python
+
+      print (18 // 4)
 
 
 .. mchoicemf:: test_question2_6_3
@@ -757,9 +764,11 @@ compute the correct values.
    :feedback_d: The % operator returns the remainder after division.
 
    What value is printed when the following statement executes?
-   <pre>
-   print (18 % 4)
-   </pre>
+
+   .. code-block:: python
+
+      print (18 % 4)
+
 
 .. index:: input, input dialog
 
@@ -836,11 +845,12 @@ The result is referred to by ``total_secs``.  Now, each time you run the program
    :feedback_d: 18 is the value of what the user typed, not the type of the data.
 
    What is printed when the following statements execute?
-   <pre>
-   n = input("Please enter your age: ")
-   # user types in 18
-   print ( type(n) )
-   </pre>
+
+   .. code-block:: python
+
+     n = input("Please enter your age: ")
+     # user types in 18
+     print ( type(n) )
 
 
 .. index:: order of operations, rules of precedence
@@ -928,9 +938,11 @@ rules for its mathematical operators that mathematics does.
    :feedback_d: Remember that // does integer division.
 
    What is the value of the following expression:
-   <pre>
-   16 - 2 * 5 // 3 + 1
-   </pre>
+
+   .. code-block:: python
+
+      16 - 2 * 5 // 3 + 1
+
 
 
 .. mchoicemf:: test_question2_8_2
@@ -945,10 +957,10 @@ rules for its mathematical operators that mathematics does.
    :feedback_d: Remember to multiply by 3.
 
    What is the value of the following expression:
-   <pre>
-   2 ** 2 ** 3 * 3
-   </pre>
 
+   .. code-block:: python
+
+      2 ** 2 ** 3 * 3
 
 
 Reassignment
@@ -1024,11 +1036,12 @@ Line 4 changes the value of ``a`` but does not change the value of
 
 
    After the following statements, what are the values of x and y?
-   <pre>
-   x = 15
-   y = x
-   x = 22
-   </pre>
+
+   .. code-block:: python
+
+     x = 15
+     y = x
+     x = 22
 
 
 Updating Variables
@@ -1104,11 +1117,12 @@ a variable, which means the same as incrementing it by 1.
 
 
    What is printed when the following statements execute?
-   <pre>
-   x = 12
-   x = x - 1
-   print (x)
-   </pre>
+
+   .. code-block:: python
+
+     x = 12
+     x = x - 1
+     print (x)
 
 
 .. admonition:: Scratch Editor
