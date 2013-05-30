@@ -9,6 +9,10 @@
 ..  shortname:: SearchingAlgorithms
 ..  description:: Sequential Search, ordered and unordered, Binary Search, Hashing
 
+.. qnum::
+   :prefix: srch-
+   :start: 1
+
 Sorting and Searching
 =====================
 

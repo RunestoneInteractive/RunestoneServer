@@ -9,6 +9,10 @@
 ..  shortname:: Graphs
 ..  description:: Introduction to the graph data structure
 
+.. qnum::
+   :prefix: graph-
+   :start: 1
+
 Graphs
 ======
 

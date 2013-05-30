@@ -9,6 +9,10 @@
 ..  shortname:: Queues
 ..  description:: This is the introduction to the queue data structure
 
+.. qnum::
+   :prefix: que-
+   :start: 1
+
 Queues
 ------
 

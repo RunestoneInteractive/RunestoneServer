@@ -633,7 +633,6 @@ problem.
 .. admonition:: Self Check
 
    .. mchoicemf:: analysis_1
-       :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
@@ -645,13 +644,15 @@ problem.
        :feedback_d: In an example like this you want to count the nested loops. especially the loops that are dependent on the same variable, in this case, n.
 
        Given the following code fragment, what is its Big-O running time?
-       test = 0
-       for i in range(n):
-          for j in range(n):
-             test = test + i * j
+
+       .. code-block:: python
+
+         test = 0
+         for i in range(n):
+            for j in range(n):
+               test = test + i * j
 
    .. mchoicemf:: analysis_2
-       :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
@@ -663,15 +664,17 @@ problem.
        :feedback_a: Even though there are two loops they are not nested.  You might think of this as O(2n) but we can ignore the constant 2.
 
        Given the following code fragment what is its Big-O running time?
-       test = 0
-       for i in range(n):
-          test = test + 1
 
-       for j in range(n):
-          test = test - 1
+       .. code-block:: python
+
+         test = 0
+         for i in range(n):
+            test = test + 1
+
+         for j in range(n):
+            test = test - 1
 
    .. mchoicemf:: analysis_3
-       :iscode:
        :answer_a: O(n)
        :answer_b: O(n^2)
        :answer_c: O(log n)
@@ -683,10 +686,13 @@ problem.
        :feedback_c: The value of i is cut in half each time through the loop so it will only take log n iterations.
 
        Given the following code fragment what is its Big-O running time?
-       i = n
-       while i > 0:
-          k = 2 + 2
-          i = i // 2
+
+       .. code-block:: python
+
+         i = n
+         while i > 0:
+            k = 2 + 2
+            i = i // 2
 
 Performance of Python Data Structures
 -------------------------------------

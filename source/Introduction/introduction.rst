@@ -9,6 +9,10 @@
 ..  shortname:: DataStructureIntroductionPythonReview
 ..  description:: A general introduction to data structures and a review of python
 
+.. qnum::
+   :prefix: intr-
+   :start: 1
+
 Introduction
 ============
 

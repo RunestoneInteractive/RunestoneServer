@@ -9,6 +9,10 @@
 ..  shortname:: Sorting
 ..  description:: Typical sorting algorithms such as bubble,selection,insertion,quick,merge,shell
 
+.. qnum::
+   :prefix: sort-
+   :start: 1
+
 Sorting
 -------
 

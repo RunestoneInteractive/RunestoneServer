@@ -9,6 +9,10 @@
 ..  shortname:: LinkedLists
 ..  description:: Introduction to linked lists and their use in building data structures.
 
+.. qnum::
+   :prefix: list-
+   :start: 1
+
 Lists
 -----
 

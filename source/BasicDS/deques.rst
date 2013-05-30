@@ -9,6 +9,10 @@
 ..  shortname:: Deques
 ..  description:: The deque data structure
 
+.. qnum::
+   :prefix: deq-
+   :start: 1
+
 Deques
 ------
 

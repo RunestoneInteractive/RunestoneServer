@@ -9,6 +9,10 @@
 ..  shortname:: Stacks
 ..  description:: This is the introduction to the stack data structure
 
+.. qnum::
+   :prefix: stk-
+   :start: 1
+
 Stacks
 ------
 
@@ -279,7 +283,6 @@ benchmark testing.
        m.peek()
 
    .. mchoicemf:: stack_2
-      :iscode:
       :answer_a: 'x'
       :answer_b: the stack is empty
       :answer_c: an error will occur
@@ -290,14 +293,17 @@ benchmark testing.
       :feedback_c: Good Job.
       :feedback_d: You may want to check out the docs for isEmpty
 
-	  Given the following sequence of stack operations, what is the top item on the stack?
-	  m = Stack()
-	  m.push('x')
-	  m.push('y')
-	  m.push('z')
-	  while not m.isEmpty():
-	     m.pop()
-       m.pop()
+      Given the following sequence of stack operations, what is the top item on the stack?
+
+      .. code-block:: python
+  
+        m = Stack()
+        m.push('x')
+        m.push('y')
+        m.push('z')
+        while not m.isEmpty():
+           m.pop()
+           m.pop()
 
    Write a function `revstring(mystr)` that uses a stack to reverse the
    characters in a string.

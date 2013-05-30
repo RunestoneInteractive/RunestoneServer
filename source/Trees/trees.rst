@@ -9,6 +9,10 @@
 ..  shortname:: Trees
 ..  description:: A general introduction to trees with emphasis on binary trees
 
+.. qnum::
+   :prefix: tree-
+   :start: 1
+
 Trees
 =====
 
