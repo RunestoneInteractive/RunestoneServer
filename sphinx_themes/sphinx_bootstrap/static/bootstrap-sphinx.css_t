@@ -58,5 +58,13 @@ table {
 
 /* Runestone custom modifications */
 .navbar .brand {
-    font-size:14px;
+    font-size: 14px;
+}
+
+pre {
+    margin: 1em 0px;
+}
+
+.CodeMirror {
+    margin: 0px 0px 1em 0px;
 }
