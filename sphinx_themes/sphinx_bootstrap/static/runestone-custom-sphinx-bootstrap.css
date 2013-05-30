@@ -1,0 +1,41 @@
+/* Runestone custom modifications */
+.navbar .brand {
+    font-size: 18px;
+}
+
+pre {
+    margin: 1em 0px;
+}
+
+.CodeMirror {
+    margin: 0px 0px 1em 0px;
+}
+
+/* override jQueryUI styles (to match bootstrap styles) */
+.ui-widget {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.ui-widget-content {
+    color: #333;
+}
+
+/* needed to override the jQueryUI style */
+.ui-widget p {
+    font-size: 14px;
+}
+
+button.btn.btn-small, 
+input[type="submit"].btn.btn-small, 
+input[type="button"].btn.btn-small {
+    font-size: 1em;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+label {
+    display: inline;
+}

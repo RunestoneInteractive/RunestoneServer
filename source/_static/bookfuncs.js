@@ -339,22 +339,24 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
     cm_editors[acblockid+"_code"] = editor;
     editor.parentDiv = acblockid;
-    var runButton = document.createElement("input");
-    runButton.setAttribute('type','button');
-    runButton.setAttribute('value','run');
+    var runButton = document.createElement("button");
+    runButton.appendChild(document.createTextNode('Run'))
+    runButton.className = runButton.className + ' btn btn-small btn-success';
     runButton.onclick = myRun;
     edNode.appendChild(runButton);
     if (sid === undefined) { // We don't need load and save buttons for grading
         if(isLoggedIn() == true) {
             var saveButton = document.createElement("input");
             saveButton.setAttribute('type','button');
-            saveButton.setAttribute('value','save');
+            saveButton.setAttribute('value','Save');
+            saveButton.className = saveButton.className + ' btn btn-small';
             saveButton.onclick = mySave;
             edNode.appendChild(saveButton);
 
             var loadButton = document.createElement("input");
             loadButton.setAttribute('type','button');
-            loadButton.setAttribute('value','load');
+            loadButton.setAttribute('value','Load');
+            loadButton.className = loadButton.className + ' btn btn-small';
             loadButton.onclick = myLoad;
             edNode.appendChild(loadButton);
         }

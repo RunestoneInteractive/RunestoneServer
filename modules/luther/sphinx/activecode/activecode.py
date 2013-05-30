@@ -235,7 +235,7 @@ class ActiveCode(Directive):
 
 
 EXEDIT = '''
-<button class='btn btn-small' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
+<button class='btn btn-small btn-inverse' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
 <div id="%(divid)s"></div>
 <br />
 '''

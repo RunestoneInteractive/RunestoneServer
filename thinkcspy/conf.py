@@ -107,7 +107,7 @@ html_theme_options = {
 
     # Tab name for entire site. (Default: "Site")
     'navbar_site_name': "Chapters",
-
+     
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
     'globaltoc_depth': 1,
@@ -123,7 +123,7 @@ html_theme_options = {
 
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
-    'navbar_class': "navbar navbar-inverse",
+    'navbar_class': "navbar",
 
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
