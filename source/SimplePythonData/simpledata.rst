@@ -1267,12 +1267,14 @@ Glossary
         program *self documenting*.
 
 
+
 Exercises
 ---------
 
 1.
 
     .. tabbed:: q1
+        :disabledtabs: 2,3
 
         .. tab:: Question
             
@@ -1306,10 +1308,12 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q1disqus
 
+
 2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
    in 51 hours.  At what time does the alarm go off?
 
    .. actex:: ex_2_2
+
 
 #. 
 
@@ -1333,6 +1337,7 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q3disqus
 
+
 #. You go on a wonderful holiday
    leaving on day number 3 (a Wednesday).  You return home after 137 nights.
    Write a general version of the program which asks for the starting day number, and
@@ -1342,6 +1347,7 @@ Exercises
 
        # Problem 4
        # My Name:
+
 
 #. 
 
@@ -1365,11 +1371,13 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q5disqus
 
+
 #. Add parenthesis to the expression ``6 * 1 - 2`` to change its value
    from 4 to -6.
 
    .. actex:: ex_2_6
 
+  
 #.
 
     .. tabbed:: q7
@@ -1400,11 +1408,13 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q7disqus
 
+  
 #. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
    back to the user with the answer.
 
    .. actex:: ex_2_8
 
+  
 #.
 
     .. tabbed:: q9
@@ -1426,11 +1436,13 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q9disqus
 
+  
 #. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
    gallons used.  Print a nice message with the answer.
 
    .. actex:: ex_2_10
 
+  
 #. 
 
     .. tabbed:: q11
@@ -1451,6 +1463,7 @@ Exercises
                 :shortname: interactivepython
                 :identifier: q11disqus
 
+  
 #. Write a program that will convert degrees fahrenheit to degrees celsius.
 
    .. actex:: ex_2_12
