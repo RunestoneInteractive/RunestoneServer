@@ -5,7 +5,18 @@
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
-  <a class='btn pull-left' href="#"><i class="icon-align-justify"></i></a>
+  <div class='dropdown pull-left'>
+    <a class='btn dropdown-toggle' href="#" data-toggle="dropdown">
+      <i class="icon-align-justify"></i>
+    </a>
+    <ul class='dropdown-menu'>
+        <li><a href='#'>Login (fix link)</a></li> <!-- TODO fix link -->
+        <li class='divider'></li>
+        <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+        <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+        <li><a href='#'>Instructors Page</a></li> <!-- TODO fix link -->
+    </ul>
+  </div>
   <span class='divider-vertical'></span>
 </div>
 {%- endif %}
