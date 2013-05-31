@@ -416,7 +416,7 @@ function gotUser(data, status, whatever) {
                 caughtErr = true;
                 mess = "Not logged in";
 	            $('button.ac_opt').hide();
-	            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+	            $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
             } else {
                 window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
             }
@@ -428,7 +428,7 @@ function gotUser(data, status, whatever) {
         } else {
             mess = "Not logged in";
             $('button.ac_opt').hide();
-            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+            $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
         }
     } else {
         if (!caughtErr) {
@@ -438,8 +438,8 @@ function gotUser(data, status, whatever) {
             timedRefresh();
         }
     }
-    x = $(".footer").text();
-    $(".footer").text(x + mess);
+    x = $(".footer p").eq(0).html();
+    $(".footer p").eq(0).html(mess + ' | ' + x);
     logBookEvent({
         'event': 'page',
         'act': 'view',
@@ -482,10 +482,10 @@ function addUserToFooter() {
     if (shouldLogin()) {
         jQuery.get(eBookConfig.ajaxURL+'getuser',null,gotUser)
     } else {
-        x = $(".footer").text();
-        $(".footer").text(x + 'not logged in');
+        x = $(".footer").html();
+        $(".footer").html(x + 'not logged in');
         $('button.ac_opt').hide();
-        $('span.loginout').html('<a href="'+ eBookConfig.app+'/default/user/login">login</a>')
+        $('li.loginout').html('<a href="'+ eBookConfig.app+'/default/user/login">Login</a>')
         logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
     }
 
