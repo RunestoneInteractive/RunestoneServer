@@ -40,6 +40,10 @@ label {
     display: inline;
 }
 
+/*i.icon-align-justify {
+    opacity: 0.25;
+}*/
+
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
     margin-top: 10px;
