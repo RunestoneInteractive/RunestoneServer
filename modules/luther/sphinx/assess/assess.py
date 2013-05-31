@@ -240,6 +240,7 @@ class MChoiceMF(Assessment):
             </script>
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)"/> 
+            <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -317,6 +318,7 @@ class MChoiceMA(Assessment):
         TEMPLATE_END = '''
             <input type="button" name="do answer" 
             value="Check Me" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)"/> 
+            <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />            
             </form><br />
             <div id="%(divid)s_feedback">
             </div>

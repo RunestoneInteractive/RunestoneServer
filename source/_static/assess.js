@@ -237,6 +237,8 @@ var checkMCMA = function(divid, expected, feedbackArray) {
 	// give the user feedback
 	feedBackMCMA('#'+divid+'_feedback', correctCount,
                  correctArray.length, givenArray.length, feedback);
+
+    document.getElementById(divid+'_bcomp').disabled = false;    
 };
 
 
@@ -424,6 +426,7 @@ var checkMCMFStorage = function(divid, expected, feedbackArray) {
     
     // give the user feedback
 	feedBackMCMF('#'+divid+'_feedback',given == expected, feedback);
+    document.getElementById(divid+'_bcomp').disabled = false;
 };
 
 

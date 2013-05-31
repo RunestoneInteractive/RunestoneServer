@@ -541,3 +541,21 @@ function setNumUsers(data) {
     var d = data[0]
     $("#totalusers").text(d.numusers);
 }
+
+function compareModal(data, status, whatever) {
+    var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>'
+    data = eval(data)[0]
+    for (var k in data) {
+        res += '<tr><td>' + k + '</td><td>' + data[k] + '%</td></tr>'
+    }
+    res += '</table></div>'
+
+    $.modal(res)
+}
+
+function compareAnswers(div_id) {
+    data = {}
+    data.div_id = div_id
+    jQuery.get(eBookConfig.ajaxURL+'getaggregateresults',data, compareModal);
+}
+

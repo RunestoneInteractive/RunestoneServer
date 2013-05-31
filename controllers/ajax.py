@@ -249,3 +249,34 @@ def getlastpage():
         return json.dumps(rowarray_list)
     else:
         db.user_state.insert(user_id=auth.user.id, course_id=course)
+
+
+
+def getaggregateresults():
+    course = request.vars.course
+    question = request.vars.div_id
+    # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
+    response.headers['content-type'] = 'application/json'
+
+    count = db.useinfo.id.count()
+    result = db(db.useinfo.div_id == question).select(db.useinfo.act,count,groupby=db.useinfo.act)
+
+    tdata = {}
+    tot = 0
+    for row in result:
+        tdata[row.useinfo.act] = row[count]
+        tot += row[count]
+
+    tot = float(tot)
+    rdata = {}
+    if tot > 0:
+        for key in tdata:
+            l = key.split(':')
+            answer = l[1]
+            count = int(tdata[key])
+            pct = round(count / tot * 100.0)
+            rdata[answer] = pct
+
+    return json.dumps([rdata])
+
+
