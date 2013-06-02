@@ -269,11 +269,16 @@ def getaggregateresults():
 
     tot = float(tot)
     rdata = {}
+    correct = ""
     if tot > 0:
         for key in tdata:
             l = key.split(':')
             answer = l[1]
+            if 'correct' in key:
+                correct = answer
             count = int(tdata[key])
+            if answer in rdata:
+                count += rdata[answer]/100.0 * tot
             pct = round(count / tot * 100.0)
             rdata[answer] = pct
 
