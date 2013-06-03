@@ -439,8 +439,8 @@ function gotUser(data, status, whatever) {
             timedRefresh();
         }
     }
-    x = $(".footer p").eq(0).html();
-    $(".footer p").eq(0).html(mess + ' | ' + x);
+    x = $("#loggedinuser").html();
+    $("#loggedinuser").html(mess + ' | ' + x);
     logBookEvent({
         'event': 'page',
         'act': 'view',
@@ -547,7 +547,7 @@ function setOnlineUsers(data) {
 
 function setNumUsers(data) {
     var d = data[0]
-    $("#totalusers").text(d.numusers);
+    $("#totalusers").html(d.numusers);
 }
 
 function compareModal(data, status, whatever) {
