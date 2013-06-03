@@ -32,6 +32,10 @@ input[type="button"].btn.btn-small {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.btn {
+    margin: 5px 0px;
+}
+
 h2 {
     margin-top: 20px;
 }
