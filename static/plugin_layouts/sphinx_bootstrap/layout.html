@@ -38,9 +38,6 @@
         <a class="brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
       </div>
 
-      <div class='navbar-logo pull-right'>
-      </div>
-
       <div class="container">
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
         <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -91,10 +88,6 @@
 
 {%- block content %}
 {{ navBar() }}
-<!--<div class="fb-like pull-right" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>-->
-
-<!--<a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @iRunestone</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>-->
 
 <div class="container">
   {% block body %}{% endblock %}

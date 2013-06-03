@@ -434,6 +434,7 @@ function gotUser(data, status, whatever) {
         if (!caughtErr) {
             mess = d.email;
             eBookConfig.isLoggedIn = true;
+            addNavbarLoginLink(); // will change navbar login link to say 'Log Out'
 			enableUserHighlights();
             timedRefresh();
         }
@@ -485,11 +486,16 @@ function addUserToFooter() {
         x = $(".footer").html();
         $(".footer").html(x + 'not logged in');
         $('button.ac_opt').hide();
-        $('li.loginout').html('<a href="'+ eBookConfig.app+'/default/user/login">Login</a>')
         logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
     }
+}
 
-
+function addNavbarLoginLink() {
+    if (isLoggedIn()) {
+        $('li.loginout').html('<a href="'+ eBookConfig.app +'/default/user/logout">Log Out</a>')
+    } else {
+        $('li.loginout').html('<a href="'+eBookConfig.app+'/default/user/login">Login</a>')
+    }
 }
 
 /*
