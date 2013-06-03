@@ -7,9 +7,14 @@ paver.setuputils.install_distutils_tasks()
 
 from sphinxcontrib import paverutils
 
-# You will want to change these for your own environment
-master_url = 'http://127.0.0.1:8000'
-master_app = 'runestone'
+# You will want to change these for your own environment in .gitignored paverconfig.py
+# 
+try:
+  from paverconfig import master_url, master_app
+except:
+  master_url = 'http://127.0.0.1:8000'
+  master_app = 'runestone'
+
 
 
 options(
