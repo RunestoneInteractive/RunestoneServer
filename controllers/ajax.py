@@ -269,6 +269,7 @@ def getaggregateresults():
 
     tot = float(tot)
     rdata = {}
+    miscdata = {}
     correct = ""
     if tot > 0:
         for key in tdata:
@@ -280,8 +281,36 @@ def getaggregateresults():
             if answer in rdata:
                 count += rdata[answer]/100.0 * tot
             pct = round(count / tot * 100.0)
-            rdata[answer] = pct
 
-    return json.dumps([rdata])
+            if answer != "undefined" and answer != "":
+                rdata[answer] = pct
+
+    miscdata['correct'] = correct
+
+    sid = None
+    if auth.user:
+        sid = auth.user.username
+    else:
+        if request.cookies.has_key('ipuser'):
+            sid = request.cookies['ipuser'].value
+
+    if sid:
+        correctquery = '''select 
+(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and act like '%:correct' )
+/
+(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' ) as result;
+''' % (sid,sid)
+
+        try:    
+            rows = db.executesql(correctquery)
+            pctcorr = round(rows[0][0]*100)
+        except:
+            pctcorr = 'unavailable in sqlite'
+    else:
+        pctcorr = 'unavailable'
+        
+    miscdata['yourpct'] = pctcorr
+
+    return json.dumps([rdata,miscdata])
 
 

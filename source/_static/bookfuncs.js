@@ -544,11 +544,26 @@ function setNumUsers(data) {
 
 function compareModal(data, status, whatever) {
     var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>'
-    data = eval(data)[0]
-    for (var k in data) {
-        res += '<tr><td>' + k + '</td><td>' + data[k] + '%</td></tr>'
+    var answers = eval(data)[0]
+    var misc = eval(data)[1]
+    var theClass = ""
+    var kl = Object.keys(answers).sort()
+    for (var k in kl) {
+        if (kl[k] == misc.correct) {
+            theClass = 'correct'
+        } else {
+            theClass = 'incorrect'
+        }
+        res += '<tr><td class="' + theClass + '">' + kl[k] + '</td><td class="' + theClass + '">' 
+            + answers[kl[k]] + '%</td></tr>'
     }
-    res += '</table></div>'
+    res += '</table>'
+    if (misc['yourpct'] !== 'unavailable') {
+        res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
+    }
+
+    res +='</div>'
+
 
     $.modal(res)
 }

@@ -344,3 +344,7 @@ div.versioninfo {
 div.error {
     background-color: #F4F4AD;
 }
+
+.correct {
+    color: #84b8d9;
+}
