@@ -40,17 +40,17 @@ label {
     display: inline;
 }
 
-.fb-like {
+/*.fb-like {
     position:fixed !important;
     top:50px;
     right:5px;
-}
+}*/
 
-.twitter-follow-button {
+/*).twitter-follow-button {
     position:fixed;
     top:77px;
     right:5px;
-}
+}*/
 
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
