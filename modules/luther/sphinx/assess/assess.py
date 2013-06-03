@@ -238,7 +238,7 @@ class MChoiceMF(Assessment):
             <script>
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
-            <button class='btn btn-small btn-inverse' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
+            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
             <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />
             </form><br />
             <div id="%(divid)s_feedback">
@@ -315,9 +315,7 @@ class MChoiceMA(Assessment):
             '''
         
         TEMPLATE_END = '''
-            <input type="button" name="do answer" 
-            value="Check Me" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)"/> 
-            <button class='btn btn-small btn-inverse' name="do answer" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
+            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
             <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />            
             </form><br />
             <div id="%(divid)s_feedback">
@@ -420,7 +418,7 @@ class FillInTheBlank(Assessment):
             '''
         
         TEMPLATE_END = '''
-            <button class='btn btn-small btn-inverse' name="do answer" onclick="checkFIB('%(divid)s','%(correct)s',%(fbl)s, %(casei)s)">Check Me</button>
+            <button class='btn btn-small btn-success' name="do answer" onclick="checkFIB('%(divid)s','%(correct)s',%(fbl)s, %(casei)s)">Check Me</button>
             </form>
             <div id="%(divid)s_feedback">
             </div>
