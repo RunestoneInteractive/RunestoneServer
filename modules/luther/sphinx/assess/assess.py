@@ -50,7 +50,7 @@ class AddButton(Directive):
             """
         
         TEMPLATE_START = '''
-            <div id="%(divid)s">
+            <div id="%(divid)s" class="alert">
             <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             '''
         
@@ -225,7 +225,7 @@ class MChoiceMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s">
+            <div id="%(divid)s" class="alert">
             '''
         
         OPTION = '''
@@ -306,7 +306,7 @@ class MChoiceMA(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s">
+            <div id="%(divid)s" class="alert">
             '''
         
         OPTION = '''
@@ -412,7 +412,7 @@ class FillInTheBlank(Assessment):
             """
         
         TEMPLATE_START = '''
-            <div id="%(divid)s">
+            <div id="%(divid)s" class="alert">
             <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             <p>%(bodytext)s</p>
             '''
@@ -478,7 +478,7 @@ class MChoiceRandomMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s">
+            <div id="%(divid)s" class="alert">
             <p>%(qnumber)s: %(bodytext)s</p>
             <form name="%(divid)s_form" method="get" action="" onsubmit="return true;">
             '''

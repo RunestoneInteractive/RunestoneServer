@@ -49,12 +49,13 @@ label {
     display: inline;
 }
 
+.alert form {
+    margin-bottom: 0px;
+}   
+
 .fb-like {
     float:right;
 }
-
-/*.twitter-follow-button {
-}*/
 
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
