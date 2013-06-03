@@ -25,6 +25,11 @@ pre {
     font-size: 14px;
 }
 
+.ui-tabs {
+    margin-bottom: 30px;
+    margin-top: 8px;
+}
+
 button.btn.btn-small, 
 input[type="submit"].btn.btn-small, 
 input[type="button"].btn.btn-small {
