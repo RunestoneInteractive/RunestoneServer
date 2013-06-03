@@ -154,7 +154,7 @@ html_short_title ='Python Courseware'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "../source/_static/logo.jpg"
+#html_logo = "../source/_static/logo.jpg" #TODO get the right size
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
