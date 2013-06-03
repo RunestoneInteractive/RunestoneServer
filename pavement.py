@@ -88,7 +88,7 @@ options(
 @cmdopts([('all','a','rebuild everything')])
 def everyday(options):
 
-    if options.everyday.all:
+    if 'all' in options.everyday:
       options['force_all'] = True
       options['freshenv'] = True
 
@@ -99,7 +99,7 @@ def everyday(options):
 def thinkcspy(options):
     sh('cp %s/index.rst %s' % (options.thinkcspy.confdir,options.thinkcspy.sourcedir))
 
-    if options.thinkcspy.all:
+    if 'all' in options.thinkcspy:
       options['force_all'] = True
       options['freshenv'] = True
     paverutils.run_sphinx(options,'thinkcspy')
@@ -109,7 +109,7 @@ def thinkcspy(options):
 def pythonds(options):
     sh('cp %s/index.rst %s' % (options.pythonds.confdir,options.pythonds.sourcedir))
 
-    if options.pythonds.all:
+    if 'all' in options.pythonds:
       options['force_all'] = True
       options['freshenv'] = True
     paverutils.run_sphinx(options,'pythonds')
@@ -117,7 +117,7 @@ def pythonds(options):
 @task
 @cmdopts([('all','a','rebuild everything')])
 def overview(options):
-    if options.overview.all:
+    if 'all' in options.overview:
       options['force_all'] = True
       options['freshenv'] = True
 
@@ -127,6 +127,10 @@ def overview(options):
 @cmdopts([('all','a','rebuild everything')])
 def devcourse(options):
     sh('cp %s/index.rst %s' % (options.devcourse.confdir,options.devcourse.sourcedir))
+
+    if 'all' in options.devcourse:
+      options['force_all'] = True
+      options['freshenv'] = True
 
     paverutils.run_sphinx(options,'devcourse')
 
