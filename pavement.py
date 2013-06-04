@@ -4,16 +4,19 @@ from paver.path import path
 from paver.easy import *
 import paver.setuputils
 paver.setuputils.install_distutils_tasks()
+import os, sys
 
 from sphinxcontrib import paverutils
 
+sys.path.append(os.getcwd())
+
 # You will want to change these for your own environment in .gitignored paverconfig.py
-# 
 try:
-  from paverconfig import master_url, master_app
+    from paverconfig import master_url, master_app
 except:
-  master_url = 'http://127.0.0.1:8000'
-  master_app = 'runestone'
+    print 'NOTICE:  You are using default values for master_* Make your own paverconfig.py file'
+    master_url = 'http://127.0.0.1:8000'
+    master_app = 'runestone'
 
 
 
