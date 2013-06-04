@@ -53,12 +53,12 @@ label {
     margin-bottom: 0px;
 }   
 
-.fb-like {
-    float:right;
-}
-
 .alert {
     color:#866A3A;
+}
+
+.social-menu {
+    padding: 10px;
 }
 
 /* These admonition styles styles are copied from the Bootstrap .alert classes */

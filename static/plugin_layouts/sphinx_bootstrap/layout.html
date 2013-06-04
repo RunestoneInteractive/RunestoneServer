@@ -5,7 +5,6 @@
     '_static/js/jquery-fix.js',
     '_static/bootstrap-2.3.1/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
-    '_static/js/share.js',
   ]
 %}
 {% set css_files = [
@@ -47,10 +46,42 @@
         </button>
 
         <div class="nav-collapse">
+          <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-search" style='opacity:0.6;'></i>
+              </a>
+              <div class="dropdown-menu search-menu">
+                <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+                  <input type="text" name="q" placeholder="Search" />
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+              </div>
+            </li>
+            
+            <li class="divider-vertical"></li>
+            
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <img src='../_static/img/Facebook_icon.png' style='margin-top:-3px;'></img>
+                <img src='../_static/img/Twitter_icon.png' style='margin-top:-3px;'></img>
+              </a>
+              <div class="dropdown-menu social-menu">
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document, "script", "twitter-wjs");</script>
+
+                <div class="fb-like pull-right" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>
+              </div>  
+            </li>
+
+            <li class="divider-vertical"></li>
+          </ul>
+
           <ul class="nav">
             <li class="divider-vertical"></li>
             {% block sidebartoc %}
-             <!-- {% include "globaltoc.html" %} -->
               {% include "localtoc.html" %}
             {% endblock %}
             {% block sidebarrel %}
@@ -59,12 +90,10 @@
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}
+
+            <li class="divider-vertical"></li>
           </ul>
          
-          <!-- searchbar.html also includes the dropdown settings/links menu button -->
-          {% block sidebarsearch %}
-            {% include "searchbox.html" %}
-          {% endblock %}
         </div>
       </div>
     </div>
@@ -121,5 +150,17 @@
     </p>
   </div>
 </footer>
+
+<!-- This function is needed to allow the dropdown search bar to work;
+The default behaviour is that the dropdown menu closes when something in
+it (like the search bar) is clicked -->
+<script type='text/javascript'>
+    $(function() {
+        // Fix input element click problem
+        $('.dropdown input, .dropdown label').click(function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
 
 {%- endblock %}
