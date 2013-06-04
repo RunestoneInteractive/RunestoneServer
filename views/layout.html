@@ -1,207 +1,127 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      {{=response.title or request.application}}
+    </title>
 
-Name       : Abrasive
-Description: A two-column, fixed-width design with dirty looks.
-Version    : 1.0
-Released   : 20081122
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
 
--->
-<html xmlns="http://www.w3.org/1999/xhtml">
- <head>
-  <title>
-   {{=response.title or request.application}}
-  </title>
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap-responsive.min.css')}}" />
 
-<meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
-  {{response.files.append(URL(request.application,'static','plugin_layouts/layouts/Abrasive/style.css'))}}
-  {{response.files.append(URL('static','plugin_layouts/superfish.js'))}}
-  {{include 'web2py_ajax.html'}}
-      <script type="text/javascript">
-    var eBookConfig = {}
-    var portPart = ''
-    eBookConfig.host = 'http://{{=request.env.http_host}}'
-    eBookConfig.app = eBookConfig.host+'/{{=request.application}}'
-    eBookConfig.ajaxURL = eBookConfig.app+'/ajax/'
-    eBookConfig.logLevel = 10
-    eBookConfig.loginRequired = true
+    <script type="text/javascript">
+      var eBookConfig = {}
+      var portPart = ''
+      eBookConfig.host = 'http://{{=request.env.http_host}}'
+      eBookConfig.app = eBookConfig.host+'/{{=request.application}}'
+      eBookConfig.ajaxURL = eBookConfig.app+'/ajax/'
+      eBookConfig.logLevel = 10
+      eBookConfig.loginRequired = true
     </script>
-  <style>
-ul.web2py-menu-vertical { width: 150px; position: relative; top:1em; left:1em;  z-index:30; border:0; margin:0; padding: 0; list-style: none; text-decoration: none;}
-ul.web2py-menu-vertical li { margin:0; padding:0; border:0; width: 150px; background: black; text-align:left;}
-ul.web2py-menu-vertical li a { margin:0; padding: 1px 3px 1px 3px; border:0; width: 144px; color: white; font-size:12px;}
-div.flash { position: fixed; float: right; padding: 10px; top: 10px; right: 30px; opacity: 0.75; margin: 10px 10px 10px 10px; text-align: center; clear: both; color: #fff; font-size: 11pt; text-align: center; vertical-align: middle; cursor: pointer; background: black; border: 2px solid #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px; z-index: 2; }
-div.error { background-color: red; color: white; padding: 3px; }
-.auth_navbar { text-align:right; z-index:20; position: absolute; top: 2px; right:30px; border:0; padding:0 }
-  </style>
- </head>
- <body>
-  <!-- start header -->
-  {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
+    <script src="{{=URL('static', 'js/jquery-1.9.1.min.js')}}"></script>    
+    <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>    
+    <script src="{{=URL('static', 'bootstrap-2.3.1/js/bootstrap.min.js')}}"></script>    
+    <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"</script>  
+    <script src="{{=URL('static', 'js/share.js')}}"></script>   
 
-  <div id="wrapper">
-   <div id="header">
-    <div id="logo">
-    <img src="{{=URL(c='static',f='_images/rsi_logo.jpg')}}">
-    </div>
-    <!-- end #logo -->
-    <div id="menu">
-     {{=MENU(response.menu,_class='web2py-menu')}}
-    <script>
-      jQuery(document).ready(function(){jQuery('ul.web2py-menu').superfish({delay:400});});
-    </script>
-    </div>
-    <!-- end #menu -->
-   </div>
-   <!-- end #header -->
-   <div id="page">
-    <div id="bgtop">
-     <div id="bgbottom">
-      <div id="content">
-       <div class="flash">{{=response.flash or ''}}</div>
-       {{include}}
-      </div>
-      <!-- end #content -->
-      <div id="sidebar">
-       <ul>
-        <li>
-         <h2>
-          Open Library
-         </h2>
-         <ul>
-          <li>
-           <a href="/{{=request.application}}/static/thinkcspy/index.html">
-            How to Think Like a Computer Scientist: Interactive Edition
-           </a>
-          </li>
-          <li>
-           <a href="/{{=request.application}}/static/pythonds/index.html">
-            Problem Solving with Algorithms and Data Structures
-           </a>
-          </li>
-          <li>
-           <a href="/{{=request.application}}/static/java4python/index.html">
-            Java for Python Programmers
-           </a>
-          </li>
-         </ul>
-        </li>
-        <li>
-         <h2>
-          More Info
-         </h2>
-         <ul>
-          <li>
-           <a href="/{{=request.application}}/default/about">
-            About Us
-           </a>
-          </li>
-          <li>
-           <a href="/{{=request.application}}/default/ack">
-            Acknowledgements
-           </a>
-          </li>
+  </head>
+<body>
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-fixed-top">
+<div class="navbar-inner">
+  <div class="container">
+    <a class="brand" href="javascript:void(0);">Runestone Interactive</a>
+    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+    <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div class="nav-collapse">
+      <ul class="nav">
+    
+        <li class="divider-vertical"></li>
+        
+        <!-- open library dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Open Library</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/{{=request.application}}/default/thinkcspy/index.html">How To Think Like a Computer Scientist</a></li>
+            <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures</a></li>
+            <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
           </ul>
-          </li>
-
-
-        <li>
-         <h2>
-          Students
-         </h2>
-         <ul>
-          <li>
-           <a href="{{=URL(c='default',f='user/register')}}">
-            Register
-           </a>
-          </li>
-          <li>
-           <a href="https://github.com/bnmnetp/runestone/issues/new">
-            Report a problem
-           </a>
-          </li>
-         </ul>
         </li>
 
-
-
-
-        <li>
-         <h2>
-          Instructors
-         </h2>
-         <ul>
-          <li>
-           <a href="{{=URL(c='admin',f='index')}}">
-            Instructor's Dashboard
-           </a>
-          </li>
-          <li>
-           <a href="https://github.com/bnmnetp/runestone/issues/new">
-            Submit an Exercise
-           </a>
-          </li>
-         </ul>
+        <!-- more info dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">More Info</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/{{=request.application}}/default/about">About Us</a></li>
+            <li><a href="/{{=request.application}}/default/ack">Acknowledgements</a></li>
+          </ul>
         </li>
 
-        <li>
-         <h2>
-          Authors &amp; Developers
-         </h2>
-         <ul>
-          <li>
-           <a href="http://runestoneinteractive.org">
-            Source for everything
-           </a>
-          </li>
-          <li>
-           <a href="http://docs.runestoneinteractive.org/build/html/index.html">
-            Documentation
-           </a>
-          </li>
-         </ul>
+        <!-- students dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Students</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/{{=request.application}}/default/user/register">Register</a></li>
+            <li><a href="https://github.com/bnmnetp/runestone/issues/new">Report A Problem</a></li>
+          </ul>
         </li>
 
-       </ul>
-      </div>
-      <!-- end #sidebar -->
-      <div style="clear: both;">
-       &nbsp;
-      </div>
-     </div>
+        <!-- instructors dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Instructors</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/{{=request.application}}/admin/index">Instructor's Dashboard</a></li>
+            <li><a href="https://github.com/bnmnetp/runestone/issues/new">Submit an Exercise</a></li>
+          </ul>
+        </li>
+
+        <!-- authors and developers dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Authors & Developers</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="http://runestoneinteractive.org">Source for everything</a></li>
+            <li><a href="http://docs.runestoneinteractive.org/build/html/index.html">Documentation</a></li>
+          </ul>
+        </li>
+
+      </ul>
+     
     </div>
-   </div>
-   <!-- end #page -->
-   <div id="footer">
-    <p>
-     Copyright (c) 2012 Brad Miller and David Ranum
-     <a href="http://www.nodethirtythree.com/">
-      NodeThirtyThree
-     </a>
-     and
-     <a href="http://www.freecsstemplates.org/">
-      FreeCSSTemplates
-     </a>
-    </p>
-   </div>
-   <!-- end #footer -->
   </div>
-  <!-- end #wrapper -->
-<script type="text/javascript">
+</div>
+</div>
+<!-- End navbar -->
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-32029811-1']);
-  _gaq.push(['_trackPageview']);
+<!-- begin body content -->
+<div class="container">
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+</div>
+<!-- end body content -->
 
-</script>
- </body>
+<!-- begin footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="pull-right">
+        <span id='totalusers'></span> readers online now | <span id='loggedinuser'></span><a href="#">Back to top</a>
+      </p>
+      <p>
+        &copy; Copyright 2013 Brad Miller, David Ranum
+      </p>
+    </div>
+  </footer>
+<!-- end footer -->
+
+</body>
 </html>

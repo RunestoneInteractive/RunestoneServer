@@ -1,0 +1,98 @@
+/* Runestone custom modifications */
+.navbar .brand {
+    font-size: 18px;
+}
+
+pre {
+    margin: 1em 0px;
+}
+
+.CodeMirror {
+    margin: 0px 0px 1em 0px;
+}
+
+/* override jQueryUI styles (to match bootstrap styles) */
+.ui-widget {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.ui-widget-content {
+    color: #333;
+}
+
+/* needed to override the jQueryUI style */
+.ui-widget p {
+    font-size: 14px;
+}
+
+.ui-tabs {
+    margin-bottom: 30px;
+    margin-top: 8px;
+}
+
+button.btn.btn-small, 
+input[type="submit"].btn.btn-small, 
+input[type="button"].btn.btn-small {
+    font-size: 1em;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.btn {
+    margin: 5px 0px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+label {
+    display: inline;
+}
+
+.alert form {
+    margin-bottom: 0px;
+}   
+
+.fb-like {
+    float:right;
+}
+
+.alert {
+    color:#866A3A;
+}
+
+/* These admonition styles styles are copied from the Bootstrap .alert classes */
+.admonition {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 7px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+
+}
+
+/* .alert-error */
+.admonition.caution {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}
+
+/* .alert-info */
+.admonition.tip {
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.admonition.note {
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.correct {
+    color: #84b8d9;    
+}
