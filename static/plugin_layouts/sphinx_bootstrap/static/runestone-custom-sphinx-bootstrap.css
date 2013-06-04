@@ -92,3 +92,7 @@ label {
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
+
+.correct {
+    color: #84b8d9;    
+}
