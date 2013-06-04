@@ -296,7 +296,7 @@ def getaggregateresults():
 
     if sid:
         correctquery = '''select 
-(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and act like '%:correct' )
+(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and act like '%%:correct' )
 /
 (select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' ) as result;
 ''' % (sid,sid)
@@ -308,7 +308,7 @@ def getaggregateresults():
             pctcorr = 'unavailable in sqlite'
     else:
         pctcorr = 'unavailable'
-        
+
     miscdata['yourpct'] = pctcorr
 
     return json.dumps([rdata,miscdata])
