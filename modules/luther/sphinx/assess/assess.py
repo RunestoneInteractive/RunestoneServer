@@ -239,7 +239,7 @@ class MChoiceMF(Assessment):
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
-            <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />
+            <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -316,7 +316,7 @@ class MChoiceMA(Assessment):
         
         TEMPLATE_END = '''
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
-            <input type="button" id="%(divid)s_bcomp" disabled name="compare" value="Compare Me" onclick="compareAnswers('%(divid)s');" />            
+            <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>            
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
