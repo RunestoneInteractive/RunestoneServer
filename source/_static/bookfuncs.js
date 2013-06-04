@@ -339,22 +339,24 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
     cm_editors[acblockid+"_code"] = editor;
     editor.parentDiv = acblockid;
-    var runButton = document.createElement("input");
-    runButton.setAttribute('type','button');
-    runButton.setAttribute('value','run');
+    var runButton = document.createElement("button");
+    runButton.appendChild(document.createTextNode('Run'))
+    runButton.className = runButton.className + ' btn btn-small btn-success';
     runButton.onclick = myRun;
     edNode.appendChild(runButton);
     if (sid === undefined) { // We don't need load and save buttons for grading
         if(isLoggedIn() == true) {
             var saveButton = document.createElement("input");
             saveButton.setAttribute('type','button');
-            saveButton.setAttribute('value','save');
+            saveButton.setAttribute('value','Save');
+            saveButton.className = saveButton.className + ' btn btn-small';
             saveButton.onclick = mySave;
             edNode.appendChild(saveButton);
 
             var loadButton = document.createElement("input");
             loadButton.setAttribute('type','button');
-            loadButton.setAttribute('value','load');
+            loadButton.setAttribute('value','Load');
+            loadButton.className = loadButton.className + ' btn btn-small';
             loadButton.onclick = myLoad;
             edNode.appendChild(loadButton);
         }
@@ -414,7 +416,7 @@ function gotUser(data, status, whatever) {
                 caughtErr = true;
                 mess = "Not logged in";
 	            $('button.ac_opt').hide();
-	            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+	            $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
             } else {
                 window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
             }
@@ -426,18 +428,19 @@ function gotUser(data, status, whatever) {
         } else {
             mess = "Not logged in";
             $('button.ac_opt').hide();
-            $('span.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">login</a>')
+            $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
         }
     } else {
         if (!caughtErr) {
             mess = d.email;
             eBookConfig.isLoggedIn = true;
+            addNavbarLoginLink(); // will change navbar login link to say 'Log Out'
 			enableUserHighlights();
             timedRefresh();
         }
     }
-    x = $(".footer").text();
-    $(".footer").text(x + mess);
+    x = $("#loggedinuser").html();
+    $("#loggedinuser").html(mess + ' | ' + x);
     logBookEvent({
         'event': 'page',
         'act': 'view',
@@ -480,14 +483,19 @@ function addUserToFooter() {
     if (shouldLogin()) {
         jQuery.get(eBookConfig.ajaxURL+'getuser',null,gotUser)
     } else {
-        x = $(".footer").text();
-        $(".footer").text(x + 'not logged in');
+        x = $(".footer").html();
+        $(".footer").html(x + 'not logged in');
         $('button.ac_opt').hide();
-        $('span.loginout').html('<a href="'+ eBookConfig.app+'/default/user/login">login</a>')
         logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
     }
+}
 
-
+function addNavbarLoginLink() {
+    if (isLoggedIn()) {
+        $('li.loginout').html('<a href="'+ eBookConfig.app +'/default/user/logout">Log Out</a>')
+    } else {
+        $('li.loginout').html('<a href="'+eBookConfig.app+'/default/user/login">Login</a>')
+    }
 }
 
 /*
@@ -539,7 +547,7 @@ function setOnlineUsers(data) {
 
 function setNumUsers(data) {
     var d = data[0]
-    $("#totalusers").text(d.numusers);
+    $("#totalusers").html(d.numusers);
 }
 
 function compareModal(data, status, whatever) {

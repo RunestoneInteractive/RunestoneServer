@@ -1,0 +1,8 @@
+{%- if prev %}
+  <li><a href="{{ prev.link|e }}"
+         title="{{ prev.title }}">{{ "&laquo;"|safe }} {{ _('Previous Chapter') }}</a></li>
+{%- endif %}
+{%- if next %}
+  <li><a href="{{ next.link|e }}"
+         title='{{ next.title }}'>{{ _('Next Chapter') }} {{ "&raquo;"|safe }}</a></li>
+{%- endif %}

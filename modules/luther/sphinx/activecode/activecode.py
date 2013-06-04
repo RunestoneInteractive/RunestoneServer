@@ -57,21 +57,21 @@ EDIT1 = '''
 </div>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
 
-<button id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
+<button class='btn btn-small btn-success' id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
 UNHIDE='''
-<button id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh()">Show/Hide Code</button>
+<button class='btn btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh()">Show/Hide Code</button>
 '''
 
 AUDIO = '''
-<input type="button" id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
+<input type="button" class='btn btn-small' id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
 '''
 
 EDIT2 = '''
 <div id="cont"></div>
 
-<button class="ac_opt" onclick="saveEditor('%(divid)s');">Save</button>
-<button class="ac_opt" onclick="requestCode('%(divid)s');">Load</button>
+<button class="ac_opt btn btn-small" onclick="saveEditor('%(divid)s');">Save</button>
+<button class="ac_opt btn btn-small" onclick="requestCode('%(divid)s');">Load</button>
 '''
 
 CANVAS = '''
@@ -235,7 +235,7 @@ class ActiveCode(Directive):
 
 
 EXEDIT = '''
-<button id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
+<button class='btn btn-small btn-inverse' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
 <div id="%(divid)s"></div>
 <br />
 '''

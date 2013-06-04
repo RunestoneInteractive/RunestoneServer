@@ -14,7 +14,7 @@ function enableUserHighlights(){
 	if ((window.location.href).toLowerCase().indexOf("index.html") == -1){
 		
 		//checksum generator for each div.section and paragraph. Add that checksum as a class _[checksumValue]
-		$('.body p, .body .section').each(function(index) {
+		$('body p, body .section').each(function(index) {
 			var s = $(this).text();
 			var i;
 			var chk = 0;
@@ -53,7 +53,7 @@ function enableUserHighlights(){
 		});
 		
 		
-		$('.body .section').on("mouseup", function(evt) {
+		$('body .section').on("mouseup", function(evt) {
 			sel = rangy.getSelection();
 			if (typeof sel !== "undefined" && sel.anchorNode != null && sel.focusNode != null){
 				var currAnchorNode = sel.anchorNode.parentElement;
@@ -161,7 +161,7 @@ function enableUserHighlights(){
 			if (data !="None"){
 				lastPageData = $.parseJSON(data);
 				if (lastPageData[0].lastPageChapter != null){
-					$(".body>.section .section:first").before('<div id="jump-to-chapter" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
+					$("body>.section .section:first").before('<div id="jump-to-chapter" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
 				}
 			}
 		});
@@ -243,7 +243,7 @@ function updateHighlightBox() {
 	var highlightJumpText = "";
 	var highlightLink;
 	var processingHighlight = false;
-	$(".body .my-highlighted-text").each(function(index,value){
+	$("body .my-highlighted-text").each(function(index,value){
 		if($(value).attr("id")){
 			if (processingHighlight){
 				highlightJumpText = highlightJumpText.split(/\s+/, 12).join(" ")+"...";
