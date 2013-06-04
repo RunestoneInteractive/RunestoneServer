@@ -57,6 +57,10 @@ label {
     float:right;
 }
 
+.alert {
+    color:#866A3A;
+}
+
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
     margin-top: 10px;
@@ -78,6 +82,12 @@ label {
 
 /* .alert-info */
 .admonition.tip {
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.admonition.note {
     color: #3a87ad;
     background-color: #d9edf7;
     border-color: #bce8f1;
