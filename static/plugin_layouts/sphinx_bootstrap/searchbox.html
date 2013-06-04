@@ -1,5 +1,5 @@
 {%- if pagename != "search" %}
-<div class='pull-right'>
+<div class='pull-right visible-desktop'>
   <form class="navbar-search pull-right" style="margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
     <input type="text" name="q" placeholder="Search" />
     <input type="hidden" name="check_keywords" value="yes" />
@@ -20,5 +20,27 @@
     </ul>
   </div>
   <span class='divider-vertical'></span>
+</div>
+
+<div class='visible-phone visible-tablet'>
+  <form class="navbar-search" style="margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+    <input type="text" name="q" placeholder="Search" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  <div class='dropdown'>
+    <a class='btn dropdown-toggle' href="#" data-toggle="dropdown">
+      <i class="icon-align-justify"></i>
+    </a>
+    <ul class='dropdown-menu'>
+        <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+        <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li>
+        <li class='divider'></li>
+        <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
+        <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+        <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+        <li><a href='/{{appname}}/admin/index'>Instructors Page</a></li> 
+    </ul>
+  </div>
 </div>
 {%- endif %}
