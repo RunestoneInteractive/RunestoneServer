@@ -20,9 +20,6 @@
 .. centered:: Luther College
 
 
-.. Based on the Original work by:  Jeffrey Elkner, Allen B. Downey, and Chris Meyers
-.. link to http://www.openbookproject.net/thinkcs/python/english2e/
-
 .. raw:: html
 
     <p>Welcome! Take a tour, experiment with Python, join <span id="totalusers"></span> other readers in learning
@@ -99,6 +96,14 @@ Contact
 * If you have questions about this book please send me email `bmiller@luther.edu <mailto:bmiller@luther.edu>`_
 * Check out the project on `github <https://github.com/bnmnetp/runestone>`_
 * Visit our `Facebook page <https://www.facebook.com/RunestoneInteractive>`_
+
+
+Acknowledgements
+~~~~~~~~~~~~~~~~
+
+* Based on the `Original work <http://www.openbookproject.net/thinkcs/python/english2e/>`_ by:  Jeffrey Elkner, Allen B. Downey, and Chris Meyers
+* Activecode based on `Skulpt <http://skulpt.org>`_
+* Codelens based on `Online Python Tutor <http://www.pythontutor.com>`_
 
 
 .. toctree::
