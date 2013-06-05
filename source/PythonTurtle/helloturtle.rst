@@ -226,11 +226,11 @@ screen until we click on it.
    True or False: A Turtle object can have any name that follows the naming rules from Chapter 2.
 
 .. mchoicemf:: test_question3_1_4
-   :answer_a: <br /><img src="../_static/test1Alt1.png" alt="right turn of 90 degrees before drawing">
-   :answer_b: <br /><img src="../_static/test1Alt2.png" alt="left turn of 180 degrees before drawing">
-   :answer_c: <br /><img src="../_static/test1Alt3.png" alt="left turn of 270 degrees before drawing">
-   :answer_d: <br /><img src="../_static/test1Alt4.png" alt="right turn of 45 degrees before drawing">
-   :answer_e: <br /><img src="../_static/test1correct.png" alt="left turn of 90 degrees before drawing">
+   :answer_a: <img src="../_static/test1Alt1.png" alt="right turn of 90 degrees before drawing">
+   :answer_b: <img src="../_static/test1Alt2.png" alt="left turn of 180 degrees before drawing">
+   :answer_c: <img src="../_static/test1Alt3.png" alt="left turn of 270 degrees before drawing">
+   :answer_d: <img src="../_static/test1Alt4.png" alt="right turn of 45 degrees before drawing">
+   :answer_e: <img src="../_static/test1correct.png" alt="left turn of 90 degrees before drawing">
    :correct: e
    :feedback_a: This code would turn the turtle to the south before drawing
    :feedback_b: This code would turn the turtle to the west before drawing
@@ -238,7 +238,10 @@ screen until we click on it.
    :feedback_d: This code would turn the turtle to the southeast before drawing.
    :feedback_e: Yes, the turtle starts facing east, so to turn it north you can turn left 90 or right 270 degrees.
 
-   Which of the following would produce the following image? <br /><img src="../_static/turtleTest1.png" alt="long line to north with shorter line to west on top">
+   Which of the following would produce the following image? 
+
+   .. image:: ../_static/turtleTest1.png 
+      :alt: long line to north with shorter line to west on top
 
 .. index:: instance
 
