@@ -439,8 +439,8 @@ function gotUser(data, status, whatever) {
             timedRefresh();
         }
     }
-    x = $("#loggedinuser").html();
-    $("#loggedinuser").html(mess + ' | ' + x);
+    x = $(".loggedinuser").html();
+    $(".loggedinuser").html(mess);
     logBookEvent({
         'event': 'page',
         'act': 'view',
