@@ -53,10 +53,6 @@ label {
     margin-bottom: 0px;
 }   
 
-.fb-like {
-    float:right;
-}
-
 .alert {
     color:#866A3A;
 }
@@ -95,4 +91,18 @@ label {
 
 .correct {
     color: #84b8d9;    
+}
+
+
+.social-menu {
+    width: 275px;
+    padding: 10px 10px 15px 20px;
+}
+
+.fb-like {
+    margin-top: 7px;
+}
+
+.twitter-follow-button {
+    margin-top: 10px;
 }
