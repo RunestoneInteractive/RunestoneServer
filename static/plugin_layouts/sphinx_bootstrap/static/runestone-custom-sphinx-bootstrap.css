@@ -106,3 +106,17 @@ label {
 .twitter-follow-button {
     margin-top: 10px;
 }
+
+.dropdown-menu > li > span  {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loggedinuser {
+    font-weight:bold;
+}

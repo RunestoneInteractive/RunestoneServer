@@ -49,21 +49,7 @@
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-search" style='opacity:0.6;'></i>
-              </a>
-              <div class="dropdown-menu search-menu">
-                <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
-                  <input type="text" name="q" placeholder="Search this book" />
-                  <input type="hidden" name="check_keywords" value="yes" />
-                  <input type="hidden" name="area" value="default" />
-                </form>
-              </div>
-            </li>
-            
-            <li class="divider-vertical"></li>
-            
+            <!-- social media dropdown -->
             <li class="dropdown">
               <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                 <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;'></img>
@@ -78,8 +64,58 @@
                 
                 <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
             </li>
+            
+            <li class="divider-vertical"></li>
+
+            <!-- search dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-search" style='opacity:0.6;'></i>
+              </a>
+              <div class="dropdown-menu search-menu">
+                <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+                  <input type="text" name="q" placeholder="Search this book" />
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+              </div>
+            </li>
 
             <li class="divider-vertical"></li>
+            
+            <!-- user account dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-user" style="opacity:0.6;"></i>
+              </a>
+              <ul class="dropdown-menu user-menu">
+                <li><span class='loggedinuser'></span></li>
+                <li class="divider"></li>
+                <li><a href="/{{appname}}/default/user/profile">Edit Profile</a>
+                <li><a href="/{{appname}}/default/user/change_password">Change Password</a>
+                <li class="divider"></li>
+                <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+              </ul>
+            </li>
+
+            <li class="divider-vertical"></li>
+            
+            <!-- help menu dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-question-sign" style="opacity:0.6;"></i>
+              </a>
+              <ul class="dropdown-menu user-menu">
+                <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
+                <li><a href='/{{appname}}/admin/index'>Instructors Page</a></li> 
+                <li class="divider"></li>
+                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+                <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+              </ul>
+            </li>
+            
+            <li class="divider-vertical"></li>
+
           </ul>
 
           <ul class="nav">
@@ -87,14 +123,16 @@
             {% block sidebartoc %}
               {% include "localtoc.html" %}
             {% endblock %}
+            <li class="divider-vertical"></li>
             {% block sidebarrel %}
               {% include "relations.html" %}
             {% endblock %}
+            <li class="divider-vertical"></li>
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}
 
-            <li class="divider-vertical"></li>
+            <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
           </ul>
          
         </div>
@@ -130,7 +168,7 @@
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
-      <span id='totalusers'></span> readers online now | <span id='loggedinuser'></span><a href="#">Back to top</a>
+      <span id='totalusers'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
       {% if theme_source_link_position == "footer" %}
         <br />
         {% include "sourcelink.html" %}
