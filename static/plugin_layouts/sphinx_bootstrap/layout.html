@@ -5,7 +5,6 @@
     '_static/js/jquery-fix.js',
     '_static/bootstrap-2.3.1/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
-    '_static/js/share.js',
   ]
 %}
 {% set css_files = [
@@ -47,24 +46,101 @@
         </button>
 
         <div class="nav-collapse">
+          <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            
+            <!-- social media dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;'></img>
+                <img src='{{ pathto('_static/img/Twitter_icon.png', 1) }}' style='margin-top:-3px;'></img>
+              </a>
+              <div class="dropdown-menu social-menu">
+                <div>
+                  <b>Follow Runestone in social media:</b>
+                </div>
+
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+            </li>
+            
+            <li class="divider-vertical"></li>
+
+            <!-- search dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-search" style='opacity:0.6;'></i>
+              </a>
+              <ul class='dropdown-menu'>
+                <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
+                <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
+                <li class="divider"></li>
+                <li>  
+                  <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+                    <input type="text" name="q" placeholder="Search this book" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                  </form>
+                </li>  
+              </ul>
+            </li>
+            <!-- end search dropdown -->
+
+            <li class="divider-vertical"></li>
+            
+            <!-- user account dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-user" style="opacity:0.6;"></i>
+              </a>
+              <ul class="dropdown-menu user-menu">
+                <li><span class='loggedinuser'></span></li>
+                <li class="divider"></li>
+                <li><a href="/{{appname}}/default/user/profile">Edit Profile</a>
+                <li><a href="/{{appname}}/default/user/change_password">Change Password</a>
+                <li class="divider"></li>
+                <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+              </ul>
+            </li>
+            <!-- end user account dropdown -->
+
+            <li class="divider-vertical"></li>
+            
+            <!-- help menu dropdown -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-question-sign" style="opacity:0.6;"></i>
+              </a>
+              <ul class="dropdown-menu user-menu">
+                <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
+                <li><a href='/{{appname}}/admin/index'>Instructors Page</a></li> 
+                <li class="divider"></li>
+                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+                <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+              </ul>
+            </li>
+            
+            <li class="divider-vertical"></li>
+
+          </ul>
+
           <ul class="nav">
             <li class="divider-vertical"></li>
             {% block sidebartoc %}
-             <!-- {% include "globaltoc.html" %} -->
               {% include "localtoc.html" %}
             {% endblock %}
+            <li class="divider-vertical"></li>
             {% block sidebarrel %}
               {% include "relations.html" %}
             {% endblock %}
+            <li class="divider-vertical"></li>
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}
+
           </ul>
          
-          <!-- searchbar.html also includes the dropdown settings/links menu button -->
-          {% block sidebarsearch %}
-            {% include "searchbox.html" %}
-          {% endblock %}
         </div>
       </div>
     </div>
@@ -98,7 +174,7 @@
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
-      <span id='totalusers'></span> readers online now | <span id='loggedinuser'></span><a href="#">Back to top</a>
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
       {% if theme_source_link_position == "footer" %}
         <br />
         {% include "sourcelink.html" %}
@@ -121,5 +197,17 @@
     </p>
   </div>
 </footer>
+
+<!-- This function is needed to allow the dropdown search bar to work;
+The default behaviour is that the dropdown menu closes when something in
+it (like the search bar) is clicked -->
+<script type='text/javascript'>
+    $(function() {
+        // Fix input element click problem
+        $('.dropdown input, .dropdown label').click(function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
 
 {%- endblock %}
