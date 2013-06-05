@@ -129,12 +129,12 @@
             <li class="divider-vertical"></li>
             {% block sidebartoc %}
               {% include "localtoc.html" %}
+              <li class="divider-vertical"></li>
             {% endblock %}
-            <li class="divider-vertical"></li>
             {% block sidebarrel %}
               {% include "relations.html" %}
+              <li class="divider-vertical"></li>
             {% endblock %}
-            <li class="divider-vertical"></li>
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}

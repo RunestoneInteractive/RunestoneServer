@@ -48,7 +48,7 @@
 <div id="navbar" class="navbar navbar-fixed-top">
 <div class="navbar-inner">
   <div class="container">
-    <a class="brand" href="javascript:void(0);">Runestone Interactive</a>
+    <a class="brand" href="/">Runestone Interactive</a>
     <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
     <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
       <span class="icon-bar"></span>
@@ -85,12 +85,20 @@
             <i class="icon-user" style="opacity:0.6;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
-            <li><span class='loggedinuser'></span></li>
+            {{ if auth.user: }}
+              <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
+            {{ else: }}
+              <li><span class='loggedinuser'>Not logged in</span></li>
+            {{ pass }}
             <li class="divider"></li>
             <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
             <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
             <li class="divider"></li>
-            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+            {{ if auth.user: }}
+              <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+            {{ else: }}
+              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li> 
+            {{ pass }}
           </ul>
         </li>
         <!-- end user account dropdown -->
@@ -103,7 +111,6 @@
             <i class="icon-question-sign" style="opacity:0.6;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
-            <li><a href='{{=URL("static", "navhelp.html")}}'>Navigation Help</a></li>
             <li><a href='/{{=request.application}}/admin/index'>Instructors Page</a></li>
             <li class="divider"></li>
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
@@ -180,10 +187,14 @@
 <!-- end body content -->
 
 <!-- begin footer -->
-  <footer class="footer">
+  <footer class="footer" style="margin-top:20px;">
     <div class="container">
       <p class="pull-right">
-        <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+        {{ if auth.user: }}
+          <span class='loggedinuser'>{{=auth.user.email}}</span> | <a href="#">Back to top</a>
+        {{ else: }}
+          <span class='loggedinuser'>Not logged in</span> | <a href="#">Back to top</a>
+        {{ pass }}
       </p>
       <p>
         &copy; Copyright 2013 Brad Miller, David Ranum
@@ -191,11 +202,6 @@
     </div>
   </footer>
 <!-- end footer -->
-
-  <script type="text/javascript">
-    //$jqTheme(document).ready(addNavbarLoginLink);
-    //$jqTheme(document).ready(getOnlineUsers);
-  </script>
 
 </body>
 </html>
