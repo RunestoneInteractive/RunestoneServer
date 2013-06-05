@@ -72,14 +72,20 @@
               <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                 <i class="icon-search" style='opacity:0.6;'></i>
               </a>
-              <div class="dropdown-menu search-menu">
-                <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
-                  <input type="text" name="q" placeholder="Search this book" />
-                  <input type="hidden" name="check_keywords" value="yes" />
-                  <input type="hidden" name="area" value="default" />
-                </form>
-              </div>
+              <ul class='dropdown-menu'>
+                <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
+                <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
+                <li class="divider"></li>
+                <li>  
+                  <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+                    <input type="text" name="q" placeholder="Search this book" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                  </form>
+                </li>  
+              </ul>
             </li>
+            <!-- end search dropdown -->
 
             <li class="divider-vertical"></li>
             
@@ -97,6 +103,7 @@
                 <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
               </ul>
             </li>
+            <!-- end user account dropdown -->
 
             <li class="divider-vertical"></li>
             
@@ -132,7 +139,6 @@
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}
 
-            <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
           </ul>
          
         </div>
@@ -168,7 +174,7 @@
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
-      <span id='totalusers'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
       {% if theme_source_link_position == "footer" %}
         <br />
         {% include "sourcelink.html" %}
