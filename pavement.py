@@ -143,7 +143,13 @@ def devcourse(options):
     paverutils.run_sphinx(options,'devcourse')
 
 @task
+@cmdopts([('all','a','rebuild everything')])
 def allbooks(options):
+    if 'all' in options.allbooks:
+      options.thinkcspy['all'] = True
+      options.pythonds['all'] = True
+      options.overview['all'] = True
+      options.devcourse['all'] = True
     thinkcspy(options)
     pythonds(options)
     devcourse(options)
