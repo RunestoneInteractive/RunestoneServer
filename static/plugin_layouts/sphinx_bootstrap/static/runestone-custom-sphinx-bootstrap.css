@@ -57,10 +57,6 @@ label {
     color:#866A3A;
 }
 
-.social-menu {
-    padding: 10px;
-}
-
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
     margin-top: 10px;
@@ -95,4 +91,18 @@ label {
 
 .correct {
     color: #84b8d9;    
+}
+
+
+.social-menu {
+    width: 275px;
+    padding: 15px 10px 15px 20px;
+}
+
+.fb-like {
+    margin-top: 7px;
+}
+
+.twitter-follow-button {
+    margin-top: 10px;
 }

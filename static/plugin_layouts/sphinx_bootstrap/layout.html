@@ -66,14 +66,17 @@
             
             <li class="dropdown">
               <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <img src='../_static/img/Facebook_icon.png' style='margin-top:-3px;'></img>
-                <img src='../_static/img/Twitter_icon.png' style='margin-top:-3px;'></img>
+                <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;'></img>
+                <img src='{{ pathto('_static/img/Twitter_icon.png', 1) }}' style='margin-top:-3px;'></img>
               </a>
               <div class="dropdown-menu social-menu">
-                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div>
+                  <b>Follow Runestone in social media:</b>
+                </div>
 
-                <div class="fb-like" data-href="http://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="220" data-show-faces="false"></div>
-              </div>  
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
             </li>
 
             <li class="divider-vertical"></li>
