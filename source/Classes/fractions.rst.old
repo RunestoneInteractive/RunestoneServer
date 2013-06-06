@@ -406,27 +406,10 @@ Glossary
 Exercises
 ---------
 
-#.
+#. Add a method ``area`` to the Rectangle class that returns the area of any instance::
 
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-           Add a method ``area`` to the Rectangle class that returns the area of any instance::
-        
-              r = Rectangle(Point(0, 0), 10, 5)
-              test(r.area(), 50)
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_d43c8f8afb2c4c808917bb7e948dbcbe
-
+      r = Rectangle(Point(0, 0), 10, 5)
+      test(r.area(), 50)
 
 #. Write a ``perimeter`` method in the Rectangle class so that we can find
    the perimeter of any rectangle instance::
@@ -434,33 +417,16 @@ Exercises
       r = Rectangle(Point(0, 0), 10, 5)
       test(r.perimeter(), 30)
 
-#.
-
-    .. tabbed:: q3
-
-        .. tab:: Question
-
-           Write a ``transpose`` method in the Rectangle class that swaps the width
-           and the height of any rectangle instance::
-           
-              r = Rectangle(Point(100, 50), 10, 5)
-              test(r.width, 10)
-              test(r.height, 5)
-              r.flip()
-              test(r.width, 5)
-              test(r.height, 10)
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_91a07f2b289d4b44a4ca7c5b49208015
-
-
+#. Write a ``transpose`` method in the Rectangle class that swaps the width
+   and the height of any rectangle instance::
+   
+      r = Rectangle(Point(100, 50), 10, 5)
+      test(r.width, 10)
+      test(r.height, 5)
+      r.flip()
+      test(r.width, 5)
+      test(r.height, 10)
+      
 #. Write a new method in the Rectangle class to test if a Point falls within
    the rectangle.  For this exercise, assume that a rectangle at (0,0) with
    width 10 and height 5 has *open* upper bounds on the width and height, 
@@ -476,30 +442,13 @@ Exercises
       test(r.contains(Point(3, 4.99999)), True)
       test(r.contains(Point(-3, -3)), False)
    
-#.
+#. In games, we often put a rectangular "bounding box" around our sprites in
+   the game.  We can then do *collision detection* between, say, bombs and 
+   spaceships, by comparing whether their rectangles overlap anywhere. 
+   
+   Write a function to determine whether two rectangles collide. *Hint:
+   this might be quite a tough exercise!  Think carefully about all the
+   cases before you code.* 
 
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           In games, we often put a rectangular "bounding box" around our sprites in
-           the game.  We can then do *collision detection* between, say, bombs and 
-           spaceships, by comparing whether their rectangles overlap anywhere. 
-           
-           Write a function to determine whether two rectangles collide. *Hint:
-           this might be quite a tough exercise!  Think carefully about all the
-           cases before you code.* 
-        
-             
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_5f1e3f17064f44088a896e9bc0e10b4d
-
-
+     
+ 

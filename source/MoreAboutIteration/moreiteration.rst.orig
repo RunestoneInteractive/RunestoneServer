@@ -1253,29 +1253,12 @@ The first six questions are typical functions you should be able to write using 
 these building blocks.
 
 
+   
+#. Add a print function to Newton's ``sqrt`` function that
+   prints out ``better`` each time it is calculated. Call your modified
+   function with 25 as an argument and record the results.
 
-#.
-
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-           Add a print function to Newton's ``sqrt`` function that
-           prints out ``better`` each time it is calculated. Call your modified
-           function with 25 as an argument and record the results.
-        
-           .. actex:: ex_7_7
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_5784e08291ba43199d43fdab277849f5
+    .. actex:: ex_7_7
 
 
 #. Write a function ``print_triangular_numbers(n)`` that prints out the first
@@ -1293,29 +1276,12 @@ these building blocks.
    .. actex:: ex_7_8
 
 
-#.
+#. Write a function, ``is_prime``, which takes a single integer argument
+   and returns ``True`` when the argument is a *prime number* and ``False``
+   otherwise.
 
-    .. tabbed:: q3
+    .. actex:: ex_7_9
 
-        .. tab:: Question
-
-           Write a function, ``is_prime``, which takes a single integer argument
-           and returns ``True`` when the argument is a *prime number* and ``False``
-           otherwise.
-        
-           .. actex:: ex_7_9
-        
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_418de05233374e76b3b66aeb96b55656
 
 
 #. Modify the the Random turtle walk program so that the turtle turns around
@@ -1324,28 +1290,11 @@ these building blocks.
 
     .. actex:: ex_7_12
 
-#.
+#. Modify the previous program so that you have two turtles each with a
+   random starting location.  Keep the turtles moving and bouncing off the
+   walls until they collide with each other.
 
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           Modify the previous program so that you have two turtles each with a
-           random starting location.  Keep the turtles moving and bouncing off the
-           walls until they collide with each other.
-        
-           .. actex:: ex_7_13
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0cd01637a1814f86b11f576c37a46437
-
+    .. actex:: ex_7_13
 
 #. Modify the previous program so that rather than a left or right turn the
    angle of the turn is determined randomly at each step.  When the turtle
@@ -1353,51 +1302,17 @@ these building blocks.
 
     .. actex:: ex_7_14
 
-#.
+#. Write a function to remove all the red from an image.
 
-    .. tabbed:: q7
-
-        .. tab:: Question
-
-           Write a function to remove all the red from an image.
-        
-           .. actex:: ex_7_15
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_777006b154ca4af7ab8bd11cc25c208a
-
+    .. actex:: ex_7_15
 
 #. Write a function to convert the image to grayscale.
 
     .. actex:: ex_7_16
 
-#.
+#. Write a function to convert an image to black and white.
 
-    .. tabbed:: q9
-
-        .. tab:: Question
-
-           Write a function to convert an image to black and white.
-        
-           .. actex:: ex_7_17
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0f0fb41d607743998a86962a11eed53d
-
+    .. actex:: ex_7_17
 
 #. Sepia Tone images are those brownish colored images that may remind you of
    times past.  The formula for creating a sepia tone is as follows:
@@ -1413,30 +1328,13 @@ these building blocks.
 
     .. actex:: ex_7_18
 
-#.
+#. Write a function to uniformly shrink or enlarge an image.  Your function
+   should take an image along with a scaling factor.  To shrink the image the
+   scale factor should be between 0 and 1 to enlarge the image the scaling
+   factor should be greater than 1.
 
-    .. tabbed:: q11
 
-        .. tab:: Question
-
-           Write a function to uniformly shrink or enlarge an image.  Your function
-           should take an image along with a scaling factor.  To shrink the image the
-           scale factor should be between 0 and 1 to enlarge the image the scaling
-           factor should be greater than 1.
-        
-        
-           .. actex:: ex_7_19
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9ca319187b4a4c2399402de0d99c0b1d
-
+    .. actex:: ex_7_19
 
 #. Write a function to rotate an image.  Your function should take an image
    object along with the number of degrees to rotate.  The rotational degrees
@@ -1444,31 +1342,14 @@ these building blocks.
 
     .. actex:: ex_7_20
 
-#.
+#. After you have scaled an image too much it looks blocky.  One way of
+   reducing the blockiness of the image is to replace each pixel with the
+   average values of the pixels around it.  This has the effect of smoothing
+   out the changes in color.  Write a function that takes an image as a
+   parameter and smooths the image.  Your function should return a new image
+   that is the same as the old but smoothed.
 
-    .. tabbed:: q13
-
-        .. tab:: Question
-
-           After you have scaled an image too much it looks blocky.  One way of
-           reducing the blockiness of the image is to replace each pixel with the
-           average values of the pixels around it.  This has the effect of smoothing
-           out the changes in color.  Write a function that takes an image as a
-           parameter and smooths the image.  Your function should return a new image
-           that is the same as the old but smoothed.
-        
-           .. actex:: ex_7_21
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb9f71a62de24efaa61f64b5a7e5d9c9
-
+    .. actex:: ex_7_21
 
 #. When you scan in images using a scanner they may have lots of noise due to
    dust particles on the image itself or the scanner itself,
@@ -1477,29 +1358,13 @@ these building blocks.
 
     .. actex:: ex_7_22
 
-#.
+#. Research the Sobel edge detection algorithm and implement it.
 
-    .. tabbed:: q15
-
-        .. tab:: Question
-
-           Research the Sobel edge detection algorithm and implement it.
-        
-           .. actex:: ex_7_23
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_dd2d9ca5ea744aafbf7cdc2a4ad5e974
+    .. actex:: ex_7_23
 
 .. toctree::
     :hidden:
 
     ../Labs/sequencelab
+
 
