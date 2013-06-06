@@ -150,7 +150,8 @@ function runit(myDiv,theButton,includes) {
     Sk.execLimit = 25000;
     // configure Skulpt output function, and module reader
     Sk.configure({output:outf,
-                read: builtinRead
+                read: builtinRead,
+                python3: true
             });
     try {
         Sk.importMainWithBody("<stdin>", false, prog);
