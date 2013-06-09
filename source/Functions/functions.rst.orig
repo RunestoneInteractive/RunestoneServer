@@ -1295,51 +1295,35 @@ Glossary
 
 Exercises
 ---------
-#.
 
-    .. tabbed:: q1
+#.  Use the drawsquare function we wrote in this chapter in a program to draw
+    the image shown below.
+    Assume each side is 20 units.
+    (Hint: notice that the turtle has already moved away from the ending point of the last
+    square when the program ends.)
 
-        .. tab:: Question
+    .. image:: Figures/five_squares.png
 
-            Use the drawsquare function we wrote in this chapter in a program to draw
-            the image shown below.
-            Assume each side is 20 units.
-            (Hint: notice that the turtle has already moved away from the ending point of the last
-            square when the program ends.)
-        
-            .. image:: Figures/five_squares.png
-        
-            .. actex:: ex_5_1
-        
-                import turtle
-        
-                def drawSquare(t, sz):
-                    """Get turtle t to draw a square of sz side"""
-        
-                    for i in range(4):
-                        t.forward(sz)
-                        t.left(90)
-        
-                wn = turtle.Screen()
-                wn.bgcolor("lightgreen")
-        
-                alex = turtle.Turtle()
-                alex.color("pink")
-        
-                drawSquare(alex,20)
-        
-                wn.exitonclick()
-        
+    .. actex:: ex_5_1
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
+        import turtle
 
-        .. tab:: Discussion 
+        def drawSquare(t, sz):
+            """Get turtle t to draw a square of sz side"""
 
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_12ac86a8d0524fc6830aefb785199048
+            for i in range(4):
+                t.forward(sz)
+                t.left(90)
+
+        wn = turtle.Screen()
+        wn.bgcolor("lightgreen")
+
+        alex = turtle.Turtle()
+        alex.color("pink")
+
+        drawSquare(alex,20)
+
+        wn.exitonclick()
 
 
 #.  Write a program to draw this. Assume the innermost square is 20 units per side,
@@ -1351,30 +1335,13 @@ Exercises
     .. actex:: ex_5_2
 
 
-#.
+#.  Write a non-fruitful function `drawPoly(someturtle, somesides, somesize)` which makes a turtle
+    draw a regular polygon.
+    When called with `drawPoly(tess, 8, 50)`, it will draw a shape like this:
 
-    .. tabbed:: q3
+    .. image:: Figures/regularpolygon.png
 
-        .. tab:: Question
-
-            Write a non-fruitful function `drawPoly(someturtle, somesides, somesize)` which makes a turtle
-            draw a regular polygon.
-            When called with `drawPoly(tess, 8, 50)`, it will draw a shape like this:
-        
-            .. image:: Figures/regularpolygon.png
-        
-            .. actex:: ex_5_3
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9a2f11265c524c7581bf7cf25d23bf3a
+    .. actex:: ex_5_3
 
 
 #. Draw this pretty pattern.
@@ -1383,29 +1350,12 @@ Exercises
 
     .. actex:: ex_5_4
 
-#.
+#.  The two spirals in this picture differ only by the turn angle.  Draw both.
 
-    .. tabbed:: q5
+    .. image:: Figures/tess_spirals.png
+       :height: 240
 
-        .. tab:: Question
-
-            The two spirals in this picture differ only by the turn angle.  Draw both.
-        
-            .. image:: Figures/tess_spirals.png
-               :height: 240
-        
-            .. actex:: ex_5_5
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_7587119991344db988f8fb37c8c9a31e
-
+    .. actex:: ex_5_5
 
 #.  Write a non-fruitful function `drawEquitriangle(someturtle, somesize)` which calls `drawPoly` from the
     previous question to have its turtle draw a equilateral triangle.
@@ -1414,41 +1364,24 @@ Exercises
 
 
 
-#.
+#.  Write a fruitful function `sumTo(n)` that returns the sum of all integer numbers up to and
+    including `n`.   So `sumTo(10)` would be `1+2+3...+10` which would return the value 55.  Use the
+    equation  (n * (n + 1)) / 2.
 
-    .. tabbed:: q7
+    .. actex:: ex_5_7
 
-        .. tab:: Question
+        from test import testEqual
 
-            Write a fruitful function `sumTo(n)` that returns the sum of all integer numbers up to and
-            including `n`.   So `sumTo(10)` would be `1+2+3...+10` which would return the value 55.  Use the
-            equation  (n * (n + 1)) / 2.
-        
-            .. actex:: ex_5_7
-        
-                from test import testEqual
-        
-                def sumTo(n):
-                    # your code here
-        
-                # Now lets see how well this works
-                t = sumTo(0)
-                testEqual(t, 0)
-                t = sumTo(10)
-                testEqual(t, 55)
-                t = sumTo(1)
-                testEqual(t,1)
+        def sumTo(n):
+            # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_6ba37a51d09845f39c96d4d4ef1d6f45
-
+        # Now lets see how well this works
+        t = sumTo(0)
+        testEqual(t, 0)
+        t = sumTo(10)
+        testEqual(t, 55)
+        t = sumTo(1)
+        testEqual(t,1)
 
 #.  Write a function `areaOfCircle(r)` which returns the area of a circle of radius `r`.  Make sure you use the math module in your solution.
 
@@ -1467,28 +1400,11 @@ Exercises
         testEqual(t,31415.926535897932)
 
 
-#.
+#.  Write a non-fruitful function to draw a five pointed star, where the length of each side is 100 units.
 
-    .. tabbed:: q9
+    .. image:: Figures/star.png
 
-        .. tab:: Question
-
-            Write a non-fruitful function to draw a five pointed star, where the length of each side is 100 units.
-        
-            .. image:: Figures/star.png
-        
-            .. actex:: ex_5_9
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_3757873187bb4581bffecdad449b5f61
-
+    .. actex:: ex_5_9
 
 #.  Extend your program above.  Draw five stars, but between each, pick up the pen,
     move forward by 350 units, turn right by 144, put the pen down, and draw the next star.
@@ -1501,27 +1417,10 @@ Exercises
     .. actex:: ex_5_10
 
 
-#.
+#.  Extend the star function to draw an n pointed star.  (Hint: n must be an odd number greater or
+    equal to 3).
 
-    .. tabbed:: q11
-
-        .. tab:: Question
-
-            Extend the star function to draw an n pointed star.  (Hint: n must be an odd number greater or
-            equal to 3).
-        
-            .. actex:: ex_5_11
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_c2f8ff1b301e4d99bd4ac52e68c8c1ed
+    .. actex:: ex_5_11
 
 
 #.  Write a function called drawSprite that will draw a sprite.  The function will need parameters for
@@ -1531,38 +1430,21 @@ Exercises
     .. actex:: ex_5_12
 
 
-#.
+#.  Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and
+    including `n`.   This time use the accumulator pattern.
 
-    .. tabbed:: q13
+    .. actex:: ex_5_13
 
-        .. tab:: Question
+        from test import testEqual
 
-            Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and
-            including `n`.   This time use the accumulator pattern.
-        
-            .. actex:: ex_5_13
-        
-                from test import testEqual
-        
-                def sumTo(n):
-                    # your code here
-        
-                # Now lets see how well this works
-                t = sumTo(0)
-                testEqual(t,0)
-                testEqual(sumTo(10),55)
-                testEqual(sumTo(1),1)
-        
+        def sumTo(n):
+            # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_6da665389fda49a584b128cc30515595
+        # Now lets see how well this works
+        t = sumTo(0)
+        testEqual(t,0)
+        testEqual(sumTo(10),55)
+        testEqual(sumTo(1),1)
 
 
 #.  Write a function called `mySqrt` that will approximate the square root of a number, call it n, by using
@@ -1573,27 +1455,10 @@ Exercises
     .. actex:: ex_5_14
 
 
-#.
+#.  Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Liebniz approximation
+    as described in class.
 
-    .. tabbed:: q15
-
-        .. tab:: Question
-
-            Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Liebniz approximation
-            as described in class.
-        
-            .. actex:: ex_5_15
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_2699e4b7bad44db6bd788c795c124b23
+    .. actex:: ex_5_15
 
 
 #.  Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Madhava approximation
@@ -1601,27 +1466,11 @@ Exercises
 
     .. actex:: ex_5_16
 
-#.
+#.  Write a function called `fancySquare` that will draw a square with fancy corners (spites on the corners).  You should
+    implement and use the `drawSprite` function from above.  For an even more interesting look, how about adding small
+    triangles to the ends of the sprite legs.
 
-    .. tabbed:: q17
-
-        .. tab:: Question
-
-            Write a function called `fancySquare` that will draw a square with fancy corners (spites on the corners).  You should
-            implement and use the `drawSprite` function from above.  For an even more interesting look, how about adding small
-            triangles to the ends of the sprite legs.
-        
-            .. actex:: ex_5_17
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_3b5d8808bf5749579718bdd2088b539f
+    .. actex:: ex_5_17
 
 .. admonition:: Scratch Editor
 
@@ -1633,4 +1482,3 @@ Exercises
 
     ../Labs/lab04_01
     ../Labs/lab04_01a
-

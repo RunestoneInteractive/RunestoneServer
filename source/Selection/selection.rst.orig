@@ -884,31 +884,15 @@ Glossary
 
 Exercises
 ---------
-#.
 
-    .. tabbed:: q1
+#.  What do these expressions evaluate to?
 
-        .. tab:: Question
+    #.  ``3 == 3``
+    #.  ``3 != 3``
+    #.  ``3 >= 4``
+    #.  ``not (3 < 4)``
 
-            What do these expressions evaluate to?
-        
-            #.  ``3 == 3``
-            #.  ``3 != 3``
-            #.  ``3 >= 4``
-            #.  ``not (3 < 4)``
-        
-                .. actex:: ex_6_1
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe
+        .. actex:: ex_6_1
 
 
 #.  Give the **logical opposites** of these conditions.  You are not allowed to use the ``not`` operator.
@@ -920,46 +904,29 @@ Exercises
 
         .. actex:: ex_6_2
 
-#.
+#.  Write a function which is given an exam mark, and it returns a string --- the grade for that mark --- according to this
+    scheme:
 
-    .. tabbed:: q3
+    .. table::
 
-        .. tab:: Question
+       =======   =====
+       Mark      Grade
+       =======   =====
+       >= 90     A
+       [80-90)   B
+       [70-80)   C
+       [60-70)   D
+       < 60      F
+       =======   =====
 
-            Write a function which is given an exam mark, and it returns a string --- the grade for that mark --- according to this
-            scheme:
-        
-            .. table::
-        
-               =======   =====
-               Mark      Grade
-               =======   =====
-               >= 90     A
-               [80-90)   B
-               [70-80)   C
-               [60-70)   D
-               < 60      F
-               =======   =====
-        
-            The square and round brackets denote closed and open intervals.
-            A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.
-        
-            Let ``xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]``
-        
-            Test your function by printing the mark and the grade for all the elements in this list.
-        
-            .. actex:: ex_6_3
+    The square and round brackets denote closed and open intervals.
+    A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
+    Let ``xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]``
 
-        .. tab:: Discussion 
+    Test your function by printing the mark and the grade for all the elements in this list.
 
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b9e6fd14629949e59da1a4ae827c0032
-
+    .. actex:: ex_6_3
 
 #.  Modify the turtle bar chart program so that the bar for any value
     of 200 or more is filled with red, values between [100 and 200) are filled yellow,
@@ -967,29 +934,12 @@ Exercises
 
     .. actex:: ex_6_4
 
-#.
+#.  In the turtle bar chart program, what do you expect to happen if one or more
+    of the data values in the list is negative?   Try it out.  Change the
+    program so that when it prints the text value for the negative bars, it puts
+    the text below the bottom of the bar.
 
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-            In the turtle bar chart program, what do you expect to happen if one or more
-            of the data values in the list is negative?   Try it out.  Change the
-            program so that when it prints the text value for the negative bars, it puts
-            the text below the bottom of the bar.
-        
-            .. actex:: ex_6_5
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0118bd02de23462bafdb51beb4c85e44
-
+    .. actex:: ex_6_5
 
 #.  Write a function ``findHypot`` which, given the length of two sides of a right-angled triangle, returns
     the length of the hypotenuse.  (Hint:  ``x ** 0.5`` will return the square root, or use ``sqrt`` from the math module)
@@ -1006,38 +956,22 @@ Exercises
         testEqual(findHypot(21.0,72.0), 75.0)
         testEqual(findHypot(1,1.73205), 1.999999)
 
-#.
+#. Write a function called ``is_even(n)`` that takes an integer as an argument
+   and returns ``True`` if the argument is an **even number** and ``False`` if
+   it is **odd**.
 
-    .. tabbed:: q7
 
-        .. tab:: Question
+   .. actex:: ex_6_7
 
-           Write a function called ``is_even(n)`` that takes an integer as an argument
-           and returns ``True`` if the argument is an **even number** and ``False`` if
-           it is **odd**.
-        
-           .. actex:: ex_6_7
-        
-               from test import testEqual
-        
-               def is_even(n):
-                   # your code here
-        
-               testEqual(is_even(10), True)
-               testEqual(is_even(5), False)
-               testEqual(is_even(1), False)
-               testEqual(is_even(0), True)
+       from test import testEqual
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
+       def is_even(n):
+           # your code here
 
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_7ae92646976d4953ac8a163f338b4358
-
+       testEqual(is_even(10), True)
+       testEqual(is_even(5), False)
+       testEqual(is_even(1), False)
+       testEqual(is_even(0), True)
 
 #. Now write the function ``is_odd(n)`` that returns ``True`` when ``n`` is odd
    and ``False`` otherwise.
@@ -1054,37 +988,20 @@ Exercises
        testEqual(is_odd(1), True)
        testEqual(is_odd(0), False)
 
-#.
+#. Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its
+   argument is an odd integer.
 
-    .. tabbed:: q9
+   .. actex:: ex_6_9
 
-        .. tab:: Question
+       from test import testEqual
 
-           Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its
-           argument is an odd integer.
-        
-           .. actex:: ex_6_9
-        
-               from test import testEqual
-        
-               def is_odd(n):
-                   # your code here
-        
-               testEqual(is_odd(10), False)
-               testEqual(is_odd(5), True)
-               testEqual(is_odd(1), True)
-               testEqual(is_odd(0), False)
-        
+       def is_odd(n):
+           # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9125792d0c264b65b4d9d72d25485ceb
+       testEqual(is_odd(10), False)
+       testEqual(is_odd(5), True)
+       testEqual(is_odd(1), True)
+       testEqual(is_odd(0), False)
 
 
 #.  Write a function ``is_rightangled`` which, given the length of three sides of a triangle,
@@ -1117,38 +1034,21 @@ Exercises
         testEqual(is_rightangled(4.1,8.2,9.168), False)
         testEqual(is_rightangled(0.5,0.4,0.64031), True)
 
-#.
+#.  Extend the above program so that the sides can be given to the function in any order.
 
-    .. tabbed:: q11
+    .. actex:: ex_6_11
 
-        .. tab:: Question
+        from test import testEqual
 
-            Extend the above program so that the sides can be given to the function in any order.
-        
-            .. actex:: ex_6_11
-        
-                from test import testEqual
-        
-                def is_rightangled(a,b,c):
-                    # your code here
-        
-                testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(16.0,4.0,8.0, False)
-                testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
-                testEqual(is_rightangled(9.16787,4.1,8.2), True)
-                testEqual(is_rightangled(4.1,8.2,9.168), False)
-                testEqual(is_rightangled(0.5,0.64031,0.4), True)
+        def is_rightangled(a,b,c):
+            # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b25992fa70fc4e7581d84315df38d796
-
+        testEqual(is_rightangled(1.5,2.0,2.5), True)
+        testEqual(is_rightangled(16.0,4.0,8.0, False)
+        testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
+        testEqual(is_rightangled(9.16787,4.1,8.2), True)
+        testEqual(is_rightangled(4.1,8.2,9.168), False)
+        testEqual(is_rightangled(0.5,0.64031,0.4), True)
 
 #.  A year is a **leap year** if it is divisible by 4 unless it is a century that is not divisible by 400.
     Write a function that takes a year as a parameter and returns ``True`` if the year is a leap year, ``False`` otherwise.
@@ -1168,26 +1068,10 @@ Exercises
         testEqual(isLeap(2000), True)
         testEqual(isLeap(2056), True)
 
-#.
+#.  Implement the Date of Easter program as described in class.
 
-    .. tabbed:: q13
+    .. actex:: ex_6_13
 
-        .. tab:: Question
-
-            Implement the Date of Easter program as described in class.
-        
-            .. actex:: ex_6_13
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_2dfd6acf1ca849c2853dad606d1ba255
 
 .. admonition:: Scratch Editor
 

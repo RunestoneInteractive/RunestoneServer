@@ -586,55 +586,21 @@ Glossary
 Exercises
 ---------
 
-#.
-
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-           Rewrite the ``distance`` function from chapter 5 so that it takes two
-           ``Point``\ s as parameters instead of four numbers.
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_090fe2d30b8d4fe58b829d06c58661f0
-
-
+#. Rewrite the ``distance`` function from chapter 5 so that it takes two
+   ``Point``\ s as parameters instead of four numbers.
+   
 #. Add a method ``reflect_x`` to Point which returns a new Point, one which is the 
    reflection of the point about the x-axis.  For example, 
    ``Point(3, 5).reflect_x()`` is (3, -5)
 
-#.
-
-    .. tabbed:: q3
-
-        .. tab:: Question
-
-           Add a method ``slope_from_origin`` which returns the slope of the line joining the origin
-           to the point.   For example, ::
-           
-              >>> Point(4, 10).slope_from_origin()
-              2.5     
-              
-           What cases will cause your method to fail? 
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_d70d350ae8284138a5726f8140c45533
-
-
+#. Add a method ``slope_from_origin`` which returns the slope of the line joining the origin
+   to the point.   For example, ::
+   
+      >>> Point(4, 10).slope_from_origin()
+      2.5     
+      
+   What cases will cause your method to fail? 
+   
 #. The equation of a straight line is  "y = ax + b", (or perhaps "y = mx + c").
    The coefficients a and b completely describe the line.  Write a method in the 
    Point class so that if a point instance is given another point, it will compute the equation
@@ -647,28 +613,11 @@ Exercises
    This tells us that the equation of the line joining the two points is "y = 2x + 3".    
    When will your method fail?
    
-#.
-
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           Given four points that fall on the circumference of a circle, find the midpoint of the circle.
-           When will you function fail?   
-           
-           *Hint:* You *must*
-           know how to solve the geometry problem *before* you think of going anywhere near programming.
-           You cannot program a solution to a problem if you don't understand what you want the computer to do! 
-           
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_fc589edaa0e14bd28175850c95b79d15
-
-
+#. Given four points that fall on the circumference of a circle, find the midpoint of the circle.
+   When will you function fail?   
+   
+   *Hint:* You *must*
+   know how to solve the geometry problem *before* you think of going anywhere near programming.
+   You cannot program a solution to a problem if you don't understand what you want the computer to do! 
+   
+   

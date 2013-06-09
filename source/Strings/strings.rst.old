@@ -1610,106 +1610,57 @@ Glossary
 Exercises
 ---------
 
-#.
+#. What is the result of each of the following:
 
-    .. tabbed:: q1
+    a. 'Python'[1]
+    #. "Strings are sequences of characters."[5]
+    #. len("wonderful")
+    #. 'Mystery'[:4]
+    #. 'p' in 'Pineapple'
+    #. 'apple' in 'Pineapple'
+    #. 'pear' not in 'Pineapple'
+    #. 'apple' > 'pineapple'
+    #. 'pineapple' < 'Peach'
+    
+#. 	In Robert McCloskey's
+	book *Make Way for Ducklings*, the names of the ducklings are Jack, Kack, Lack,
+	Mack, Nack, Ouack, Pack, and Quack.  This loop tries to output these names in order.
 
-        .. tab:: Question
+	.. sourcecode:: python
 
-            What is the result of each of the following:
-        
-            a. 'Python'[1]
-            #. "Strings are sequences of characters."[5]
-            #. len("wonderful")
-            #. 'Mystery'[:4]
-            #. 'p' in 'Pineapple'
-            #. 'apple' in 'Pineapple'
-            #. 'pear' not in 'Pineapple'
-            #. 'apple' > 'pineapple'
-            #. 'pineapple' < 'Peach'
+	    prefixes = "JKLMNOPQ"
+	    suffix = "ack"
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_dc2457710a924d9283b12f42a31d2b27
+	    for p in prefixes:
+	        print(p + suffix)
 
 
-#. In Robert McCloskey's
-   book *Make Way for Ducklings*, the names of the ducklings are Jack, Kack, Lack,
-   Mack, Nack, Ouack, Pack, and Quack.  This loop tries to output these names in order.
-
-   .. sourcecode:: python
-
-       prefixes = "JKLMNOPQ"
-	   suffix = "ack"
-
-	   for p in prefixes:
-	       print(p + suffix)
 
 
-   Of course, that's not quite right because Ouack and Quack are misspelled.
-   Can you fix it?
+	Of course, that's not quite right because Ouack and Quack are misspelled.
+	Can you fix it?
    
     .. actex:: ex_8_2
    
-#.
+#. Assign to a variable in your program a triple-quoted string that contains 
+   your favourite paragraph of text - perhaps a poem, a speech, instructions
+   to bake a cake, some inspirational verses, etc.
 
-    .. tabbed:: q3
+   Write a function which removes all punctuation from string and counts the number of words in your text that contain
+   the letter 'e'.  Your program should print an analysis of the text like this::
 
-        .. tab:: Question
+       Your text contains 243 words, of which 109 (44.8%) contain an 'e'.      
 
-           Assign to a variable in your program a triple-quoted string that contains 
-           your favourite paragraph of text - perhaps a poem, a speech, instructions
-           to bake a cake, some inspirational verses, etc.
-        
-           Write a function which removes all punctuation from string and counts the number of words in your text that contain
-           the letter 'e'.  Your program should print an analysis of the text like this::
-        
-               Your text contains 243 words, of which 109 (44.8%) contain an 'e'.      
-        
-           .. actex:: ex_8_3
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_bf88b1c4616d43f289c798b56a43b01c
-
+   .. actex:: ex_8_3
 
 #. Print out a neatly formatted multiplication table, up to 12 x 12.
 
    .. actex:: ex_8_4
 
 
-#.
+#. Write a function that will return the number of digits in an integer.
 
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           Write a function that will return the number of digits in an integer.
-        
-           .. actex:: ex_7_10
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_bfd6f74a183c4682b29c72c4411200fb
+    .. actex:: ex_7_10
 
 
 #. Write a function that reverses its string argument.
@@ -1725,37 +1676,20 @@ Exercises
       testEqual(reverse("Python"), "nohtyP")
       testEqual(reverse(""),"")
 
-#.
+#. Write a function that mirrors its argument.
 
-    .. tabbed:: q7
+   .. actex:: ex_8_6
 
-        .. tab:: Question
+      from test import testEqual
 
-           Write a function that mirrors its argument.
-        
-           .. actex:: ex_8_6
-        
-              from test import testEqual
-        
-              def mirror(mystr):
-                  # your code here
-        
-              testEqual(mirror('good'),'gooddoog')
-              testEqual(mirror('Python'),'PythonnohtyP')
-              testEqual(mirror(''), '')
-              testEqual(mirror('a'),'aa')
-        
-        
+      def mirror(mystr):
+          # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
+      testEqual(mirror('good'),'gooddoog')
+      testEqual(mirror('Python'),'PythonnohtyP')
+      testEqual(mirror(''), '')
+      testEqual(mirror('a'),'aa')
 
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_70b7ac515456497c952a2de5caa27ab9
 
 
 #. Write a function that removes all occurrences of a given letter from a string.
@@ -1773,37 +1707,20 @@ Exercises
 
 
 
-#.
+#. Write a function that recognizes palindromes. (Hint: use your ``reverse`` function to make this easy!).
 
-    .. tabbed:: q9
+   .. actex:: ex_8_8
 
-        .. tab:: Question
+      from test import testEqual
 
-           Write a function that recognizes palindromes. (Hint: use your ``reverse`` function to make this easy!).
-        
-           .. actex:: ex_8_8
-        
-              from test import testEqual
-        
-              def is_palindrome(myStr):
-                  # your code here
-        
-              testEqual(is_palindrome('abba'),True)
-              testEqual(is_palindrome('abab'),False)
-              testEqual(is_palindrome('straw warts'),True)
-              testEqual(is_palindrome('a'), True)
-              testEqual(is_palindrome(''),True)
-        
+      def is_palindrome(myStr):
+          # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_605923545bb849f7b8d41bbf823518e9
+      testEqual(is_palindrome('abba'),True)
+      testEqual(is_palindrome('abab'),False)
+      testEqual(is_palindrome('straw warts'),True)
+      testEqual(is_palindrome('a'), True)
+      testEqual(is_palindrome(''),True)
 
 
 #. Write a function that counts how many times a substring occurs in a string.
@@ -1823,37 +1740,20 @@ Exercises
       testEqual(count('aaa', 'aaaaaa'),  4)
 
 
-#.
+#. Write a function that removes the first occurrence of a string from another string.
 
-    .. tabbed:: q11
+   .. actex:: ex_8_10
 
-        .. tab:: Question
+      from test import testEqual
 
-           Write a function that removes the first occurrence of a string from another string.
-        
-           .. actex:: ex_8_10
-        
-              from test import testEqual
-        
-              def remove(substr,theStr):
-                  # your code here
-        
-              testEqual(remove('an', 'banana'),'bana')
-              testEqual(remove('cyc', 'bicycle'), 'bile')
-              testEqual(remove('iss', 'Mississippi'), 'Missippi')
-              testEqual(remove('egg', 'bicycle'), 'bicycle')
-        
-        
+      def remove(substr,theStr):
+          # your code here
 
-        .. tab:: Answer
-            
-            Put some sort of answer here!
+      testEqual(remove('an', 'banana'),'bana')
+      testEqual(remove('cyc', 'bicycle'), 'bile')
+      testEqual(remove('iss', 'Mississippi'), 'Missippi')
+      testEqual(remove('egg', 'bicycle'), 'bicycle')
 
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_2f2772134b604a6498748138542d312d
 
 
 #. Write a function that removes all occurrences of a string from another string.
@@ -1871,30 +1771,13 @@ Exercises
       testEqual(remove_all('eggs', 'bicycle'), 'bicycle')
 
 
-#.
+#. Here is another interesting L-System called a Hilbert curve.  Use 90 degrees::
 
-    .. tabbed:: q13
+       L
+       L -> +RF-LFL-FR+
+       R -> -LF+RFR+FL-
 
-        .. tab:: Question
-
-           Here is another interesting L-System called a Hilbert curve.  Use 90 degrees::
-        
-               L
-               L -> +RF-LFL-FR+
-               R -> -LF+RFR+FL-
-        
-           .. actex:: ex_8_12
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_ab823200fac64461a9e88f53b75f5795
-
+   .. actex:: ex_8_12
 
 #. Here is a dragon curve.  Use 90 degrees.::
 
@@ -1904,30 +1787,13 @@ Exercises
 
    .. actex:: ex_8_13
 
-#.
+#. Here is something called an arrowhead curve.  Use 60 degrees.::
 
-    .. tabbed:: q15
+       YF
+       X -> YF+XF+Y
+       Y -> XF-YF-X
 
-        .. tab:: Question
-
-           Here is something called an arrowhead curve.  Use 60 degrees.::
-        
-               YF
-               X -> YF+XF+Y
-               Y -> XF-YF-X
-        
-           .. actex:: ex_8_14
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9b2dfba083a64d5c894f873af2e93a1b
-
+   .. actex:: ex_8_14
 
 #. Try the Peano-Gosper curve.  Use 60 degrees.::
 
@@ -1937,30 +1803,13 @@ Exercises
 
    .. actex:: ex_8_15
 
-#.
+#. The Sierpinski Triangle.  Use 60 degrees.::
 
-    .. tabbed:: q17
+       FXF--FF--FF
+       F -> FF
+       X -> --FXF++FXF++FXF--
 
-        .. tab:: Question
-
-            The Sierpinski Triangle.  Use 60 degrees.::
-        
-               FXF--FF--FF
-               F -> FF
-               X -> --FXF++FXF++FXF--
-        
-           .. actex:: ex_8_16
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_912a5f19d3964dc2af7a067dcd832c7e
-
+   .. actex:: ex_8_16
 
 #. Write a function that implements a substitution cipher.  In a substitution
    cipher one letter is substituted for another to garble the message.  For
@@ -1971,29 +1820,12 @@ Exercises
 
    .. actex:: ex_8_17
 
-#.
+#. Write a function that decrypts the message from the previous exercise.  It
+   should also take two parameters.  The encrypted message,
+   and the mixed up alphabet.  The function should return a string that is
+   the same as the original unencrypted message.
 
-    .. tabbed:: q19
-
-        .. tab:: Question
-
-           Write a function that decrypts the message from the previous exercise.  It
-           should also take two parameters.  The encrypted message,
-           and the mixed up alphabet.  The function should return a string that is
-           the same as the original unencrypted message.
-        
-           .. actex:: ex_8_18
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_d7d1ca00bfff4e7bacf886386fb3302e
-
+   .. actex:: ex_8_18
 
 #. Write a function ``descramble`` that takes a message that is scrambled
    using the picket fence algorithm as discussed in class.  Try exchanging messages
@@ -2008,37 +1840,20 @@ Exercises
       print(descramble(testmess))
 
 
-#.
+#. Write a function called ``rot13`` that uses the Caesar cipher to encrypt a message.
+   The Caesar cipher works like a substitution cipher but each character is replaced
+   by the character 13 characters to 'its right' in the alphabet.  So for example
+   the letter a becomes the letter n.  If a letter is past the middle of the alphabet
+   then the counting wraps around to the letter a again, so n becomes a, o becomes b
+   and so on.  *Hint:* Whenever you talk about things wrapping around its a good idea
+   to think of modulo arithmetic.
 
-    .. tabbed:: q21
+   .. actex:: ex_8_20
 
-        .. tab:: Question
+      def rot13(mess):
+          # Your code here
 
-           Write a function called ``rot13`` that uses the Caesar cipher to encrypt a message.
-           The Caesar cipher works like a substitution cipher but each character is replaced
-           by the character 13 characters to 'its right' in the alphabet.  So for example
-           the letter a becomes the letter n.  If a letter is past the middle of the alphabet
-           then the counting wraps around to the letter a again, so n becomes a, o becomes b
-           and so on.  *Hint:* Whenever you talk about things wrapping around its a good idea
-           to think of modulo arithmetic.
-        
-           .. actex:: ex_8_20
-        
-              def rot13(mess):
-                  # Your code here
-        
-              print(rot13('abcde'))
-              print(rot13('nopqr'))
-              print(rot13(rot13('Since rot13 is symmetric you should see this message')))
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_49e1151bb7864a3287a6b6ae1c84db16
-
+      print(rot13('abcde'))
+      print(rot13('nopqr'))
+      print(rot13(rot13('Since rot13 is symmetric you should see this message')))
 

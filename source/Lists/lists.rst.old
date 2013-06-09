@@ -1741,202 +1741,85 @@ Glossary
 
 Exercises
 ---------
-#.
 
-    .. tabbed:: q1
+#. Draw a reference diagram for ``a`` and ``b`` before and after the third line of
+   the following python code is executed:
 
-        .. tab:: Question
-
-           Draw a reference diagram for ``a`` and ``b`` before and after the third line of
-           the following python code is executed:
-        
-           .. sourcecode:: python
-            
-               a = [1, 2, 3]
-               b = a[:]
-               b[0] = 5
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_12314cf40dbe407cb145f029870c0347
-
+   .. sourcecode:: python
+    
+       a = [1, 2, 3]
+       b = a[:]
+       b[0] = 5
 
 #.  Create a list called ``myList`` with the following six items: 76, 92.3, "hello", True, 4, 76.
 
     .. actex:: ex_9_2
 
  
-#.
+#.  Write Python statements to do the following:
 
-    .. tabbed:: q3
+    a. Append "apple" and 76 to the list.
+    #. Insert the value "cat" at position 3.
+    #. Insert the value 99 at the start of the list.
+    #. Find the index of "hello".
+    #. Count the number of 76s in the list.
+    #. Remove the first occurrence of 76 from the list.
+    #. Remove True from the list using ``pop`` and ``index``.
 
-        .. tab:: Question
 
-           Write Python statements to do the following:
-        
-           a. Append "apple" and 76 to the list.
-           #. Insert the value "cat" at position 3.
-           #. Insert the value 99 at the start of the list.
-           #. Find the index of "hello".
-           #. Count the number of 76s in the list.
-           #. Remove the first occurrence of 76 from the list.
-           #. Remove True from the list using ``pop`` and ``index``.
-        
-        
-           .. actex:: ex_9_3
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b9034b274ebe4c55a58c44315ee681a4
-
+    .. actex:: ex_9_3
 
 #.  Create a list containing 100 random integers between 0 and 1000 (use iteration, append, and the random module).  Write a function called ``average`` that will take the list as a parameter and return the average.
 
     .. actex:: ex_9_4
 
-#.
+#. Write a Python function that will take a the list of integers from the previous problem and return the maximum value.  (Note: there is a builtin function named ``max`` but pretend you cannot use it.)
 
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           Write a Python function that will take a the list of integers from the previous problem and return the maximum value.  (Note: there is a builtin function named ``max`` but pretend you cannot use it.)
-        
-           .. actex:: ex_9_5
-        
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_714fd5537ebf41189ce5fb6fb16d1d26
+    .. actex:: ex_9_5
 
 
 #. Write a function ``sum_of_squares(xs)`` that computes the sum
    of the squares of the numbers in the list ``xs``.  For example,
    ``sum_of_squares([2, 3, 4])`` should return 4+9+16 which is 29:
 
-   .. actex:: ex_7_11
+    .. actex:: ex_7_11
 
-#.
+#. Write a function to count how many odd numbers are in a list.
 
-    .. tabbed:: q7
-
-        .. tab:: Question
-
-           Write a function to count how many odd numbers are in a list.
-        
-           .. actex:: ex_9_6
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_fdd366b1b4c8494082a385e1e1197844
-
+    .. actex:: ex_9_6
 
 #. Sum up all the even numbers in a list.
 
-   .. actex:: ex_9_7
+    .. actex:: ex_9_7
 
-#.
+#. Sum up all the negative numbers in a list.
 
-    .. tabbed:: q9
-
-        .. tab:: Question
-
-           Sum up all the negative numbers in a list.
-        
-           .. actex:: ex_9_8
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_bfe671ac1e0942f2be4de7179921f83f
-
+    .. actex:: ex_9_8
 
 #. Count how many words in a list have length 5.
 
-   .. actex:: ex_9_9
+    .. actex:: ex_9_9
 
-#.
+#. Sum all the elements in a list up to but not including the first even number.
 
-    .. tabbed:: q11
-
-        .. tab:: Question
-
-           Sum all the elements in a list up to but not including the first even number.
-        
-           .. actex:: ex_9_10
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_90f95bbe4a49428caa9ed0c5e02747b1
-
+    .. actex:: ex_9_10
 
 #. Count how many words occur in a list up to and including the first occurrence of the word "sam".
 
-   .. actex:: ex_9_11
+    .. actex:: ex_9_11
 
 
-#.
 
-    .. tabbed:: q13
+#. Although Python provides us with many list methods, it is good practice and very instructive to think about how they are implemented.  Implement a Python function that works like the following:
 
-        .. tab:: Question
+    a. count
+    #. in
+    #. reverse
+    #. index
+    #. insert
 
-           Although Python provides us with many list methods, it is good practice and very instructive to think about how they are implemented.  Implement a Python function that works like the following:
-        
-           a. count
-           #. in
-           #. reverse
-           #. index
-           #. insert
-        
-           
-           .. actex:: ex_9_12
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_39ee0274e51d4c888cc20b6fefa4069c
-
+   
+    .. actex:: ex_9_12
 
 #. Write a function ``replace(s, old, new)`` that replaces all occurences of
    ``old`` with ``new`` in a string ``s``::
@@ -1952,38 +1835,19 @@ Exercises
 
    *Hint*: use the ``split`` and ``join`` methods.
 
-   .. actex:: ex_9_13
+    .. actex:: ex_9_13
 
 
-#.
+#. Here are the rules for an L-system that creates something that resembles
+   a common garden herb.  Implement the following rules and try it.  Use an
+   angle of 25.7 degrees.::
 
-    .. tabbed:: q15
+       H
+       H --> HFX[+H][-H]
+       X --> X[-FFF][+FFF]FX
 
-        .. tab:: Question
 
-           Here are the rules for an L-system that creates something that resembles 
-           a common garden herb.  Implement the following rules and try it.  Use an
-           angle of 25.7 degrees.
-           
-           ::
-        
-               H
-               H --> HFX[+H][-H]
-               X --> X[-FFF][+FFF]FX
-        
-        
-           .. actex:: ex_9_14
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_10a1fdd1fadb401b8e733afd9d105052
-
+   .. actex:: ex_9_14
 
 #. Here is another L-System.  Use an Angle of 25::
 
@@ -1991,3 +1855,4 @@ Exercises
        F --> F[-F]F[+F]F
 
    .. actex:: ex_9_15
+
