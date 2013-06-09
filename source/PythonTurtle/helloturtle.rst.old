@@ -944,57 +944,22 @@ Glossary
 
 Exercises
 ---------
+#. Write a program that prints ``We like Python's turtles!`` 1000 times.
 
-#.
-
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-           Write a program that prints ``We like Python's turtles!`` 1000 times.
-        
-           .. actex:: ex_3_1
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9858d02024e54ae1b6b50ed8c65a01e6
-
+   .. actex:: ex_3_1
 
 #. Give three attributes of your cellphone object.  Give three methods of your
    cellphone.
 
    .. actex:: ex_3_2
 
-#.
+#. Write a program that uses a for loop to print
+     |  ``One of the months of the year is January``
+     |  ``One of the months of the year is February``
+     |  ``One of the months of the year is March``
+     |  etc ...
 
-    .. tabbed:: q3
-
-        .. tab:: Question
-
-           Write a program that uses a for loop to print
-             |  ``One of the months of the year is January``
-             |  ``One of the months of the year is February``
-             |  ``One of the months of the year is March``
-             |  etc ...
-        
-           .. actex:: ex_3_3
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b271442ee0864973a023c19f27aeb401
-
+   .. actex:: ex_3_3
 
 #. Assume you have the assignment ``xs = [12, 10, 32, 3, 66, 17, 42, 99, 20]``
 
@@ -1003,32 +968,15 @@ Exercises
 
    .. actex:: ex_3_4
 
-#.
+#. Use ``for`` loops to make a turtle draw these regular polygons
+   (regular means all sides the same lengths, all angles the same):
 
-    .. tabbed:: q5
+   * An equilateral triangle
+   * A square
+   * A hexagon (six sides)
+   * An octagon (eight sides)
 
-        .. tab:: Question
-
-           Use ``for`` loops to make a turtle draw these regular polygons
-           (regular means all sides the same lengths, all angles the same):
-        
-           * An equilateral triangle
-           * A square
-           * A hexagon (six sides)
-           * An octagon (eight sides)
-        
-           .. actex:: ex_3_5
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_36e8bc742b89424e82f111ba2d1dd33f
-
+   .. actex:: ex_3_5
 
 #. .. _drunk_student_problem:
 
@@ -1042,27 +990,10 @@ Exercises
 
    .. actex:: ex_3_6
 
-#.
+#. Enhance your program above to also tell us what the drunk pirate's heading
+   is after he has finished stumbling around.
 
-    .. tabbed:: q7
-
-        .. tab:: Question
-
-           Enhance your program above to also tell us what the drunk pirate's heading
-           is after he has finished stumbling around.
-        
-           .. actex:: ex_3_7
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_7e34946f59f348f2bfeb3f918eb57b7a
-
+   .. actex:: ex_3_7
 
 #. On a piece of scratch paper, trace the following program and show the drawing.  When you are done, press ``run``
    and check your answer.
@@ -1080,28 +1011,11 @@ Exercises
        tess.forward(-100)
 
 
-#.
+#. Write a program to draw a shape like this:
 
-    .. tabbed:: q9
+   .. image:: Figures/star.png
 
-        .. tab:: Question
-
-           Write a program to draw a shape like this:
-        
-           .. image:: Figures/star.png
-        
-           .. actex:: ex_3_9
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_611217310057488aab6a34d4b591e753
-
+   .. actex:: ex_3_9
 
 #. Write a program to draw a face of a clock that looks something like this:
 
@@ -1109,51 +1023,16 @@ Exercises
 
    .. actex:: ex_3_10
 
-#.
+#. Write a program to draw some kind of picture.  Be creative and experiment
+    with the turtle methods provided in turtle_methods_.
 
-    .. tabbed:: q11
-
-        .. tab:: Question
-
-           Write a program to draw some kind of picture.  Be creative and experiment
-           with the turtle methods provided in turtle_methods_.
-        
-           .. actex:: ex_3_11
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_928a562a4f5c41f9892c9bfc4a1d5883
-
+   .. actex:: ex_3_11
 
 #. Create a turtle, and assign it to a variable.  When you print its type,
     what do you get?
 
    .. actex:: ex_3_12
 
-#.
+#. Write a program to draw a Sprite where the number of legs is provided by the user.
 
-    .. tabbed:: q13
-
-        .. tab:: Question
-
-            Write a program to draw a Sprite where the number of legs is provided by the user.
-                   
-            .. actex:: ex_3_13
-
-        .. tab:: Answer
-            
-            Put some sort of answer here!
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_65d7e616d2b548f592205dba699cc132
-
-
+   .. actex:: ex_3_13
