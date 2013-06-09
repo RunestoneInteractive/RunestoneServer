@@ -28,21 +28,6 @@ from scratch and write your own interactive textbook using the tools that we pro
 In order to see how the tools work, the following sections will show them in action.
 
 
-.. tabbed:: randomdiv
-    
-    .. tab:: Tab1
-        
-        .. video:: videoinfo
-            :controls:
-            :thumb: _static/activecodethumb.png
-
-            http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
-            http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
-
-    .. tab:: Tab 2
-        
-        hello world
-
 Embedded Videos
 ---------------
 
@@ -273,17 +258,17 @@ next line executed.
 Disqus Comment Box
 ------------------
 
-A comment box allowing users to add comments and start discussions can be added. You must provide the Disqus shortname for your site, which can be obtained by registering with Disqus. You must also provide an identifier for the specific page you want users to comment on.
+A comment box allowing users to add comments and start discussions can be added. A comment box can be added at the page level, but also for an individual section or question, allowing discussion of that particular content.
 
 .. disqus::
     :shortname: interactivepython
-    :identifier: post1
+    :identifier: discussion1
 
 
 Tabbed Question
 ---------------
 
-Any of the existing question types can be placed in a tabbed exhibit-style question. This can be used for example to provide a Disqus discussion box specifically related to a certain question.
+Any of the existing question types can be placed in a tabbed exhibit-style question. This may be used to provide an possible answer or a Disqus discussion box specifically related to a certain question.
 
 .. tabbed:: exercise1
     
@@ -315,5 +300,5 @@ site and choosing the courseware examples that we have already created.  The fir
 of computer science and helps you learn Python programming.  The second course, **Problem Solving with Algorithms and Data Structures Using Python**, is a thorough introduction to data structures and algorithms using Python.  Topics include stacks,
 queues, trees, graphs, and recursion.
 
-We hope you will find these tools and materials useful.  If you want to get more involved, feel free to download the tools and write your own courseware.  Everything you need can be found in the current `github repository <http://github.com/bnmnetp/runestone>`_.
+We hope you will find these tools and materials useful.  If you want to get more involved, feel free to download the tools and write your own courseware.  Everything you need can be found in the current `GitHub repository <http://github.com/bnmnetp/runestone>`_.
 
