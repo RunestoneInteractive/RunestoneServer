@@ -71,7 +71,7 @@ DISQUS_LINK = """
     }());
 </script>
 
-<a href="#disqus_thread" data-disqus-identifier="%(identifier)s" onclick="%(identifier)s_disqus(this);">Show Comments</a>
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="%(identifier)s" onclick="%(identifier)s_disqus(this);">Show Comments</a>
 """
 
 

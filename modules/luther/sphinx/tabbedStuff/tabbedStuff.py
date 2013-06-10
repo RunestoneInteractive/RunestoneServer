@@ -48,7 +48,14 @@ END = """
     <script type='text/javascript'>
         // init the jQuery tabs plugin
         $(function() {
-            $("#%(divid)s").tabs({"disabled":%(disabledtabs)s});
+            $("#%(divid)s").tabs({
+                "disabled":%(disabledtabs)s, 
+                "activate": function( event, ui ) {
+                    if ($(ui.newPanel).find('.disqus_thread_link')) {
+                        $(ui.newPanel).find('.disqus_thread_link').click();
+                    }
+                }
+            });
         });
     </script>
 """
