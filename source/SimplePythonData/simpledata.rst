@@ -1356,10 +1356,10 @@ Exercises
 
                 if time > 12:
                     end_time = time - 12
-                    print ("The time after waiting " + waiting_time_string + " hours is: " + end_time + "pm")                        
+                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "pm")                        
                 else:
                     end_time = time
-                    print ("The time after waiting " + waiting_time_string + " hours is: " + end_time + "am")                        
+                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "am")                        
 
 
         .. tab:: Discussion
@@ -1461,7 +1461,7 @@ Exercises
 
                 final = P * ( ((1 + (r/n)) ** (n * t)) )
 
-                print ("The final amount after " + t + " years is " + final)
+                print ("The final amount after", t, "years is", final)
 
     
         .. tab:: Discussion
@@ -1528,7 +1528,16 @@ Exercises
         
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q11_answer
+                :nocanvas:
+
+                ## question 11 solution ##
+
+                deg_c = int(input("What is the temperature in Celsius? "))
+
+                deg_f = deg_c * (9 / 5) + 32
+
+                print (str(deg_c) + " degrees Celsius is " + str(deg_f) + " degrees Farenheit.")
 
         .. tab:: Discussion
 
