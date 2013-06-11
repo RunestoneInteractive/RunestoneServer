@@ -1274,7 +1274,6 @@ Exercises
 1.
 
     .. tabbed:: q1
-        :disabledtabs: 2,3
 
         .. tab:: Question
             
@@ -1300,7 +1299,18 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            #. ``5 ** 2  = 25``
+            #. ``9 * 5 = 45``
+            #. ``15 / 12 = 1.25``
+            #. ``12 / 15 = 0.8``
+            #. ``15 // 12 = 1``
+            #. ``12 // 15 = 0``
+            #. ``5 % 2 = 1``
+            #. ``9 % 5 = 4``
+            #. ``15 % 12 = 3``
+            #. ``12 % 15 = 12``
+            #. ``6 % 6 = 0``
+            #. ``0 % 7 = 0``
 
         .. tab:: Discussion
 
@@ -1328,8 +1338,29 @@ Exercises
             .. actex:: ex_2_3
         
         .. tab:: Answer
+            
+            .. activecode:: q3_answer
+                :nocanvas:
+                
+                ## question 3 solution ##
 
-            Put some sort of answer here!
+                current_time_string = input("What is the current time (in hours)? ")
+                waiting_time_string = input("How many hours do you want to wait? ")
+
+                current_time_int = int(current_time_string)
+                waiting_time_int = int(waiting_time_string)
+
+                hours = current_time_int + waiting_time_int
+
+                time = hours % 24
+
+                if time > 12:
+                    end_time = time - 12
+                    print ("The time after waiting " + waiting_time_string + " hours is: " + end_time + "pm")                        
+                else:
+                    end_time = time
+                    print ("The time after waiting " + waiting_time_string + " hours is: " + end_time + "am")                        
+
 
         .. tab:: Discussion
 
@@ -1363,7 +1394,24 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q5_answer    
+                :nocanvas:
+
+                ## question 5 solution ##
+
+                word1 = "All"
+                word2 = "work"
+                word3 = "and"
+                word4 = "no"
+                word5 = "play"
+                word6 = "makes"
+                word7 = "Jack"
+                word8 = "a"
+                word9 = "dull"
+                word10 = "boy."
+
+                print(word1, word2, word3, word4, word5, word6, word7, word8, word9, word10)
+        
 
         .. tab:: Discussion
 
@@ -1400,8 +1448,22 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+                :nocanvas:
 
+                ## question 7 solution ##
+
+                P = 10000
+                n = 12
+                r = 0.08
+
+                t = int(input("Compound for how many years? "))
+
+                final = P * ( ((1 + (r/n)) ** (n * t)) )
+
+                print ("The final amount after " + t + " years is " + final)
+
+    
         .. tab:: Discussion
 
             .. disqus::
@@ -1428,7 +1490,18 @@ Exercises
         
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q9_answer
+                :nocanvas:        
+
+                ## question 9 solution
+
+                width = int(input("Width? "))
+                height = int(input("Height? "))
+
+                area = width * height
+
+                print("The area of the rectangle is " + area)
+
 
         .. tab:: Discussion
 
