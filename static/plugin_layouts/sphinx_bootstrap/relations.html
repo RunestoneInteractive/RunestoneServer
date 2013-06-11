@@ -1,8 +1,9 @@
 {%- if prev %}
   <li><a href="{{ prev.link|e }}"
-         title="{{ prev.title }}">{{ "&laquo;"|safe }} {{ _('Previous Chapter') }}</a></li>
+         title="Previous Chapter - {{ prev.title }}"><i class='icon-fast-backward' style='opacity:0.6;'></i></a></li>
 {%- endif %}
+<li class="divider-vertical"></li>
 {%- if next %}
   <li><a href="{{ next.link|e }}"
-         title='{{ next.title }}'>{{ _('Next Chapter') }} {{ "&raquo;"|safe }}</a></li>
+         title='Next Chapter - {{ next.title }}'><i class='icon-fast-forward' style='opacity:0.6;'></i></a></li>
 {%- endif %}
