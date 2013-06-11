@@ -114,8 +114,7 @@ instructions that all turtles know how to respond to.
 .. admonition:: Complete the rectangle ...
 
     Modify the program by adding the commands necessary to have *alex* complete the
-       rectangle.
-
+    rectangle.
 
 
 
@@ -957,7 +956,11 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode::  q1_answer
+                :nocanvas:
+
+                for i in range(1000):
+                    print("We like Python's turtles!")
 
         .. tab:: Discussion 
 
@@ -987,7 +990,11 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_answer
+                
+                months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'
+                for month in months:
+                    print("One of the months of the year is", month)
 
         .. tab:: Discussion 
 
@@ -1021,8 +1028,63 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. code:: python
+                
+                # draw a equilateral triangle
+                import turtle
 
+                wn = turtle.Screen()
+                norvig = turtle.Turtle()
+
+                for i in range(3):
+                    norvig.forward(100)
+                    norvig.left(360/3)
+
+                wn.exitonclick()
+
+
+            .. code:: python
+
+                # draw a square    
+                import turtle
+
+                wn = turtle.Screen()
+                kurzweil = turtle.Turtle()
+
+                for i in range(4):
+                    kurzweil.forward(100)
+                    kurzweil.left(360/4)
+
+                wn.exitonclick()
+
+            .. code:: python
+
+                # draw a hexagon    
+                import turtle
+
+                wn = turtle.Screen()
+                dijkstra = turtle.Turtle()
+
+                for i in range(6):
+                    dijkstra.forward(100)
+                    dijkstra.left(360/6)
+
+                wn.exitonclick()
+
+            .. code:: python
+
+                # draw an octogon    
+                import turtle
+
+                wn = turtle.Screen()
+                knuth = turtle.Turtle()
+
+                for i in range(8):
+                    knuth.forward(75)
+                    knuth.left(360/8)
+
+                wn.exitonclick()
+                
         .. tab:: Discussion 
 
             .. disqus::
@@ -1093,8 +1155,16 @@ Exercises
            .. actex:: ex_3_9
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
+
+            .. activecode:: q9_answer
+                
+                import turtle
+
+                turing = turtle.Turtle()
+
+                for i in range(5):
+                    turing.forward(110)
+                    turing.left(216)
 
         .. tab:: Discussion 
 
@@ -1122,7 +1192,18 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q11_answer
+
+                import turtle
+
+                tanenbaum = turtle.Turtle()
+
+                tanenbaum.hideturtle()
+                tanenbaum.speed(20)
+
+                for i in range(350):
+                    tanenbaum.forward(i)
+                    tanenbaum.right(98)
 
         .. tab:: Discussion 
 
