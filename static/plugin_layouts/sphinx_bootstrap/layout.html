@@ -45,7 +45,7 @@
           <span class="icon-bar"></span>
         </button>
 
-        <div class="nav-collapse">
+        <div class="nav-collapse collapse">
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             
@@ -134,7 +134,6 @@
             {% endblock %}
             {% block sidebarrel %}
               {% include "relations.html" %}
-              <li class="divider-vertical"></li>
             {% endblock %}
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
