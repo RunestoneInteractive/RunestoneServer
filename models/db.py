@@ -64,6 +64,17 @@ if db(db.courses.id > 0).isempty():
 
 
 ########################################
+
+class COURSE_ID_VALIDATOR:
+    def __init__(self, error_message='Unknown course name. Please see your instructor.'):
+        self.e = error_message
+
+    def __call__(self, value):
+        if db(db.courses.course_id == value).select():
+            return (db(db.courses.course_id == value).select()[0].id, None)
+        return (value, self.e)
+
+
 db.define_table('auth_user',
     Field('username', type='string',
           label=T('Username')),
@@ -89,9 +100,8 @@ db.define_table('auth_user',
     Field('registration_id',default='',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
-      required=True,
-      requires=IS_IN_DB(db,db.courses.id,'%(course_id)s'),
-      widget=SQLFORM.widgets.options.widget   ),
+          required=True,
+          requires=[COURSE_ID_VALIDATOR()]),
     format='%(username)s',
     migrate=settings.migrate)
 
