@@ -99,7 +99,7 @@ Example:
 
         TEMPLATE = '''
         %(qnumber)s: %(instructions)s
-        <div>
+        <div class='parsons alert'>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
