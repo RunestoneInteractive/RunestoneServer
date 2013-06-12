@@ -291,6 +291,20 @@ Any of the existing question types can be placed in a tabbed exhibit-style quest
 We are working on additional question types as well.  Give us your feedback on our `Facebook page <http://www.facebook.com/RunestoneInteractive>`_.
 
 
+DOM Access
+----------
+
+Python programs written in activecode windows can now import the ``document`` module.  This document module allows access to basic elements of the web page, including the new text entry box called **text1** :textfield:`text1:example input:20` like this one.  Try running the program, then change the value in the text entry box and run it again.
+
+.. activecode:: tftest1
+
+   import document
+
+   t = document.getElementById('text1')
+   print('value = ', t.value)
+
+
+
 What To Do Now
 --------------
 
