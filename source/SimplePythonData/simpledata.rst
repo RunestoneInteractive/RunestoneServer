@@ -1355,9 +1355,11 @@ Exercises
                 time = hours % 24
 
                 if time > 12:
+                    # time is after noon (pm), so subtract 12 to get the time in 12-hour format
                     end_time = time - 12
                     print ("The time after waiting", waiting_time_string, "hours is:", end_time, "pm")                        
                 else:
+                    # the time is before noon (am)
                     end_time = time
                     print ("The time after waiting", waiting_time_string, "hours is:", end_time, "am")                        
 
@@ -1535,6 +1537,7 @@ Exercises
 
                 deg_c = int(input("What is the temperature in Celsius? "))
 
+                # formula to convert C to F is: (degrees Celcius) times (9/5) plus (32)
                 deg_f = deg_c * (9 / 5) + 32
 
                 print (str(deg_c) + " degrees Celsius is " + str(deg_f) + " degrees Farenheit.")

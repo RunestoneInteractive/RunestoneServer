@@ -1038,6 +1038,9 @@ Exercises
 
                 for i in range(3):
                     norvig.forward(100)
+
+                    # the angle of each vertice of a regular polygon 
+                    # is 360 divided by the number of sides
                     norvig.left(360/3)
 
                 wn.exitonclick()
@@ -1131,9 +1134,13 @@ Exercises
                 # now draw the drunk pirate's path
                 lovelace.pendown()
                 for angle in [160, -43, 270, -97, -43, 200, -940, 17, -86]:
+                    
+                    # we use .left() so that positive angles are counter-clockwise
+                    # and negative angles are clockwise
                     lovelace.left(angle)
                     lovelace.forward(100)
 
+                # the .heading() method gives us the turtle's current heading in degrees
                 print("The pirate's final heading was", lovelace.heading())
 
                 wn.exitonclick()
@@ -1269,7 +1276,7 @@ Exercises
                     babbage.forward(65)
                     babbage.stamp()
                     
-                    # go back to the middle
+                    # go back to the middle and turn back around
                     babbage.right(180)
                     babbage.forward(65)
                     babbage.right(180)
