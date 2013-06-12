@@ -1030,7 +1030,7 @@ Exercises
             
             .. code:: python
                 
-                # draw a equilateral triangle
+                # draw an equilateral triangle
                 import turtle
 
                 wn = turtle.Screen()
