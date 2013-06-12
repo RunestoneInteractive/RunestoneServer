@@ -18,6 +18,7 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
+from textfield import *
 import json
 import random
 
@@ -28,6 +29,8 @@ def setup(app):
     app.add_directive('mcmfrandom',MChoiceRandomMF)
     app.add_directive('addbutton',AddButton)
     app.add_directive('qnum',QuestionNumber)    
+    app.add_role('textfield',textfield_role)
+
 
     app.add_javascript('assess.js')
 
@@ -67,6 +70,7 @@ class AddButton(Directive):
         
         res += TEMPLATE_END % self.options
         return [nodes.raw('',res , format='html')]
+
 
 class QuestionNumber(Directive):
     """Set Parameters for Question Numbering"""
