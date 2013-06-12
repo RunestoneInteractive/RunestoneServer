@@ -109,8 +109,8 @@ var checkMe = function(divid, expected, feedback) {
 	logBookEvent({'event':'assses', 'act':answerInfo, 'div_id':divid});
 };
 
-var checkFIB = function(divid, expected, feedback, casi) {
-  var given = document.forms[divid+"_form"].elements.blank.value;
+var checkFIB = function(divid, blankid, expected, feedback, casi) {
+  var given = document.getElementById(blankid).value;
   // update number of trials??
   // log this to the db
   modifiers = ''

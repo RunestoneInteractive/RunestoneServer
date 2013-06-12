@@ -199,12 +199,15 @@ correct number as well as the feedback for each.
 
    Which colors might be found in a rainbow? (choose all that are correct)
 
+
 Another type of question allows you as the instructor to ask for a value.  You can test for the value using Pythons regular expressions.  For example:
 
 .. fillintheblank:: baseconvert1
    :correct: \\b31\\b
+   :blankid: baseconvert1_ans1
 
-   What is value of 25 expressed as an octal number (base 8) ___
+   What is value of 25 expressed as an octal number (base 8) :textfield:`baseconvert1_ans1::mini`
+
 
 And finally here is a way of giving your students some simple programming problems where the code is already there for them but not indented or in the correct order.  Use drag-and-drop to get everthing right.
 
@@ -217,6 +220,7 @@ And finally here is a way of giving your students some simple programming proble
    x = 0
    for i in range(10)
       x = x + 1
+
 
 
 Here is a different sort of codelens visualization.  Some codelens blocks can have
@@ -294,7 +298,7 @@ We are working on additional question types as well.  Give us your feedback on o
 DOM Access
 ----------
 
-Python programs written in activecode windows can now import the ``document`` module.  This document module allows access to basic elements of the web page, including the new text entry box called **text1** :textfield:`text1:example input:20` like this one.  Try running the program, then change the value in the text entry box and run it again.
+Python programs written in activecode windows can now import the ``document`` module.  This document module allows access to basic elements of the web page, including the new text entry box called **text1** :textfield:`text1:example input:large` like this one.  Try running the program, then change the value in the text entry box and run it again.
 
 .. activecode:: tftest1
 

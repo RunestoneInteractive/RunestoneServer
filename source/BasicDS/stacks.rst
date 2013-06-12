@@ -683,19 +683,22 @@ resulting string.
 
    .. fillintheblank:: baseconvert1
       :correct: \\b31\\b
+      :blankid: bcblank1
 
-      What is value of 25 expressed as an octal number (base 8) ___
+      What is value of 25 expressed as an octal number :textfield:`bcblank1::mini`
 
    .. fillintheblank:: baseconvert2
       :correct: \\b100\\b
+      :blankid: bcblank2
 
-      What is value of 256 expressed as a hexidecimal number (base 16) ___
+      What is value of 256 expressed as a hexidecimal number :textfield:`bcblank2::mini`
 
    .. fillintheblank:: baseconvert3
       :correct: \\b10\\b
       :feedback1: ('.*', 'You may need to modify the baseConverter function, or simply find a pattern in the conversion of bases.')
+      :blankid: bcblank3
 
-      What is value of 26 expressed in base 26 ___
+      What is value of 26 expressed in base 26 :textfield:`bcblank3::mini`
 
 
 .. video:: video_Stack2
@@ -1185,20 +1188,23 @@ this as an exercise at the end of the chapter.
       :correct: \\b10\\s+3\\s+5\\s*\\*\\s*16\\s+4\\s*-\\s*/\\s*\\+
       :feedback1:  ('10.*3.*5.*16.*4', 'The numbers appear to be in the correct order check your operators')
       :feedback2: ('.*', 'Remember the numbers will be in the same order as the original equation')
+      :blankid: pfblank1
 
-      Without using the activecode infixToPostfix function, convert the following expression to postfix <br> 10 + 3 * 5 / (16 - 4) ___
+      Without using the activecode infixToPostfix function, convert the following expression to postfix  ``10 + 3 * 5 / (16 - 4)`` :textfield:`pfblank1::xlarge`
 
    .. fillintheblank:: postfix2
       :correct: \\b9\\b
       :feedback1: ('.*', "Remember to push each intermediate result back on the stack" )
+      :blankid: pfblank2
 
-      17 10 + 3 * 9 / == ___
+      ``17 10 + 3 * 9 / ==`` :textfield:`pfblank2::mini`
 
    .. fillintheblank:: postfix3
       :correct: 5\\s+3\\s+4\\s+2\\s*-\\s*\\^\\s*\\*
       :feedback1: ('.*', 'Hint: You only need to add one line to the function!!')
+      :blankid: pfblank3
 
-      Modify the infixToPostfix function so that it can convert the following expression:  5 * 3 ^ (4 - 2)   Paste the answer here: ___
+      Modify the infixToPostfix function so that it can convert the following expression:  ``5 * 3 ^ (4 - 2)``   Paste the answer here: :textfield:`pfblank3::large`
 
 
 .. video:: video_Stack3
