@@ -3,7 +3,33 @@
 import json
 
 
-def user(): return dict(form=auth())
+def user(): 
+    form = auth()
+    
+    env = request['wsgi']['environ']
+
+    # parse the referring URL to see if we can prepopulate the course_id field in 
+    # the registration form
+    if 'HTTP_REFERER' in env:
+        ref = env['HTTP_REFERER']
+
+        if '_next' in ref:
+            ref = ref.split("_next")
+            url_parts = ref[1].split("/")
+            
+            for i in range(len(url_parts)):
+                if "static" in url_parts[i]:
+                    try:
+                        course_id = url_parts[i+1]
+                        form.vars.course_id = course_id
+                        form.process()
+                        break
+                    except KeyError:
+                        # I have no idea if this case of a malformed URL will ever happen
+                        break
+
+    return dict(form=form)
+
 def download(): return response.download(request,db)
 def call(): return service()
 ### end requires

@@ -65,7 +65,7 @@ if db(db.courses.id > 0).isempty():
 
 ########################################
 
-class COURSE_ID_VALIDATOR:
+class IS_COURSE_ID:
     def __init__(self, error_message='Unknown course name. Please see your instructor.'):
         self.e = error_message
 
@@ -101,7 +101,7 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
           required=True,
-          requires=[COURSE_ID_VALIDATOR()]),
+          requires=[IS_COURSE_ID()]),
     format='%(username)s',
     migrate=settings.migrate)
 
