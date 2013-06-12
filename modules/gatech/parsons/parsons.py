@@ -98,8 +98,8 @@ Example:
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
-        %(qnumber)s: %(instructions)s
         <div class='parsons alert'>
+        %(qnumber)s: %(instructions)s<br /><br />
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
