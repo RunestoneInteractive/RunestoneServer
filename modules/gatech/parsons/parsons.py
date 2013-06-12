@@ -103,10 +103,11 @@ Example:
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
-	<div style="clear:left;"></div>
+    	<div style="clear:left;"></div>
         <div id="parsons-message-%(unique_id)s" style="background: pink; padding: 1em;"></div>
-        <a href="#" id="newInstanceLink-%(unique_id)s">Reset</a>
-        <a href="#" id="feedbackLink-%(unique_id)s">Get feedback</a>
+        
+        <button id="newInstanceLink-%(unique_id)s" class='btn btn-small btn-success'>Reset</button>
+        <button id="feedbackLink-%(unique_id)s" class='btn btn-small'>Get Feedback</button>
         </div>
 
     <script>
