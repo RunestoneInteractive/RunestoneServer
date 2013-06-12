@@ -73,7 +73,11 @@
                 <i class="icon-search" style='opacity:0.6;'></i>
               </a>
               <ul class='dropdown-menu'>
-                <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
+                {% if 'overview' in course_id: %}
+                    <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li> 
+                {% else: %}
+                    <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
+                {% endif %}
                 <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
                 <li class="divider"></li>
                 <li>  
