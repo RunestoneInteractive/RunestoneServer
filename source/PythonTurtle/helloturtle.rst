@@ -1117,7 +1117,26 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+                
+                import turtle
+
+                wn = turtle.Screen()
+                lovelace = turtle.Turtle()
+
+                # move the turtle foward a little so that the whole path fits on the screen
+                lovelace.penup()
+                lovelace.forward(60)
+
+                # now draw the drunk pirate's path
+                lovelace.pendown()
+                for angle in [160, -43, 270, -97, -43, 200, -940, 17, -86]:
+                    lovelace.left(angle)
+                    lovelace.forward(100)
+
+                print("The pirate's final heading was", lovelace.heading())
+
+                wn.exitonclick()
 
         .. tab:: Discussion 
 
@@ -1222,14 +1241,44 @@ Exercises
     .. tabbed:: q13
 
         .. tab:: Question
+            
+            A sprite is a simple spider shaped thing with n legs coming out from a center 
+            point. The angle between each leg is 360/n degrees.
 
-            Write a program to draw a Sprite where the number of legs is provided by the user.
+            Write a program to draw a sprite where the number of legs is provided by the user.
                    
             .. actex:: ex_3_13
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q13_answer
+                
+                import turtle
+
+                wn = turtle.Screen()
+
+                babbage = turtle.Turtle()
+                babbage.shape("triangle")
+
+                n = int(input("How many legs should this sprite have? "))
+                angle = 360/n
+
+                for i in range(n):
+                    # draw the leg
+                    babbage.right(angle)
+                    babbage.forward(65)
+                    babbage.stamp()
+                    
+                    # go back to the middle
+                    babbage.right(180)
+                    babbage.forward(65)
+                    babbage.right(180)
+
+                babbage.shape("circle")
+
+                wn.exitonclick()
+    
+        
 
         .. tab:: Discussion 
 
