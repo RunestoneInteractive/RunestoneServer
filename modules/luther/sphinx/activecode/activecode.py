@@ -19,7 +19,7 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-
+import json
 
 def setup(app):
     app.add_directive('activecode',ActiveCode)
@@ -48,7 +48,7 @@ START = '''
 <div id="%(divid)s" >
 '''
 
-# todo:  add parameter to runit to accept a suffix
+
 EDIT1 = '''
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s">
@@ -80,6 +80,8 @@ CANVAS = '''
 <canvas id="%(divid)s_canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
 </div>
 '''
+
+SUFF = '''<pre id="%(divid)s_suffix" style="display:none">%(suffix)s</pre>'''
 
 PRE = '''
 <pre id="%(divid)s_pre" class="active_out">
@@ -135,6 +137,8 @@ def visit_ac_node(self,node):
         node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
         res += UNHIDE
+    if 'suffix' in node.ac_components:
+        res += SUFF
     if 'nopre' not in node.ac_components:
         res += PRE
     if 'autorun' in node.ac_components:
@@ -189,14 +193,21 @@ class ActiveCode(Directive):
         env.activecodecounter += 1
 
         self.options['divid'] = self.arguments[0]
-        # split on ===== in content here
+
         if self.content:
-            source = "\n".join(self.content)
+            if '====' in self.content:
+                idx = self.content.index('====')
+                source = "\n".join(self.content[:idx])
+                suffix = "\n".join(self.content[idx+1:])
+            else:
+                source = "\n".join(self.content)
+                suffix = "\n"
         else:
             source = '\n'
+            suffix = '\n'
 
         self.options['initialcode'] = source
-
+        self.options['suffix'] = suffix
         str=source.replace("\n","*nline*")
         str0=str.replace("\"","*doubleq*")
         str1=str0.replace("(","*open*")
