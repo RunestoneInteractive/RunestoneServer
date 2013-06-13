@@ -12,9 +12,9 @@
     <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
 
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap-responsive.min.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap-responsive.min.css')}}" />
 
     <script type="text/javascript">
       var eBookConfig = {}
@@ -46,6 +46,9 @@
 
 <!-- Begin navbar -->
 <div id="navbar" class="navbar navbar-fixed-top">
+{{ if response.flash: }}
+    <div class="flash">{{=response.flash or ''}}</div>
+{{ pass }}
 <div class="navbar-inner">
   <div class="container">
     <a class="brand" href="/">Runestone Interactive</a>
@@ -182,7 +185,6 @@
 
 <!-- begin body content -->
   <div class="container">
-  <!-- <div class="flash">{{=response.flash or ''}}</div>-->
     {{include}}
   </div>
 <!-- end body content -->
