@@ -379,14 +379,12 @@ function createActiveCode(divid,suppliedSource,sid) {
             loadButton.setAttribute('value','Load');
             loadButton.className = loadButton.className + ' btn btn-small disabled';
             loadButton.setAttribute('data-toggle','tooltip');
-            loadButton.setAttribute('title','Register or log in load your saved code');
+            loadButton.setAttribute('title','Register or log in to load your saved code');
             edNode.appendChild(loadButton);
             $jqTheme(loadButton).tooltip( {
                 'selector': '',
                 'placement': 'bottom'
             });
-            
-
         }
     }
     edNode.appendChild(document.createElement('br'));
@@ -413,6 +411,21 @@ function createActiveCode(divid,suppliedSource,sid) {
    // $('#'+divid).modal({minHeight:700, minWidth: 410, maxWidth:450, containerCss:{width:420, height:750}});
 }
 
+function disableAcOpt() {
+    $jqTheme('button.ac_opt').each ( function(index, value) {
+        value.className = value.className + ' disabled';
+        $jqTheme(value).attr('data-toggle', 'tooltip');
+        if ($jqTheme(value).text() == 'Save') {
+            $jqTheme(value).attr('title', 'Register or log in to save your code');
+        } else if ($jqTheme(value).text() == 'Load') {
+            $jqTheme(value).attr('title', 'Register or log in to load your saved code');
+        }
+        $jqTheme(value).tooltip( {
+            'selector': '',
+            'placement': 'bottom'
+        });
+    });
+}
 
 function comment(blockid) {
     $.modal('<iframe width="600" height="400" src="/getcomment?id='+blockid+'" style="background-color: white">', {
@@ -443,7 +456,7 @@ function gotUser(data, status, whatever) {
             if (confirm("Error: " + err.toString() + "Please report this error!  Click OK to continue without logging in.  Cancel to retry.")) {
                 caughtErr = true;
                 mess = "Not logged in";
-	            $('button.ac_opt').hide();
+	            disableAcOpt();
 	            $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
             } else {
                 window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
@@ -455,7 +468,7 @@ function gotUser(data, status, whatever) {
             window.location.href = eBookConfig.app + '/default/user/login?_next=' + window.location.href
         } else {
             mess = "Not logged in";
-            $('button.ac_opt').hide();
+            disableAcOpt();
             $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
         }
     } else {
@@ -513,7 +526,7 @@ function addUserToFooter() {
     } else {
         x = $(".footer").html();
         $(".footer").html(x + 'not logged in');
-        $('button.ac_opt').hide();
+        disableAcOpt();
         logBookEvent({'event':'page', 'act':'view', 'div_id':window.location.pathname})
     }
 }
