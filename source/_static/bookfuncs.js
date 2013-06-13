@@ -345,6 +345,7 @@ function createActiveCode(divid,suppliedSource,sid) {
     runButton.className = runButton.className + ' btn btn-small btn-success';
     runButton.onclick = myRun;
     edNode.appendChild(runButton);
+    edNode.appendChild(document.createElement('br'));
     if (sid === undefined) { // We don't need load and save buttons for grading
         if(isLoggedIn() == true) {
             var saveButton = document.createElement("input");
@@ -360,6 +361,32 @@ function createActiveCode(divid,suppliedSource,sid) {
             loadButton.className = loadButton.className + ' btn btn-small';
             loadButton.onclick = myLoad;
             edNode.appendChild(loadButton);
+        } else {
+            var saveButton = document.createElement("input");
+            saveButton.setAttribute('type','button');
+            saveButton.setAttribute('value','Save');
+            saveButton.className = saveButton.className + ' btn btn-small disabled';
+            saveButton.setAttribute('data-toggle','tooltip');
+            saveButton.setAttribute('title','Register or log in to save your code');
+            edNode.appendChild(saveButton);
+            $jqTheme(saveButton).tooltip( {
+                'selector': '',
+                'placement': 'bottom'
+            });
+
+            var loadButton = document.createElement("input");
+            loadButton.setAttribute('type','button');
+            loadButton.setAttribute('value','Load');
+            loadButton.className = loadButton.className + ' btn btn-small disabled';
+            loadButton.setAttribute('data-toggle','tooltip');
+            loadButton.setAttribute('title','Register or log in load your saved code');
+            edNode.appendChild(loadButton);
+            $jqTheme(loadButton).tooltip( {
+                'selector': '',
+                'placement': 'bottom'
+            });
+            
+
         }
     }
     edNode.appendChild(document.createElement('br'));
