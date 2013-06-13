@@ -383,7 +383,7 @@ var resetPage = function(divid){
 
 var checkRadio = function(divid){
     
-    var qnum=divid.substring(13,divid.length);
+    var qnum=divid;
     var len=localStorage.length;
     
         //retrieving data from local storage
@@ -396,7 +396,7 @@ var checkRadio = function(divid){
                 {
                     var ex=localStorage.getItem(key);
                     var arr=ex.split(",");
-                    var str="test_question"+key+"_opt_"+arr[0];
+                    var str=key+"_opt_"+arr[0];
                     $("#"+str).attr("checked","true");
                 }
         }
@@ -418,7 +418,7 @@ var checkMCMFStorage = function(divid, expected, feedbackArray) {
     var storage_arr=new Array();
     storage_arr.push(given);
     storage_arr.push(expected);
-    localStorage.setItem(divid.substring(13,divid.length),  storage_arr.join(","));
+    localStorage.setItem(divid, storage_arr.join(","));
     
     // log the answer
   var answerInfo = 'answer:' + given + ":" + (given == expected ? 'correct' : 'no');
