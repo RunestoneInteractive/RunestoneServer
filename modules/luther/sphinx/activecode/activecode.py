@@ -253,23 +253,14 @@ EXEDIT = '''
 <br />
 '''
 
-class ActiveExercise(Directive):
+class ActiveExercise(ActiveCode):
     required_arguments = 1
     optional_arguments = 0
     has_content = True
 
     def run(self):
-        self.options['divid'] = self.arguments[0]
-        if self.content:
-            source = "\\n".join(self.content)
-        else:
-            source = ''
-        self.options['source'] = source.replace('"','%22').replace("'",'%27')
-
-        res = EXEDIT
-
-        return [nodes.raw('',res % self.options,format='html')]
-
+        self.options['hidecode'] = True
+        return super(ActiveExercise,self).run()
 
 
 if __name__ == '__main__':
