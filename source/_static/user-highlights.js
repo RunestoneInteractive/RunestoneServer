@@ -26,9 +26,8 @@ function enableUserHighlights(){
 		
 		var lastPositionVal = $.getUrlVar('lastPosition');
 		if ( typeof lastPositionVal !== "undefined"){
-			$("body").append('<img src="../_static/last-point.png" style="position:absolute; padding-top:30px; left: 10px; top: '+parseInt(lastPositionVal)+'px;"/>');
+			$("body").append('<img src="../_static/last-point.png" style="position:absolute; padding-top:40px; left: 10px; top: '+parseInt(lastPositionVal)+'px;"/>');
 			$("html, body").animate({scrollTop: parseInt(lastPositionVal)}, 1000);
-			//$("html, body").scrollTop(parseInt(lastPositionVal) -20);
 		}
 		
 		//Add the highlights on the page
@@ -38,20 +37,15 @@ function enableUserHighlights(){
 		$(".sphinxsidebarwrapper").append('<div id="highlightbox"><h3>My Highlights</h3><ul></ul></div>');
 		updateHighlightBox();
 		
-		urlList = $("div.sphinxsidebar ul:first a");
-			$(urlList).each(function(index) {
-				$(this).bind('click', function() {
-					//processPageState($(this).attr("href"));
-				});
-			});
-		processPageState();
+        var sec = $("body .section");
+        sec.splice(0,1);
+        sec.each(function(index) {
+            $(this).waypoint(function(direction) {
+                processPageState($(this));
+            });
+        });
 	
 		$("body").append('<ul class="dropdown-menu" id="highlight-option-box" style="display:none;"><li><a href="javascript:void(0);" id="option-highlight-text" style="display:block;">Highlight</a></li></ul>');
-		
-		$(window).on('unload', function(){
-		  processPageUnloadState();
-		});
-		
 		
 		$('body .section').on("mouseup", function(evt) {
 			sel = rangy.getSelection();
@@ -161,7 +155,7 @@ function enableUserHighlights(){
 			if (data !="None"){
 				lastPageData = $.parseJSON(data);
 				if (lastPageData[0].lastPageChapter != null){
-					$("body>.section .section:first").before('<div id="jump-to-chapter" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
+                    $("body .section .section:first").before('<div id="jump-to-chapter" class="alert" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
 				}
 			}
 		});
@@ -215,7 +209,7 @@ function saveHighlight(parentSelectorClass,serializedRange,saveMethod) {
 	var newId;
 	var currSection = window.location.pathname+window.location.hash;
     var data = {parentClass:parentSelectorClass, range:serializedRange, method:saveMethod, page:currPage, pageSection: currSection, course:eBookConfig.course};
-    $(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for"+settings.url)});
+    $(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for "+settings.url)});
     jQuery.ajax({url: eBookConfig.ajaxURL+'savehighlight',data: data, async: false}).done(function(returndata) {
 		newId = returndata;
 	});
@@ -290,41 +284,39 @@ function restoreSelection() {
 	});
 }
 
-function processPageState(currentLink){
-	/*Get the chapter name and subchaptername by matching the active link with the sidebar links. Store in the database for last visited page*/
-	if (!currentLink){
-		if (location.hash == "")
-			currentLink = "#";
-		else
-			currentLink = location.hash; 
-	}
+function processPageState(subChapterSectionElement){
+	/*Get the chapter name and subchaptername from the Waypoints jQuery plugin. Store in the database for last visited page*/
+	
 	var chapterName, subChapterName;
 	chapterName = $("h1:first").text();
-	chapterName = chapterName.substring(0,chapterName.length -1);
+	chapterName = chapterName.substring(0,chapterName.length -1); // strip out permalink character
 	
-	$(urlList).each(function(index) {
-		if($(this).attr("href") == currentLink){ //matches current opened subchapter
-			subChapterName = $(this).html();
-		}
-	});
+    subChapterName = subChapterSectionElement.find("h2").text();
+    subChapterName = subChapterName.substring(0, subChapterName.length -1); // strip out permalink character
+
+	subChapterId = subChapterSectionElement.attr("id");
 	
+    var currentLink = subChapterId
+
 	/*Log last page visited*/
 	var currentPathname = window.location.pathname;
 	if (currentPathname.indexOf("?") !== -1)
 		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
 	var data = {lastPageUrl:currentPathname, lastPageHash: currentLink, lastPageChapter:chapterName, lastPageSubchapter:subChapterName, lastPageScrollLocation: $(window).scrollTop(), course:eBookConfig.course};
-	$(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for"+settings.url)});
+	$(document).ajaxError( function(e,jqhxr,settings,exception) {
+        alert("Request Failed for "+settings.url)
+    } );
 	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data});
 }
 
-function processPageUnloadState(){
+/*function processPageUnloadState(){
 	var chapterName, subChapterName;
 	var currentLink = "";
 	
 	chapterName = $("h1:first").text();
 	chapterName = chapterName.substring(0,chapterName.length -1);
 	
-	console.log("The current scroolled position is "+$(window).scrollTop());
+	console.log("The current scrolled position is "+$(window).scrollTop());
 	$(urlList).each(function(index){
 		var currentID = $(urlList[index]).attr("href");
 		if ($(currentID).position()){
@@ -340,13 +332,15 @@ function processPageUnloadState(){
 	});
 
 	/*Log last page visited*/
-	var currentPathname = window.location.pathname;
+/*	var currentPathname = window.location.pathname;
 	if (currentPathname.indexOf("?") !== -1)
 		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
 	var data = {lastPageUrl:currentPathname, lastPageHash: currentLink, lastPageChapter:chapterName, lastPageSubchapter:subChapterName, lastPageScrollLocation: $(window).scrollTop(), course:eBookConfig.course};
-	$(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for"+settings.url)});
+	$(document).ajaxError( function(e,jqhxr,settings,exception) {
+        alert("Request Failed for "+settings.url)
+    } );
 	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data, async: false});
-}
+}*/
 
 $.extend({
   getUrlVars: function(){
