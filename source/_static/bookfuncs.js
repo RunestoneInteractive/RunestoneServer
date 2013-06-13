@@ -137,7 +137,6 @@ function runit(myDiv,theButton,includes,suffix) {
         suffix = spre.innerText;
     }
     prog = prog + '\n' + suffix;
-    console.log(prog)
 
     var mypre = document.getElementById(myDiv + "_pre");
     if (mypre) mypre.innerHTML = '';
