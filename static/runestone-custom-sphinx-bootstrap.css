@@ -120,3 +120,33 @@ label {
 .loggedinuser {
     font-weight:bold;
 }
+
+/* from web2py.css */
+div.flash {
+    font-weight: bold;
+    position: fixed;
+    padding: 10px;
+    top: 55px;
+    right: 45px;
+    /*min-width: 280px;*/
+    opacity: 0.95;
+    margin: 0px 0px 10px 10px;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    -o-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    background-image: -webkit-linear-gradient(top,#222,#000);
+    background-image: -o-linear-gradient(top,#222,#000);
+    background-image: -moz-linear-gradient(90deg, #222, #000);
+    background-image: linear-gradient(top,#222,#000);
+    background-repeat: repeat-x;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    z-index: 2000;
+}
+
