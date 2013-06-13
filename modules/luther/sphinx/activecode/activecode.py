@@ -48,6 +48,7 @@ START = '''
 <div id="%(divid)s" >
 '''
 
+# todo:  add parameter to runit to accept a suffix
 EDIT1 = '''
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s">
@@ -188,6 +189,7 @@ class ActiveCode(Directive):
         env.activecodecounter += 1
 
         self.options['divid'] = self.arguments[0]
+        # split on ===== in content here
         if self.content:
             source = "\n".join(self.content)
         else:
