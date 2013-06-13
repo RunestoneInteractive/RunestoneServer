@@ -107,7 +107,7 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
 
-function runit(myDiv,theButton,includes) {
+function runit(myDiv,theButton,includes,suffix) {
     //var prog = document.getElementById(myDiv + "_code").value;
 
     $(theButton).attr('disabled','disabled');
@@ -131,6 +131,13 @@ function runit(myDiv,theButton,includes) {
         }
     }
     prog = prog + editor.getValue();
+    var spre = document.getElementById(myDiv+'_suffix');
+    var suffix = '';
+    if (spre) {
+        suffix = spre.innerText;
+    }
+    prog = prog + '\n' + suffix;
+
     var mypre = document.getElementById(myDiv + "_pre");
     if (mypre) mypre.innerHTML = '';
     Sk.canvas = myDiv + "_canvas";
