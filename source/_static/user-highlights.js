@@ -161,7 +161,7 @@ function enableUserHighlights(){
 			if (data !="None"){
 				lastPageData = $.parseJSON(data);
 				if (lastPageData[0].lastPageChapter != null){
-					$("body>.section .section:first").before('<div id="jump-to-chapter" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
+                    $("body .section .section:first").before('<div id="jump-to-chapter" class="alert" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
 				}
 			}
 		});
