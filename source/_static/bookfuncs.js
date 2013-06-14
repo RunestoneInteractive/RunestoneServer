@@ -110,6 +110,7 @@ function builtinRead(x) {
 function runit(myDiv,theButton,includes,suffix) {
     //var prog = document.getElementById(myDiv + "_code").value;
 
+    Sk.divid = myDiv
     $(theButton).attr('disabled','disabled');
     Sk.isTurtleProgram = false;
     if (theButton !== undefined) {

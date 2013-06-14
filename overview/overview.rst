@@ -259,6 +259,69 @@ next line executed.
         print 'x is even'
         y = y - x
 
+Unit Tests for Code
+-------------------
+
+Its nice to be able to have students solve a particular problem by writing some code, its even better if you can give them some feedback and provide some tests for them.  Much of the ``unittest`` module from Python is available in the ``unittestgui`` module for activecode.  Take a look:
+
+.. activecode:: units1
+
+   def add(a,b):
+      return 4
+
+   import unittestgui
+
+   class myTests(unittestgui.unittest):
+
+       def testOne(self):
+           self.assertEqual(add(2,2),4,"A feedback string when the test fails")
+           self.assertAlmostEqual(add(2.0,3.0),5.0,"Your function failed on inputs of 2.0 and 3.0")
+
+   myTests().main()
+
+Before you go on, fix the add function in the activecode box.  The full complement of assertXXX functions is available.  You can see the list `Here <http://docs.python.org/2/library/unittest.html#assert-methods>`_.  Now, for an introductory course exposing the inner workings of the unittest class may lead to more confusion that anything.  But, you can still get the benefit of the unittest module with activecode by placing it in the hidden code at the end.  You can hide the code by placing it after a line that contains ``====``.  The source code for the above example with the unit tests hidden would look like this:
+
+.. sourcecode:: rst
+
+    .. activecode:: units1
+
+       def add(a,b):
+          return 4
+
+       ====
+       import unittestgui
+
+       class myTests(unittestgui.unittest):
+
+           def testOne(self):
+               self.assertEqual(add(2,2),4,"A feedback string when the test fails")
+               self.assertAlmostEqual(add(2.0,3.0),5.0,"Your function failed on inputs of 2.0 and 3.0")
+
+       myTests().main()
+
+**Check Your Understanding**
+
+Fix the following code so that it always correctly adds two numbers.
+
+.. activecode:: units2
+
+   def add(a,b):
+      return 4
+
+   ====
+   import unittestgui
+
+   class myTests(unittestgui.unittest):
+
+       def testOne(self):
+           self.assertEqual(add(2,2),4,"A feedback string when the test fails")
+           self.assertAlmostEqual(add(2.0,3.0),5.0,"Your function failed on inputs of 2.0 and 3.0")
+
+   myTests().main()
+
+
+
+
 Disqus Comment Box
 ------------------
 
