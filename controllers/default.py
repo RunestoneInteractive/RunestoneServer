@@ -5,8 +5,9 @@ import json
 
 def user(): 
     form = auth()
-    
 
+    # this looks horrible but it seems to be the only way to add a CSS class to the submit button
+    form[0][-1][1][0]['_class'] = 'btn btn-small'
 
     # parse the referring URL to see if we can prepopulate the course_id field in 
     # the registration form
@@ -17,16 +18,17 @@ def user():
             url_parts = ref[1].split("/")
         else:
             url_parts = ref.split("/")
-            for i in range(len(url_parts)):
-                if "static" in url_parts[i]:
-                    try:
-                        course_id = url_parts[i+1]
-                        form.vars.course_id = course_id
-                        form.process()
-                        break
-                    except KeyError:
-                        # I have no idea if this case of a malformed URL will ever happen
-                        break
+        
+        for i in range(len(url_parts)):
+            if "static" in url_parts[i]:
+                try:
+                    course_id = url_parts[i+1]
+                    form.vars.course_id = course_id
+                    form.process()
+                    break
+                except KeyError:
+                    # I have no idea if this case of a malformed URL will ever happen
+                    break
     return dict(form=form)
 
 def download(): return response.download(request,db)
