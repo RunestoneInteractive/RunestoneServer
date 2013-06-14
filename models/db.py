@@ -131,6 +131,15 @@ auth.settings.reset_password_requires_verification = True
 ## register with janrain.com, write your domain:api_key in private/janrain.key
 #from gluon.contrib.login_methods.rpx_account import use_janrain
 #use_janrain(auth,filename='private/janrain.key')
+from gluon.contrib.login_methods.rpx_account import RPXAccount
+janrain_form = RPXAccount(request, 
+                          api_key='20cd9290c5a55568548e1deba04a67afc5c263be',
+                          domain='runestoneinteractive',
+                          url='http://localhost:8000/runestone/default/user/login')
+# TODO make url environment-aware
+
+from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm 
+auth.settings.login_form = ExtendedLoginForm(auth, janrain_form)
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example

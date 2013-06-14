@@ -7,7 +7,8 @@ def user():
     form = auth()
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
-    form[0][-1][1][0]['_class'] = 'btn btn-small'
+    form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+
 
     # parse the referring URL to see if we can prepopulate the course_id field in 
     # the registration form
