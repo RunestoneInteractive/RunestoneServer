@@ -101,6 +101,7 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
           required=True,
+          default='0',
           requires=[IS_COURSE_ID()]),
     format='%(username)s',
     migrate=settings.migrate)
@@ -132,14 +133,22 @@ auth.settings.reset_password_requires_verification = True
 #from gluon.contrib.login_methods.rpx_account import use_janrain
 #use_janrain(auth,filename='private/janrain.key')
 from gluon.contrib.login_methods.rpx_account import RPXAccount
+
+if request.is_local:
+    janrain_url = 'http://127.0.0.1:8000/%s/default/user/login' % request.application
+else:
+    janrain_url = 'http://%s:%s/%s/default/user/login' % (request.env.server_name,
+                                                          request.env.server_port,
+                                                          request.application)
+
 janrain_form = RPXAccount(request, 
                           api_key='20cd9290c5a55568548e1deba04a67afc5c263be',
                           domain='runestoneinteractive',
-                          url='http://localhost:8000/runestone/default/user/login')
-# TODO make url environment-aware
+                          url=janrain_url)
 
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm 
 auth.settings.login_form = ExtendedLoginForm(auth, janrain_form)
+
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example

@@ -9,7 +9,6 @@ def user():
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
 
-
     # parse the referring URL to see if we can prepopulate the course_id field in 
     # the registration form
     ref = request.env.http_referer
@@ -25,10 +24,11 @@ def user():
                 try:
                     course_id = url_parts[i+1]
                     form.vars.course_id = course_id
-                    form.process()
+                    #form.process()
                     break
-                except KeyError:
-                    # I have no idea if this case of a malformed URL will ever happen
+                except (KeyError, AttributeError), e:
+                    # Handle a KeyError (malformed URL) or an AttributeError 
+                    # (no form.vars.course_id, i.e. it's a normal login form and not a registration form)
                     break
     return dict(form=form)
 
@@ -39,7 +39,13 @@ def call(): return service()
 @auth.requires_login()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
-    redirect('/%s/static/%s/index.html' % (request.application,course.course_id))
+
+    if not course:
+        # If the login process was handled by Janrain, the user didn't have a chance to choose the course_id
+        # so we redirect them to the profile page to choose one
+        redirect('/%s/default/user/profile' % (request.application))
+    else:
+        redirect('/%s/static/%s/index.html' % (request.application,course.course_id))
 
     # web_support = WebSupport(datadir=settings.sphinx_datadir,
     #                 staticdir=settings.sphinx_staticdir,
