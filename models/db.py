@@ -156,7 +156,7 @@ else:
                                                           request.application)
 
 janrain_form = RPXAccount(request, 
-                          api_key='20cd9290c5a55568548e1deba04a67afc5c263be',
+                          api_key=settings.janrain_api_key, # set in 1.py
                           domain='runestoneinteractive',
                           url=janrain_url)
 
