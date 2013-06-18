@@ -150,3 +150,20 @@ div.flash {
     z-index: 2000;
 }
 
+#web2py_user_form {
+    margin-top: 10px;
+}
+
+#web2py_user_form form {
+    float:left;
+    margin-right: 100px;
+    padding-top: 6px;
+}
+
+#sign_in_text td {
+    font-size: 17px;
+    color: #333;
+    font-family: 'lucida grande',Verdana,sans-serif;
+    padding-bottom: 13px;
+}
+
