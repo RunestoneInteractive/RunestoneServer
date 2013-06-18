@@ -7,7 +7,7 @@ def user():
     form = auth()
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
-    # TODO reenable form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+    form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
 
     # parse the referring URL to see if we can prepopulate the course_id field in 
     # the registration form
@@ -22,23 +22,27 @@ def user():
             
             for i in range(len(url_parts)):
                 if "static" in url_parts[i]:
-                    try:
-                        course_id = url_parts[i+1]
-                        form.vars.course_id = course_id
-                        form.process()
-                        break
-                    except (KeyError, AttributeError), e:
-                        # Handle a KeyError (malformed URL) or an AttributeError 
-                        # (no form.vars.course_id, i.e. it's a normal login form and not a registration form)
-                        break
+                    course_id = url_parts[i+1]
+                    form.vars.course_id = course_id
+                break
+        
+        else: # we can't prepopulate, just set it to empty
+            form.vars.course_id = ''
 
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
-        if form.process().accepted:
-            # for some reason the auth.user session object doesn't automatically update
-            auth.user.update(course_id=form.vars.course_id) 
 
-            redirect(URL('default', 'index'))
+    try:
+        if form.process().accepted:
+            # auth.user session object doesn't automatically update when the DB gets updated
+            auth.user.update(form.vars)
+            auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
+
+            redirect(URL('default','index'))
+    except AttributeError: 
+        # Janrain login form wrapped in the ExtendedLoginForm doesn't have the process() method
+        # (which makes sense because we have no ability to process the Janrain form)
+        pass
 
     return dict(form=form)
 
@@ -49,13 +53,10 @@ def call(): return service()
 @auth.requires_login()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
-
-    print "Auth.user.course_id: " + str(auth.user.course_id)
-    print "Course: " + str(course)
-
+    
     if not course:
-        # If the login process was handled by Janrain, the user didn't have a chance to choose the course_id
-        # so we redirect them to the profile page to choose one
+        # if login was handled by Janrain, user didn't have a chance to choose the course_id;
+        # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
         redirect('/%s/static/%s/index.html' % (request.application,course.course_id))
