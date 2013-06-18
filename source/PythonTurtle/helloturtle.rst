@@ -966,7 +966,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_9858d02024e54ae1b6b50ed8c65a01e6
+                :identifier: f858d02024e54ae1b6b50ed8c65a01e6
 
 
 #. Give three attributes of your cellphone object.  Give three methods of your
@@ -1000,7 +1000,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_b271442ee0864973a023c19f27aeb401
+                :identifier: b271442ee0864973a023c19f27aeb401
 
 
 #. Assume you have the assignment ``xs = [12, 10, 32, 3, 66, 17, 42, 99, 20]``
@@ -1092,7 +1092,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_36e8bc742b89424e82f111ba2d1dd33f
+                :identifier: f36e8bc742b89424e82f111ba2d1dd33f
 
 
 #. .. _drunk_student_problem:
@@ -1149,7 +1149,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_7e34946f59f348f2bfeb3f918eb57b7a
+                :identifier: a7e34946f59f348f2bfeb3f918eb57b7a
 
 
 #. On a piece of scratch paper, trace the following program and show the drawing.  When you are done, press ``run``
@@ -1196,7 +1196,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_611217310057488aab6a34d4b591e753
+                :identifier: c611217310057488aab6a34d4b591e753
 
 
 #. Write a program to draw a face of a clock that looks something like this:
@@ -1235,7 +1235,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_928a562a4f5c41f9892c9bfc4a1d5883
+                :identifier: e928a562a4f5c41f9892c9bfc4a1d5883
 
 
 #. Create a turtle, and assign it to a variable.  When you print its type,
@@ -1291,6 +1291,6 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_65d7e616d2b548f592205dba699cc132
+                :identifier: b65d7e616d2b548f592205dba699cc132
 
 
