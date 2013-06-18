@@ -9,6 +9,10 @@ def user():
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
 
+    # add info text re: using local auth. CSS styled to match text on Janrain form
+    sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
+    form[0][0].insert(0, sign_in_text)
+
     # parse the referring URL to see if we can prepopulate the course_id field in 
     # the registration form
     if 'register' in request.args(0):
