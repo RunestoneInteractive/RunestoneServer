@@ -157,7 +157,7 @@ else:
 
 janrain_form = RPXAccount(request, 
                           api_key=settings.janrain_api_key, # set in 1.py
-                          domain='runestoneinteractive',
+                          domain=settings.janrain_domain, # set in 1.py
                           url=janrain_url)
 
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm 
