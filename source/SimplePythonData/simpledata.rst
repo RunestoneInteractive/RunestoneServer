@@ -1316,7 +1316,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q1disqus
+                :identifier: c0a62044cac248859ce3695b46697ecc
 
 
 2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
@@ -1368,7 +1368,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q3disqus
+                :identifier: a77ed6163c254612b0d649034b261659
 
 
 #. You go on a wonderful holiday
@@ -1419,7 +1419,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q5disqus
+                :identifier: d1a30631e500449481955e02d3761dd3
 
 
 #. Add parenthesis to the expression ``6 * 1 - 2`` to change its value
@@ -1470,7 +1470,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q7disqus
+                :identifier: f14145f85af93420ba0c05fca5d1b4d9a
 
   
 #. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
@@ -1509,7 +1509,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q9disqus
+                :identifier: f69d286cc58943b6aef1d886e279a12b
 
   
 #. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
@@ -1546,7 +1546,7 @@ Exercises
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q11disqus
+                :identifier: c4a929d598ab4c46b484f6abbcec2655
 
   
 #. Write a program that will convert degrees fahrenheit to degrees celsius.
