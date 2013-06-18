@@ -79,7 +79,7 @@ Now before you start web2py its convenient to make runestone the default applica
 Running the Server
 ------------------
 
-You will have to set a few configuration values in the file ``models/1.py``. Copy ``models/1.py.prototype`` to ``models/1.py``. In 1.py, change the database_uri (line 13) to match your actual credentials.
+You will have to set a few configuration values in the file ``models/1.py``. Copy ``models/1.py.prototype`` to ``models/1.py`` and open the newly created 1.py. If you don't wish to use a local SQLite database, change the database_uri (line 13) to match your actual credentials.
 If you wish to use Janrain Engage to provide social network authentication integration, you will also have to set your Janrain API key and domain in 1.py.
 
 Note: If you do *not* wish to use Janrain, you must comment out lines 159 - 163 of ``models/0.db``::
