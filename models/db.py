@@ -147,6 +147,7 @@ auth.settings.reset_password_requires_verification = True
 #from gluon.contrib.login_methods.rpx_account import use_janrain
 #use_janrain(auth,filename='private/janrain.key')
 from gluon.contrib.login_methods.rpx_account import RPXAccount
+from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
 if request.is_local:
     janrain_url = 'http://127.0.0.1:8000/%s/default/user/login' % request.application
@@ -160,9 +161,8 @@ janrain_form = RPXAccount(request,
                           domain=settings.janrain_domain, # set in 1.py
                           url=janrain_url)
 
-from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm 
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form)
-
+auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
+#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
