@@ -54,6 +54,7 @@ auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
 #auth.settings.retrieve_username_captcha	= False
 
+
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
   Field('course_id','string'),
@@ -65,7 +66,18 @@ if db(db.courses.id > 0).isempty():
 
 ########################################
 
+def getCourseNameFromId(courseid):
+    ''' used to compute auth.user.course_name field '''
+    if courseid == 0:
+        return ''
+    else:
+        q = db.courses.id == courseid
+        course_name = db(q).select()[0].course_id
+        return course_name
+
 class IS_COURSE_ID:
+    ''' used to validate that a course name entered (e.g. devcourse) corresponds to a 
+        valid course ID (i.e. db.courses.id) '''
     def __init__(self, error_message='Unknown course name. Please see your instructor.'):
         self.e = error_message
 
@@ -101,8 +113,8 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
           required=True,
-          default='0',
-          requires=[IS_COURSE_ID()]),
+          default=0),
+    Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
     format='%(username)s',
     migrate=settings.migrate)
 
@@ -114,6 +126,8 @@ db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
                                IS_NOT_IN_DB(db, db.auth_user.email))
+db.auth_user.course_id.requires = IS_COURSE_ID()
+
 auth.define_tables(migrate=settings.migrate)
 
 
