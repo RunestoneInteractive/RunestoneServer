@@ -160,7 +160,6 @@ janrain_form = RPXAccount(request,
                           api_key=settings.janrain_api_key, # set in 1.py
                           domain=settings.janrain_domain, # set in 1.py
                           url=janrain_url)
-
 auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
 #auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
 
