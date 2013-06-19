@@ -1651,7 +1651,7 @@ Exercises
 
         .. tab:: Question
 
-            Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and
+            Rewrite the function ``sumTo(n)`` that returns the sum of all integer numbers up to and
             including `n`.   This time use the accumulator pattern.
 
             .. actex:: ex_5_13
@@ -1672,7 +1672,19 @@ Exercises
 
             .. activecode:: q13_answer
 
-                import turtle
+                from test import testEqual
+
+                def sumTo(n):
+                    sum = 0
+                    for i in range(1,n+1):
+                        sum = sum + i
+                    return sum
+
+                # Now lets see how well this works
+                t = sumTo(0)
+                testEqual(t,0)
+                testEqual(sumTo(10),55)
+                testEqual(sumTo(1),1)
 
         .. tab:: Discussion
 
@@ -1681,7 +1693,7 @@ Exercises
                 :identifier: eda665389fda49a584b128cc30515595
 
 
-#.  Write a function called `mySqrt` that will approximate the square root of a number, call it n, by using
+#.  Write a function called ``mySqrt`` that will approximate the square root of a number, call it n, by using
     Newton's algorithm.
     Newton's approach is an iterative guessing algorithm where the initial guess is n/2 and each subsequent guess
     is computed using   the formula:  newguess = (1/2) * (oldguess + (n/oldguess)).
@@ -1695,7 +1707,7 @@ Exercises
 
         .. tab:: Question
 
-            Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Liebniz approximation
+            Write a function called ``myPi`` that will return an approximation of PI (3.14159...).  Use the Leibniz approximation
             as described in class.
 
             .. actex:: ex_5_15
@@ -1703,7 +1715,24 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q15 answer
+
+                def myPi(iters):
+                    ''' Calculate an approximation of PI using the Leibniz
+                    approximation with iters number of iterations '''
+                    pi = 0
+                    sign = 1
+                    denominator = 1
+                    for i in range(iters):
+                        pi = pi + (sign/denominator)
+                        sign = sign * -1  # alternate positive and negative
+                        denominator = denominator + 2
+
+                    pi = pi * 4.0
+                    return pi
+
+                pi_approx = myPi(10000)
+                print(pi_approx)
 
         .. tab:: Discussion
 
