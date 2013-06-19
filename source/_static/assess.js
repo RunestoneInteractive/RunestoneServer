@@ -65,25 +65,6 @@ var add_button=function(divid,expected,feedArray)
     $("#"+bdiv).html(element);
 };
 
-var checkMCMFRandom=function(divid,expected,feed)
-{
-    var given;
-    var feedback = null;
-	var buttonObjs = document.forms[divid+"_form"].elements.group1;
-	for (var i = buttonObjs.length - 1; i >= 0; i--) {
-		if (buttonObjs[i].checked) {
-			given = buttonObjs[i].value;
-            feedback = feed[i];
-		}
-	}
-	// log the answer
-    var answerInfo = 'answer:' + given + ":" + (given == expected ? 'correct' : 'no');
-    logBookEvent({'event':'mChoice','act': answerInfo, 'div_id':divid}); 
-    
-    // give the user feedback
-	feedbackMCMFRandom('#'+divid+'_feedback',given == expected, feedback);
-};
-
 var feedbackMCMFRandom = function(divid,correct,feedbackText) {
 	if (correct) {
 		$(divid).html('Correct!!  ' + feedbackText);
@@ -309,18 +290,6 @@ var createHTML_MCMFRandom=function(divid,answerString,feedString,corrAnswer)
             var index=ansArray.indexOf(corrAnswer);
             add_button(divid,index,feedArray);  
 };
-            
-var add_button=function(divid,expected,feedArray)
-{
-    var bdiv = divid+"_bt";
-    var element = document.createElement("input");
-    element.setAttribute("type", "button");
-    element.setAttribute("value", "Check Me!");
-    element.setAttribute("name", "do check");
-    element.onclick=function(){checkMCMFRandom(divid,expected,feedArray);
-    };
-    $("#"+bdiv).html(element);
-};
 
 var checkMCMFRandom=function(divid,expected,feed)
 {
@@ -340,16 +309,6 @@ var checkMCMFRandom=function(divid,expected,feed)
     
     // give the user feedback
 	feedbackMCMFRandom('#'+divid+'_feedback',given == expected, feedback);
-};
-
-var feedbackMCMFRandom = function(divid,correct,feedbackText) {
-	if (correct) {
-		$(divid).html('Correct!!  ' + feedbackText);
-        $(divid).css('background-color','#C8F4AD');
-	} else {
-		$(divid).html("Incorrect.  " + feedbackText );
-        $(divid).css('background-color','#F4F4AD');
-	}
 };
 
 /* Local Storage */
