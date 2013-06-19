@@ -1269,7 +1269,19 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q1_answer
+
+                def newtonSqrt(n):
+                    approx = 0.5 * n
+                    better = 0.5 * (approx + n/approx)
+                    while  better !=  approx:
+                        approx = better
+                        better = 0.5 * (approx + n/approx)
+                        print (" Approx:", better)
+                    return approx
+
+
+                print ("Final approx:", newtonSqrt(25))
 
         .. tab:: Discussion 
 
@@ -1309,7 +1321,18 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_answer
+
+                def is_prime(n):
+                    for i in range(2, n):
+                        if n % i == 0:
+                            return False
+                    return True
+
+                print (is_prime(25))
+                print (is_prime(7))
+                print (is_prime(251))
+                print (is_prime(20))
 
         .. tab:: Discussion 
 
@@ -1322,7 +1345,7 @@ these building blocks.
    when it hits the wall and goes the other direction.  This bouncing off the
    walls should continue until the turtle has hit the wall 4 times.
 
-    .. actex:: ex_7_12
+   .. actex:: ex_7_12
 
 #.
 
@@ -1338,7 +1361,60 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q5_answer
+
+                import random
+                import turtle
+
+                def moveRandom(wn, t):
+                    coin = random.randrange(0,2)
+                    if coin == 0:
+                        t.left(90)
+                    else:
+                        t.right(90)
+
+                    t.forward(50)
+                    if not isInScreen(wn, t):
+                        t.left(180)
+                        t.forward(50)
+
+                def areColliding(t1, t2):
+                    if t1.distance(t2) < 2:
+                        return True
+                    else:
+                        return False
+
+                def isInScreen(w,t):
+                    leftBound = - w.window_width()/2
+                    rightBound = w.window_width()/2
+                    topBound = w.window_height()/2
+                    bottomBound = -w.window_height()/2
+
+                    turtleX = t.xcor()
+                    turtleY = t.ycor()
+
+                    stillIn = True
+                    if turtleX > rightBound or turtleX < leftBound:
+                        stillIn = False
+                    if turtleY > topBound or turtleY < bottomBound:
+                        stillIn = False
+                    return stillIn
+
+                t1 = turtle.Turtle()
+                t2 = turtle.Turtle()
+                wn = turtle.Screen()
+
+                t1.shape('turtle')
+                t2.shape('circle')
+
+                t1.forward(50)
+
+                while not areColliding(t1, t2):
+                    moveRandom(wn, t1)
+                    if not areColliding(t1,t2):
+                        moveRandom(wn, t2)
+
+                wn.exitonclick()
 
         .. tab:: Discussion 
 
@@ -1365,7 +1441,28 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+
+                import image
+
+                img = image.Image("luther.jpg")
+                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+                win = image.ImageWin()
+
+                for col in range(img.getWidth()):
+                    for row in range(img.getHeight()):
+                       p = img.getPixel(col, row)
+
+                       newred = 0
+                       green = p.getGreen()
+                       blue = p.getBlue()
+
+                       newpixel = image.Pixel(newred, green, blue)
+
+                       newimg.setPixel(col, row, newpixel)
+
+                newimg.draw(win)
+                win.exitonclick()
 
         .. tab:: Discussion 
 
@@ -1390,9 +1487,50 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q9_answer
 
-        .. tab:: Discussion 
+                import image
+
+                def convertBlackWhite(input_image):
+                    grayscale_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+
+                    for col in range(input_image.getWidth()):
+                        for row in range(input_image.getHeight()):
+                            p = input_image.getPixel(col, row)
+
+                            red = p.getRed()
+                            green = p.getGreen()
+                            blue = p.getBlue()
+
+                            avg = (red + green + blue) / 3.0
+
+                            newpixel = image.Pixel(avg, avg, avg)
+                            grayscale_image.setPixel(col, row, newpixel)
+
+                    blackwhite_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+                    for col in range(input_image.getWidth()):
+                        for row in range(input_image.getHeight()):
+                            p = grayscale_image.getPixel(col, row)
+                            red = p.getRed()
+                            if red > 140:
+                                val = 255
+                            else:
+                                val = 0
+
+                            newpixel = image.Pixel(val, val, val)
+                            blackwhite_image.setPixel(col, row, newpixel)
+                    return blackwhite_image
+
+
+                win = image.ImageWin()
+                img = image.Image("luther.jpg")
+
+                bw_img = convertBlackWhite(img)
+                bw_img.draw(win)
+
+                win.exitonclick()
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -1490,7 +1628,112 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q15_answer
+
+                import image
+                import math
+                import sys
+
+                # Code adapted from http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/image-processing/edge_detection.html
+                # Licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+
+                # this algorithm takes some time for larger images - this increases the amount of time
+                # the program is allowed to run before it times out
+                sys.setExecutionLimit(20000)
+
+                img = image.Image("luther.jpg")
+                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+                win = image.ImageWin()
+
+                for x in range(1, img.getWidth()-1):  # ignore the edge pixels for simplicity (1 to width-1)
+                    for y in range(1, img.getHeight()-1): # ignore edge pixels for simplicity (1 to height-1)
+
+                        # initialise Gx to 0 and Gy to 0 for every pixel
+                        Gx = 0
+                        Gy = 0
+
+                        # top left pixel
+                        p = img.getPixel(x-1, y-1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        # intensity ranges from 0 to 765 (255 * 3)
+                        intensity = r + g + b
+
+                        # accumulate the value into Gx, and Gy
+                        Gx += -intensity
+                        Gy += -intensity
+
+                        # remaining left column
+                        p = img.getPixel(x-1, y)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gx += -2 * (r + g + b)
+
+                        p = img.getPixel(x-1, y+1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gx += -(r + g + b)
+                        Gy += (r + g + b)
+
+                        # middle pixels
+                        p = img.getPixel(x, y-1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gy += -2 * (r + g + b)
+
+                        p = img.getPixel(x, y+1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gy += 2 * (r + g + b)
+
+                        # right column
+                        p = img.getPixel(x+1, y-1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gx += (r + g + b)
+                        Gy += -(r + g + b)
+
+                        p = img.getPixel(x+1, y)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gx += 2 * (r + g + b)
+
+                        p = img.getPixel(x+1, y+1)
+                        r = p.getRed()
+                        g = p.getGreen()
+                        b = p.getBlue()
+
+                        Gx += (r + g + b)
+                        Gy += (r + g + b)
+
+                        # calculate the length of the gradient (Pythagorean theorem)
+                        length = math.sqrt((Gx * Gx) + (Gy * Gy))
+
+                        # normalise the length of gradient to the range 0 to 255
+                        length = length / 4328 * 255
+
+                        length = int(length)
+
+                        # draw the length in the edge image
+                        newpixel = image.Pixel(length, length, length)
+                        newimg.setPixel(x, y, newpixel)
+
+                newimg.draw(win)
+                win.exitonclick()
 
         .. tab:: Discussion 
 
