@@ -382,7 +382,9 @@ var resetPage = function(divid){
 };
 
 var checkRadio = function(divid){
-    
+    // This function repopulates MCMF questions with a user's previous answers,
+    // which were previously stored into local storage
+
     var qnum=divid;
     var len=localStorage.length;
     
@@ -395,12 +397,93 @@ var checkRadio = function(divid){
             if(key===qnum)
                 {
                     var ex=localStorage.getItem(key);
-                    var arr=ex.split(",");
+                    var arr=ex.split(";");
                     var str=key+"_opt_"+arr[0];
                     $("#"+str).attr("checked","true");
                 }
         }
     }
+};
+
+var checkMultipleSelect = function(divid) {
+    // This function repopulates MCMA questions with a user's previous answers,
+    // which were stored into local storage.
+
+    var qnum = divid;
+    var len = localStorage.length;
+
+    if (len > 0) {
+        for (var i=0; i<len; i++) {
+            var key = localStorage.key(i);
+            if (key === qnum) {
+                var ex = localStorage.getItem(key);
+                var arr = ex.split(";");
+                var answers = arr[0].split(",");
+                for (var a=0; a<answers.length; a++) {
+                    var str = key + "_opt_" + answers[a];
+                    $("#"+str).attr("checked","true");
+                }
+            }
+        }
+    }
+}
+
+var checkMCMAStorage = function(divid, expected, feedbackArray) {
+    var given;
+    var feedback = "";
+    var correctArray = expected.split(",");
+    correctArray.sort();
+    var givenArray = [];
+    var correctCount = 0;
+    var correctIndex = 0;
+    var givenIndex = 0;
+    var givenlog = '';
+    var buttonObjs = document.forms[divid+"_form"].elements.group1;
+
+    // loop through the checkboxes
+    for (var i = 0;  i < buttonObjs.length; i++) {
+        if (buttonObjs[i].checked) { // if checked box
+            given = buttonObjs[i].value; // get value of this button
+            givenArray.push(given)    // add it to the givenArray
+            feedback+=given + ": " + feedbackArray[i] + "<br />"; // add the feedback
+            givenlog += given + ",";
+        }
+    }
+    // sort the given array
+    givenArray.sort();
+
+    while (correctIndex < correctArray.length &&
+        givenIndex < givenArray.length) {
+        if (givenArray[givenIndex] < correctArray[correctIndex]) {
+            givenIndex++;
+        }
+        else if (givenArray[givenIndex] == correctArray[correctIndex]) {
+            correctCount++;
+            givenIndex++;
+            correctIndex++;
+        }
+        else {
+            correctIndex++;
+        }
+
+    } // end while
+
+    // save the data into local storage
+    var storage_arr=new Array();
+    storage_arr.push(givenArray);
+    storage_arr.push(expected);
+    localStorage.setItem(divid, storage_arr.join(";"));
+
+    // log the answer
+    var answerInfo = 'answer:' + givenlog.substring(0,givenlog.length-1) + ':' +
+        (correctCount == correctArray.length ? 'correct' : 'no');
+    logBookEvent({'event':'mChoice','act': answerInfo, 'div_id':divid});
+
+    // give the user feedback
+    feedBackMCMA('#'+divid+'_feedback', correctCount,
+        correctArray.length, givenArray.length, feedback);
+
+    document.getElementById(divid+'_bcomp').disabled = false;
 };
 
 var checkMCMFStorage = function(divid, expected, feedbackArray) {
@@ -418,7 +501,7 @@ var checkMCMFStorage = function(divid, expected, feedbackArray) {
     var storage_arr=new Array();
     storage_arr.push(given);
     storage_arr.push(expected);
-    localStorage.setItem(divid, storage_arr.join(","));
+    localStorage.setItem(divid, storage_arr.join(";"));
     
     // log the answer
   var answerInfo = 'answer:' + given + ":" + (given == expected ? 'correct' : 'no');

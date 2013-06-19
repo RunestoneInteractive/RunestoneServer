@@ -202,7 +202,10 @@ class MChoiceMA(Assessment):
             '''
         
         TEMPLATE_END = '''
-            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMA('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
+            <script>
+            $(document).ready(function(){checkMultipleSelect('%(divid)s');});
+            </script>
+            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMAStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
             <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>            
             </form><br />
             <div id="%(divid)s_feedback">
