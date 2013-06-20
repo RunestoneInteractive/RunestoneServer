@@ -1269,7 +1269,19 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q1_answer
+
+                def newtonSqrt(n):
+                    approx = 0.5 * n
+                    better = 0.5 * (approx + n/approx)
+                    while  better !=  approx:
+                        approx = better
+                        better = 0.5 * (approx + n/approx)
+                        print (" Approx:", better)
+                    return approx
+
+
+                print ("Final approx:", newtonSqrt(25))
 
         .. tab:: Discussion 
 
@@ -1309,7 +1321,18 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_answer
+
+                def is_prime(n):
+                    for i in range(2, n):
+                        if n % i == 0:
+                            return False
+                    return True
+
+                print (is_prime(25))
+                print (is_prime(7))
+                print (is_prime(251))
+                print (is_prime(20))
 
         .. tab:: Discussion 
 
@@ -1322,7 +1345,7 @@ these building blocks.
    when it hits the wall and goes the other direction.  This bouncing off the
    walls should continue until the turtle has hit the wall 4 times.
 
-    .. actex:: ex_7_12
+   .. actex:: ex_7_12
 
 #.
 
@@ -1338,7 +1361,60 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q5_answer
+
+                import random
+                import turtle
+
+                def moveRandom(wn, t):
+                    coin = random.randrange(0,2)
+                    if coin == 0:
+                        t.left(90)
+                    else:
+                        t.right(90)
+
+                    t.forward(50)
+                    if not isInScreen(wn, t):
+                        t.left(180)
+                        t.forward(50)
+
+                def areColliding(t1, t2):
+                    if t1.distance(t2) < 2:
+                        return True
+                    else:
+                        return False
+
+                def isInScreen(w,t):
+                    leftBound = - w.window_width()/2
+                    rightBound = w.window_width()/2
+                    topBound = w.window_height()/2
+                    bottomBound = -w.window_height()/2
+
+                    turtleX = t.xcor()
+                    turtleY = t.ycor()
+
+                    stillIn = True
+                    if turtleX > rightBound or turtleX < leftBound:
+                        stillIn = False
+                    if turtleY > topBound or turtleY < bottomBound:
+                        stillIn = False
+                    return stillIn
+
+                t1 = turtle.Turtle()
+                t2 = turtle.Turtle()
+                wn = turtle.Screen()
+
+                t1.shape('turtle')
+                t2.shape('circle')
+
+                t1.forward(50)
+
+                while not areColliding(t1, t2):
+                    moveRandom(wn, t1)
+                    if not areColliding(t1,t2):
+                        moveRandom(wn, t2)
+
+                wn.exitonclick()
 
         .. tab:: Discussion 
 
@@ -1365,7 +1441,28 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+
+                import image
+
+                img = image.Image("luther.jpg")
+                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+                win = image.ImageWin()
+
+                for col in range(img.getWidth()):
+                    for row in range(img.getHeight()):
+                       p = img.getPixel(col, row)
+
+                       newred = 0
+                       green = p.getGreen()
+                       blue = p.getBlue()
+
+                       newpixel = image.Pixel(newred, green, blue)
+
+                       newimg.setPixel(col, row, newpixel)
+
+                newimg.draw(win)
+                win.exitonclick()
 
         .. tab:: Discussion 
 
@@ -1390,9 +1487,50 @@ these building blocks.
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q9_answer
 
-        .. tab:: Discussion 
+                import image
+
+                def convertBlackWhite(input_image):
+                    grayscale_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+
+                    for col in range(input_image.getWidth()):
+                        for row in range(input_image.getHeight()):
+                            p = input_image.getPixel(col, row)
+
+                            red = p.getRed()
+                            green = p.getGreen()
+                            blue = p.getBlue()
+
+                            avg = (red + green + blue) / 3.0
+
+                            newpixel = image.Pixel(avg, avg, avg)
+                            grayscale_image.setPixel(col, row, newpixel)
+
+                    blackwhite_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+                    for col in range(input_image.getWidth()):
+                        for row in range(input_image.getHeight()):
+                            p = grayscale_image.getPixel(col, row)
+                            red = p.getRed()
+                            if red > 140:
+                                val = 255
+                            else:
+                                val = 0
+
+                            newpixel = image.Pixel(val, val, val)
+                            blackwhite_image.setPixel(col, row, newpixel)
+                    return blackwhite_image
+
+
+                win = image.ImageWin()
+                img = image.Image("luther.jpg")
+
+                bw_img = convertBlackWhite(img)
+                bw_img.draw(win)
+
+                win.exitonclick()
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
