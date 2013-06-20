@@ -99,7 +99,10 @@ class FillInTheBlank(Assessment):
             '''
         
         TEMPLATE_END = '''
-            <button class='btn btn-small btn-success' name="do answer" onclick="checkFIB('%(divid)s', '%(blankid)s', '%(correct)s',%(fbl)s, %(casei)s)">Check Me</button>
+            <script>
+            $(document).ready(function(){checkPreviousFIB('%(divid)s');});
+            </script>
+            <button class='btn btn-small btn-success' name="do answer" onclick="checkFIBStorage('%(divid)s', '%(blankid)s', '%(correct)s',%(fbl)s, %(casei)s)">Check Me</button>
             <div id="%(divid)s_feedback">
             </div>
             </div>
