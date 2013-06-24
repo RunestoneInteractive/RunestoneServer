@@ -44,6 +44,22 @@ If you are using a GUI git client you may simply get prompted to update the subm
 
     $ git clone --recursive https://github.com/bnmnetp/runestone.git
 
+Configure the Book
+------------------
+
+Although the book looks like a static website, there are quite a few AJAX calls going on in the background.  The javascript relies on a configuration object called eBookConfig.  To get the right values in the eBookConfig object you need to configure a couple of things prior to running the paver command to build the book.  We have provided a ``paverconfig.py.prototype`` file, you can simply copy that to ``paverconfig.py``.  It contains the following two lines:
+
+::
+
+    master_url = 'http://127.0.0.1:8000'
+    master_app = 'runestone'
+
+You can modify the master_url to be the hostname that you are running your app on, but if you are just doing local development you will probably want to leave it alone.  If you omit this step the books will build in the next step using the values above as default values, but you will get a warning message:
+
+::
+
+    'NOTICE:  You are using default values for master_* Make your own paverconfig.py file'
+
 
 Building the Book
 -----------------
