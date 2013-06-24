@@ -18,9 +18,11 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-from assessbase import Assessment
+from assessbase import *
 import json
 import random
+
+
 
 class MChoiceNode(nodes.General, nodes.Element):
     def __init__(self,content):
@@ -55,7 +57,7 @@ def depart_mc_node(self,node):
             node.mc_options['atext'] = node.mc_options[k]
             res += node.template_option % node.mc_options
             currFeedback = "feedback_" + label
-            feedbackStr = feedbackStr + "'" + node.mc_options[currFeedback] + "', "
+            feedbackStr = feedbackStr + "'" + escapejs(node.mc_options[currFeedback]) + "', "
     
     # store the feedback array with key feedback minus last comma
     node.mc_options['feedback'] = feedbackStr[0:-2] + "]"

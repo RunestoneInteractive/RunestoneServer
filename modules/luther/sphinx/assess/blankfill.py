@@ -18,7 +18,7 @@ __author__ = 'bmiller'
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-from assessbase import Assessment
+from assessbase import *
 import json
 import random
 
@@ -47,8 +47,7 @@ def depart_fitb_node(self,node):
     for k in sorted(node.fitb_options.keys()):
         if 'feedback' in k:
             pair = eval(node.fitb_options[k])
-            p1 = pair[1].replace('"','&quot;')
-            p1 = p1.replace("'",'&acute;')
+            p1 = escapejs(pair[1])
             newpair = (pair[0],p1)
             fbl.append(newpair)
     
