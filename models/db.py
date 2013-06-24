@@ -54,6 +54,7 @@ auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
 #auth.settings.retrieve_username_captcha	= False
 
+
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
   Field('course_id','string'),
@@ -65,7 +66,18 @@ if db(db.courses.id > 0).isempty():
 
 ########################################
 
+def getCourseNameFromId(courseid):
+    ''' used to compute auth.user.course_name field '''
+    if courseid == 0:
+        return ''
+    else:
+        q = db.courses.id == courseid
+        course_name = db(q).select()[0].course_id
+        return course_name
+
 class IS_COURSE_ID:
+    ''' used to validate that a course name entered (e.g. devcourse) corresponds to a 
+        valid course ID (i.e. db.courses.id) '''
     def __init__(self, error_message='Unknown course name. Please see your instructor.'):
         self.e = error_message
 
@@ -101,7 +113,8 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
           required=True,
-          requires=[IS_COURSE_ID()]),
+          default=0),
+    Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
     format='%(username)s',
     migrate=settings.migrate)
 
@@ -113,6 +126,8 @@ db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
                                IS_NOT_IN_DB(db, db.auth_user.email))
+db.auth_user.course_id.requires = IS_COURSE_ID()
+
 auth.define_tables(migrate=settings.migrate)
 
 
@@ -131,6 +146,22 @@ auth.settings.reset_password_requires_verification = True
 ## register with janrain.com, write your domain:api_key in private/janrain.key
 #from gluon.contrib.login_methods.rpx_account import use_janrain
 #use_janrain(auth,filename='private/janrain.key')
+from gluon.contrib.login_methods.rpx_account import RPXAccount
+from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
+
+if request.is_local:
+    janrain_url = 'http://127.0.0.1:8000/%s/default/user/login' % request.application
+else:
+    janrain_url = 'http://%s:%s/%s/default/user/login' % (request.env.server_name,
+                                                          request.env.server_port,
+                                                          request.application)
+
+janrain_form = RPXAccount(request, 
+                          api_key=settings.janrain_api_key, # set in 1.py
+                          domain=settings.janrain_domain, # set in 1.py
+                          url=janrain_url)
+auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
+#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
