@@ -209,7 +209,9 @@ function saveHighlight(parentSelectorClass,serializedRange,saveMethod) {
 	var newId;
 	var currSection = window.location.pathname+window.location.hash;
     var data = {parentClass:parentSelectorClass, range:serializedRange, method:saveMethod, page:currPage, pageSection: currSection, course:eBookConfig.course};
-    $(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for "+settings.url)});
+    $(document).ajaxError(function(e,jqhxr,settings,exception){
+        console.log("Request Failed for "+settings.url);
+    });
     jQuery.ajax({url: eBookConfig.ajaxURL+'savehighlight',data: data, async: false}).done(function(returndata) {
 		newId = returndata;
 	});
@@ -223,7 +225,9 @@ function saveHighlight(parentSelectorClass,serializedRange,saveMethod) {
 function deleteHighlight(uniqueId) {
 	var currPage = window.location.pathname;
     var data = {uniqueId: uniqueId};
-    $(document).ajaxError(function(e,jqhxr,settings,exception){alert("Request Failed for"+settings.url)});
+    $(document).ajaxError(function(e,jqhxr,settings,exception){
+        console.log("Request Failed for"+settings.url)
+    });
     jQuery.post(eBookConfig.ajaxURL+'deletehighlight',data);
     if (eBookConfig.logLevel > 0){
         logBookEvent({'event':'highlight','act': 'delete', 'div_id':currPage}); // Log the run event
@@ -304,7 +308,7 @@ function processPageState(subChapterSectionElement){
 		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
 	var data = {lastPageUrl:currentPathname, lastPageHash: currentLink, lastPageChapter:chapterName, lastPageSubchapter:subChapterName, lastPageScrollLocation: $(window).scrollTop(), course:eBookConfig.course};
 	$(document).ajaxError( function(e,jqhxr,settings,exception) {
-        alert("Request Failed for "+settings.url)
+        console.log("Request Failed for "+settings.url)
     } );
 	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data});
 }
