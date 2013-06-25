@@ -1274,7 +1274,6 @@ Exercises
 1.
 
     .. tabbed:: q1
-        :disabledtabs: 2,3
 
         .. tab:: Question
             
@@ -1300,13 +1299,24 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            #. ``5 ** 2  = 25``
+            #. ``9 * 5 = 45``
+            #. ``15 / 12 = 1.25``
+            #. ``12 / 15 = 0.8``
+            #. ``15 // 12 = 1``
+            #. ``12 // 15 = 0``
+            #. ``5 % 2 = 1``
+            #. ``9 % 5 = 4``
+            #. ``15 % 12 = 3``
+            #. ``12 % 15 = 12``
+            #. ``6 % 6 = 0``
+            #. ``0 % 7 = 0``
 
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q1disqus
+                :identifier: c0a62044cac248859ce3695b46697ecc
 
 
 2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
@@ -1328,14 +1338,37 @@ Exercises
             .. actex:: ex_2_3
         
         .. tab:: Answer
+            
+            .. activecode:: q3_answer
+                :nocanvas:
+                
+                ## question 3 solution ##
 
-            Put some sort of answer here!
+                current_time_string = input("What is the current time (in hours)? ")
+                waiting_time_string = input("How many hours do you want to wait? ")
+
+                current_time_int = int(current_time_string)
+                waiting_time_int = int(waiting_time_string)
+
+                hours = current_time_int + waiting_time_int
+
+                time = hours % 24
+
+                if time > 12:
+                    # time is after noon (pm), so subtract 12 to get the time in 12-hour format
+                    end_time = time - 12
+                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "pm")                        
+                else:
+                    # the time is before noon (am)
+                    end_time = time
+                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "am")                        
+
 
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q3disqus
+                :identifier: a77ed6163c254612b0d649034b261659
 
 
 #. You go on a wonderful holiday
@@ -1363,13 +1396,30 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q5_answer    
+                :nocanvas:
+
+                ## question 5 solution ##
+
+                word1 = "All"
+                word2 = "work"
+                word3 = "and"
+                word4 = "no"
+                word5 = "play"
+                word6 = "makes"
+                word7 = "Jack"
+                word8 = "a"
+                word9 = "dull"
+                word10 = "boy."
+
+                print(word1, word2, word3, word4, word5, word6, word7, word8, word9, word10)
+        
 
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q5disqus
+                :identifier: d1a30631e500449481955e02d3761dd3
 
 
 #. Add parenthesis to the expression ``6 * 1 - 2`` to change its value
@@ -1400,13 +1450,27 @@ Exercises
 
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+                :nocanvas:
 
+                ## question 7 solution ##
+
+                P = 10000
+                n = 12
+                r = 0.08
+
+                t = int(input("Compound for how many years? "))
+
+                final = P * ( ((1 + (r/n)) ** (n * t)) )
+
+                print ("The final amount after", t, "years is", final)
+
+    
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q7disqus
+                :identifier: f14145f85af93420ba0c05fca5d1b4d9a
 
   
 #. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
@@ -1428,13 +1492,24 @@ Exercises
         
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q9_answer
+                :nocanvas:        
+
+                ## question 9 solution
+
+                width = int(input("Width? "))
+                height = int(input("Height? "))
+
+                area = width * height
+
+                print("The area of the rectangle is " + area)
+
 
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q9disqus
+                :identifier: f69d286cc58943b6aef1d886e279a12b
 
   
 #. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
@@ -1455,13 +1530,23 @@ Exercises
         
         .. tab:: Answer
 
-            Put some sort of answer here!
+            .. activecode:: q11_answer
+                :nocanvas:
+
+                ## question 11 solution ##
+
+                deg_c = int(input("What is the temperature in Celsius? "))
+
+                # formula to convert C to F is: (degrees Celcius) times (9/5) plus (32)
+                deg_f = deg_c * (9 / 5) + 32
+
+                print (str(deg_c) + " degrees Celsius is " + str(deg_f) + " degrees Farenheit.")
 
         .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: q11disqus
+                :identifier: c4a929d598ab4c46b484f6abbcec2655
 
   
 #. Write a program that will convert degrees fahrenheit to degrees celsius.

@@ -902,7 +902,10 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            #. True
+            #. False
+            #. False
+            #. False
 
         .. tab:: Discussion 
 
@@ -952,7 +955,23 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_question
+
+                def grade(mark):
+                    if mark >= 90:
+                        return "A"
+                    if mark < 90 and mark >= 80:
+                        return "B"
+                    if mark < 80 and mark >= 70:
+                        return "C"
+                    if mark < 70 and mark >= 60:
+                        return "D"
+                    if mark < 60:
+                        return "F"
+
+                xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]
+                for mark in xs:
+                    print( "Mark:", str(mark), "Grade:", grade(mark))
 
         .. tab:: Discussion 
 
@@ -1030,7 +1049,20 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
+
+                from test import testEqual
+
+                def is_even(n):
+                    if n % 2 == 0:
+                        return True
+                    else:
+                        return False
+
+                testEqual(is_even(10), True)
+                testEqual(is_even(5), False)
+                testEqual(is_even(1), False)
+                testEqual(is_even(0), True)
 
         .. tab:: Discussion 
 
@@ -1078,9 +1110,28 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q9_answer
 
-        .. tab:: Discussion 
+                from test import testEqual
+
+                def is_even(n):
+                    if n % 2 == 0:
+                        return True
+                    else:
+                        return False
+
+                def is_odd(n):
+                    if is_even(n):
+                        return False
+                    else:
+                        return True
+
+                testEqual(is_odd(10), False)
+                testEqual(is_odd(5), True)
+                testEqual(is_odd(1), True)
+                testEqual(is_odd(0), False)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -1099,7 +1150,7 @@ Exercises
 
     .. sourcecode:: python
 
-      if  abs(x-y) < 0.000001:      # if x is approximately equal to y
+      if  abs(x-y) < 0.001:      # if x is approximately equal to y
           ...
 
 
@@ -1133,7 +1184,7 @@ Exercises
                     # your code here
         
                 testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(16.0,4.0,8.0, False)
+                testEqual(is_rightangled(16.0,4.0,8.0), False)
                 testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
                 testEqual(is_rightangled(9.16787,4.1,8.2), True)
                 testEqual(is_rightangled(4.1,8.2,9.168), False)
@@ -1141,7 +1192,35 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q11_answer
+
+                from test import testEqual
+
+                def is_rightangled(a,b,c):
+                    is_rightangled = False
+
+                    largest = a
+                    if b > largest:
+                        # largest = b
+                        if abs((a**2) + (c**2) - (b**2)) < 0.001:
+                            is_rightangled = True
+                    if c > largest:
+                        # largest = c
+                        if abs((a**2) + (b**2) - (c**2)) < 0.001:
+                            is_rightangled = True
+                    else:
+                        # largest = a
+                        if abs((c**2) + (b**2) - (a**2)) < 0.001:
+                            is_rightangled = True
+
+                    return is_rightangled
+
+                testEqual(is_rightangled(1.5,2.0,2.5), True)
+                testEqual(is_rightangled(4.0,8.0,16.0), False)
+                testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
+                testEqual(is_rightangled(4.1,8.2,9.16787), True)
+                testEqual(is_rightangled(4.1,8.2,9.168), False)
+                testEqual(is_rightangled(0.5,0.4,0.64031), True)
 
         .. tab:: Discussion 
 

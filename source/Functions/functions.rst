@@ -1333,13 +1333,36 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q1_answer
+
+                import turtle
+
+                def drawSquare(t, sz):
+                    """Make turtle t draw a square of with side sz."""
+                    for i in range(4):
+                        t.forward(sz)
+                        t.left(90)
+
+                wn = turtle.Screen()       # Set up the window and its attributes
+                wn.bgcolor("lightgreen")
+
+                alex = turtle.Turtle()     # create alex
+                alex.color('hotpink')
+                alex.pensize(3)
+
+                for i in range(5):
+                    drawSquare(alex, 20)   # Call the function to draw the square
+                    alex.penup()
+                    alex.forward(40)       # move alex to the starting position for the next square
+                    alex.pendown()
+
+                wn.exitonclick()
 
         .. tab:: Discussion 
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_12ac86a8d0524fc6830aefb785199048
+                :identifier: a2ac86a8d0524fc6830aefb785199048
 
 
 #.  Write a program to draw this. Assume the innermost square is 20 units per side,
@@ -1357,9 +1380,9 @@ Exercises
 
         .. tab:: Question
 
-            Write a non-fruitful function `drawPoly(someturtle, somesides, somesize)` which makes a turtle
+            Write a non-fruitful function ``drawPoly(someturtle, somesides, somesize)`` which makes a turtle
             draw a regular polygon.
-            When called with `drawPoly(tess, 8, 50)`, it will draw a shape like this:
+            When called with ``drawPoly(tess, 8, 50)``, it will draw a shape like this:
         
             .. image:: Figures/regularpolygon.png
         
@@ -1368,13 +1391,29 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_answer
+
+                import turtle
+
+                def drawPoly(t, num_sides, side_length):
+                    for i in range(num_sides):
+                        t.forward(side_length)
+                        t.left(360/num_sides)
+
+                wn = turtle.Screen()       # Set up the window and its attributes
+                wn.bgcolor("lightgreen")
+
+                tess = turtle.Turtle()
+                tess.color('hotpink')
+                tess.pensize(3)
+
+                drawPoly(tess, 8, 50)
 
         .. tab:: Discussion 
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_9a2f11265c524c7581bf7cf25d23bf3a
+                :identifier: ba2f11265c524c7581bf7cf25d23bf3a
 
 
 #. Draw this pretty pattern.
@@ -1398,20 +1437,56 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q5_answer
+
+                import turtle
+
+                def drawSpiral(t, angle):
+                    ''' takes a turtle, t, and an angle in degrees '''
+                    length = 1
+                    for i in range(84):
+                        t.forward(length)
+                        t.right(angle)
+                        length = length + 2
+
+
+                wn = turtle.Screen()       # Set up the window and its attributes
+                wn.bgcolor("lightgreen")
+
+                guido = turtle.Turtle()    # create guido
+                guido.color('blue')
+
+                ## draw the first spiral ##
+                # position guido
+                guido.penup()
+                guido.backward(110)
+                guido.pendown()
+
+                # draw the spiral using a 90 degree turn angle
+                drawSpiral(guido, 90)
+
+
+                ## draw the second spiral ##
+                # position guido
+                guido.home()
+                guido.penup()
+                guido.forward(90)
+                guido.pendown()
+
+                drawSpiral(guido, 89)
+
 
         .. tab:: Discussion 
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_7587119991344db988f8fb37c8c9a31e
+                :identifier: c587119991344db988f8fb37c8c9a31e
 
 
-#.  Write a non-fruitful function `drawEquitriangle(someturtle, somesize)` which calls `drawPoly` from the
+#.  Write a non-fruitful function ``drawEquitriangle(someturtle, somesize)`` which calls ``drawPoly`` from the
     previous question to have its turtle draw a equilateral triangle.
 
     .. actex:: ex_5_6
-
 
 
 #.
@@ -1420,8 +1495,8 @@ Exercises
 
         .. tab:: Question
 
-            Write a fruitful function `sumTo(n)` that returns the sum of all integer numbers up to and
-            including `n`.   So `sumTo(10)` would be `1+2+3...+10` which would return the value 55.  Use the
+            Write a fruitful function ``sumTo(n)`` that returns the sum of all integer numbers up to and
+            including `n`.   So ``sumTo(10)`` would be ``1+2+3...+10`` which would return the value 55.  Use the
             equation  (n * (n + 1)) / 2.
         
             .. actex:: ex_5_7
@@ -1441,13 +1516,27 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
 
-        .. tab:: Discussion 
+                from test import testEqual
+
+                def sumTo(n):
+                    result = (n * (n + 1)) / 2
+                    return result
+
+                # Now lets see how well this works
+                t = sumTo(0)
+                testEqual(t, 0)
+                t = sumTo(10)
+                testEqual(t, 55)
+                t = sumTo(1)
+                testEqual(t,1)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_6ba37a51d09845f39c96d4d4ef1d6f45
+                :identifier: d6ba37a51d09845f39c96d4d4ef1d6f45
 
 
 #.  Write a function `areaOfCircle(r)` which returns the area of a circle of radius `r`.  Make sure you use the math module in your solution.
@@ -1474,20 +1563,30 @@ Exercises
         .. tab:: Question
 
             Write a non-fruitful function to draw a five pointed star, where the length of each side is 100 units.
-        
+
             .. image:: Figures/star.png
-        
+
             .. actex:: ex_5_9
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q9_answer
+
+                import turtle
+
+                def drawFivePointStar(t):
+                    for i in range(5):
+                        t.forward(100)
+                        t.left(216)
+
+                wolfram = turtle.Turtle()
+                drawFivePointStar(wolfram)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_3757873187bb4581bffecdad449b5f61
+                :identifier: e757873187bb4581bffecdad449b5f61
 
 
 #.  Extend your program above.  Draw five stars, but between each, pick up the pen,
@@ -1509,19 +1608,34 @@ Exercises
 
             Extend the star function to draw an n pointed star.  (Hint: n must be an odd number greater or
             equal to 3).
-        
+
             .. actex:: ex_5_11
-        
+
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q11_answer
+
+                import turtle
+
+                def drawStar(t, n):
+                    if n < 3:
+                        print("Error: n must be greater than 3!")
+                    elif n % 2 == 0:
+                        print("Error: n must be odd!")
+                    else:
+                        for i in range(n):
+                            t.forward(100)
+                            t.left(180 - 180/n)
+
+                stroustrup = turtle.Turtle()
+                drawStar(stroustrup, 7)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_c2f8ff1b301e4d99bd4ac52e68c8c1ed
+                :identifier: f2f8ff1b301e4d99bd4ac52e68c8c1ed
 
 
 #.  Write a function called drawSprite that will draw a sprite.  The function will need parameters for
@@ -1537,35 +1651,49 @@ Exercises
 
         .. tab:: Question
 
-            Rewrite the function `sumTo(n)` that returns the sum of all integer numbers up to and
+            Rewrite the function ``sumTo(n)`` that returns the sum of all integer numbers up to and
             including `n`.   This time use the accumulator pattern.
-        
+
             .. actex:: ex_5_13
-        
+
                 from test import testEqual
-        
+
                 def sumTo(n):
                     # your code here
-        
+
                 # Now lets see how well this works
                 t = sumTo(0)
                 testEqual(t,0)
                 testEqual(sumTo(10),55)
                 testEqual(sumTo(1),1)
-        
+
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q13_answer
+
+                from test import testEqual
+
+                def sumTo(n):
+                    sum = 0
+                    for i in range(1,n+1):
+                        sum = sum + i
+                    return sum
+
+                # Now lets see how well this works
+                t = sumTo(0)
+                testEqual(t,0)
+                testEqual(sumTo(10),55)
+                testEqual(sumTo(1),1)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_6da665389fda49a584b128cc30515595
+                :identifier: eda665389fda49a584b128cc30515595
 
 
-#.  Write a function called `mySqrt` that will approximate the square root of a number, call it n, by using
+#.  Write a function called ``mySqrt`` that will approximate the square root of a number, call it n, by using
     Newton's algorithm.
     Newton's approach is an iterative guessing algorithm where the initial guess is n/2 and each subsequent guess
     is computed using   the formula:  newguess = (1/2) * (oldguess + (n/oldguess)).
@@ -1579,21 +1707,38 @@ Exercises
 
         .. tab:: Question
 
-            Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Liebniz approximation
+            Write a function called ``myPi`` that will return an approximation of PI (3.14159...).  Use the Leibniz approximation
             as described in class.
-        
+
             .. actex:: ex_5_15
-        
+
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q15 answer
+
+                def myPi(iters):
+                    ''' Calculate an approximation of PI using the Leibniz
+                    approximation with iters number of iterations '''
+                    pi = 0
+                    sign = 1
+                    denominator = 1
+                    for i in range(iters):
+                        pi = pi + (sign/denominator)
+                        sign = sign * -1  # alternate positive and negative
+                        denominator = denominator + 2
+
+                    pi = pi * 4.0
+                    return pi
+
+                pi_approx = myPi(10000)
+                print(pi_approx)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_2699e4b7bad44db6bd788c795c124b23
+                :identifier: b699e4b7bad44db6bd788c795c124b23
 
 
 #.  Write a function called `myPi` that will return an approximation of PI (3.14159...).  Use the Madhava approximation
@@ -1610,18 +1755,18 @@ Exercises
             Write a function called `fancySquare` that will draw a square with fancy corners (spites on the corners).  You should
             implement and use the `drawSprite` function from above.  For an even more interesting look, how about adding small
             triangles to the ends of the sprite legs.
-        
+
             .. actex:: ex_5_17
 
         .. tab:: Answer
-            
+
             Put some sort of answer here!
 
         .. tab:: Discussion 
 
             .. disqus::
                 :shortname: interactivepython
-                :identifier: disqus_3b5d8808bf5749579718bdd2088b539f
+                :identifier: db5d8808bf5749579718bdd2088b539f
 
 .. admonition:: Scratch Editor
 
