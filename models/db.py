@@ -61,6 +61,7 @@ db.define_table('courses',
   migrate=settings.migrate
   )
 if db(db.courses.id > 0).isempty():
+    db.courses.insert(course_id='boguscourse') # should be id 1
     db.courses.insert(course_id='devcourse')
 
 
@@ -68,7 +69,7 @@ if db(db.courses.id > 0).isempty():
 
 def getCourseNameFromId(courseid):
     ''' used to compute auth.user.course_name field '''
-    if courseid == 0:
+    if courseid == 1: # boguscourse
         return ''
     else:
         q = db.courses.id == courseid
@@ -113,7 +114,7 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('course_id',db.courses,label=T('Course Name'),
           required=True,
-          default=0),
+          default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
     format='%(username)s',
     migrate=settings.migrate)
@@ -149,14 +150,10 @@ auth.settings.reset_password_requires_verification = True
 from gluon.contrib.login_methods.rpx_account import RPXAccount
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
-if request.is_local:
-    janrain_url = 'http://127.0.0.1:8000/%s/default/user/login' % request.application
-else:
-    janrain_url = 'http://%s:%s/%s/default/user/login' % (request.env.server_name,
-                                                          request.env.server_port,
-                                                          request.application)
+janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
+                                                   request.application)
 
-janrain_form = RPXAccount(request, 
+janrain_form = RPXAccount(request,
                           api_key=settings.janrain_api_key, # set in 1.py
                           domain=settings.janrain_domain, # set in 1.py
                           url=janrain_url)
