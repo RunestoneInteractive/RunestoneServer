@@ -1,6 +1,8 @@
 /* Runestone custom modifications */
 .navbar .brand {
     font-size: 18px;
+    background: transparent url("images/logo_small.png") no-repeat 22px 3px;
+    background-size: 35px 35px;
 }
 
 pre {
