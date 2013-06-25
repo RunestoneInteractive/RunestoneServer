@@ -54,6 +54,11 @@ END = """
                     if ($(ui.newPanel).find('.disqus_thread_link')) {
                         $(ui.newPanel).find('.disqus_thread_link').click();
                     }
+                    if ($(ui.newPanel).find('.active_code')) {
+                        $(ui.newPanel).find('.CodeMirror').each(function(i, el){
+                            el.CodeMirror.refresh();
+                        });
+                    }
                 }
             });
         });

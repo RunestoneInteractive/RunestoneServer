@@ -1629,8 +1629,16 @@ Exercises
             #. 'pineapple' < 'Peach'
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
+
+            a. 'Python'[1] = 'y'
+            #. 'Strings are sequences of characters.'[5] = 'g'
+            #. len('wonderful') = 9
+            #. 'Mystery'[:4] = 'Myst'
+            #. 'p' in 'Pineapple' = True
+            #. 'apple' in 'Pineapple' = True
+            #. 'pear' not in 'Pineapple' = True
+            #. 'apple' > 'pineapple' = False
+            #. 'pineapple' < 'Peach' = False
 
         .. tab:: Discussion 
 
@@ -1676,9 +1684,32 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q3_answer
 
-        .. tab:: Discussion 
+                def count(p):
+                    p = p.replace('.','').replace(',','').replace('"','').replace('-','')
+                    word_list = p.split(" ")
+
+                    words_with_e = 0
+                    for word in word_list:
+                        if 'e' in word:
+                            words_with_e = words_with_e + 1
+
+                    word_count = len(word_list)
+                    percent_with_e = (words_with_e / word_count) * 100
+                    print("Your text contains", word_count, "words, of which", words_with_e, "(" + percent_with_e + "%)", "contain an 'e'.")
+
+
+                p = '''
+                "If the automobile had followed the same development cycle as the computer, a
+                Rolls-Royce would today cost $100, get a million miles per gallon, and explode
+                once a year, killing everyone inside."
+                -Robert Cringely
+                '''
+
+                count(p)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -1703,7 +1734,16 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q5_answer
+
+                def findNumDigits(n):
+                    n_str = str(n)
+                    return len(n_str)
+
+
+                print (findNumDigits(50))
+                print (findNumDigits(20000))
+                print (findNumDigits(1))
 
         .. tab:: Discussion 
 
@@ -1749,9 +1789,25 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q7_answer
 
-        .. tab:: Discussion 
+                from test import testEqual
+
+                def reverse(mystr):
+                    reversed = ''
+                    for char in mystr:
+                        reversed = char + reversed
+                    return reversed
+
+                def mirror(mystr):
+                    return mystr + reverse(mystr)
+
+                testEqual(mirror('good'),'gooddoog')
+                testEqual(mirror('Python'),'PythonnohtyP')
+                testEqual(mirror(''), '')
+                testEqual(mirror('a'),'aa')
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -1797,7 +1853,27 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q9_answer
+
+                from test import testEqual
+
+                def reverse(mystr):
+                    reversed = ''
+                    for char in mystr:
+                        reversed = char + reversed
+                    return reversed
+
+                def is_palindrome(myStr):
+                    if myStr in reverse(myStr):
+                        return True
+                    else:
+                        return False
+
+                testEqual(is_palindrome('abba'),True)
+                testEqual(is_palindrome('abab'),False)
+                testEqual(is_palindrome('straw warts'),True)
+                testEqual(is_palindrome('a'), True)
+                testEqual(is_palindrome(''),True)
 
         .. tab:: Discussion 
 
@@ -1847,7 +1923,21 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q11_answer
+
+                from test import testEqual
+
+                def remove(substr,theStr):
+                    index = theStr.index(substr)
+                    if index < 0: # substr doesn't exist in theStr
+                        return theStr
+                    return_str = theStr[:index] + theStr[index+len(substr):]
+                    return return_str
+
+                testEqual(remove('an', 'banana'),'bana')
+                testEqual(remove('cyc', 'bicycle'), 'bile')
+                testEqual(remove('iss', 'Mississippi'), 'Missippi')
+                testEqual(remove('egg', 'bicycle'), 'bicycle')
 
         .. tab:: Discussion 
 
@@ -1886,10 +1976,69 @@ Exercises
            .. actex:: ex_8_12
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q13_answer
+
+                import turtle
+
+                def createLSystem(numIters,axiom):
+                    startString = axiom
+                    endString = ""
+                    for i in range(numIters):
+                        endString = processString(startString)
+                        startString = endString
+
+                    return endString
+
+                def processString(oldStr):
+                    newstr = ""
+                    for ch in oldStr:
+                        newstr = newstr + applyRules(ch)
+
+                    return newstr
+
+                def applyRules(ch):
+                    newstr = ""
+                    if ch == 'L':
+                        newstr = '+RF-LFL-FR+'   # Rule 1
+                    elif ch == 'R':
+                        newstr = '-LF+RFR+FL-'
+                    else:
+                        newstr = ch     # no rules apply so keep the character
+
+                    return newstr
+
+                def drawLsystem(aTurtle,instructions,angle,distance):
+                    for cmd in instructions:
+                        if cmd == 'F':
+                            aTurtle.forward(distance)
+                        elif cmd == 'B':
+                            aTurtle.backward(distance)
+                        elif cmd == '+':
+                            aTurtle.right(angle)
+                        elif cmd == '-':
+                            aTurtle.left(angle)
+                        else:
+                            print('Error:', cmd, 'is an unknown command')
+
+                def main():
+                    inst = createLSystem(4,"L")   #create the string
+                    print(inst)
+                    t = turtle.Turtle()           #create the turtle
+                    wn = turtle.Screen()
+
+                    t.up()
+                    t.back(200)
+                    t.down()
+                    t.speed(9)
+                    drawLsystem(t,inst,90,5)      #draw the picture
+                                                  #angle 90, segment length 5
+                    wn.exitonclick()
+
+                main()
+
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -1920,7 +2069,64 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q15_answer
+
+                import turtle
+
+                def createLSystem(numIters,axiom):
+                    startString = axiom
+                    endString = ""
+                    for i in range(numIters):
+                        endString = processString(startString)
+                        startString = endString
+
+                    return endString
+
+                def processString(oldStr):
+                    newstr = ""
+                    for ch in oldStr:
+                        newstr = newstr + applyRules(ch)
+
+                    return newstr
+
+                def applyRules(ch):
+                    newstr = ""
+                    if ch == 'X':
+                        newstr = 'YF+XF+Y'   # Rule 1
+                    elif ch == 'Y':
+                        newstr = 'XF-YF-X'
+                    else:
+                        newstr = ch     # no rules apply so keep the character
+
+                    return newstr
+
+                def drawLsystem(aTurtle,instructions,angle,distance):
+                    for cmd in instructions:
+                        if cmd == 'F':
+                            aTurtle.forward(distance)
+                        elif cmd == 'B':
+                            aTurtle.backward(distance)
+                        elif cmd == '+':
+                            aTurtle.right(angle)
+                        elif cmd == '-':
+                            aTurtle.left(angle)
+                        else:
+                            # unknown command, ignore it.
+                            pass
+
+                def main():
+                    inst = createLSystem(5,"YF")   #create the string
+                    print(inst)
+                    t = turtle.Turtle()           #create the turtle
+                    wn = turtle.Screen()
+
+                    t.speed(9)
+                    drawLsystem(t,inst,60,5)      #draw the picture
+                                                  #angle 90, segment length 5
+                    wn.exitonclick()
+
+                main()
+
 
         .. tab:: Discussion 
 
@@ -1952,8 +2158,71 @@ Exercises
            .. actex:: ex_8_16
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
+
+            .. activecode:: q17_answer
+
+                import turtle
+
+                def createLSystem(numIters,axiom):
+                    startString = axiom
+                    endString = ""
+                    for i in range(numIters):
+                        endString = processString(startString)
+                        startString = endString
+
+                    return endString
+
+                def processString(oldStr):
+                    newstr = ""
+                    for ch in oldStr:
+                        newstr = newstr + applyRules(ch)
+
+                    return newstr
+
+                def applyRules(ch):
+                    newstr = ""
+                    if ch == 'F':
+                        newstr = 'FF'   # Rule 1
+                    elif ch == 'X':
+                        newstr = '--FXF++FXF++FXF--'
+                    else:
+                        newstr = ch     # no rules apply so keep the character
+
+                    return newstr
+
+                def drawLsystem(aTurtle,instructions,angle,distance):
+                    for cmd in instructions:
+                        if cmd == 'F':
+                            aTurtle.forward(distance)
+                        elif cmd == 'B':
+                            aTurtle.backward(distance)
+                        elif cmd == '+':
+                            aTurtle.right(angle)
+                        elif cmd == '-':
+                            aTurtle.left(angle)
+                        else:
+                            # unknown command, ignore it.
+                            pass
+
+                def main():
+                    inst = createLSystem(5,"FXF--FF--FF")   #create the string
+                    print(inst)
+                    t = turtle.Turtle()           #create the turtle
+                    wn = turtle.Screen()
+                    t.up()
+                    t.back(200)
+                    t.right(90)
+                    t.forward(100)
+                    t.left(90)
+                    t.down()
+                    t.speed(9)
+
+                    drawLsystem(t,inst,60,5)      #draw the picture
+                                                  #angle 90, segment length 5
+                    wn.exitonclick()
+
+                main()
+
 
         .. tab:: Discussion 
 
@@ -1985,10 +2254,41 @@ Exercises
            .. actex:: ex_8_18
 
         .. tab:: Answer
-            
-            Put some sort of answer here!
 
-        .. tab:: Discussion 
+            .. activecode:: q19_answer
+
+                def encrypt(message, cipher):
+                    alphabet = "abcdefghijklmnopqrstuvwxyz"
+                    encrypted = ''
+                    for char in message:
+                        if char == ' ':
+                            encrypted = encrypted + ' '
+                        else:
+                            pos = alphabet.index(char)
+                            encrypted = encrypted + cipher[pos]
+                    return encrypted
+
+                def decrypt(encrypted, cipher):
+                    alphabet = "abcdefghijklmnopqrstuvwxyz"
+                    decrypted = ''
+                    for char in encrypted:
+                        if char == ' ':
+                            decrypted = decrypted + ' '
+                        else:
+                            pos = cipher.index(char)
+                            decrypted = decrypted + alphabet[pos]
+                    return decrypted
+
+
+                cipher = "badcfehgjilknmporqtsvuxwzy"
+
+                encrypted = encrypt('hello world', cipher)
+                print encrypted
+
+                decrypted = decrypt(encrypted, cipher)
+                print(decrypted)
+
+        .. tab:: Discussion
 
             .. disqus::
                 :shortname: interactivepython
@@ -2033,7 +2333,25 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: q21_answer
+
+                def rot13(mess):
+                    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+                    encrypted = ''
+                    for char in mess:
+                        if char == ' ':
+                            encrypted = encrypted + ' '
+                        else:
+                            rotated_index = alphabet.index(char) + 13
+                            if rotated_index < 26:
+                                encrypted = encrypted + alphabet[rotated_index]
+                            else:
+                                encrypted = encrypted + alphabet[rotated_index % 26]
+                    return encrypted
+
+                print(rot13('abcde'))
+                print(rot13('nopqr'))
+                print(rot13(rot13('since rot thirteen is symmetric you should see this message')))
 
         .. tab:: Discussion 
 
