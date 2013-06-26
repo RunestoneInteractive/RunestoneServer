@@ -37,7 +37,10 @@
 
       <div class="container">
           <div class='navbar-brand'>
-            <a class="brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+            <div>
+              <a class="brand-logo" href="http://runestoneinteractive.org/">&nbsp; </a>
+              <a class="brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+            </div>
           </div>
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
         <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
