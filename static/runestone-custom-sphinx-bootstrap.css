@@ -1,4 +1,16 @@
 /* Runestone custom modifications */
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+/* Remove top padding when top navbar goes static in narrow viewports */
+@media (max-width: 979px) {
+    body {
+        padding-top: 0;
+    }
+}
+
 .navbar .brand {
     font-size: 18px;
     margin-left: 0px;
