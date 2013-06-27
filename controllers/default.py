@@ -49,14 +49,14 @@ def call(): return service()
 
 @auth.requires_login()
 def index():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
     
-    if 'boguscourse' in course.course_id:
+    if 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
-        redirect('/%s/static/%s/index.html' % (request.application,course.course_id))
+        redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
 
     # web_support = WebSupport(datadir=settings.sphinx_datadir,
     #                 staticdir=settings.sphinx_staticdir,
