@@ -2,16 +2,18 @@
 ### required - do no delete
 import json
 
-
-def user(): 
+def user():
     form = auth()
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
 
     if 'register' in request.args(0):
-        # parse the referring URL to see if we can prepopulate the course_id field in
-        # the registration form
+        # If we can't pre-populate, just set it to blank.
+        # This will force the user to choose a valid course name
+        db.auth_user.course_id.default = ''
+
+        # Otherwise, use the referer URL to try to pre-populate
         ref = request.env.http_referer
         if ref:
             if '_next' in ref:
@@ -19,36 +21,28 @@ def user():
                 url_parts = ref[1].split("/")
             else:
                 url_parts = ref.split("/")
-            
+
             for i in range(len(url_parts)):
                 if "static" in url_parts[i]:
-                    course_id = url_parts[i+1]
-                    form.vars.course_id = course_id
-                break
+                    course_name = url_parts[i+1]
+                    db.auth_user.course_id.default = course_name
+                    break
 
-        # we can't prepopulate, just set it to empty
-        else:
-            form.vars.course_id = ''
+        # Recreate the form with the temporarily updated default course_id
+        form = auth.register()
+
+    if 'profile' in request.args(0):
+        form.vars.course_id = auth.user.course_name
+        if form.process().accepted:
+            # auth.user session object doesn't automatically update when the DB gets updated
+            auth.user.update(form.vars)
+            auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
+            redirect(URL('default', 'index'))
 
     if 'login' in request.args(0):
         # add info text re: using local auth. CSS styled to match text on Janrain form
         sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
         form[0][0].insert(0, sign_in_text)
-
-    if 'profile' in request.args(0):
-        form.vars.course_id = auth.user.course_name
-
-    try:
-        if form.process().accepted:
-            # auth.user session object doesn't automatically update when the DB gets updated
-            auth.user.update(form.vars)
-            auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
-
-            redirect(URL('default','index'))
-    except AttributeError: 
-        # Janrain login form wrapped in the ExtendedLoginForm doesn't have the process() method
-        # (which makes sense because we have no ability to process the Janrain form)
-        pass
 
     return dict(form=form)
 
