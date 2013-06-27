@@ -130,7 +130,7 @@ class MChoiceMF(Assessment):
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
             <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
-            <div id="%(divid)s_feedback">
+            <div id="%(divid)s_feedback" class="assess-feedback">
             </div>
             </div>
             '''   
@@ -210,7 +210,7 @@ class MChoiceMA(Assessment):
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMAStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
             <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>            
             </form><br />
-            <div id="%(divid)s_feedback">
+            <div id="%(divid)s_feedback" class="assess-feedback">
             </div>
             </div>
             '''   
@@ -289,7 +289,7 @@ class MChoiceRandomMF(Assessment):
             <div id="%(divid)s_bt"></div>
             
             </form>
-            <div id="%(divid)s_feedback">
+            <div id="%(divid)s_feedback" class="assess-feedback">
             </div>
             
             <script>

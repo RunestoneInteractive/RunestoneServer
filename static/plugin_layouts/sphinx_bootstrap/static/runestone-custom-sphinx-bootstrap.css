@@ -1,8 +1,30 @@
 /* Runestone custom modifications */
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+/* Remove top padding when top navbar goes static in narrow viewports */
+@media (max-width: 979px) {
+    body {
+        padding-top: 0;
+    }
+}
+
 .navbar .brand {
     font-size: 18px;
-    background: transparent url("logo_small.png") no-repeat 22px 3px;
+    margin-left: 0px;
+    padding-left: 10px !important;
+}
+
+.brand-logo {
+    float: left;
+    display: block;
+    background: transparent url('/runestone/static/images/logo_small.png') no-repeat 0px 0px;
     background-size: 35px 35px;
+    width: 35px;
+    height: 35px;
+    margin-top:2px;
 }
 
 pre {
@@ -169,3 +191,12 @@ div.flash {
     padding-bottom: 13px;
 }
 
+.assess-feedback {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 7px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
