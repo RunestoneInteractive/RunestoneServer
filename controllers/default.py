@@ -10,10 +10,11 @@ def user():
     form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
 
     if 'register' in request.args(0):
-        # parse the referring URL to see if we can pre-populate the course_id field in
-        # the registration form
+        # If we can't pre-populate, just set it to blank.
+        # This will force the user to choose a valid course name
+        db.auth_user.course_id.default = ''
 
-        form.vars.course_id = '' # set it to be empty if we can't pre-populate
+        # Otherwise, use the referer URL to try to pre-populate
         ref = request.env.http_referer
         if ref:
             if '_next' in ref:
@@ -24,9 +25,12 @@ def user():
 
             for i in range(len(url_parts)):
                 if "static" in url_parts[i]:
-                    course_id = url_parts[i+1]
-                    form.vars.course_id = course_id
-                break
+                    course_name = url_parts[i+1]
+                    db.auth_user.course_id.default = course_name
+                    break
+
+        # Recreate the form with the temporarily updated default course_id
+        form = auth.register()
 
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
