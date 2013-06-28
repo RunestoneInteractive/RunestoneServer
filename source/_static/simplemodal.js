@@ -60,7 +60,7 @@
  * @author Eric Martin (http://ericmmartin.com)
  * @version 1.4.1
  */
-;(function ($) {
+(function ($) {
 	var ie6 = $.browser.msie && parseInt($.browser.version) === 6 && typeof window['XMLHttpRequest'] !== 'object',
 		ie7 = $.browser.msie && parseInt($.browser.version) === 7,
 		ieQuirks = null,
