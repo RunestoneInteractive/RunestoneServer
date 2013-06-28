@@ -41,8 +41,8 @@ for filename in filenames:
           "-jar", "closure-compiler.jar",
           "--js", "a.js",
           "--js_output_file", filename,
-          "--compilation_level", "SIMPLE_OPTIMIZATIONS"])
-
+          "--compilation_level", "SIMPLE_OPTIMIZATIONS",
+          "--warning_level", "QUIET"])
 
 call(["rm", "a.js"])
 print "Done."
