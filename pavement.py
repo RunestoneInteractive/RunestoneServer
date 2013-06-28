@@ -17,6 +17,7 @@ except:
     print 'NOTICE:  You are using default values for master_* Make your own paverconfig.py file'
     master_url = 'http://127.0.0.1:8000'
     master_app = 'runestone'
+    minify_js = False
 
 
 
@@ -102,6 +103,9 @@ def everyday(options):
 
     paverutils.run_sphinx(options,'everyday')
 
+    if minify_js:
+        sh('./minifyjs.py %s' % options.everyday.outdir)
+
 @task
 @cmdopts([('all','a','rebuild everything')])
 def thinkcspy(options):
@@ -111,6 +115,9 @@ def thinkcspy(options):
       options['force_all'] = True
       options['freshenv'] = True
     paverutils.run_sphinx(options,'thinkcspy')
+
+    if minify_js:
+        sh('./minifyjs.py %s' % options.thinkcspy.outdir)
 
 @task
 @cmdopts([('all','a','rebuild everything')])
@@ -122,6 +129,9 @@ def pythonds(options):
       options['freshenv'] = True
     paverutils.run_sphinx(options,'pythonds')
 
+    if minify_js:
+        sh('./minifyjs.py %s' % options.pythonds.outdir)
+
 @task
 @cmdopts([('all','a','rebuild everything')])
 def overview(options):
@@ -130,6 +140,9 @@ def overview(options):
       options['freshenv'] = True
 
     paverutils.run_sphinx(options,'overview')
+
+    if minify_js:
+        sh('./minifyjs.py %s' % options.overview.outdir)
 
 @task
 @cmdopts([('all','a','rebuild everything')])
@@ -141,6 +154,9 @@ def devcourse(options):
       options['freshenv'] = True
 
     paverutils.run_sphinx(options,'devcourse')
+
+    if minify_js:
+        sh('./minifyjs.py %s' % options.devcourse.outdir)
 
 @task
 @cmdopts([('all','a','rebuild everything')])
