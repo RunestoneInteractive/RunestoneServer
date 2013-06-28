@@ -12,14 +12,12 @@ sys.path.append(os.getcwd())
 
 # You will want to change these for your own environment in .gitignored paverconfig.py
 try:
-    from paverconfig import master_url, master_app
+    from paverconfig import master_url, master_app, minify_js
 except:
     print 'NOTICE:  You are using default values for master_* Make your own paverconfig.py file'
     master_url = 'http://127.0.0.1:8000'
     master_app = 'runestone'
     minify_js = False
-
-
 
 options(
     sphinx = Bunch(
