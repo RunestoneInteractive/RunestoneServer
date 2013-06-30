@@ -1,2 +1,6 @@
 master_url = 'http://127.0.0.1:8000'
 master_app = 'runestone'
+
+# Setting this to True will cause Paver to minify Runestone JavaScript files during the build.
+# Set to False during development so you can debug Javascript.
+minify_js = False
