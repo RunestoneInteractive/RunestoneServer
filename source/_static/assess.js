@@ -259,6 +259,7 @@ var checkRadio = function (divid) {
                 var arr = ex.split(";");
                 var str = key + "_opt_" + arr[0];
                 $("#" + str).attr("checked", "true");
+                document.getElementById(divid + '_bcomp').disabled = false;
             }
         }
     }
@@ -281,6 +282,7 @@ var checkMultipleSelect = function (divid) {
                 for (var a = 0; a < answers.length; a++) {
                     var str = key + "_opt_" + answers[a];
                     $("#" + str).attr("checked", "true");
+                    document.getElementById(divid + '_bcomp').disabled = false;
                 }
             }
         }
