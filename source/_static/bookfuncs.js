@@ -311,7 +311,7 @@ function loadEditor(data, status, whatever) {
 }
 
 
-function createActiveCode(divid,suppliedSource,sid) {
+/*function createActiveCode(divid,suppliedSource,sid) {
     var eNode;
     var acblockid;
     if (sid !== undefined) {
@@ -417,7 +417,7 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
 }
    // $('#'+divid).modal({minHeight:700, minWidth: 410, maxWidth:450, containerCss:{width:420, height:750}});
-}
+} */
 
 function disableAcOpt() {
     $jqTheme('button.ac_opt').each ( function(index, value) {
