@@ -296,7 +296,7 @@ def getaggregateresults():
 
     if sid:
         correctquery = '''select 
-(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and act like '%%:correct' )
+(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and position('correct' in act) > 0 )
 /
 (select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' ) as result;
 ''' % (sid,sid)
