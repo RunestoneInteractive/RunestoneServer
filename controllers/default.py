@@ -31,6 +31,10 @@ def user():
         # Recreate the form with the temporarily updated default course_id
         form = auth.register()
 
+        # add the Janrain login form
+        form[0][5][2] = ''
+        form.insert(0, DIV(request.janrain_form.login_form(), _id='janrain-form'))
+
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
         if form.process().accepted:
