@@ -162,6 +162,8 @@ janrain_form = RPXAccount(request,
 auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
 #auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
 
+request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
+
 #########################################################################
 ## Define your tables below (or better in another model file) for example
 ##
