@@ -58,10 +58,11 @@ EDIT1 = '''
 </div>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
 
-<button class='btn btn-small btn-success' id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
+<button class='btn btn-small btn-success' style="display: %(hidecode)s" id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
 UNHIDE='''
-<button class='btn btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh()">Show/Hide Code</button>
+<button class='btn btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();\
+$('#%(divid)s_runb').toggle();$('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
 '''
 
 AUDIO = '''
@@ -71,8 +72,18 @@ AUDIO = '''
 EDIT2 = '''
 <div id="cont"></div>
 
-<button class="ac_opt btn btn-small" onclick="saveEditor('%(divid)s');">Save</button>
-<button class="ac_opt btn btn-small" onclick="requestCode('%(divid)s');">Load</button>
+<button class="ac_opt btn btn-small" style="display: inline-block" id="%(divid)s_saveb" onclick="saveEditor('%(divid)s');">Save</button>
+<button class="ac_opt btn btn-small" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
+
+<script>
+if ('%(hidecode)s' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#%(divid)s_saveb').toggle();
+    $('#%(divid)s_loadb').toggle();
+}
+</script>
+
 '''
 
 CANVAS = '''
@@ -247,11 +258,11 @@ class ActiveCode(Directive):
 
 
 
-EXEDIT = '''
-<button class='btn btn-small btn-inverse' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
-<div id="%(divid)s"></div>
-<br />
-'''
+#EXEDIT = '''
+#<button class='btn btn-small btn-inverse' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
+#<div id="%(divid)s"></div>
+#<br />
+#'''
 
 class ActiveExercise(ActiveCode):
     required_arguments = 1

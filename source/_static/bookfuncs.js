@@ -311,7 +311,7 @@ function loadEditor(data, status, whatever) {
 }
 
 
-function createActiveCode(divid,suppliedSource,sid) {
+/*function createActiveCode(divid,suppliedSource,sid) {
     var eNode;
     var acblockid;
     if (sid !== undefined) {
@@ -339,17 +339,17 @@ function createActiveCode(divid,suppliedSource,sid) {
 
     var myRun = function() {
         runit(acblockid);
-    }
+    };
     var mySave = function() {
         saveEditor(divid);
-    }
+    };
     var myLoad = function() {
         requestCode(divid,sid);
-    }
+    };
     cm_editors[acblockid+"_code"] = editor;
     editor.parentDiv = acblockid;
     var runButton = document.createElement("button");
-    runButton.appendChild(document.createTextNode('Run'))
+    runButton.appendChild(document.createTextNode('Run'));
     runButton.className = runButton.className + ' btn btn-small btn-success';
     runButton.onclick = myRun;
     edNode.appendChild(runButton);
@@ -417,11 +417,12 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
 }
    // $('#'+divid).modal({minHeight:700, minWidth: 410, maxWidth:450, containerCss:{width:420, height:750}});
-}
+} */
 
 function disableAcOpt() {
     $jqTheme('button.ac_opt').each ( function(index, value) {
         value.className = value.className + ' disabled';
+        $jqTheme(value).attr('onclick', 'return false;')
         $jqTheme(value).attr('data-toggle', 'tooltip');
         if ($jqTheme(value).text() == 'Save') {
             $jqTheme(value).attr('title', 'Register or log in to save your code');
