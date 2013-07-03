@@ -200,3 +200,9 @@ div.flash {
     border-radius: 4px;
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
+
+#janrain-form {
+    float: right;
+    margin-left: 100px;
+    margin-top: -12px;
+}
