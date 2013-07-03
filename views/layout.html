@@ -16,19 +16,10 @@
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
 
-    <script type="text/javascript">
-      var eBookConfig = {}
-      var portPart = ''
-      eBookConfig.host = 'http://{{=request.env.http_host}}'
-      eBookConfig.app = eBookConfig.host+'/{{=request.application}}'
-      eBookConfig.ajaxURL = eBookConfig.app+'/ajax/'
-      eBookConfig.logLevel = 10
-      eBookConfig.loginRequired = true
-    </script>
-    <script src="{{=URL('static', 'js/jquery-1.9.1.min.js')}}"></script>    
-    <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>    
+    <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-2.3.1/js/bootstrap.min.js')}}"></script>    
-    <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>  
+    <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
 
   </head>
 <body>
