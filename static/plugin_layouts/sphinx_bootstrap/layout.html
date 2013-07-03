@@ -166,12 +166,12 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <script type="text/javascript">
-  eBookConfig = {}
-  eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000',
-  eBookConfig.app = eBookConfig.host+'/{{appname}}',
-  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/',
-  eBookConfig.course = '{{course_id}}',
-  eBookConfig.logLevel = {{loglevel}},
+  eBookConfig = {};
+  eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/{{appname}}';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = '{{course_id}}';
+  eBookConfig.logLevel = {{loglevel}};
   eBookConfig.loginRequired = {{login_required}}
   eBookConfig.isLoggedIn = false;
 </script>
