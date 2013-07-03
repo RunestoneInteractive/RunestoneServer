@@ -5,27 +5,29 @@
 {% endblock %}
 
 {% block extrahead %}
+
 <script type="text/javascript">
-eBookConfig = {}
-eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000',
-eBookConfig.app = eBookConfig.host+'/{{appname}}',
-eBookConfig.ajaxURL = eBookConfig.app+'/ajax/',
-eBookConfig.course = '{{course_id}}',
-eBookConfig.logLevel = {{loglevel}},
-eBookConfig.loginRequired = {{login_required}}
-eBookConfig.isLoggedIn = false;
+  eBookConfig = {}
+  eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000',
+  eBookConfig.app = eBookConfig.host+'/{{appname}}',
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/',
+  eBookConfig.course = '{{course_id}}',
+  eBookConfig.logLevel = {{loglevel}},
+  eBookConfig.loginRequired = {{login_required}}
+  eBookConfig.isLoggedIn = false;
 </script>
-<script type="text/javascript" charset="utf-8" src="{{course_url}}/{{appname}}/static/js/jquery.idle-timer.js">
-</script>
+<script type="text/javascript" charset="utf-8" src="{{course_url}}/{{appname}}/static/js/jquery.idle-timer.js"></script>
 <script type="text/javascript" src="{{course_url}}/{{appname}}/static/js/processing-1.4.1.min.js"></script>
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
 
 {% endblock %}
 

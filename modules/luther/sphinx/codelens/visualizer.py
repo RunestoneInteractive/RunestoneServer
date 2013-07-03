@@ -26,13 +26,10 @@ def setup(app):
     app.add_directive('codelens',Codelens)
     app.add_stylesheet('codelens/v3/css/pytutor.css')
     app.add_stylesheet('codelens/v3/css/basic.css')
-    app.add_stylesheet('codelens/v3/css/ui-lightness/jquery-ui-1.8.24.custom.css')
 
-    app.add_javascript('codelens/v3/js/jquery.simplemodal.js')
     app.add_javascript('codelens/v3/js/d3.v2.min.js')
     app.add_javascript('codelens/v3/js/jquery.ba-bbq.min.js')
     app.add_javascript('codelens/v3/js/jquery.jsPlumb-1.3.10-all-min.js')
-    app.add_javascript('codelens/v3/js/jquery-ui-1.8.24.custom.min.js')
     app.add_javascript('codelens/v3/js/pytutor.js')
 
 

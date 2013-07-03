@@ -1,11 +1,13 @@
 {% extends "basic/layout.html" %}
 
   {% set script_files = script_files + [
-    '_static/js/jquery-1.9.1.min.js',
-    '_static/js/jquery-fix.js',
+    '_static/jquery-1.10.2.min.js',
+    '_static/jquery-ui-1.10.3.custom.min.js',
+    '_static/jquery-fix.js',
     '_static/bootstrap-2.3.1/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
-    '_static/waypoints.min.js'
+    '_static/waypoints.min.js',
+    '_static/jquery.simplemodal.1.4.4.min.js'
   ]
 %}
 {% set css_files = [
@@ -19,6 +21,7 @@
 %}
 {% endif %}
 {% set css_files = css_files + [
+    '_static/jquery-ui-1.10.3.custom.min.css',
     '_static/bootstrap-sphinx.css',
     '_static/runestone-custom-sphinx-bootstrap.css',
     '_static/bootstrap-2.3.1/css/bootstrap-responsive.min.css'
@@ -67,6 +70,7 @@
                 <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 
                 <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </div>
             </li>
             
             <li class="divider-vertical"></li>
@@ -159,7 +163,6 @@
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
 {% endblock %}
 
 {# Silence the sidebar's, relbar's #}
