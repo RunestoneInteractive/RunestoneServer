@@ -51,7 +51,7 @@ def build():
 
     if request.vars.coursetype != 'custom':
 
-        cid = db.courses.update_or_insert(course_id=request.vars.projectname)
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
 
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
@@ -119,7 +119,7 @@ def build():
         return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html',success=True )
     else:
 
-        cid = db.courses.update_or_insert(course_id=request.vars.projectname)
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
 
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
