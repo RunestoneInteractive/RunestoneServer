@@ -135,7 +135,7 @@ function runit(myDiv,theButton,includes,suffix) {
     var spre = document.getElementById(myDiv+'_suffix');
     var suffix = '';
     if (spre) {
-        suffix = spre.innerText;
+        suffix = spre.innerText || '';  // for some reason Firefox returns undefined when no innerText
     }
     prog = prog + '\n' + suffix;
 
