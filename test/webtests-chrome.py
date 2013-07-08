@@ -12,7 +12,7 @@ import time
 # https://code.google.com/p/chromedriver/downloads/list.
 
 # Put the binary in this directory and update the filename param:
-chromedriver_filename = "chromedriver.v27.v30.linux-amd64"
+chromedriver_filename = "chromedriver.v27-v30.linux-amd64"
 
 ###################################################################
 
@@ -30,11 +30,13 @@ def testActiveCodeForPage():
                 button.click()
         except UnexpectedAlertPresentException: # some of the ActiveCodes expect input
             alert = driver.switch_to_alert()
-            alert.send_keys('random text')
+
+            # this is some random text - I'm using an integer string because some of the AC blocks do int casting.
+            alert.send_keys('50')
             alert.dismiss()
         except Exception, e:
             print "there was an error clicking:"
-            print e.message
+            print e
             print ""
 
     time.sleep(5) # not sure if this is really necessary or not.
@@ -46,7 +48,7 @@ def testActiveCodeForPage():
         print ""
 
 
-# Get the master list
+# Get the master list for thinkcspy
 driver.get(host + "/runestone/static/thinkcspy/toc.html")
 
 chapters = driver.find_elements_by_class_name('toctree-l1')
@@ -54,13 +56,6 @@ link_list = []
 for c in chapters:
     l = c.find_element_by_tag_name('a')
     link_list.append(l.get_attribute('href'))
-
-driver.get(host + "/runestone/static/pythonds/index.html")
-chapters = driver.find_elements_by_class_name('toctree-l1')
-for c in chapters:
-    l = c.find_element_by_tag_name('a')
-    link_list.append(l.get_attribute('href'))
-
 
 for l in link_list:
     driver.get(l)
