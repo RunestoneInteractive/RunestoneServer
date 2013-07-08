@@ -28,6 +28,7 @@ def setup(app):
     app.add_stylesheet('codelens/v3/css/basic.css')
 
     app.add_javascript('codelens/v3/js/d3.v2.min.js')
+    app.add_javascript('jquery-migrate-1.2.1.min.js') # needed so that ba-bbq can use the latest jQuery that we've included
     app.add_javascript('codelens/v3/js/jquery.ba-bbq.min.js')
     app.add_javascript('codelens/v3/js/jquery.jsPlumb-1.3.10-all-min.js')
     app.add_javascript('codelens/v3/js/pytutor.js')
