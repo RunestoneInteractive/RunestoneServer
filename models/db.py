@@ -62,8 +62,8 @@ db.define_table('courses',
   migrate=settings.migrate
 )
 if db(db.courses.id > 0).isempty():
-    db.courses.insert(course_id='boguscourse') # should be id 1
-    db.courses.insert(course_id='devcourse')
+    db.courses.insert(course_name='boguscourse') # should be id 1
+    db.courses.insert(course_name='devcourse')
 
 
 ########################################
@@ -74,7 +74,7 @@ def getCourseNameFromId(courseid):
         return ''
     else:
         q = db.courses.id == courseid
-        course_name = db(q).select()[0].course_id
+        course_name = db(q).select()[0].course_name
         return course_name
 
 class IS_COURSE_ID:
@@ -84,8 +84,8 @@ class IS_COURSE_ID:
         self.e = error_message
 
     def __call__(self, value):
-        if db(db.courses.course_id == value).select():
-            return (db(db.courses.course_id == value).select()[0].id, None)
+        if db(db.courses.course_name == value).select():
+            return (db(db.courses.course_name == value).select()[0].id, None)
         return (value, self.e)
 
 
