@@ -23,9 +23,6 @@ from docutils.parsers.rst import Directive
 def setup(app):
     app.add_directive('tabbed', TabbedStuffDirective)
     app.add_directive('tab', TabDirective)
-    
-    app.add_stylesheet('jquery-ui-1.10.3.custom.min.css')
-    app.add_javascript('jquery-ui-1.10.3.custom.min.js')
 
     app.add_node(TabNode, html=(visit_tab_node, depart_tab_node))
     app.add_node(TabbedStuffNode, html=(visit_tabbedstuff_node, depart_tabbedstuff_node))

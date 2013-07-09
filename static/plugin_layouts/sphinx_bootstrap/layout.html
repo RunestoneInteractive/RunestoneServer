@@ -1,27 +1,32 @@
 {% extends "basic/layout.html" %}
 
-  {% set script_files = script_files + [
-    '_static/js/jquery-1.9.1.min.js',
-    '_static/js/jquery-fix.js',
+{% set script_files = script_files + [
+    '_static/jquery-ui-1.10.3.custom.min.js',
+    '_static/jquery-fix.js',
     '_static/bootstrap-2.3.1/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
-    '_static/waypoints.min.js'
+    '_static/waypoints.min.js',
+    '_static/jquery.simplemodal.1.4.4.min.js',
+    '_static/rangy-core.js',
+    '_static/rangy-textrange.js',
+    '_static/rangy-cssclassapplier.js',
+    '_static/user-highlights.js'
   ]
 %}
-{% set css_files = [
-    '_static/bootstrap-2.3.1/css/bootstrap.min.css'
-  ] + css_files
-%}
+
+{% set css_files = ['_static/bootstrap-2.3.1/css/bootstrap.min.css'] + css_files %}
 {% if theme_bootswatch_theme %}
-{% set css_files = css_files + [
-    'http://netdna.bootstrapcdn.com/bootswatch/2.3.1/' + theme_bootswatch_theme + '/bootstrap.min.css'
-  ]
-%}
+  {% set css_files = css_files +
+    ['http://netdna.bootstrapcdn.com/bootswatch/2.3.1/' + theme_bootswatch_theme + '/bootstrap.min.css']
+  %}
 {% endif %}
+
 {% set css_files = css_files + [
+    '_static/jquery-ui-1.10.3.custom.min.css',
     '_static/bootstrap-sphinx.css',
+    '_static/bootstrap-2.3.1/css/bootstrap-responsive.min.css',
+    '_static/user-highlights.css',
     '_static/runestone-custom-sphinx-bootstrap.css',
-    '_static/bootstrap-2.3.1/css/bootstrap-responsive.min.css'
   ]
 %}
 
@@ -67,6 +72,7 @@
                 <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 
                 <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </div>
             </li>
             
             <li class="divider-vertical"></li>
@@ -146,7 +152,6 @@
             {% if theme_source_link_position == "nav" %}
               <li>{% include "sourcelink.html" %}</li>
             {% endif %}
-
           </ul>
          
         </div>
@@ -159,7 +164,30 @@
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/{{appname}}';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = '{{course_id}}';
+  eBookConfig.logLevel = {{loglevel}};
+  eBookConfig.loginRequired = {{login_required}}
+  eBookConfig.isLoggedIn = false;
+</script>
+<script type="text/javascript" charset="utf-8" src="{{course_url}}/{{appname}}/static/js/jquery.idle-timer.js"></script>
+<script type="text/javascript" src="{{course_url}}/{{appname}}/static/js/processing-1.4.1.min.js"></script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
 {% endblock %}
 
 {# Silence the sidebar's, relbar's #}
@@ -218,5 +246,26 @@ it (like the search bar) is clicked -->
     });
 </script>
 
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+</script>
 
-{%- endblock %}
+{% if appname == "courselib" %}
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+{% endif %}
+
+{% endblock %}
