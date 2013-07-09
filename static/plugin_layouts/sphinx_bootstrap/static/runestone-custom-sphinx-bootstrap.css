@@ -179,7 +179,8 @@ div.flash {
 }
 
 #web2py_user_form form {
-    margin-right: 250px;
+    float: left;
+    margin-right: 150px;
     padding-top: 6px;
 }
 
@@ -198,12 +199,6 @@ div.flash {
     -moz-border-radius: 4px;
     border-radius: 4px;
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-}
-
-#janrain-form {
-    float: right;
-    margin-left: 100px;
-    margin-top: -12px;
 }
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
