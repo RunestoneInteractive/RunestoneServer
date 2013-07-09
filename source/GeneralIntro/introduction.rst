@@ -704,9 +704,8 @@ result is the words:
 Here is the example in activecode.  Give it a try!
 
 .. activecode:: ch01_2
-    :nopre:
 
-   print("Hello, World!")
+    print("Hello, World!")
 
 The quotation marks in the program mark the beginning and end of the value.
 They don't appear in the result.
