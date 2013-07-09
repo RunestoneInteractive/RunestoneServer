@@ -206,3 +206,8 @@ div.flash {
     margin-left: 100px;
     margin-top: -12px;
 }
+
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
+}

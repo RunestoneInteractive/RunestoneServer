@@ -56,11 +56,11 @@ EDIT1 = '''
 </div>
 <p class="ac_caption"><span class="ac_caption_text">%(caption)s (%(divid)s)</span> </p>
 
-<button class='btn btn-small btn-success' style="display: %(hidecode)s" id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
+<button class='btn btn-small btn-success' id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
 UNHIDE='''
 <button class='btn btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();\
-$('#%(divid)s_runb').toggle();$('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
+$('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
 '''
 
 AUDIO = '''
