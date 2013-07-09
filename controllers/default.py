@@ -6,7 +6,10 @@ def user():
     form = auth()
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
-    form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+    try:
+        form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+    except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
+        pass
 
     if 'register' in request.args(0):
         # If we can't pre-populate, just set it to blank.
@@ -56,14 +59,14 @@ def call(): return service()
 
 @auth.requires_login()
 def index():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_id).first()
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
     
-    if 'boguscourse' in course.course_id:
+    if 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
-        redirect('/%s/static/%s/index.html' % (request.application,course.course_id))
+        redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
 
     # web_support = WebSupport(datadir=settings.sphinx_datadir,
     #                 staticdir=settings.sphinx_staticdir,
