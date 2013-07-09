@@ -1023,7 +1023,7 @@ Exercises
 
         .. tab:: Answer
             
-            .. code:: python
+            .. sourcecode:: python
                 
                 # draw an equilateral triangle
                 import turtle
@@ -1040,8 +1040,7 @@ Exercises
 
                 wn.exitonclick()
 
-
-            .. code:: python
+            .. sourcecode:: python
 
                 # draw a square    
                 import turtle
@@ -1055,7 +1054,7 @@ Exercises
 
                 wn.exitonclick()
 
-            .. code:: python
+            .. sourcecode:: python
 
                 # draw a hexagon    
                 import turtle
@@ -1069,7 +1068,7 @@ Exercises
 
                 wn.exitonclick()
 
-            .. code:: python
+            .. sourcecode:: python
 
                 # draw an octogon    
                 import turtle
