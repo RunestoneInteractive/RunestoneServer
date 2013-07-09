@@ -179,8 +179,7 @@ div.flash {
 }
 
 #web2py_user_form form {
-    float:left;
-    margin-right: 100px;
+    margin-right: 250px;
     padding-top: 6px;
 }
 
