@@ -35,7 +35,6 @@ that are defined inside.
 
 
 .. activecode:: chmod_01
-    :nopre:
 
     import turtle            # allows us to use the turtles library
 

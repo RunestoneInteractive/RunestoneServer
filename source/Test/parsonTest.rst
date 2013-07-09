@@ -724,7 +724,6 @@ result is the words:
 Here is the example in activecode.  Give it a try!
 
 .. activecode:: ch01_2
-    :nopre:
 
    print("Hello, World!")
 

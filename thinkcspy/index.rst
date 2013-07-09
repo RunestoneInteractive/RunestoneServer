@@ -29,7 +29,6 @@
    :above:
    :autorun:
    :hidecode:
-   :nopre:
 
    import turtle
    import random
