@@ -3,14 +3,8 @@
 import json
 
 def user():
-    form = auth()
-
-    # this looks horrible but it seems to be the only way to add a CSS class to the submit button
-    try:
-        form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
-    except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
-        pass
-
+    # this is kinda hacky but it's the only way I can figure out how to pre-populate
+    # the course_id field
     if 'register' in request.args(0):
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
@@ -31,12 +25,12 @@ def user():
                     db.auth_user.course_id.default = course_name
                     break
 
-        # Recreate the form with the temporarily updated default course_id
-        form = auth.register()
+    form = auth()
 
+    if 'register' in request.args(0):
         # add the Janrain login form
         form[0][5][2] = ''
-        form.insert(0, DIV(request.janrain_form.login_form(), _id='janrain-form'))
+        form = (DIV(form,request.janrain_form.login_form()))
 
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
@@ -50,6 +44,13 @@ def user():
         # add info text re: using local auth. CSS styled to match text on Janrain form
         sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
         form[0][0].insert(0, sign_in_text)
+
+
+    # this looks horrible but it seems to be the only way to add a CSS class to the submit button
+    try:
+        form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+    except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
+        pass
 
     return dict(form=form)
 
