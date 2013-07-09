@@ -3,7 +3,8 @@
 import json
 
 def user():
-
+    # this is kinda hacky but it's the only way I can figure out how to pre-populate
+    # the course_id field
     if 'register' in request.args(0):
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
@@ -26,6 +27,11 @@ def user():
 
     form = auth()
 
+    if 'register' in request.args(0):
+        # add the Janrain login form
+        form[0][5][2] = ''
+        form.insert(0, DIV(request.janrain_form.login_form(), _id='janrain-form'))
+
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
         if form.process().accepted:
@@ -45,10 +51,6 @@ def user():
         form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
     except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
-
-    # add the Janrain login form
-    form[0][5][2] = ''
-    form.insert(0, DIV(request.janrain_form.login_form(), _id='janrain-form'))
 
     return dict(form=form)
 
