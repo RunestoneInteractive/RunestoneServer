@@ -100,7 +100,9 @@ def everyday(options):
       options['freshenv'] = True
 
     paverutils.run_sphinx(options,'everyday')
-
+    
+    sh('cp %s/_static/jquery-1.10.2.min.js %s/_static/jquery.js' % (options.everyday.outdir, options.everyday.outdir))
+    
     if minify_js:
         sh('./minifyjs.py %s' % options.everyday.outdir)
 
@@ -112,7 +114,10 @@ def thinkcspy(options):
     if 'all' in options.thinkcspy:
       options['force_all'] = True
       options['freshenv'] = True
+    
     paverutils.run_sphinx(options,'thinkcspy')
+    
+    sh('cp %s/_static/jquery-1.10.2.min.js %s/_static/jquery.js' % (options.thinkcspy.outdir, options.thinkcspy.outdir))
 
     if minify_js:
         sh('./minifyjs.py %s' % options.thinkcspy.outdir)
@@ -125,7 +130,10 @@ def pythonds(options):
     if 'all' in options.pythonds:
       options['force_all'] = True
       options['freshenv'] = True
+    
     paverutils.run_sphinx(options,'pythonds')
+    
+    sh('cp %s/_static/jquery-1.10.2.min.js %s/_static/jquery.js' % (options.pythonds.outdir, options.pythonds.outdir))
 
     if minify_js:
         sh('./minifyjs.py %s' % options.pythonds.outdir)
@@ -138,6 +146,8 @@ def overview(options):
       options['freshenv'] = True
 
     paverutils.run_sphinx(options,'overview')
+    
+    sh('cp %s/_static/jquery-1.10.2.min.js %s/_static/jquery.js' % (options.overview.outdir, options.overview.outdir))
 
     if minify_js:
         sh('./minifyjs.py %s' % options.overview.outdir)
@@ -152,6 +162,8 @@ def devcourse(options):
       options['freshenv'] = True
 
     paverutils.run_sphinx(options,'devcourse')
+    
+    sh('cp %s/_static/jquery-1.10.2.min.js %s/_static/jquery.js' % (options.devcourse.outdir, options.devcourse.outdir))
 
     if minify_js:
         sh('./minifyjs.py %s' % options.devcourse.outdir)
