@@ -44,7 +44,7 @@ class LocalUser:
     def register(self):
         self.driver.get(self.host + '/runestone/default/user/register')
 
-        ## Fill out the registration form ##
+        ## fill out the registration form ##
         self.driver.find_element_by_id('auth_user_username').\
             send_keys(self.username)
         self.driver.find_element_by_id('auth_user_first_name').\
@@ -65,6 +65,7 @@ class LocalUser:
         WebDriverWait(self.driver, 20).until(EC.staleness_of(element))
 
         assert (self.host + "/runestone/static/" + self.course_name) in self.driver.current_url, \
-            "Newly registered user not redirected to expected course."
+            "Newly registered user not redirected to expected course (%s). Maybe there are errors " \
+            "in the registration form?" % self.course_name
 
 
