@@ -97,7 +97,9 @@ class LocalAuthTests(unittest.TestCase):
     def logout(self):
         self.driver.get(self.host + '/runestone/default/user/logout')
 
+        ## check that the "Logged out" flash is visible
         try:
-            self.driver.find_element_by_class_name('flash')
+            flash_div = self.driver.find_element_by_class_name('flash')
+            self.assertIn("Logged out", flash_div.text, "Logging out failed! Flash DIV had wrong text.")
         except NoSuchElementException:
-            self.assertRaises(RuntimeError("Logging out failed!"))
+            self.assertRaises(RuntimeError("Logging out failed! Could not find flash DIV."))
