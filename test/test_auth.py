@@ -36,6 +36,7 @@ class LocalAuthTests(unittest.TestCase):
         self.local_registration()
         self.logout()
         self.local_login()
+        self.profile()
         self.logout()
 
     def tearDown(self):
@@ -68,11 +69,17 @@ class LocalAuthTests(unittest.TestCase):
         self.driver.find_element_by_css_selector("input[value='Register']").\
             click()
 
+        ## check for errors in the registration form ##
+        try:
+            form_error = self.driver.find_element_by_class_name('error').text
+            self.assertRaises(RuntimeError("Error in registration form: %s" % form_error))
+        except NoSuchElementException:
+            pass
+
         ## check that we were redirected to the course we just registered for ##
         expected_course_url = self.host + "/runestone/static/" + self.course_name
         self.assertIn(expected_course_url, self.driver.current_url,
-            "Newly registered user not redirected to expected course (%s). Maybe there are errors " \
-            "in the registration form?" % self.course_name)
+            "Newly registered user not redirected to expected course (%s)." % self.course_name)
 
 
     def local_login(self):
@@ -103,3 +110,16 @@ class LocalAuthTests(unittest.TestCase):
             self.assertIn("Logged out", flash_div.text, "Logging out failed! Flash DIV had wrong text.")
         except NoSuchElementException:
             self.assertRaises(RuntimeError("Logging out failed! Could not find flash DIV."))
+
+    def profile(self):
+        '''
+        Make sure we can navigate to the profile page and that the correct course name
+        is displayed
+        '''
+        self.driver.get(self.host + '/runestone/default/user/profile')
+
+        found_course_name = self.driver.find_element_by_id('auth_user_course_id').get_attribute('value')
+        self.assertIn(self.course_name, found_course_name,
+            "Wrong course name displayed in user profile page: \
+             expected %s, got %s" % (self.course_name, found_course_name))
+
