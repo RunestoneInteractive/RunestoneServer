@@ -7,28 +7,31 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import string
 import random
+import time
 
 import unittest
 
 
-def generateName():
+def generate_name():
     lst = [random.choice(string.ascii_letters) for n in xrange(20)]
     return "".join(lst)
 
-def generateEmail():
-    return generateName() + "@testing.com"
+def generate_email():
+    return generate_name() + "@testing.com"
 
 
 class LocalAuthTests(unittest.TestCase):
 
     def setUp(self):
-        self.username = generateName()
-        self.first_name = generateName()
-        self.last_name = generateName()
-        self.email = generateEmail()
+        self.username = generate_name()
+        self.first_name = generate_name()
+        self.last_name = generate_name()
+        self.email = generate_email()
         self.password = 't3stp4ssword'
         self.course_name = 'devcourse'
         self.host = 'http://127.0.0.1:8000'
+
+        self.new_course_name = generate_name()
 
         self.driver = webdriver.Firefox()
 
@@ -37,12 +40,23 @@ class LocalAuthTests(unittest.TestCase):
          1. register a new user.
          2. make sure we can log out and log back in as the new user
          3. make sure we can access the profile page for that user
+         4. create a new course with that user as the instructor
         '''
         self.register()
         self.logout()
+
+        # verify we can login and are redirected to the correct course
         self.login()
+
+        # verify the profile page works
         self.profile()
+
+        # make sure the new course designer works
+        self.build_new_course_from_existing_course()
+
+        # next 2 steps will verify the new course got created properly
         self.logout()
+        self.login() # verifies redirection to new course
 
     def tearDown(self):
         self.driver.quit()
@@ -140,3 +154,17 @@ class LocalAuthTests(unittest.TestCase):
             "Wrong course name displayed in user profile page: \
              expected %s, got %s" % (self.course_name, found_course_name))
 
+    def build_new_course_from_existing_course(self):
+        self.driver.get(self.host + "/runestone/designer")
+
+        self.driver.find_element_by_name('projectname').send_keys(self.new_course_name)
+        self.driver.find_element_by_name('projectdescription').send_keys('a new project')
+
+        self.driver.find_element_by_css_selector("input[value='thinkcspy']").click()
+
+        self.driver.find_element_by_css_selector("input[value='Submit']").click()
+
+        WebDriverWait(self.driver, 30)\
+            .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"),'Your course is ready'))
+
+        self.course_name = self.new_course_name # user account is now linked with the new course
