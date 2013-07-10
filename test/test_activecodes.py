@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import WebDriverException
 import time
 import unittest
 
@@ -37,18 +39,23 @@ class ActiveCodeTests(unittest.TestCase):
             try:
                 if button.text == "Run":
                     button.click()
-            except UnexpectedAlertPresentException: # some of the ActiveCodes expect input
-                alert = self.driver.switch_to_alert()
 
-                # this is just random text - I'm using an integer string because some of the AC blocks do int casting.
-                alert.send_keys('8080')
-                alert.dismiss()
+                    alert = self.driver.switch_to_alert() # some ActiveCode blocks expect input
 
-        time.sleep(5) # not sure if this is really necessary or not.
+                    # this is just random text - I'm using an integer string because some of the AC blocks do int casting.
+                    alert.send_keys('1111')
+                    alert.dismiss()
+
+            #except NoAlertPresentException:
+            except WebDriverException:
+                # no input prompt for this ActiveCode
+                pass
+
+        #time.sleep(5) # not sure if this is really necessary or not.
         allErrors = self.driver.find_elements_by_class_name("error")
 
         for e in allErrors:
-            self.assertRaises(RuntimeWarning("Error in ActiveCode block %s on page %s." % (e.id, url[url.rindex('/')+1])))
+            print "Error in ActiveCode block %s on page %s." % (e.get_attribute('id'), url[url.rindex('/')+1:])
 
 
 ### Example stuff
