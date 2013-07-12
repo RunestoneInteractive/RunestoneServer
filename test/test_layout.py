@@ -13,12 +13,24 @@ class LayoutTests(unittest.TestCase):
 
     def setUp(self):
         self.host = 'http://127.0.0.1:8000'
-        self.course_name = 'thinkcspy'
+        self.course_name = ''
         self.driver = webdriver.Firefox()
 
-    def runTest(self):
+    def test_thinkcspy(self):
+        self.course_name = 'thinkcspy'
+
         self.logo_link()
         self.course_title_link()
+        self.search_menu()
+        self.social_media_menu()
+        self.help_menu()
+
+    def test_pythonds(self):
+        self.course_name = 'pythonds'
+
+        self.logo_link()
+        self.course_title_link()
+        self.search_menu()
         self.social_media_menu()
         self.help_menu()
 
@@ -51,7 +63,7 @@ class LayoutTests(unittest.TestCase):
 
 
         if 'pythonds' in self.course_name:
-            expected_url = '%s/runestone/static/%s/index.html' % (self.host, self.course_name)
+            expected_url = '%s/runestone/static/%s/index.html#' % (self.host, self.course_name)
         else:
             expected_url = '%s/runestone/static/%s/toc.html' % (self.host, self.course_name)
 
@@ -81,6 +93,41 @@ class LayoutTests(unittest.TestCase):
         # make sure the Facebook like button is visible
         fb_button = social_div.find_element_by_class_name('fb-like')
         self.assertTrue(fb_button.is_displayed(), "The Facebook 'Like' button is not displayed!")
+
+    def search_menu(self):
+        ''' test the links and functionality of the search dropdown menu '''
+        def open_menu():
+            self.driver.get('%s/runestone/static/%s/index.html'
+                            %(self.host, self.course_name))
+
+            # trigger the menu to open
+            menu_toggles = WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_class_name('dropdown-toggle'))
+            menu_toggles[1].click()
+
+            # make sure it actually did open
+            dropdown_el = self.driver.find_element_by_class_name('open')
+
+            # get the list with the menu items
+            search_menu = dropdown_el.find_element_by_class_name('dropdown-menu')
+
+            return search_menu
+
+        # Table of Contents link
+        search_menu = open_menu()
+        search_menu.find_elements_by_tag_name('a')[0].click()
+        if 'pythonds' in self.course_name:
+            expected_url = '%s/runestone/static/%s/index.html#' % (self.host, self.course_name)
+        else:
+            expected_url = '%s/runestone/static/%s/toc.html' % (self.host, self.course_name)
+        self.assertEqual(expected_url, self.driver.current_url,
+                "Wrong 'Table of Contents' link: expected %s, got %s." % (expected_url, self.driver.current_url))
+
+        # Book Index link
+        search_menu = open_menu()
+        search_menu.find_elements_by_tag_name('a')[1].click()
+        expected_url = '%s/runestone/static/%s/genindex.html' % (self.host, self.course_name)
+        self.assertEqual(expected_url, self.driver.current_url,
+                         "Wrong 'Book Index' link: expected %s, got %s." % (expected_url, self.driver.current_url))
 
     def help_menu(self):
         ''' test that links in the help menu work and link to the correct locations '''
