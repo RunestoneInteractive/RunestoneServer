@@ -128,7 +128,24 @@ class LocalAuthTests(unittest.TestCase):
         ## check that we were redirected to the course this user is registered for ##
         expected_course_url = self.host + "/runestone/static/" + self.course_name
         self.assertIn(expected_course_url, self.driver.current_url,
-                      "Not redirected to expected course (%s)." % self.course_name)
+                "Not redirected to expected course (%s)." % self.course_name)
+
+        ## check that the user dropdown menu has the email address of the logged in user ##
+        # open the menu
+        self.driver.find_elements_by_class_name('dropdown-toggle')[2].click()
+
+        # make sure it actually did open
+        dropdown_el = self.driver.find_element_by_class_name('open')
+
+        # get the list with the menu items
+        search_menu = dropdown_el.find_element_by_class_name('user-menu')
+
+        # get the span with the email address of the logged in user
+        span = search_menu.find_element_by_class_name('loggedinuser')
+
+        self.assertEqual(span.text, self.email,
+                "Email address of current user is not visible in user navbar menu: expected %s, got %s" % (self.email, span.text))
+
 
     def logout(self):
         '''
@@ -157,6 +174,7 @@ class LocalAuthTests(unittest.TestCase):
              expected %s, got %s" % (self.course_name, found_course_name))
 
     def build_new_course_from_existing_course(self):
+        ''' build a new course from an existing course (thinkcspy) '''
         self.driver.get(self.host + "/runestone/designer")
 
         self.driver.find_element_by_name('projectname').send_keys(self.new_course_name)
@@ -166,7 +184,8 @@ class LocalAuthTests(unittest.TestCase):
 
         self.driver.find_element_by_css_selector("input[value='Submit']").click()
 
-        WebDriverWait(self.driver, 30)\
+        # wait up to a minute for the new course to be created
+        WebDriverWait(self.driver, 60)\
             .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"),'Your course is ready'))
 
         self.course_name = self.new_course_name # user account is now linked with the new course
