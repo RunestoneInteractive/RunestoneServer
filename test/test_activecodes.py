@@ -7,7 +7,6 @@ import unittest
 
 
 class ActiveCodeTests(unittest.TestCase):
-
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.host = 'http://127.0.0.1:8000'
@@ -67,5 +66,5 @@ class ActiveCodeTests(unittest.TestCase):
         allErrors = self.driver.find_elements_by_class_name("error")
         for e in allErrors:
             print "[%s] Error in ActiveCode [%s] on page [%s]." \
-                  % (course_name, e.get_attribute('id'), url[url.rindex('/')+1:])
+                  % (course_name, e.get_attribute('id'), url[url.rindex('/') + 1:])
 

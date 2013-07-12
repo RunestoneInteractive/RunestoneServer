@@ -9,8 +9,8 @@ import string
 import random
 import unittest
 
-class LayoutTests(unittest.TestCase):
 
+class LayoutTests(unittest.TestCase):
     def setUp(self):
         self.host = 'http://127.0.0.1:8000'
         self.course_name = ''
@@ -43,24 +43,24 @@ class LayoutTests(unittest.TestCase):
         ''' test that the RSI logo in the navbar links to the RSI site '''
 
         self.driver.get('%s/runestone/static/%s/index.html'
-                        %(self.host, self.course_name))
+                        % (self.host, self.course_name))
 
         self.driver.find_element_by_class_name('brand-logo').click()
 
         # make sure the logo link goes to the right place
         expected_url = 'http://runestoneinteractive.org/'
         self.assertEqual(self.driver.current_url, expected_url, 'Logo link does not go to'
-                    ' the correct location! Expected %s, got %s.' % (expected_url, self.driver.current_url))
+                                                                ' the correct location! Expected %s, got %s.' % (
+                                                                expected_url, self.driver.current_url))
 
     def course_title_link(self):
         ''' test that clicking on the course title links to the Sphinx master doc (index or toc.html) '''
 
         self.driver.get('%s/runestone/static/%s/index.html'
-                        %(self.host, self.course_name))
+                        % (self.host, self.course_name))
 
         title_link = WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_class_name('brand'))
         title_link.click()
-
 
         if 'pythonds' in self.course_name:
             expected_url = '%s/runestone/static/%s/index.html#' % (self.host, self.course_name)
@@ -68,13 +68,14 @@ class LayoutTests(unittest.TestCase):
             expected_url = '%s/runestone/static/%s/toc.html' % (self.host, self.course_name)
 
         self.assertEqual(self.driver.current_url, expected_url, "Title link does not go to "
-                    "the correct location! Expected %s, got %s." % (expected_url, self.driver.current_url))
+                                                                "the correct location! Expected %s, got %s." % (
+                                                                expected_url, self.driver.current_url))
 
     def social_media_menu(self):
         ''' test that the Facebook and Twitter buttons are visible in the social media dropdown menu '''
 
         self.driver.get('%s/runestone/static/%s/index.html'
-                        %(self.host, self.course_name))
+                        % (self.host, self.course_name))
 
         # trigger the menu to open
         menu_toggles = WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_class_name('dropdown-toggle'))
@@ -96,12 +97,14 @@ class LayoutTests(unittest.TestCase):
 
     def search_menu(self):
         ''' test the links and functionality of the search dropdown menu '''
+
         def open_menu():
             self.driver.get('%s/runestone/static/%s/index.html'
-                            %(self.host, self.course_name))
+                            % (self.host, self.course_name))
 
             # trigger the menu to open
-            menu_toggles = WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_class_name('dropdown-toggle'))
+            menu_toggles = WebDriverWait(self.driver, 10).until(
+                lambda x: x.find_elements_by_class_name('dropdown-toggle'))
             menu_toggles[1].click()
 
             # make sure it actually did open
@@ -120,7 +123,8 @@ class LayoutTests(unittest.TestCase):
         else:
             expected_url = '%s/runestone/static/%s/toc.html' % (self.host, self.course_name)
         self.assertEqual(expected_url, self.driver.current_url,
-                "Wrong 'Table of Contents' link: expected %s, got %s." % (expected_url, self.driver.current_url))
+                         "Wrong 'Table of Contents' link: expected %s, got %s." % (
+                         expected_url, self.driver.current_url))
 
         # Book Index link
         search_menu = open_menu()
@@ -134,10 +138,11 @@ class LayoutTests(unittest.TestCase):
 
         def open_menu():
             self.driver.get('%s/runestone/static/%s/index.html'
-                            %(self.host, self.course_name))
+                            % (self.host, self.course_name))
 
             # trigger the menu to open
-            menu_toggles = WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_class_name('dropdown-toggle'))
+            menu_toggles = WebDriverWait(self.driver, 10).until(
+                lambda x: x.find_elements_by_class_name('dropdown-toggle'))
             menu_toggles[3].click()
 
             # make sure it actually did open
@@ -153,7 +158,7 @@ class LayoutTests(unittest.TestCase):
         help_menu.find_elements_by_tag_name('a')[0].click()
         expected_url = '%s/runestone/static/%s/navhelp.html' % (self.host, self.course_name)
         self.assertEqual(expected_url, self.driver.current_url,
-                "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, self.driver.current_url))
+                         "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, self.driver.current_url))
 
         # Instructor's Page link
         help_menu = open_menu()

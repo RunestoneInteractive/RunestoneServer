@@ -16,12 +16,12 @@ def generate_name():
     lst = [random.choice(string.ascii_letters) for n in xrange(20)]
     return "".join(lst)
 
+
 def generate_email():
     return generate_name() + "@testing.com"
 
 
 class LocalAuthTests(unittest.TestCase):
-
     def setUp(self):
         self.username = generate_name()
         self.first_name = generate_name()
@@ -72,19 +72,19 @@ class LocalAuthTests(unittest.TestCase):
         self.driver.get(self.host + '/runestone/default/user/register')
 
         ## fill out the registration form ##
-        self.driver.find_element_by_id('auth_user_username').\
+        self.driver.find_element_by_id('auth_user_username'). \
             send_keys(self.username)
-        self.driver.find_element_by_id('auth_user_first_name').\
+        self.driver.find_element_by_id('auth_user_first_name'). \
             send_keys(self.first_name)
-        self.driver.find_element_by_id('auth_user_last_name').\
+        self.driver.find_element_by_id('auth_user_last_name'). \
             send_keys(self.last_name)
-        self.driver.find_element_by_id('auth_user_email').\
+        self.driver.find_element_by_id('auth_user_email'). \
             send_keys(self.email)
-        self.driver.find_element_by_id('auth_user_password').\
+        self.driver.find_element_by_id('auth_user_password'). \
             send_keys(self.password)
-        self.driver.find_element_by_name('password_two').\
+        self.driver.find_element_by_name('password_two'). \
             send_keys(self.password)
-        self.driver.find_element_by_id('auth_user_course_id').\
+        self.driver.find_element_by_id('auth_user_course_id'). \
             send_keys(self.course_name)
 
         ## wait until the Captcha has been filled and we navigate away ##
@@ -92,7 +92,7 @@ class LocalAuthTests(unittest.TestCase):
         #WebDriverWait(self.driver, 20).until(EC.staleness_of(element))
 
         ## submit the registration form ##
-        self.driver.find_element_by_css_selector("input[value='Register']").\
+        self.driver.find_element_by_css_selector("input[value='Register']"). \
             click()
 
         ## check for errors in the registration form ##
@@ -105,7 +105,7 @@ class LocalAuthTests(unittest.TestCase):
         ## check that we were redirected to the course we just registered for ##
         expected_course_url = self.host + "/runestone/static/" + self.course_name
         self.assertIn(expected_course_url, self.driver.current_url,
-            "Newly registered user not redirected to expected course (%s)." % self.course_name)
+                      "Newly registered user not redirected to expected course (%s)." % self.course_name)
 
     def login(self):
         '''
@@ -128,7 +128,7 @@ class LocalAuthTests(unittest.TestCase):
         ## check that we were redirected to the course this user is registered for ##
         expected_course_url = self.host + "/runestone/static/" + self.course_name
         self.assertIn(expected_course_url, self.driver.current_url,
-                "Not redirected to expected course (%s)." % self.course_name)
+                      "Not redirected to expected course (%s)." % self.course_name)
 
         ## check that the user dropdown menu has the email address of the logged in user ##
         # open the menu
@@ -144,7 +144,8 @@ class LocalAuthTests(unittest.TestCase):
         span = search_menu.find_element_by_class_name('loggedinuser')
 
         self.assertEqual(span.text, self.email,
-                "Email address of current user is not visible in user navbar menu: expected %s, got %s" % (self.email, span.text))
+                         "Email address of current user is not visible in user "
+                         "navbar menu: expected %s, got %s" % (self.email, span.text))
 
 
     def logout(self):
@@ -170,7 +171,7 @@ class LocalAuthTests(unittest.TestCase):
 
         found_course_name = self.driver.find_element_by_id('auth_user_course_id').get_attribute('value')
         self.assertIn(self.course_name, found_course_name,
-            "Wrong course name displayed in user profile page: \
+                      "Wrong course name displayed in user profile page: \
              expected %s, got %s" % (self.course_name, found_course_name))
 
     def build_new_course_from_existing_course(self):
@@ -185,7 +186,7 @@ class LocalAuthTests(unittest.TestCase):
         self.driver.find_element_by_css_selector("input[value='Submit']").click()
 
         # wait up to a minute for the new course to be created
-        WebDriverWait(self.driver, 60)\
-            .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"),'Your course is ready'))
+        WebDriverWait(self.driver, 60) \
+            .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Your course is ready'))
 
         self.course_name = self.new_course_name # user account is now linked with the new course
