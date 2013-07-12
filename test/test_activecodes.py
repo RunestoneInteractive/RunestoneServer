@@ -69,26 +69,3 @@ class ActiveCodeTests(unittest.TestCase):
             print "[%s] Error in ActiveCode [%s] on page [%s]." \
                   % (course_name, e.get_attribute('id'), url[url.rindex('/')+1:])
 
-
-### Example stuff
-
-# # get a div
-# div = driver.find_element_by_id("ch03_4")
-#
-# # get the first button within the div
-# button = div.find_element_by_tag_name('button')
-# if button.text == 'Run':
-#     button.click()
-#
-# # get the pre element
-# pre = div.find_element_by_id("ch03_4_pre")
-#
-#
-# try:
-#     WebDriverWait(driver,10).until(EC.text_to_be_present_in_element((By.ID,"ch03_4_pre"),"Zuki"))
-#     print pre.text
-# except:
-#     print "not there"
-#
-# #finally:
-# #    driver.quit()
