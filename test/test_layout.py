@@ -144,34 +144,34 @@ class LayoutTests(unittest.TestCase):
             dropdown_el = self.driver.find_element_by_class_name('open')
 
             # get the list with the menu items
-            user_menu = dropdown_el.find_element_by_class_name('user-menu')
+            help_menu = dropdown_el.find_element_by_class_name('user-menu')
 
-            return user_menu
+            return help_menu
 
         # Navigation Help link
-        user_menu = open_menu()
-        user_menu.find_elements_by_tag_name('a')[0].click()
+        help_menu = open_menu()
+        help_menu.find_elements_by_tag_name('a')[0].click()
         expected_url = '%s/runestone/static/%s/navhelp.html' % (self.host, self.course_name)
         self.assertEqual(expected_url, self.driver.current_url,
                 "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, self.driver.current_url))
 
         # Instructor's Page link
-        user_menu = open_menu()
-        link = user_menu.find_elements_by_tag_name('a')[1].get_attribute('href')
+        help_menu = open_menu()
+        link = help_menu.find_elements_by_tag_name('a')[1].get_attribute('href')
         expected_url = '%s/runestone/admin/index' % self.host
         self.assertEqual(expected_url, link,
                          "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, link))
 
         # About Runestone link
-        user_menu = open_menu()
-        user_menu.find_elements_by_tag_name('a')[2].click()
+        help_menu = open_menu()
+        help_menu.find_elements_by_tag_name('a')[2].click()
         expected_url = 'http://runestoneinteractive.org/'
         self.assertEqual(expected_url, self.driver.current_url,
                          "Wrong 'About Runestone' link: expected %s, got %s" % (expected_url, self.driver.current_url))
 
         # Report A Problem link
-        user_menu = open_menu()
-        link = user_menu.find_elements_by_tag_name('a')[3].get_attribute('href')
+        help_menu = open_menu()
+        link = help_menu.find_elements_by_tag_name('a')[3].get_attribute('href')
         expected_url = 'https://github.com/bnmnetp/runestone/issues/new'
         self.assertEqual(expected_url, link,
                          "Wrong 'Report A Problem' link: expected %s, got %s" % (expected_url, link))
