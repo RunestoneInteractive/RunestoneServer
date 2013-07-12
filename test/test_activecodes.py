@@ -22,8 +22,6 @@ class ActiveCodeTests(unittest.TestCase):
         '''
         link_list = []
         for course in self.courses_to_test:
-
-            # TODO remove this if statement once issue #185 is resolved
             if 'pythonds' in course:
                 self.driver.get(self.host + "/runestone/static/%s/index.html" % course)
             else:
@@ -40,6 +38,8 @@ class ActiveCodeTests(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+
+    #################################################################################################
 
     def runActiveCodesOnPage(self, url):
         '''Find and run every ActiveCode element on the page specified by url'''

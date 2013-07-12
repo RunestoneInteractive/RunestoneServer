@@ -61,6 +61,8 @@ class LocalAuthTests(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+    ##############################################################################################
+
     def register(self):
         '''
         Use the local web2py authentication to register a new user (info
