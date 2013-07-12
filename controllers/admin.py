@@ -35,7 +35,7 @@ def listassessments():
                           from useinfo
                           where div_id = oui.div_id and course_id = '%s' ) as pct
                from useinfo oui
-               where event = 'mChoice' and act like '%%:correct'
+               where event = 'mChoice' and position('correct' in act) > 0
                      and course_id = '%s' group by div_id order by pct;''' % (course.course_name,course.course_name,course.course_name)
     rset = db.executesql(query)
     return dict(solutions=rset)
