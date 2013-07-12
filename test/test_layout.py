@@ -20,13 +20,16 @@ class LayoutTests(unittest.TestCase):
         self.logo_link()
         self.course_title_link()
         self.social_media_menu()
+        self.help_menu()
 
     def tearDown(self):
         self.driver.quit()
 
-    ##################################################################
+    ##########################################################################################
 
     def logo_link(self):
+        ''' test that the RSI logo in the navbar links to the RSI site '''
+
         self.driver.get('%s/runestone/static/%s/index.html'
                         %(self.host, self.course_name))
 
@@ -38,6 +41,8 @@ class LayoutTests(unittest.TestCase):
                     ' the correct location! Expected %s, got %s.' % (expected_url, self.driver.current_url))
 
     def course_title_link(self):
+        ''' test that clicking on the course title links to the Sphinx master doc (index or toc.html) '''
+
         self.driver.get('%s/runestone/static/%s/index.html'
                         %(self.host, self.course_name))
 
@@ -54,6 +59,8 @@ class LayoutTests(unittest.TestCase):
                     "the correct location! Expected %s, got %s." % (expected_url, self.driver.current_url))
 
     def social_media_menu(self):
+        ''' test that the Facebook and Twitter buttons are visible in the social media dropdown menu '''
+
         self.driver.get('%s/runestone/static/%s/index.html'
                         %(self.host, self.course_name))
 
@@ -74,3 +81,50 @@ class LayoutTests(unittest.TestCase):
         # make sure the Facebook like button is visible
         fb_button = social_div.find_element_by_class_name('fb-like')
         self.assertTrue(fb_button.is_displayed(), "The Facebook 'Like' button is not displayed!")
+
+    def help_menu(self):
+        ''' test that links in the help menu work and link to the correct locations '''
+
+        def open_menu():
+            self.driver.get('%s/runestone/static/%s/index.html'
+                            %(self.host, self.course_name))
+
+            # trigger the menu to open
+            menu_toggles = WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_class_name('dropdown-toggle'))
+            menu_toggles[3].click()
+
+            # make sure it actually did open
+            dropdown_el = self.driver.find_element_by_class_name('open')
+
+            # get the list with the menu items
+            user_menu = dropdown_el.find_element_by_class_name('user-menu')
+
+            return user_menu
+
+        # Navigation Help link
+        user_menu = open_menu()
+        user_menu.find_elements_by_tag_name('a')[0].click()
+        expected_url = '%s/runestone/static/%s/navhelp.html' % (self.host, self.course_name)
+        self.assertEqual(expected_url, self.driver.current_url,
+                "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, self.driver.current_url))
+
+        # Instructor's Page link
+        user_menu = open_menu()
+        link = user_menu.find_elements_by_tag_name('a')[1].get_attribute('href')
+        expected_url = '%s/runestone/admin/index' % self.host
+        self.assertEqual(expected_url, link,
+                         "Wrong 'Navigation Help' link: expected %s, got %s" % (expected_url, link))
+
+        # About Runestone link
+        user_menu = open_menu()
+        user_menu.find_elements_by_tag_name('a')[2].click()
+        expected_url = 'http://runestoneinteractive.org/'
+        self.assertEqual(expected_url, self.driver.current_url,
+                         "Wrong 'About Runestone' link: expected %s, got %s" % (expected_url, self.driver.current_url))
+
+        # Report A Problem link
+        user_menu = open_menu()
+        link = user_menu.find_elements_by_tag_name('a')[3].get_attribute('href')
+        expected_url = 'https://github.com/bnmnetp/runestone/issues/new'
+        self.assertEqual(expected_url, link,
+                         "Wrong 'Report A Problem' link: expected %s, got %s" % (expected_url, link))
