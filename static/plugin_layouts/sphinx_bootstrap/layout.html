@@ -86,7 +86,7 @@
                 {% if 'overview' in course_id: %}
                     <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li> 
                 {% else: %}
-                    <li><a href='/{{appname}}/static/{{course_id}}/toc.html'>Table of Contents</a></li> 
+                    <li><a href='{{ pathto(master_doc) }}'>Table of Contents</a></li>
                 {% endif %}
                 <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
                 <li class="divider"></li>
