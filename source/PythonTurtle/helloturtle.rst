@@ -1232,8 +1232,7 @@ Exercises
                 :identifier: e928a562a4f5c41f9892c9bfc4a1d5883
 
 
-#. Create a turtle, and assign it to a variable.  When you print its type,
-    what do you get?
+#. Create a turtle and assign it to a variable.  When you print its type, what do you get?
 
    .. actex:: ex_3_12
 
