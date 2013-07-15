@@ -305,6 +305,7 @@ var checkPreviousFIB = function (divid) {
                 var arr = ex.split(";");
                 var str = key + "_ans1";
                 $("#" + str).attr("value", arr[0]);
+                document.getElementById(divid + '_bcomp').disabled = false;                
             }
         }
     }
