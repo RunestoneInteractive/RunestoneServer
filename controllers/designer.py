@@ -127,8 +127,7 @@ def build():
         # update instructor record to have course_id be this course
         # if the above update_or_insert on project does nothing (meaning this is a duplicate)
         # then do not change teh instructors cid.
-        if cid:
-            db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        db(db.auth_user.id == auth.user.id).update(course_id = cid)
 
         moddata = {}
 
