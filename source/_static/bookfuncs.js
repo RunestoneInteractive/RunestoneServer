@@ -636,6 +636,7 @@ function compareAnswers(div_id) {
 function compareFITB(data, status, whatever) {
     var res = '<div class="compare-modal">\n<h2>Top Answers</h2><table>'
     var answers = eval(data)[0]
+    var misc = eval(data)[1]    
     var theClass = ""
 
     for (var row in answers) {
@@ -644,9 +645,9 @@ function compareFITB(data, status, whatever) {
             + answers[row].count + ' times</td></tr>'
     }
     res += '</table>'
-//    if (misc['yourpct'] !== 'unavailable') {
-//        res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
-//    }
+    if (misc['yourpct'] !== 'unavailable') {
+        res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
+    }
 
     res +='</div>'
 

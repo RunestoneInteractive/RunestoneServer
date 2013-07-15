@@ -251,6 +251,31 @@ def getlastpage():
         db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
+def getCorrectStats(miscdata,event):
+    sid = None
+    if auth.user:
+        sid = auth.user.username
+    else:
+        if request.cookies.has_key('ipuser'):
+            sid = request.cookies['ipuser'].value
+
+    if sid:
+        correctquery = '''select 
+(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' and position('correct' in act) > 0 )
+/
+(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' ) as result;
+''' % (sid,event,sid,event)
+
+        try:    
+            rows = db.executesql(correctquery)
+            pctcorr = round(rows[0][0]*100)
+        except:
+            pctcorr = 'unavailable in sqlite'
+    else:
+        pctcorr = 'unavailable'
+
+    miscdata['yourpct'] = pctcorr
+
 
 def getaggregateresults():
     course = request.vars.course
@@ -259,7 +284,7 @@ def getaggregateresults():
     response.headers['content-type'] = 'application/json'
 
     count = db.useinfo.id.count()
-    result = db(db.useinfo.div_id == question).select(db.useinfo.act,count,groupby=db.useinfo.act)
+    result = db((db.useinfo.div_id == question) & (db.useinfo.course_id == course)).select(db.useinfo.act,count,groupby=db.useinfo.act)
 
     tdata = {}
     tot = 0
@@ -287,29 +312,7 @@ def getaggregateresults():
 
     miscdata['correct'] = correct
 
-    sid = None
-    if auth.user:
-        sid = auth.user.username
-    else:
-        if request.cookies.has_key('ipuser'):
-            sid = request.cookies['ipuser'].value
-
-    if sid:
-        correctquery = '''select 
-(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' and position('correct' in act) > 0 )
-/
-(select cast(count(*) as float) from useinfo where sid='%s' and event='mChoice' ) as result;
-''' % (sid,sid)
-
-        try:    
-            rows = db.executesql(correctquery)
-            pctcorr = round(rows[0][0]*100)
-        except:
-            pctcorr = 'unavailable in sqlite'
-    else:
-        pctcorr = 'unavailable'
-
-    miscdata['yourpct'] = pctcorr
+    getCorrectStats(miscdata,'mChoice')
 
     return json.dumps([rdata,miscdata])
 
@@ -328,7 +331,11 @@ def gettop10Answers():
         res = 'error in query'
 
     res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')], 'count':row[1]} for row in rows ]
-    return json.dumps([res])
+
+    miscdata = {}
+    getCorrectStats(miscdata,'assses')
+
+    return json.dumps([res,miscdata])
 
 
 
