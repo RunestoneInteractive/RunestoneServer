@@ -27,33 +27,33 @@ function dragDefine(ev) {
 
 function addModBlock()
 {
-    var cboxes = document.getElementById("chapterboxes")
-    var divelement = document.createElement('div')
+    var cboxes = document.getElementById("chapterboxes");
+    var divelement = document.createElement('div');
     
-    divelement.setAttribute("id","box2")
-    divelement.setAttribute("class","boxclass")
-    divelement.setAttribute("ondrop","drop(event)" )
-    divelement.setAttribute("ondragover","allowDrop(event)")
-    divelement.innerHTML='<input id="title" type="text" value="Your Section Title Here" name="label" />'
+    divelement.setAttribute("id","box2");
+    divelement.setAttribute("class","boxclass");
+    divelement.setAttribute("ondrop","drop(event)" );
+    divelement.setAttribute("ondragover","allowDrop(event)");
+    divelement.innerHTML='<input id="title" type="text" placeholder="Your section title here" name="label" />';
     
     cboxes.appendChild(divelement)
 }
 
 function displayContents()
 {
-   var cdiv = document.getElementById("chapterboxes")
-   txt=""
-   var cchildren = cdiv.childNodes
+   var cdiv = document.getElementById("chapterboxes");
+   txt="";
+   var cchildren = cdiv.childNodes;
    
-   var bchildren = cchildren[1].childNodes
+   var bchildren = cchildren[1].childNodes;
 
    var txt=txt+bchildren[1].value + "<br/>";
 
    for (var i=3; i<bchildren.length; i++)
       {
         txt=txt + "ID="+bchildren[i].id +" "+ bchildren[i].innerHTML + "<br/>";
-      };
-   
+      }
+
    for (var c=3; c<cchildren.length; c=c+1)
    {
       var bchildren = cchildren[c].childNodes
@@ -72,38 +72,33 @@ function displayContents()
 function buildSuccess(data,status,ignore) {
   window.location.href = data.yoururl
 }
-function buildIndexFile(projname)
-{
-   var cdiv = document.getElementById("chapterboxes")
-//   txt="projectname="+projname+"&toc="
-   txt=""
-   var cchildren = cdiv.childNodes
-   
-   var bchildren = cchildren[1].childNodes
+function buildIndexFile(projname) {
+    var cdiv = document.getElementById("chapterboxes");
 
-   var txt=txt+bchildren[1].value + " ";
+    var txt="";
+    var cchildren = cdiv.childNodes;
+    var bchildren = cchildren[1].childNodes;
 
-   for (var i=3; i<bchildren.length; i++)
-      {
+    txt=txt+bchildren[1].value + " ";
+
+    for (var i=3; i<bchildren.length; i++) {
         txt=txt + bchildren[i].getAttribute("data-filename") + " ";
-      };
+    }
    
-   for (var c=3; c<cchildren.length; c=c+1)
-   {
-      var bchildren = cchildren[c].childNodes
+    for (var c=3; c<cchildren.length; c=c+1) {
+        var bchildren = cchildren[c].childNodes;
 
-      var txt=txt+bchildren[0].value + " ";
+        var txt=txt+bchildren[0].value + " ";
 
-      for (var i=1; i<bchildren.length; i++)
-      {
-        txt=txt + bchildren[i].getAttribute("data-filename") + " ";
-      };
-   }
+        for (var i=1; i<bchildren.length; i++) {
+            txt=txt + bchildren[i].getAttribute("data-filename") + " ";
+        }
+    }
 
-   data = {}
-   data.projectname=projname;
-   data.toc=txt
-   jQuery.post(eBookConfig.app +'/designer/makefile.json',data,buildSuccess)
+    data = {};
+    data.projectname=projname;
+    data.toc=txt;
+    jQuery.post(eBookConfig.app +'/designer/makefile.json',data,buildSuccess)
 }
 
 function displayItems(boxid)

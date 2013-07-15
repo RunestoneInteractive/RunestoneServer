@@ -146,8 +146,6 @@ def makefile():
 
     p = request.vars.toc
 
-
-
     pcode = request.vars.projectname
     row = db(db.projects.projectcode==pcode).select()
     title = row[0].description
@@ -156,7 +154,8 @@ def makefile():
     sourcedir = path.join(workingdir,'tmp',pcode)
 
     # copy modules from source
-
+    if not os.path.exists(path.join(workingdir,'tmp')):
+        os.mkdir(path.join(workingdir,'tmp'))
     os.mkdir(sourcedir)
 
     f = open(path.join(sourcedir,"index.rst"),"w")
