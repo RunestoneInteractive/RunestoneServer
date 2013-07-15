@@ -138,7 +138,7 @@ like any other data in Python.  Module objects simply contain other Python eleme
 
 
 The first thing we need to do when we wish to use a module is perform an ``import``.  In the example above, the statement
-``import turtle`` creates a new name, ``turtle`` and makes it refer to a `module object`.  This looks very much like
+``import turtle`` creates a new name, ``turtle``, and makes it refer to a `module object`.  This looks very much like
 the reference diagrams we saw earlier for simple variables.
 
 
@@ -161,7 +161,7 @@ We will now turn our attention to a few other modules that you might find useful
 The `math` module
 -----------------
 
-The ``math`` module contains the kinds of mathematical functions you'd typically find on your
+The ``math`` module contains the kinds of mathematical functions you would typically find on your
 calculator and some mathematical constants
 like `pi` and `e`.
 As we noted above, when we ``import math``, we create a reference to a module object that contains these elements.
@@ -198,7 +198,7 @@ Mathematical functions do not need to be constructed.  They simply
 perform a task.
 They are all housed together in a module called `math`.  Once we have imported the math module, anything defined there
 can be used in our program.  Notice that we always use the name of the module followed by a `dot` followed by the
-specific item form the module (``math.sqrt``).  You can think of this as lastname.firstname where the lastname is the module
+specific item from the module (``math.sqrt``).  You can think of this as lastname.firstname where the lastname is the module
 family and the firstname is the individual entry in the module.
 
 If you have not done so already, take a look at the documentation
@@ -285,7 +285,7 @@ So they're called **pseudo-random** generators --- they are not genuinely random
 They start with a *seed* value. Each time you ask for another random number, you'll get
 one based on the current seed attribute, and the state of the seed (which is one
 of the attributes of the generator) will be updated.  The good news is that each time you run your program, the seed value
-is likely different meaning that even though the random numbers are being created algorithmically, you will likely
+is likely to be different meaning that even though the random numbers are being created algorithmically, you will likely
 get random behavior each time you execute.
 
 
@@ -382,6 +382,60 @@ Glossary
 
 Exercises
 ---------
+
+#.  .. tabbed:: q1
+
+        .. tab:: Question
+
+           Use a ``for`` statement to print 10 random numbers.
+        
+
+        .. tab:: Answer
+            
+            .. activecode:: mod_q1_answer
+            
+               import random
+            
+               howmany = 10
+               for counter in range(howmany):
+                  arandom = random.random()
+                  print(arandom)
+
+        .. tab:: Discussion
+
+            .. disqus::
+                :shortname: interactivepython
+                :identifier: mods_111
+
+
+#.  Search for a way to calculate an approximation for **pi**.  Write a program to compute the approximation and then print that value as well as the value of ``math.pi`` from the math module.
+
+    .. actex:: ex_mod_2
+
+#.  .. tabbed:: q3
+
+        .. tab:: Question
+
+           The **Pythagorean Theorem** tells us that the length of the hypotenuse of a right triangle is related to the lengths of the other two sides.  Look thru the ``math`` module and see if you can find a function that will compute this relationship automatically.
+        
+
+        .. tab:: Answer
+            
+            .. activecode:: mod_q3_answer
+            
+               import math
+            
+               side1 = 3
+               side2 = 4
+               hypotenuse = math.hypot(side1,side2)
+               print(hypotenuse)
+
+        .. tab:: Discussion
+
+            .. disqus::
+                :shortname: interactivepython
+                :identifier: mods_333
+
 
 
 .. toctree::
