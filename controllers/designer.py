@@ -103,7 +103,7 @@ def build():
         freshenv = True
         warningiserror = False
         tags = []
-        print sys.path
+
         sys.path.insert(0,path.join(request.folder,'modules'))
         app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
                     confoverrides, status, warning, freshenv,
@@ -119,7 +119,6 @@ def build():
 
         cid = db.courses.update_or_insert(course_name=request.vars.projectname)
 
-        print cid
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
