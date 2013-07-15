@@ -72,8 +72,6 @@ def build():
 
         shutil.copytree(path.join(workingdir,'source'),sourcedir)
 
-        conffile = request.vars.coursetype + '-conf.py'
-        indexfile = 'index-' + request.vars.coursetype
         # copy the config file to conf.py
         shutil.copy(path.join(workingdir,request.vars.coursetype,'conf.py'),
             path.join(sourcedir,'conf.py'))
@@ -121,6 +119,7 @@ def build():
 
         cid = db.courses.update_or_insert(course_name=request.vars.projectname)
 
+        print cid
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
@@ -153,7 +152,13 @@ def makefile():
     workingdir = request.folder
     sourcedir = path.join(workingdir,'tmp',pcode)
 
-    # copy modules from source
+    # create confdir and copy the conf.py file from devcourse into our custom course
+    confdir = path.join(workingdir, pcode)
+    os.mkdir(confdir)
+    shutil.copy(path.join(workingdir, 'devcourse', 'conf.py'),
+                path.join(confdir, 'conf.py'))
+
+    # generate index.rst and copy modules from source
     if not os.path.exists(path.join(workingdir,'tmp')):
         os.mkdir(path.join(workingdir,'tmp'))
     os.mkdir(sourcedir)
@@ -224,7 +229,6 @@ def makefile():
                                 path.join(sourcedir,'FrontBackMatter'))
 
     coursename = pcode
-    confdir = path.join(workingdir,'source')
     outdir = path.join(request.folder, 'static' , coursename)
     doctreedir = path.join(outdir,'.doctrees')
     buildername = 'html'
