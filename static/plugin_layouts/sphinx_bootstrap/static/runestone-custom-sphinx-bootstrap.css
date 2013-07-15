@@ -14,7 +14,7 @@ body {
 .navbar .brand {
     font-size: 18px;
     margin-left: 0px;
-    padding-left: 10px !important;
+    padding-left:10px !important;
 }
 
 .brand-logo {
@@ -204,4 +204,9 @@ div.flash {
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;
     width: 82px !important;
+}
+
+.compare-modal table {
+    border-collapse: separate;
+    border-spacing: 10px 5px;
 }

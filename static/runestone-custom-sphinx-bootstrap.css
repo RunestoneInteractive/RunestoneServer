@@ -205,3 +205,8 @@ div.flash {
     height: 20px !important;
     width: 82px !important;
 }
+
+.compare-modal table {
+    border-collapse: separate;
+    border-spacing: 10px 5px;
+}
