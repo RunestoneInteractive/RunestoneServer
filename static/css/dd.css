@@ -79,9 +79,9 @@
     display:inline;
 }
 
-td  {color:#ff0000;}
+.homeboxclass td  {color:#ff0000;}
 
-table, tr, td {border: 3px solid green}
+/*table, tr, td {border: 3px solid green}*/
 
 
        
