@@ -39,13 +39,27 @@
 
   <button type="button" class='btn btn-small' onclick="addModBlock()">+</button>
 
-  <button type="button" class='btn btn-small' onclick="buildIndexFile('{{=pname}}')">Create Index</button>
+  <button type="button" class='btn btn-small' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}')">Create Index</button>
 
   <div id="chapterboxes">
     <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
       <input id="title" type="text" placeholder="Your section title here" name="label" />
     </div>
   </div>
+
+  <div id="spinner_div" style="align: center; display: none;">
+    <p>Your course is being prepared for you.  This may take several minutes to complete.  When the course is finished you will be redirected to your new to your course.  Because you created the course you are set up as the instructor.</p>
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
+  </div>
+
+  <script type="text/javascript">
+	  function unhide_img(id) {
+      var d = document.getElementById('spinner_div');
+      d.style.display = "block";
+		  var i = document.getElementById('spinner');
+		  i.style.display = "block";
+	  }
+	</script>
 {{pass}}
 
 
