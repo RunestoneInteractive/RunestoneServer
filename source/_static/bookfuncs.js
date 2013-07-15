@@ -310,115 +310,6 @@ function loadEditor(data, status, whatever) {
     // need to get the divId back with the result...
 }
 
-
-/*function createActiveCode(divid,suppliedSource,sid) {
-    var eNode;
-    var acblockid;
-    if (sid !== undefined) {
-        acblockid = divid + "_" + sid;
-    } else {
-        acblockid = divid;
-    }
-
-    edNode = document.getElementById(acblockid);
-    if (edNode.children.length == 0 ) {
-    //edNode.style.display = 'none';
-    edNode.style.backgroundColor = "white";
-    var editor;
-    editor = CodeMirror(edNode, {
-                mode: {name: "python",
-                    version: 2,
-                    singleLineStringErrors: false},
-                lineNumbers: true,
-                indentUnit: 4,
-                tabMode: "indent",
-                matchBrackets: true,
-                onKeyEvent:handleEdKeys
-            });
-
-
-    var myRun = function() {
-        runit(acblockid);
-    };
-    var mySave = function() {
-        saveEditor(divid);
-    };
-    var myLoad = function() {
-        requestCode(divid,sid);
-    };
-    cm_editors[acblockid+"_code"] = editor;
-    editor.parentDiv = acblockid;
-    var runButton = document.createElement("button");
-    runButton.appendChild(document.createTextNode('Run'));
-    runButton.className = runButton.className + ' btn btn-small btn-success';
-    runButton.onclick = myRun;
-    edNode.appendChild(runButton);
-    edNode.appendChild(document.createElement('br'));
-    if (sid === undefined) { // We don't need load and save buttons for grading
-        if(isLoggedIn() == true) {
-            var saveButton = document.createElement("input");
-            saveButton.setAttribute('type','button');
-            saveButton.setAttribute('value','Save');
-            saveButton.className = saveButton.className + ' btn btn-small';
-            saveButton.onclick = mySave;
-            edNode.appendChild(saveButton);
-
-            var loadButton = document.createElement("input");
-            loadButton.setAttribute('type','button');
-            loadButton.setAttribute('value','Load');
-            loadButton.className = loadButton.className + ' btn btn-small';
-            loadButton.onclick = myLoad;
-            edNode.appendChild(loadButton);
-        } else {
-            var saveButton = document.createElement("input");
-            saveButton.setAttribute('type','button');
-            saveButton.setAttribute('value','Save');
-            saveButton.className = saveButton.className + ' btn btn-small disabled';
-            saveButton.setAttribute('data-toggle','tooltip');
-            saveButton.setAttribute('title','Register or log in to save your code');
-            edNode.appendChild(saveButton);
-            $jqTheme(saveButton).tooltip( {
-                'selector': '',
-                'placement': 'bottom'
-            });
-
-            var loadButton = document.createElement("input");
-            loadButton.setAttribute('type','button');
-            loadButton.setAttribute('value','Load');
-            loadButton.className = loadButton.className + ' btn btn-small disabled';
-            loadButton.setAttribute('data-toggle','tooltip');
-            loadButton.setAttribute('title','Register or log in to load your saved code');
-            edNode.appendChild(loadButton);
-            $jqTheme(loadButton).tooltip( {
-                'selector': '',
-                'placement': 'bottom'
-            });
-        }
-    }
-    edNode.appendChild(document.createElement('br'));
-    var newCanvas = edNode.appendChild(document.createElement("canvas"));
-    newCanvas.id = acblockid+"_canvas";
-    newCanvas.height = 400;
-    newCanvas.width = 400;
-    newCanvas.style.border = '2px solid black';
-    newCanvas.style.display = 'none';
-    var newPre = edNode.appendChild(document.createElement("pre"));
-    newPre.id = acblockid + "_pre";
-    newPre.className = "active_out";
-
-    myLoad();
-    if (! suppliedSource ) {
-        suppliedSource = '\n\n\n\n\n';
-    }
-    if (! editor.getValue()) {
-        suppliedSource = suppliedSource.replace(new RegExp('%22','g'),'"');
-        suppliedSource = suppliedSource.replace(new RegExp('%27','g'),"'");
-        editor.setValue(suppliedSource);
-    }
-}
-   // $('#'+divid).modal({minHeight:700, minWidth: 410, maxWidth:450, containerCss:{width:420, height:750}});
-} */
-
 function disableAcOpt() {
     $jqTheme('button.ac_opt').each ( function(index, value) {
         value.className = value.className + ' disabled';
@@ -624,6 +515,52 @@ function compareModal(data, status, whatever) {
 
 
     $.modal(res)
+}
+
+function submitPoll(div_id) {
+    var form = $("#"+div_id+"_poll");
+    var poll_val = form.find("input:radio[name="+div_id +"_opt]:checked").val();
+    var poll_comment = form.find("input:text[name="+div_id+"_comment]").val();
+
+    var act = ''
+    if(poll_comment[0] !== undefined)
+        act = poll_val + ":" + poll_comment;
+    else
+        act = poll_val;
+
+    var eventInfo = {'event':'poll', 'act':act, 'div_id':div_id};
+
+    logBookEvent(eventInfo);
+
+    $("#"+div_id+"_poll_input").hide(); // hide the poll inputs
+
+    // show the results of the poll
+    var data = {};
+    data.div_id = div_id;
+    data.course = eBookConfig.course;
+    jQuery.get(eBookConfig.ajaxURL+'getpollresults',data, showPollResults);
+}
+
+function showPollResults(data) {
+    results = eval(data);
+    var total = results[0];
+    var opt_list = results[1];
+    var count_list = results[2];
+    var div_id = results[3];
+
+    var result_div = $("#"+div_id+"_results");
+    result_div.html("<b>Results:</b><br><br>");
+    result_div.show();
+
+    var list = $(document.createElement("ol"));
+    for(var i=0; i<opt_list.length; i++) {
+        var count = count_list[i];
+        var percent = (count / total) * 100;
+        var text = Math.round(10*percent)/10 + "%";   // round percent to 10ths
+        var el = $("<li><div class='progress progress-success'><div class='bar' style='width:"+percent+"%;'>"+text+"</div></div></li>");
+        list.append(el);
+    }
+    result_div.append(list);
 }
 
 function compareAnswers(div_id) {

@@ -2,6 +2,7 @@ import json
 import datetime
 import logging
 import time
+from collections import Counter
 
 logger = logging.getLogger("web2py.app.eds")
 logger.setLevel(logging.DEBUG)
@@ -316,6 +317,32 @@ def getaggregateresults():
 
     return json.dumps([rdata,miscdata])
 
+def getpollresults():
+    course = request.vars.course
+    div_id = request.vars.div_id
+
+    response.headers['content-type'] = 'application/json'
+
+    query = ''' select act from useinfo where event = 'poll' and div_id = '%s' and course_id = '%s'
+                ''' % (div_id, course)
+    rows = db.executesql(query)
+
+    result_list = []
+    for row in rows:
+        val = row[0].split(":")[0]
+        result_list.append(int(val))
+
+    # maps option : count
+    opt_counts = Counter(result_list)
+
+    # opt_list holds the option numbers from smallest to largest
+    # count_list[i] holds the count of responses that chose option i
+    opt_list = sorted(opt_counts.keys())
+    count_list = []
+    for i in opt_list:
+        count_list.append(opt_counts[i])
+
+    return json.dumps([len(result_list), opt_list, count_list, div_id])
 
 def gettop10Answers():
     course = request.vars.course
@@ -323,8 +350,7 @@ def gettop10Answers():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
-    query = '''select act, count(*) from useinfo where event = 'assses' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
-
+    query = '''select act, count(*) from useinfo where event = 'assess' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
     try:
         rows = db.executesql(query)    
     except:
