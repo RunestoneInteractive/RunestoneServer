@@ -15,7 +15,6 @@
   {{pass}}
 {{ else: }}
 
-  <script type="text/javascript" src="{{=URL('static', 'js/dd.js')}}"></script>
   <h4>Module Index</h4>
 
   <div id="boxA" class="homeboxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -38,9 +37,9 @@
   <h4>Choose topics for...</h4>
   <h4>{{=pname}}</h4>
 
-  <button type="button" onclick="addModBlock()">+</button>
+  <button type="button" class='btn btn-small' onclick="addModBlock()">+</button>
 
-  <button type="button" onclick="buildIndexFile('{{=pname}}')">Create Index</button>
+  <button type="button" class='btn btn-small' onclick="buildIndexFile('{{=pname}}')">Create Index</button>
 
   <div id="chapterboxes">
     <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
