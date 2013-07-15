@@ -20,7 +20,15 @@
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-2.3.1/js/bootstrap.min.js')}}"></script>    
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
-
+    <script type="text/javascript">
+      var eBookConfig = {};
+      var portPart = '';
+      eBookConfig.host = 'http://{{=request.env.http_host}}';
+      eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
+      eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+      eBookConfig.logLevel = 10;
+      eBookConfig.loginRequired = true;
+    </script>
   </head>
 <body>
 
