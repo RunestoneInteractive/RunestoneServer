@@ -58,11 +58,8 @@ def build():
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
-        # update instructor record to have course_id be this course
-        # if the above update_or_insert on project does nothing (meaning this is a duplicate)
-        # then do not change teh instructors cid.
-        if cid:
-            db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        # enrol the user in their new course
+        db(db.auth_user.id == auth.user.id).update(course_id = cid)
 
         # Now Copy the whole source directory to tmp
         workingdir = request.folder
@@ -72,8 +69,6 @@ def build():
 
         shutil.copytree(path.join(workingdir,'source'),sourcedir)
 
-        conffile = request.vars.coursetype + '-conf.py'
-        indexfile = 'index-' + request.vars.coursetype
         # copy the config file to conf.py
         shutil.copy(path.join(workingdir,request.vars.coursetype,'conf.py'),
             path.join(sourcedir,'conf.py'))
@@ -105,7 +100,7 @@ def build():
         freshenv = True
         warningiserror = False
         tags = []
-        print sys.path
+
         sys.path.insert(0,path.join(request.folder,'modules'))
         app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
                     confoverrides, status, warning, freshenv,
@@ -126,11 +121,8 @@ def build():
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
-        # update instructor record to have course_id be this course
-        # if the above update_or_insert on project does nothing (meaning this is a duplicate)
-        # then do not change teh instructors cid.
-        if cid:
-            db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        # enrol the user in their new course
+        db(db.auth_user.id == auth.user.id).update(course_id = cid)
 
         moddata = {}
 
@@ -146,8 +138,6 @@ def makefile():
 
     p = request.vars.toc
 
-
-
     pcode = request.vars.projectname
     row = db(db.projects.projectcode==pcode).select()
     title = row[0].description
@@ -155,8 +145,15 @@ def makefile():
     workingdir = request.folder
     sourcedir = path.join(workingdir,'tmp',pcode)
 
-    # copy modules from source
+    # create confdir and copy the conf.py file from devcourse into our custom course
+    confdir = path.join(workingdir, pcode)
+    os.mkdir(confdir)
+    shutil.copy(path.join(workingdir, 'devcourse', 'conf.py'),
+                path.join(confdir, 'conf.py'))
 
+    # generate index.rst and copy modules from source
+    if not os.path.exists(path.join(workingdir,'tmp')):
+        os.mkdir(path.join(workingdir,'tmp'))
     os.mkdir(sourcedir)
 
     f = open(path.join(sourcedir,"index.rst"),"w")
@@ -225,7 +222,6 @@ def makefile():
                                 path.join(sourcedir,'FrontBackMatter'))
 
     coursename = pcode
-    confdir = path.join(workingdir,'source')
     outdir = path.join(request.folder, 'static' , coursename)
     doctreedir = path.join(outdir,'.doctrees')
     buildername = 'html'
