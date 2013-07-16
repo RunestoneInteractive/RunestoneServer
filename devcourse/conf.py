@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.abspath('../modules'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.disqus','luther.sphinx.tabbedStuff','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta','gatech.parsons']
+extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.poll','luther.sphinx.disqus','luther.sphinx.tabbedStuff','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta','gatech.parsons']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../source/_templates']
@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Python Courseware'
-copyright = u'2012, Brad Miller, David Ranum'
+copyright = u'2013 Brad Miller, David Ranum'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
