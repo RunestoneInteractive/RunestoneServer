@@ -21,6 +21,15 @@ Simple Python Data
 
    SimplePythonData/simpledata.rst
 
+Debugging Interlude 1
+:::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Debugging/debugIntro.rst
+   
+
 Python Turtle Graphics
 ::::::::::::::::::::::
 
