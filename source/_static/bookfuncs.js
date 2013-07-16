@@ -520,6 +520,9 @@ function compareModal(data, status, whatever) {
 function submitPoll(div_id) {
     var form = $("#"+div_id+"_poll");
     var poll_val = form.find("input:radio[name="+div_id +"_opt]:checked").val();
+    if(poll_val === undefined)
+        return;
+
     var poll_comment = form.find("input:text[name="+div_id+"_comment]").val();
 
     var act = ''
