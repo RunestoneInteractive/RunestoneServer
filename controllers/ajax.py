@@ -324,7 +324,7 @@ def gettop10Answers():
     response.headers['content-type'] = 'application/json'
 
     query = '''select act, count(*) from useinfo where event = 'assses' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
-    print query
+
     try:
         rows = db.executesql(query)    
     except:
