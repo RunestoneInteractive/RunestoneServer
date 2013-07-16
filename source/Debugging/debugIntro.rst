@@ -111,4 +111,77 @@ Debugging a program is a different way of thinking than writing a program.  The 
 
 #. Everyone is a suspect (Except Python)!  Its common for beginner programmers to blame Python, but that should be your last resort.  Remember that Python has been used to solve CS1 level problems millions of times by millions of other programmers.  So, Python is probably not the problem.
 
-#. Find clues.  This is the biggest job of the detective.
+#. Find clues.  This is the biggest job of the detective and right now there are two important kinds of clues for you to understand.
+
+    #. Error Messages
+
+    #. Print Statements
+
+Know your error Messages
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Many problems in your program will lead to an error message.  For example as I was writing and testing this chapter of the book I wrote the following version of the example program in the previous section.
+
+.. sourcecode:: python
+
+   current_time_str = input("what is the current time (in hours 0-23)?")
+   wait_time_str = input("How many hours do you want to wait")
+
+   current_time_int = int(current_time_str)
+   wait_time_int = int(wait_time_int)
+
+   final_time_int = current_time_int + wait_time_int
+   print(final_time_int)
+
+Can you see what is wrong, just by looking at the code?  Maybe, maybe not.  Our brain tends to see what we think is there, so sometimes it is very hard to find the problem just by looking at the code.  Especially when it is our own code and we are sure that we have done everything right!
+
+Lets try the program again, but this time in an activecode:
+
+.. activecode:: db_ex3_5
+
+   current_time_str = input("what is the current time (in hours 0-23)?")
+   wait_time_str = input("How many hours do you want to wait")
+
+   current_time_int = int(current_time_str)
+   wait_time_int = int(wait_time_int)
+
+   final_time_int = current_time_int + wait_time_int
+   print(final_time_int)
+
+
+Aha!  Now we have an error message that might be useful.  The name error tells us that  ``wait_time_int`` is not defined.  It also tells us that the error is on line 5.  Thats **really** useful information.  Now look at line five and you will see that ``wait_time_int`` is used on both the left and the right hand side of the assignment statement. 
+
+.. mchoicemf:: db_qex32
+   :answer_a: You cannot use a variable on both the left and right hand sides of an assignment statement.
+   :answer_b: wait_time_int does not have a value so it cannot be used on the right hand side.
+   :answer_c: This is not really an error, Python is broken.
+   :correct: b
+   :feedback_a: No, You can, as long as all the variables on the right hand side already have values.
+   :feedback_b: Yes.  Variables must already have values in order to be used on the right hand side.
+   :feedback_c: No, No, No!
+
+   Which of the following explains why ``wait_time_int = int(wait_time_int)`` is an error.
+
+
+In writing and using this book over the last few years we have collected a lot of statistics about the programs in this book.  Here are some statistics about error messages for the exercise we have been looking at.
+
+=================== ======= =======
+Message             Number  Percent
+=================== ======= =======
+ParseError:         4999    54.74%
+TypeError:          1305    14.29%
+NameError:          1009    11.05%
+ValueError:         893     9.78%
+URIError:           334     3.66%
+TokenError:         244     2.67%
+SyntaxError:        227     2.49%
+TimeLimitError:     44      0.48%
+IndentationError:   28      0.31%
+AttributeError:     27      0.30%
+ImportError:        16      0.18%
+IndexError:         6       0.07%
+=================== ======= =======
+
+
+Finding Clues with print Statements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
