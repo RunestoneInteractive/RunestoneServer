@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
 import string
 import random
 import time
@@ -212,9 +213,17 @@ class LocalAuthTests(unittest.TestCase):
             .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Module Index'))
 
         # use a few modules to create a course
+        chapter_box = self.driver.find_element_by_css_selector("#box1")
+        chapter_title = self.driver.find_element_by_css_selector("#box1 #title ")
         gen_intro = self.driver.find_element_by_css_selector("div[data-filename='GeneralIntro/introduction.rst']")
         queues = self.driver.find_element_by_css_selector("div[data-filename='BasicDS/queues.rst']")
 
+        chapter_title.send_keys('Chapter 1: A Fake Chapter')
 
+        robot = ActionChains(self.driver)
 
+        # TODO this isn't working!
+        robot.drag_and_drop(gen_intro, chapter_box)
+        robot.drag_and_drop(queues, chapter_box)
+        robot.perform()
         self.course_name = new_course_name # user account is now linked with the new course
