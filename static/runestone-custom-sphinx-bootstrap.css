@@ -251,9 +251,24 @@ div.flash {
     color: #000000;
 }
 
+.CodeMirror {
+    background-color: #fff;
+}
+
 #exercises > ol > li:nth-child(even) {
-    border: 1px solid #aaa;
+    padding: 1em 1.4em;
+    /*margin: 8px 0 30px 0;*/
+}
+
+#exercises > ol > li {
+    background: #faf7df;
+    border: 1px solid #fbeed5;
     border-radius: 4px;
-    padding: 15px;
-    margin: 8px 0 30px 0;
+    margin-bottom: 30px
+}
+
+#exercises > ol > li > .ui-tabs {
+    border: none;
+    background: #faf7df;
+    margin: 0;
 }
