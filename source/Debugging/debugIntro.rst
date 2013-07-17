@@ -182,6 +182,123 @@ ImportError:        16      0.18%
 IndexError:         6       0.07%
 =================== ======= =======
 
+Nearly 90% of the error messages encountered for this  problem are ParseError, TypeError, NameError, or ValueError.  We will look at these errors in three stages:
+
+* First we will define what these four error messages mean.
+* Then, we will look at some examples that cause these errors to occur.
+* Finally we will look at ways to help uncover the root cause of these messages.
+
+
+ParseError
+^^^^^^^^^^
+
+Parse errors happen when you make an error in the syntax of your program.  Syntax errors are like making grammatical errors in writing.  If you don't use periods and commas in your writing then you are making it hard for other readers to figure out what you are trying to say.  Similarly Python has certain grammatical rules that must be followed or else Python can't figure out what you are trying to say.
+
+Usually ParseErrors can be traced back to missing punctuation characters, such as parenthesis, qutation marks, or commas. Remember that in Python commas are used to separate parameters to functions.  Paretheses must be balanced, or else Python thinks that you are trying to include everything that follows as a parameter to some function.
+
+Here are a couple examples of Parse errors in the example program we have been using.  See if you can figure out what caused them.
+
+.. tabbed:: db_tabs1
+
+    .. tab:: Question
+
+        Find and fix the error in the following code.
+
+        .. activecode:: db_ex3_6
+
+           current_time_str = input("what is the current time (in hours 0-23)?")
+           wait_time_str = input("How many hours do you want to wait"
+
+           current_time_int = int(current_time_str)
+           wait_time_int = int(wait_time_str)
+
+           final_time_int = current_time_int + wait_time_int
+           print(final_time_int)
+
+    .. tab:: Answer
+
+        .. sourcecode:: python
+
+           current_time_str = input("what is the current time (in hours 0-23)?")
+           wait_time_str = input("How many hours do you want to wait"
+
+           current_time_int = int(current_time_str)
+           wait_time_int = int(wait_time_str)
+
+           final_time_int = current_time_int + wait_time_int
+           print(final_time_int)
+
+        Since the error message points us to line 4 this might be a bit confusing.  If you look at line four carefully you will see that there is no problem with the syntax.  So, in this case the next step should be to back up and look at the previous line.  In this case if you look at line 2 carefully you will see that there is a missing right parenthesis at the end of the line.  Remember that parenthses must be balanced.  Since Python allows statements to continue over multiple lines inside parentheses python will continue to scan subsequent lines looking for the balancing right parenthesis.  However in this case it finds the name ``current_time_int`` and it will want to interpret that as another parameter to the input function.  But, there is not a comma to separate the previous string from the variable so as far as Python is concerned the error here is a missing comma.  From your perspective its a missing parenthesis.
+
+**Finding Clues**  How can you help yourself find these problems?  One trick that can be very valuable in this situation is to simply start by commenting out the line number that is flagged as having the error.  If you comment out line four, the error message now changes to point to line 5.  Now you ask yourself, am I really that bad that I have two lines in a row that have errors on them?  Maybe, so taken to the extreme, you could comment out all of the remaining lines in the program. Now the error message changes to ``TokenError: EOF in multi-line statement``  This is a very technical way of saying that Python got to the end of file (EOF) while it was still looking for something.  In this case a right parenthesis.
+
+
+
+.. tabbed:: db_tabs2
+
+    .. tab:: Question
+
+        Find and fix the error in the following code.
+
+        .. activecode:: db_ex3_7
+
+           current_time_str = input("what is the "current time" (in hours 0-23)?")
+           wait_time_str = input("How many hours do you want to wait")
+
+           current_time_int = int(current_time_str)
+           wait_time_int = int(wait_time_str)
+
+           final_time_int = current_time_int + wait_time_int
+           print(final_time_int)
+
+    .. tab:: Answer
+
+        .. sourcecode:: python
+
+           current_time_str = input("what is the "current time" (in hours 0-23)?")
+           wait_time_str = input("How many hours do you want to wait")
+
+           current_time_int = int(current_time_str)
+           wait_time_int = int(wait_time_str)
+
+           final_time_int = current_time_int + wait_time_int
+           print(final_time_int)
+
+        The error message points you to line 1 and in this case that is exactly where the error occurs. In this case your biggest clue is to notice the difference in  highlighting on the line.  Notice that the words "current time" are a different color than those around them.  Why is this?  Because "current time" is in double quotes inside another pair of double quotes Python things that you are finishing off one string, then you have some other names and findally another string.  But you haven't separated these names or strings by commas, and you haven't added them together with the concatenation operator (+).  So, there are several corrections you could make.  First you could make the argument to input be as follows:  ``"what is the 'current time' (in hours 0-23)"``  Notice that here we have correctly used single quotes inside double quotes.   Another option is to simply remove the extra double quotes.  Why were you quoting "current time" anyway?  ``"what is the current time (in hours 0-23)"``
+
+**Finding Clues**  If you follow the same advice as for the last problem, comment out line one, you will immediately get a different error message.  Here's where you need to be very careful and not panic.  The error message you get now is: ``NameError: name 'current_time_str' is not defined on line 4``.  You might be very tempted to think that this is somehow related to the earlier problem and immediately conclude that there is something wrong with the variable name ``current_time_str`` but if you reflect for a minute  You will see that by commenting out line one you have caused a new and unrelated error.  That is you have commented out the creation of the name ``current_time_str``.  So of course when you want to convert it to an ``int`` you will get the NameError.  Yes, this can be confusing, but it will become much easier with experience.  Its also important to keep calm, and evaluate each new clue carefully so you don't waste time chasing problems that are not really there.  
+
+Uncomment line 1 and you are back to the ParseError.  Another track is to eliminate a possible source of error.  Rather than commenting out the entire line you might just try to assign ``current_time_str`` to a constant value.  For example you might make line one look like this:  ``current_time_str = "10"  #input("what is the "current time" (in hours 0-23)?")``.  Now you have assigned ``current_time_str`` to the string 10, and commented out the input statement.  And now the program works!  So you conclude that the problem must have something to do with the input function.
+
+
+TypeError
+^^^^^^^^^
+
+TypeErrors occur when you you try to combine two objects that are not compatible.  For example you try to add together an integer and a string.  Usually type errors can be isolated to lines that are using mathematical operators, and usually the line number given by the error message is an accurate indication of the line.
+
+Here's an example of a type error created by a Polish learner.
+
+.. activecode:: db_ex3_8
+
+    a = input('wpisuj cieciu godzine')
+    x = input('wpisuj ile godzin cieciu')
+    int(x)
+    int(a)
+    h = x // 24
+    s = x % 24
+    print (h, s)
+    a = a + s
+    print ('godzina teraz %s' %a) 
+
+In finding this error there are few lessons to think about.  First, you may find it very disconcerting that you cannot
+
+
+NameError
+^^^^^^^^^
+
+ValueError
+^^^^^^^^^^
+
 
 Finding Clues with print Statements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
