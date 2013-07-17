@@ -11,13 +11,13 @@ def setup(app):
 
 
 BEGIN = """
+    <button type='button' id='%(divid)s_show' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">%(showtitle)s</button>
+    <button type='button' id='%(divid)s_hide' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>%(hidetitle)s</button>
     <div id='%(divid)s' style='display:none'>
 """
 
 END = """
     </div>
-    <button type='button' id='%(divid)s_show' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">Show</button>
-    <button type='button' id='%(divid)s_hide' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>Hide</button>
 """
 
 
@@ -42,10 +42,16 @@ class RevealDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = True
-    option_spec = {}
+    option_spec = {"showtitle":directives.unchanged,
+                   "hidetitle":directives.unchanged}
 
     def run(self):
         self.assert_has_content() # an empty reveal block isn't very useful...
+
+        if not 'showtitle' in self.options:
+            self.options['showtitle'] = "Show"
+        if not 'hidetitle' in self.options:
+            self.options['hidetitle'] = "Hide"
 
         self.options['divid'] = self.arguments[0]
 
