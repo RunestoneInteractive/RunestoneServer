@@ -372,7 +372,11 @@ Reveals
 
     This content starts out hidden. It's visibility can be toggled by using the Show/Hide button.
 
-    This is a test of a second line
+    The reveal block can also contain other directives (ActiveCode, Disqus block, etc):
+
+    .. activecode:: ac11
+
+        print ("Hello, world")
 
 
 DOM Access

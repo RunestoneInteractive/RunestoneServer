@@ -12,12 +12,11 @@ def setup(app):
 
 BEGIN = """
     <div id='%(divid)s' style='display:none'>
-        %(content)s
 """
 
 END = """
     </div>
-    <button type='button' id='%(divid)s_show' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();">Show</button>
+    <button type='button' id='%(divid)s_show' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">Show</button>
     <button type='button' id='%(divid)s_hide' class='btn btn-small' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>Hide</button>
 """
 
@@ -29,15 +28,14 @@ class RevealNode(nodes.General, nodes.Element):
 
 
 def visit_reveal_node(self, node):
-    res = BEGIN
-    res += END
-    res = res % node.reveal_components
+    res = BEGIN % node.reveal_components
 
     self.body.append(res)
 
 def depart_reveal_node(self,node):
-    pass
+    res = END % node.reveal_components
 
+    self.body.append(res)
 
 class RevealDirective(Directive):
     required_arguments = 1
@@ -47,7 +45,13 @@ class RevealDirective(Directive):
     option_spec = {}
 
     def run(self):
-        self.options['content'] = "<p>".join(self.content)
+        self.assert_has_content() # an empty reveal block isn't very useful...
+
         self.options['divid'] = self.arguments[0]
-        return [RevealNode(self.options)]
+
+        reveal_node = RevealNode(self.options)
+
+        self.state.nested_parse(self.content, self.content_offset, reveal_node)
+
+        return [reveal_node]
 
