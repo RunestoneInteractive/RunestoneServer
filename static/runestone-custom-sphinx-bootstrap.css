@@ -250,3 +250,37 @@ div.flash {
 .progress .bar {
     color: #000000;
 }
+
+.CodeMirror {
+    background-color: #fff;
+}
+
+#exercises > ol > li:nth-child(even) {
+    padding: 1em 1.4em;
+}
+
+#exercises > ol > li {
+    background: #faf7df;
+    border: 1px solid #fbeed5;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+#exercises > ol > li > .ui-tabs {
+    border: none;
+    background: #faf7df;
+    margin: 0;
+}
+
+#exercises > ol > li .ui-tabs-nav {
+    background: #CFCCB8;
+    border-color: #fbeed5;
+}
+
+#exercises > ol > li .ui-state-default {
+    background: #E6E2CC;
+}
+
+#exercises > ol > li .ui-state-default.ui-tabs-active {
+    background: #faf7df;
+}
