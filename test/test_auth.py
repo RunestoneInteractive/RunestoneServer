@@ -31,8 +31,6 @@ class LocalAuthTests(unittest.TestCase):
         self.course_name = 'devcourse'
         self.host = 'http://127.0.0.1:8000'
 
-        self.new_course_name = generate_name()
-
         self.driver = webdriver.Firefox()
 
     def runTest(self):
@@ -49,14 +47,20 @@ class LocalAuthTests(unittest.TestCase):
         self.login()
 
         # verify the profile page works
-        self.profile()
+        #self.profile()
 
         # make sure the new course designer works
-        self.build_new_course_from_existing_course()
+        #self.build_new_course_from_existing_course()
 
         # next 2 steps will verify the new course got created properly
+        #self.logout()
+        #self.login() # verifies redirection to new course
+
+        # create a custom course
+        self.build_new_custom_course()
+
         self.logout()
-        self.login() # verifies redirection to new course
+        self.login()
 
     def tearDown(self):
         self.driver.quit()
@@ -176,9 +180,11 @@ class LocalAuthTests(unittest.TestCase):
 
     def build_new_course_from_existing_course(self):
         ''' build a new course from an existing course (thinkcspy) '''
+        new_course_name = generate_name()
+
         self.driver.get(self.host + "/runestone/designer")
 
-        self.driver.find_element_by_name('projectname').send_keys(self.new_course_name)
+        self.driver.find_element_by_name('projectname').send_keys(new_course_name)
         self.driver.find_element_by_name('projectdescription').send_keys('a new project')
 
         self.driver.find_element_by_css_selector("input[value='thinkcspy']").click()
@@ -189,4 +195,26 @@ class LocalAuthTests(unittest.TestCase):
         WebDriverWait(self.driver, 60) \
             .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Your course is ready'))
 
-        self.course_name = self.new_course_name # user account is now linked with the new course
+        self.course_name = new_course_name # user account is now linked with the new course
+
+    def build_new_custom_course(self):
+        new_course_name = generate_name()
+        self.driver.get(self.host + "/runestone/designer")
+
+        self.driver.find_element_by_name('projectname').send_keys(new_course_name)
+        self.driver.find_element_by_name('projectdescription').send_keys('a new project')
+
+        self.driver.find_element_by_css_selector("input[value='custom']").click()
+
+        self.driver.find_element_by_css_selector("input[value='Submit']").click()
+
+        WebDriverWait(self.driver, 10) \
+            .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Module Index'))
+
+        # use a few modules to create a course
+        gen_intro = self.driver.find_element_by_css_selector("div[data-filename='GeneralIntro/introduction.rst']")
+        queues = self.driver.find_element_by_css_selector("div[data-filename='BasicDS/queues.rst']")
+
+
+
+        self.course_name = new_course_name # user account is now linked with the new course

@@ -45,10 +45,10 @@ crud, service, plugins = Crud(db), Service(), PluginManager()
 
 ## Enable captcha's :-(
 from gluon.tools import Recaptcha
-auth.settings.captcha = Recaptcha(request,
-   '6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD',
-   '6Lfb_t4SAAAAAGvAHwmkahQ6s44478AL5Cf-fI-x',
-   options="theme:'blackglass'")
+#auth.settings.captcha = Recaptcha(request,
+#   '6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD',
+#   '6Lfb_t4SAAAAAGvAHwmkahQ6s44478AL5Cf-fI-x',
+#   options="theme:'blackglass'")
 
 auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
