@@ -187,7 +187,11 @@ function addErrorMessage(err, myDiv) {
     eContainer.id = myDiv + '_errinfo'
     eContainer.appendChild(errHead[0])
     var errText = eContainer.appendChild(document.createElement('pre'))
-    var errString = err.toString()
+    var lineNo = ""
+    if (Sk.currLineNo !== undefined) {
+        lineNo = " on line: " + Sk.currLineNo
+    }
+    var errString = err.toString() + lineNo
     errText.innerHTML = errString
     var to = errString.indexOf(":")
     var errName = errString.substring(0,to)
