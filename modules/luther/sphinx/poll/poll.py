@@ -135,7 +135,7 @@ class PollDirective(Directive):
         self.assert_has_content()
         
         self.options['divid'] = self.arguments[0]
-        self.options['content'] = self.content[0]
+        self.options['content'] = "<p>".join(self.content)
         poll_node = PollNode(self.options)
 
         return [poll_node]
