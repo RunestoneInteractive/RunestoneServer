@@ -366,6 +366,19 @@ Polls
     On a scale from 1 to 10, how important do you think it is to have a polling directive in the Runestone Tools?
 
 
+Reveals
+-------
+.. reveal:: revealid1
+
+    This content starts out hidden. It's visibility can be toggled by using the Show/Hide button.
+
+    The reveal block can also contain other directives (ActiveCode, Disqus block, etc):
+
+    .. activecode:: ac11
+
+        print ("Hello, world")
+
+
 DOM Access
 ----------
 
