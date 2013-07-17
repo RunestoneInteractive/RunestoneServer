@@ -369,6 +369,8 @@ Polls
 Reveals
 -------
 .. reveal:: revealid1
+    :showtitle: Reveal Content
+    :hidetitle: Hide Content
 
     This content starts out hidden. It's visibility can be toggled by using the Show/Hide button.
 
