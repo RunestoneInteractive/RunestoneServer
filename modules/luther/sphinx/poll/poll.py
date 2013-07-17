@@ -25,6 +25,8 @@ def setup(app):
 
     app.add_node(PollNode, html=(visit_poll_node, depart_poll_node))
 
+    app.add_javascript('poll.js')
+
 
 BEGIN = """ <div id='%(divid)s' class='poll alert'> """
 
@@ -59,9 +61,35 @@ END_FORM = """
 
 RESULTS_DIV = """ <div id='%(divid)s_results'></div> """
 
-END = """ </div> """
 
 
+END = """
+    <script type='text/javascript'>
+        // check if the user has already answered this poll
+        $(function() {
+            var len = localStorage.length;
+            if (len > 0) {
+                for (var i = 0; i < len; i++) {
+                    var key = localStorage.key(i);
+                    if (key === '%(divid)s') {
+                        var ex = localStorage.getItem(key);
+                        if(ex === "true") {
+                            // hide the poll inputs
+                            $("#%(divid)s_poll_input").hide();
+
+                            // show the results of the poll
+                            var data = {};
+                            data.div_id = '%(divid)s';
+                            data.course = eBookConfig.course;
+                            jQuery.get(eBookConfig.ajaxURL+'getpollresults', data, showPollResults);
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+"""
 
 class PollNode(nodes.General, nodes.Element):
     def __init__(self, options):
