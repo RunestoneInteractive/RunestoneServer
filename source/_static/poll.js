@@ -10,7 +10,7 @@ function submitPoll(div_id) {
     var poll_comment = form.find("input:text[name="+div_id+"_comment]").val();
 
     var act = '';
-    if(poll_comment[0] !== undefined)
+    if((poll_comment === undefined) || (poll_comment[0] !== undefined))
         act = poll_val + ":" + poll_comment;
     else
         act = poll_val;
