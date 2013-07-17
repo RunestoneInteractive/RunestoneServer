@@ -106,8 +106,8 @@ Example:
     	<div style="clear:left;"></div>
         <div id="parsons-message-%(unique_id)s" style="border-radius:4px; background: pink; padding: 1em;"></div>
         
-        <button id="newInstanceLink-%(unique_id)s" class='btn btn-small btn-success'>Reset</button>
-        <button id="feedbackLink-%(unique_id)s" class='btn btn-small'>Get Feedback</button>
+        <button id="newInstanceLink-%(unique_id)s" class='btn btn-small'>Reset</button>
+        <button id="feedbackLink-%(unique_id)s" class='btn btn-small btn-success'>Get Feedback</button>
         </div>
 
     <script>
