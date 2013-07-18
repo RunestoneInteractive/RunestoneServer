@@ -33,6 +33,7 @@ pre {
 
 .CodeMirror {
     margin: 0px 0px 1em 0px;
+    background-color: #fff;
 }
 
 /* override jQueryUI styles (to match bootstrap styles) */
@@ -77,6 +78,7 @@ label {
     margin-bottom: 0px;
 }
 
+/* override the color styles applied by Skulpt to the unittest results divs */
 .unittest-results.alert-error {
     background-color: #f2dede !important;
 }
@@ -85,10 +87,12 @@ label {
     background-color: #dff0d8 !important;
 }
 
-/* These admonition styles styles are copied from the Bootstrap .alert classes */
+/* These admonition styles styles are copied from the Bootstrap .alert classes.
+ Most of the !important declarations are to override the Sphinx basic.css styles */
 .admonition {
     padding: 8px 35px 8px 14px !important;
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
     background-color: #fcf8e3;
     border: 1px solid #fbeed5;
@@ -219,10 +223,10 @@ div.flash {
     color: #000000;
 }
 
-.CodeMirror {
-    background-color: #fff;
-}
 
+/* selectors beginning with #exercises are to provide some nice styling
+for the end-of-chapter exercies sections. We are overriding lots of the
+jQueryUI tab plugin styles to do it. */
 #exercises > ol > li:nth-child(even) {
     padding: 1em 1.4em;
 }
