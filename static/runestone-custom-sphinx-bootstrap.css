@@ -78,6 +78,12 @@ label {
     margin-bottom: 0px;
 }
 
+/* the default Bootstrap color for .alert is hard to read, but
+the colors for the other .alert classes are fine */
+.alert:not(.alert-error):not(.alert-success):not(.alert-info)  {
+    color: #000;
+}
+
 /* override the color styles applied by Skulpt to the unittest results divs */
 .unittest-results.alert-error {
     background-color: #f2dede !important;
@@ -99,7 +105,7 @@ label {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    color: #c09853;
+    /*color: #c09853*/;
 }
 
 /* .alert-error */
@@ -225,7 +231,7 @@ div.flash {
 
 
 /* selectors beginning with #exercises are to provide some nice styling
-for the end-of-chapter exercies sections. We are overriding lots of the
+for the end-of-chapter exercies sections, overriding lots of the
 jQueryUI tab plugin styles to do it. */
 #exercises > ol > li:nth-child(even) {
     padding: 1em 1.4em;
