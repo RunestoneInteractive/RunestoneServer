@@ -296,15 +296,17 @@ Here's an example of a type error created by a Polish learner.  See if you can f
     :showtitle: Show me the Solution
     :hidetitle: Hide
 
-    In finding this error there are few lessons to think about.  First, you may find it very disconcerting that you cannot understand the whole program.  Unless you speak Polish then this won't be an issue.  But, learning what you can ignore, and what you need to focus on is a very important part of the debugging process.  Second, types and good variable names are important and can be very helpful.  In this case a and x are not particularly helpful names, and in particular they do not help you think about the types of your variables, which as the error message implies is the root of the problem here.  The rest of the lessons we will get back to in a minute.
+    .. admonition:: Solution
 
-    The error message provided to you gives you a pretty big hint.  ``TypeError: unsupported operand type(s) for FloorDiv: 'str' and 'number' on line: 5``  On line five we are trying to use integer division on x and 24.  The error message tells you that you are tyring to divide a string by a number.  In this case you know that 24 is a number so x must be a string.  But how?  You can see the function call on line 3 where you are converting x to an integer.  ``int(x)`` or so you think.  This is lesson three and is one of the most common errors we see in introductory programming.  What is the difference between ``int(x)`` and ``x = int(x)``
+        In finding this error there are few lessons to think about.  First, you may find it very disconcerting that you cannot understand the whole program.  Unless you speak Polish then this won't be an issue.  But, learning what you can ignore, and what you need to focus on is a very important part of the debugging process.  Second, types and good variable names are important and can be very helpful.  In this case a and x are not particularly helpful names, and in particular they do not help you think about the types of your variables, which as the error message implies is the root of the problem here.  The rest of the lessons we will get back to in a minute.
 
-    * The expression ``int(x)`` converts the string referenced by x to an integer but it does not store it anywhere.  It is very common to assume that ``int(x)`` somehow changes x itself, as that is what you are intending!  The thing that makes this very tricky is that ``int(x)`` is a valid expression, so it doesn't cause any kind of error, but rather the error happens later on in the program.
+        The error message provided to you gives you a pretty big hint.  ``TypeError: unsupported operand type(s) for FloorDiv: 'str' and 'number' on line: 5``  On line five we are trying to use integer division on x and 24.  The error message tells you that you are tyring to divide a string by a number.  In this case you know that 24 is a number so x must be a string.  But how?  You can see the function call on line 3 where you are converting x to an integer.  ``int(x)`` or so you think.  This is lesson three and is one of the most common errors we see in introductory programming.  What is the difference between ``int(x)`` and ``x = int(x)``
 
-    * The assignment statement  ``x = int(x)`` is very different.  Again, the ``int(x)`` expression converts the string referenced by x to an integer, but this time it also changes what x references so that x now refers to the integer value returned by the ``int`` function.  
+        * The expression ``int(x)`` converts the string referenced by x to an integer but it does not store it anywhere.  It is very common to assume that ``int(x)`` somehow changes x itself, as that is what you are intending!  The thing that makes this very tricky is that ``int(x)`` is a valid expression, so it doesn't cause any kind of error, but rather the error happens later on in the program.
 
-    So, the solution to this problem is to change lines 3 and 4 so they are assignment statements.
+        * The assignment statement  ``x = int(x)`` is very different.  Again, the ``int(x)`` expression converts the string referenced by x to an integer, but this time it also changes what x references so that x now refers to the integer value returned by the ``int`` function.  
+
+        So, the solution to this problem is to change lines 3 and 4 so they are assignment statements.
 
 
 **Finding Clues**  One thing that can help you in this situation is to print out the values and the types of the variables involved in the statement that is causing the error.  You might try adding a print statement after line 4 ``print(x, type(x))``  You will see that at least we have confirmed that x is of type string.  Now you need to start to work backward through the program.  You need to ask yourself, where is x used in the program?  x is used on lines 2, 3, and of course 5 and 6 (where we are getting an error).  So maybe you move the print statement to be after line 2 and again after 3.  Line Three is where you expect the value of x to be changed to an integer.  Could line 4 be mysteriously changine x back to a string?  Not very likely.  So the value and type of x is just what you would expect it to be after line 2, but not after line 3.  This helps you isolate the problem to line 3.  In fact if you employ one of our earler techniques of commenting out line 3 you will see that this has no impact on the error, and is a big clue that line 3 as it is currently written is useless.
@@ -328,7 +330,9 @@ Name errors almost always mean that you have used a variable before it has a val
 .. reveal:: db_ex39_reveal
     :showtitle: Show me the Solution
 
-    In this example, the student seems to be a fairly bad speller, as there are a number of typos to fix.  The first one is identified as wait_time is not defined on line 6.  Now in this example you can see that there is ``str_wait_time`` on line 2, and  ``wai_time`` on line 4 and ``wait_time`` on line 6.   If you do not have very sharp eyes its easy to miss that there is a typo on line 4.
+    .. admonition:: Solution
+
+        In this example, the student seems to be a fairly bad speller, as there are a number of typos to fix.  The first one is identified as wait_time is not defined on line 6.  Now in this example you can see that there is ``str_wait_time`` on line 2, and  ``wai_time`` on line 4 and ``wait_time`` on line 6.   If you do not have very sharp eyes its easy to miss that there is a typo on line 4.
 
 **Finding Clues**  With name errors one of the best things you can do is use the editor, or browser search function.  Quite often if you search for the exact word in the error message one of two things will happen:
 
@@ -351,8 +355,10 @@ Here is another one for you to try:
 
 .. reveal:: db_ex310_reveal
     :showtitle:  Show me the Solution
-    
-    This one is once again a typo, but the typo is not in a variable name, but rather, the name of a function.  The search strategy would help you with this one easily, but there is another clue for you as well.  The editor in the textbook, as well as almost all Python editors in the world provide you with color clues.  Notice that on line 2 the function ``imt`` is not highlighted blue like the word ``int`` on line 4.
+
+    .. admonition:: Solution    
+
+        This one is once again a typo, but the typo is not in a variable name, but rather, the name of a function.  The search strategy would help you with this one easily, but there is another clue for you as well.  The editor in the textbook, as well as almost all Python editors in the world provide you with color clues.  Notice that on line 2 the function ``imt`` is not highlighted blue like the word ``int`` on line 4.
 
 
 And one last bit of code to fix.
@@ -368,7 +374,9 @@ And one last bit of code to fix.
 .. reveal:: db_ex311_reveal
     :showtitle: Show me the Solution
 
-    In this example the error message is about ``set_time`` not defined on line 3.  In this case the undefined name is not used in an assignment statement, but is used as a parameter (incorrectly) to a function call.   A search on ``set_time`` reveals that in fact it is only used once in the program.  Did the author mean ``set_alarm``?  If we make that assumption we immediately get another error ``NameError: name 'alarm_time' is not defined on line: 3``.  The variable ``alarm_time`` is defined on line 4, but that does not help us on line 3.  Furthermore we now have to ask the question is this function call ``int(present_time,set_alarm,alarm_time)`` even the correct use of the ``int`` function?  The answer to that is a resounding no.  Lets list all of the things wrong with line 3:
+    .. admonition:: Solution
+
+        In this example the error message is about ``set_time`` not defined on line 3.  In this case the undefined name is not used in an assignment statement, but is used as a parameter (incorrectly) to a function call.   A search on ``set_time`` reveals that in fact it is only used once in the program.  Did the author mean ``set_alarm``?  If we make that assumption we immediately get another error ``NameError: name 'alarm_time' is not defined on line: 3``.  The variable ``alarm_time`` is defined on line 4, but that does not help us on line 3.  Furthermore we now have to ask the question is this function call ``int(present_time,set_alarm,alarm_time)`` even the correct use of the ``int`` function?  The answer to that is a resounding no.  Lets list all of the things wrong with line 3:
 
     1.  ``set_time`` is not defined and never used, the author probably meant ``set_alarm``.
     2.  ``alarm_time`` cannot be used as a parameter before it is defined, even on the next line!
