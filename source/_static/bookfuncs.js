@@ -183,7 +183,7 @@ function addErrorMessage(err, myDiv) {
     var errHead = $('<h3>').html('Error')
     var divEl = document.getElementById(myDiv)
     var eContainer = divEl.appendChild(document.createElement('div'))
-    eContainer.className = 'error'
+    eContainer.className = 'error alert alert-error'
     eContainer.id = myDiv + '_errinfo'
     eContainer.appendChild(errHead[0])
     var errText = eContainer.appendChild(document.createElement('pre'))
