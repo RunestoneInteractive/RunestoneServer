@@ -124,7 +124,6 @@ Example:
 
 	        } else {
                     logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s'});
-                    //msgBox.css("background-color","white");
                     msgBox.attr('class','alert alert-success');
                     msgBox.html("Perfect!")
                 }
