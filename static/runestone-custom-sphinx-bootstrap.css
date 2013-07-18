@@ -4,7 +4,7 @@ body {
     padding-bottom: 40px;
 }
 
-/* Remove top padding when top navbar goes static in narrow viewports */
+/* Remove top padding when top navbar goes collapsed in narrow viewports */
 @media (max-width: 979px) {
     body {
         padding-top: 0;
@@ -150,7 +150,6 @@ div.flash {
     padding: 10px;
     top: 55px;
     right: 45px;
-    /*min-width: 280px;*/
     opacity: 0.95;
     margin: 0px 0px 10px 10px;
     vertical-align: middle;
@@ -188,16 +187,6 @@ div.flash {
     font-family: 'lucida grande',Verdana,sans-serif;
     padding-bottom: 13px;
 }
-
-/*.assess-feedback {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 7px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-}*/
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;
