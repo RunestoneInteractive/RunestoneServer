@@ -104,7 +104,7 @@ Example:
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
     	<div style="clear:left;"></div>
-        <div id="parsons-message-%(unique_id)s" style="border-radius:4px; background: pink; padding: 1em;"></div>
+        <div id="parsons-message-%(unique_id)s"></div>
         
         <button id="newInstanceLink-%(unique_id)s" class='btn btn-small'>Reset</button>
         <button id="feedbackLink-%(unique_id)s" class='btn btn-small btn-success'>Get Feedback</button>
@@ -118,15 +118,15 @@ Example:
 	        if(fb.errors.length > 0) {
                     var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
                     msgBox.fadeIn(500);
-                    msgBox.css("background-color","pink");
+                    msgBox.attr('class','alert alert-error');
                     msgBox.html(fb.errors[0]);
                     logBookEvent({'event':'parsons', 'act':hash, 'div_id':'%(divid)s'});
 
 	        } else {
                     logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s'});
-                    msgBox.css("background-color","white");
+                    //msgBox.css("background-color","white");
+                    msgBox.attr('class','alert alert-success');
                     msgBox.html("Perfect!")
-                    msgBox.fadeOut(3000);
                 }
 	    }
  
