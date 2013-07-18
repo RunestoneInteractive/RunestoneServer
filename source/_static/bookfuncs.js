@@ -189,12 +189,12 @@ function addErrorMessage(err, myDiv) {
     var errText = eContainer.appendChild(document.createElement('pre'))
     var lineNo = ""
     if (Sk.currLineNo !== undefined) {
-        lineNo = " on line: " + Sk.currLineNo
+        lineNo = "Line " + Sk.currLineNo + ": "
     }
-    var errString = err.toString() + lineNo
-    errText.innerHTML = errString
+    var errString = err.toString()
     var to = errString.indexOf(":")
     var errName = errString.substring(0,to)
+    errText.innerHTML = lineNo + errString
     $(eContainer).append('<h3>Description</h3>')
     var errDesc = eContainer.appendChild(document.createElement('p'))
     errDesc.innerHTML = errorText[errName]
@@ -240,7 +240,8 @@ errorText.InternalError = "An Internal error may mean that you've triggered a bu
 errorText.InternalErrorFix = "Report this error, along with your code as a bug."
 errorText.IndentationError = "This error occurs when you have not indented your code properly.  This is most likely to happen as part of an if, for, while or def statement."
 errorText.IndentationErrorFix = "Check your if, def, for, and while statements to be sure the lines are properly indented beneath them.  Another source of this error comes from copying and pasting code where you have accidentally left some bits of code lying around that don't belong there anymore."
-
+errorText.NotImplementedError = "This error occurs when you try to use a builtin function of Python that has not been implemented in this in-browser version of Python."
+errorText.NotImplementedErrorFix = "For now the only way to fix this is to not use the function.  There may be workarounds.  If you really need this builtin function then file a bug report and tell us how you are trying to use the function."
 function logBookEvent(eventInfo) {
     eventInfo.course = eBookConfig.course
     if (eBookConfig.logLevel > 0){
