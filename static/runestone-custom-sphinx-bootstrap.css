@@ -270,3 +270,14 @@ jQueryUI tab plugin styles to do it. */
     max-width: 350px;
     max-height: 400px;
 }
+
+.footnote.table {
+    width: auto;
+    margin-bottom:10px;
+}
+
+.footnote.table td.label {
+    padding: 2px 5px 2px 5px;
+    background-color: #d9edf7;
+}
+
