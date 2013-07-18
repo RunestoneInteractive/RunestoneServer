@@ -77,10 +77,6 @@ label {
     margin-bottom: 0px;
 }   
 
-.alert {
-    color:#866A3A;
-}
-
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
     margin-top: 10px;
