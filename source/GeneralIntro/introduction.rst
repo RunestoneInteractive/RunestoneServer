@@ -50,7 +50,7 @@ the problem solving process are also important.  In computer science, we refer t
 as **algorithms**.  An algorithm is a step by step list of instructions that if followed exactly will solve the problem under consideration.
 
 Our goal in computer science is to take a problem and develop an algorithm that can serve as a general solution.  Once we have such a solution, we can use our computer to automate the execution.  As noted
-above, programming is a skill which allows a computer scientist to take an algorithm and represent it in
+above, programming is a skill that allows a computer scientist to take an algorithm and represent it in
 a notation (a program) that can be followed by a computer.  These programs are written in **programming languages**.
 
 **Check your understanding**
@@ -147,16 +147,16 @@ and the interpreter immediately shows the result.  The example below shows the P
     >>>
 
 The ``>>>`` is called the **Python prompt**. The interpreter uses the prompt to
-indicate that it is ready for instructions. We typed ``2 + 3``, and the
-interpreter evaluated our expression, and replied ``5``, and on the next line
-it gave a new prompt, indicating that it is ready for more input.
+indicate that it is ready for instructions. We typed ``2 + 3``.  The
+interpreter evaluated our expression and replied ``5``. On the next line
+it gave a new prompt indicating that it is ready for more input.
 
 Working directly in the interpreter is convenient for testing short bits of
 code because you get immediate feedback. Think of it as scratch paper used to
-help you work out problems. Anything longer than a few lines should be put into
-a script.
+help you work out problems.
 
-Alternatively, you can write an entire program in a file and use the interpreter to
+Alternatively, you can write an entire program by placing lines of Python instructions
+in a file and then use the interpreter to
 execute the contents of the file as a whole. Such a file is often referred to as **source code**.  For
 example, we used a text editor to create a source code file named ``firstprogram.py`` with
 the following contents:
@@ -231,7 +231,7 @@ most programs are more interesting than this one.
    :feedback_c: Both compilers and interpreters are software.
    :feedback_d: Compilers can produce object code or byte code depending on the language.  An interpreter produces neither.
 
-   Pick the best replacements for 1 and 2 in the following sentence.<br>  When comparing compilers and interpreters, a compiler is like 1 while an interpreter is like 2.
+   Pick the best replacements for 1 and 2 in the following sentence: When comparing compilers and interpreters, a compiler is like 1 while an interpreter is like 2.
 
 Special Ways to Execute Python in this Book
 -------------------------------------------
@@ -270,14 +270,17 @@ Press *Load* to return your program to its previously saved state.
 In addition to activecode, you can also execute Python code with the assistance of a unique visualization tool.  This tool, known as **codelens**, allows you to control the step by step execution of a program.  It also lets you see the values of
 all variables as they are created and modified.  The following example shows codelens in action on the same program as we saw above.  Note that in activecode, the source code executes from beginning to end and you can see the final result.  In codelens you can see and control the step by step progress.
 
-The examples in this book use a mixture of the standard Python  interpreter, source code, activecode, and codelens.  You
-will be able to tell which is which by looking for either the Python prompt in the case of a shell mode program, the *run* button for the activecode, or the *forward/backward* buttons for codelens.
+
 
 .. codelens:: firstexample
     :showoutput:
 
     print("My first program adds two numbers, 2 and 3:")
     print(2 + 3)
+
+
+The examples in this book use a mixture of the standard Python  interpreter, source code, activecode, and codelens.  You
+will be able to tell which is which by looking for either the Python prompt in the case of a shell mode program, the *run* button for the activecode, or the *forward/backward* buttons for codelens.
 
 
 **Check your understanding**
@@ -329,7 +332,7 @@ output
     Display data on the screen or send data to a file or other device.
 
 math and logic
-    Perform basic mathematical operations like addition, and multiplication,
+    Perform basic mathematical operations like addition and multiplication
     and logical operations like ``and``, ``or``, and ``not``.
 
 conditional execution
@@ -370,8 +373,8 @@ instructions.
 What is Debugging?
 ------------------
 
-Programming is a complex process, and because it is done by human beings, it
-often leads to errors. Programming errors are called **bugs** and the process
+Programming is a complex process.  Since it is done by human beings, errors may often occur.
+Programming errors are called **bugs** and the process
 of tracking them down and correcting them is called **debugging**.  Some claim
 that in 1945, a dead moth caused a problem on relay number 70, panel F, of one
 of the first computers at Harvard, and the term **bug** has remained in use
@@ -412,10 +415,10 @@ this sentence contains a **syntax error**. So does this one
 For most readers, a few syntax errors are not a significant problem, which is
 why we can read the poetry of e. e. cummings without problems.
 Python is not so forgiving. If there is a single syntax error anywhere in your
-program, Python will display an error message and quit, and you will not be able
-to run your program. During the first few weeks of your programming career, you
-will probably spend a lot of time tracking down syntax errors. As you gain
-experience, though, you will make fewer errors and find them faster.
+program, Python will display an error message and quit.  You will not be able
+to complete the execution your program. During the first few weeks of your programming career, you
+will probably spend a lot of time tracking down syntax errors. However, as you gain
+experience, you will make fewer errors and you will also be able to find your errors faster.
 
 
 **Check your understanding**
@@ -478,8 +481,8 @@ Semantic Errors
 ---------------
 
 The third type of error is the **semantic error**. If there is a semantic error
-in your program, it will run successfully, in the sense that the computer will
-not generate any error messages, but it will not do the right thing. It will do
+in your program, it will run successfully in the sense that the computer will
+not generate any error messages.  However, your program will not do the right thing. It will do
 something else. Specifically, it will do what you told it to do.
 
 The problem is that the program you wrote is not the program you wanted to
@@ -694,8 +697,7 @@ looks like this.
     print("Hello, World!")
 
 This is an example of using the **print function**, which doesn't actually
-print anything on paper. It displays a value on the screen. In this case, the
-result is the words:
+print anything on paper. It displays a value on the screen. In this case, the result is the phrase:
 
 .. sourcecode:: python
 
@@ -875,8 +877,6 @@ Glossary
     runtime error
         An error that does not occur until the program has started to execute
         but that prevents the program from continuing.
-
-
 
     semantic error
         An error in a program that makes it do something other than what the

@@ -408,7 +408,7 @@ Exercises
                 :identifier: mods_111
 
 
-#.  Search for a way to calculate an approximation for **pi**.  Write a program to compute the approximation and then print that value as well as the value of ``math.pi`` from the math module.
+#.  Repeat the above exercise but this time print 10 random numbers between 25 and 35.
 
     .. actex:: ex_mod_2
 
@@ -436,7 +436,10 @@ Exercises
                 :shortname: interactivepython
                 :identifier: mods_333
 
+#.  Search for a way to calculate an approximation for **pi**.  Write a program to compute the approximation and then print that value as well as the value of ``math.pi`` from the math module.
 
+    .. actex:: ex_mod_4
+    
 
 .. toctree::
     :hidden:
