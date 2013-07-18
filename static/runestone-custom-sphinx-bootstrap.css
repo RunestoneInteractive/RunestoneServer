@@ -75,7 +75,15 @@ label {
 
 .alert form {
     margin-bottom: 0px;
-}   
+}
+
+.unittest-results.alert-error {
+    background-color: #f2dede !important;
+}
+
+.unittest-results.alert-success {
+    background-color: #dff0d8 !important;
+}
 
 /* These admonition styles styles are copied from the Bootstrap .alert classes */
 .admonition {
@@ -98,13 +106,7 @@ label {
 }
 
 /* .alert-info */
-.admonition.tip {
-    color: #3a87ad;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-}
-
-.admonition.note {
+.admonition.tip, .admonition.note {
     color: #3a87ad;
     background-color: #d9edf7;
     border-color: #bce8f1;
@@ -113,7 +115,6 @@ label {
 .correct {
     color: #84b8d9;    
 }
-
 
 .social-menu {
     width: 275px;
@@ -188,7 +189,7 @@ div.flash {
     padding-bottom: 13px;
 }
 
-.assess-feedback {
+/*.assess-feedback {
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 7px;
@@ -196,7 +197,7 @@ div.flash {
     -moz-border-radius: 4px;
     border-radius: 4px;
     text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-}
+}*/
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;
@@ -208,23 +209,23 @@ div.flash {
     border-spacing: 10px 5px;
 }
 
-.unittest-results {
+/*.unittest-results {
     padding: 8px 35px 8px 14px;
     margin-bottom: 20px;
     background-color: rgb(244, 244, 173) !important;
-    color: #866A3A;
-    border: 1px solid #fbeed5;
+    #color: #866A3A;
+    #border: 1px solid #fbeed5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     line-height: 20px;
-}
+}*/
 
-.poll legend {
+/*.poll legend {
     color: #866A3A;
-}
+}*/
 
 .poll-question {
     padding-bottom: 10px;

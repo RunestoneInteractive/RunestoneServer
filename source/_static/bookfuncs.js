@@ -558,3 +558,24 @@ function compareFITBAnswers(div_id) {
     data.course = eBookConfig.course
     jQuery.get(eBookConfig.ajaxURL+'gettop10Answers',data, compareFITB);
 }
+
+document.addEventListener("DOMNodeInserted", function(event) {
+    var el = $(event.target);
+
+    if (el.hasClass('unittest-results')) {
+        event.target.addEventListener('DOMSubtreeModified', function(event) {
+            var div = $(event.currentTarget);
+            if (div.html()) {
+                if(div.html().indexOf('Fail') === -1 ) {
+                    div.removeClass('alert-error');
+                    div.addClass('alert alert-success');
+                } else if (div.html().indexOf('Fail') >= 0) {
+                    div.removeClass('alert-success');
+                    div.addClass('alert alert-error');
+                }
+            }
+        });
+    }
+
+});
+
