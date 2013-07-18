@@ -66,10 +66,12 @@ var add_button = function (divid, expected, feedArray) {
 var feedbackMCMFRandom = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('Correct!!  ' + feedbackText);
-        $(divid).css('background-color', '#C8F4AD');
+        //$(divid).css('background-color', '#C8F4AD');
+        $(divid).attr('class','alert alert-success');
     } else {
         $(divid).html("Incorrect.  " + feedbackText);
-        $(divid).css('background-color', '#F4F4AD');
+        //$(divid).css('background-color', '#F4F4AD');
+        $(divid).attr('class','alert alert-error')
     }
 };
 
@@ -110,10 +112,12 @@ var checkFIBStorage = function (divid, blankid, expected, feedback, casi) {
 var feedBack = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('You are Correct!');
-        $(divid).css('background-color', '#C8F4AD');
+        //$(divid).css('background-color', '#C8F4AD');
+        $(divid).attr('class','alert alert-success');
     } else {
         $(divid).html("Incorrect.  " + feedbackText);
-        $(divid).css('background-color', '#F4F4AD');
+        //$(divid).css('background-color', '#F4F4AD');
+        $(divid).attr('class','alert alert-error');
     }
 };
 
@@ -126,10 +130,12 @@ var feedBack = function (divid, correct, feedbackText) {
 var feedBackMCMF = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('Correct!!  ' + feedbackText);
-        $(divid).css('background-color', '#C8F4AD');
+        //$(divid).css('background-color', '#C8F4AD');
+        $(divid).attr('class','alert alert-success');
     } else {
         $(divid).html("Incorrect.  " + feedbackText);
-        $(divid).css('background-color', '#F4F4AD');
+        //$(divid).css('background-color', '#F4F4AD');
+        $(divid).attr('class','alert alert-error');
     }
 };
 
@@ -144,12 +150,14 @@ var feedBackMCMA = function (divid, numCorrect, numNeeded, numGiven, feedbackTex
 
     if (numCorrect == numNeeded && numNeeded == numGiven) {
         $(divid).html('Correct!  <br />' + feedbackText);
-        $(divid).css('background-color', '#C8F4AD');
+        //$(divid).css('background-color', '#C8F4AD');
+        $(divid).attr('class', 'alert alert-success');
     } else {
         $(divid).html("Incorrect.  " + "You gave " + numGiven +
             " " + answerStr + " and got " + numCorrect + " correct of " +
             numNeeded + " needed.<br /> " + feedbackText);
-        $(divid).css('background-color', '#F4F4AD');
+        //$(divid).css('background-color', '#F4F4AD');
+        $(divid).attr('class', 'alert alert-error');
     }
 };
 
