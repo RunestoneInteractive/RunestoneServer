@@ -284,3 +284,24 @@ div.flash {
 #exercises > ol > li .ui-state-default.ui-tabs-active {
     background: #faf7df;
 }
+
+
+div.error {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 8px;
+    padding: 0px 8px 2px 8px;
+    margin-bottom: 15px;
+}
+
+div.error p {
+    background: #f1f49c;
+    padding: 7px;
+    border-radius: 7px;
+}
+
+div.error pre {
+    background: #f1f49c;
+    padding: 7px;
+    border-radius: 7px;
+}
