@@ -113,16 +113,10 @@ def build():
 
         return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html',success=True )
     else:
-
-        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
-
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
-
-        # enrol the user in their new course
-        db(db.auth_user.id == auth.user.id).update(course_id = cid)
 
         moddata = {}
 
@@ -246,6 +240,10 @@ def makefile():
     shutil.rmtree(sourcedir)
 
     yoururlpath=path.join('/',request.application,"static",coursename,"index.html")
+
+    # enrol the user in their new course
+    cid = db.courses.update_or_insert(course_name=request.vars.projectname)
+    db(db.auth_user.id == auth.user.id).update(course_id = cid)
 
     return dict(message=T("Here is the link to your new eBook"),yoururl=yoururlpath)
 
