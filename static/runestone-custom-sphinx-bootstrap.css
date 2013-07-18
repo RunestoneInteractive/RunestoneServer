@@ -263,3 +263,10 @@ jQueryUI tab plugin styles to do it. */
 #exercises > ol > li .ui-state-default.ui-tabs-active {
     background: #faf7df;
 }
+
+.simplemodal-container {
+    width: auto !important;
+    height: auto !important;
+    max-width: 350px;
+    max-height: 400px;
+}
