@@ -20,8 +20,7 @@ body {
 .brand-logo {
     float: left;
     display: block;
-    background: transparent url('/runestone/static/images/logo_small.png') no-repeat 0px 0px;
-    background-size: 35px 35px;
+    background-size: 35px 35px !important;
     width: 35px;
     height: 35px;
     margin-top:2px;
