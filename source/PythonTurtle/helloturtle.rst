@@ -987,7 +987,7 @@ Exercises
             
             .. activecode:: q3_answer
                 
-                months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'
+                months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
                 for month in months:
                     print("One of the months of the year is", month)
 
