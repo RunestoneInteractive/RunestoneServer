@@ -10,7 +10,9 @@
     '_static/rangy-core.js',
     '_static/rangy-textrange.js',
     '_static/rangy-cssclassapplier.js',
-    '_static/user-highlights.js'
+    '_static/user-highlights.js',
+    '_static/jquery.idle-timer.js',
+    '_static/processing-1.4.1.min.js'
   ]
 %}
 
@@ -43,7 +45,7 @@
       <div class="container">
           <div class='navbar-brand'>
             <div>
-              <a class="brand-logo" href="http://runestoneinteractive.org/">&nbsp; </a>
+              <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="http://runestoneinteractive.org/">&nbsp; </a>
               <a class="brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
             </div>
           </div>
@@ -61,8 +63,8 @@
             <!-- social media dropdown -->
             <li class="dropdown">
               <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;'></img>
-                <img src='{{ pathto('_static/img/Twitter_icon.png', 1) }}' style='margin-top:-3px;'></img>
+                <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;' />
+                <img src='{{ pathto('_static/img/Twitter_icon.png', 1) }}' style='margin-top:-3px;' />
               </a>
               <div class="dropdown-menu social-menu">
                 <div>
@@ -174,8 +176,6 @@
   eBookConfig.loginRequired = {{login_required}}
   eBookConfig.isLoggedIn = false;
 </script>
-<script type="text/javascript" charset="utf-8" src="{{course_url}}/{{appname}}/static/js/jquery.idle-timer.js"></script>
-<script type="text/javascript" src="{{course_url}}/{{appname}}/static/js/processing-1.4.1.min.js"></script>
 
 <div id="fb-root"></div>
 <script>
