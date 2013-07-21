@@ -96,7 +96,9 @@
                 {% endif %}
                 <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
                 <li class="divider"></li>
-                <li>  
+                <li id="scratch_ac_link"><a href="javascript:showScratchActivecode()">Scratch Activecode</a></li>
+                <li class="divider"></li>
+                <li>
                   <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
                     <input type="text" name="q" placeholder="Search this book" />
                     <input type="hidden" name="check_keywords" value="yes" />
@@ -256,6 +258,7 @@ it (like the search bar) is clicked -->
     $(document).ready(createEditors);
     $(document).ready(getNumUsers);
     $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
 </script>
 
 {% if appname == "courselib" %}
