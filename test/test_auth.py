@@ -48,20 +48,14 @@ class LocalAuthTests(unittest.TestCase):
         self.login()
 
         # verify the profile page works
-        #self.profile()
+        self.profile()
 
         # make sure the new course designer works
-        #self.build_new_course_from_existing_course()
+        self.build_new_course_from_existing_course()
 
         # next 2 steps will verify the new course got created properly
-        #self.logout()
-        #self.login() # verifies redirection to new course
-
-        # create a custom course
-        self.build_new_custom_course()
-
         self.logout()
-        self.login()
+        self.login() # verifies redirection to new course
 
     def tearDown(self):
         self.driver.quit()
