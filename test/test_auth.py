@@ -136,6 +136,7 @@ class LocalAuthTests(unittest.TestCase):
                       "Not redirected to expected course (%s)." % self.course_name)
 
         ## check that the user dropdown menu has the email address of the logged in user ##
+
         # open the menu
         self.driver.find_elements_by_class_name('dropdown-toggle')[2].click()
 
@@ -198,32 +199,3 @@ class LocalAuthTests(unittest.TestCase):
 
         self.course_name = new_course_name # user account is now linked with the new course
 
-    def build_new_custom_course(self):
-        new_course_name = generate_name()
-        self.driver.get(self.host + "/runestone/designer")
-
-        self.driver.find_element_by_name('projectname').send_keys(new_course_name)
-        self.driver.find_element_by_name('projectdescription').send_keys('a new project')
-
-        self.driver.find_element_by_css_selector("input[value='custom']").click()
-
-        self.driver.find_element_by_css_selector("input[value='Submit']").click()
-
-        WebDriverWait(self.driver, 10) \
-            .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Module Index'))
-
-        # use a few modules to create a course
-        chapter_box = self.driver.find_element_by_css_selector("#box1")
-        chapter_title = self.driver.find_element_by_css_selector("#box1 #title ")
-        gen_intro = self.driver.find_element_by_css_selector("div[data-filename='GeneralIntro/introduction.rst']")
-        queues = self.driver.find_element_by_css_selector("div[data-filename='BasicDS/queues.rst']")
-
-        chapter_title.send_keys('Chapter 1: A Fake Chapter')
-
-        robot = ActionChains(self.driver)
-
-        # TODO this isn't working!
-        robot.drag_and_drop(gen_intro, chapter_box)
-        robot.drag_and_drop(queues, chapter_box)
-        robot.perform()
-        self.course_name = new_course_name # user account is now linked with the new course
