@@ -57,6 +57,10 @@ class LocalAuthTests(unittest.TestCase):
         self.logout()
         self.login_local() # verifies redirection to new course
 
+        self.save_load_activecode()
+
+        self.logout()
+
     def tearDown(self):
         self.driver.quit()
 
@@ -130,7 +134,6 @@ class LocalAuthTests(unittest.TestCase):
                       "Not redirected to expected course (%s)." % self.course_name)
 
         ## check that the user dropdown menu has the email address of the logged in user ##
-
         # open the menu
         self.driver.find_elements_by_class_name('dropdown-toggle')[2].click()
 
@@ -192,4 +195,37 @@ class LocalAuthTests(unittest.TestCase):
             .until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"), 'Your course is ready'))
 
         self.course_name = new_course_name # user account is now linked with the new course
+
+    def save_load_activecode(self):
+        ''' Test that saving and then re-loading an activecode works '''
+        self.driver.get(self.host + "/runestone/static/overview/overview.html")
+
+        save_b = self.driver.find_element_by_id('codeexample1_saveb')
+
+        expected_text = 'print("My first program adds two numbers, 2 and 3:")\nprint(2 + 3)\n'
+        js = "return cm_editors.codeexample1_code.getValue();"
+        actual_text = str(self.driver.execute_script(js))
+
+        self.assertTrue(expected_text == actual_text)
+
+        js = "cm_editors.codeexample1_code.setValue('print(\"Hello, world\")')"
+        self.driver.execute_script(js)
+
+        save_b.click()
+        time.sleep(2) # give the ajax call some time
+
+        self.driver.refresh()
+
+        load_b = self.driver.find_element_by_id('codeexample1_loadb')
+        load_b.click()
+        time.sleep(2) # give the ajax call some time
+
+        expected_text = 'print(\"Hello, world\")'
+        js = "return cm_editors.codeexample1_code.getValue();"
+        actual_text = str(self.driver.execute_script(js))
+
+        self.assertTrue(expected_text == actual_text,
+                        "Loading saved code failed! Expected '%s', found '%s'"
+                        % (expected_text, actual_text))
+
 
