@@ -86,7 +86,7 @@ if ('%(hidecode)s' == 'none') {
 
 CANVAS = '''
 <div style="text-align: center">
-<canvas id="%(divid)s_canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+<canvas id="%(divid)s_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
 </div>
 '''
 
