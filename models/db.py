@@ -43,12 +43,13 @@ from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
-## Enable captcha's :-(
-from gluon.tools import Recaptcha
-auth.settings.captcha = Recaptcha(request,
-   '6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD',
-   '6Lfb_t4SAAAAAGvAHwmkahQ6s44478AL5Cf-fI-x',
-   options="theme:'blackglass'")
+if settings.enable_captchas:
+    ## Enable captcha's :-(
+    from gluon.tools import Recaptcha
+    auth.settings.captcha = Recaptcha(request,
+        '6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD',
+        '6Lfb_t4SAAAAAGvAHwmkahQ6s44478AL5Cf-fI-x',
+        options="theme:'blackglass'")
 
 auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
