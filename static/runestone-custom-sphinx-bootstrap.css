@@ -270,6 +270,20 @@ jQueryUI tab plugin styles to do it. */
     max-height: 400px;
 }
 
+#scratch-ac-modal {
+    top: 55px !important;
+    width: 700px !important;
+    max-width: 700px;
+    max-height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#scratch-ac-modal .simplemodal-close {
+    top: 0;
+    right: 0;
+}
+
 .footnote.table {
     width: auto;
     margin-bottom:10px;
