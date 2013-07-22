@@ -96,3 +96,23 @@ class AssessTests(unittest.TestCase):
         # check that feedback is incorrect
         feedback = question.find_element_by_id('baseconvert1_feedback').text
         self.assertTrue('Incorrect.' in feedback, "FIB incorrect answer not graded correctly!")
+
+
+    def test_codelens(self):
+        self.driver.get(self.host + '/runestone/static/overview/overview.html')
+
+        question = self.driver.find_element_by_id('firstexample')
+
+        forward_button = question.find_element_by_id('jmpStepFwd')
+
+        forward_button.click()
+        output = question.find_element_by_id('pyStdout').get_attribute('value')
+        expected_output = 'My first program adds two numbers, 2 and 3:\n'
+        self.assertTrue(expected_output in output, "Codelens output is incorrect!")
+
+        forward_button.click()
+        output = question.find_element_by_id('pyStdout').get_attribute('value')
+        expected_output = 'My first program adds two numbers, 2 and 3:\n5\n'
+        self.assertTrue(expected_output in output, "Codelens output is incorrect!")
+
+
