@@ -77,7 +77,7 @@
                   <div>
                   <iframe style="border: 0; margin: 0; padding: 0;"
         src="https://www.gittip.com/bnmnetp/widget.html"
-        width="48pt" height="22pt"></iframe> Support Us</div>
+        width="48pt" height="22pt"> </iframe> Help Support Us</div>
               </div>
             </li>
             
@@ -90,7 +90,7 @@
               </a>
               <ul class='dropdown-menu'>
                 {% if 'overview' in course_id: %}
-                    <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li> 
+                    <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li>
                 {% else: %}
                     <li><a href='{{ pathto(master_doc) }}'>Table of Contents</a></li>
                 {% endif %}
@@ -119,11 +119,11 @@
               <ul class="dropdown-menu user-menu">
                 <li><span class='loggedinuser'></span></li>
                 <li class="divider"></li>
-                <li><a href="/{{appname}}/default/user/profile">Edit Profile</a></li>
-                <li><a href="/{{appname}}/default/user/change_password">Change Password</a></li>
+                <li><a href="{{course_url}}/{{appname}}/default/user/profile">Edit Profile</a></li>
+                <li><a href="{{course_url}}/{{appname}}/default/user/change_password">Change Password</a></li>
                 <li class="divider"></li>
                 <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
-                <li><a href="/{{appname}}/default/user/register">Register</a></li>
+                <li><a href="{{course_url}}/{{appname}}/default/user/register">Register</a></li>
               </ul>
             </li>
             <!-- end user account dropdown -->
@@ -137,7 +137,7 @@
               </a>
               <ul class="dropdown-menu user-menu">
                 <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
-                <li><a href='/{{appname}}/admin/index'>Instructors Page</a></li> 
+                <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructors Page</a></li>
                 <li class="divider"></li>
                 <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
                 <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
