@@ -778,9 +778,18 @@ programs much easier for humans to parse.  Use them liberally!
 
    What are comments for?
 
-.. admonition:: Scratch Editor
 
-   .. actex:: introscratch_1
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_01
+
+
+
 
 
 Glossary

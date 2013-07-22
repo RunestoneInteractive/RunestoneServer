@@ -156,9 +156,7 @@ Triple quoted strings can even span multiple lines:
 Python doesn't care whether you use single or double quotes or the
 three-of-a-kind quotes to surround your strings.  Once it has parsed the text of
 your program or command, the way it stores the value is identical in all cases,
-and the surrounding quotes are not part of the value. But when the interpreter
-wants to display a string, it has to decide which quotes to use to make it look
-like a string.
+and the surrounding quotes are not part of the value.
 
 .. activecode:: ch02_7
     :nocanvas:
@@ -231,11 +229,11 @@ Type conversion functions
 -------------------------
 
 Sometimes it is necessary to convert values from one type to another.  Python provides
-a few simple functions that will allow us to do that.  The functions `int`, `float` and `str`
+a few simple functions that will allow us to do that.  The functions ``int``, ``float`` and ``str``
 will (attempt to) convert their arguments into types `int`, `float` and `str`
 respectively.  We call these **type conversion** functions.
 
-The `int` function can take a floating point number or a string, and turn it
+The ``int`` function can take a floating point number or a string, and turn it
 into an int. For floating point numbers, it *discards* the decimal portion of
 the number - a process we call *truncation towards zero* on the number line.
 Let us see this in action:
@@ -257,7 +255,7 @@ The last case shows that a string has to be a syntactically legal number,
 otherwise you'll get one of those pesky runtime errors.  Modify the example by deleting the
 ``bottles`` and rerun the program.  You should see the integer ``23``.
 
-The type converter `float` can turn an integer, a float, or a syntactically
+The type converter ``float`` can turn an integer, a float, or a syntactically
 legal string into a float.
 
 .. activecode:: ch02_21
@@ -267,7 +265,7 @@ legal string into a float.
     print(type(float("123.45")))
 
 
-The type converter `str` turns its argument into a string.  Remember that when we print a string, the
+The type converter ``str`` turns its argument into a string.  Remember that when we print a string, the
 quotes are removed.  However, if we print the type, we can see that it is definitely `str`.
 
 .. activecode:: ch02_22
@@ -325,8 +323,8 @@ This example makes three assignments. The first assigns the string value
 integer ``17`` to ``n``, and the third assigns the floating-point number
 ``3.14159`` to a variable called ``pi``.
 
-The **assignment token**, ``=``, should not be confused with *equals*, which
-uses the token `==`.  The assignment statement links a *name*, on the left hand
+The **assignment token**, ``=``, should not be confused with *equality* (we will see later that equality uses the
+``==`` token).  The assignment statement links a *name*, on the left hand
 side of the operator, with a *value*, on the right hand side.  This is why you
 will get an error if you enter:
 
@@ -343,7 +341,7 @@ A common way to represent variables on paper is to write the name with an arrow
 pointing to the variable's value. This kind of figure, known as a **reference diagram**, is often called a **state
 snapshot** because it shows what state each of the variables is in at a
 particular instant in time.  (Think of it as the variable's state of mind).
-This diagram shows the result of executing the assignment statements.
+This diagram shows the result of executing the assignment statements shown above.
 
 .. image:: Figures/refdiagram1.png
    :alt: Reference Diagram
@@ -431,9 +429,9 @@ assignment we even give it a value that is of a different type.
 
 
 
-A great deal of programming is about having the computer remember things,
-e.g.  *The number of missed calls on your phone*, and then arranging to update
-or change the variable when you miss another call.
+A great deal of programming is about having the computer remember things.  For example, we might want to keep
+track of the number of missed calls on your phone.  Each time another call is missed, we will arrange to update
+or change the variable so that it will always reflect the correct value.
 
 **Check your understanding**
 
@@ -468,7 +466,11 @@ digits, but they have to begin with a letter or an underscore. Although it is
 legal to use uppercase letters, by convention we don't. If you do, remember
 that case matters. ``Bruce`` and ``bruce`` are different variables.
 
-The underscore character ( ``_``) can appear in a name. It is often used in
+.. caution::
+
+   Variable names can never contain spaces.
+
+The underscore character ( ``_``) can also appear in a name. It is often used in
 names with multiple words, such as ``my_name`` or ``price_of_tea_in_china``.
 There are some situations in which names beginning with an underscore have
 special meaning, so a safe rule for beginners is to start all names with a
@@ -642,6 +644,8 @@ expect.
 When a variable name appears in the place of an operand, it is replaced with
 the value that it refers to before the operation is performed.
 For example, what if we wanted to convert 645 minutes into hours.
+In Python 3, division is denoted by the operator token ``/`` which always evaluates to a floating point
+result.
 
 .. activecode:: ch02_16
     :nocanvas:
@@ -650,14 +654,10 @@ For example, what if we wanted to convert 645 minutes into hours.
     hours = minutes / 60
     print(hours)
 
-
-In Python 3, the division operator uses the token `/` which always evaluates to a floating point
-result.
-
-In the previous example, what we might have wanted to know was how many *whole* hours there
-are, and how many minutes remain.  Python gives us two different flavors of
-the division operator.  The second, called **integer division**, uses the token
-`//`.  It always *truncates* its result down to the next smallest integer (to
+What if, on the other hand, we had wanted to know how many *whole* hours there
+are and how many minutes remain.  To help answer this question, Python gives us a second flavor of
+the division operator.  This version, called **integer division**, uses the token
+``//``.  It always *truncates* its result down to the next smallest integer (to
 the left on the number line).
 
 .. activecode:: ch02_17
@@ -669,17 +669,18 @@ the left on the number line).
     hours = minutes // 60
     print(hours)
 
-
+Pay particular attention to the first two examples above.  Notice that the result of floating point division
+is ``1.75`` but the result of the integer division is simply ``1``.
 Take care that you choose the correct flavor of the division operator.  If
 you're working with expressions where you need floating point values, use the
-division operator `/`.  If you want an integer result, use `//`.
+division operator ``/``.  If you want an integer result, use ``//``.
 
 .. index:: modulus
 
 The **modulus operator**, sometimes also called the **remainder operator** or **integer remainder operator** works on integers (and integer expressions) and yields
 the remainder when the first operand is divided by the second. In Python, the
 modulus operator is a percent sign (``%``). The syntax is the same as for other
-operators:
+operators.
 
 .. activecode:: ch02_18
     :nocanvas:
@@ -690,7 +691,7 @@ operators:
     print(remainder)
 
 
-So 7 divided by 3 is 2 with a remainder of 1.
+In the above example, 7 divided by 3 is 2 when we use integer division and there is a remainder of 1.
 
 The modulus operator turns out to be surprisingly useful. For example, you can
 check whether one number is divisible by another---if ``x % y`` is zero, then
@@ -786,7 +787,7 @@ Input
 
 
 The program in the previous section works fine but is very limited in that it only works with one value for ``total_secs``.  What if we wanted to rewrite the program so that it was more general.  One thing we could
-do is allow the use to enter any value they wish for the number of seconds.  The program would then print the
+do is allow the use to enter any value they wish for the number of seconds.  The program could then print the
 proper result for that starting value.
 
 In order to do this, we need a way to get **input** from the user.  Luckily, in Python
@@ -800,20 +801,22 @@ The input function allows the user to provide a **prompt string**.  When the fun
 shown.
 The user of the program can enter the name and press `return`. When this
 happens the text that has been entered is returned from the `input` function,
-and in this case assigned to the variable `n`.
+and in this case assigned to the variable `n`.  Make sure you run this example a number
+of times and try some different names in the input box that appears.
 
 .. activecode:: inputfun
 
     n = input("Please enter your name: ")
     print("Hello", n)
 
-Even if you asked the user to enter their age, you would get back a string like
+It is very important to note that the ``input`` function returns a string value.  Even if you asked the user to enter their age, you would get back a string like
 ``"17"``.  It would be your job, as the programmer, to convert that string into
-a int or a float, using the `int` or `float` converter functions we saw
+an int or a float, using the ``int`` or ``float`` converter functions we saw
 earlier.
 
 To modify our previous program, we will add an input statement to allow the user to enter the number of seconds.  Then
-we will convert that string to an integer.  From there the process is the same as before.
+we will convert that string to an integer.  From there the process is the same as before.  To complete the example, we will
+print some appropriate output.
 
 .. activecode:: int_secs
 
@@ -999,7 +1002,7 @@ Here is what **reassignment** looks like in a reference diagram:
 
 It is important to note that in mathematics, a statement of equality is always true.  If ``a is equal to b``
 now, then ``a will always equal to b``. In Python, an assignment statement can make
-two variables equal, but because of the possibility of reassignment,
+two variables refer to the same object and therefore have the same value.  They appear to be equal.  However, because of the possibility of reassignment,
 they don't have to stay that way:
 
 .. activecode:: ch07_reassign2
@@ -1098,8 +1101,8 @@ a variable, which means the same as incrementing it by 1.
      installing Python on your computer here.
 
    * `Topic 2: <http://interactivepython.org/courselib/static/diveintopython3/index.html>`_ Dive Into Python 3,
-     this is an online textbook by Mark Pilgrim.  If you've had some
-     programming experience already this book takes you off the deep end with
+     this is an online textbook by Mark Pilgrim.  If you have already had some
+     programming experience, this book takes you off the deep end with
      both feet.
 
 **Check your understanding**
@@ -1124,10 +1127,46 @@ a variable, which means the same as incrementing it by 1.
      x = x - 1
      print (x)
 
+.. mchoicemf:: test_question2_10_2
+   :answer_a: 12
+   :answer_b: 9
+   :answer_c: 15
+   :answer_d: Nothing.  An error occurs because x cannot be used that many times in assignment statements.
+   :correct: c
+   :feedback_a: The value of x changes in the second statement.
+   :feedback_b: Each statement changes the value of x, so 9 is not the final result.
+   :feedback_c: Yes, starting with 12, subtract 3, than add 5, and finally add 1.
+   :feedback_d: Remember that variables in Python are different from variables in math in that they (temporarily) hold values, but can be reassigned.
 
-.. admonition:: Scratch Editor
 
-   .. actex:: sf_scratch_1
+   What is printed when the following statements execute?
+
+   .. code-block:: python
+
+     x = 12
+     x = x - 3
+     x = x + 5
+     x = x + 1
+     print (x)
+
+.. parsonsprob:: question2_10_3
+
+   Construct the code that will result in the value 134 being printed.
+   -----
+   mybankbalance = 100
+   mybankbalance = mybankbalance + 34
+   print(mybankbalance)
+
+
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_02
+
 
 
 Glossary
@@ -1318,11 +1357,13 @@ Exercises
                 :shortname: interactivepython
                 :identifier: c0a62044cac248859ce3695b46697ecc
 
+#. What is the order of the arithmetic operations in the following expression.  Evaluate the expression by hand and then check your
+     work.
 
-2. You look at the clock and it is exactly 2pm.  You set an alarm to go off
-   in 51 hours.  At what time does the alarm go off?
+      2 + (3 - 1) * 10 / 5 * (2 + 3)
 
    .. actex:: ex_2_2
+
 
 
 #. 
@@ -1331,8 +1372,10 @@ Exercises
 
         .. tab:: Question
 
+            Many people keep time using a 24 hour clock (11 is 11am and 23 is 11pm, 0 is midnight).  
+            If it is currently 13 and you set your alarm to go off in 50 hours, it will be 15 (3pm).
             Write a Python program to solve the general version of the above problem.
-            Ask the user for the time now (in hours), and ask for the number of hours to wait.
+            Ask the user for the time now (in hours), and then ask for the number of hours to wait for the alarm.
             Your program should output what the time will be on the clock when the alarm goes off.
 
             .. actex:: ex_2_3
@@ -1345,24 +1388,16 @@ Exercises
                 ## question 3 solution ##
 
                 current_time_string = input("What is the current time (in hours)? ")
-                waiting_time_string = input("How many hours do you want to wait? ")
+                waiting_time_string = input("How many hours do you have to wait? ")
 
                 current_time_int = int(current_time_string)
                 waiting_time_int = int(waiting_time_string)
 
                 hours = current_time_int + waiting_time_int
 
-                time = hours % 24
+                timeofday = hours % 24
 
-                if time > 12:
-                    # time is after noon (pm), so subtract 12 to get the time in 12-hour format
-                    end_time = time - 12
-                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "pm")                        
-                else:
-                    # the time is before noon (am)
-                    end_time = time
-                    print ("The time after waiting", waiting_time_string, "hours is:", end_time, "am")                        
-
+                print(timeofday)
 
         .. tab:: Discussion
 
@@ -1371,8 +1406,8 @@ Exercises
                 :identifier: a77ed6163c254612b0d649034b261659
 
 
-#. You go on a wonderful holiday
-   leaving on day number 3 (a Wednesday).  You return home after 137 nights.
+#. It is possible to name the days 0 thru 6 where day 0 is Sunday and day 6 is Saturday.  If you go on a wonderful holiday
+   leaving on day number 3 (a Wednesday) and you return home after 10 nights.
    Write a general version of the program which asks for the starting day number, and
    the length of your stay, and it will tell you the number of day of the week you will return on.
 
@@ -1502,7 +1537,7 @@ Exercises
 
                 area = width * height
 
-                print("The area of the rectangle is " + area)
+                print("The area of the rectangle is", area)
 
 
         .. tab:: Discussion
@@ -1540,7 +1575,7 @@ Exercises
                 # formula to convert C to F is: (degrees Celcius) times (9/5) plus (32)
                 deg_f = deg_c * (9 / 5) + 32
 
-                print (str(deg_c) + " degrees Celsius is " + str(deg_f) + " degrees Farenheit.")
+                print (deg_c, " degrees Celsius is", deg_f, " degrees Farenheit.")
 
         .. tab:: Discussion
 

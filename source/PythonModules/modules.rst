@@ -416,7 +416,7 @@ Exercises
 
         .. tab:: Question
 
-           The **Pythagorean Theorem** tells us that the length of the hypotenuse of a right triangle is related to the lengths of the other two sides.  Look thru the ``math`` module and see if you can find a function that will compute this relationship automatically.
+           The **Pythagorean Theorem** tells us that the length of the hypotenuse of a right triangle is related to the lengths of the other two sides.  Look thru the ``math`` module and see if you can find a function that will compute this relationship for you.  Once you find it, write a short program to try it out.
         
 
         .. tab:: Answer
@@ -436,7 +436,7 @@ Exercises
                 :shortname: interactivepython
                 :identifier: mods_333
 
-#.  Search for a way to calculate an approximation for **pi**.  Write a program to compute the approximation and then print that value as well as the value of ``math.pi`` from the math module.
+#.  Search on the internet for a way to calculate an approximation for **pi**.  There are many that use simple arithmetic.  Write a program to compute the approximation and then print that value as well as the value of ``math.pi`` from the math module.
 
     .. actex:: ex_mod_4
     
