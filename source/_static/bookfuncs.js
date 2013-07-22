@@ -601,7 +601,7 @@ function createScratchActivecode() {
                '  <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
 
                '  <div style="text-align: center">' +
-               '    <canvas id="'+divid+'_canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
+               '    <canvas id="'+divid+'_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
                '  </div>' +
                '  <pre id="'+divid+'_suffix" style="display:none">' +
                '  </pre>' +
