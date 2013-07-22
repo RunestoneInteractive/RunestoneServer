@@ -40,3 +40,59 @@ class AssessTests(unittest.TestCase):
         # check that feedback is incorrect
         feedback = question.find_element_by_id('question1_1_feedback').text
         self.assertTrue("Incorrect." in feedback, "MCMF incorrect answer not graded correctly!")
+
+
+    def test_MCMA(self):
+        self.driver.get(self.host + '/runestone/static/overview/overview.html')
+
+        question = self.driver.find_element_by_id('question1_2')
+
+        # select the correct answers
+        question.find_element_by_id('question1_2_opt_a').click()
+        question.find_element_by_id('question1_2_opt_b').click()
+        question.find_element_by_id('question1_2_opt_d').click()
+
+        # submit answers
+        submit_button = question.find_element_by_name('do answer')
+        submit_button.click()
+
+        # check that feedback is correct
+        feedback = question.find_element_by_id('question1_2_feedback').text
+        self.assertTrue("Correct!" in feedback, "MCMA correct answers not graded correctly!")
+
+        # select a wrong answer
+        question.find_element_by_id('question1_2_opt_c').click()
+
+        # submit answer
+        submit_button.click()
+
+        # check that feedback is incorrect
+        feedback = question.find_element_by_id('question1_2_feedback').text
+        self.assertTrue("Incorrect." in feedback, "MCMA incorrect answer not graded correctly!")
+
+    def test_FIB(self):
+        self.driver.get(self.host + '/runestone/static/overview/overview.html')
+
+        question = self.driver.find_element_by_id('baseconvert1')
+
+        # input the correct answer
+        question.find_element_by_id('baseconvert1_ans1').send_keys('31')
+
+        # submit the answer
+        submit_button = question.find_element_by_name('do answer')
+        submit_button.click()
+
+        # check that feedback is correct
+        feedback = question.find_element_by_id('baseconvert1_feedback').text
+        self.assertTrue('You are Correct' in feedback, "FIB correct answer not graded correctly!")
+
+        # input the wrong answer
+        question.find_element_by_id('baseconvert1_ans1').send_keys('50')
+
+        # submit the answer
+        submit_button = question.find_element_by_name('do answer')
+        submit_button.click()
+
+        # check that feedback is incorrect
+        feedback = question.find_element_by_id('baseconvert1_feedback').text
+        self.assertTrue('Incorrect.' in feedback, "FIB incorrect answer not graded correctly!")
