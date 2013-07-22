@@ -579,3 +579,50 @@ document.addEventListener("DOMNodeInserted", function(event) {
 
 });
 
+function createScratchActivecode() {
+    /* set up the scratch Activecode editor in the search menu */
+
+    // use the URL to assign a divid - each page should have a unique Activecode block id.
+    // Remove everything from the URL but the course and page name
+    var divid = document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
+
+    // generate the HTML
+    var html = '<div id="'+divid+'" style="display: none;" class="scratch-ac-modal"><br/>' +
+               '  <div id="'+divid+'_code_div" style="display: block">' +
+               '    <textarea cols="50" rows="12" id="'+divid+'_code" class="active_code"></textarea>' +
+               '  </div>' +
+               '  <p class="ac_caption"><span class="ac_caption_text">Scratch Editor</span> </p>' +
+
+               '  <button class="btn btn-small btn-success" id="'+divid+'_runb" onclick="runit(\''+divid+'\',this, undefined);">Run</button>' +
+
+               '  <div id="cont"></div>' +
+
+               '  <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_saveb" onclick="saveEditor(\''+divid+'\');">Save</button>' +
+               '  <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
+
+               '  <div style="text-align: center">' +
+               '    <canvas id="'+divid+'_canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
+               '  </div>' +
+               '  <pre id="'+divid+'_suffix" style="display:none">' +
+               '  </pre>' +
+               '  <pre id="'+divid+'_pre" class="active_out">' +
+               '  </pre>' +
+
+               '</div>';
+    el = $(html);
+    $('body').append(el);
+}
+
+function showScratchActivecode() {
+    var divid = document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
+    var div = $("#"+divid);
+
+    div.modal({'containerId':'scratch-ac-modal',
+               'persist':true,
+               'onShow': function(dialog) {
+                    dialog.data.find('.CodeMirror').each(function(i, el) {
+                        el.CodeMirror.refresh();
+                    });
+                }
+              });
+}
