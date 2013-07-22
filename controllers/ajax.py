@@ -350,7 +350,7 @@ def gettop10Answers():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
-    query = '''select act, count(*) from useinfo where event = 'assses' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
+    query = '''select act, count(*) from useinfo where event = 'assess' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
     try:
         rows = db.executesql(query)    
     except:
@@ -359,7 +359,7 @@ def gettop10Answers():
     res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')], 'count':row[1]} for row in rows ]
 
     miscdata = {}
-    getCorrectStats(miscdata,'assses')
+    getCorrectStats(miscdata,'assess')
 
     return json.dumps([res,miscdata])
 

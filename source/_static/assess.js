@@ -105,7 +105,7 @@ var checkFIBStorage = function (divid, blankid, expected, feedback, casi) {
 
     feedBack('#' + divid + '_feedback', isCorrect, feedback);
     var answerInfo = 'answer:' + given + ":" + (isCorrect ? 'correct' : 'no');
-    logBookEvent({'event': 'assses', 'act': answerInfo, 'div_id': divid});
+    logBookEvent({'event': 'assess', 'act': answerInfo, 'div_id': divid});
     document.getElementById(divid + '_bcomp').disabled = false;    
 };
 
