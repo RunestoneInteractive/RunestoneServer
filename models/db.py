@@ -59,7 +59,7 @@ auth.settings.retrieve_password_captcha	= False
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
   Field('course_id','string'),
-  Field('course_name', 'string'),
+  Field('course_name', 'string', unique=True),
   migrate=settings.migrate
 )
 if db(db.courses.id > 0).isempty():
