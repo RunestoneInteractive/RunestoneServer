@@ -69,12 +69,14 @@ var feedbackMCMFRandom = function (divid, correct, feedbackText) {
         //$(divid).css('background-color', '#C8F4AD');
         $(divid).attr('class','alert alert-success');
     } else {
+        if (feedbackText == null) {
+            feedbackText = '';
+        }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
         $(divid).attr('class','alert alert-error')
     }
 };
-
 
 var checkFIBStorage = function (divid, blankid, expected, feedback, casi) {
     var given = document.getElementById(blankid).value;
@@ -115,6 +117,9 @@ var feedBack = function (divid, correct, feedbackText) {
         //$(divid).css('background-color', '#C8F4AD');
         $(divid).attr('class','alert alert-success');
     } else {
+        if (feedbackText == null) {
+            feedbackText = '';
+        }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
         $(divid).attr('class','alert alert-error');
@@ -125,21 +130,20 @@ var feedBack = function (divid, correct, feedbackText) {
 /* 
  Multiple Choice with Feedback for each answer
  */
-
-
 var feedBackMCMF = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('Correct!!  ' + feedbackText);
         //$(divid).css('background-color', '#C8F4AD');
         $(divid).attr('class','alert alert-success');
     } else {
+        if (feedbackText == null) {
+            feedbackText = '';
+        }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
         $(divid).attr('class','alert alert-error');
     }
 };
-
-
 
 /*
  Multiple Choice with Multiple Answers
