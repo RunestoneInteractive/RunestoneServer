@@ -47,6 +47,10 @@ def build():
     response.files.append(URL('static','css/dd.css'))
     response.files.append(URL('static','js/dd.js'))
 
+    existing_course = db(db.courses.course_name == request.vars.projectname).select().first()
+    if existing_course:
+        return dict(mess='That name has already been used.',course_url=None, success=False)
+
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
     if request.vars.coursetype != 'custom':
