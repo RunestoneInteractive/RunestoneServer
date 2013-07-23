@@ -30,7 +30,6 @@ def setup(app):
 
 BEGIN = """ <div id='%(divid)s' class='poll alert'> """
 
-# TODO give this form an action!
 BEGIN_FORM = """
     <form id='%(divid)s_poll' name='%(divid)s_poll' action="">
         <fieldset>
@@ -50,7 +49,7 @@ END_POLL_OPTIONS = """ </div> """
 COMMENT = """ <br><input type='text' name='%(divid)s_comment' placeholder='Any comments?'> <br>"""
 
 END_POLL_INPUT = """
-            <button type='button' class='btn btn-small btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
+            <button type='button' id='%(divid)s_submit' class='btn btn-small btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
         </div>
 """
 
