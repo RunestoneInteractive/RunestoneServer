@@ -297,3 +297,25 @@ jQueryUI tab plugin styles to do it. */
 .ac-canvas {
     background-color: white;
 }
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
+
+.tracecheck, .close-modal {
+    margin: 10px 8px 12px 0;
+}
+
+.video-play-overlay {
+    position: absolute;
+    top: -40px;
+    left: 110px;
+    height: 200px;
+    width: 200px;
+    background-position: 0 0;
+    background-repeat:no-repeat;
+}
