@@ -1,8 +1,5 @@
 from selenium import webdriver
-from selenium.common.exceptions import UnexpectedAlertPresentException
-from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import WebDriverException
-import time
 import unittest
 
 
