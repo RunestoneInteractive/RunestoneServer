@@ -619,6 +619,7 @@ function showScratchActivecode() {
 
     div.modal({'containerId':'scratch-ac-modal',
                'persist':true,
+               'overlayClose':true,
                'onShow': function(dialog) {
                     dialog.data.find('.CodeMirror').each(function(i, el) {
                         el.CodeMirror.refresh();
