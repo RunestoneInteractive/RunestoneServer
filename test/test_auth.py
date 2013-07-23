@@ -5,12 +5,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.action_chains import ActionChains
 import string
 import random
 import time
-
 import unittest
+import shutil
 
 
 def generate_name():
@@ -63,6 +62,9 @@ class LocalAuthTests(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+
+        # delete the files for the custom course
+        shutil.rmtree("../static/%s/" % self.course_name)
 
     ##############################################################################################
 
@@ -135,7 +137,9 @@ class LocalAuthTests(unittest.TestCase):
 
         ## check that the user dropdown menu has the email address of the logged in user ##
         # open the menu
-        self.driver.find_elements_by_class_name('dropdown-toggle')[2].click()
+        els = WebDriverWait(self.driver, 10)\
+            .until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'dropdown-toggle')))
+        els[2].click()
 
         # make sure it actually did open
         dropdown_el = self.driver.find_element_by_class_name('open')
@@ -183,7 +187,9 @@ class LocalAuthTests(unittest.TestCase):
 
         self.driver.get(self.host + "/runestone/designer")
 
-        self.driver.find_element_by_name('projectname').send_keys(new_course_name)
+        WebDriverWait(self.driver, 10) \
+            .until(EC.presence_of_element_located((By.NAME, "projectname"))).send_keys(new_course_name)
+        #self.driver.find_element_by_name('projectname').send_keys(new_course_name)
         self.driver.find_element_by_name('projectdescription').send_keys('a new project')
 
         self.driver.find_element_by_css_selector("input[value='thinkcspy']").click()
