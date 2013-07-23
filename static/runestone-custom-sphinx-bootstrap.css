@@ -305,3 +305,7 @@ jQueryUI tab plugin styles to do it. */
 .gittip-button {
     margin-bottom: -6px;
 }
+
+.tracecheck, .close-modal {
+    margin: 10px 8px 12px 0;
+}
