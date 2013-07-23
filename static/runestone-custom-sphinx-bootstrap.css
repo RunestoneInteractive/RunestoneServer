@@ -297,3 +297,11 @@ jQueryUI tab plugin styles to do it. */
 .ac-canvas {
     background-color: white;
 }
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
