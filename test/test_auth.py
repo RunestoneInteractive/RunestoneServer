@@ -121,8 +121,8 @@ class LocalAuthTests(unittest.TestCase):
         self.driver.get(self.host + '/runestone/default/user/login')
 
         ## fill out the login form ##
-        self.driver.find_element_by_id('auth_user_username'). \
-            send_keys(self.username)
+        WebDriverWait(self.driver, 10)\
+            .until(EC.presence_of_element_located((By.ID, 'auth_user_username'))).send_keys(self.username)
         self.driver.find_element_by_id('auth_user_password'). \
             send_keys(self.password)
 
