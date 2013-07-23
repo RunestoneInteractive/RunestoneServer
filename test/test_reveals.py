@@ -14,6 +14,7 @@ class RevealTests(unittest.TestCase):
 
     #################################################################################################
     def test_reveal(self):
+        ''' test the reveal directive '''
         self.driver.get(self.host + '/runestone/static/overview/overview.html')
 
         reveal_div = self.driver.find_element_by_id('revealid1')

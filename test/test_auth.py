@@ -208,24 +208,29 @@ class LocalAuthTests(unittest.TestCase):
 
         save_b = self.driver.find_element_by_id('codeexample1_saveb')
 
+        # check the original contents of the AC block
         expected_text = 'print("My first program adds two numbers, 2 and 3:")\nprint(2 + 3)\n'
         js = "return cm_editors.codeexample1_code.getValue();"
         actual_text = str(self.driver.execute_script(js))
-
         self.assertTrue(expected_text == actual_text)
 
+        # replace the code with something new
         js = "cm_editors.codeexample1_code.setValue('print(\"Hello, world\")')"
         self.driver.execute_script(js)
 
+        # save our new code
         save_b.click()
         time.sleep(2) # give the ajax call some time
 
+        # reload the page
         self.driver.refresh()
 
+        # load the saved code
         load_b = self.driver.find_element_by_id('codeexample1_loadb')
         load_b.click()
         time.sleep(2) # give the ajax call some time
 
+        # make sure our code was saved and loaded properly
         expected_text = 'print(\"Hello, world\")'
         js = "return cm_editors.codeexample1_code.getValue();"
         actual_text = str(self.driver.execute_script(js))

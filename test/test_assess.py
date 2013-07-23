@@ -105,6 +105,10 @@ class AssessTests(unittest.TestCase):
 
 
     def test_codelens(self):
+        '''
+        A few simple tests to make sure Codelens is working, including the
+        inline "Check your understanding" questions
+        '''
         self.driver.get(self.host + '/runestone/static/overview/overview.html')
 
         question = self.driver.find_element_by_id('firstexample')

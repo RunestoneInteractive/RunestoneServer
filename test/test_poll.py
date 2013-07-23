@@ -14,14 +14,17 @@ class PollTests(unittest.TestCase):
 
     #################################################################################################
     def test_poll(self):
+        ''' test the poll directive '''
         self.driver.get(self.host + '/runestone/static/overview/overview.html')
 
         poll_div = self.driver.find_element_by_id('pollid1')
 
         opts = poll_div.find_elements_by_css_selector(".poll-options input[type='radio']")
 
+        # the poll in overview should be on a scale 1-10.
         self.assertTrue(len(opts) == 10, "Not enough poll options present!")
 
+        # just choose option 4
         poll_div.find_element_by_id('pollid1_4').click()
 
         # submit

@@ -14,6 +14,7 @@ class DomAccessTests(unittest.TestCase):
 
     #################################################################################################
     def test_dom_access(self):
+        ''' quick test of the DOM access ability using the sample in overview '''
         self.driver.get(self.host + '/runestone/static/overview/overview.html')
 
         dom_input = self.driver.find_element_by_id('text1')
