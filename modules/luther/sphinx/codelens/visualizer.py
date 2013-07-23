@@ -44,10 +44,10 @@ QUESTION = '''
     <h3>Check your understanding</h3>
     %(question)s
     <input id="%(divid)s_textbox" type="textbox" />
-    <button id="%(divid)s_tracecheck" class='btn btn-small' onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">Check
+    <button id="%(divid)s_tracecheck" class='btn btn-small tracecheck' onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">Check
     Me</button>
-    <button class='btn btn-small' onclick="closeModal('%(divid)s')">Continue...</button>
-    <p id="%(divid)s_feedbacktext" class="feedbacktext"></p>
+    <button class='btn btn-small close-modal' onclick="closeModal('%(divid)s')">Continue...</button>
+    <p id="%(divid)s_feedbacktext" class="feedbacktext alert"></p>
 </div>
 '''
 
