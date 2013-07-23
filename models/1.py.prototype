@@ -11,3 +11,6 @@ settings.janrain_api_key = 'ThisIsntARealKey'
 
 # Add your Janrain domain (without the .rpxnow.com suffix)
 settings.janrain_domain = 'my-janrain-domain'
+
+# Enable captchas during registration
+settings.enable_captchas = True
