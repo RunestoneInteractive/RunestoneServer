@@ -43,7 +43,7 @@ class LayoutTests(unittest.TestCase):
         self.driver.find_element_by_class_name('brand-logo').click()
 
         # make sure the logo link goes to the right place
-        expected_url = 'http://runestoneinteractive.org/'
+        expected_url = '%s/runestone/default/user/login' % self.host
         self.assertEqual(self.driver.current_url, expected_url, 'Logo link does not go to'
                                                                 ' the correct location! Expected %s, got %s.' % (
                                                                 expected_url, self.driver.current_url))
