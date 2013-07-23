@@ -25,7 +25,10 @@ def setup(app):
     app.add_stylesheet('video.css')
 
 CODE = """\
-<a id="%(divid)s_thumb" > <img src="%(thumb)s" /></a>
+<a id="%(divid)s_thumb" style='position:relative;'>
+    <img src="%(thumb)s" />
+    <div class='video-play-overlay'></div>
+</a>
 <div id="%(divid)s" class="video_popup" >
 <video %(controls)s %(loop)s >
     %(sources)s

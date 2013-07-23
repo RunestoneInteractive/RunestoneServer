@@ -266,6 +266,12 @@ it (like the search bar) is clicked -->
     $(document).ready(createScratchActivecode());
 </script>
 
+<script type="text/javascript">
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'{{pathto('_static/play_overlay_icon.png', 1)}}\')")
+  });
+</script>
+
 {% if appname == "courselib" %}
 <script type="text/javascript">
   var _gaq = _gaq || [];
