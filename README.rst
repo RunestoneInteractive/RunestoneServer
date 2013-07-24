@@ -138,12 +138,11 @@ To use the admin functionalities you are going to want to do one more bit of con
 * Click the "Register" link in the upper right corner of the browser window.
 * Fill in the form to create a user account for yourself.
 
-Now, create an 'instructors' user group and add your new user account to it using the appadmin 
+Now, add your new user account to the 'instructors' group using the appadmin
 functionality of web2py:
 
 * Open ``http://127.0.0.1:8000/runestone/appadmin``. Login using the password you supplied when you ran web2py.
-* Click the link for ``insert new auth_group`` and add ``instructor`` as a role. Description can be whatever you want.
-* Go back to the appadmin/index page and click on ``insert new auth_membership``. Select your user account and the new instructor group as the two values and click submit.  You are now an instructor.
+* Click on ``insert new auth_membership``. Select your user account and the instructor group as the two values and click submit.  You are now an instructor.
 
 
 How to Contribute

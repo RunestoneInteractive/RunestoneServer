@@ -133,6 +133,9 @@ db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(migrate=settings.migrate)
 
+# create the instructor group if it doesn't already exist
+if not db(db.auth_group.role == 'instructor').select().first():
+    db.auth_group.insert(role='instructor')
 
 ## configure email
 mail=auth.settings.mailer
