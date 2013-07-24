@@ -151,7 +151,7 @@ def rebuildcourse():
         coursename = request.vars.projectname
         confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
         outdir = path.join(request.folder, 'static' , coursename)
-        doctreedir = path.join(outdir,'.doctrees')
+        doctreedir = path.join(outdir,'doctrees')
         buildername = 'html'
         confoverrides = {}
         confoverrides['html_context.appname'] = request.application
