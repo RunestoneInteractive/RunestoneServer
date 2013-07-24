@@ -118,6 +118,9 @@ def build():
         filenames = []
         app.build(force_all, filenames)
 
+        shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
+                    path.join(outdir, '_static', 'jquery.js'))
+
         shutil.rmtree(sourcedir)
 
         # enrol the user in their new course
@@ -256,6 +259,9 @@ def makefile():
     force_all = True
     filenames = []
     app.build(force_all, filenames)
+
+    shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
+                path.join(outdir, '_static', 'jquery.js'))
 
     shutil.rmtree(sourcedir)
 

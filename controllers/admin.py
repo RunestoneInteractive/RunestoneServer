@@ -176,6 +176,9 @@ def rebuildcourse():
         filenames = []
         app.build(force_all, filenames)
 
+        shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
+                    path.join(outdir, '_static', 'jquery.js'))
+
         # clean up the temp source dir
         shutil.rmtree(sourcedir)
 
