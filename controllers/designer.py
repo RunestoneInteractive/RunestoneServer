@@ -55,9 +55,6 @@ def build():
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
-        # enrol the user in their new course
-        db(db.auth_user.id == auth.user.id).update(course_id = cid)
-
         # sourcedir holds the all sources temporarily
         # confdir holds the files needed to rebuild the course
         workingdir = request.folder
@@ -122,6 +119,11 @@ def build():
         app.build(force_all, filenames)
 
         shutil.rmtree(sourcedir)
+
+        # enrol the user in their new course
+        db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        auth.user.course_id = cid
+        auth.user.course_name = request.vars.projectname
 
         return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html',success=True )
     else:
@@ -262,6 +264,8 @@ def makefile():
     # enrol the user in their new course
     cid = db.courses.update_or_insert(course_name=request.vars.projectname)
     db(db.auth_user.id == auth.user.id).update(course_id = cid)
+    auth.user.course_id = cid
+    auth.user.course_name = request.vars.projectname
 
     return dict(message=T("Here is the link to your new eBook"),yoururl=yoururlpath)
 

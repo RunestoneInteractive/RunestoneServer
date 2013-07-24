@@ -136,8 +136,12 @@ def rebuildcourse():
         sourcedir = path.join(workingdir,request.vars.projectname)
         confdir = path.join(workingdir, 'custom_courses', request.vars.projectname)
 
-        # copy all the sources into the temporary sourcedir
-        shutil.copytree(path.join(workingdir,'source'),sourcedir)
+        try:
+            # copy all the sources into the temporary sourcedir
+            shutil.copytree(path.join(workingdir,'source'),sourcedir)
+        except OSError:
+            # this is probably devcourse, thinkcspy, or other builtin course
+            return dict(confirm=False, mess="You don't have permission to rebuild this course.", course_url='/'+request.application+'/static/'+request.vars.projectname+'/index.html')
 
         # copy the index and conf files to the sourcedir
         shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
@@ -175,7 +179,7 @@ def rebuildcourse():
         # clean up the temp source dir
         shutil.rmtree(sourcedir)
 
-        return dict(mess='Your course has been rebuilt.', confirm=False)
+        return dict(mess='Your course has been rebuilt.',course_url='/'+request.application+'/static/'+coursename+'/index.html', confirm=False)
 
 #@auth.requires_membership('instructor')
 def buildmodulelist():
