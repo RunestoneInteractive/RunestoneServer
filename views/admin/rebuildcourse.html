@@ -1,0 +1,34 @@
+{{extend 'layout.html'}}
+
+
+{{ if confirm: }}
+  <h3>Rebuild your course</h3>
+
+  <p>This will update your course will the latest changes to the content and layout.
+    Are you sure you want to do this?
+  </p>
+
+  <form name="confirm" method="POST" action="/{{=request.application}}/admin/rebuildcourse">
+   <input type="hidden" name="projectname" value="{{= auth.user.course_name}}" />
+   <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br>
+   <input type="submit" class="btn btn-small" onclick="unhide_img('spinner');" value="Rebuild" />
+  </form>
+
+  <div id="spinner_div" style="align: center; display: none;">
+    <p>Your course is being rebuilt.  This may take several minutes to complete.</p>
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
+  </div>
+
+  <script type="text/javascript">
+	  function unhide_img(id) {
+      var d = document.getElementById('spinner_div');
+      d.style.display = "block";
+		  var i = document.getElementById('spinner');
+		  i.style.display = "block";
+		  return true;
+	  }
+	</script>
+
+{{ else: }}
+  {{ =mess }}
+{{ pass }}

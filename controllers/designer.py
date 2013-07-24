@@ -6,14 +6,7 @@ import shutil
 import sys
 import re
 
-from docutils.utils import SystemMessage
-
-from sphinx import __version__
-from sphinx.errors import SphinxError
 from sphinx.application import Sphinx
-from sphinx.util import Tee, format_exception_cut_frames, save_traceback
-from sphinx.util.console import red, nocolor, color_terminal
-from sphinx.util.pycompat import terminal_safe
 
 
 #########################################################################
@@ -69,12 +62,16 @@ def build():
         # confdir holds the files needed to rebuild the course
         workingdir = request.folder
         sourcedir = path.join(workingdir,request.vars.projectname)
+
+        if not os.path.exists(path.join(workingdir, 'custom_courses')):
+            os.mkdir(path.join(workingdir, 'custom_courses'))
         confdir = path.join(workingdir, 'custom_courses', request.vars.projectname)
         if os.path.exists(sourcedir) \
                 or re.search(r'[ &]',request.vars.projectname) \
                 or os.path.exists(confdir):
             return dict(mess='You may not use %s for your course name'%request.vars.projectname,success=False)
 
+        # copy all the sources into the temporary sourcedir
         shutil.copytree(path.join(workingdir,'source'),sourcedir)
 
         os.mkdir(confdir)
@@ -97,7 +94,7 @@ def build():
         # set the url
         # build the book
         coursename = request.vars.projectname
-        confdir = sourcedir
+        confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
         outdir = path.join(request.folder, 'static' , coursename)
         doctreedir = path.join(outdir,'.doctrees')
         buildername = 'html'

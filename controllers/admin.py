@@ -1,3 +1,9 @@
+from os import path
+import os
+import shutil
+import sys
+from sphinx.application import Sphinx
+
 # this is for admin links
 # use auth.requires_membership('manager')
 #
@@ -8,6 +14,7 @@
 # - show totals for all students
 
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
+
 
 @auth.requires_login()
 def index():
@@ -118,6 +125,57 @@ def studentactivity():
     return dict(grid=res,course_id=course.course_name)
     
 
+@auth.requires_membership('instructor')
+def rebuildcourse():
+    if not request.vars.projectname:
+        return dict(confirm=True)
+    else:
+        # sourcedir holds the all sources temporarily
+        # confdir holds the files needed to rebuild the course
+        workingdir = request.folder
+        sourcedir = path.join(workingdir,request.vars.projectname)
+        confdir = path.join(workingdir, 'custom_courses', request.vars.projectname)
+
+        # copy all the sources into the temporary sourcedir
+        shutil.copytree(path.join(workingdir,'source'),sourcedir)
+
+        # copy the index and conf files to the sourcedir
+        shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
+        shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
+
+        # run the Sphinx build
+        coursename = request.vars.projectname
+        confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
+        outdir = path.join(request.folder, 'static' , coursename)
+        doctreedir = path.join(outdir,'.doctrees')
+        buildername = 'html'
+        confoverrides = {}
+        confoverrides['html_context.appname'] = request.application
+        confoverrides['html_context.course_id'] = coursename
+        confoverrides['html_context.loglevel'] = 10
+        confoverrides['html_context.course_url'] = 'http://' + request.env.http_host
+        if request.vars.loginreq == 'yes':
+            confoverrides['html_context.login_required'] = 'true'
+        else:
+            confoverrides['html_context.login_required'] = 'false'
+        status = sys.stdout
+        warning = sys.stdout
+        freshenv = True
+        warningiserror = False
+        tags = []
+
+        sys.path.insert(0,path.join(request.folder,'modules'))
+        app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
+                    confoverrides, status, warning, freshenv,
+                    warningiserror, tags)
+        force_all = True
+        filenames = []
+        app.build(force_all, filenames)
+
+        # clean up the temp source dir
+        shutil.rmtree(sourcedir)
+
+        return dict(mess='Your course has been rebuilt.', confirm=False)
 
 #@auth.requires_membership('instructor')
 def buildmodulelist():
