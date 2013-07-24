@@ -268,7 +268,8 @@ You can also make changes and save them for reloading later. *Save* and *Load* a
 Press *Load* to return your program to its previously saved state.
 
 In addition to activecode, you can also execute Python code with the assistance of a unique visualization tool.  This tool, known as **codelens**, allows you to control the step by step execution of a program.  It also lets you see the values of
-all variables as they are created and modified.  The following example shows codelens in action on the same program as we saw above.  Note that in activecode, the source code executes from beginning to end and you can see the final result.  In codelens you can see and control the step by step progress.
+all variables as they are created and modified.  The following example shows codelens in action on the same program as we saw above.  Note that in activecode, the source code executes from beginning to end and you can see the final result.  In codelens you can see and control the step by step progress.  Note that the red arrow always points to the next line of code that is going to be executed.  The light green
+arrow points to the line that was just executed.
 
 
 
