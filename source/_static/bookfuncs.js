@@ -95,7 +95,7 @@ function createEditors() {
             onKeyEvent:handleEdKeys
         }
                 );
-        cm_editors[newEdId].parentDiv = edList[i].parentNode.id;
+        cm_editors[newEdId].parentDiv = edList[i].parentNode.parentNode.id;
         //requestCode(edList[i].parentNode.id) // populate with user's code
     }
 
@@ -187,14 +187,10 @@ function addErrorMessage(err, myDiv) {
     eContainer.id = myDiv + '_errinfo'
     eContainer.appendChild(errHead[0])
     var errText = eContainer.appendChild(document.createElement('pre'))
-    var lineNo = ""
-    if (Sk.currLineNo !== undefined) {
-        lineNo = "Line " + Sk.currLineNo + ": "
-    }
     var errString = err.toString()
     var to = errString.indexOf(":")
     var errName = errString.substring(0,to)
-    errText.innerHTML = lineNo + errString
+    errText.innerHTML = errString
     $(eContainer).append('<h3>Description</h3>')
     var errDesc = eContainer.appendChild(document.createElement('p'))
     errDesc.innerHTML = errorText[errName]
