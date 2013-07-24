@@ -31,8 +31,8 @@ DISQUS_BOX = """\
             DISQUS.reset({
                 reload: true,
                 config: function () {
-                    this.page.identifier = '%(identifier)s';
-                    this.page.url = 'http://%(identifier)s.interactivepython.com/#!';
+                    this.page.identifier = '%(identifier)s_' + eBookConfig.course;
+                    this.page.url = 'http://%(identifier)s_'+eBookConfig.course+'.interactivepython.com/#!';
                 }
             });
 
@@ -42,8 +42,8 @@ DISQUS_BOX = """\
 
             // set Disqus required vars
             disqus_shortname = '%(shortname)s';    
-            disqus_identifier = '%(identifier)s';
-            disqus_url = 'http://%(identifier)s.interactivepython.com/#!'; 
+            disqus_identifier = '%(identifier)s_' + eBookConfig.course;
+            disqus_url = 'http://%(identifier)s_'+eBookConfig.course+'.interactivepython.com/#!';
 
             //append the Disqus embed script to HTML
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -57,6 +57,9 @@ DISQUS_BOX = """\
 
 DISQUS_LINK = """
 <a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="%(identifier)s" onclick="%(identifier)s_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='%(identifier)s']").attr('data-disqus-identifier', '%(identifier)s_' + eBookConfig.course);
+</script>
 """
 
 
