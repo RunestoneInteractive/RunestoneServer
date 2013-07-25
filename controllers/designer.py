@@ -47,88 +47,27 @@ def build():
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
     if request.vars.coursetype != 'custom':
-
-        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
-
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
-        # sourcedir holds the all sources temporarily
-        # confdir holds the files needed to rebuild the course
-        workingdir = request.folder
-        sourcedir = path.join(workingdir,request.vars.projectname)
+        # run_sphinx is defined in models/scheduler.py
+        # TODO evaluate timeout - is it long enough?
+        scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
+                                                    rvars=request.vars,
+                                                    application=request.application,
+                                                    http_host=request.env.http_host))
 
-        if not os.path.exists(path.join(workingdir, 'custom_courses')):
-            os.mkdir(path.join(workingdir, 'custom_courses'))
-        confdir = path.join(workingdir, 'custom_courses', request.vars.projectname)
-        if os.path.exists(sourcedir) \
-                or re.search(r'[ &]',request.vars.projectname) \
-                or os.path.exists(confdir):
-            return dict(mess='You may not use %s for your course name'%request.vars.projectname,success=False)
-
-        # copy all the sources into the temporary sourcedir
-        shutil.copytree(path.join(workingdir,'source'),sourcedir)
-
-        os.mkdir(confdir)
-
-        # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
-        # and we also copy it to the sourcedir (which will be used for this build and then deleted.
-        shutil.copy(path.join(workingdir,request.vars.coursetype,'conf.py'),
-            path.join(confdir,'conf.py'))
-        shutil.copy(path.join(workingdir,request.vars.coursetype,'conf.py'),
-            path.join(sourcedir,'conf.py'))
-
-        # copy the index file. Save in confdir (to allow rebuilding the course at a later date),
-        # and copy to sourcedir for this build.
-        shutil.copy(path.join(workingdir,request.vars.coursetype,'index.rst'),
-            path.join(confdir,'index.rst'))
-        shutil.copy(path.join(workingdir,request.vars.coursetype,'index.rst'),
-            path.join(sourcedir,'index.rst'))
-
-        # set the courseid
-        # set the url
-        # build the book
-        coursename = request.vars.projectname
-        confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
-        outdir = path.join(request.folder, 'static' , coursename)
-        doctreedir = path.join(outdir,'doctrees')
-        buildername = 'html'
-        confoverrides = {}
-        confoverrides['html_context.appname'] = request.application
-        confoverrides['html_context.course_id'] = coursename
-        confoverrides['html_context.loglevel'] = 10
-        confoverrides['html_context.course_url'] = 'http://' + request.env.http_host
-        if request.vars.loginreq == 'yes':
-            confoverrides['html_context.login_required'] = 'true'
-        else:
-            confoverrides['html_context.login_required'] = 'false'
-        status = sys.stdout
-        warning = sys.stdout
-        freshenv = True
-        warningiserror = False
-        tags = []
-
-        sys.path.insert(0,path.join(request.folder,'modules'))
-        app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
-                    confoverrides, status, warning, freshenv,
-                    warningiserror, tags)
-        force_all = True
-        filenames = []
-        app.build(force_all, filenames)
-
-        shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
-                    path.join(outdir, '_static', 'jquery.js'))
-
-        shutil.rmtree(sourcedir)
-
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
 
-        return dict(mess='Your course is ready',course_url='static/'+coursename+'/index.html',success=True )
+        # TODO!!
+        return(dict(success=True, mess='Working on sphinx...'))
+
     else:
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
@@ -144,6 +83,92 @@ def build():
         buildvalues['moddata']=  moddata   #actually come from source files
 
         return buildvalues
+
+def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
+    print ("WORKINGGGGGGG")
+    # if make instructor add row to auth_membership
+    if rvars.instructor == "yes":
+        gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
+        db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
+
+    # sourcedir holds the all sources temporarily
+    # confdir holds the files needed to rebuild the course
+    workingdir = folder
+    sourcedir = path.join(workingdir,rvars.projectname)
+
+    if not os.path.exists(path.join(workingdir, 'custom_courses')):
+        os.mkdir(path.join(workingdir, 'custom_courses'))
+    confdir = path.join(workingdir, 'custom_courses', rvars.projectname)
+    if os.path.exists(sourcedir) \
+        or re.search(r'[ &]',rvars.projectname) \
+        or os.path.exists(confdir):
+        return dict(mess='You may not use %s for your course name'%rvars.projectname,success=False)
+
+    # copy all the sources into the temporary sourcedir
+    shutil.copytree(path.join(workingdir,'source'),sourcedir)
+
+    os.mkdir(confdir)
+
+    # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
+    # and we also copy it to the sourcedir (which will be used for this build and then deleted.
+    shutil.copy(path.join(workingdir,rvars.coursetype,'conf.py'),
+                path.join(confdir,'conf.py'))
+    shutil.copy(path.join(workingdir,rvars.coursetype,'conf.py'),
+                path.join(sourcedir,'conf.py'))
+
+    # copy the index file. Save in confdir (to allow rebuilding the course at a later date),
+    # and copy to sourcedir for this build.
+    shutil.copy(path.join(workingdir,rvars.coursetype,'index.rst'),
+                path.join(confdir,'index.rst'))
+    shutil.copy(path.join(workingdir,rvars.coursetype,'index.rst'),
+                path.join(sourcedir,'index.rst'))
+
+    # set the courseid
+    # set the url
+    # build the book
+    coursename = rvars.projectname
+    confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
+    outdir = path.join(folder, 'static' , coursename)
+    doctreedir = path.join(outdir,'doctrees')
+    buildername = 'html'
+    confoverrides = {}
+    confoverrides['html_context.appname'] = application
+    confoverrides['html_context.course_id'] = coursename
+    confoverrides['html_context.loglevel'] = 10
+    confoverrides['html_context.course_url'] = 'http://' + http_host
+    if rvars.loginreq == 'yes':
+        confoverrides['html_context.login_required'] = 'true'
+    else:
+        confoverrides['html_context.login_required'] = 'false'
+    status = sys.stdout
+    warning = sys.stdout
+    freshenv = True
+    warningiserror = False
+    tags = []
+
+    sys.path.insert(0,path.join(folder,'modules'))
+
+    force_all = True
+    filenames = []
+
+    app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
+                confoverrides, status, warning, freshenv,
+                warningiserror, tags)
+    app.build(force_all, filenames)
+
+    shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
+                path.join(outdir, '_static', 'jquery.js'))
+
+    shutil.rmtree(sourcedir)
+
+    cid = db.courses.update_or_insert(course_name=coursename)
+    # enrol the user in their new course
+    db(db.auth_user.id == auth.user.id).update(course_id = cid)
+    auth.user.course_id = cid
+    auth.user.course_name = rvars.projectname
+
+    redirect(URL('admin', 'index'))
+    #return dict(mess='Your course is ready',course_url='static/'+course_name+'/index.html',success=True )
 
 def makefile():
 
