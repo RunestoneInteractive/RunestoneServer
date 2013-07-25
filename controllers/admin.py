@@ -37,7 +37,7 @@ def listassignments():
 
 @auth.requires_membership('instructor')
 def listassessments():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
 
     query = '''select div_id,
                      (select count(*) from useinfo where div_id = oui.div_id
@@ -52,8 +52,9 @@ def listassessments():
                           pct
                from useinfo oui
                where event = 'mChoice'
+                     and DATE(timestamp) >= DATE('%(start_date)s')
                      and course_id = '%(course_name)s' group by div_id order
-                     by pct''' % dict(course_name=course.course_name)
+                     by pct''' % dict(course_name=course.course_name, start_date=course.term_start_date)
     rset = db.executesql(query)
     return dict(solutions=rset)
 
