@@ -131,6 +131,18 @@ def studentactivity():
 
     return dict(grid=res,course_id=course.course_name)
     
+@auth.requires_membership('instructor')
+def startdate():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    if request.vars.startdate:
+        date = request.vars.startdate.split('/')
+        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        course.update_record(term_start_date=date)
+        session.flash = "Course start date changed."
+        redirect(URL('admin','index'))
+    else:
+        current_start_date = course.term_start_date.strftime("%m/%d/%Y")
+        return dict(startdate=current_start_date)
 
 @auth.requires_membership('instructor')
 def rebuildcourse():
