@@ -48,8 +48,6 @@ def build():
 
     if request.vars.coursetype != 'custom':
 
-        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
-
         # if make instructor add row to auth_membership
         if request.vars.instructor == "yes":
             gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
@@ -124,6 +122,7 @@ def build():
         shutil.rmtree(sourcedir)
 
         # enrol the user in their new course
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname

@@ -3,6 +3,9 @@
 
 
 {{if 'message' in globals():}}
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/datepicker.css')}}" />
+<script src="{{=URL('static', 'js/bootstrap-datepicker.js')}}"></script>
+
 <h3>{{=message}}</h3>
 
 <h5>{{=descr}}</h5>
@@ -23,6 +26,8 @@ OR<br />
 
 <input type="checkbox" name="instructor" value="yes" checked="checked"/> Make me the Instructor of this course. <br /> <br />
 
+Term start date: <input type="text" name="startdate" id='datepicker' data-date-format="mm/dd/yy"/> <br /> <br />
+
 <input type="submit" class="btn btn-small" value="Submit" />
 </form>
 
@@ -33,6 +38,7 @@ OR<br />
 {{pass}}
 
 <script type="text/javascript">
+  $('#datepicker').datepicker();
 	function unhide_img(id) {
         var d = document.getElementById('spinner_div')
         d.style.display = "block";
