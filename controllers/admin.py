@@ -57,6 +57,7 @@ def listassessments():
     rset = db.executesql(query)
     return dict(solutions=rset)
 
+
 @auth.requires_membership('instructor')
 def assessdetail():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
