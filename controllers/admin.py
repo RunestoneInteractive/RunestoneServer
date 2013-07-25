@@ -35,15 +35,22 @@ def listassignments():
 @auth.requires_membership('instructor')
 def listassessments():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+
     query = '''select div_id,
-                     (select count(*) from useinfo where div_id = oui.div_id and course_id = '%s'),
-                     count(*) * 1.0 /
+                     (select count(*) from useinfo where div_id = oui.div_id
+                     and course_id = '%(course_name)s'),
+                     (select count(*) * 1.0 from useinfo where div_id = oui
+                     .div_id  and course_id='%(course_name)s' and position(
+                     'correct' in
+                     act) > 0) /
                          (select count(*)
                           from useinfo
-                          where div_id = oui.div_id and course_id = '%s' ) as pct
+                          where div_id = oui.div_id and course_id = '%(course_name)s' ) as
+                          pct
                from useinfo oui
-               where event = 'mChoice' and position('correct' in act) > 0
-                     and course_id = '%s' group by div_id order by pct;''' % (course.course_name,course.course_name,course.course_name)
+               where event = 'mChoice'
+                     and course_id = '%(course_name)s' group by div_id order
+                     by pct''' % dict(course_name=course.course_name)
     rset = db.executesql(query)
     return dict(solutions=rset)
 
