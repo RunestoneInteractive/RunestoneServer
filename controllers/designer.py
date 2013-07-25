@@ -44,6 +44,12 @@ def build():
     if existing_course:
         return dict(mess='That name has already been used.',course_url=None, success=False)
 
+    if request.vars.startdate == '':
+        request.vars.startdate = datetime.date.today()
+    else:
+        date = request.vars.startdate.split('/')
+        request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
     if request.vars.coursetype != 'custom':
@@ -121,8 +127,8 @@ def build():
 
         shutil.rmtree(sourcedir)
 
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=request.vars.startdate)
         # enrol the user in their new course
-        cid = db.courses.update_or_insert(course_name=request.vars.projectname)
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
@@ -141,6 +147,7 @@ def build():
             moddata[row.id]=[row.shortname,row.description,row.pathtofile]
 
         buildvalues['moddata']=  moddata   #actually come from source files
+        buildvalues['startdate'] = request.vars.startdate
 
         return buildvalues
 
@@ -148,6 +155,7 @@ def makefile():
 
     p = request.vars.toc
 
+    startdate = request.vars.startdate
     pcode = request.vars.projectname
     row = db(db.projects.projectcode==pcode).select()
     title = row[0].description
@@ -267,7 +275,7 @@ def makefile():
     yoururlpath=path.join('/',request.application,"static",coursename,"index.html")
 
     # enrol the user in their new course
-    cid = db.courses.update_or_insert(course_name=request.vars.projectname)
+    cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=startdate)
     db(db.auth_user.id == auth.user.id).update(course_id = cid)
     auth.user.course_id = cid
     auth.user.course_name = request.vars.projectname
