@@ -23,11 +23,14 @@ def index():
 @auth.requires_membership('instructor')
 def listassignments():
     sid = request.vars.student
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
     if sid:
-        q = db(db.code.sid == sid & db.code.course_id == course.course_name)
+        q = db((db.code.sid == sid)
+             & (db.code.course_id == course.course_name)
+             & (db.code.timestamp >= course.term_start_date))
     else:
-        q = db(db.code.course_id == auth.user.course_id)
+        q = db((db.code.course_id == auth.user.course_id)
+             & (db.code.timestamp >= course.term_start_date))
     
     rset = q.select(db.code.acid,orderby=db.code.acid,distinct=True)
     return dict(exercises=rset,course_id=course.course_name)
@@ -96,11 +99,7 @@ def gradeassignment():
     sid = request.vars.student
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-    if sid:
-        q = db(db.code.sid == sid & db.code.course_id == course.course_name)
-    else:
-        q = db(db.code.course_id == auth.user.course_id)
-    
+
     rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name from code as T, auth_user
         where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
              (select max(timestamp) from code where sid=T.sid and acid=T.acid);''' %
@@ -110,8 +109,9 @@ def gradeassignment():
 
 @auth.requires_membership('instructor')
 def showlog():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-    grid = SQLFORM.grid(db.useinfo.course_id==course.course_name,
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    grid = SQLFORM.grid(
+        (db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date),
         fields=[db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id],
         editable=False,
         deletable=False,
@@ -123,11 +123,15 @@ def showlog():
 
 @auth.requires_membership('instructor')
 def studentactivity():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
     count = db.useinfo.id.count()
     last = db.useinfo.timestamp.max()
-    res = db(db.useinfo.course_id==course.course_name).select(
-        db.useinfo.sid, count, last, groupby=db.useinfo.sid, orderby=count)
+    res = db((db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date))\
+            .select(db.useinfo.sid,
+                    count,
+                    last,
+                    groupby=db.useinfo.sid,
+                    orderby=count)
 
     return dict(grid=res,course_id=course.course_name)
     
