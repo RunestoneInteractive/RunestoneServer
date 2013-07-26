@@ -261,11 +261,19 @@ def getCorrectStats(miscdata,event):
             sid = request.cookies['ipuser'].value
 
     if sid:
+        course = db(db.courses.course_name == miscdata['course']).select().first()
+
         correctquery = '''select 
-(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' and position('correct' in act) > 0 )
+(select cast(count(*) as float) from useinfo where sid='%s'
+                                               and event='%s'
+                                               and DATE(timestamp) >= DATE('%s')
+                                               and position('correct' in act) > 0 )
 /
-(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' ) as result;
-''' % (sid,event,sid,event)
+(select cast(count(*) as float) from useinfo where sid='%s'
+                                               and event='%s'
+                                               and DATE(timestamp) >= DATE('%s')
+) as result;
+''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
 
         try:    
             rows = db.executesql(correctquery)
@@ -312,6 +320,7 @@ def getaggregateresults():
                 rdata[answer] = pct
 
     miscdata['correct'] = correct
+    miscdata['course'] = course
 
     getCorrectStats(miscdata,'mChoice')
 
@@ -387,6 +396,7 @@ def gettop10Answers():
     res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')], 'count':row[1]} for row in rows ]
 
     miscdata = {}
+    miscdata['course'] = course
     getCorrectStats(miscdata,'fillb')
 
     return json.dumps([res,miscdata])
