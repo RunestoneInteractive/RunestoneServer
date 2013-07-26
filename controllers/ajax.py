@@ -315,7 +315,35 @@ def getaggregateresults():
 
     getCorrectStats(miscdata,'mChoice')
 
-    return json.dumps([rdata,miscdata])
+    returnDict = dict(answerDict=rdata, misc=miscdata)
+
+    if auth.user and auth.has_membership('instructor',auth.user.id):
+        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+        q = db( (db.useinfo.div_id == question) & (db.useinfo.course_id == course.course_name) )
+        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+
+        currentSid = res[0].sid
+        currentAnswers = []
+        resultList = []
+
+        for row in res:
+            answer = row.act.split(':')[1]
+
+            if row.sid == currentSid:
+                currentAnswers.append(answer)
+            else:
+                currentAnswers.sort()
+                resultList.append((currentSid, currentAnswers))
+                currentAnswers = [row.act.split(':')[1]]
+
+                currentSid = row.sid
+
+        currentAnswers.sort()
+        resultList.append((currentSid, currentAnswers))
+
+        returnDict['reslist'] = resultList
+
+    return json.dumps([returnDict])
 
 def getpollresults():
     course = request.vars.course

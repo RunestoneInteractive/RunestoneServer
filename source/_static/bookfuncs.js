@@ -492,10 +492,25 @@ function setNumUsers(data) {
     $("#totalusers").html(d.numusers);
 }
 
+function instructorMchoiceModal(data) {
+    // data.reslist -- student and their answers
+    // data.answerDict  -- answers and count
+    // data.correct - correct answer
+    var res = '<table><tr><th>Student</th><th>Answer(s)</th></tr>'
+    for (var i in data) {
+        res += '<tr><td>'+ data[i][0]+'</td><td>'+data[i][1]+'</td></tr>';
+    }
+    res += '</table>'
+    return res;
+}
+
+
 function compareModal(data, status, whatever) {
     var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>'
-    var answers = eval(data)[0]
-    var misc = eval(data)[1]
+    res += '<tr><th>Answer</th><th>Percent</th></tr>'
+    var datadict = eval(data)[0]
+    var answers = datadict.answerDict;
+    var misc = datadict.misc
     var theClass = ""
     var kl = Object.keys(answers).sort()
     for (var k in kl) {
@@ -511,6 +526,11 @@ function compareModal(data, status, whatever) {
     if (misc['yourpct'] !== 'unavailable') {
         res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
     }
+
+    if (datadict.reslist !== undefined) {
+        res += instructorMchoiceModal(datadict.reslist);
+    }
+
 
     res +='</div>'
 
@@ -528,7 +548,7 @@ function compareAnswers(div_id) {
 function compareFITB(data, status, whatever) {
     var res = '<div class="compare-modal">\n<h2>Top Answers</h2><table>'
     var answers = eval(data)[0]
-    var misc = eval(data)[1]    
+    var misc = eval(data)[1]
     var theClass = ""
 
     for (var row in answers) {
