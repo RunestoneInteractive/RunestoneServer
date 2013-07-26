@@ -6,11 +6,11 @@
 
 {{end}}
 
-{{ if 'mess' in globals():}}
+{{ if 'mess' in globals(): }}
 
   <h1>{{=mess}}</h1>
 
-  {{ if building: # waiting for Sphinx build to finish }}
+  {{ if building: }}
     <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
 	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
     </div>
@@ -31,12 +31,12 @@
       }, 3000)
     </script>
 
-  {{ else: # user chose a course name that's already been taken }}
+  {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
 
   {{ pass }}
 
-{{ else: # we're building a custom course }}
+{{ else: }}
 
   <h4>Module Index</h4>
 
@@ -88,6 +88,6 @@
 	  }
 	</script>
 
-{{pass}}
+{{ pass }}
 
 
