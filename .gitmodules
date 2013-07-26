@@ -1,9 +1,9 @@
-[submodule "source/_static/js-parsons"]
-	path = source/_static/js-parsons
+[submodule "common/ext/js-parsons"]
+	path = common/ext/js-parsons
 	url = https://github.com/vkaravir/js-parsons
-[submodule "source/_static/codelens"]
-	path = source/_static/codelens
-	url = git@github.com:pgbovine/OnlinePythonTutor.git
+[submodule "common/ext/codelens"]
+	path = common/ext/codelens
+	url = https://github.com/pgbovine/OnlinePythonTutor
 [submodule "common/ext/skulpt"]
 	path = common/ext/skulpt
 	url = https://github.com/bnmnetp/skulpt
