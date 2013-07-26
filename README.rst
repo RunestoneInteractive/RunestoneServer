@@ -4,8 +4,18 @@ Runestone Interactive Tools and Content
 Important Notice
 ----------------
 
-This is the consolidated repository for all work related to our interactive textbook project.  If you were using the
-thinkcspy repository and the eBookExtensions repository you will find all of that work here.  Thanks.
+On July 26, 2013 We made some structural changes which involved moving the
+three extisting submodules.  skulpt, codelens, and js-parson.  Submodules are
+a known PITA for many git operations.  If you have an existing project here is
+what you should do.
+
+1.  git pull or follow the fetch instructions for your Fork.
+2.  git submodule init
+3.  git submodule sync
+4.  git submodule update
+
+If you are Forking this repo for the first time, you can just proceed to the
+dependencies.
 
 Dependencies
 ------------
@@ -157,6 +167,26 @@ How to Contribute
 #. test
 #. Make a Pull Request.  This will notify me that I should look at your changes and merge them into the main repository.
 #. Repeat!
+
+
+How to Contribute $$
+--------------------
+
+as our popularity has grown we have server costs.  We
+were also able to make great progress during the Summer of 2013
+thanks to a generous grant from ACM-SIGCSE that supported one of our
+undergraduate students. It would be great if we could have a student
+working on this all the time.
+
+If this system or these books have helped you, please consider making a small
+donation
+
+
+.. raw:: html
+
+    <script
+        data-gittip-username="bnmnetp" src="https://www.gittip.com/assets/widgets/0002.js">
+    </script>
 
 
 More Documentation
