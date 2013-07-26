@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 from os import path
-import os
-import shutil
-import sys
-import re
-
-from sphinx.application import Sphinx
-
+import uuid
 
 #########################################################################
 ## This is a samples controller
@@ -33,7 +27,6 @@ def index():
     return basicvalues
 
 def build():
-
     buildvalues = {}
     buildvalues['pname']=request.vars.projectname
     buildvalues['pdescr']=request.vars.projectdescription
@@ -42,7 +35,7 @@ def build():
 
     existing_course = db(db.courses.course_name == request.vars.projectname).select().first()
     if existing_course:
-        return dict(mess='That name has already been used.',course_url=None, success=False)
+        return dict(mess='That name has already been used.', building=False)
 
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
@@ -52,11 +45,13 @@ def build():
         db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
     if request.vars.coursetype != 'custom':
+
         # run_sphinx is defined in models/scheduler.py
-        scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
-                                                      rvars=request.vars,
-                                                      application=request.application,
-                                                      http_host=request.env.http_host))
+        row = scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
+                                                                      rvars=request.vars,
+                                                                      application=request.application,
+                                                                      http_host=request.env.http_host))
+        uuid = row['uuid']
 
         cid = db.courses.update_or_insert(course_name=request.vars.projectname)
         # enrol the user in their new course
@@ -64,8 +59,13 @@ def build():
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
 
-        # TODO!!
-        return(dict(success=True, mess='Working on sphinx...'))
+        course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
+
+        return(dict(success=False,
+                    building=True,
+                    task_name=uuid,
+                    mess='Building your course.',
+                    course_url=course_url))
 
     else:
         moddata = {}
@@ -80,12 +80,13 @@ def build():
 
 def makefile():
     # run_sphinx is defined in models/scheduler.py
-    scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
-                                                             rvars=request.vars,
-                                                             application=request.application,
-                                                             http_host=request.env.http_host))
+    row = scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
+                                                                   rvars=request.vars,
+                                                                   application=request.application,
+                                                                   http_host=request.env.http_host))
+    uuid = row['uuid']
 
-    yoururlpath=path.join('/',request.application,"static",request.vars.coursename,"index.html")
+    course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
 
     # enrol the user in their new course
     cid = db.courses.update_or_insert(course_name=request.vars.projectname)
@@ -93,9 +94,12 @@ def makefile():
     auth.user.course_id = cid
     auth.user.course_name = request.vars.projectname
 
-    # TODO gotta return a URL for the Javascript callback to send us to...
-    return dict(message=T("Here is the link to your new eBook"),yoururl=yoururlpath)
-    #return(dict(success=True, mess='Working on sphinx...'))
+    return(dict(success=False,
+            building=True,
+            task_name=uuid,
+            mess='Building your course.',
+            course_url=course_url))
+
 
 def user():
     """

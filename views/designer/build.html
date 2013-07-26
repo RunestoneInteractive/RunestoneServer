@@ -8,13 +8,27 @@
 
 {{ if 'mess' in globals():}}
   <h1>{{=mess}}</h1>
-  {{if success:}}
-    To access your new course you will need to logout, and then log in again.  After login you will be taken to the home page for your course. <a href="/{{=request.application}}/default/user/logout">Logout</a>
-  {{else:}}
+  {{ if building: }}
+    Your course is being prepared for you. This may take several minutes to complete.  When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.
+    <script type="text/javascript">
+      var iid = setInterval(function() {
+        d = {
+             task_name:'{{ =task_name }}',
+             course_url:'{{ =course_url }}'
+            };
+        $.get(eBookConfig.ajaxURL+'getSphinxBuildStatus', d, function(data) {
+          var obj = eval(data);
+          if (obj[0] == 'true') {
+            window.location.href = obj[1];
+          }
+        });
+      }, 3000)
+    </script>
+  {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
-  {{pass}}
-{{ else: }}
+  {{ pass }}
 
+{{ else: }}
   <h4>Module Index</h4>
 
   <div id="boxA" class="homeboxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
