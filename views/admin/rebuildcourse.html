@@ -10,16 +10,19 @@
 
   <form name="confirm" method="POST" action="/{{=request.application}}/admin/rebuildcourse">
    <input type="hidden" name="projectname" value="{{= auth.user.course_name}}" />
+   <input type="hidden" name="coursetype" value="rebuildcourse" />
    <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br>
    <input type="submit" class="btn btn-small" value="Rebuild" />
   </form>
 
 {{ else: }}
-  <div id="spinner_div" class='pull-left' style="align: center;">
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
+  <h3 id="title">Rebuilding course.</h3>
+  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
   </div>
-  <p>Your course is being rebuilt.  This may take several minutes to complete. When the rebuild is finished, you will be
-  redirected to your newly rebuilt course.</p>
+  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
+   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
+   your newly rebuilt course.</p>
 
   <script type="text/javascript">
     var iid = setInterval(function() {
@@ -29,6 +32,12 @@
         if (data.status == "true") {
           window.location.href = data.course_url;
         }
+        if (data.status == "failed") {
+          $("#spinner_div").hide();
+          $("#title").text("Permission denied.");
+          $("#message").text("You don't have permission to rebuild this course.");
+        }
       });
     }, 3000);
   </script>
+{{ pass }}

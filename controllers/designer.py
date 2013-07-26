@@ -45,9 +45,9 @@ def build():
     if request.vars.coursetype != 'custom':
         # run_sphinx is defined in models/scheduler.py
         row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
-                                                                      rvars=request.vars,
-                                                                      application=request.application,
-                                                                      http_host=request.env.http_host))
+                                                                       rvars=request.vars,
+                                                                       application=request.application,
+                                                                       http_host=request.env.http_host))
         uuid = row['uuid']
 
         cid = db.courses.update_or_insert(course_name=request.vars.projectname)
@@ -93,10 +93,10 @@ def build_custom():
     auth.user.course_name = request.vars.projectname
 
     return(dict(success=False,
-            building=True,
-            task_name=uuid,
-            mess='Building your course.',
-            course_url=course_url))
+                building=True,
+                task_name=uuid,
+                mess='Building your course.',
+                course_url=course_url))
 
 def user():
     """

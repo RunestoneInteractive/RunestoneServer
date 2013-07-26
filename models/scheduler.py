@@ -24,35 +24,14 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
 
     # confdir holds the conf and index files
     confdir = path.join(workingdir, 'custom_courses', rvars['projectname'])
-    os.mkdir(confdir)
-
-    ########
-    # we're just copying one of the pre-existing books
-    ########
-    if rvars['coursetype'] != 'custom':
-        # copy all the sources into the temporary sourcedir
-        shutil.copytree(path.join(workingdir,'source'),sourcedir)
-
-        # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
-        # and we also copy it to the sourcedir (which will be used for this build and then deleted.
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
-                    path.join(confdir,'conf.py'))
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
-                    path.join(sourcedir,'conf.py'))
-
-        # copy the index file. Save in confdir (to allow rebuilding the course at a later date),
-        # and copy to sourcedir for this build.
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
-                    path.join(confdir,'index.rst'))
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
-                    path.join(sourcedir,'index.rst'))
-
+    if not os.path.exists(confdir):
+        os.mkdir(confdir)
 
     ########
     # We're building a custom course.
     # Generate an index.rst and copy conf.py from devcourse.
     ########
-    else:
+    if rvars['coursetype'] == 'custom':
         row = db(db.projects.projectcode==rvars['projectname']).select()
         title = row[0].description
 
@@ -101,7 +80,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
                 topic = ""
                 while idx<len(parts) and ".rst" not in parts[idx]:
                     if topic != "":
-                       topic =topic + " " + parts[idx]
+                        topic =topic + " " + parts[idx]
                     else:
                         topic = topic + parts[idx]
                     idx=idx+1
@@ -129,7 +108,47 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
         shutil.copy(path.join(sourcedir, 'index.rst'), path.join(confdir, 'index.rst'))
 
         shutil.copytree(path.join(workingdir,'source','FrontBackMatter'),
-                                    path.join(sourcedir,'FrontBackMatter'))
+                        path.join(sourcedir,'FrontBackMatter'))
+
+    #########
+    # We're rebuilding a course
+    #########
+    elif rvars['coursetype'] == 'rebuildcourse':
+        try:
+            # copy all the sources into the temporary sourcedir
+            shutil.copytree(path.join(workingdir,'source'),sourcedir)
+        except OSError:
+            # this is probably devcourse, thinkcspy, or other builtin course -
+            # let the exception propagate
+            raise OSError
+
+        # copy the index and conf files to the sourcedir
+        shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
+        shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
+
+
+    ########
+    # we're just copying one of the pre-existing books
+    ########
+    else:
+        # copy all the sources into the temporary sourcedir
+        shutil.copytree(path.join(workingdir,'source'),sourcedir)
+
+        # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
+        # and we also copy it to the sourcedir (which will be used for this build and then deleted.
+        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
+                    path.join(confdir,'conf.py'))
+        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
+                    path.join(sourcedir,'conf.py'))
+
+        # copy the index file. Save in confdir (to allow rebuilding the course at a later date),
+        # and copy to sourcedir for this build.
+        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
+                    path.join(confdir,'index.rst'))
+        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
+                    path.join(sourcedir,'index.rst'))
+
+
 
     ###########
     # Set up and run Sphinx

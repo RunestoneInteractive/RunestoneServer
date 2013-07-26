@@ -373,10 +373,10 @@ def getSphinxBuildStatus():
     if st == 'COMPLETED':
         status = 'true'
         return(dict(status=status, course_url=course_url))
-    else:
+    elif st == 'RUNNING' or st == 'QUEUED' or st == 'ASSIGNED':
         status = 'false'
         return(dict(status=status, course_url=course_url))
-
-
-
+    else: # task failed
+        status = 'failed'
+        return(dict(status=status))
 
