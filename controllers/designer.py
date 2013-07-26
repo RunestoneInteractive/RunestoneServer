@@ -30,8 +30,6 @@ def build():
     buildvalues = {}
     buildvalues['pname']=request.vars.projectname
     buildvalues['pdescr']=request.vars.projectdescription
-    response.files.append(URL('static','css/dd.css'))
-    response.files.append(URL('static','js/dd.js'))
 
     existing_course = db(db.courses.course_name == request.vars.projectname).select().first()
     if existing_course:
@@ -45,9 +43,8 @@ def build():
         db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
     if request.vars.coursetype != 'custom':
-
         # run_sphinx is defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                       rvars=request.vars,
                                                                       application=request.application,
                                                                       http_host=request.env.http_host))
@@ -75,12 +72,13 @@ def build():
             moddata[row.id]=[row.shortname,row.description,row.pathtofile]
 
         buildvalues['moddata']=  moddata   #actually come from source files
+        buildvalues['loginreq'] = request.vars.loginreq
 
         return buildvalues
 
-def makefile():
+def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=240, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
                                                                    http_host=request.env.http_host))
@@ -99,7 +97,6 @@ def makefile():
             task_name=uuid,
             mess='Building your course.',
             course_url=course_url))
-
 
 def user():
     """

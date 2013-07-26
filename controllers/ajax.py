@@ -367,14 +367,15 @@ def gettop10Answers():
 def getSphinxBuildStatus():
     task_name = request.vars.task_name
     course_url = request.vars.course_url
+
     st = scheduler.task_status(task_name)['status']
 
     if st == 'COMPLETED':
         status = 'true'
-        return(json.dumps([status, course_url]))
+        return(dict(status=status, course_url=course_url))
     else:
         status = 'false'
-        return(json.dumps([status]))
+        return(dict(status=status, course_url=course_url))
 
 
 

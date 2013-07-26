@@ -7,7 +7,10 @@ import re
 
 from sphinx.application import Sphinx
 
-
+################
+## This task will run as a scheduled task using the web2py scheduler.
+## It's dispached from build() and build_custom() in controllers/designer.py
+################
 def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     # workingdir is the application folder
     workingdir = folder
@@ -50,7 +53,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     # Generate an index.rst and copy conf.py from devcourse.
     ########
     else:
-        row = db(db.project.projectcode==rvars['projectname']).select()
+        row = db(db.projects.projectcode==rvars['projectname']).select()
         title = row[0].description
 
         # this is the temporary source dir for this build
