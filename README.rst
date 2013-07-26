@@ -179,14 +179,7 @@ undergraduate students. It would be great if we could have a student
 working on this all the time.
 
 If this system or these books have helped you, please consider making a small
-donation
-
-
-.. raw:: html
-
-    <script
-        data-gittip-username="bnmnetp" src="https://www.gittip.com/assets/widgets/0002.js">
-    </script>
+donation using `gittip <https://www.gittip.com/bnmnetp/>`_
 
 
 More Documentation
