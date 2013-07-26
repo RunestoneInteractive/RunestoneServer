@@ -23,18 +23,21 @@ def index():
 @auth.requires_membership('instructor')
 def listassignments():
     sid = request.vars.student
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
     if sid:
-        q = db(db.code.sid == sid & db.code.course_id == course.course_name)
+        q = db((db.code.sid == sid)
+             & (db.code.course_id == course.course_name)
+             & (db.code.timestamp >= course.term_start_date))
     else:
-        q = db(db.code.course_id == auth.user.course_id)
+        q = db((db.code.course_id == auth.user.course_id)
+             & (db.code.timestamp >= course.term_start_date))
     
     rset = q.select(db.code.acid,orderby=db.code.acid,distinct=True)
     return dict(exercises=rset,course_id=course.course_name)
 
 @auth.requires_membership('instructor')
 def listassessments():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
 
     query = '''select div_id,
                      (select count(*) from useinfo where div_id = oui.div_id
@@ -49,10 +52,12 @@ def listassessments():
                           pct
                from useinfo oui
                where event = 'mChoice'
+                     and DATE(timestamp) >= DATE('%(start_date)s')
                      and course_id = '%(course_name)s' group by div_id order
-                     by pct''' % dict(course_name=course.course_name)
+                     by pct''' % dict(course_name=course.course_name, start_date=course.term_start_date)
     rset = db.executesql(query)
     return dict(solutions=rset)
+
 
 @auth.requires_membership('instructor')
 def assessdetail():
@@ -96,11 +101,7 @@ def gradeassignment():
     sid = request.vars.student
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-    if sid:
-        q = db(db.code.sid == sid & db.code.course_id == course.course_name)
-    else:
-        q = db(db.code.course_id == auth.user.course_id)
-    
+
     rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name from code as T, auth_user
         where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
              (select max(timestamp) from code where sid=T.sid and acid=T.acid);''' %
@@ -110,8 +111,9 @@ def gradeassignment():
 
 @auth.requires_membership('instructor')
 def showlog():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-    grid = SQLFORM.grid(db.useinfo.course_id==course.course_name,
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    grid = SQLFORM.grid(
+        (db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date),
         fields=[db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id],
         editable=False,
         deletable=False,
@@ -123,20 +125,44 @@ def showlog():
 
 @auth.requires_membership('instructor')
 def studentactivity():
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
     count = db.useinfo.id.count()
     last = db.useinfo.timestamp.max()
-    res = db(db.useinfo.course_id==course.course_name).select(
-        db.useinfo.sid, count, last, groupby=db.useinfo.sid, orderby=count)
+    res = db((db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date))\
+            .select(db.useinfo.sid,
+                    count,
+                    last,
+                    groupby=db.useinfo.sid,
+                    orderby=count)
 
     return dict(grid=res,course_id=course.course_name)
     
+@auth.requires_membership('instructor')
+def startdate():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    if request.vars.startdate:
+        date = request.vars.startdate.split('/')
+        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        course.update_record(term_start_date=date)
+        session.flash = "Course start date changed."
+        redirect(URL('admin','index'))
+    else:
+        current_start_date = course.term_start_date.strftime("%m/%d/%Y")
+        return dict(startdate=current_start_date)
 
 @auth.requires_membership('instructor')
 def rebuildcourse():
     if not request.vars.projectname:
-        return dict(confirm=True)
+        course = db(db.courses.course_name == auth.user.course_name).select().first()
+        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+        return dict(curr_start_date=curr_start_date, confirm=True)
     else:
+        # update the start date
+        course = db(db.courses.id == auth.user.course_id).select().first()
+        date = request.vars.startdate.split('/')
+        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        course.update_record(term_start_date=date)
+
         # sourcedir holds the all sources temporarily
         # confdir holds the files needed to rebuild the course
         workingdir = request.folder

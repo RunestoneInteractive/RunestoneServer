@@ -72,7 +72,7 @@ function displayContents()
 function buildSuccess(data,status,ignore) {
   window.location.href = data.yoururl
 }
-function buildIndexFile(projname) {
+function buildIndexFile(projname, startdate) {
     var cdiv = document.getElementById("chapterboxes");
 
     var txt="";
@@ -98,6 +98,7 @@ function buildIndexFile(projname) {
     data = {};
     data.projectname=projname;
     data.toc=txt;
+    data.startdate = startdate;
     jQuery.post(eBookConfig.app +'/designer/makefile.json',data,buildSuccess)
 }
 
