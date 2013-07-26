@@ -24,18 +24,18 @@ from luther.sphinx.assess import Assessment
 def setup(app):
     app.add_directive('parsonsprob',ParsonsProblem)
 
-    app.add_stylesheet('js-parsons/parsons.css')
-    app.add_stylesheet('js-parsons/lib/prettify.css')
+    app.add_stylesheet('parsons.css')
+    app.add_stylesheet('lib/prettify.css')
 
     # includes parsons specific javascript headers
     # parsons-noconflict reverts underscore and
     # jquery to their original versions
-    app.add_javascript('js-parsons/lib/jquery.min.js')
-    app.add_javascript('js-parsons/lib/jquery-ui.min.js')
-    app.add_javascript('js-parsons/lib/prettify.js')
-    app.add_javascript('js-parsons/lib/underscore-min.js')
-    app.add_javascript('js-parsons/lib/lis.js')
-    app.add_javascript('js-parsons/parsons.js')
+    app.add_javascript('lib/jquery.min.js')
+    app.add_javascript('lib/jquery-ui.min.js')
+    app.add_javascript('lib/prettify.js')
+    app.add_javascript('lib/underscore-min.js')
+    app.add_javascript('lib/lis.js')
+    app.add_javascript('parsons.js')
     app.add_javascript('parsons-noconflict.js')
 
 
