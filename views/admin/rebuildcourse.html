@@ -11,25 +11,24 @@
   <form name="confirm" method="POST" action="/{{=request.application}}/admin/rebuildcourse">
    <input type="hidden" name="projectname" value="{{= auth.user.course_name}}" />
    <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br>
-   <input type="submit" class="btn btn-small" onclick="unhide_img('spinner');" value="Rebuild" />
+   <input type="submit" class="btn btn-small" value="Rebuild" />
   </form>
 
-  <div id="spinner_div" style="align: center; display: none;">
-    <p>Your course is being rebuilt.  This may take several minutes to complete.</p>
+{{ else: }}
+  <div id="spinner_div" class='pull-left' style="align: center;">
 	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
   </div>
+  <p>Your course is being rebuilt.  This may take several minutes to complete. When the rebuild is finished, you will be
+  redirected to your newly rebuilt course.</p>
 
   <script type="text/javascript">
-	  function unhide_img(id) {
-      var d = document.getElementById('spinner_div');
-      d.style.display = "block";
-		  var i = document.getElementById('spinner');
-		  i.style.display = "block";
-		  return true;
-	  }
-	</script>
-
-{{ else: }}
-  {{ =mess }}
-  Click <a href="{{=course_url}}">here</a> to be taken to your course.
-{{ pass }}
+    var iid = setInterval(function() {
+      d = { task_name:'{{ =task_name }}',
+            course_url:'{{ =course_url }}'};
+      $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+        if (data.status == "true") {
+          window.location.href = data.course_url;
+        }
+      });
+    }, 3000);
+  </script>
