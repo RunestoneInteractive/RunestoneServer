@@ -99,8 +99,10 @@ ASCII using 7 bits of information to represent the upper case, lower case, and p
 
 .. fillintheblank:: convert1
    :correct: 65
+   :blankid: stegblank1
 
-    Using your new knowledge of converting binary to decimal what is the decimal value of ``010000001``  ___ ?
+    Using your new knowledge of converting binary to decimal what is the
+    decimal value of ``010000001``  :textfield:`stegblank1::mini` ?
 
 Python provides us with the ``ord`` function for converting a character to its numeric representation.  In addition there are three functions: ``hex``, ``oct``, and ``bin`` that provide the hexadecimal (base 16), octal (base 8), and binary (base 2) representations of the number.
 

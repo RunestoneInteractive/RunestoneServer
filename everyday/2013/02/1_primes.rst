@@ -47,8 +47,10 @@ What are the prime factors of 105?  Since 105 is not divisible by 2 we will try 
 
 .. fillintheblank:: primefact_1
    :correct: 2, 5, 7, 11
+   :blankid: pf1blank
 
-   The prime factors of 770 are ___ .  Show your answer as x, y, z
+   The prime factors of 770 are :textfield:`pf1blank::mini` .  Show your
+   answer as x, y, z
 
 Ok, now lets turn what we've learned by working these examples into a Python function.  For our first attempt we will use two functions.  The first function called ``get_prime_factors`` will keep track of the list of factors as well as the current number, N, we need to divide.  The second function ``get_next_prime_factor`` will try to find the next prime number that divides N.  Lets do the ``get next prime factor`` first.
 
