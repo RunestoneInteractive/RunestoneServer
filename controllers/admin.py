@@ -153,8 +153,16 @@ def startdate():
 @auth.requires_membership('instructor')
 def rebuildcourse():
     if not request.vars.projectname:
-        return dict(confirm=True)
+        course = db(db.courses.course_name == auth.user.course_name).select().first()
+        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+        return dict(curr_start_date=curr_start_date, confirm=True)
     else:
+        # update the start date
+        course = db(db.courses.id == auth.user.course_id).select().first()
+        date = request.vars.startdate.split('/')
+        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        course.update_record(term_start_date=date)
+
         # sourcedir holds the all sources temporarily
         # confdir holds the files needed to rebuild the course
         workingdir = request.folder
