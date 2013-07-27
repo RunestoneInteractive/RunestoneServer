@@ -1,0 +1,21 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/datepicker.css')}}" />
+<script src="{{=URL('static', 'js/bootstrap-datepicker.js')}}"></script>
+<h3>Set the course start date</h3>
+
+<p>This allows you set the start date for the current term of your course. All logs, records, and
+assignments from dates before the start date will not be visible to you or to your students.
+</p>
+
+<form name="startdate-form" method="POST" action="/{{=request.application}}/admin/startdate">
+  Term start date:
+      <input type="text" name="startdate" id='datepicker' data-date-format="mm/dd/yyyy" value="{{=startdate}}"/>
+      <br /> <br />
+ <input type="submit" class="btn btn-small"  value="Update start date" />
+</form>
+
+<script type="text/javascript">
+  $('#datepicker').datepicker();
+</script>
+

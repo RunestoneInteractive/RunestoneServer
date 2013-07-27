@@ -83,7 +83,7 @@ function buildSuccess(data,status,ignore) {
     }, 3000);
 }
 
-function buildIndexFile(projname, loginreq) {
+function buildIndexFile(projname, startdate, loginreq) {
     var cdiv = document.getElementById("chapterboxes");
 
     var txt="";
@@ -110,8 +110,9 @@ function buildIndexFile(projname, loginreq) {
     data.coursetype='custom';
     data.loginreq = loginreq;
     data.projectname=projname;
+    data.startdate = startdate;
     data.toc=txt;
-    jQuery.post(eBookConfig.app +'/designer/build_custom.json',data, buildSuccess)
+    jQuery.post(eBookConfig.app +'/designer/build_custom.json',data,buildSuccess)
 }
 
 function displayItems(boxid)

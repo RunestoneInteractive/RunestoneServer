@@ -52,8 +52,10 @@ a pair of letters might alternate left-right or right-left.
 
 .. fillintheblank:: score_1
    :correct: 0.4
+   :blankid: edbscore1
 
-   Using the algorithm above calculate the score for the word 'python' ___
+   Using the algorithm above calculate the score for the word 'python'
+   :textfield:`edbscore1::mini`
 
 Now, you can play around with the example above, and modify it to use different
 words, but this is really a case where a `function

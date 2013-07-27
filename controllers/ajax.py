@@ -261,11 +261,19 @@ def getCorrectStats(miscdata,event):
             sid = request.cookies['ipuser'].value
 
     if sid:
+        course = db(db.courses.course_name == miscdata['course']).select().first()
+
         correctquery = '''select 
-(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' and position('correct' in act) > 0 )
+(select cast(count(*) as float) from useinfo where sid='%s'
+                                               and event='%s'
+                                               and DATE(timestamp) >= DATE('%s')
+                                               and position('correct' in act) > 0 )
 /
-(select cast(count(*) as float) from useinfo where sid='%s' and event='%s' ) as result;
-''' % (sid,event,sid,event)
+(select cast(count(*) as float) from useinfo where sid='%s'
+                                               and event='%s'
+                                               and DATE(timestamp) >= DATE('%s')
+) as result;
+''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
 
         try:    
             rows = db.executesql(correctquery)
@@ -312,10 +320,39 @@ def getaggregateresults():
                 rdata[answer] = pct
 
     miscdata['correct'] = correct
+    miscdata['course'] = course
 
     getCorrectStats(miscdata,'mChoice')
 
-    return json.dumps([rdata,miscdata])
+    returnDict = dict(answerDict=rdata, misc=miscdata)
+
+    if auth.user and auth.has_membership('instructor',auth.user.id):
+        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+        q = db( (db.useinfo.div_id == question) & (db.useinfo.course_id == course.course_name) )
+        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+
+        currentSid = res[0].sid
+        currentAnswers = []
+        resultList = []
+
+        for row in res:
+            answer = row.act.split(':')[1]
+
+            if row.sid == currentSid:
+                currentAnswers.append(answer)
+            else:
+                currentAnswers.sort()
+                resultList.append((currentSid, currentAnswers))
+                currentAnswers = [row.act.split(':')[1]]
+
+                currentSid = row.sid
+
+        currentAnswers.sort()
+        resultList.append((currentSid, currentAnswers))
+
+        returnDict['reslist'] = resultList
+
+    return json.dumps([returnDict])
 
 def getpollresults():
     course = request.vars.course
@@ -359,6 +396,7 @@ def gettop10Answers():
     res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')], 'count':row[1]} for row in rows ]
 
     miscdata = {}
+    miscdata['course'] = course
     getCorrectStats(miscdata,'fillb')
 
     return json.dumps([res,miscdata])
