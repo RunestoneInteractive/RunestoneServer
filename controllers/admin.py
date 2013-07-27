@@ -162,60 +162,20 @@ def rebuildcourse():
         date = request.vars.startdate.split('/')
         date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
         course.update_record(term_start_date=date)
+        
+        # run_sphinx in defined in models/scheduler.py
+        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
+                                                                       rvars=request.vars,
+                                                                       application=request.application,
+                                                                       http_host=request.env.http_host))
+        uuid = row['uuid']
 
-        # sourcedir holds the all sources temporarily
-        # confdir holds the files needed to rebuild the course
-        workingdir = request.folder
-        sourcedir = path.join(workingdir,request.vars.projectname)
-        confdir = path.join(workingdir, 'custom_courses', request.vars.projectname)
 
-        try:
-            # copy all the sources into the temporary sourcedir
-            shutil.copytree(path.join(workingdir,'source'),sourcedir)
-        except OSError:
-            # this is probably devcourse, thinkcspy, or other builtin course
-            return dict(confirm=False, mess="You don't have permission to rebuild this course.", course_url='/'+request.application+'/static/'+request.vars.projectname+'/index.html')
+        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
 
-        # copy the index and conf files to the sourcedir
-        shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
-        shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
-
-        # run the Sphinx build
-        coursename = request.vars.projectname
-        confdir = sourcedir  # the Sphinx build actually gets the conf stuff from the temp sourcedir
-        outdir = path.join(request.folder, 'static' , coursename)
-        doctreedir = path.join(outdir,'doctrees')
-        buildername = 'html'
-        confoverrides = {}
-        confoverrides['html_context.appname'] = request.application
-        confoverrides['html_context.course_id'] = coursename
-        confoverrides['html_context.loglevel'] = 10
-        confoverrides['html_context.course_url'] = 'http://' + request.env.http_host
-        if request.vars.loginreq == 'yes':
-            confoverrides['html_context.login_required'] = 'true'
-        else:
-            confoverrides['html_context.login_required'] = 'false'
-        status = sys.stdout
-        warning = sys.stdout
-        freshenv = True
-        warningiserror = False
-        tags = []
-
-        sys.path.insert(0,path.join(request.folder,'modules'))
-        app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
-                    confoverrides, status, warning, freshenv,
-                    warningiserror, tags)
-        force_all = True
-        filenames = []
-        app.build(force_all, filenames)
-
-        shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
-                    path.join(outdir, '_static', 'jquery.js'))
-
-        # clean up the temp source dir
-        shutil.rmtree(sourcedir)
-
-        return dict(mess='Your course has been rebuilt.',course_url='/'+request.application+'/static/'+coursename+'/index.html', confirm=False)
+        return dict(confirm=False,
+                    task_name=uuid,
+                    course_url=course_url)
 
 #@auth.requires_membership('instructor')
 def buildmodulelist():
