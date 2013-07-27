@@ -35,11 +35,6 @@ def build():
     if existing_course:
         return dict(mess='That name has already been used.', building=False)
 
-    if request.vars.startdate == '':
-        request.vars.startdate = datetime.date.today()
-    else:
-        date = request.vars.startdate.split('/')
-        request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
 
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
@@ -56,7 +51,14 @@ def build():
                                                                        http_host=request.env.http_host))
         uuid = row['uuid']
 
+        if request.vars.startdate == '':
+            request.vars.startdate = datetime.date.today()
+        else:
+            date = request.vars.startdate.split('/')
+            request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+
         cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=request.vars.startdate)
+
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         auth.user.course_id = cid
@@ -93,8 +95,15 @@ def build_custom():
 
     course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
 
-    # enrol the user in their new course
+    if request.vars.startdate == '':
+        request.vars.startdate = datetime.date.today()
+    else:
+        date = request.vars.startdate.split('/')
+        request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+
     cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=request.vars.startdate)
+
+    # enrol the user in their new course
     db(db.auth_user.id == auth.user.id).update(course_id = cid)
     auth.user.course_id = cid
     auth.user.course_name = request.vars.projectname

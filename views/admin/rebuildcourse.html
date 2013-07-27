@@ -13,7 +13,7 @@
   <form name="confirm" method="POST" action="/{{=request.application}}/admin/rebuildcourse">
    <input type="hidden" name="projectname" value="{{= auth.user.course_name}}" />
    <input type="hidden" name="coursetype" value="rebuildcourse" />
-   <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br>
+   <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br /><br />
    Course start date: <input type="text" name="startdate" id="datepicker" data-date-format="mm/dd/yyyy" value="{{=curr_start_date}}" /><br /><br />
    <input type="submit" class="btn btn-small" value="Rebuild" />
   </form>
