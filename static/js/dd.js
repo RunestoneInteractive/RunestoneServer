@@ -70,9 +70,20 @@ function displayContents()
 }
 
 function buildSuccess(data,status,ignore) {
-  window.location.href = data.yoururl
+    var iid = setInterval(function() {
+        d = {
+             task_name:data.task_name,
+             course_url:data.course_url
+            };
+        $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(retdata) {
+            if (retdata.status == "true") {
+                window.location.href = retdata.course_url;
+            }
+        });
+    }, 3000);
 }
-function buildIndexFile(projname, startdate) {
+
+function buildIndexFile(projname, startdate, loginreq) {
     var cdiv = document.getElementById("chapterboxes");
 
     var txt="";
@@ -96,10 +107,12 @@ function buildIndexFile(projname, startdate) {
     }
 
     data = {};
+    data.coursetype='custom';
+    data.loginreq = loginreq;
     data.projectname=projname;
-    data.toc=txt;
     data.startdate = startdate;
-    jQuery.post(eBookConfig.app +'/designer/makefile.json',data,buildSuccess)
+    data.toc=txt;
+    jQuery.post(eBookConfig.app +'/designer/build_custom.json',data,buildSuccess)
 }
 
 function displayItems(boxid)

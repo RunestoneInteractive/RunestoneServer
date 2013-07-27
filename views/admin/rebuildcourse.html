@@ -12,29 +12,39 @@
 
   <form name="confirm" method="POST" action="/{{=request.application}}/admin/rebuildcourse">
    <input type="hidden" name="projectname" value="{{= auth.user.course_name}}" />
+   <input type="hidden" name="coursetype" value="rebuildcourse" />
    <input type="checkbox" name="loginreq" value="yes" checked /> Require a username to access this course <br /><br />
    Course start date: <input type="text" name="startdate" id="datepicker" data-date-format="mm/dd/yyyy" value="{{=curr_start_date}}" /><br /><br />
-   <input type="submit" class="btn btn-small" onclick="unhide_img('spinner');" value="Rebuild" />
+   <input type="submit" class="btn btn-small" value="Rebuild" />
   </form>
-
-  <div id="spinner_div" style="align: center; display: none;">
-    <p>Your course is being rebuilt.  This may take several minutes to complete.</p>
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
-  </div>
-
   <script type="text/javascript">
-    $('#datepicker').datepicker();
-
-	  function unhide_img(id) {
-      var d = document.getElementById('spinner_div');
-      d.style.display = "block";
-		  var i = document.getElementById('spinner');
-		  i.style.display = "block";
-		  return true;
-	  }
-	</script>
+    $("#datepicker").datepicker();
+  </script>
 
 {{ else: }}
-  {{ =mess }}
-  Click <a href="{{=course_url}}">here</a> to be taken to your course.
+  <h3 id="title">Rebuilding course.</h3>
+  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
+  </div>
+  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
+   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
+   your newly rebuilt course.</p>
+
+  <script type="text/javascript">
+    
+    var iid = setInterval(function() {
+      d = { task_name:'{{ =task_name }}',
+            course_url:'{{ =course_url }}'};
+      $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+        if (data.status == "true") {
+          window.location.href = data.course_url;
+        }
+        if (data.status == "failed") {
+          $("#spinner_div").hide();
+          $("#title").text("Permission denied.");
+          $("#message").text("You don't have permission to rebuild this course.");
+        }
+      });
+    }, 3000);
+  </script>
 {{ pass }}

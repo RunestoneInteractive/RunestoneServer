@@ -6,20 +6,45 @@
 
 {{end}}
 
-{{ if 'mess' in globals():}}
+{{ if 'mess' in globals(): }}
+
   <h1>{{=mess}}</h1>
-  {{if success:}}
-    To access your new course you will need to logout, and then log in again.  After login you will be taken to the home page for your course. <a href="/{{=request.application}}/default/user/logout">Logout</a>
-  {{else:}}
+
+  {{ if building: }}
+    <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
+	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
+    </div>
+    <p>Your course is being prepared for you. This may take several minutes to complete.
+     When the course is finished you will be redirected to your new course.  Because you
+     created the course you are set up as the instructor.</p>
+    <script type="text/javascript">
+      var iid = setInterval(function() {
+        d = {
+             task_name:'{{ =task_name }}',
+             course_url:'{{ =course_url }}'
+            };
+        $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+          if (data.status == "true") {
+            window.location.href = data.course_url;
+          }
+        });
+      }, 3000)
+    </script>
+
+  {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
-  {{pass}}
+
+  {{ pass }}
+
 {{ else: }}
 
   <h4>Module Index</h4>
 
   <div id="boxA" class="homeboxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
     {{dragitemidx = 0}}
-    {{for item in moddata.keys():}}
+
+    {{ for item in moddata.keys(): }}
+
       {{dragitemidx = dragitemidx + 1}}
       {{idstr = str(item)}}
       <div id="{{=idstr}}" data-filename="{{=moddata[item][2]}}" class="word" draggable="true" onclick="showDetails({{=item}})" ondragstart="drag(event)">
@@ -31,7 +56,9 @@
     	    <div style='text-align: right;'><a onmouseover='this.style.cursor="pointer" ' style='font-size: 12px;' onfocus='this.blur();' onclick="document.getElementById('PopUp{{=idstr}}').style.display = 'none' " >Close</a></div>
     	  </div>
       </div>
+
     {{ pass }}
+
   </div>
 
   <h4>Choose topics for...</h4>
@@ -39,7 +66,7 @@
 
   <button type="button" class='btn btn-small' onclick="addModBlock()">+</button>
 
-  <button type="button" class='btn btn-small' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}', '{{=startdate}}}')">Create Course</button>
+  <button type="button" class='btn btn-small' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}','{{=startdate}}', '{{=loginreq}}')">Create Course</button>
 
   <div id="chapterboxes">
     <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -60,6 +87,7 @@
 		  i.style.display = "block";
 	  }
 	</script>
-{{pass}}
+
+{{ pass }}
 
 
