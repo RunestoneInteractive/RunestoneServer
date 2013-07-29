@@ -31,6 +31,11 @@ pre {
     margin: 1em 0px;
 }
 
+h5 {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
 .CodeMirror {
     margin: 0px 0px 1em 0px;
     background-color: #fff;
@@ -68,10 +73,6 @@ input[type="button"].btn.btn-small {
 
 h2 {
     margin-top: 20px;
-}
-
-label {
-    display: inline;
 }
 
 .alert form {
@@ -212,7 +213,6 @@ div.flash {
 #auth_user_remember {
     margin-top: -20px;
 }
-
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;
