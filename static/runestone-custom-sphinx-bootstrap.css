@@ -1,9 +1,9 @@
 /* Runestone custom modifications */
 
-/*body {
+body {
     padding-top: 60px;
     padding-bottom: 40px;
-}*/
+}
 
 /* Remove top padding when top navbar goes collapsed in narrow viewports */
 /*@media (max-width: 979px) {
