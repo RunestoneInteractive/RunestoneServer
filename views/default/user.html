@@ -10,13 +10,14 @@
 {{else:}}
 
 <div class="container" style="margin-top:20px;">
-  <div class='pull-left'>
+  <div class='col-lg-3'>
     <video controls width="300" id="runestonevid">
       <source src="{{=URL(c='static',f='_images/runestone.mov')}}" type="video/mp4"></source>
       <source src="{{=URL(c='static',f='_images/runestone.webm')}}" type="video/webm"></source>
   </video>
   </div>
-  <div class='span8'>
+
+  <div class='col-lg-8 col-offset-1'>
     <h2>Learn more about Runestone Interactive</h2>
       <p>The video here will give you a bit of an overview of what our interactive books are all about.  Please watch it.  Another way to learn about our books is to click on <a href="{{=URL(c='static',f='overview/overview.html')}}">this demonstration</a>. If you are ready to start learning interactively, click on one of the titles below. </p>
       <p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a <a href='https://www.facebook.com/RunestoneInteractive'>suggestion</a>.</p>
@@ -32,47 +33,44 @@
       Python Blog</a></li>
       <ul><li>Motivating examples of solving real world problems with Python</li></ul>
     </ul>
-
   </div>
-
 </div>
-
 
 {{pass}}
-<div>
-    <h2>Support Us</h2>
-    <p>This project is Open Source, but it does take time and resources.
-        Especially as our popularity has grown we have server costs.  We
-        were also able to make great progress during the Summer of 2013
-        thanks to a generous grant from ACM-SIGCSE that supported one of our
-        undergraduate students. It would be great if we could have a student
-        working on this all the time.</p>
-    <p>If you these books have helped you, if you liked them,
-        please consider making a small donation.</p>
-    <script
-            data-gittip-username="bnmnetp" src="https://www.gittip.com/assets/widgets/0002.js">
-    </script>
+<div class='col-lg-12'>
+  <h2>Support Us</h2>
+  <p>This project is Open Source, but it does take time and resources.
+     Especially as our popularity has grown we have server costs.  We
+     were also able to make great progress during the Summer of 2013
+     thanks to a generous grant from ACM-SIGCSE that supported one of our
+     undergraduate students. It would be great if we could have a student
+     working on this all the time.</p>
+  <p>If you these books have helped you, if you liked them,
+     please consider making a small donation.</p>
+  <script
+    data-gittip-username="bnmnetp" src="https://www.gittip.com/assets/widgets/0002.js">
+  </script>
 </div>
 
-<div>
-<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
-<div id="loginexp">
-<p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please register and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
-</div>
+<div class='col-lg-12'>
+  <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+  <div id="loginexp">
+    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please register and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
+  </div>
 
-
-<div id="web2py_user_form">
-  {{=form}}
-  {{if request.args(0)=='login':}}
-  {{if not 'register' in auth.settings.actions_disabled:}}
-  <a href="{{=URL(args='register')}}">{{=T('Register')}}</a>
-  {{pass}}
-  {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+  <div id="web2py_user_form">
+    {{=form}}
+    {{if request.args(0)=='login':}}
+      {{if not 'register' in auth.settings.actions_disabled:}}
+        <a href="{{=URL(args='register')}}">{{=T('Register')}}</a>
+      {{pass}}
+      {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+        <br />
+        <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
+      {{pass}}
+    {{pass}}
+  </div>
   <br />
-  <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
-  {{pass}}
-  {{pass}}
-</div><br />
 
 </div>
 

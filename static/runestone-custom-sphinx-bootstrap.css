@@ -1,17 +1,18 @@
 /* Runestone custom modifications */
-body {
+
+/*body {
     padding-top: 60px;
     padding-bottom: 40px;
-}
+}*/
 
 /* Remove top padding when top navbar goes collapsed in narrow viewports */
-@media (max-width: 979px) {
+/*@media (max-width: 979px) {
     body {
         padding-top: 0;
     }
-}
+}*/
 
-.navbar .brand {
+.navbar-brand {
     font-size: 18px;
     margin-left: 0px;
     padding-left:10px !important;
@@ -20,10 +21,10 @@ body {
 .brand-logo {
     float: left;
     display: block;
-    background-size: 35px 35px !important;
-    width: 35px;
-    height: 35px;
-    margin-top:2px;
+    background-size: 40px 40px !important;
+    width: 40px;
+    height: 40px;
+    margin-top:4px;
 }
 
 pre {
@@ -186,7 +187,7 @@ div.flash {
 #web2py_user_form form {
     float: left;
     margin-right: 150px;
-    padding-top: 6px;
+    padding-top: 3px;
 }
 
 #sign_in_text td {

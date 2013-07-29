@@ -11,15 +11,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
 
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap.min.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap-responsive.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-3.0.0-rc1/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-3.0.0-rc1/css/bootstrap-glyphicons.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
 
     <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
-    <script src="{{=URL('static', 'bootstrap-2.3.1/js/bootstrap.min.js')}}"></script>    
+    <script src="{{=URL('static', 'bootstrap-3.0.0-rc1/js/bootstrap.min.js')}}"></script>    
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
     <script type="text/javascript" src="{{=URL('static', 'js/dd.js')}}"></script>
     <script type="text/javascript">
@@ -50,24 +50,26 @@
 {{ if response.flash: }}
     <div class="flash">{{=response.flash or ''}}</div>
 {{ pass }}
-<div class="navbar-inner">
+
   <div class="container">
-    <div>
-      <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
-      <a class="brand" href="/">Runestone Interactive</a>
-    </div>
 
     <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-    <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-responsive-collapse">
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
 
-    <div class="nav-collapse collapse">
+    <div>
+     <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+      <a class="navbar-brand" href="/">Runestone Interactive</a>
+    </div>
 
-     <ul class="nav pull-right">
-        <li class="divider-vertical"></li>
+
+
+    <div class="nav-collapse collapse navbar-responsive-collapse">
+
+     <ul class="nav navbar-nav pull-right">
 
         <!-- social media dropdown -->
         <li class="dropdown">
@@ -95,12 +97,10 @@
           </div>
         </li>
 
-        <li class="divider-vertical"></li>
-
         <!-- user account dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon-user" style="opacity:0.6;"></i>
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
             {{ if auth.user: }}
@@ -115,19 +115,17 @@
             {{ if auth.user: }}
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
-              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li> 
-              <li><a href='{{=URL("default", "user/register")}}'>Register</a></li> 
+              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
+              <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
             {{ pass }}
           </ul>
         </li>
         <!-- end user account dropdown -->
 
-        <li class="divider-vertical"></li>
-
         <!-- help menu dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon-question-sign" style="opacity:0.6;"></i>
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
             <li><a href='/{{=request.application}}/admin/index'>Instructors Page</a></li>
@@ -137,13 +135,10 @@
           </ul>
         </li>
 
-        <li class="divider-vertical"></li>
-
       </ul>
 
-      <ul class="nav">
-        <li class="divider-vertical"></li>
-        
+      <ul class="nav navbar-nav">
+
         <!-- open library dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Open Library<b class="caret"></b></a>
@@ -191,12 +186,13 @@
         </li>
 
       </ul>
-     
+
     </div>
   </div>
-</div>
+
 </div>
 <!-- End navbar -->
+
 
 <!-- begin body content -->
   <div class="container">
