@@ -24,7 +24,7 @@ Strings Revisited
 -----------------
 
 Throughout the first chapters of this book we have used strings to represent words or phrases that we
-wanted to print out.  Our definition was simple.  A string is simply some characters inside quotes.  In this chapter we explore strings in much more detail.
+wanted to print out.  Our definition was simple:  a string is simply some characters inside quotes.  In this chapter we explore strings in much more detail.
 
 A Collection Data Type
 ----------------------
@@ -34,8 +34,8 @@ So far we have seen built-in types like: ``int``, ``float``,
 ``int``, ``float``, and
 ``bool`` are considered to be simple or primitive data types because their values are not composed
 of any smaller parts.  They cannot be broken down.
-On the other hand, strings and lists are qualitatively different from the others because they
-are made up of smaller pieces.  In the case of strings, they're made up of smaller
+On the other hand, strings and lists are different from the others because they
+are made up of smaller pieces.  In the case of strings, they are made up of smaller
 strings each containing one **character**.  
 
 Types that are comprised of smaller pieces are called **collection data types**.
@@ -45,7 +45,7 @@ single entity (the whole), or we may want to access its parts. This ambiguity is
 Strings can be defined as sequential collections of characters.  This means that the individual characters
 that make up the string are assumed to be in a particular order from left to right.
 
-A string that contains no characters, often referred to as the **empty string**, is still considered to be a string.  It is simply a sequence of zero characters and is represented by '' or "" (two quotes with nothing in between).
+A string that contains no characters, often referred to as the **empty string**, is still considered to be a string.  It is simply a sequence of zero characters and is represented by '' or "" (two single or two double quotes with nothing in between).
 
 .. index:: string operations, concatenation
 
@@ -75,11 +75,11 @@ joining the two operands by linking them end-to-end. For example:
     print(fruit + bakedGood)
 
 The output of this program is ``banana nut bread``. The space before the word
-``nut`` is part of the string, and is necessary to produce the space between
+``nut`` is part of the string and is necessary to produce the space between
 the concatenated strings.  Take out the space and run it again.
 
-The ``*`` operator also works on strings; it performs repetition. For example,
-``'Fun'*3`` is ``'FunFunFun'``. One of the operands has to be a string; the
+The ``*`` operator also works on strings.  It performs repetition. For example,
+``'Fun'*3`` is ``'FunFunFun'``. One of the operands has to be a string and the
 other has to be an integer.
 
 .. activecode:: ch08_mult
@@ -356,7 +356,7 @@ change the original.  You can also consult the `Python documentation for strings
    :answer_c: n
    :answer_d: Error, you cannot combine all those things together.
    :correct: a
-   :feedback_a: Yes, s[1] is y and the index of n is 5, so 5 y characters
+   :feedback_a: Yes, s[1] is y and the index of n is 5, so 5 y characters.  It is important to realize that the index method has precedence over the repetition operator.  Repetition is done last.
    :feedback_b: Close.  5 is not repeated, it is the number of times to repeat.
    :feedback_c: This expression uses the index of n
    :feedback_d: This is fine, the repetition operator used the result of indexing and the index method.
@@ -541,6 +541,17 @@ What do you think ``fruit[:]`` means?
 
 
 
+Scratchpad
+----------
+
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_08_01
+
+
+
 .. index:: string comparison, comparison of strings
 
 String Comparison
@@ -657,7 +668,7 @@ One thing to note in the last two examples is the fact that the space character 
    :answer_b: False
    :correct: b
    :feedback_a: d is greater than D.
-   :feedback_b: The length does not matter.
+   :feedback_b: The length does not matter.  Lower case d is greater than upper case D.
 
    Evaluate the following comparison:
    
@@ -814,7 +825,7 @@ Note that it is only possible to process the characters one at a time from left 
 Traversal and the ``for`` Loop: By Index
 ----------------------------------------
 
-It is also possible to use the ``range`` function to systematically generate the indices of the characters.  The for loop can then be used to iterate over these positions. 
+It is also possible to use the ``range`` function to systematically generate the indices of the characters.  The ``for`` loop can then be used to iterate over these positions. 
 These positions can be used together with the indexing operator to access the individual
 characters in the string.
 
@@ -864,7 +875,7 @@ Trace the values of ``idx`` and satisfy yourself that they are correct.  In part
    :correct: c
    :feedback_a: The for loop visits each index but the selection only prints some of them.
    :feedback_b: o is at positions 4 and 8
-   :feedback_c: Yes, it will print all the characters in even index positions.
+   :feedback_c: Yes, it will print all the characters in even index positions and the o character appears both times in an even location.
    :feedback_d: The for statement can have any statements inside, including if as well as for.
 
 
@@ -940,6 +951,15 @@ Here is the same example in codelens so that you can trace the values of the var
          print(s[idx])
          idx = idx + 2
       
+Scratchpad
+----------
+
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_08_02
+
 
 
 .. index::
@@ -1054,6 +1074,15 @@ Step thru the function using codelens to see the accumulator variable grow.
          r = item.upper() + r
       print(r)
 
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_08_03
+
 
 Turtles and Strings and L-Systems
 ---------------------------------
@@ -1112,16 +1141,16 @@ above.
 
 .. activecode::  string_lsys1
 
-    def applyRules(ch):
-        newstr = ""
-        if ch == 'A':
-            newstr = 'B'   # Rule 1
-        elif ch == 'B':
-            newstr = 'AB'  # Rule 2
+    def applyRules(lhch):
+        rhstr = ""
+        if lhch == 'A':
+            rhstr = 'B'   # Rule 1
+        elif lhch == 'B':
+            rhstr = 'AB'  # Rule 2
         else:
-            newstr = ch    # no rules apply so keep the character
+            rhstr = ch    # no rules apply so keep the character
 
-        return newstr
+        return rhstr
 
 
     def processString(oldStr):
@@ -1293,10 +1322,10 @@ Feel free to try some different angles and segment lengths to see how the drawin
 Looping and counting
 --------------------
 
-We will finish this chapter with a few more examples that show variations on the theme of iteration through the characters of the string.  We will implement a few of the methods that we described earlier to show how they can be come.
+We will finish this chapter with a few more examples that show variations on the theme of iteration through the characters of a string.  We will implement a few of the methods that we described earlier to show how they can be done.
 
 
-The following program counts the number of times a particular letter, `` aChar``, appears in a
+The following program counts the number of times a particular letter, ``aChar``, appears in a
 string.  It is another example of the accumulator pattern that we have seen in previous chapters.
 
 .. activecode:: chp08_fun2
@@ -1514,6 +1543,15 @@ to be punctuation. Try the following and see what you get.
 For more information consult the ``string`` module documentaiton (see `Global Module Index <http://docs.python.org/py3k/py-modindex.html>`_).
 
 
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_08_04
+
 
 Summary 
 ------- 
@@ -1672,13 +1710,12 @@ Exercises
         .. tab:: Question
 
            Assign to a variable in your program a triple-quoted string that contains 
-           your favourite paragraph of text - perhaps a poem, a speech, instructions
+           your favorite paragraph of text - perhaps a poem, a speech, instructions
            to bake a cake, some inspirational verses, etc.
         
-           Write a function which removes all punctuation from string and counts the number of words in your text that contain
-           the letter 'e'.  Your program should print an analysis of the text like this::
+           Write a function that counts the number of alphabetic characters (a thru z, or A thru Z) in your text and then keeps track of how many are the letter 'e'.  Your function should print an analysis of the text like this::
         
-               Your text contains 243 words, of which 109 (44.8%) contain an 'e'.      
+               Your text contains 243 alphabetic characters, of which 109 (44.8%) are 'e'.      
         
            .. actex:: ex_8_3
 
@@ -1687,17 +1724,20 @@ Exercises
             .. activecode:: q3_answer
 
                 def count(p):
-                    p = p.replace('.','').replace(',','').replace('"','').replace('-','')
-                    word_list = p.split(" ")
+                    lows="abcdefghijklmnopqrstuvwxyz"
+                    ups="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    
+                    numberOfe = 0
+                    totalChars = 0
+                    for achar in p:
+                        if achar in lows or achar in ups:
+                            totalChars = totalChars + 1
+                            if achar == 'e':
+                                numberOfe = numberOfe + 1
 
-                    words_with_e = 0
-                    for word in word_list:
-                        if 'e' in word:
-                            words_with_e = words_with_e + 1
-
-                    word_count = len(word_list)
-                    percent_with_e = (words_with_e / word_count) * 100
-                    print("Your text contains", word_count, "words, of which", words_with_e, "(" + percent_with_e + "%)", "contain an 'e'.")
+                   
+                    percent_with_e = (numberOfe/totalChars) * 100
+                    print("Your text contains", totalChars, "alphabetic characters of which", numberOfe, "(", percent_with_e, "%)", "are 'e'.")
 
 
                 p = '''

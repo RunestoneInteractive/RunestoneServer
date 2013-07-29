@@ -1580,9 +1580,9 @@ Exercises
             
             .. activecode:: answer_7_11
             
-                import image
+               import image
                 
-                def double(oldimage):
+               def double(oldimage):
                    oldw = oldimage.getWidth()
                    oldh = oldimage.getHeight()
                    
@@ -1644,13 +1644,15 @@ Exercises
                 def pixelMapper(oldimage, rgbFunction):
                     width = oldimage.getWidth()
                     height = oldimage.getHeight()
-                    newim = image.NewImage(width,height)
+                    newim = image.EmptyImage(width,height)
                 
                     for row in range(height):
                         for col in range(width):
                             originalpixel = oldimage.getPixel(col,row)
                             newpixel = rgbFunction(originalpixel)
                             newim.setPixel(col,row,newpixel)
+                            
+                    return newim
                         
                 def graypixel(oldpixel):
                     intensitysum = oldpixel.getRed() + oldpixel.getGreen() + oldpixel.getBlue()
