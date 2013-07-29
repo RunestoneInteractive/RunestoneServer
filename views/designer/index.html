@@ -12,14 +12,18 @@
 
   <div class='col-lg-7'>
     <form name="mainform" action="/{{=request.application}}/{{=request.controller}}/build" method="get"  onsubmit="unhide_img('spinner'); return true;">
-      <div class="form-group">
-        <label for="projectname">Project Name</label>
-        <input type="text" class='form-control' placeholder="Short name, no spaces" name="projectname" id="projectname" /> 
+      <div class="form-group row">
+        <div class="col-lg-4">
+          <label for="projectname">Project Name</label>
+          <input type="text" class='form-control' placeholder="Short name, no spaces" name="projectname" id="projectname" />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="projectdescription">Description</label>
-        <input type="text" class='form-control' placeholder="Enter a short description" name="projectdescription" id="projectdescription" />
+      <div class="form-group row">
+        <div class="col-lg-6">
+          <label for="projectdescription">Description</label>
+          <input type="text" class='form-control' placeholder="Enter a short description" name="projectdescription" id="projectdescription" />
+        </div>
       </div>
       
       <br />
@@ -72,7 +76,12 @@
         </div>
       </div>
 
-      Term start date: <input type="text" name="startdate" id='startdate' class='form-control' style='width:200px;' data-date-format="mm/dd/yyyy" placeholder="{{=datetime.date.today().strftime('%m/%d/%Y')}}"/> <br /> <br />
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <label for="startdate">Term start date </label>
+          <input type="text" name="startdate" id='startdate' class='form-control' data-date-format="mm/dd/yyyy" placeholder="{{=datetime.date.today().strftime('%m/%d/%Y')}}"/> <br /> <br />
+        </div>
+      </div>
 
       <input type="submit" class="btn btn-default btn-small" value="Submit" />
     </form>
