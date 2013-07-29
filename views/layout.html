@@ -218,4 +218,16 @@
 <!-- end footer -->
 
 </body>
+<script type='text/javascript'>
+  $("form tr").each(function() {
+    var id = $(this).attr('id')
+    if (id.indexOf('__row') != -1 ) {   
+        $(this).addClass('form-group');
+        $(this).find("input[type='text']").addClass('form-control');
+        $(this).find("input[type='password']").addClass('form-control');
+    }
+
+  }); 
+  $("#auth_user_remember__row > .w2p_fw > div").text()
+</script>   
 </html>

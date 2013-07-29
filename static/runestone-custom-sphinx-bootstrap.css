@@ -190,12 +190,29 @@ div.flash {
     padding-top: 3px;
 }
 
+#web2py_user_form td {
+    padding-bottom: 15px;
+}
+
+#web2py_user_form td.w2p_fw {
+    width: 299px;
+}
+
+#auth-actions {
+    margin-top:50px;
+}
+
 #sign_in_text td {
     font-size: 17px;
     color: #333;
     font-family: 'lucida grande',Verdana,sans-serif;
     padding-bottom: 13px;
 }
+
+#auth_user_remember {
+    margin-top: -20px;
+}
+
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;

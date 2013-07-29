@@ -61,13 +61,15 @@
   <div id="web2py_user_form">
     {{=form}}
     {{if request.args(0)=='login':}}
-      {{if not 'register' in auth.settings.actions_disabled:}}
-        <a href="{{=URL(args='register')}}">{{=T('Register')}}</a>
-      {{pass}}
-      {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-        <br />
-        <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
-      {{pass}}
+      <div id='auth-actions'>
+        {{if not 'register' in auth.settings.actions_disabled:}}
+          <a href="{{=URL(args='register')}}">{{=T('Register')}}</a>
+        {{pass}}
+        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+          <br />
+          <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
+        {{pass}}
+      </div>
     {{pass}}
   </div>
   <br />
