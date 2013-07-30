@@ -384,7 +384,10 @@ Reveals
 DOM Access
 ----------
 
-Python programs written in activecode windows can now import the ``document`` module.  This document module allows access to basic elements of the web page, including the new text entry box called **text1** :textfield:`text1:example input:large` like this one.  Try running the program, then change the value in the text entry box and run it again.
+Python programs written in activecode windows can now import the ``document`` module. This document module
+allows access to basic elements of the web page, including the new text entry box called
+**text1** :textfield:`text1:example input:200px` like this one.  Try running the program, then change
+the value in the text entry box and run it again.
 
 .. activecode:: tftest1
 

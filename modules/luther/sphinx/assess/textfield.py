@@ -34,15 +34,15 @@ def textfield_role(name, rawtext, text, lineno, inliner, options={}, content=[])
 
 	In your document you can write :textfield:`myid:myvalue:width`
 
-	This will translate to:  <input type='text' id='myid' class="input-::size::" value='myvalue'></input>
+	This will translate to:  <input type='text' id='myid' class="form-control input-small" style="display:inline; width:width;" value='myvalue'></input>
      
-    where ::size:: is one of mini, small, medium, large, xlarge, or xxlarge
+    where width can be specified in pixels or percentage of page width (standard CSS syntax).
 
 
 	'''
 	iid, value, width = text.split(':')
 
-	res = '''<input type='text' id='%s' class="input-%s" value="%s"></input>''' % (iid,width,value)
+	res = '''<input type='text' id='%s' class="form-control input-small" style="display: inline; width: %s;" value="%s"></input>''' % (iid,width,value)
 
 	return [nodes.raw('',res, format='html')],[]
 
