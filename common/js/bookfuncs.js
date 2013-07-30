@@ -605,43 +605,53 @@ function createScratchActivecode() {
     var divid = document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
 
     // generate the HTML
-    var html = '<div id="'+divid+'" style="display: none;" class="scratch-ac-modal"><br/>' +
-               '  <div id="'+divid+'_code_div" style="display: block">' +
-               '    <textarea cols="50" rows="12" id="'+divid+'_code" class="active_code">\n\n\n\n\n</textarea>' +
+    var html = '<div id="ac_modal_'+divid+'" class="modal fade">' +
+               '  <div class="modal-dialog scratch-ac-modal">' +
+               '    <div class="modal-content">' +
+               '      <div class="modal-header">' +
+               '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+               '        <h4 class="modal-title">Scratch ActiveCode</h4>' +
+               '      </div> '  +
+               '      <div class="modal-body">' +
+               '        <div id="'+divid+'">' +
+               '          <div id="'+divid+'_code_div" style="display: block">' +
+               '            <textarea cols="50" rows="12" id="'+divid+'_code" class="active_code">\n\n\n\n\n</textarea>' +
+               '          </div>' +
+               '          <p class="ac_caption"><span class="ac_caption_text">Scratch Editor</span> </p>' +
+
+               '          <button class="btn btn-small btn-success" id="'+divid+'_runb" onclick="runit(\''+divid+'\',this, undefined);">Run</button>' +
+
+               '          <div id="cont"></div>' +
+
+               '          <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_saveb" onclick="saveEditor(\''+divid+'\');">Save</button>' +
+               '          <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
+
+               '          <div style="text-align: center">' +
+               '            <canvas id="'+divid+'_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
+               '          </div>' +
+               '          <pre id="'+divid+'_suffix" style="display:none">' +
+               '          </pre>' +
+               '          <pre id="'+divid+'_pre" class="active_out">' +
+               '          </pre>' +
+               '        </div>'+
+               '      </div>'+
+               '    </div>'+
                '  </div>' +
-               '  <p class="ac_caption"><span class="ac_caption_text">Scratch Editor</span> </p>' +
-
-               '  <button class="btn btn-small btn-success" id="'+divid+'_runb" onclick="runit(\''+divid+'\',this, undefined);">Run</button>' +
-
-               '  <div id="cont"></div>' +
-
-               '  <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_saveb" onclick="saveEditor(\''+divid+'\');">Save</button>' +
-               '  <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
-
-               '  <div style="text-align: center">' +
-               '    <canvas id="'+divid+'_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
-               '  </div>' +
-               '  <pre id="'+divid+'_suffix" style="display:none">' +
-               '  </pre>' +
-               '  <pre id="'+divid+'_pre" class="active_out">' +
-               '  </pre>' +
-
                '</div>';
     el = $(html);
     $('body').append(el);
+
+    el.on('shown.bs.modal', function (){
+        el.find('.CodeMirror').each(function(i, e) {
+            e.CodeMirror.refresh();
+        });
+    });
 }
 
 function showScratchActivecode() {
-    var divid = document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
+    var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
     var div = $("#"+divid);
 
-    div.modal({'containerId':'scratch-ac-modal',
-               'persist':true,
-               'overlayClose':true,
-               'onShow': function(dialog) {
-                    dialog.data.find('.CodeMirror').each(function(i, el) {
-                        el.CodeMirror.refresh();
-                    });
-                }
-              });
+    div.modal();
+
 }

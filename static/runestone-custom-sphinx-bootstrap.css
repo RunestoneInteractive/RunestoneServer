@@ -77,6 +77,10 @@ input[type="button"].btn.btn-small {
     pointer-events: auto;
 }
 
+.tooltip {
+    z-index: 2000 !important;
+}
+
 div.tooltip-inner {
     width: 350px;
 }
@@ -324,18 +328,8 @@ jQueryUI tab plugin styles to do it. */
     z-index: 1051 !important;
 }
 
-#scratch-ac-modal {
-    top: 55px !important;
-    width: 700px !important;
-    max-width: 700px;
-    max-height: 90%;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-#scratch-ac-modal .simplemodal-close {
-    top: 0;
-    right: 0;
+.scratch-ac-modal {
+    width: 800px;
 }
 
 .footnote.table {
