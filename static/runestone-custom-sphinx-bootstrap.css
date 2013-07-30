@@ -14,8 +14,9 @@ body {
 
 .navbar-brand {
     font-size: 18px;
-    margin-left: 0px;
+    margin-left: 0;
     padding-left:10px !important;
+    max-width: none;
 }
 
 .brand-logo {
