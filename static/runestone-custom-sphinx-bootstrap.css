@@ -77,12 +77,13 @@ input[type="button"].btn.btn-small {
     pointer-events: auto;
 }
 
-.tooltip {
-   opacity: 0.8 !important;
-}
-
 div.tooltip-inner {
     width: 350px;
+}
+
+.tooltip.in {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
 }
 
 h2 {
