@@ -82,12 +82,12 @@ h2 {
 
 /* the default Bootstrap color for .alert is hard to read, but
 the colors for the other .alert classes are fine */
-.alert:not(.alert-error):not(.alert-success):not(.alert-info)  {
+.alert:not(.alert-danger):not(.alert-success):not(.alert-info)  {
     color: #333;
 }
 
 /* override the color styles applied by Skulpt to the unittest results divs */
-.unittest-results.alert-error {
+.unittest-results.alert-danger {
     background-color: #f2dede !important;
 }
 
@@ -109,7 +109,7 @@ the colors for the other .alert classes are fine */
     border-radius: 4px;
 }
 
-/* .alert-error */
+/* .alert-danger */
 .admonition.caution {
     color: #b94a48;
     background-color: #f2dede;

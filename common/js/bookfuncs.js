@@ -183,7 +183,7 @@ function addErrorMessage(err, myDiv) {
     var errHead = $('<h3>').html('Error')
     var divEl = document.getElementById(myDiv)
     var eContainer = divEl.appendChild(document.createElement('div'))
-    eContainer.className = 'error alert alert-error'
+    eContainer.className = 'error alert alert-danger'
     eContainer.id = myDiv + '_errinfo'
     eContainer.appendChild(errHead[0])
     var errText = eContainer.appendChild(document.createElement('pre'))
@@ -583,11 +583,11 @@ document.addEventListener("DOMNodeInserted", function(event) {
             var div = $(event.currentTarget);
             if (div.html()) {
                 if(div.html().indexOf('Fail') === -1 ) {
-                    div.removeClass('alert-error');
+                    div.removeClass('alert-danger');
                     div.addClass('alert alert-success');
                 } else if (div.html().indexOf('Fail') >= 0) {
                     div.removeClass('alert-success');
-                    div.addClass('alert alert-error');
+                    div.addClass('alert alert-danger');
                 }
             }
         });

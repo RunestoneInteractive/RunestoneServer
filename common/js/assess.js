@@ -74,7 +74,7 @@ var feedbackMCMFRandom = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error')
+        $(divid).attr('class','alert alert-danger')
     }
 };
 
@@ -122,7 +122,7 @@ var feedBack = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error');
+        $(divid).attr('class','alert alert-danger');
     }
 };
 
@@ -141,7 +141,7 @@ var feedBackMCMF = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error');
+        $(divid).attr('class','alert alert-danger');
     }
 };
 
@@ -161,7 +161,7 @@ var feedBackMCMA = function (divid, numCorrect, numNeeded, numGiven, feedbackTex
             " " + answerStr + " and got " + numCorrect + " correct of " +
             numNeeded + " needed.<br /> " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class', 'alert alert-error');
+        $(divid).attr('class', 'alert alert-danger');
     }
 };
 
