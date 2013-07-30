@@ -140,6 +140,13 @@ the colors for the other .alert classes are fine */
     margin-top: 10px;
 }
 
+.navbar .divider-vertical {
+    height: 50px;
+    margin: 0 3px;
+    border-right: 1px solid #e8e8e8;
+    border-left: 1px solid #f2f2f2;
+}
+
 .dropdown-menu > li > span  {
     display: block;
     padding: 3px 20px;
