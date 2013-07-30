@@ -169,7 +169,6 @@ div.flash {
     background-color: #000;
     border: 2px solid #fff;
     border-radius: 8px;
-    -o-border-radius: 8px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     background-image: -webkit-linear-gradient(top,#222,#000);
