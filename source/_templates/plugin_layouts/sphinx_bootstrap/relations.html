@@ -1,12 +1,12 @@
 {%- if prev %}
   <li><a href="{{ prev.link|e }}"
-         title="Previous Chapter - {{ prev.title }}"><i class='glyphicon glyphicon-backward' style='opacity:0.6;'></i></a></li>
+         title="Previous Chapter - {{ prev.title }}"><i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i></a></li>
   {% if not next %}
     <li class="divider-vertical"></li>
   {% endif %}
 {%- endif %}
 {%- if next %}
   <li><a href="{{ next.link|e }}"
-         title='Next Chapter - {{ next.title }}'><i class='glyphicon glyphicon-forward' style='opacity:0.6;'></i></a></li>
+         title='Next Chapter - {{ next.title }}'><i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i></a></li>
   <li class="divider-vertical"></li>
 {%- endif %}
