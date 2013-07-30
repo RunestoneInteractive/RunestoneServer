@@ -252,12 +252,8 @@ div.flash {
     padding-bottom: 10px;
 }
 
-.poll-options input[type='radio'] {
-    margin: 0;
-}
-
-.poll-options label {
-    padding-left: 8px;
+.poll-options > label {
+    margin-right: 5px;
 }
 
 .progress {
@@ -268,7 +264,6 @@ div.flash {
 .progress .bar {
     color: #000000;
 }
-
 
 /* selectors beginning with #exercises are to provide some nice styling
 for the end-of-chapter exercies sections, overriding lots of the

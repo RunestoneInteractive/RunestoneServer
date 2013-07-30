@@ -40,13 +40,19 @@ BEGIN_FORM = """
 """
 
 POLL_ELEMENT = """
-<label for='%(divid)s_%(value)s'> %(value)s </label>
-<input type='radio' name='%(divid)s_opt' id='%(divid)s_%(value)s' value='%(value)s'>
+<label class='radio-inline'>
+    <input type='radio' name='%(divid)s_opt' id='%(divid)s_%(value)s' value='%(value)s'>
+    %(value)s
+</label>
 """
 
 END_POLL_OPTIONS = """ </div> """
 
-COMMENT = """ <br><input type='text' name='%(divid)s_comment' placeholder='Any comments?'> <br>"""
+COMMENT = """
+<br />
+<input type='text' class='form-control' style='width:300px;' name='%(divid)s_comment' placeholder='Any comments?'>
+<br />
+"""
 
 END_POLL_INPUT = """
             <button type='button' id='%(divid)s_submit' class='btn btn-small btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
