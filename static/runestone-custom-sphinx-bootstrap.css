@@ -81,6 +81,10 @@ input[type="button"].btn.btn-small {
    opacity: 0.8 !important;
 }
 
+div.tooltip-inner {
+    width: 350px;
+}
+
 h2 {
     margin-top: 20px;
 }

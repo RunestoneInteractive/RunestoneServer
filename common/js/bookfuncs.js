@@ -323,7 +323,7 @@ function disableAcOpt() {
         }
         $jqTheme(value).tooltip( {
             'selector': '',
-            'delay': { show: 300, hide: 100 },
+            'delay': { show: 300, hide: 50 },
             'placement': 'bottom'
         });
     });
