@@ -72,6 +72,15 @@ input[type="button"].btn.btn-small {
     margin: 5px 0;
 }
 
+.btn.disabled {
+    /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
+    pointer-events: auto;
+}
+
+.tooltip {
+   opacity: 0.8 !important;
+}
+
 h2 {
     margin-top: 20px;
 }
