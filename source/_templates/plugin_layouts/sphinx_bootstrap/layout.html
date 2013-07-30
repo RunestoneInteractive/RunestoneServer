@@ -249,17 +249,6 @@
   </div>
 </footer>
 
-<!-- This function is needed to allow the dropdown search bar to work;
-The default behaviour is that the dropdown menu closes when something in
-it (like the search bar) is clicked -->
-<script type='text/javascript'>
-    $(function() {
-        // Fix input element click problem
-        $('.dropdown input, .dropdown label').click(function(e) {
-            e.stopPropagation();
-        });
-    });
-</script>
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(addUserToFooter);
@@ -271,9 +260,31 @@ it (like the search bar) is clicked -->
 </script>
 
 <script type="text/javascript">
+  // add the video play button overlay image
   $(".video-play-overlay").each(function() {
     $(this).css('background-image', "url(\'{{pathto('_static/play_overlay_icon.png', 1)}}\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
   });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-small btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-small btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-small btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-small btn-default');
+      });
+  });
+
 </script>
 
 {% if appname == "courselib" %}

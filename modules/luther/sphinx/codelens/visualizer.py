@@ -65,12 +65,13 @@ $(document).ready(function() {
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
     allVisualizers.push(%(divid)s_vis);
+
 });
 
 $(document).ready(function() {
     $("#%(divid)s_tracecheck").click(function() {
         logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'%(divid)s'});
-        });
+    });
 });
 
 if (allVisualizers === undefined) {

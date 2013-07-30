@@ -239,15 +239,12 @@
 
 </body>
 <script type='text/javascript'>
-  $("form tr").each(function() {
-    var id = $(this).attr('id')
-    if (id.indexOf('__row') != -1 ) {   
-        $(this).addClass('form-group');
-        $(this).find("input[type='text']").addClass('form-control');
-        $(this).find("input[type='password']").addClass('form-control');
-    }
-
-  }); 
-  $("#auth_user_remember__row > .w2p_fw > div").text()
-</script>   
+  // do some styling of the web2py login and registration form
+  // this is done here because web2py doesn't have an easy way
+  // to add class to the auth form. We don't want to duplicate the
+  // styles from .form-control into our custom CSS.
+  var el = $("#web2py_user_form");
+  el.find("input[type='text']").addClass('form-control');
+  el.find("input[type='password']").addClass('form-control');
+</script>
 </html>
