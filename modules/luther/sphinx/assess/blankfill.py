@@ -103,6 +103,8 @@ class FillInTheBlank(Assessment):
             </script>
             <button class='btn btn-small btn-success' name="do answer" onclick="checkFIBStorage('%(divid)s', '%(blankid)s', '%(correct)s',%(fbl)s, %(casei)s)">Check Me</button>
             <button class='btn btn-small btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareFITBAnswers('%(divid)s');">Compare Me</button>
+            <br />
+            <br />
             <div id="%(divid)s_feedback">
             </div>
             </div>
