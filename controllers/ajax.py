@@ -285,6 +285,37 @@ def getCorrectStats(miscdata,event):
 
     miscdata['yourpct'] = pctcorr
 
+def getStudentResults(question):
+        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+
+        q = db( (db.useinfo.div_id == question) &
+                (db.useinfo.course_id == course.course_name) &
+                (db.courses.course_name == course.course_name) &
+                (db.useinfo.timestamp >= db.courses.term_start_date) )
+
+        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+
+        resultList = []
+        if len(res) > 0:
+            currentSid = res[0].sid
+            currentAnswers = []
+
+            for row in res:
+                answer = row.act.split(':')[1]
+
+                if row.sid == currentSid:
+                    currentAnswers.append(answer)
+                else:
+                    currentAnswers.sort()
+                    resultList.append((currentSid, currentAnswers))
+                    currentAnswers = [row.act.split(':')[1]]
+
+                    currentSid = row.sid
+
+            currentAnswers.sort()
+            resultList.append((currentSid, currentAnswers))
+
+        return resultList
 
 def getaggregateresults():
     course = request.vars.course
@@ -293,7 +324,11 @@ def getaggregateresults():
     response.headers['content-type'] = 'application/json'
 
     count = db.useinfo.id.count()
-    result = db((db.useinfo.div_id == question) & (db.useinfo.course_id == course)).select(db.useinfo.act,count,groupby=db.useinfo.act)
+    result = db((db.useinfo.div_id == question) &
+                (db.useinfo.course_id == course) &
+                (db.courses.course_name == course) &
+                (db.useinfo.timestamp >= db.courses.term_start_date)
+               ).select(db.useinfo.act,count,groupby=db.useinfo.act)
 
     tdata = {}
     tot = 0
@@ -327,29 +362,7 @@ def getaggregateresults():
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
     if auth.user and auth.has_membership('instructor',auth.user.id):
-        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-        q = db( (db.useinfo.div_id == question) & (db.useinfo.course_id == course.course_name) )
-        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
-
-        currentSid = res[0].sid
-        currentAnswers = []
-        resultList = []
-
-        for row in res:
-            answer = row.act.split(':')[1]
-
-            if row.sid == currentSid:
-                currentAnswers.append(answer)
-            else:
-                currentAnswers.sort()
-                resultList.append((currentSid, currentAnswers))
-                currentAnswers = [row.act.split(':')[1]]
-
-                currentSid = row.sid
-
-        currentAnswers.sort()
-        resultList.append((currentSid, currentAnswers))
-
+        resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 
     return json.dumps([returnDict])
@@ -387,7 +400,7 @@ def gettop10Answers():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
-    query = '''select act, count(*) from useinfo where event = 'fillb' and div_id = '%s' and course_id = '%s' group by act order by count(*) desc limit 10''' % (question,course)
+    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
     try:
         rows = db.executesql(query)    
     except:
@@ -398,6 +411,10 @@ def gettop10Answers():
     miscdata = {}
     miscdata['course'] = course
     getCorrectStats(miscdata,'fillb')
+
+    if auth.user and auth.has_membership('instructor',auth.user.id):
+        resultList = getStudentResults(question)
+        miscdata['reslist'] = resultList
 
     return json.dumps([res,miscdata])
 
