@@ -297,6 +297,14 @@ jQueryUI tab plugin styles to do it. */
     height: auto !important;
     max-width: 350px;
     max-height: 400px;
+    /* need so that modal is above Bootstrap navbar (z-index 1030) */
+    z-index: 1052 !important;
+}
+
+.simplemodal-overlay {
+    /* needed so that the overlay overlays the Bootstrap navbar
+    which has a z-index of 1030 */
+    z-index: 1051 !important;
 }
 
 #scratch-ac-modal {
