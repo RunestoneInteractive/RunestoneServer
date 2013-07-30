@@ -258,11 +258,19 @@ div.flash {
 
 .progress {
     width: 350px;
+    height: 25px;
     margin-top: -20px;
 }
 
 .progress .progress-bar {
-    color: #000000;
+    height: 30px;
+    color: #333;
+}
+
+.poll-text {
+    line-height: 22px;
+    display: inline-block;
+    vertical-align: text-bottom;
 }
 
 /* selectors beginning with #exercises are to provide some nice styling

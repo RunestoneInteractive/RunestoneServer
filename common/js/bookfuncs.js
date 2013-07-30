@@ -314,7 +314,7 @@ function loadEditor(data, status, whatever) {
 function disableAcOpt() {
     $jqTheme('button.ac_opt').each ( function(index, value) {
         value.className = value.className + ' disabled';
-        $jqTheme(value).attr('onclick', 'return false;')
+        $jqTheme(value).attr('onclick', 'return false;');
         $jqTheme(value).attr('data-toggle', 'tooltip');
         if ($jqTheme(value).text() == 'Save') {
             $jqTheme(value).attr('title', 'Register or log in to save your code');
@@ -323,8 +323,9 @@ function disableAcOpt() {
         }
         $jqTheme(value).tooltip( {
             'selector': '',
-            'delay': { show: 300, hide: 50 },
-            'placement': 'bottom'
+            'delay': { show: true, hide: 50 },
+            'placement': 'bottom',
+            'animation': true
         });
     });
 }
