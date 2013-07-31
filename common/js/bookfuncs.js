@@ -498,46 +498,52 @@ function instructorMchoiceModal(data) {
     // data.reslist -- student and their answers
     // data.answerDict  -- answers and count
     // data.correct - correct answer
-    var res = '<table><tr><th>Student</th><th>Answer(s)</th></tr>'
+    var res = '<table><tr><th>Student</th><th>Answer(s)</th></tr>';
     for (var i in data) {
         res += '<tr><td>'+ data[i][0]+'</td><td>'+data[i][1]+'</td></tr>';
     }
-    res += '</table>'
+    res += '</table>';
     return res;
 }
 
-
 function compareModal(data, status, whatever) {
-    var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>';
-    res += '<tr><th>Answer</th><th>Percent</th></tr>';
-    var datadict = eval(data)[0]
+    var datadict = eval(data)[0];
     var answers = datadict.answerDict;
-    var misc = datadict.misc
-    var theClass = ""
-    var kl = Object.keys(answers).sort()
+    var misc = datadict.misc;
+    var kl = Object.keys(answers).sort();
+
+    var body = '<table>';
+    body += '<tr><th>Answer</th><th>Percent</th></tr>';
+
     for (var k in kl) {
-        if (kl[k] == misc.correct) {
-            theClass = 'correct'
-        } else {
-            theClass = 'incorrect'
-        }
-        res += '<tr><td class="' + theClass + '">' + kl[k] + '</td><td class="' + theClass + '">' 
-            + answers[kl[k]] + '%</td></tr>'
+        body += '<tr><td>' + kl[k] + '</td><td>' + answers[kl[k]] + '%</td></tr>';
     }
-    res += '</table>'
+    body += '</table>';
+
     if (misc['yourpct'] !== 'unavailable') {
-        res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
+        body += '<br /><p>You have ' + misc['yourpct'] + '% correct for all questions</p>';
     }
 
     if (datadict.reslist !== undefined) {
         res += instructorMchoiceModal(datadict.reslist);
     }
 
+    var html = '<div class="modal fade">' +
+        '  <div class="modal-dialog compare-modal">' +
+        '    <div class="modal-content">' +
+        '      <div class="modal-header">' +
+        '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+        '        <h4 class="modal-title">Distribution of Answers</h4>' +
+        '      </div>' +
+        '      <div class="modal-body">' +
+                 body +
+        '      </div>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>';
 
-    res +='</div>'
-
-
-    $.modal(res)
+    el = $(html);
+    el.modal();
 }
 
 function compareAnswers(div_id) {
@@ -552,6 +558,7 @@ function compareFITB(data, status, whatever) {
     var misc = eval(data)[1];
 
     var body = '<table>';
+    body += '<tr><th>Answer</th><th>Count</th></tr>';
 
     for (var row in answers) {
         body += '<tr><td>' + answers[row].answer + '</td><td>' + answers[row].count + ' times</td></tr>';
@@ -573,7 +580,7 @@ function compareFITB(data, status, whatever) {
                '      </div>' +
                '    </div>' +
                '  </div>' +
-               '</div>'
+               '</div>';
     el = $(html);
     el.modal();
 }
