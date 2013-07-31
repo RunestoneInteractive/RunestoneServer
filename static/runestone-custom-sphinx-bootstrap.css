@@ -29,7 +29,7 @@ body {
 }
 
 pre {
-    margin: 1em 0px;
+    margin: 1em 0;
 }
 
 h5 {
@@ -38,7 +38,7 @@ h5 {
 }
 
 .CodeMirror {
-    margin: 0px 0px 1em 0px;
+    margin: 0 0 1em 0;
     background-color: #fff;
 }
 
@@ -145,10 +145,6 @@ the colors for the other .alert classes are fine */
     border-color: #bce8f1;
 }
 
-.correct {
-    color: #84b8d9;    
-}
-
 .social-menu {
     width: 275px;
     padding: 10px 10px 15px 20px;
@@ -161,6 +157,15 @@ the colors for the other .alert classes are fine */
 .twitter-follow-button {
     margin-top: 10px;
 }
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
+
 
 .navbar .divider-vertical {
     height: 50px;
@@ -191,7 +196,7 @@ div.flash {
     top: 55px;
     right: 45px;
     opacity: 0.95;
-    margin: 0px 0px 10px 10px;
+    margin: 0 0 10px 10px;
     vertical-align: middle;
     cursor: pointer;
     color: #fff;
@@ -210,6 +215,7 @@ div.flash {
     z-index: 2000;
 }
 
+/* Styles for the login, registration, and Janrain forms */
 #web2py_user_form {
     margin-top: 10px;
 }
@@ -242,17 +248,15 @@ div.flash {
 #auth_user_remember {
     margin-top: -20px;
 }
+/* End login, registration, Janrain styles */
 
 .fb_iframe_widget span, .fb_iframe_widget iframe {
     height: 20px !important;
     width: 82px !important;
 }
 
-.compare-modal table {
-    border-collapse: separate;
-    border-spacing: 10px 5px;
-}
 
+/* Styles for poll directive */
 .poll-question {
     padding-bottom: 10px;
 }
@@ -277,6 +281,7 @@ div.flash {
     display: inline-block;
     vertical-align: text-bottom;
 }
+/* End poll directive styles */
 
 /* selectors beginning with #exercises are to provide some nice styling
 for the end-of-chapter exercies sections, overriding lots of the
@@ -312,25 +317,26 @@ jQueryUI tab plugin styles to do it. */
 #exercises > ol > li .ui-state-default.ui-tabs-active {
     background: #faf7df;
 }
+/* End chapter exercises styles */
 
-.simplemodal-container {
-    width: auto !important;
-    height: auto !important;
-    max-width: 350px;
-    max-height: 400px;
-    /* need so that modal is above Bootstrap navbar (z-index 1030) */
-    z-index: 1052 !important;
-}
-
-.simplemodal-overlay {
-    /* needed so that the overlay overlays the Bootstrap navbar
-    which has a z-index of 1030 */
-    z-index: 1051 !important;
-}
-
+/* Modal dialog styles (scratch activecode, compare me, etc) */
 .scratch-ac-modal {
     width: 800px;
 }
+
+.compare-modal {
+    width: 350px;
+}
+
+.compare-modal table {
+    border-collapse: separate;
+    border-spacing: 10px 5px;
+}
+
+.tracecheck, .close-modal {
+    margin: 10px 8px 12px 0;
+}
+/* End modal dialog styles */
 
 .footnote.table {
     width: auto;
@@ -346,17 +352,6 @@ jQueryUI tab plugin styles to do it. */
     background-color: white;
 }
 
-.gittip {
-    margin-top: 8px;
-}
-
-.gittip-button {
-    margin-bottom: -6px;
-}
-
-.tracecheck, .close-modal {
-    margin: 10px 8px 12px 0;
-}
 
 .video-play-overlay {
     position: absolute;
