@@ -1,4 +1,4 @@
-var createHTML_MCMFRandom = function (divid, qnum, qtext, answerString, feedString, corrAnswer) {
+/*var createHTML_MCMFRandom = function (divid, qnum, qtext, answerString, feedString, corrAnswer) {
     var j;
     var ar = new Array();
     var fr = new Array();
@@ -49,7 +49,7 @@ var createHTML_MCMFRandom = function (divid, qnum, qtext, answerString, feedStri
 
     var index = ansArray.indexOf(corrAnswer);
     add_button(divid, index, feedArray);
-};
+};*/
 
 var add_button = function (divid, expected, feedArray) {
     var bdiv = divid + "_bt";
@@ -209,6 +209,8 @@ var createHTML_MCMFRandom = function (divid, answerString, feedString, corrAnswe
 
     var index = ansArray.indexOf(corrAnswer);
     add_button(divid, index, feedArray);
+
+    return true;
 };
 
 var checkMCMFRandom = function (divid, expected, feed) {
