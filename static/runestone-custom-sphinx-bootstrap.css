@@ -254,7 +254,6 @@ div.flash {
 }
 /* End login, registration, Janrain styles */
 
-
 /* Styles for poll directive */
 .poll-question {
     padding-bottom: 10px;
@@ -343,7 +342,6 @@ jQueryUI tab plugin styles to do it. */
 .codelens-modal > .modal-dialog {
     width: 400px;
 }
-
 /* End modal dialog styles */
 
 .footnote.table {

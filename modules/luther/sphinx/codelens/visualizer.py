@@ -54,6 +54,7 @@ QUESTION = '''
         <button id="%(divid)s_tracecheck" class='btn btn-default btn-small tracecheck' onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">
           Check Me
         </button>
+        <button type="button" class="btn btn-default btn-small" data-dismiss="modal">Continue</button>
         <br />
         <p id="%(divid)s_feedbacktext" class="feedbacktext alert"></p>
       </div>
