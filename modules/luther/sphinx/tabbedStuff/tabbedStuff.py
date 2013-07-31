@@ -27,6 +27,8 @@ def setup(app):
     app.add_node(TabNode, html=(visit_tab_node, depart_tab_node))
     app.add_node(TabbedStuffNode, html=(visit_tabbedstuff_node, depart_tabbedstuff_node))
 
+    app.add_stylesheet('tabbedstuff.css')
+
 
 BEGIN = """<div id='%(divid)s' class='alert'>"""
 
