@@ -6,11 +6,15 @@ body {
 }
 
 /* Remove top padding when top navbar goes collapsed in narrow viewports */
-/*@media (max-width: 979px) {
+@media (max-width: 768px) {
     body {
         padding-top: 0;
     }
-}*/
+
+    .navbar-fixed-top {
+        position: relative;
+    }
+}
 
 .navbar-brand {
     font-size: 18px;
@@ -171,11 +175,14 @@ the colors for the other .alert classes are fine */
     margin-bottom: -6px;
 }
 
-.navbar .divider-vertical {
-    height: 50px;
-    margin: 0 3px;
-    border-right: 1px solid #e8e8e8;
-    border-left: 1px solid #f2f2f2;
+/* when navbar is collapsed we don't want any vertical dividers taking up space */
+@media (min-width: 768px) {
+    .navbar .divider-vertical {
+        height: 50px;
+        margin: 0 3px;
+        border-right: 1px solid #e8e8e8;
+        border-left: 1px solid #f2f2f2;
+    }
 }
 
 .dropdown-menu > li > span  {
