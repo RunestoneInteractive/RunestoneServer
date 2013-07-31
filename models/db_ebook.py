@@ -56,3 +56,9 @@ db.define_table('user_state',
   Field('last_page_accessed_on','datetime'),
   migrate=settings.migrate
 )
+
+# Table to match instructor(s) to their course(s)
+db.define_table('course_instructor',
+    Field('course', db.courses ),
+    Field('instructor', db.auth_user)
+)
