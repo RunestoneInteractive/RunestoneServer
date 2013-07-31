@@ -61,6 +61,7 @@ def build():
 
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
+        db.course_instructor.insert(instructor=auth.user.id, course=cid)
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
 
