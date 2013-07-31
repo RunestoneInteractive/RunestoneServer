@@ -508,8 +508,8 @@ function instructorMchoiceModal(data) {
 
 
 function compareModal(data, status, whatever) {
-    var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>'
-    res += '<tr><th>Answer</th><th>Percent</th></tr>'
+    var res = '<div class="compare-modal">\n<h2>Distribution of Answers</h2><table>';
+    res += '<tr><th>Answer</th><th>Percent</th></tr>';
     var datadict = eval(data)[0]
     var answers = datadict.answerDict;
     var misc = datadict.misc
@@ -541,39 +541,47 @@ function compareModal(data, status, whatever) {
 }
 
 function compareAnswers(div_id) {
-    data = {}
-    data.div_id = div_id
-    data.course = eBookConfig.course
+    data = {};
+    data.div_id = div_id;
+    data.course = eBookConfig.course;
     jQuery.get(eBookConfig.ajaxURL+'getaggregateresults',data, compareModal);
 }
 
 function compareFITB(data, status, whatever) {
-    var res = '<div class="compare-modal">\n<h2>Top Answers</h2><table>'
-    var answers = eval(data)[0]
-    var misc = eval(data)[1]
-    var theClass = ""
+    var answers = eval(data)[0];
+    var misc = eval(data)[1];
+
+    var body = '<table>';
 
     for (var row in answers) {
-        theClass = "incorrect"
-        res += '<tr><td class="' + theClass + '">' + answers[row].answer + '</td><td class="' + theClass + '">' 
-            + answers[row].count + ' times</td></tr>'
+        body += '<tr><td>' + answers[row].answer + '</td><td>' + answers[row].count + ' times</td></tr>';
     }
-    res += '</table>'
+    body += '</table>';
     if (misc['yourpct'] !== 'unavailable') {
-        res += '<p>You have ' + misc['yourpct'] + '% correct for all questions</p>'
+        body += '<br /><p>You have ' + misc['yourpct'] + '% correct for all questions</p>';
     }
 
-    res +='</div>'
-
-
-    $.modal(res)
-
+    var html = '<div class="modal fade">' +
+               '  <div class="modal-dialog compare-modal">' +
+               '    <div class="modal-content">' +
+               '      <div class="modal-header">' +
+               '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+               '        <h4 class="modal-title">Top Answers</h4>' +
+               '      </div>' +
+               '      <div class="modal-body">' +
+                        body +
+               '      </div>' +
+               '    </div>' +
+               '  </div>' +
+               '</div>'
+    el = $(html);
+    el.modal();
 }
 
 function compareFITBAnswers(div_id) {
-    data = {}
-    data.div_id = div_id
-    data.course = eBookConfig.course
+    data = {};
+    data.div_id = div_id;
+    data.course = eBookConfig.course;
     jQuery.get(eBookConfig.ajaxURL+'gettop10Answers',data, compareFITB);
 }
 
