@@ -98,7 +98,40 @@ h5 {
     background-color: #fff;
 }
 
-/* override jQueryUI styles (to match bootstrap styles) */
+/* tabbed exhibit styles */
+.tab-pane {
+    padding: 20px 15px 10px 15px;
+}
+
+.nav.nav-tabs {
+    padding-top: 6px;
+    background-color: #CFCCB8;
+    border-color: #fbeed5;
+    border-radius: 4px;
+}
+
+.nav.nav-tabs li {
+    margin-right: 1px;
+    margin-left: 6px;
+}
+
+.nav.nav-tabs li > a {
+    background-color: #E6E2CC;
+    border-bottom-color: #fcf8e3;
+    color: #555;
+}
+
+.nav-tabs > li > a:hover {
+    border-color: #b4b19d;
+    border-bottom-width:0;
+}
+
+.nav.nav-tabs li.active > a {
+    background-color: #faf7df;
+}
+/* end tabbed exhibit styles */
+
+/* override jQueryUI styles (to match bootstrap styles)
 .ui-widget {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
@@ -107,7 +140,7 @@ h5 {
     color: #333;
 }
 
-/* needed to override the jQueryUI style */
+/* needed to override the jQueryUI style
 .ui-widget p {
     font-size: 14px;
 }
@@ -115,7 +148,7 @@ h5 {
 .ui-tabs {
     margin-bottom: 30px;
     margin-top: 8px;
-}
+}*/
 
 button.btn.btn-small, 
 input[type="submit"].btn.btn-small, 
@@ -262,39 +295,18 @@ div.flash {
 }
 /* End login, registration, Janrain styles */
 
-/* selectors beginning with #exercises are to provide some nice styling
-for the end-of-chapter exercies sections, overriding lots of the
-jQueryUI tab plugin styles to do it. */
-#exercises > ol > li:nth-child(even) {
-    padding: 1em 1.4em;
+/* end-of-chapter exercises styles */
+#exercises > ol > li {
+    margin-bottom: 30px;
 }
 
-#exercises > ol > li {
+#exercises > ol > li:nth-child(even) {
+    padding: 1.2em 1.4em;
     background: #faf7df;
     border: 1px solid #fbeed5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    margin-bottom: 30px;
-}
-
-#exercises > ol > li > .ui-tabs {
-    border: none;
-    background: #faf7df;
-    margin: 0;
-}
-
-#exercises > ol > li .ui-tabs-nav {
-    background: #CFCCB8;
-    border-color: #fbeed5;
-}
-
-#exercises > ol > li .ui-state-default {
-    background: #E6E2CC;
-}
-
-#exercises > ol > li .ui-state-default.ui-tabs-active {
-    background: #faf7df;
 }
 /* End chapter exercises styles */
 
@@ -338,7 +350,6 @@ jQueryUI tab plugin styles to do it. */
 .ac-canvas {
     background-color: white;
 }
-
 
 .video-play-overlay {
     position: absolute;
