@@ -39,7 +39,7 @@ h5 {
 .navbar-brand {
     font-size: 18px;
     margin-left: 0;
-    padding-left:10px !important;
+    padding-left: 10px !important;
     max-width: none;
 }
 
@@ -49,7 +49,7 @@ h5 {
     background-size: 40px 40px !important;
     width: 40px;
     height: 40px;
-    margin-top:4px;
+    margin-top: 4px;
 }
 
 .social-menu {
@@ -78,7 +78,7 @@ h5 {
     margin-bottom: -6px;
 }
 
-.dropdown-menu > li > span  {
+.dropdown-menu > li > span {
     display: block;
     padding: 3px 20px;
     clear: both;
@@ -89,8 +89,9 @@ h5 {
 }
 
 .loggedinuser {
-    font-weight:bold;
+    font-weight: bold;
 }
+
 /* end navbar and menu related styles */
 
 .CodeMirror {
@@ -99,10 +100,10 @@ h5 {
 }
 
 button.btn.btn-small,
-input[type="submit"].btn.btn-small, 
+input[type="submit"].btn.btn-small,
 input[type="button"].btn.btn-small {
     font-size: 1em;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .btn {
@@ -137,7 +138,7 @@ h2 {
 
 /* the default Bootstrap color for .alert is hard to read, but
 the colors for the other .alert classes are fine */
-.alert:not(.alert-danger):not(.alert-success):not(.alert-info)  {
+.alert:not(.alert-danger):not(.alert-success):not(.alert-info) {
     color: #333;
 }
 
@@ -160,7 +161,7 @@ the colors for the other .alert classes are fine */
     padding: 8px 35px 8px 14px !important;
     margin-bottom: 20px !important;
     margin-top: 20px !important;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     background-color: #fcf8e3;
     border: 1px solid #fbeed5;
     -webkit-border-radius: 4px;
@@ -181,6 +182,7 @@ the colors for the other .alert classes are fine */
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
+
 /* from web2py.css */
 div.flash {
     font-weight: bold;
@@ -198,10 +200,10 @@ div.flash {
     border-radius: 8px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
-    background-image: -webkit-linear-gradient(top,#222,#000);
-    background-image: -o-linear-gradient(top,#222,#000);
+    background-image: -webkit-linear-gradient(top, #222, #000);
+    background-image: -o-linear-gradient(top, #222, #000);
     background-image: -moz-linear-gradient(90deg, #222, #000);
-    background-image: linear-gradient(top,#222,#000);
+    background-image: linear-gradient(top, #222, #000);
     background-repeat: repeat-x;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -228,19 +230,20 @@ div.flash {
 }
 
 #auth-actions {
-    margin-top:50px;
+    margin-top: 50px;
 }
 
 #sign_in_text td {
     font-size: 17px;
     color: #333;
-    font-family: 'lucida grande',Verdana,sans-serif;
+    font-family: 'lucida grande', Verdana, sans-serif;
     padding-bottom: 13px;
 }
 
 #auth_user_remember {
     margin-top: -20px;
 }
+
 /* End login, registration, Janrain styles */
 
 /* end-of-chapter exercises styles */
@@ -256,6 +259,7 @@ div.flash {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
 /* End chapter exercises styles */
 
 /* Modal dialog styles (scratch activecode, compare me, etc) */
@@ -283,11 +287,12 @@ div.flash {
 .codelens-modal > .modal-dialog {
     width: 400px;
 }
+
 /* End modal dialog styles */
 
 .footnote.table {
     width: auto;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 .footnote.table td.label {
