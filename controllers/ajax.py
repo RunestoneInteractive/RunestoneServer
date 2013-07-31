@@ -94,14 +94,14 @@ def saveprog():
 
 
 def getprog():
-    '''
+    """
     return the program code for a particular acid
     :Parameters:
         - `acid`: id of the active code block
         - `user`: optional identifier for the owner of the code
     :Return:
         - json object containing the source text
-    '''
+    """
     codetbl = db.code
     acid = request.vars.acid
     sid = request.vars.sid
@@ -146,6 +146,7 @@ def getuser():
     logging.debug("returning login info: %s",res)
     return json.dumps([res])
 
+
 def getnumonline():
     response.headers['content-type'] = 'application/json'
 
@@ -157,6 +158,7 @@ def getnumonline():
 
     res = {'online':rows[0][0]}
     return json.dumps([res])
+
 
 def getnumusers():
     response.headers['content-type'] = 'application/json'
@@ -172,7 +174,7 @@ def getnumusers():
 #
 def savehighlight():
     parentClass = request.vars.parentClass
-    range = request.vars.range
+    hrange = request.vars.range
     method = request.vars.method
     page = request.vars.page
     pageSection = request.vars.pageSection
@@ -183,11 +185,12 @@ def savehighlight():
                    user_id=auth.user.id,
                    course_id=course,
                    parent_class=parentClass,
-                   range=range,
+                   range=hrange,
                    chapter_url=page,
                    sub_chapter_url=pageSection,
                    method = method)
     return str(insert_id)
+
 
 def deletehighlight():
     uniqueId = request.vars.uniqueId
@@ -195,15 +198,16 @@ def deletehighlight():
     print 'deleting highlight'
     db(db.user_highlights.id == uniqueId).update(is_active = 0)
 
+
 def gethighlights():
-    '''
-    return all the highlights for a given user, on a given page 
+    """
+    return all the highlights for a given user, on a given page
     :Parameters:
         - `page`: the page to search the highlights on
         - `course`: the course to search the highlights in
     :Return:
         - json object containing a list of matching highlights
-    '''
+    """
     page = request.vars.page
     course = request.vars.course
 
@@ -219,6 +223,7 @@ def gethighlights():
         rowarray_list.append(res)
     return json.dumps(rowarray_list)
 
+
 #
 #  Ajax Handlers to update and retreive the last position of the user in the course
 #
@@ -233,6 +238,7 @@ def updatelastpage():
     res = db((db.user_state.user_id == auth.user.id) & (db.user_state.course_id == course))
     res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash, last_page_chapter = lastPageChapter, last_page_subchapter = lastPageSubchapter, last_page_scroll_location = lastPageScrollLocation, last_page_accessed_on = datetime.datetime.now())
 
+
 def getlastpage():
     course = request.vars.course
 
@@ -240,12 +246,11 @@ def getlastpage():
     rowarray_list = []
     if result:
         for row in result:
-            res = {}
-            res['lastPageUrl'] = row.last_page_url
-            res['lastPageHash'] = row.last_page_hash
-            res['lastPageChapter'] = row.last_page_chapter
-            res['lastPageSubchapter'] = row.last_page_subchapter
-            res['lastPageScrollLocation'] = row.last_page_scroll_location
+            res = {'lastPageUrl': row.last_page_url,
+                   'lastPageHash': row.last_page_hash,
+                   'lastPageChapter': row.last_page_chapter,
+                   'lastPageSubchapter': row.last_page_subchapter,
+                   'lastPageScrollLocation': row.last_page_scroll_location}
             rowarray_list.append(res)
         return json.dumps(rowarray_list)
     else:
@@ -285,6 +290,20 @@ def getCorrectStats(miscdata,event):
 
     miscdata['yourpct'] = pctcorr
 
+
+def verifyInstructorStatus(course, instructor):
+    """
+    Make sure that the instructor specified is actually an instructor for the
+    given course.
+    """
+    if type(course) == str:
+        course = db(db.courses.course_name == course).select(db.courses.id).first()
+
+    return db((db.course_instructor.course == course) &
+             (db.course_instructor.instructor == instructor)
+            ).count() > 0
+
+
 def getStudentResults(question):
         course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
@@ -317,6 +336,7 @@ def getStudentResults(question):
 
         return resultList
 
+
 def getaggregateresults():
     course = request.vars.course
     question = request.vars.div_id
@@ -328,7 +348,7 @@ def getaggregateresults():
                 (db.useinfo.course_id == course) &
                 (db.courses.course_name == course) &
                 (db.useinfo.timestamp >= db.courses.term_start_date)
-               ).select(db.useinfo.act,count,groupby=db.useinfo.act)
+                ).select(db.useinfo.act, count, groupby=db.useinfo.act)
 
     tdata = {}
     tot = 0
@@ -348,7 +368,7 @@ def getaggregateresults():
                 correct = answer
             count = int(tdata[key])
             if answer in rdata:
-                count += rdata[answer]/100.0 * tot
+                count += rdata[answer] / 100.0 * tot
             pct = round(count / tot * 100.0)
 
             if answer != "undefined" and answer != "":
@@ -357,15 +377,16 @@ def getaggregateresults():
     miscdata['correct'] = correct
     miscdata['course'] = course
 
-    getCorrectStats(miscdata,'mChoice')
+    getCorrectStats(miscdata, 'mChoice')
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and auth.has_membership('instructor',auth.user.id):
+    if auth.user and auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 
     return json.dumps([returnDict])
+
 
 def getpollresults():
     course = request.vars.course
@@ -373,8 +394,9 @@ def getpollresults():
 
     response.headers['content-type'] = 'application/json'
 
-    query = ''' select act from useinfo where event = 'poll' and div_id = '%s' and course_id = '%s'
-                ''' % (div_id, course)
+    query = '''select act from useinfo
+               where event = 'poll' and div_id = '%s' and course_id = '%s'
+               ''' % (div_id, course)
     rows = db.executesql(query)
 
     result_list = []
@@ -394,22 +416,23 @@ def getpollresults():
 
     return json.dumps([len(result_list), opt_list, count_list, div_id])
 
+
 def gettop10Answers():
     course = request.vars.course
     question = request.vars.div_id
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
+    rows = []
 
     query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
     try:
-        rows = db.executesql(query)    
+        rows = db.executesql(query)
+        res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')],
+                'count':row[1]} for row in rows ]
     except:
         res = 'error in query'
 
-    res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')], 'count':row[1]} for row in rows ]
-
-    miscdata = {}
-    miscdata['course'] = course
+    miscdata = {'course': course}
     getCorrectStats(miscdata,'fillb')
 
     if auth.user and auth.has_membership('instructor',auth.user.id):
@@ -427,11 +450,11 @@ def getSphinxBuildStatus():
 
     if st == 'COMPLETED':
         status = 'true'
-        return(dict(status=status, course_url=course_url))
+        return dict(status=status, course_url=course_url)
     elif st == 'RUNNING' or st == 'QUEUED' or st == 'ASSIGNED':
         status = 'false'
-        return(dict(status=status, course_url=course_url))
+        return dict(status=status, course_url=course_url)
     else: # task failed
         status = 'failed'
-        return(dict(status=status))
+        return dict(status=status)
 
