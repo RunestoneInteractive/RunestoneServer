@@ -338,7 +338,7 @@ Tabbed Question
 Any of the existing question types can be placed in a tabbed exhibit-style question. This may be used to provide an possible answer or a Disqus discussion box specifically related to a certain question.
 
 .. tabbed:: exercise1
-    
+
     .. tab:: Question 1
         
         Write a program that prints "Hello, world".

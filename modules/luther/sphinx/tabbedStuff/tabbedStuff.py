@@ -90,7 +90,6 @@ def visit_tab_node(self, node):
 def depart_tab_node(self,node):
     self.body.append(TABDIV_END)
 
-
 class TabbedStuffNode(nodes.General, nodes.Element):
     '''A TabbedStuffNode contains one or more TabNodes'''
     def __init__(self,content):
@@ -125,21 +124,7 @@ def visit_tabbedstuff_node(self, node):
 def depart_tabbedstuff_node(self,node):
     divid = node.divid
 
-    #disabled_tabs = node.tabbed_stuff_components['disabledtabs']
-
-    # this is kind of silly; the jQuery tab plugin starts indexing at 0, but there is only a 
-    # positive_int_list directives option type. So, we subtract 1 from each index.
-    #disabled_tabs = [x - 1 for x in disabled_tabs]
-
-    # check to make sure that each of the tabs marked as disabled actually exist...
-    #tabs = node.traverse(include_self=False, descend=True, condition=TabNode)
-    #for i in disabled_tabs:
-    #    try:
-    #        temp = tabs[i]
-    #    except IndexError:
-    #        raise IndexError('Attempt to disable non-existent tab ' + str(i+1))
-
-    # close the tab plugin div and init the jQuery plugin
+    # close the tab plugin div and init the Bootstrap tabs
     res = TABCONTENT_END
     res += END
 
@@ -175,15 +160,12 @@ class TabbedStuffDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = True
-    option_spec = {"disabledtabs":directives.positive_int_list}
 
     def run(self):
         # Raise an error if the directive does not have contents.
         self.assert_has_content()
 
         self.options['divid'] = self.arguments[0]
-        if 'disabledtabs' not in self.options:
-            self.options['disabledtabs'] = []
 
         # Create the node, to be populated by "nested_parse".
         tabbedstuff_node = TabbedStuffNode(self.options)
