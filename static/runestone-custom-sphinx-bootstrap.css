@@ -154,6 +154,11 @@ the colors for the other .alert classes are fine */
     margin-top: 7px;
 }
 
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
+}
+
 .twitter-follow-button {
     margin-top: 10px;
 }
@@ -165,7 +170,6 @@ the colors for the other .alert classes are fine */
 .gittip-button {
     margin-bottom: -6px;
 }
-
 
 .navbar .divider-vertical {
     height: 50px;
@@ -250,11 +254,6 @@ div.flash {
 }
 /* End login, registration, Janrain styles */
 
-.fb_iframe_widget span, .fb_iframe_widget iframe {
-    height: 20px !important;
-    width: 82px !important;
-}
-
 
 /* Styles for poll directive */
 .poll-question {
@@ -333,9 +332,18 @@ jQueryUI tab plugin styles to do it. */
     border-spacing: 10px 5px;
 }
 
-.tracecheck, .close-modal {
-    margin: 10px 8px 12px 0;
+.codelens-modal {
+    /* we set some custom position styles so that the modal doesn't obscure the codelens visualizer */
+    top: 20%;
+    right: 20%;
+    left: auto;
+    bottom: auto;
 }
+
+.codelens-modal > .modal-dialog {
+    width: 400px;
+}
+
 /* End modal dialog styles */
 
 .footnote.table {
