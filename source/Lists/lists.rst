@@ -49,7 +49,7 @@ another list.
 
 A list within another list is said to be **nested** and the inner list is often called a **sublist**.
 Finally, there is a special list that contains no elements. It is called the
-empty list, and is denoted ``[]``.
+empty list and is denoted ``[]``.
 
 As you would expect, we can also assign list values to variables and pass lists as parameters to functions.  
 
@@ -264,7 +264,9 @@ Similarly, the ``*`` operator repeats the items in a list a given number of time
 
 It is important to see that these operators create new lists from the elements of the operand lists.  If you concatenate a list with 2 items and a list with 4 items, you will get a new list with 6 items (not a list with two sublists).  Similarly, repetition of a list of 2 items 4 times will give a list with 8 items.
 
-One way for us to make this more clear is to run a part of this example in codelens.  As you step thru the code, you will see the variables being created and the lists that they refer to.  Pay particular attention to the `id` tag that is shown after the data type descriptor (``list (id = 12)``).  The **id** in Python corresponds to a unique identifier for that particular object.  You can tell if you have different objects by comparing the ids.
+One way for us to make this more clear is to run a part of this example in codelens.  As you step thru the code, you will see the variables being created and the lists that they refer to.  Pay particular attention to the fact that when ``newlist`` is created by the statement ``newlist = fruit + numlist``, it refers to a completely new list formed by making copies of the items from ``fruit`` and ``numlist``.  You can see this very clearly in the codelens object diagram.  The objects are different.
+
+
 
 .. codelens:: chp09_concatid
 
@@ -277,9 +279,9 @@ One way for us to make this more clear is to run a part of this example in codel
 
 
 
-The statement ``newlist = fruit + numlist`` creates a new list object with the contents of the list ``fruit`` followed by the contents of the list ``numlist``. We can see it is a new list by looking at the ids.  The id of ``newlist`` is not the same as the others.  It is extremely important to know whether you are creating a new list or just modifying an existing list.  Again, the ids can help.
 
-In Python, there is a built-in function that can be called on any object to return its unique id.  The function is appropriately called ``id`` and takes a single parameter, the object that you are interested in knowing about.  You can see in the example below that a real id is usually a very large integer value (corresponding to an address in memory).
+
+In Python, every object has a unique identification tab.  Likewise, there is a built-in function that can be called on any object to return its unique id.  The function is appropriately called ``id`` and takes a single parameter, the object that you are interested in knowing about.  You can see in the example below that a real id is usually a very large integer value (corresponding to an address in memory).
 
 .. sourcecode:: python
 
@@ -334,7 +336,10 @@ In Python, there is a built-in function that can be called on any object to retu
 List Slices
 -----------
 
-The slice operation we saw with strings also work on lists.  Remember that the first index is the starting point for the slice and the second number is one index past the end of the slice (up to but not including that element).
+The slice operation we saw with strings also work on lists.  Remember that the first index is the starting point for the slice and the second number is one index past the end of the slice (up to but not including that element).  Recall also
+that if you omit the first index (before the colon), the slice starts at the
+beginning of the sequence. If you omit the second index, the slice goes to the
+end of the sequence.
 
 .. activecode:: chp09_6
     
@@ -450,7 +455,7 @@ desired location.
 List Deletion
 -------------
 
-Using slices to delete list elements can be awkward, and therefore error-prone.
+Using slices to delete list elements can be awkward and therefore error-prone.
 Python provides an alternative that is more readable.
 The ``del`` statement removes an element from a list by using its position.
 
@@ -469,6 +474,19 @@ error if the index is out of range.
 In addition, you can use a slice as an index for ``del``.
 As usual, slices select all the elements up to, but not including, the second
 index.
+
+
+Scratchpad
+----------
+
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_09_01
+
+
+
 
 .. index:: is operator, objects and values
 
@@ -566,7 +584,9 @@ In this case, the reference diagram looks like this:
    :alt: State snapshot for multiple references (aliases) to a list 
 
 Because the same list has two different names, ``a`` and ``b``, we say that it
-is **aliased**. Changes made with one alias affect the other.  In the codelens example below, the `ids` of ``a`` and ``b`` become the same after executing the assignment statement ``b = a``.
+is **aliased**. Changes made with one alias affect the other.  In the codelens example below, you can see that ``a`` and ``b`` refer
+to the same list after executing the assignment statement ``b = a``.
+
 
 .. codelens:: chp09_is3
     :showoutput:
@@ -639,7 +659,7 @@ consist of the whole list.
     print(a)
     print(b)
 
-Now we are free to make changes to ``b`` without worrying about ``a``.  Note also that the `id` of b is different from the ``id`` of a.  It is an entirely different list.
+Now we are free to make changes to ``b`` without worrying about ``a``.  Again, we can clearly see in codelens that ``a`` and ``b`` are entirely different list objects.
 
 
 Repetition and References
@@ -752,6 +772,18 @@ Here is the same example in codelens.  Step through the code until paying partic
      print(blist)
 
 
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_09_02
+
+
+
+
 
 .. index:: list; append
 
@@ -796,7 +828,12 @@ There are two ways to use the ``pop`` method.  The first, with no parameter, wil
 last item of the list.  If you provide a parameter for the position, ``pop`` will remove and return the
 item at that position.  Either way the list is changed.
 
-The following table provides a summary of the list methods shown above.  Be sure
+The following table provides a summary of the list methods shown above.  The column labeled
+`result` gives an explanation as to what the return value is as it relates to the new value of the list.  The word
+**mutator** means that the list is changed by the method but nothing is returned (actually ``None`` is returned).  A **hybrid** method is one that not only changes the list but also returns a value as its result.  Finally, if the result is simply a return, then the list
+is unchanged by the method.
+
+Be sure
 to experiment with these methods to gain a better understanding of what they do.
 
 
@@ -820,8 +857,8 @@ remove      item            mutator       Removes the first occurrence of item
 Details for these and others
 can be found in the `Python Documentation <http://docs.python.org/py3k/library/stdtypes.html#sequence-types-str-bytes-bytearray-list-tuple-range>`_.
 
-It is important to note that ``append``, ``sort``, 
-and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to the result of sorting ``mylist`` will result in losing the entire list.
+It is important to remember that methods like ``append``, ``sort``, 
+and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to the result of sorting ``mylist`` will result in losing the entire list.  Calls like these will likely never appear as part of an assignment statement (see line 8 below).
 
 .. activecode:: chp09_meth2
 
@@ -916,9 +953,17 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
      print(alist)
 
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-	.. actex:: scratch_9_1
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_09_03
+
+
+
 
 The Return of L-Systems
 -----------------------
@@ -1027,9 +1072,17 @@ This example only uses 6 expansions.  Try it out with a larger number of
 expansions.  You may also want to try this example with different values for
 the angle and distance parameters.
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-	.. actex:: scratch_9_2
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_09_04
+
+
+
 
 Append versus Concatenate
 -------------------------
@@ -1059,9 +1112,17 @@ Note that the word "cat" needs to be placed in a list since the concatenation op
     origlist = origlist + ["cat"]
 
 
-It is also important to see that with append, the original list is simply modified.  You can see this by watching the `id` of ``origlist``.  It stays the same before and after the append.
+It is also important to realize that with append, the original list is simply modified.  
+On the other hand, with concatenation, an entirely new list is created.  This can be seen in the following codelens example where
+``newlist`` refers to a list which is a copy of the original list, ``origlist``, with the new item "cat" added to the end.  ``origlist`` still contains the three values it did before the concatenation.  This is why the assignment operation is necessary as part of the
+accumulator pattern.
 
-On the other hand, with concatenation, you will see that the `id` of the original list is not the same as the `id` of the result after the assignment statement. Step through both examples very slowly to see this important difference.
+.. codelens:: appcon3
+
+    origlist = [45,32,88]
+
+    newlist = origlist + ["cat"]
+
 
 **Check you understanding**
 
@@ -1147,9 +1208,19 @@ Take a moment to think about ``range(len(numbers))`` until you understand how
 it works. We are interested here in both the *value* and its *index* within the
 list, so that we can assign a new value to it.
 
-.. admonition:: Scratch Editor
 
-	.. actex:: scratch_9_3
+
+Scratchpad
+----------
+
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_09_05
+    
+    
+    
 
 **Check your understanding**
 
@@ -1183,7 +1254,7 @@ Using Lists as Parameters
 Functions which take lists as arguments and change them during execution are
 called **modifiers** and the changes they make are called **side effects**.
 Passing a list as an argument actually passes a reference to the list, not a
-copy of the list. Since lists are mutable changes made to the 
+copy of the list. Since lists are mutable, changes made to the 
 elements referenced by the parameter change
 the same list that the argument is referencing. 
 For example, the function below takes a list as an
@@ -1213,7 +1284,7 @@ Since the list object is shared by two references, there is only one copy.
 If a function modifies the elements of a list parameter, the caller sees the change since the change
 is occurring to the original.
 
-This can be easily seen in codelens.  Note that after the call to ``doubleStuff``, the `id` of the formal parameter ``aList`` is the same as the `id` of ``things``.
+This can be easily seen in codelens.  Note that after the call to ``doubleStuff``, the formal parameter ``aList`` refers to the same object as the actual parameter ``things``.  There is only one copy of the list object itself.
 
 
 .. codelens:: chp09_parm1_trace
@@ -1238,7 +1309,7 @@ Pure Functions
 
 
 A **pure function** does not produce side effects. It communicates with the
-calling program only through parameters, which it does not modify, and a return
+calling program only through parameters (which it does not modify) and a return
 value. Here is the ``doubleStuff`` function from the previous section written as a pure function.
 To use the pure function version of ``double_stuff`` to modify ``things``,
 you would assign the return value back to ``things``.
@@ -1275,10 +1346,6 @@ Once again, codelens helps us to see the actual references and objects as they a
     things = doubleStuff(things)
 
 
-
-.. admonition:: Scratch Editor
-
-	.. actex:: scratch_9_4
 
 Which is Better?
 ----------------
@@ -1352,9 +1419,16 @@ To write the ``primes_upto`` function we will use the ``is_prime`` function to f
 	    return result
 
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-	.. actex:: scratch_9_5
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_09_06
+    
+    
 
 **Check your understanding**
 
@@ -1474,9 +1548,7 @@ and join the list with the glue between each of the elements.
 The list that you glue together (``wds`` in this example) is not modified.  Also, 
 you can use empty glue or multi-character strings as glue.
 
-.. admonition:: Scratch Editor
 
-	.. actex:: scratch_9_6
 
 **Check your understanding**
 
@@ -1665,9 +1737,14 @@ of a circle of radius r.
     print(circleInfo(10))
 
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-	.. actex:: scratch_9_7
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_09_07
 
 Glossary
 --------
@@ -1758,7 +1835,8 @@ Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            Your diagram should show two variables referring to two different lists.  ``a`` refers to the original list with 1,2, and 3.
+            ``b`` refers to a list with 5,2, and 3 since the zero-eth element was replaced with 5.
 
         .. tab:: Discussion
 
@@ -1767,7 +1845,7 @@ Exercises
                 :identifier: disqus_12314cf40dbe407cb145f029870c0347
 
 
-#.  Create a list called ``myList`` with the following six items: 76, 92.3, "hello", True, 4, 76.
+#.  Create a list called ``myList`` with the following six items: 76, 92.3, "hello", True, 4, 76.  Do it with both append and with concatenation, one item at a time.
 
     .. actex:: ex_9_2
 
@@ -1778,7 +1856,7 @@ Exercises
 
         .. tab:: Question
 
-           Write Python statements to do the following:
+           Starting with the list in Exercise 1, write Python statements to do the following:
 
            a. Append "apple" and 76 to the list.
            #. Insert the value "cat" at position 3.
@@ -1826,7 +1904,7 @@ Exercises
 
         .. tab:: Question
 
-           Write a Python function that will take a the list of integers from the previous problem and return the maximum value.  (Note: there is a builtin function named ``max`` but pretend you cannot use it.)
+           Write a Python function that will take a the list of 100 random integers between 0 and 1000 and return the maximum value.  (Note: there is a builtin function named ``max`` but pretend you cannot use it.)
 
            .. actex:: ex_9_5
 
@@ -1972,7 +2050,7 @@ Exercises
                 for i in range(100):
                     lst.append(random.randint(0,1000))
 
-                print sum(lst)
+                print(sum(lst))
 
         .. tab:: Discussion 
 
@@ -2124,6 +2202,7 @@ Exercises
                     return newstr
 
                 def drawLsystem(aTurtle,instructions,angle,distance):
+                    savedInfoList = []
                     for cmd in instructions:
                         if cmd == 'F':
                             aTurtle.forward(distance)
@@ -2133,9 +2212,17 @@ Exercises
                             aTurtle.right(angle)
                         elif cmd == '-':
                             aTurtle.left(angle)
+                        elif cmd == '[':
+                            savedInfoList.append([aTurtle.heading(),aTurtle.xcor(),aTurtle.ycor()])
+                            #print(savedInfoList)
+                        elif cmd == ']':
+                            newInfo = savedInfoList.pop()
+                            aTurtle.setheading(newInfo[0])
+                            aTurtle.setposition(newInfo[1],newInfo[2])
                         else:
-                            # unknown command, ignore it.
+                            #print('Error:', cmd, 'is an unknown command')
                             pass
+                
 
                 def main():
                     inst = createLSystem(4,"H")   #create the string
