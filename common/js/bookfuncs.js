@@ -323,7 +323,7 @@ function disableAcOpt() {
         }
         $jqTheme(value).tooltip( {
             'selector': '',
-            'delay': { show: true, hide: 50 },
+            'delay': { show: 100, hide: 50 },
             'placement': 'bottom',
             'animation': true
         });
