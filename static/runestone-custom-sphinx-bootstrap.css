@@ -5,14 +5,34 @@ body {
     padding-bottom: 40px;
 }
 
-/* Remove top padding when top navbar goes collapsed in narrow viewports */
+pre {
+    margin: 1em 0;
+}
+
+h5 {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* navbar and menu related styles */
 @media (max-width: 768px) {
+    /* Remove top padding when top navbar goes collapsed in narrow viewports */
     body {
         padding-top: 0;
     }
 
     .navbar-fixed-top {
         position: relative;
+    }
+}
+
+@media (min-width: 768px) {
+    /* when navbar is collapsed we don't want any vertical dividers taking up space */
+    .navbar .divider-vertical {
+        height: 50px;
+        margin: 0 3px;
+        border-right: 1px solid #e8e8e8;
+        border-left: 1px solid #f2f2f2;
     }
 }
 
@@ -32,14 +52,46 @@ body {
     margin-top:4px;
 }
 
-pre {
-    margin: 1em 0;
+.social-menu {
+    width: 275px;
+    padding: 10px 10px 15px 20px;
 }
 
-h5 {
-    font-weight: bold;
-    padding: 10px 0;
+.fb-like {
+    margin-top: 7px;
 }
+
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
+}
+
+.twitter-follow-button {
+    margin-top: 10px;
+}
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
+
+.dropdown-menu > li > span  {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loggedinuser {
+    font-weight:bold;
+}
+/* end navbar and menu related styles */
 
 .CodeMirror {
     margin: 0 0 1em 0;
@@ -148,57 +200,6 @@ the colors for the other .alert classes are fine */
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
-
-.social-menu {
-    width: 275px;
-    padding: 10px 10px 15px 20px;
-}
-
-.fb-like {
-    margin-top: 7px;
-}
-
-.fb_iframe_widget span, .fb_iframe_widget iframe {
-    height: 20px !important;
-    width: 82px !important;
-}
-
-.twitter-follow-button {
-    margin-top: 10px;
-}
-
-.gittip {
-    margin-top: 8px;
-}
-
-.gittip-button {
-    margin-bottom: -6px;
-}
-
-/* when navbar is collapsed we don't want any vertical dividers taking up space */
-@media (min-width: 768px) {
-    .navbar .divider-vertical {
-        height: 50px;
-        margin: 0 3px;
-        border-right: 1px solid #e8e8e8;
-        border-left: 1px solid #f2f2f2;
-    }
-}
-
-.dropdown-menu > li > span  {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: bold;
-    line-height: 20px;
-    color: #333;
-    white-space: nowrap;
-}
-
-.loggedinuser {
-    font-weight:bold;
-}
-
 /* from web2py.css */
 div.flash {
     font-weight: bold;
@@ -260,33 +261,6 @@ div.flash {
     margin-top: -20px;
 }
 /* End login, registration, Janrain styles */
-
-/* Styles for poll directive */
-.poll-question {
-    padding-bottom: 10px;
-}
-
-.poll-options > label {
-    margin-right: 5px;
-}
-
-.progress {
-    width: 350px;
-    height: 25px;
-    margin-top: -20px;
-}
-
-.progress .progress-bar {
-    height: 30px;
-    color: #333;
-}
-
-.poll-text {
-    line-height: 22px;
-    display: inline-block;
-    vertical-align: text-bottom;
-}
-/* End poll directive styles */
 
 /* selectors beginning with #exercises are to provide some nice styling
 for the end-of-chapter exercies sections, overriding lots of the

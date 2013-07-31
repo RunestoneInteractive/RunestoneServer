@@ -26,6 +26,7 @@ def setup(app):
     app.add_node(PollNode, html=(visit_poll_node, depart_poll_node))
 
     app.add_javascript('poll.js')
+    app.add_stylesheet('poll.css')
 
 
 BEGIN = """ <div id='%(divid)s' class='poll alert'> """
