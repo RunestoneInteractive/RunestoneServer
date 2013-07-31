@@ -617,7 +617,10 @@ function createScratchActivecode() {
 
     // use the URL to assign a divid - each page should have a unique Activecode block id.
     // Remove everything from the URL but the course and page name
-    var divid = document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
+    var divid = document.URL.split('#')[0];
+    divid = divid.split('static')[1];
+    divid = divid.split('?')[0];  // remove any query string (e.g ?lastPosition)
+    divid = divid.replaceAll('/', '').replace('.html', '');
 
     // generate the HTML
     var html = '<div id="ac_modal_'+divid+'" class="modal fade">' +
@@ -664,7 +667,7 @@ function createScratchActivecode() {
 }
 
 function showScratchActivecode() {
-    var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].replaceAll('/', '').replace('.html', '');
+    var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].split('?')[0].replaceAll('/', '').replace('.html', '');
     var div = $("#"+divid);
 
     div.modal();
