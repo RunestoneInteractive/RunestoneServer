@@ -7,7 +7,7 @@ db.define_table('useinfo',
   Field('act','string'),
   Field('div_id','string'),
   Field('course_id','string'),
-  migrate=settings.migrate
+  migrate='runestone_useinfo.table'
 )
 
 db.define_table('code',
@@ -17,7 +17,7 @@ db.define_table('code',
   Field('grade','double'),
   Field('sid','string'),
   Field('timestamp','datetime'),
-  migrate=settings.migrate
+  migrate='runestone_code.table'
 )
 
 db.define_table('acerror_log',
@@ -27,7 +27,7 @@ db.define_table('acerror_log',
                 Field('course_id','string'),                
                 Field('code','text'),
                 Field('emessage','text'),
-                migrate=settings.migrate
+                migrate='runestone_acerror_log.table'
                 )
 
 ##table to store highlights saved by the user
@@ -41,7 +41,7 @@ db.define_table('user_highlights',
   Field('sub_chapter_url','text'),
   Field('method','string'), #self / Imported from friend
   Field('is_active','integer', default=1), #0 - deleted / inactive. 1 - active
-  migrate=settings.migrate
+  migrate='runestone_user_highlights.table'
 )
 
 ##table to store the last position of the user. 1 row per user, per course
@@ -54,11 +54,12 @@ db.define_table('user_state',
   Field('last_page_subchapter','string'),
   Field('last_page_scroll_location','string'),
   Field('last_page_accessed_on','datetime'),
-  migrate=settings.migrate
+  migrate='runestone_user_state.table'
 )
 
 # Table to match instructor(s) to their course(s)
 db.define_table('course_instructor',
     Field('course', db.courses ),
-    Field('instructor', db.auth_user)
+    Field('instructor', db.auth_user),
+    migrate='runestone_course_instructor.table'
 )
