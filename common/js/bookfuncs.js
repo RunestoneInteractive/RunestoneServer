@@ -623,8 +623,8 @@ function createScratchActivecode() {
 
                '          <div id="cont"></div>' +
 
-               '          <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_saveb" onclick="saveEditor(\''+divid+'\');">Save</button>' +
-               '          <button class="ac_opt btn btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
+               '          <button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="'+divid+'_saveb" onclick="saveEditor(\''+divid+'\');">Save</button>' +
+               '          <button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="'+divid+'_loadb" onclick="requestCode(\''+divid+'\');">Load</button>' +
 
                '          <div style="text-align: center">' +
                '            <canvas id="'+divid+'_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
