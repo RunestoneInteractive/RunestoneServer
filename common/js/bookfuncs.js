@@ -531,8 +531,15 @@ function compareModal(data, status, whatever) {
     var body = '<table>';
     body += '<tr><th>Answer</th><th>Percent</th></tr>';
 
+    var theClass= '';
     for (var k in kl) {
-        body += '<tr><td>' + kl[k] + '</td><td>' + answers[kl[k]] + '%</td></tr>';
+        if (kl[k] == misc.correct) {
+            theClass = 'correct';
+        } else {
+            theClass = 'incorrect';
+        }
+
+        body += '<tr><td class='+theClass+'>' + kl[k] + '</td><td class='+theClass+'>' + answers[kl[k]] + '%</td></tr>';
     }
     body += '</table>';
 
@@ -541,7 +548,7 @@ function compareModal(data, status, whatever) {
     }
 
     if (datadict.reslist !== undefined) {
-        res += instructorMchoiceModal(datadict.reslist);
+        body += instructorMchoiceModal(datadict.reslist);
     }
 
     var html = '<div class="modal fade">' +
