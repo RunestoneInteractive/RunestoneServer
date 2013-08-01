@@ -541,7 +541,7 @@ function compareModal(data, status, whatever) {
     }
 
     if (datadict.reslist !== undefined) {
-        res += instructorMchoiceModal(datadict.reslist);
+        body += instructorMchoiceModal(datadict.reslist);
     }
 
     var html = '<div class="modal fade">' +
