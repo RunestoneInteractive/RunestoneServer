@@ -264,8 +264,7 @@ function saveSuccess(data, status, whatever) {
         } else {
             // use a tooltip to provide some success feedback
             var save_btn = $("#" + acid + "_saveb");
-            save_btn.attr('data-toggle', 'tooltip');
-            save_btn.attr('title', 'Saved!');
+            save_btn.attr('title', 'Saved your code.');
             opts = {
                 'trigger': 'manual',
                 'placement': 'bottom',
@@ -302,7 +301,6 @@ function saveEditor(divName) {
 function requestCode(divName, sid) {
     var editor = cm_editors[divName + "_code"];
 
-
     var data = {acid: divName};
     if (sid !== undefined) {
         data['sid'] = sid;
@@ -321,10 +319,23 @@ function loadEditor(data, status, whatever) {
         editor = cm_editors[res.acid + "_code"];
     }
 
+    var loadbtn = $("#"+res.acid+"_loadb");
     if (res.source) {
         editor.setValue(res.source);
+        loadbtn.tooltip({'placement': 'bottom',
+                         'title': "Loaded your saved code.",
+                         'trigger': 'manual'
+                        });
+    } else {
+        loadbtn.tooltip({'placement': 'bottom',
+                         'title': "No saved code.",
+                         'trigger': 'manual'
+                        });
     }
-    // need to get the divId back with the result...
+    loadbtn.tooltip('show');
+    setTimeout(function () {
+        loadbtn.tooltip('destroy')
+    }, 4000);
 }
 
 function disableAcOpt() {
@@ -540,13 +551,11 @@ function compareModal(data, status, whatever) {
         }
 
         body += '<tr><td>' + kl[k] + '</td><td class="compare-me-progress">';
-
         pct = answers[kl[k]] + '%';
         body += '<div class="progress">';
         body += '  <div class="progress-bar progress-bar-' + theClass + '" style="width:'+pct+';">' + pct;
         body += '  </div>';
         body += '</div></td></tr>';
-        //body += '<td>' + answers[kl[k]] + '%</td></tr>';
     }
     body += '</table>';
 

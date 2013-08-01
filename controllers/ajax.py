@@ -117,8 +117,8 @@ def getprog():
     res = {}
     if query:
         result = db(query)
+        res['acid'] = acid
         if not result.isempty():
-            res['acid'] = acid
             r = result.select(orderby=~codetbl.timestamp).first().code
             res['source'] = r
             if sid:
