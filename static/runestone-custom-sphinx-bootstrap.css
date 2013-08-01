@@ -118,10 +118,6 @@ input[type="button"].btn.btn-small {
     z-index: 2000 !important;
 }
 
-div.tooltip-inner {
-    width: 350px;
-}
-
 .tooltip.in {
     opacity: 0.8;
     filter: alpha(opacity=80);
