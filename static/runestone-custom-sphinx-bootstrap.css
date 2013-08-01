@@ -263,6 +263,10 @@ div.flash {
     width: 800px;
 }
 
+.correct {
+    color: #468847;
+}
+
 .compare-modal {
     width: 350px;
 }
