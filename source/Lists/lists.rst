@@ -1488,7 +1488,7 @@ left to right.
    :feedback_a: 6 is in the wrong list.  alist[1] refers to the second item in alist, namely [888,999].
    :feedback_b: 8 is in the wrong list.  alist[1] refers to the second item in alist, namely [888,999].
    :feedback_c: Yes, alist[0][1][0] is True and alist[1] is the second list, the first item is 888.
-   :feedback_d: alist[0][1][0] is False.  Take another look at the if statement.
+   :feedback_d: alist[0][1][0] is True.  Take another look at the if statement.
    
    What is printed by the following statements?
    
