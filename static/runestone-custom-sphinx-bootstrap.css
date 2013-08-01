@@ -19,6 +19,7 @@ h5 {
     /* Remove top padding when top navbar goes collapsed in narrow viewports */
     body {
         padding-top: 0;
+        margin: auto auto auto 5px;
     }
 
     .navbar-fixed-top {
