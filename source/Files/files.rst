@@ -56,7 +56,7 @@ other years. The format of the data file is as follows
 
 .. raw:: html
 
-	<pre id="qbdata.txt">
+    <pre id="qbdata.txt">
     Colt McCoy QB CLE  135 222 1576    6   9   60.8%   74.5
     Josh Freeman QB TB 291 474 3451    25  6   61.4%   95.9
     Michael Vick QB PHI    233 372 3018    21  6   62.6%   100.2
@@ -272,8 +272,8 @@ Glossary
       When you are done with a file, you should close it.
 
    read
-	  Will read the entire contents of a file as a string.  This is often used in an assignment statement
-	  so that a variable can reference the contents of the file.
+      Will read the entire contents of a file as a string.  This is often used in an assignment statement
+      so that a variable can reference the contents of the file.
 
    readline
       Will read a single line from the file, up to and including the first instance of the newline character.
@@ -306,26 +306,26 @@ Exercises
                 grace 12 28 21 45 26 10
                 john 14 32 25 16 89
                 </pre>
-            
+
             Using the text file ``studentdata.txt`` write a program that prints out the names of
             students that have more than six quiz scores.
-       
-       
-       
+
+
+
             .. actex:: ex_6_1
-    
+
 
         .. tab:: Answer
-    
+
             .. activecode:: ch_files_q1answer
-        
+
                 f = open("studentdata.txt","r")
-            
+
                 for aline in f:
                    items = aline.split()
                    if len(items[1:]) > 6:
                       print(items[0])
-                  
+
                 f.close()
 
         .. tab:: Discussion 
@@ -342,32 +342,32 @@ Exercises
    .. actex:: ex_10_2
 
 
-   
+
 #.
 
     .. tabbed:: q3
 
         .. tab:: Question
 
- 
+
             Using the text file ``studentdata.txt`` (shown in exercise 1) write a program that calculates the minimum and
             maximum score for each student.  Print out their name as well.
-   
-   
-   
+
+
+
             .. actex:: ex_6_3
 
 
         .. tab:: Answer
 
             .. activecode:: ch_files_q3answer
-    
+
                 f = open("studentdata.txt","r")
-        
+
                 for aline in f:
                    items = aline.split()
                    print(items[0],"max is", max(items[1:]), "min is", min(items[1:]))
-              
+
                 f.close()
 
         .. tab:: Discussion 
@@ -376,12 +376,12 @@ Exercises
                 :shortname: interactivepython
                 :identifier: disqus_eb4a097382404ffe81300aac5744e3fe_q3
 
-   
-   
-   
-   
-   
-   
+
+
+
+
+
+
 
 
 
@@ -414,29 +414,23 @@ Exercises
         77 67
         </pre>
 
-
-
     Interpret the data file ``labdata.txt`` such that each line contains a an x,y coordinate pair.
     Write a function called ``plotRegression`` that reads the data from this file
     and uses a turtle to plot those points and a best fit line according to the following
     formulas:
 
-
     :math:`y = \bar{y} + m(x - \bar{x})`
 
     :math:`m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}`
 
+    where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
+    values and :math:`n` is the number of points.  If you are not familiar with the
+    mathematical :math:`\sum` it is the sum operation.  For example :math:`\sum{x_i}`
+    means to add up all the x values.
 
-
-	where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
-	values and :math:`n` is the number of points.  If you are not familiar with the
-	mathematical :math:`\sum` it is the sum operation.  For example :math:`\sum{x_i}`
-	means to add up all the x values.
-
-	Your program should analyze the points and correctly scale the window using
-	``setworldcoordinates`` so that that each point can be plotted.  Then you should
-	draw the best fit line, in a different color, through the points.
-
+    Your program should analyze the points and correctly scale the window using
+    ``setworldcoordinates`` so that that each point can be plotted.  Then you should
+    draw the best fit line, in a different color, through the points.
 
 
     .. actex:: ex_10_4
@@ -456,21 +450,21 @@ Exercises
             described by the commands and the set of points.
 
             .. actex:: ex_10_5
-   
+
 
 
         .. tab:: Answer
 
             .. activecode:: ch_files_q5answer
-            
+
                 import turtle
-                
+
                 t = turtle.Turtle()
                 wn = turtle.Screen()
                 wn.setworldcoordinates(-300,-300,300,300)
-                
+
                 f = open("mystery.txt","r")
-                
+
                 for aline in f:
                     items = aline.split()
                     if items[0] == "UP":
@@ -481,10 +475,10 @@ Exercises
                         else:
                             #must be coords
                             t.goto(int(items[0]),int(items[1]))
-                            
+
                 f.close()
                 wn.exitonclick()
-    
+
 
 
         .. tab:: Discussion 
