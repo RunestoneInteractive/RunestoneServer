@@ -263,8 +263,16 @@ div.flash {
     width: 800px;
 }
 
-.correct {
-    color: #468847;
+.compare-modal .progress {
+    margin-bottom: 0;
+}
+
+.compare-me-progress {
+    width: 100%;
+}
+
+.compare-me-progress .progress-bar {
+    color: #333;
 }
 
 .compare-modal {

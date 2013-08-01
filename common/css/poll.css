@@ -1,5 +1,5 @@
 /* Styles for Runestone poll directive */
-.poll-question {
+.poll .poll-question {
     padding-bottom: 10px;
 }
 
@@ -7,13 +7,13 @@
     margin-right: 5px;
 }
 
-.progress {
+.poll .progress {
     width: 350px;
     height: 25px;
     margin-top: -20px;
 }
 
-.progress .progress-bar {
+.poll .progress .progress-bar {
     height: 30px;
     color: #333;
 }

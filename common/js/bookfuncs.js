@@ -534,12 +534,19 @@ function compareModal(data, status, whatever) {
     var theClass= '';
     for (var k in kl) {
         if (kl[k] == misc.correct) {
-            theClass = 'correct';
+            theClass = 'success';
         } else {
-            theClass = 'incorrect';
+            theClass = 'info';
         }
 
-        body += '<tr><td class='+theClass+'>' + kl[k] + '</td><td class='+theClass+'>' + answers[kl[k]] + '%</td></tr>';
+        body += '<tr><td>' + kl[k] + '</td><td class="compare-me-progress">';
+
+        pct = answers[kl[k]] + '%';
+        body += '<div class="progress">';
+        body += '  <div class="progress-bar progress-bar-' + theClass + '" style="width:'+pct+';">' + pct;
+        body += '  </div>';
+        body += '</div></td></tr>';
+        //body += '<td>' + answers[kl[k]] + '%</td></tr>';
     }
     body += '</table>';
 
