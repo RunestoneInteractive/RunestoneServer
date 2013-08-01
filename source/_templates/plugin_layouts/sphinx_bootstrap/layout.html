@@ -110,10 +110,15 @@
             <li id="scratch_ac_link"><a href="javascript:showScratchActivecode()">Scratch ActiveCode</a></li>
             <li class="divider"></li>
             <li style="width: 240px;">
-              <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
-                <div class="form-group">
+              <form class="navbar-search" style="margin:10px;" action="{{ pathto('search') }}" method="get">
+                <div class="input-group">
                   <input type="text" class="form-control" name="q" placeholder="Search this book" />
-                </div>
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit"">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
                 <input type="hidden" name="check_keywords" value="yes" />
                 <input type="hidden" name="area" value="default" />
               </form>
