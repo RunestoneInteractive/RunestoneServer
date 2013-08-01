@@ -51,7 +51,7 @@ Discussion Questions
 
 #. Draw the graph corresponding to the following adjacency matrix.
 
-.. figure:: Figures/adjMatEx.png
+.. figure:: Figures/adjMatEX.png
    :align: center
 
 

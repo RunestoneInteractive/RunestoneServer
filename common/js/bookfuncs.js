@@ -701,7 +701,13 @@ function createScratchActivecode() {
     el.on('shown.bs.modal', function () {
         el.find('.CodeMirror').each(function (i, e) {
             e.CodeMirror.refresh();
+            e.CodeMirror.focus();
         });
+    });
+
+    $(document).bind('keypress', '\\', function(evt) {
+        showScratchActivecode();
+        return false;
     });
 }
 
@@ -709,6 +715,6 @@ function showScratchActivecode() {
     var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].split('?')[0].replaceAll('/', '').replace('.html', '');
     var div = $("#" + divid);
 
-    div.modal();
+    div.modal('toggle');
 
 }

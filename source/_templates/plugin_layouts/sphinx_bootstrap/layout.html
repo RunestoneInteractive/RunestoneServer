@@ -11,7 +11,8 @@
     '_static/rangy-cssclassapplier.js',
     '_static/user-highlights.js',
     '_static/jquery.idle-timer.js',
-    '_static/processing-1.4.1.min.js'
+    '_static/processing-1.4.1.min.js',
+    '_static/jquery.hotkey.js'
   ]
 %}
 
@@ -183,7 +184,7 @@
 {%- block extrahead %}
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 <script type="text/javascript">
   eBookConfig = {};
   eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';

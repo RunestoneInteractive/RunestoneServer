@@ -19,10 +19,18 @@ h5 {
     /* Remove top padding when top navbar goes collapsed in narrow viewports */
     body {
         padding-top: 0;
+        margin: auto auto auto 5px;
     }
 
     .navbar-fixed-top {
-        position: relative;
+        position: static;
+    }
+
+    .codelens-modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
     }
 }
 
