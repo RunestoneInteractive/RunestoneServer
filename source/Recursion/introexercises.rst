@@ -51,7 +51,15 @@ Programming Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: ch_rec_answer1
+            
+                def factorial(n):
+                    if n <= 0:
+                        return 1
+                    else:
+                        return n * factorial(n-1)
+                        
+                print(factorial(5))
 
         .. tab:: Discussion 
 
@@ -60,9 +68,30 @@ Programming Exercises
                 :identifier: disqus_75fd86c9c8944f759bb68668e5fc11ea
 
 
-#. Write a recursive function to reverse a list.
+#.  Modify the recursive tree program using one or all of the following
+    ideas:
 
-   .. actex:: ex_rec_2
+    -  Modify the thickness of the branches so that as the ``branchLen``
+       gets smaller, the line gets thinner.
+
+    -  Modify the color of the branches so that as the ``branchLen`` gets
+       very short it is colored like a leaf.
+
+    -  Modify the angle used in turning the turtle so that at each branch
+       point the angle is selected at random in some range. For example
+       choose the angle between 15 and 45 degrees. Play around to see
+       what looks good.
+
+    -  Modify the ``branchLen`` recursively so that instead of always
+       subtracting the same amount you subtract a random amount in some
+       range.
+
+    If you implement all of the above ideas you will have a very
+    realistic looking tree.
+
+      
+      
+    .. actex:: ex_rec_2
    
 #.
 
@@ -70,32 +99,21 @@ Programming Exercises
 
         .. tab:: Question
 
-           Modify the recursive tree program using one or all of the following
-           ideas:
-        
-           -  Modify the thickness of the branches so that as the ``branchLen``
-              gets smaller, the line gets thinner.
-        
-           -  Modify the color of the branches so that as the ``branchLen`` gets
-              very short it is colored like a leaf.
-        
-           -  Modify the angle used in turning the turtle so that at each branch
-              point the angle is selected at random in some range. For example
-              choose the angle between 15 and 45 degrees. Play around to see
-              what looks good.
-        
-           -  Modify the ``branchLen`` recursively so that instead of always
-              subtracting the same amount you subtract a random amount in some
-              range.
-        
-           If you implement all of the above ideas you will have a very
-           realistic looking tree.
+           Write a recursive function to reverse a list
            
            .. actex:: ex_rec_3
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: ch_rec_answer3
+        
+                def reverse(alist):
+                    if len(alist) == 0:
+                        return []
+                    else:
+                        return reverse(alist[1:]) + [alist[0]]
+                    
+                print(reverse([1,2,3,4,5]))
 
         .. tab:: Discussion 
 
@@ -123,7 +141,20 @@ Programming Exercises
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: ch_rec_answer5
+            
+                def fibonacci(n):
+                   if n == 1:
+                       return 0
+                   else:
+                       if n == 2:
+                           return 1
+                       else:
+                           return fibonacci(n-1) + fibonacci(n-2)
+                           
+                print(fibonacci(10))
+                
+                 
 
         .. tab:: Discussion 
 
@@ -150,8 +181,36 @@ Programming Exercises
         
 
         .. tab:: Answer
+        
+            .. activecode:: ch_rec_answer7
             
-            Put some sort of answer here!
+                import turtle
+            
+                def koch(aturtle, length):
+                    if length <= 5:
+                        aturtle.forward(length)
+                    else:
+                        koch(aturtle,length/3)
+                        aturtle.left(60)
+                        koch(aturtle,length/3)
+                        aturtle.right(120)
+                        koch(aturtle,length/3)
+                        aturtle.left(60)
+                        koch(aturtle,length/3)
+                    
+                    
+                t = turtle.Turtle()
+                wn = turtle.Screen()
+            
+                t.up()
+                t.backward(200)
+                t.down()
+                
+                koch(t, 400)
+            
+                wn.exitonclick()
+            
+            
 
         .. tab:: Discussion 
 
