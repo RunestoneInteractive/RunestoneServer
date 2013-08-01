@@ -64,9 +64,9 @@
   <h4>Choose topics for...</h4>
   <h4>{{=pname}}</h4>
 
-  <button type="button" class='btn btn-small' onclick="addModBlock()">+</button>
+  <button type="button" class='btn btn-default btn-small' onclick="addModBlock()">+</button>
 
-  <button type="button" class='btn btn-small' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}','{{=startdate}}', '{{=loginreq}}')">Create Course</button>
+  <button type="button" class='btn btn-default btn-small' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}','{{=startdate}}', '{{=loginreq}}')">Create Course</button>
 
   <div id="chapterboxes">
     <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -75,7 +75,7 @@
   </div>
 
   <div id="spinner_div" style="align: center; display: none;">
-    <p>Your course is being prepared for you.  This may take several minutes to complete.  When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.</p>
+    <p>Your course is being prepared for you.  This may take several minutes to complete. <b>Please do not refresh the page.</b> When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.</p>
 	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
   </div>
 

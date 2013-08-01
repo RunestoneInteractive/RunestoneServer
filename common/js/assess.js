@@ -1,56 +1,3 @@
-var createHTML_MCMFRandom = function (divid, qnum, qtext, answerString, feedString, corrAnswer) {
-    var j;
-    var ar = new Array();
-    var fr = new Array();
-    var ansArray = new Array();
-    var feedArray = new Array();
-    var hash = new Array();
-
-    arr = answerString.split(",");
-    fr = feedString.split("::");
-
-    for (j = 0; j < arr.length - 1; j++) {
-        ansArray[j] = arr[j];
-        hash[ansArray[j]] = fr[j];
-    }
-
-    var i = ansArray.length;
-    if (i == 0) return false;
-    while (--i) {
-        var j = Math.floor(Math.random() * ( i + 1 ));
-        var tempi = ansArray[i];
-        var tempj = ansArray[j];
-        ansArray[i] = tempj;
-        ansArray[j] = tempi;
-    }
-
-    for (i = 0; i < ansArray.length; i++) {
-        var k = ansArray[i];
-        feedArray[i] = hash[k];
-    }
-
-    var o1 = "<input type='radio' name='group1' value='0'/>" + "<label for= 'opt_1'>  a) " + ansArray[0] + "</label><br />";
-    var o2 = "<input type='radio' name='group1' value='1'/>" + "<label for= 'opt_2'>  b) " + ansArray[1] + "</label><br />";
-    var o3 = "<input type='radio' name='group1' value='2'/>" + "<label for= 'opt_3'>  c) " + ansArray[2] + "</label><br />";
-    var o4 = "<input type='radio' name='group1' value='3'/>" + "<label for= 'opt_4'>  d) " + ansArray[3] + "</label><br />";
-
-    var qdiv = divid + "_question";
-    var opdiv1 = divid + "_op1";
-    var opdiv2 = divid + "_op2";
-    var opdiv3 = divid + "_op3";
-    var opdiv4 = divid + "_op4";
-    var resdiv = "#" + divid + "_test";
-
-    $("#" + qdiv).html("<br>" + qnum + " " + qtext);
-    $("#" + opdiv1).html(o1);
-    $("#" + opdiv2).html(o2);
-    $("#" + opdiv3).html(o3);
-    $("#" + opdiv4).html(o4);
-
-    var index = ansArray.indexOf(corrAnswer);
-    add_button(divid, index, feedArray);
-};
-
 var add_button = function (divid, expected, feedArray) {
     var bdiv = divid + "_bt";
     var element = document.createElement("input");
@@ -74,7 +21,7 @@ var feedbackMCMFRandom = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error')
+        $(divid).attr('class','alert alert-danger')
     }
 };
 
@@ -122,7 +69,7 @@ var feedBack = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error');
+        $(divid).attr('class','alert alert-danger');
     }
 };
 
@@ -141,7 +88,7 @@ var feedBackMCMF = function (divid, correct, feedbackText) {
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-error');
+        $(divid).attr('class','alert alert-danger');
     }
 };
 
@@ -161,7 +108,7 @@ var feedBackMCMA = function (divid, numCorrect, numNeeded, numGiven, feedbackTex
             " " + answerStr + " and got " + numCorrect + " correct of " +
             numNeeded + " needed.<br /> " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class', 'alert alert-error');
+        $(divid).attr('class', 'alert alert-danger');
     }
 };
 
@@ -209,6 +156,8 @@ var createHTML_MCMFRandom = function (divid, answerString, feedString, corrAnswe
 
     var index = ansArray.indexOf(corrAnswer);
     add_button(divid, index, feedArray);
+
+    return true;
 };
 
 var checkMCMFRandom = function (divid, expected, feed) {

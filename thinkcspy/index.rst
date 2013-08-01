@@ -98,13 +98,13 @@ This interactive book is a product of the `Runestone Interactive <http://runesto
 * Many contributions from the `CSLearning4U research group <http://home.cc.gatech.edu/csl/CSLearning4U>`_ at Georgia Tech.
 * ACM-SIGCSE for the special projects grant that funded our student Isaac Dontje Lindell for the summer of 2013.
 
-The Runestone Interactive tools are open source and we encourage you to contact us, or grab a copy from github if you would like to use them to write your own resources.
+The Runestone Interactive tools are open source and we encourage you to contact us, or grab a copy from GitHub if you would like to use them to write your own resources.
 
 Contact
 -------
 
 * If you have questions about this book please send me email `bmiller@luther.edu <mailto:bmiller@luther.edu>`_
-* Check out the project on `github <https://github.com/bnmnetp/runestone>`_
+* Check out the project on `GitHub <https://github.com/bnmnetp/runestone>`_
 * Visit our `Facebook page <https://www.facebook.com/RunestoneInteractive>`_
 
 

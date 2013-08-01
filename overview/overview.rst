@@ -338,7 +338,7 @@ Tabbed Question
 Any of the existing question types can be placed in a tabbed exhibit-style question. This may be used to provide an possible answer or a Disqus discussion box specifically related to a certain question.
 
 .. tabbed:: exercise1
-    
+
     .. tab:: Question 1
         
         Write a program that prints "Hello, world".
@@ -384,7 +384,10 @@ Reveals
 DOM Access
 ----------
 
-Python programs written in activecode windows can now import the ``document`` module.  This document module allows access to basic elements of the web page, including the new text entry box called **text1** :textfield:`text1:example input:large` like this one.  Try running the program, then change the value in the text entry box and run it again.
+Python programs written in activecode windows can now import the ``document`` module. This document module
+allows access to basic elements of the web page, including the new text entry box called
+**text1** :textfield:`text1:example input:medium` like this one.  Try running the program, then change
+the value in the text entry box and run it again.
 
 .. activecode:: tftest1
 

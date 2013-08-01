@@ -11,15 +11,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
 
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap.min.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-2.3.1/css/bootstrap-responsive.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-3.0.0-rc1/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-3.0.0-rc1/css/bootstrap-glyphicons.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
 
     <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
-    <script src="{{=URL('static', 'bootstrap-2.3.1/js/bootstrap.min.js')}}"></script>    
+    <script src="{{=URL('static', 'bootstrap-3.0.0-rc1/js/bootstrap.min.js')}}"></script>    
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
     <script type="text/javascript" src="{{=URL('static', 'js/dd.js')}}"></script>
     <script type="text/javascript">
@@ -50,30 +50,33 @@
 {{ if response.flash: }}
     <div class="flash">{{=response.flash or ''}}</div>
 {{ pass }}
-<div class="navbar-inner">
+
   <div class="container">
-    <div>
-      <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
-      <a class="brand" href="/">Runestone Interactive</a>
-    </div>
 
     <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-    <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-responsive-collapse">
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
 
-    <div class="nav-collapse collapse">
+    <div>
+     <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+      <a class="navbar-brand" href="/">Runestone Interactive</a>
+    </div>
 
-     <ul class="nav pull-right">
+
+
+    <div class="nav-collapse collapse navbar-responsive-collapse">
+
+      <ul class="nav navbar-nav pull-right">
+
         <li class="divider-vertical"></li>
 
         <!-- social media dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <img src='{{=URL("static", "images/Facebook_icon.png")}}' style='margin-top:-3px;' />
-            <img src='{{=URL("static", "images/Twitter_icon.png")}}' style='margin-top:-3px;' />
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
           </a>
           <div class="dropdown-menu social-menu">
             <div>
@@ -94,13 +97,14 @@
             </div>
           </div>
         </li>
+        <!-- end social media dropdown -->
 
         <li class="divider-vertical"></li>
 
         <!-- user account dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon-user" style="opacity:0.6;"></i>
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
             {{ if auth.user: }}
@@ -115,8 +119,8 @@
             {{ if auth.user: }}
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
-              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li> 
-              <li><a href='{{=URL("default", "user/register")}}'>Register</a></li> 
+              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
+              <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
             {{ pass }}
           </ul>
         </li>
@@ -127,7 +131,7 @@
         <!-- help menu dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon-question-sign" style="opacity:0.6;"></i>
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
             <li><a href='/{{=request.application}}/admin/index'>Instructors Page</a></li>
@@ -141,9 +145,10 @@
 
       </ul>
 
-      <ul class="nav">
+      <ul class="nav navbar-nav">
+
         <li class="divider-vertical"></li>
-        
+
         <!-- open library dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Open Library<b class="caret"></b></a>
@@ -154,6 +159,8 @@
           </ul>
         </li>
 
+        <li class="divider-vertical"></li>
+
         <!-- more info dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">More Info<b class="caret"></b></a>
@@ -162,6 +169,8 @@
             <li><a href="/{{=request.application}}/default/ack">Acknowledgements</a></li>
           </ul>
         </li>
+
+        <li class="divider-vertical"></li>
 
         <!-- students dropdown -->
         <li class="dropdown">
@@ -172,6 +181,8 @@
           </ul>
         </li>
 
+        <li class="divider-vertical"></li>
+
         <!-- instructors dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Instructors<b class="caret"></b></a>
@@ -180,6 +191,8 @@
             <li><a href="https://github.com/bnmnetp/runestone/issues/new">Submit an Exercise</a></li>
           </ul>
         </li>
+
+        <li class="divider-vertical"></li>
 
         <!-- authors and developers dropdown -->
         <li class="dropdown">
@@ -190,13 +203,16 @@
           </ul>
         </li>
 
+        <li class="divider-vertical"></li>
+
       </ul>
-     
+
     </div>
   </div>
-</div>
+
 </div>
 <!-- End navbar -->
+
 
 <!-- begin body content -->
   <div class="container">
@@ -222,4 +238,13 @@
 <!-- end footer -->
 
 </body>
+<script type='text/javascript'>
+  // do some styling of the web2py login and registration form
+  // this is done here because web2py doesn't have an easy way
+  // to add class to the auth form. We don't want to duplicate the
+  // styles from .form-control into our custom CSS.
+  var el = $("#web2py_user_form");
+  el.find("input[type='text']").addClass('form-control');
+  el.find("input[type='password']").addClass('form-control');
+</script>
 </html>

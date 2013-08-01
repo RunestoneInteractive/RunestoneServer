@@ -27,38 +27,50 @@ def setup(app):
     app.add_node(TabNode, html=(visit_tab_node, depart_tab_node))
     app.add_node(TabbedStuffNode, html=(visit_tabbedstuff_node, depart_tabbedstuff_node))
 
+    app.add_stylesheet('tabbedstuff.css')
 
-BEGIN = """<div id='%(divid)s'>"""
 
-TABLIST_BEGIN = """<ul>"""
+BEGIN = """<div id='%(divid)s' class='alert'>"""
 
-TABLIST_ELEMENT = """<li><a href='#%(divid)s-%(tabname)s'><span>%(tabfriendlyname)s</span></a></li>"""
+TABLIST_BEGIN = """<ul class='nav nav-tabs' id='%(divid)s_tab'>"""
+
+TABLIST_ELEMENT = """
+<li>
+    <a data-toggle='tab' href='#%(divid)s-%(tabname)s'><span>%(tabfriendlyname)s</span></a>
+</li>
+"""
 
 TABLIST_END = """</ul>"""
 
-TABDIV_BEGIN = """<div id='%(divid)s-%(tabname)s'>"""
+TABCONTENT_BEGIN = """<div class='tab-content'>"""
+TABCONTENT_END = """</div>"""
+
+TABDIV_BEGIN = """<div class='tab-pane' id='%(divid)s-%(tabname)s'>"""
 
 TABDIV_END = """</div>""" 
 
 END = """
     </div>
     <script type='text/javascript'>
-        // init the jQuery tabs plugin
-        $(function() {
-            $("#%(divid)s").tabs({
-                "disabled":%(disabledtabs)s, 
-                "activate": function( event, ui ) {
-                    if ($(ui.newPanel).find('.disqus_thread_link')) {
-                        $(ui.newPanel).find('.disqus_thread_link').click();
-                    }
-                    if ($(ui.newPanel).find('.active_code')) {
-                        $(ui.newPanel).find('.CodeMirror').each(function(i, el){
-                            el.CodeMirror.refresh();
-                        });
-                    }
-                }
+        $('#%(divid)s .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#%(divid)s .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#%(divid)s .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
             });
-        });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
     </script>
 """
 
@@ -79,7 +91,6 @@ def visit_tab_node(self, node):
 
 def depart_tab_node(self,node):
     self.body.append(TABDIV_END)
-
 
 class TabbedStuffNode(nodes.General, nodes.Element):
     '''A TabbedStuffNode contains one or more TabNodes'''
@@ -107,6 +118,7 @@ def visit_tabbedstuff_node(self, node):
                                   'tabname':tab.tabname.replace(" ", "")}  
 
     res += TABLIST_END  # </ul>
+    res += TABCONTENT_BEGIN
 
     self.body.append(res)
 
@@ -114,22 +126,11 @@ def visit_tabbedstuff_node(self, node):
 def depart_tabbedstuff_node(self,node):
     divid = node.divid
 
-    disabled_tabs = node.tabbed_stuff_components['disabledtabs']
+    # close the tab plugin div and init the Bootstrap tabs
+    res = TABCONTENT_END
+    res += END
 
-    # this is kind of silly; the jQuery tab plugin starts indexing at 0, but there is only a 
-    # positive_int_list directives option type. So, we subtract 1 from each index.
-    disabled_tabs = [x - 1 for x in disabled_tabs]
-
-    # check to make sure that each of the tabs marked as disabled actually exist...
-    tabs = node.traverse(include_self=False, descend=True, condition=TabNode)
-    for i in disabled_tabs:
-        try:
-            temp = tabs[i]
-        except IndexError:
-            raise IndexError('Attempt to disable non-existent tab ' + str(i+1))
-
-    # close the tab plugin div and init the jQuery plugin 
-    res = END % {'divid':divid, 'disabledtabs':str(disabled_tabs)}
+    res = res % {'divid':divid}
 
     self.body.append(res)
 
@@ -161,15 +162,12 @@ class TabbedStuffDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     has_content = True
-    option_spec = {"disabledtabs":directives.positive_int_list}
 
     def run(self):
         # Raise an error if the directive does not have contents.
         self.assert_has_content()
 
         self.options['divid'] = self.arguments[0]
-        if 'disabledtabs' not in self.options:
-            self.options['disabledtabs'] = []
 
         # Create the node, to be populated by "nested_parse".
         tabbedstuff_node = TabbedStuffNode(self.options)

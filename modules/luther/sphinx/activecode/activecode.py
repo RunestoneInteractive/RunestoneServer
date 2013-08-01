@@ -59,19 +59,19 @@ EDIT1 = '''
 <button class='btn btn-small btn-success' id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
 UNHIDE='''
-<button class='btn btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();\
+<button class='btn btn-default btn-small' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();\
 $('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
 '''
 
 AUDIO = '''
-<input type="button" class='btn btn-small' id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
+<input type="button" class='btn btn-default btn-small' id="audiob" name="Play Audio" value="Start Audio Tour" onclick="createAudioTourHTML('%(divid)s','%(argu)s','%(no_of_buttons)s','%(ctext)s')"/>
 '''
 
 EDIT2 = '''
 <div id="cont"></div>
 
-<button class="ac_opt btn btn-small" style="display: inline-block" id="%(divid)s_saveb" onclick="saveEditor('%(divid)s');">Save</button>
-<button class="ac_opt btn btn-small" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
+<button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="%(divid)s_saveb" onclick="saveEditor('%(divid)s');">Save</button>
+<button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
 
 <script>
 if ('%(hidecode)s' == 'none') {
@@ -254,13 +254,6 @@ class ActiveCode(Directive):
 
         return [ActivcodeNode(self.options)]
 
-
-
-#EXEDIT = '''
-#<button class='btn btn-small btn-inverse' id="butt_%(divid)s" onclick="createActiveCode('%(divid)s','%(source)s'); $('#butt_%(divid)s').hide();">Open Editor</button>
-#<div id="%(divid)s"></div>
-#<br />
-#'''
 
 class ActiveExercise(ActiveCode):
     required_arguments = 1

@@ -1,0 +1,32 @@
+/* Styles for the Runestone tabbed exhibit directive */
+
+.tab-pane {
+    padding: 20px 15px 10px 15px;
+}
+
+.nav.nav-tabs {
+    padding-top: 6px;
+    background-color: #CFCCB8;
+    border-color: #fbeed5;
+    border-radius: 4px;
+}
+
+.nav.nav-tabs li {
+    margin-right: 1px;
+    margin-left: 6px;
+}
+
+.nav.nav-tabs li > a {
+    background-color: #E6E2CC;
+    border-bottom-color: #fcf8e3;
+    color: #555;
+}
+
+.nav-tabs > li > a:hover {
+    border-color: #b4b19d;
+    border-bottom-width:0;
+}
+
+.nav.nav-tabs li.active > a {
+    background-color: #faf7df;
+}
