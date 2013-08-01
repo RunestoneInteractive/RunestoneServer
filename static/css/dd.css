@@ -55,7 +55,14 @@
 }
      
 .word {
-	width:250px; height:20px; padding:1px; margin:5px; text-align:center; font-weight:bold; font-size:14px; border:1px solid #ff0000;
+	width:225px;
+    height:20px;
+    padding:1px;
+    margin:5px;
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+    border:1px solid #ff0000;
 	background-color:#fff;
 	display:inline-block;
 }

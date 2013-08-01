@@ -1,60 +1,104 @@
 /* Runestone custom modifications */
+
 body {
     padding-top: 60px;
     padding-bottom: 40px;
 }
 
-/* Remove top padding when top navbar goes collapsed in narrow viewports */
-@media (max-width: 979px) {
+pre {
+    margin: 1em 0;
+}
+
+h5 {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* navbar and menu related styles */
+@media (max-width: 768px) {
+    /* Remove top padding when top navbar goes collapsed in narrow viewports */
     body {
         padding-top: 0;
     }
+
+    .navbar-fixed-top {
+        position: relative;
+    }
 }
 
-.navbar .brand {
+@media (min-width: 768px) {
+    /* when navbar is collapsed we don't want any vertical dividers taking up space */
+    .navbar .divider-vertical {
+        height: 50px;
+        margin: 0 3px;
+        border-right: 1px solid #e8e8e8;
+        border-left: 1px solid #f2f2f2;
+    }
+}
+
+.navbar-brand {
     font-size: 18px;
-    margin-left: 0px;
+    margin-left: 0;
     padding-left:10px !important;
+    max-width: none;
 }
 
 .brand-logo {
     float: left;
     display: block;
-    background-size: 35px 35px !important;
-    width: 35px;
-    height: 35px;
-    margin-top:2px;
+    background-size: 40px 40px !important;
+    width: 40px;
+    height: 40px;
+    margin-top:4px;
 }
 
-pre {
-    margin: 1em 0px;
+.social-menu {
+    width: 275px;
+    padding: 10px 10px 15px 20px;
 }
 
-.CodeMirror {
-    margin: 0px 0px 1em 0px;
-    background-color: #fff;
+.fb-like {
+    margin-top: 7px;
 }
 
-/* override jQueryUI styles (to match bootstrap styles) */
-.ui-widget {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
 }
 
-.ui-widget-content {
-    color: #333;
+.twitter-follow-button {
+    margin-top: 10px;
 }
 
-/* needed to override the jQueryUI style */
-.ui-widget p {
-    font-size: 14px;
-}
-
-.ui-tabs {
-    margin-bottom: 30px;
+.gittip {
     margin-top: 8px;
 }
 
-button.btn.btn-small, 
+.gittip-button {
+    margin-bottom: -6px;
+}
+
+.dropdown-menu > li > span  {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loggedinuser {
+    font-weight:bold;
+}
+/* end navbar and menu related styles */
+
+.CodeMirror {
+    margin: 0 0 1em 0;
+    background-color: #fff;
+}
+
+button.btn.btn-small,
 input[type="submit"].btn.btn-small, 
 input[type="button"].btn.btn-small {
     font-size: 1em;
@@ -62,34 +106,48 @@ input[type="button"].btn.btn-small {
 }
 
 .btn {
-    margin: 5px 0px;
+    margin: 5px 0;
+}
+
+.btn.disabled {
+    /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
+    pointer-events: auto;
+}
+
+.tooltip {
+    z-index: 2000 !important;
+}
+
+.tooltip.in {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
 }
 
 h2 {
     margin-top: 20px;
 }
 
-label {
-    display: inline;
-}
-
 .alert form {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 /* the default Bootstrap color for .alert is hard to read, but
 the colors for the other .alert classes are fine */
-.alert:not(.alert-error):not(.alert-success):not(.alert-info)  {
+.alert:not(.alert-danger):not(.alert-success):not(.alert-info)  {
     color: #333;
 }
 
 /* override the color styles applied by Skulpt to the unittest results divs */
-.unittest-results.alert-error {
+.unittest-results.alert-danger {
     background-color: #f2dede !important;
 }
 
 .unittest-results.alert-success {
     background-color: #dff0d8 !important;
+}
+
+.alert label {
+    font-weight: normal;
 }
 
 /* These admonition styles styles are copied from the Bootstrap .alert classes.
@@ -106,7 +164,7 @@ the colors for the other .alert classes are fine */
     border-radius: 4px;
 }
 
-/* .alert-error */
+/* .alert-danger */
 .admonition.caution {
     color: #b94a48;
     background-color: #f2dede;
@@ -119,38 +177,6 @@ the colors for the other .alert classes are fine */
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
-
-.correct {
-    color: #84b8d9;    
-}
-
-.social-menu {
-    width: 275px;
-    padding: 10px 10px 15px 20px;
-}
-
-.fb-like {
-    margin-top: 7px;
-}
-
-.twitter-follow-button {
-    margin-top: 10px;
-}
-
-.dropdown-menu > li > span  {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: bold;
-    line-height: 20px;
-    color: #333;
-    white-space: nowrap;
-}
-
-.loggedinuser {
-    font-weight:bold;
-}
-
 /* from web2py.css */
 div.flash {
     font-weight: bold;
@@ -159,14 +185,13 @@ div.flash {
     top: 55px;
     right: 45px;
     opacity: 0.95;
-    margin: 0px 0px 10px 10px;
+    margin: 0 0 10px 10px;
     vertical-align: middle;
     cursor: pointer;
     color: #fff;
     background-color: #000;
     border: 2px solid #fff;
     border-radius: 8px;
-    -o-border-radius: 8px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     background-image: -webkit-linear-gradient(top,#222,#000);
@@ -179,6 +204,7 @@ div.flash {
     z-index: 2000;
 }
 
+/* Styles for the login, registration, and Janrain forms */
 #web2py_user_form {
     margin-top: 10px;
 }
@@ -186,7 +212,19 @@ div.flash {
 #web2py_user_form form {
     float: left;
     margin-right: 150px;
-    padding-top: 6px;
+    padding-top: 3px;
+}
+
+#web2py_user_form td {
+    padding-bottom: 15px;
+}
+
+#web2py_user_form td.w2p_fw {
+    width: 299px;
+}
+
+#auth-actions {
+    margin-top:50px;
 }
 
 #sign_in_text td {
@@ -196,9 +234,33 @@ div.flash {
     padding-bottom: 13px;
 }
 
-.fb_iframe_widget span, .fb_iframe_widget iframe {
-    height: 20px !important;
-    width: 82px !important;
+#auth_user_remember {
+    margin-top: -20px;
+}
+/* End login, registration, Janrain styles */
+
+/* end-of-chapter exercises styles */
+#exercises > ol > li {
+    margin-bottom: 30px;
+}
+
+#exercises > ol > li:nth-child(even) {
+    padding: 1.2em 1.4em;
+    background: #faf7df;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+/* End chapter exercises styles */
+
+/* Modal dialog styles (scratch activecode, compare me, etc) */
+.scratch-ac-modal {
+    width: 800px;
+}
+
+.compare-modal {
+    width: 350px;
 }
 
 .compare-modal table {
@@ -206,83 +268,18 @@ div.flash {
     border-spacing: 10px 5px;
 }
 
-.poll-question {
-    padding-bottom: 10px;
+.codelens-modal {
+    /* we set some custom position styles so that the modal doesn't obscure the codelens visualizer */
+    top: 20%;
+    right: 20%;
+    left: auto;
+    bottom: auto;
 }
 
-.poll-options input[type='radio'] {
-    margin: 0;
+.codelens-modal > .modal-dialog {
+    width: 400px;
 }
-
-.poll-options label {
-    padding-left: 8px;
-}
-
-.progress {
-    width: 350px;
-    margin-top: -20px;
-}
-
-.progress .bar {
-    color: #000000;
-}
-
-
-/* selectors beginning with #exercises are to provide some nice styling
-for the end-of-chapter exercies sections, overriding lots of the
-jQueryUI tab plugin styles to do it. */
-#exercises > ol > li:nth-child(even) {
-    padding: 1em 1.4em;
-}
-
-#exercises > ol > li {
-    background: #faf7df;
-    border: 1px solid #fbeed5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    margin-bottom: 30px;
-}
-
-#exercises > ol > li > .ui-tabs {
-    border: none;
-    background: #faf7df;
-    margin: 0;
-}
-
-#exercises > ol > li .ui-tabs-nav {
-    background: #CFCCB8;
-    border-color: #fbeed5;
-}
-
-#exercises > ol > li .ui-state-default {
-    background: #E6E2CC;
-}
-
-#exercises > ol > li .ui-state-default.ui-tabs-active {
-    background: #faf7df;
-}
-
-.simplemodal-container {
-    width: auto !important;
-    height: auto !important;
-    max-width: 350px;
-    max-height: 400px;
-}
-
-#scratch-ac-modal {
-    top: 55px !important;
-    width: 700px !important;
-    max-width: 700px;
-    max-height: 90%;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-#scratch-ac-modal .simplemodal-close {
-    top: 0;
-    right: 0;
-}
+/* End modal dialog styles */
 
 .footnote.table {
     width: auto;
@@ -296,18 +293,6 @@ jQueryUI tab plugin styles to do it. */
 
 .ac-canvas {
     background-color: white;
-}
-
-.gittip {
-    margin-top: 8px;
-}
-
-.gittip-button {
-    margin-bottom: -6px;
-}
-
-.tracecheck, .close-modal {
-    margin: 10px 8px 12px 0;
 }
 
 .video-play-overlay {
