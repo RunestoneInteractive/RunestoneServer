@@ -22,7 +22,14 @@ h5 {
     }
 
     .navbar-fixed-top {
-        position: relative;
+        position: static;
+    }
+
+    .codelens-modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
     }
 }
 
