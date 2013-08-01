@@ -3,10 +3,9 @@
 {% set script_files = script_files + [
     '_static/jquery-ui-1.10.3.custom.min.js',
     '_static/jquery-fix.js',
-    '_static/bootstrap-2.3.1/js/bootstrap.min.js',
+    '_static/bootstrap-3.0.0-rc1/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
     '_static/waypoints.min.js',
-    '_static/jquery.simplemodal.1.4.4.min.js',
     '_static/rangy-core.js',
     '_static/rangy-textrange.js',
     '_static/rangy-cssclassapplier.js',
@@ -16,7 +15,7 @@
   ]
 %}
 
-{% set css_files = ['_static/bootstrap-2.3.1/css/bootstrap.min.css'] + css_files %}
+{% set css_files = ['_static/bootstrap-3.0.0-rc1/css/bootstrap.min.css'] + css_files %}
 {% if theme_bootswatch_theme %}
   {% set css_files = css_files +
     ['http://netdna.bootstrapcdn.com/bootswatch/2.3.1/' + theme_bootswatch_theme + '/bootstrap.min.css']
@@ -24,9 +23,9 @@
 {% endif %}
 
 {% set css_files = css_files + [
+    '_static/bootstrap-3.0.0-rc1/css/bootstrap-glyphicons.css',
     '_static/jquery-ui-1.10.3.custom.min.css',
     '_static/bootstrap-sphinx.css',
-    '_static/bootstrap-2.3.1/css/bootstrap-responsive.min.css',
     '_static/user-highlights.css',
     '../runestone-custom-sphinx-bootstrap.css',
   ]
@@ -38,139 +37,143 @@
 
 {# Sidebar: Rework into our Boostrap nav section. #}
 {% macro navBar() %}
-  <div id="navbar" class="{{ theme_navbar_class }} {% if theme_navbar_fixed_top == 'true' -%} navbar-fixed-top{%- endif -%}">
-    <div class="navbar-inner">
 
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-fixed-top">
 
-      <div class="container">
-          <div class='navbar-brand'>
+  <div class="container">
+
+    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+    <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+
+    <div>
+     <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="/{{appname}}/default/user/login">&nbsp; </a>
+      <a class="navbar-brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+    </div>
+
+    <div class="nav-collapse collapse navbar-responsive-collapse">
+
+      <ul class="nav navbar-nav pull-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <div class="dropdown-menu social-menu">
             <div>
-              <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="/{{appname}}/default/user/login">&nbsp; </a>
-              <a class="brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+              <b>Follow Runestone in social media:</b>
+            </div>
+            <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+            <br><br>
+
+            <div>
+              <b>Help support us:</b>
+            </div>
+            <div class="gittip">
+              <iframe style="border:0;"
+                src="https://www.gittip.com/bnmnetp/widget.html"
+                width="48pt" height="22pt" class="gittip-button">
+              </iframe>
             </div>
           </div>
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
+        </li>
+        <!-- end social media dropdown -->
 
-        <div class="nav-collapse collapse">
-          <ul class="nav pull-right">
-            <li class="divider-vertical"></li>
-            
-            <!-- social media dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <img src='{{ pathto('_static/img/Facebook_icon.png', 1) }}' style='margin-top:-3px;' />
-                <img src='{{ pathto('_static/img/Twitter_icon.png', 1) }}' style='margin-top:-3px;' />
-              </a>
-              <div class="dropdown-menu social-menu">
-                <div>
-                  <b>Follow Runestone in social media:</b>
-                </div>
-                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
-                <br><br>
+        <li class="divider-vertical"></li>
 
-                <div>
-                  <b>Help support us:</b>
-                </div>
-                <div class="gittip">
-                  <iframe style="border:0;"
-                    src="https://www.gittip.com/bnmnetp/widget.html"
-                    width="48pt" height="22pt" class="gittip-button">
-                  </iframe>
-                </div>
-              </div>
-            </li>
-            
-            <li class="divider-vertical"></li>
-
-            <!-- search dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-search" style='opacity:0.6;'></i>
-              </a>
-              <ul class='dropdown-menu'>
-                {% if 'overview' in course_id: %}
-                    <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li>
-                {% else: %}
-                    <li><a href='{{ pathto(master_doc) }}'>Table of Contents</a></li>
-                {% endif %}
-                <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
-                <li class="divider"></li>
-                <li id="scratch_ac_link"><a href="javascript:showScratchActivecode()">Scratch ActiveCode</a></li>
-                <li class="divider"></li>
-                <li>
-                  <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
-                    <input type="text" name="q" placeholder="Search this book" />
-                    <input type="hidden" name="check_keywords" value="yes" />
-                    <input type="hidden" name="area" value="default" />
-                  </form>
-                </li>  
-              </ul>
-            </li>
-            <!-- end search dropdown -->
-
-            <li class="divider-vertical"></li>
-            
-            <!-- user account dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-user" style="opacity:0.6;"></i>
-              </a>
-              <ul class="dropdown-menu user-menu">
-                <li><span class='loggedinuser'></span></li>
-                <li class="divider"></li>
-                <li><a href="{{course_url}}/{{appname}}/default/user/profile">Edit Profile</a></li>
-                <li><a href="{{course_url}}/{{appname}}/default/user/change_password">Change Password</a></li>
-                <li class="divider"></li>
-                <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
-                <li><a href="{{course_url}}/{{appname}}/default/user/register">Register</a></li>
-              </ul>
-            </li>
-            <!-- end user account dropdown -->
-
-            <li class="divider-vertical"></li>
-            
-            <!-- help menu dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-question-sign" style="opacity:0.6;"></i>
-              </a>
-              <ul class="dropdown-menu user-menu">
-                <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
-                <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructors Page</a></li>
-                <li class="divider"></li>
-                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-                <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
-              </ul>
-            </li>
-            
-            <li class="divider-vertical"></li>
-
-          </ul>
-
-          <ul class="nav">
-            <li class="divider-vertical"></li>
-            {% block sidebartoc %}
-              {% include "localtoc.html" %}
-              <li class="divider-vertical"></li>
-            {% endblock %}
-            {% block sidebarrel %}
-              {% include "relations.html" %}
-            {% endblock %}
-            {% if theme_source_link_position == "nav" %}
-              <li>{% include "sourcelink.html" %}</li>
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            {% if 'overview' in course_id: %}
+                <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li>
+            {% else: %}
+                <li><a href='{{ pathto(master_doc) }}'>Table of Contents</a></li>
             {% endif %}
+            <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:showScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                </div>
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
           </ul>
-         
-        </div>
-      </div>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href="{{course_url}}/{{appname}}/default/user/profile">Edit Profile</a></li>
+            <li><a href="{{course_url}}/{{appname}}/default/user/change_password">Change Password</a></li>
+            <li class="divider"></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+            <li><a href="{{course_url}}/{{appname}}/default/user/register">Register</a></li>
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
+            <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructors Page</a></li>
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        {% block sidebartoc %}
+          {% include "localtoc.html" %}
+          <li class="divider-vertical"></li>
+        {% endblock %}
+        {% block sidebarrel %}
+          {% include "relations.html" %}
+        {% endblock %}
+        {% if theme_source_link_position == "nav" %}
+          <li>{% include "sourcelink.html" %}</li>
+        {% endif %}
+      </ul>
+
     </div>
   </div>
+</div>
 {% endmacro %}
 
 {%- block extrahead %}
@@ -245,17 +248,6 @@
   </div>
 </footer>
 
-<!-- This function is needed to allow the dropdown search bar to work;
-The default behaviour is that the dropdown menu closes when something in
-it (like the search bar) is clicked -->
-<script type='text/javascript'>
-    $(function() {
-        // Fix input element click problem
-        $('.dropdown input, .dropdown label').click(function(e) {
-            e.stopPropagation();
-        });
-    });
-</script>
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(addUserToFooter);
@@ -267,9 +259,31 @@ it (like the search bar) is clicked -->
 </script>
 
 <script type="text/javascript">
+  // add the video play button overlay image
   $(".video-play-overlay").each(function() {
     $(this).css('background-image', "url(\'{{pathto('_static/play_overlay_icon.png', 1)}}\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
   });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-small btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-small btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-small btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-small btn-default');
+      });
+  });
+
 </script>
 
 {% if appname == "courselib" %}

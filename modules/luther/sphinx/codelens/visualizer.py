@@ -40,15 +40,28 @@ VIS = '''
 <p class="cl_caption"><span class="cl_caption_text">%(caption)s (%(divid)s)</span> </p>'''
 
 QUESTION = '''
-<div id="%(divid)s_modal" class="basic-modal-content">
-    <h3>Check your understanding</h3>
-    %(question)s
-    <input id="%(divid)s_textbox" type="textbox" />
-    <button id="%(divid)s_tracecheck" class='btn btn-small tracecheck' onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">Check
-    Me</button>
-    <button class='btn btn-small close-modal' onclick="closeModal('%(divid)s')">Continue...</button>
-    <p id="%(divid)s_feedbacktext" class="feedbacktext alert"></p>
+<div id="%(divid)s_modal" class="modal fade codelens-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Check your understanding</h4>
+      </div>
+      <div class="modal-body">
+        <p>%(question)s</p>
+        <input id="%(divid)s_textbox" type="textbox" class="form-control" style="width:200px;" />
+        <br />
+        <button id="%(divid)s_tracecheck" class='btn btn-default btn-small tracecheck' onclick="traceQCheckMe('%(divid)s_textbox','%(divid)s','%(correct)s')">
+          Check Me
+        </button>
+        <button type="button" class="btn btn-default btn-small" data-dismiss="modal">Continue</button>
+        <br />
+        <p id="%(divid)s_feedbacktext" class="feedbacktext alert"></p>
+      </div>
+    </div>
+  </div>
 </div>
+
 '''
 
 DATA = '''
@@ -65,12 +78,13 @@ $(document).ready(function() {
                                 });
     attachLoggers(%(divid)s_vis,'%(divid)s');
     allVisualizers.push(%(divid)s_vis);
+
 });
 
 $(document).ready(function() {
     $("#%(divid)s_tracecheck").click(function() {
         logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'%(divid)s'});
-        });
+    });
 });
 
 if (allVisualizers === undefined) {

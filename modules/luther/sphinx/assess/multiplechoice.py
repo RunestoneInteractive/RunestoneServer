@@ -128,7 +128,7 @@ class MChoiceMF(Assessment):
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
-            <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
+            <button class='btn btn-small btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -208,7 +208,7 @@ class MChoiceMA(Assessment):
             $(document).ready(function(){checkMultipleSelect('%(divid)s');});
             </script>
             <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMAStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
-            <button class='btn btn-small' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>            
+            <button class='btn btn-small btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -328,13 +328,13 @@ class MChoiceRandomMF(Assessment):
                 feed=feed+self.options["feedback_"+feedArray[i]]+"*separator*"
                 self.options['opi']=i+1
                 res += OPTION % self.options
-            i=i+1;
+            i=i+1
         
         # Store the Answer and Feedback arrays
         self.options['a']=answ
         self.options['f']=feed
 
-        op=self.options['correct'];
+        op=self.options['correct']
 
         if(op=='a'):
             index=0

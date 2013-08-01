@@ -118,7 +118,7 @@ Example:
 	        if(fb.errors.length > 0) {
                     var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
                     msgBox.fadeIn(500);
-                    msgBox.attr('class','alert alert-error');
+                    msgBox.attr('class','alert alert-danger');
                     msgBox.html(fb.errors[0]);
                     logBookEvent({'event':'parsons', 'act':hash, 'div_id':'%(divid)s'});
 

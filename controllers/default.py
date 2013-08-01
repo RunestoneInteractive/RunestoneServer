@@ -48,7 +48,7 @@ def user():
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     try:
-        form.element(_id='submit_record__row')[1][0]['_class']='btn btn-small'
+        form.element(_id='submit_record__row')[1][0]['_class']='btn btn-default btn-small'
     except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
 
