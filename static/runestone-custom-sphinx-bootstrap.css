@@ -91,7 +91,6 @@ h5 {
 .loggedinuser {
     font-weight: bold;
 }
-
 /* end navbar and menu related styles */
 
 .CodeMirror {
@@ -117,10 +116,6 @@ input[type="button"].btn.btn-small {
 
 .tooltip {
     z-index: 2000 !important;
-}
-
-div.tooltip-inner {
-    width: 350px;
 }
 
 .tooltip.in {

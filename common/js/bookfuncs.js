@@ -262,6 +262,19 @@ function saveSuccess(data, status, whatever) {
         if (acid.indexOf("ERROR:") == 0) {
             alert(acid);
         } else {
+            // use a tooltip to provide some success feedback
+            var save_btn = $("#"+acid+"_saveb");
+            save_btn.attr('data-toggle', 'tooltip');
+            save_btn.attr('title', 'Saved!');
+            opts = {
+                'trigger': 'manual',
+                'placement': 'bottom',
+                'delay': { show:100, hide:500}
+            };
+            save_btn.tooltip(opts);
+            save_btn.tooltip('show');
+            setTimeout(function() {save_btn.tooltip('destroy')}, 4000);
+
             $('#' + acid + ' .CodeMirror').css('border-top', '2px solid #aaa');
             $('#' + acid + ' .CodeMirror').css('border-bottom', '2px solid #aaa');
         }
