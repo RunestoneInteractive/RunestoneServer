@@ -14,14 +14,14 @@ var feedbackMCMFRandom = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('Correct!!  ' + feedbackText);
         //$(divid).css('background-color', '#C8F4AD');
-        $(divid).attr('class','alert alert-success');
+        $(divid).attr('class', 'alert alert-success');
     } else {
         if (feedbackText == null) {
             feedbackText = '';
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-danger')
+        $(divid).attr('class', 'alert alert-danger')
     }
 };
 
@@ -55,21 +55,21 @@ var checkFIBStorage = function (divid, blankid, expected, feedback, casi) {
     feedBack('#' + divid + '_feedback', isCorrect, feedback);
     var answerInfo = 'answer:' + given + ":" + (isCorrect ? 'correct' : 'no');
     logBookEvent({'event': 'fillb', 'act': answerInfo, 'div_id': divid});
-    document.getElementById(divid + '_bcomp').disabled = false;    
+    document.getElementById(divid + '_bcomp').disabled = false;
 };
 
 var feedBack = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('You are Correct!');
         //$(divid).css('background-color', '#C8F4AD');
-        $(divid).attr('class','alert alert-success');
+        $(divid).attr('class', 'alert alert-success');
     } else {
         if (feedbackText == null) {
             feedbackText = '';
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-danger');
+        $(divid).attr('class', 'alert alert-danger');
     }
 };
 
@@ -81,14 +81,14 @@ var feedBackMCMF = function (divid, correct, feedbackText) {
     if (correct) {
         $(divid).html('Correct!!  ' + feedbackText);
         //$(divid).css('background-color', '#C8F4AD');
-        $(divid).attr('class','alert alert-success');
+        $(divid).attr('class', 'alert alert-success');
     } else {
         if (feedbackText == null) {
             feedbackText = '';
         }
         $(divid).html("Incorrect.  " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
-        $(divid).attr('class','alert alert-danger');
+        $(divid).attr('class', 'alert alert-danger');
     }
 };
 
@@ -105,8 +105,8 @@ var feedBackMCMA = function (divid, numCorrect, numNeeded, numGiven, feedbackTex
         $(divid).attr('class', 'alert alert-success');
     } else {
         $(divid).html("Incorrect.  " + "You gave " + numGiven +
-            " " + answerStr + " and got " + numCorrect + " correct of " +
-            numNeeded + " needed.<br /> " + feedbackText);
+                          " " + answerStr + " and got " + numCorrect + " correct of " +
+                          numNeeded + " needed.<br /> " + feedbackText);
         //$(divid).css('background-color', '#F4F4AD');
         $(divid).attr('class', 'alert alert-danger');
     }
@@ -266,7 +266,7 @@ var checkPreviousFIB = function (divid) {
                 var arr = ex.split(";");
                 var str = key + "_ans1";
                 $("#" + str).attr("value", arr[0]);
-                document.getElementById(divid + '_bcomp').disabled = false;                
+                document.getElementById(divid + '_bcomp').disabled = false;
             }
         }
     }
@@ -325,7 +325,7 @@ var checkMCMAStorage = function (divid, expected, feedbackArray) {
 
     // give the user feedback
     feedBackMCMA('#' + divid + '_feedback', correctCount,
-        correctArray.length, givenArray.length, feedback);
+                 correctArray.length, givenArray.length, feedback);
 
     document.getElementById(divid + '_bcomp').disabled = false;
 };
