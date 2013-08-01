@@ -32,7 +32,7 @@ is from a **key**, which can be any immutable type,
 to a **value**, which can be any Python data object.
 
 As an example, we will create a dictionary to translate English words into
-Spanish. For this dictionary, the keys are strings.
+Spanish. For this dictionary, the keys are strings and the values will also be strings.
 
 One way to create a dictionary is to start with the empty dictionary and add
 **key-value pairs**. The empty dictionary is denoted ``{}``
@@ -45,7 +45,7 @@ One way to create a dictionary is to start with the empty dictionary and add
     eng2sp['three'] = 'tres'
 
 
-The first assignment creates a dictionary named ``eng2sp``.  The other
+The first assignment creates an empty dictionary named ``eng2sp``.  The other
 assignments add new key-value pairs to the dictionary.  The left hand side gives the dictionary and the key being associated.  The right hand side gives the value being associated with that key.
 We can print the current
 value of the dictionary in the usual way.
@@ -78,13 +78,19 @@ Here is how we use a key to look up the corresponding value.
     eng2sp = {'three': 'tres', 'one': 'uno', 'two': 'dos'}
 
     value = eng2sp['two']
+    print(value)
 
 
 The key ``'two'`` yields the value ``'dos'``.
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-  .. actex:: dict_scratch_1
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_11_01
 
 
 **Check your understanding**
@@ -162,9 +168,6 @@ Notice that there are now 512 bananas---the dictionary has been modified.  Note 
 of key-value pairs:
 
 
-.. admonition:: Scratch Editor
-
-  .. actex:: dict_scratch_2
 
 
 **Check your understanding**
@@ -222,9 +225,7 @@ list by using the ``list`` conversion function.
        
     ks = list(inventory.keys())
     print(ks)
-    
-    for k in inventory:     
-       print("Got key", k)
+
     
 It is so common to iterate over the keys in a dictionary that you can
 omit the ``keys`` method call in the ``for`` loop --- iterating over
@@ -282,8 +283,8 @@ dictionary causes a runtime error.
 
 The ``get`` method allows us to access the value associated with a key, similar to the ``[ ]`` operator.
 The important difference is that ``get`` will not cause a runtime error if the key is not present.  It
-will instead return None.  There exists a variation of ``get`` that allows an alternative return value
-in the case where the key is not present.
+will instead return None.  There exists a variation of ``get`` that allows a second parameter that serves as an alternative return value
+in the case where the key is not present.  This can be seen in the final example below.  In this case, since "cherries" is not a key, return 0 (instead of None).
 
 .. activecode:: chp12_dict10
     
@@ -293,6 +294,17 @@ in the case where the key is not present.
     print(inventory.get("cherries"))
 
     print(inventory.get("cherries",0))
+
+
+Scratchpad
+----------
+
+.. note::
+
+    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+    .. activecode:: scratch_11_02
+
 
 **Check your understanding**
 
@@ -458,14 +470,17 @@ If you want to modify a dictionary and keep a copy of the original, use the dict
 Sparse matrices
 ---------------
 
-We previously used a list of lists to represent a matrix. That is a good choice
-for a matrix with mostly nonzero values, but consider a `sparse matrix
-<http://en.wikipedia.org/wiki/Sparse_matrix>`__ like this one:
+A matrix is a two dimensional collection, typically thought of as having rows and columns of data.  One of the easiest ways to create a matrix is to use a list of lists.  For example, consider the matrix shown below.  
+
+
+
 
 .. image:: Figures/sparse.png
    :alt: sparse matrix 
 
-The list representation contains a lot of zeroes:
+We can represent this collection as five rows, each row having five columns.  Using a list of lists representation, we will have a list of five items, each of which is a list of five items.  The
+outer items represent the rows and the items in the nested lists represent the data in each column.
+
 
 .. sourcecode:: python
     
@@ -474,8 +489,17 @@ The list representation contains a lot of zeroes:
               [0, 2, 0, 0, 0],
               [0, 0, 0, 0, 0],
               [0, 0, 0, 3, 0]]
+              
+              
+              
 
-An alternative is to use a dictionary. For the keys, we can use tuples that
+
+
+One thing that you might note about this example matrix is that there are many items that are zero.  In fact, only three of the
+data values are nonzero.  This type of matrix has a special name.  It is called a `sparse matrix <http://en.wikipedia.org/wiki/Sparse_matrix>`__.
+
+Since there is really no need to store all of the zeros, the list of lists representation is considered to be inefficient.
+An alternative representation is to use a dictionary. For the keys, we can use tuples that
 contain the row and column numbers. Here is the dictionary representation of
 the same matrix.
 
@@ -798,8 +822,29 @@ Exercises
             
 
         .. tab:: Answer
+        
+            .. activecode:: ch11_q5_answer
             
-            Put some sort of answer here!
+                pirate = {}
+                pirate['sir'] = 'matey'
+                pirate['hotel'] = 'fleabag inn'
+                pirate['student'] = 'swabbie'
+                pirate['boy'] = 'matey'
+                pirate['restaurant'] = 'galley'
+                #and so on
+            
+                sentence = input("Please enter a sentence in English")
+            
+                psentence = []
+                words = sentence.split()
+                for aword in words:
+                    if aword in pirate:
+                        psentence.append(pirate[aword])
+                    else:
+                        psentence.append(aword)
+                    
+                print(" ").join(psentence)
+            
 
         .. tab:: Discussion 
 

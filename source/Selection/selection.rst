@@ -108,10 +108,6 @@ if ``a == 7`` then ``7 == a``. But in Python, the statement ``a = 7``
 is legal and ``7 = a`` is not. (Can you explain why?)
 
 
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_1
-
 **Check your understanding**
 
 .. mchoicema:: test_question6_1_1
@@ -163,9 +159,6 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
 
 	There is a very common mistake that occurs when programmers try to write boolean expressions.  For example, what if we have a variable ``number`` and we want to check to see if its value is 5,6, or 7.  In words we might say: "number equal to 5 or 6 or 7".  However, if we translate this into Python, ``number == 5 or 6 or 7``, it will not be correct.  The ``or`` operator must join the results of three equality checks.  The correct way to write this is ``number == 5 or number == 6 or number == 7``.  This may seem like a lot of typing but it is absolutely necessary.  You cannot take a shortcut.
 
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_2
 
 **Check your understanding**
 
@@ -181,6 +174,8 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
    :feedback_d: Yes, with an and keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true.
 
    What is the correct Python expression for checking to see if a number stored in a variable x is between 0 and 5.
+
+
 
 Precedence of Operators
 -----------------------
@@ -202,9 +197,15 @@ Level     Category        Operators
 =======   ==============  ===============
 
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-    .. actex:: scratch_6_3
+.. note::
+
+  This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+  .. activecode:: scratch_06_01
+
 
 **Check your understanding**
 
@@ -245,8 +246,8 @@ Conditional Execution: Binary Selection
 
 In order to write useful programs, we almost always need the ability to check
 conditions and change the behavior of the program accordingly. **Selection statements**, sometimes
-also referred to as **conditional statements** give us this ability. The simplest form of selection is the **if**
-statement.  This is sometimes referred to as **binary selection** since there are two possible paths of execution.
+also referred to as **conditional statements**, give us this ability. The simplest form of selection is the **if statement**.  
+This is sometimes referred to as **binary selection** since there are two possible paths of execution.
 
 .. activecode:: ch05_4
 
@@ -299,9 +300,7 @@ There is no limit on the number of statements that can appear under the two clau
     * `Approximating Pi with Simulation <../Labs/montepi.html>`_ In this guided lab exercise we will work
       through a problem solving exercise related to approximating the value of pi using random numbers.
 
-.. admonition:: Scratch Editor
 
-    .. actex:: scratch_6_4
 
 **Check your understanding**
 
@@ -321,7 +320,7 @@ There is no limit on the number of statements that can appear under the two clau
 .. mchoicemf:: test_question6_4_2
    :answer_a: TRUE
    :answer_b: FALSE
-   :answer_c: TRUE<br>    FALSE
+   :answer_c: TRUE on one line and FALSE on the next
    :answer_d: Nothing will be printed
    :correct: b
    :feedback_a: TRUE is printed by the if-block, which only executes if the conditional (in this case, 4+5 == 10) is true.  In this case 5+4 is not equal to 10.
@@ -400,7 +399,7 @@ Omitting the `else` Clause: Unary Selection
 Another form of the ``if`` statement is one in which the ``else`` clause is omitted entirely.
 This creates what is sometimes called **unary selection**.
 In this case, when the condition evaluates to ``True``, the statements are
-executed, otherwise the flow of execution continues to the statement after the ``if``.
+executed.  Otherwise the flow of execution continues to the statement after the body of the ``if``.
 
 
 .. activecode:: ch05_unaryselection
@@ -411,12 +410,8 @@ executed, otherwise the flow of execution continues to the statement after the `
     print("This is always printed")
 
 
-What would be printed if the value of `` x`` is negative?  Try it.
+What would be printed if the value of ``x`` is negative?  Try it.
 
-
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_5
 
 **Check your understanding**
 
@@ -457,7 +452,7 @@ What would be printed if the value of `` x`` is negative?  Try it.
    :answer_a: No
    :answer_b: Yes
    :correct: b
-   :feedback_a: Every else-block must have exactly one corresponding if-block.  If you want to chain if-else statements together, you must use the else if construct, described in section 6.7.
+   :feedback_a: Every else-block must have exactly one corresponding if-block.  If you want to chain if-else statements together, you must use the else if construct, described in the chained conditionals section.
    :feedback_b: This will cause an error because the second else-block is not attached to a corresponding if-block.
 
    Will the following code cause an error?
@@ -497,7 +492,7 @@ The second branch (the else from the outer) contains another ``if`` statement, w
 has two branches of its own. Those two branches could contain
 conditional statements as well.
 
-The flow of control can be seen in this flowchart illustration.
+The flow of control for this example can be seen in this flowchart illustration.
 
 .. image:: Figures/flowchart_nested_conditional.png
 
@@ -541,10 +536,6 @@ If you are still a bit unsure, here is the same selection as part of a codelens 
         else:
             print("x and y must be equal")
 
-
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_6
 
 **Check your understanding**
 
@@ -618,9 +609,15 @@ Here is the same program using ``elif``.
         print("x and y must be equal")
 
 
-.. admonition:: Scratch Editor
+Scratchpad
+----------
 
-    .. actex:: scratch_6_7
+.. note::
+
+  This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+  .. activecode:: scratch_06_02
+
 
 **Check your understanding**
 
@@ -633,7 +630,7 @@ Here is the same program using ``elif``.
    :correct: b
    :feedback_a: You can not use a Boolean expression after an else.
    :feedback_b: Yes, II will give the same result.
-   :feedback_c: No, III will Not give the same result.  The first if statement will be true, but the second will be false, so the else part will execute.
+   :feedback_c: No, III will not give the same result.  The first if statement will be true, but the second will be false, so the else part will execute.
    :feedback_d: No, Although II is correct III will not give the same result.  Try it.
    :feedback_e: No, in I you can not have a Boolean expression after an else.
 
@@ -651,10 +648,11 @@ Here is the same program using ``elif``.
          else:
              print(x, " is 0")
 
-     I.
 
    .. code-block:: python
 
+     I.
+     
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
      else (x > 0):
@@ -662,9 +660,11 @@ Here is the same program using ``elif``.
      else:
          print(x, " is 0")
 
-     II.
+
    .. code-block:: python
 
+     II.
+     
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
      elif (x > 0):
@@ -672,10 +672,10 @@ Here is the same program using ``elif``.
      else:
          print(x, " is 0")
 
-     III.
-
    .. code-block:: python
 
+     III.
+     
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
      if (x > 0):
@@ -709,8 +709,9 @@ Here is the same program using ``elif``.
 Boolean Functions
 -----------------
 
-Functions can return boolean values, which is often convenient for hiding
-complicated tests inside functions. For example:
+We have already seen that boolean values result from the evaluation of boolean expressions.  Since the result of any
+expression evaluation can be returned by a function (using the ``return`` statement),
+functions can return boolean values.  This turns out to be a very convenient way to hide the details of complicated tests. For example:
 
 .. activecode:: ch06_boolfun1
 
@@ -750,7 +751,8 @@ Boolean functions are often used in conditional statements:
 
 It might be tempting to write something like
 ``if isDivisible(x, y) == True:``
-but the extra comparison is  not necessary.  The following example shows the ``isDivisible`` function at work.  Try it
+but the extra comparison is  not necessary.  The following example shows the ``isDivisible`` function at work.  Notice how
+descriptive the code is when we move the testing details into a boolean function.  Try it
 with a few other actual parameters to see what is printed.
 
 .. activecode:: ch06_boolfun2
@@ -768,7 +770,8 @@ with a few other actual parameters to see what is printed.
     else:
         print("Those values are no good")
 
-Here is the same program in codelens.
+Here is the same program in codelens.  When we evaluate the ``if`` statement in the main part of the program, the evaluation of
+the boolean expression causes a call to the ``isDivisible`` function.  This is very easy to see in codelens.
 
 .. codelens:: ch06_boolcodelens
     :showoutput:
@@ -787,9 +790,6 @@ Here is the same program in codelens.
         print("Those values are no good")
 
 
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_8
 
 **Check your understanding**
 
@@ -817,6 +817,15 @@ Here is the same program in codelens.
 
      return x + y < z
 
+
+Scratchpad
+----------
+
+.. note::
+
+   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
+
+   .. activecode:: scratch_06_03
 
 
 
@@ -919,7 +928,7 @@ Exercises
     #.  ``a > b``
     #.  ``a >= b``
     #.  ``a >= 18  and  day == 3``
-    #.  ``a >= 18  and  day != 3``
+    #.  ``a >= 18  or  day != 3``
 
         .. actex:: ex_6_2
 
@@ -947,9 +956,7 @@ Exercises
             The square and round brackets denote closed and open intervals.
             A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.
         
-            Let ``xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]``
-        
-            Test your function by printing the mark and the grade for all the elements in this list.
+            Test your function by printing the mark and the grade for a number of different marks.
         
             .. actex:: ex_6_3
 
@@ -960,18 +967,20 @@ Exercises
                 def grade(mark):
                     if mark >= 90:
                         return "A"
-                    if mark < 90 and mark >= 80:
-                        return "B"
-                    if mark < 80 and mark >= 70:
-                        return "C"
-                    if mark < 70 and mark >= 60:
-                        return "D"
-                    if mark < 60:
-                        return "F"
+                    else:
+                        if mark >= 80:
+                            return "B"
+                        else:
+                            if mark >= 70:
+                                return "C"
+                            else:
+                                if mark >= 60:
+                                    return "D"
+                                else:
+                                    return "F"
 
-                xs = [83, 75, 74.9, 70, 69.9, 65, 60, 59.9, 55, 50, 49.9, 45, 44.9, 40, 39.9, 2, 0]
-                for mark in xs:
-                    print( "Mark:", str(mark), "Grade:", grade(mark))
+                mark = 83
+                print( "Mark:", str(mark), "Grade:", grade(mark))
 
         .. tab:: Discussion 
 
@@ -980,7 +989,7 @@ Exercises
                 :identifier: disqus_b9e6fd14629949e59da1a4ae827c0032
 
 
-#.  Modify the turtle bar chart program so that the bar for any value
+#.  Modify the turtle bar chart program from the previous chapter so that the bar for any value
     of 200 or more is filled with red, values between [100 and 200) are filled yellow,
     and bars representing values less than 100 are filled green.
 
@@ -993,15 +1002,63 @@ Exercises
         .. tab:: Question
 
             In the turtle bar chart program, what do you expect to happen if one or more
-            of the data values in the list is negative?   Try it out.  Change the
+            of the data values in the list is negative?   Go back and try it out.  Change the
             program so that when it prints the text value for the negative bars, it puts
-            the text below the bottom of the bar.
+            the text above the base of the bar (on the 0 axis).
         
             .. actex:: ex_6_5
 
         .. tab:: Answer
             
-            Put some sort of answer here!
+            .. activecode:: answer_ex_6_5
+
+                    import turtle
+
+                    def drawBar(t, height):
+                      """ Get turtle t to draw one bar, of height. """
+                      t.begin_fill()               # start filling this shape
+                      if height < 0:
+                          t.write(str(height))
+                      t.left(90)
+                      t.forward(height)
+                      if height >=0:
+                          t.write(str(height))
+                      t.right(90)
+                      t.forward(40)
+                      t.right(90)
+                      t.forward(height)
+                      t.left(90)
+                      t.end_fill()                 # stop filling this shape
+
+
+
+                    xs = [48,-50,200,240,160,260,220]  # here is the data
+                    maxheight = max(xs)
+                    minheight = min(xs)
+                    numbars = len(xs)
+                    border = 10
+
+                    tess = turtle.Turtle()           # create tess and set some attributes
+                    tess.color("blue")
+                    tess.fillcolor("red")
+                    tess.pensize(3)
+
+                    wn = turtle.Screen()             # Set up the window and its attributes
+                    wn.bgcolor("lightgreen")
+                    if minheight >0:
+                        lly = 0
+                    else:
+                        lly = minheight-border
+    
+                    wn.setworldcoordinates(0-border,lly,40*numbars+border,maxheight+border)
+
+
+                    for a in xs:
+                      drawBar(tess, a)
+
+                    wn.exitonclick()
+
+
 
         .. tab:: Discussion 
 
@@ -1010,7 +1067,7 @@ Exercises
                 :identifier: disqus_0118bd02de23462bafdb51beb4c85e44
 
 
-#.  Write a function ``findHypot`` which, given the length of two sides of a right-angled triangle, returns
+#.  Write a function ``findHypot``.  The function will be given the length of two sides of a right-angled triangle and it should return
     the length of the hypotenuse.  (Hint:  ``x ** 0.5`` will return the square root, or use ``sqrt`` from the math module)
 
     .. actex:: ex_6_6
@@ -1253,14 +1310,53 @@ Exercises
 
         .. tab:: Question
 
-            Implement the Date of Easter program as described in class.
+            Implement the calculator for the date of Easter.
+            
+            The following algorithm computes the date for Easter Sunday for any year between 1900 to 2099.
+            
+            Ask the user to enter a year.
+            Compute the following:
+            
+            
+            
+                1. a = year % 19
+                #. b = year % 4
+                #. c = year % 7
+                #. d = (19 * a + 24) % 30
+                #. e = (2 * b + 4 * c + 6 * d + 5) % 7
+                #. dateofeaster = 22 + d + e
+            
+            
+            Special note: The algorithm can give a date in April.  Also, if the year is one of four special 
+            years (1954, 1981, 2049, or 2076) then subtract 7 from the date.
+            
+            Your program should print an error message if the user provides a date that is out of range.
         
             .. actex:: ex_6_13
         
 
         .. tab:: Answer
+
+            .. activecode:: answer_ex_6_13
             
-            Put some sort of answer here!
+                year = int(input("Please enter a year"))
+                if year >= 1900 and year <= 2099:
+                    a = year % 19
+                    b = year % 4
+                    c = year % 7
+                    d = (19*a + 24) % 30
+                    e = (2*b + 4*c + 6*d + 5) % 7
+                    dateofeaster = 22 + d + e
+
+                    if year == 1954 or year == 2981 or year == 2049 or year == 2076:
+                        dateofeaster = dateofeaster - 7
+                
+                    if dateofeaster > 31:
+                        print("April", dateofeaster - 31)
+                    else:
+                        print("March", dateofeaster)
+                else:
+                    print("ERROR...year out of range")
 
         .. tab:: Discussion 
 
@@ -1268,9 +1364,6 @@ Exercises
                 :shortname: interactivepython
                 :identifier: disqus_2dfd6acf1ca849c2853dad606d1ba255
 
-.. admonition:: Scratch Editor
-
-    .. actex:: scratch_6_9
 
 .. toctree::
     :hidden:

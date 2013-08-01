@@ -20,7 +20,7 @@ So far, the data we have used in this book have all been either coded right into
 
 For our purposes, we will assume that our data files are text files--that is, files filled with characters. The Python programs that you write are stored as text files.  We can create these files in any of a number of ways. For example, we could use a text editor to type in and save the data.  We could also download the data from a website and then save it in a file. Regardless of how the file is created, Python will allow us to manipulate the contents.
 
-In Python, we must **open** files before we can use them and **close** them when we are done with them. As you might expect, once a file is opened it becomes a Python object just like all other data. :ref:`Table 1<filemethods1a>` shows the methods that can be used to open and close files.
+In Python, we must **open** files before we can use them and **close** them when we are done with them. As you might expect, once a file is opened it becomes a Python object just like all other data. :ref:`Table 1<filemethods1a>` shows the functions and methods that can be used to open and close files.
 
 .. _filemethods1a:
 
@@ -37,7 +37,7 @@ Finding a File on your Disk
 
 Opening a file requires that you, as a programmer, and Python agree about the location of the file on your disk.  The way that files are located on disk is by their **path**  You can think of the filename as the short name for a file, and the path as the full name.  For example on a Mac if you save the file ``hello.txt`` in your home directory the path to that file is ``/Users/yourname/hello.txt``  On a Windows machine the path looks a bit different but the same principles are in use.  For example on windows the path might be ``C:\Users\yourname\My Documents\hello.txt``
 
-You can access files in folders, also called directories, under your home directory by adding a slash and the name of the folder.  For example we have been storing files to use with PyCharm in the CS150 folder inside the PyCharmProjects folder under your home directory.  The full name for ``hello.py`` stored in the CS150 folder would be ``/Users/yourname/PyCharmProjects/CS150/hello.py``
+You can access files in folders, also called directories, under your home directory by adding a slash and the name of the folder.  For example, if you had a file called ``hello.py`` in a folder called ``CS150``  that was inside a folder called ``PyCharmProjects`` under your home directory, then the full name for ``hello.py`` stored in the CS150 folder would be ``/Users/yourname/PyCharmProjects/CS150/hello.py``
 
 Here's the important rule to remember:  If your file and your Python program are in the same directory you can simply use the filename. ``open('myfile.txt','r')`` If your file and your Python program are in different directories then you should use the path to the file ``open(/Users/joebob01/myfile.txt)``.
 
@@ -57,40 +57,40 @@ other years. The format of the data file is as follows
 .. raw:: html
 
 	<pre id="qbdata.txt">
-    Colt McCoy QB, CLE  135 222 1576    6   9   60.8%   74.5
-    Josh Freeman QB, TB 291 474 3451    25  6   61.4%   95.9
-    Michael Vick QB, PHI    233 372 3018    21  6   62.6%   100.2
-    Matt Schaub QB, HOU 365 574 4370    24  12  63.6%   92.0
-    Philip Rivers QB, SD    357 541 4710    30  13  66.0%   101.8
-    Matt Hasselbeck QB, SEA 266 444 3001    12  17  59.9%   73.2
-    Jimmy Clausen QB, CAR   157 299 1558    3   9   52.5%   58.4
-    Joe Flacco QB, BAL  306 489 3622    25  10  62.6%   93.6
-    Kyle Orton QB, DEN  293 498 3653    20  9   58.8%   87.5
-    Jason Campbell QB, OAK  194 329 2387    13  8   59.0%   84.5
-    Peyton Manning QB, IND  450 679 4700    33  17  66.3%   91.9
-    Drew Brees QB, NO   448 658 4620    33  22  68.1%   90.9
-    Matt Ryan QB, ATL   357 571 3705    28  9   62.5%   91.0
-    Matt Cassel QB, KC  262 450 3116    27  7   58.2%   93.0
-    Mark Sanchez QB, NYJ    278 507 3291    17  13  54.8%   75.3
-    Brett Favre QB, MIN 217 358 2509    11  19  60.6%   69.9
-    David Garrard QB, JAC   236 366 2734    23  15  64.5%   90.8
-    Eli Manning QB, NYG 339 539 4002    31  25  62.9%   85.3
-    Carson Palmer QB, CIN   362 586 3970    26  20  61.8%   82.4
-    Alex Smith QB, SF   204 342 2370    14  10  59.6%   82.1
-    Chad Henne QB, MIA  301 490 3301    15  19  61.4%   75.4
-    Tony Romo QB, DAL   148 213 1605    11  7   69.5%   94.9
-    Jay Cutler QB, CHI  261 432 3274    23  16  60.4%   86.3
-    Jon Kitna QB, DAL   209 318 2365    16  12  65.7%   88.9
-    Tom Brady QB, NE    324 492 3900    36  4   65.9%   111.0
-    Ben Roethlisberger QB, PIT  240 389 3200    17  5   61.7%   97.0
-    Kerry Collins QB, TEN   160 278 1823    14  8   57.6%   82.2
-    Derek Anderson QB, ARI  169 327 2065    7   10  51.7%   65.9
-    Ryan Fitzpatrick QB, BUF    255 441 3000    23  15  57.8%   81.8
-    Donovan McNabb QB, WAS  275 472 3377    14  15  58.3%   77.1
-    Kevin Kolb QB, PHI  115 189 1197    7   7   60.8%   76.1
-    Aaron Rodgers QB, GB    312 475 3922    28  11  65.7%   101.2
-    Sam Bradford QB, STL    354 590 3512    18  15  60.0%   76.5
-    Shaun Hill QB, DET  257 416 2686    16  12  61.8%   81.3
+    Colt McCoy QB CLE  135 222 1576    6   9   60.8%   74.5
+    Josh Freeman QB TB 291 474 3451    25  6   61.4%   95.9
+    Michael Vick QB PHI    233 372 3018    21  6   62.6%   100.2
+    Matt Schaub QB HOU 365 574 4370    24  12  63.6%   92.0
+    Philip Rivers QB SD    357 541 4710    30  13  66.0%   101.8
+    Matt Hasselbeck QB SEA 266 444 3001    12  17  59.9%   73.2
+    Jimmy Clausen QB CAR   157 299 1558    3   9   52.5%   58.4
+    Joe Flacco QB BAL  306 489 3622    25  10  62.6%   93.6
+    Kyle Orton QB DEN  293 498 3653    20  9   58.8%   87.5
+    Jason Campbell QB OAK  194 329 2387    13  8   59.0%   84.5
+    Peyton Manning QB IND  450 679 4700    33  17  66.3%   91.9
+    Drew Brees QB NO   448 658 4620    33  22  68.1%   90.9
+    Matt Ryan QB ATL   357 571 3705    28  9   62.5%   91.0
+    Matt Cassel QB KC  262 450 3116    27  7   58.2%   93.0
+    Mark Sanchez QB NYJ    278 507 3291    17  13  54.8%   75.3
+    Brett Favre QB MIN 217 358 2509    11  19  60.6%   69.9
+    David Garrard QB JAC   236 366 2734    23  15  64.5%   90.8
+    Eli Manning QB NYG 339 539 4002    31  25  62.9%   85.3
+    Carson Palmer QB CIN   362 586 3970    26  20  61.8%   82.4
+    Alex Smith QB SF   204 342 2370    14  10  59.6%   82.1
+    Chad Henne QB MIA  301 490 3301    15  19  61.4%   75.4
+    Tony Romo QB DAL   148 213 1605    11  7   69.5%   94.9
+    Jay Cutler QB CHI  261 432 3274    23  16  60.4%   86.3
+    Jon Kitna QB DAL   209 318 2365    16  12  65.7%   88.9
+    Tom Brady QB NE    324 492 3900    36  4   65.9%   111.0
+    Ben Roethlisberger QB PIT  240 389 3200    17  5   61.7%   97.0
+    Kerry Collins QB TEN   160 278 1823    14  8   57.6%   82.2
+    Derek Anderson QB ARI  169 327 2065    7   10  51.7%   65.9
+    Ryan Fitzpatrick QB BUF    255 441 3000    23  15  57.8%   81.8
+    Donovan McNabb QB WAS  275 472 3377    14  15  58.3%   77.1
+    Kevin Kolb QB PHI  115 189 1197    7   7   60.8%   76.1
+    Aaron Rodgers QB GB    312 475 3922    28  11  65.7%   101.2
+    Sam Bradford QB STL    354 590 3512    18  15  60.0%   76.5
+    Shaun Hill QB DET  257 416 2686    16  12  61.8%   81.3
     </pre>
 
 To open this file, we would call the ``open`` function. The variable,
@@ -140,9 +140,8 @@ is as follows:
 To process all of our quarterback data, we will use a *for* loop to iterate over the lines of the file. Using
 the ``split`` method, we can break each line into a list containing all the fields of interest about the
 quarterback. We can then take the values corresponding to first name, lastname, and passer rating to
-construct a simple sentence as shown in :ref:`Listing 1 <readingfile1>`.
+construct a simple sentence.
 
-.. _readingfile1:
 
 .. activecode:: files_for
 
@@ -168,7 +167,7 @@ reaches the end of the file. The ``readlines`` method returns the contents of
 the entire file as a list of strings, where each item in the list represents
 one line of the file. It is also possible to read the entire file into a
 single string with ``read``. :ref:`Table 2 <filemethods2a>` summarizes these methods
-and :ref:`Session 2 <filesession>` shows them in action.
+and the following session shows them in action.
 
 Note that we need to reopen the file before each read so that we start from
 the beginning. Each file has a marker that denotes the current read position
@@ -178,7 +177,6 @@ of ``readline`` this moves the marker to the first character of the next line
 in the file. In the case of ``read`` or ``readlines`` the marker is moved to
 the end of the file.
 
-.. _filesession:
 
 ::
 
@@ -192,21 +190,21 @@ the end of the file.
     >>> print(len(linelist))
     34
     >>> print(linelist[0:4])
-    ['Colt McCoy QB, CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n',
-     'Josh Freeman QB, TB\t291\t474\t3451\t25\t6\t61.4%\t95.9\n',
-     'Michael Vick QB, PHI\t233\t372\t3018\t21\t6\t62.6%\t100.2\n',
-     'Matt Schaub QB, HOU\t365\t574\t4370\t24\t12\t63.6%\t92.0\n']
+    ['Colt McCoy QB CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n',
+     'Josh Freeman QB TB\t291\t474\t3451\t25\t6\t61.4%\t95.9\n',
+     'Michael Vick QB PHI\t233\t372\t3018\t21\t6\t62.6%\t100.2\n',
+     'Matt Schaub QB HOU\t365\t574\t4370\t24\t12\t63.6%\t92.0\n']
     >>>
     >>> infile = open("qbdata.txt","r")
     >>> filestring = infile.read()
     >>> print(len(filestring))
     1708
     >>> print(filestring[:256])
-    Colt McCoy QB, CLE	135	222	1576	6	9	60.8%	74.5
-    Josh Freeman QB, TB	291	474	3451	25	6	61.4%	95.9
-    Michael Vick QB, PHI	233	372	3018	21	6	62.6%	100.2
-    Matt Schaub QB, HOU	365	574	4370	24	12	63.6%	92.0
-    Philip Rivers QB, SD	357	541	4710	30	13	66.0%	101.8
+    Colt McCoy QB CLE	135	222	1576	6	9	60.8%	74.5
+    Josh Freeman QB TB	291	474	3451	25	6	61.4%	95.9
+    Michael Vick QB PHI	233	372	3018	21	6	62.6%	100.2
+    Matt Schaub QB HOU	365	574	4370	24	12	63.6%	92.0
+    Philip Rivers QB SD	357	541	4710	30	13	66.0%	101.8
     Matt Ha
     >>>
 
@@ -236,7 +234,7 @@ the end of the file.
                                                       returned.
 ======================== =========================== =====================================
 
-Now lets look at another method of reading our file using a ``while`` loop.  This important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
+Now lets look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
 
 .. activecode:: files_while
 
@@ -249,7 +247,17 @@ Now lets look at another method of reading our file using a ``while`` loop.  Thi
 
     infile.close()
 
-The important thing to notice is that on line two we have the statement ``line = infile.readline()``  This is very important because the while condition needs to have a value for the ``line`` variable.  We call this initial read the **priming read**.
+The important thing to notice is that on line 2 we have the statement ``line = infile.readline()``.  
+We call this initial read the **priming read**.
+It is very important because the while condition needs to have a value for the ``line`` variable.  The ``readline`` method will return the
+empty string if there is no more data in the file.  The condition ``while line:`` means `while the content of line is not the empty string`.  Remember that a
+blank line in the file actually has a single character, the ``\n`` character (newline).  So, the only way that a line of data from the
+file can be empty is if you are reading at the end of the file.
+
+Finally, notice that the last line of the body of the ``while`` loop performs another ``readline``.  This statement will reassign the variable ``line`` to the next line of the file.  It represents the `change of state` that is necessary for the iteration to
+function correctly.  Without it, there would be an infinite loop processing the same line of data over and over.
+
+
 
 Glossary
 --------
@@ -276,76 +284,151 @@ Glossary
 Exercises
 ---------
 
-The following sample file contains one line for each student in an imaginary class the students name is the first thing on each line, followed by some exam scores.
 
-.. raw:: html
 
-    <pre id="student_data.dat">
-    joe 10 15 20 30 40
-    bill 23 16 19 22
-    sue 8 22 17 14 32 17 24 21 2 9 11 17
-    grace 12 28 21 45 26 10
-    john 14 32 25 16 89
-    </pre>
+#. 
 
-#. Using the text file ``student_data.dat`` write a program that prints out the names of
-   students that have more than six quiz scores.
 
-   .. actex:: ex_10_1
+    .. tabbed:: q1
 
-#. Using the text file ``student_data.dat`` write a program that calculates the average grade
+        .. tab:: Question
+
+            The following sample file called ``studentdata.txt`` contains one line for each student in an imaginary class.  The 
+            students name is the first thing on each line, followed by some exam scores.  
+            The number of scores might be different for each student.
+
+            .. raw:: html
+
+                <pre id="studentdata.txt">
+                joe 10 15 20 30 40
+                bill 23 16 19 22
+                sue 8 22 17 14 32 17 24 21 2 9 11 17
+                grace 12 28 21 45 26 10
+                john 14 32 25 16 89
+                </pre>
+            
+            Using the text file ``studentdata.txt`` write a program that prints out the names of
+            students that have more than six quiz scores.
+       
+       
+       
+            .. actex:: ex_6_1
+    
+
+        .. tab:: Answer
+    
+            .. activecode:: ch_files_q1answer
+        
+                f = open("studentdata.txt","r")
+            
+                for aline in f:
+                   items = aline.split()
+                   if len(items[1:]) > 6:
+                      print(items[0])
+                  
+                f.close()
+
+        .. tab:: Discussion 
+
+            .. disqus::
+                :shortname: interactivepython
+                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe
+
+
+
+#. Using the text file ``studentdata.txt`` (shown in exercise 1) write a program that calculates the average grade
    for each student, and print out the student's name along with their average grade.
 
    .. actex:: ex_10_2
 
-#. Using the text file ``student_data.dat`` write a program that calculates the minimum
-   and maximum grade grade for each student.  Print out the students name along with their
-   minimum and maximum scores.
 
-   .. actex:: ex_10_3
+   
+#.
 
-   Here is a file called ``lab_data.dat`` that contains some sample data from a lab experiment.
+    .. tabbed:: q3
 
+        .. tab:: Question
 
-.. raw:: html
-
-	<pre id='lab_data.dat'>
-    44 71
-    79 37
-    78 24
-    41 76
-    19 12
-    19 32
-    28 36
-    22 58
-    89 92
-    91 6
-    53 7
-    27 80
-    14 34
-    8 81
-    80 19
-    46 72
-    83 96
-    88 18
-    96 48
-    77 67
-	</pre>
+ 
+            Using the text file ``studentdata.txt`` (shown in exercise 1) write a program that calculates the minimum and
+            maximum score for each student.  Print out their name as well.
+   
+   
+   
+            .. actex:: ex_6_3
 
 
+        .. tab:: Answer
 
-4.  Using the data file ``lab_data.data`` each line contains a an x,y coordinate pair.
+            .. activecode:: ch_files_q3answer
+    
+                f = open("studentdata.txt","r")
+        
+                for aline in f:
+                   items = aline.split()
+                   print(items[0],"max is", max(items[1:]), "min is", min(items[1:]))
+              
+                f.close()
+
+        .. tab:: Discussion 
+
+            .. disqus::
+                :shortname: interactivepython
+                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe_q3
+
+   
+   
+   
+   
+   
+   
+
+
+
+
+#.  Here is a file called ``labdata.txt`` that contains some sample data from a lab experiment.
+
+
+    .. raw:: html
+
+        <pre id='labdata.txt'>
+        44 71
+        79 37
+        78 24
+        41 76
+        19 12
+        19 32
+        28 36
+        22 58
+        89 92
+        91 6
+        53 7
+        27 80
+        14 34
+        8 81
+        80 19
+        46 72
+        83 96
+        88 18
+        96 48
+        77 67
+        </pre>
+
+
+
+    Interpret the data file ``labdata.txt`` such that each line contains a an x,y coordinate pair.
     Write a function called ``plotRegression`` that reads the data from this file
     and uses a turtle to plot those points and a best fit line according to the following
-    formulas
+    formulas:
 
-	.. math::
 
-       y = \bar{y} + m(x - \bar{x})
+    :math:`y = \bar{y} + m(x - \bar{x})`
 
-       m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}
+    :math:`m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}`
 
-	Where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
+
+
+	where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
 	values and :math:`n` is the number of points.  If you are not familiar with the
 	mathematical :math:`\sum` it is the sum operation.  For example :math:`\sum{x_i}`
 	means to add up all the x values.
@@ -354,21 +437,74 @@ The following sample file contains one line for each student in an imaginary cla
 	``setworldcoordinates`` so that that each point can be plotted.  Then you should
 	draw the best fit line, in a different color, through the points.
 
+
+
     .. actex:: ex_10_4
 
 
-5.  At the end of this chapter is a very long file called ``mystery.dat`` The lines of this
-    file contain either the word UP or DOWN or a pair of numbers.  UP and DOWN are instructions
-    for a turtle to lift up or put down its tail.  The pair of numbers are some x,y coordinates.
-    Write a program that reads the file ``mystery.dat`` and uses the turtle to draw the picture
-    described by the commands and the set of points.
+#.  
 
-    .. actex:: ex_10_5
+
+    .. tabbed:: q5
+
+        .. tab:: Question
+
+            At the end of this chapter is a very long file called ``mystery.txt`` The lines of this
+            file contain either the word UP or DOWN or a pair of numbers.  UP and DOWN are instructions
+            for a turtle to lift up or put down its tail.  The pair of numbers are some x,y coordinates.
+            Write a program that reads the file ``mystery.txt`` and uses the turtle to draw the picture
+            described by the commands and the set of points.
+
+            .. actex:: ex_10_5
+   
+
+
+        .. tab:: Answer
+
+            .. activecode:: ch_files_q5answer
+            
+                import turtle
+                
+                t = turtle.Turtle()
+                wn = turtle.Screen()
+                wn.setworldcoordinates(-300,-300,300,300)
+                
+                f = open("mystery.txt","r")
+                
+                for aline in f:
+                    items = aline.split()
+                    if items[0] == "UP":
+                        t.up()
+                    else:
+                        if items[0] == "DOWN":
+                            t.down()
+                        else:
+                            #must be coords
+                            t.goto(int(items[0]),int(items[1]))
+                            
+                f.close()
+                wn.exitonclick()
+    
+
+
+        .. tab:: Discussion 
+
+            .. disqus::
+                :shortname: interactivepython
+                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe_q5
+
+
+
+
+
+
+
+Here is the ``mystery.txt`` file:
 
 
 .. raw:: html
 
-   <pre id="mystery.dat">
+   <pre id="mystery.txt">
    UP
    -218 185
    DOWN
