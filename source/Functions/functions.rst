@@ -115,7 +115,7 @@ this purpose!
 .. admonition::  docstrings
 
     If the first thing after the function header is a string (some tools insist that
-    it must be a triple-quoted string). It is called a **docstring**
+    it must be a triple-quoted string), it is called a **docstring**
     and gets special treatment in Python and in some of the programming tools.
 
     Another way to retrieve this information is to use the interactive
