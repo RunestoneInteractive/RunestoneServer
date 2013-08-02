@@ -463,8 +463,14 @@ function addUserToFooter() {
 
 function addNavbarLoginLink() {
     if (isLoggedIn()) {
+        $('#profilelink').show();
+        $('#passwordlink').show();
+        $('#registerlink').hide();
         $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/logout">Log Out</a>')
     } else {
+        $('#registerlink').show();
+        $('#profilelink').hide();
+        $('#passwordlink').hide();
         $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
     }
 }
