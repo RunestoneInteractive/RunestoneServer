@@ -381,10 +381,7 @@ However, now we can perform addition in the same manner that we are used to with
 	It turns out that addition is a method that exists for integers as well.  4+5 can be written as (4).__add__(5).
 	We are asking 4 to invoke its add method, passing 5 as the other value.
 	
-	
-	
-Scratchpad
-----------
+
 
 .. note::
 

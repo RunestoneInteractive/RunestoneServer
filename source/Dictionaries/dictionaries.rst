@@ -83,8 +83,7 @@ Here is how we use a key to look up the corresponding value.
 
 The key ``'two'`` yields the value ``'dos'``.
 
-Scratchpad
-----------
+
 
 .. note::
 
@@ -296,8 +295,7 @@ in the case where the key is not present.  This can be seen in the final example
     print(inventory.get("cherries",0))
 
 
-Scratchpad
-----------
+
 
 .. note::
 

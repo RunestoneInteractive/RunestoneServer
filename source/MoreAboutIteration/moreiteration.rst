@@ -187,8 +187,6 @@ terminates.
 So why have two kinds of loop if ``for`` looks easier?  This next example shows an indefinite iteration where
 we need the extra power that we get from the ``while`` loop.
 
-Scratchpad
-----------
 
 .. note::
 
@@ -401,15 +399,6 @@ was still in the screen in another part of the program.  Another advantage is
 that if you ever need to write a similar program, you can reuse this function
 with confidence the next time you need it.  Breaking up this
 program into a couple of parts is another example of functional decomposition.
-
-Scratchpad
-----------
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_07_02
 
 
 
@@ -653,8 +642,6 @@ algorithm.
 .. index:: table, logarithm, Intel, Pentium, escape sequence, tab, newline,
            cursor
 
-Scratchpad
-----------
 
 .. note::
 
@@ -716,14 +703,6 @@ of the previous program.
 Because of the tab characters between the columns, the position of the second
 column does not depend on the number of digits in the first column.
 
-Scratchpad
-----------
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_07_04
 
 
 
@@ -1154,8 +1133,6 @@ If you want to try some image processing on your own, outside of the textbook yo
 
 
 
-Scratchpad
-----------
 
 .. note::
 

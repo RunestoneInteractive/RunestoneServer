@@ -780,9 +780,6 @@ programs much easier for humans to parse.  Use them liberally!
    What are comments for?
 
 
-Scratchpad
-----------
-
 .. note::
 
    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
