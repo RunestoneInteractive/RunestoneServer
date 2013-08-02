@@ -1360,8 +1360,3 @@ Exercises
                 :identifier: disqus_2dfd6acf1ca849c2853dad606d1ba255
 
 
-.. toctree::
-    :hidden:
-
-    ../Labs/montepi
-

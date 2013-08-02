@@ -450,8 +450,3 @@ Exercises
     .. actex:: ex_mod_4
     
 
-.. toctree::
-    :hidden:
-
-    ../Labs/sinlab
-

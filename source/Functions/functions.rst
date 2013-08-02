@@ -1802,9 +1802,3 @@ Exercises
 
 
 
-.. toctree::
-    :hidden:
-
-    ../Labs/lab04_01
-    ../Labs/lab04_01a
-

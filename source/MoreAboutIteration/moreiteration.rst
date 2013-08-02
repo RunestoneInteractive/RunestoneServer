@@ -1786,8 +1786,4 @@ Exercises
                 :shortname: interactivepython
                 :identifier: disqus_dd2d9ca5ea744aafbf7cdc2a4ad5e974
 
-.. toctree::
-    :hidden:
-
-    ../Labs/sequencelab
 
