@@ -698,7 +698,7 @@ function createScratchActivecode() {
     el = $(html);
     $('body').append(el);
 
-    el.on('shown.bs.modal', function () {
+    el.on('shown.bs.modal show.bs.modal', function () {
         el.find('.CodeMirror').each(function (i, e) {
             e.CodeMirror.refresh();
             e.CodeMirror.focus();
@@ -706,12 +706,12 @@ function createScratchActivecode() {
     });
 
     $(document).bind('keypress', '\\', function(evt) {
-        showScratchActivecode();
+        toggleScratchActivecode();
         return false;
     });
 }
 
-function showScratchActivecode() {
+function toggleScratchActivecode() {
     var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].split('?')[0].replaceAll('/', '').replace('.html', '');
     var div = $("#" + divid);
 
