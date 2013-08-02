@@ -197,8 +197,6 @@ Level     Category        Operators
 =======   ==============  ===============
 
 
-Scratchpad
-----------
 
 .. note::
 
@@ -609,8 +607,7 @@ Here is the same program using ``elif``.
         print("x and y must be equal")
 
 
-Scratchpad
-----------
+
 
 .. note::
 
@@ -818,8 +815,6 @@ the boolean expression causes a call to the ``isDivisible`` function.  This is v
      return x + y < z
 
 
-Scratchpad
-----------
 
 .. note::
 

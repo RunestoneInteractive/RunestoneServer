@@ -349,10 +349,6 @@ get random behavior each time you execute.
    One reason that lotteries don’t use computers to generate random numbers is:
 
 
-
-Scratchpad
-----------
-
 .. note::
 
    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.

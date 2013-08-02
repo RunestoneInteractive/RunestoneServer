@@ -205,9 +205,6 @@ been defined, we can call it as many times as we like with whatever actual param
     wn.exitonclick()
 
 
-Scratchpad
-----------
-
 .. note::
 
    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
@@ -518,14 +515,7 @@ function will be ``None``.  In this case, ``squareResult`` will refer to that va
     single: lifetime
 
 
-Scratchpad
-----------
 
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_05_02
 
 
 **Check your understanding**
@@ -563,8 +553,8 @@ Scratchpad
 
    .. code-block:: python
 
-   def addEm(x, y, z):
-       print(x+y+z)
+    def addEm(x, y, z):
+        print(x+y+z)
 
 
 Variables and parameters are local
@@ -686,14 +676,7 @@ But this example demonstrates that that is clearly not how Python operates.
     print(z)
 
 
-Scratchpad
-----------
 
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_05_03
 
 **Check your understanding**
 
@@ -820,8 +803,6 @@ Here is the same program in codelens.  Step thru the function and watch the "run
     generalization
     abstraction
 
-Scratchpad
-----------
 
 .. note::
 
@@ -1027,14 +1008,6 @@ demonstrates two:
 
 .. index:: flow of execution
 
-Scratchpad
-----------
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_05_05
 
 
 Flow of Execution Summary
@@ -1254,8 +1227,6 @@ we have stored the data values in a list and used a few list functions.  We will
 
 
 
-Scratchpad
-----------
 
 .. note::
 
