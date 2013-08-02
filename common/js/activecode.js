@@ -48,7 +48,7 @@ var createAudioTourHTML = function (divid, code, bnum, audio_text) {
     var html_string = "<div class='modal-lightsout'></div><div class='modal-profile'><h2>Take an audio tour through the code!</h2><div class='modal-close-profile'></div><p id='windowcode'></p><p id='" + divid + "_audiocode'></p>";
     html_string += "<input type='image' src='../_static/first.png' width='25' id='first_audio' name='first_audio' title='Play first audio in tour' alt='Play first audio in tour' disabled/>" + "<input type='image' src='../_static/prev.png' width='25' id='prev_audio' name='prev_audio' title='Play previous audio in tour' alt='Play previous audio in tour' disabled/>" + "<input type='image' src='../_static/pause.png' width='25' id='pause_audio' name='pause_audio' title='Pause current audio' alt='Pause current audio' disabled/><input type='image' src='../_static/next.png' width ='25' id='next_audio' name='next_audio' title='Play next audio in tour' alt='Play next audio in tour' disabled/><input type='image' src='../_static/last.png' width ='25' id='last_audio' name='last_audio' title='Play last audio in tour' alt='Play last audio in tour' disabled/><br/>";
     for (var i = 0; i < audio_type.length - 1; i++) {
-        html_string += "<input type='button' id='button_audio_" + i + "' name='button_audio_" + i + "' value=" + bval[i] + " />";
+        html_string += "<input type='button' style='margin-right:5px;' class='btn btn-default btn-small' id='button_audio_" + i + "' name='button_audio_" + i + "' value=" + bval[i] + " />";
         bcount++;
     }
     html_string += "<p id='status'></p><p id='hightest'></p><p id='hightest1'></p><br/><br/><p id='test'></p><br/><p id='audi'></p></div>";

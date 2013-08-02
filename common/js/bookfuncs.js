@@ -264,8 +264,7 @@ function saveSuccess(data, status, whatever) {
         } else {
             // use a tooltip to provide some success feedback
             var save_btn = $("#" + acid + "_saveb");
-            save_btn.attr('data-toggle', 'tooltip');
-            save_btn.attr('title', 'Saved!');
+            save_btn.attr('title', 'Saved your code.');
             opts = {
                 'trigger': 'manual',
                 'placement': 'bottom',
@@ -302,7 +301,6 @@ function saveEditor(divName) {
 function requestCode(divName, sid) {
     var editor = cm_editors[divName + "_code"];
 
-
     var data = {acid: divName};
     if (sid !== undefined) {
         data['sid'] = sid;
@@ -321,10 +319,23 @@ function loadEditor(data, status, whatever) {
         editor = cm_editors[res.acid + "_code"];
     }
 
+    var loadbtn = $("#"+res.acid+"_loadb");
     if (res.source) {
         editor.setValue(res.source);
+        loadbtn.tooltip({'placement': 'bottom',
+                         'title': "Loaded your saved code.",
+                         'trigger': 'manual'
+                        });
+    } else {
+        loadbtn.tooltip({'placement': 'bottom',
+                         'title': "No saved code.",
+                         'trigger': 'manual'
+                        });
     }
-    // need to get the divId back with the result...
+    loadbtn.tooltip('show');
+    setTimeout(function () {
+        loadbtn.tooltip('destroy')
+    }, 4000);
 }
 
 function disableAcOpt() {
@@ -452,8 +463,14 @@ function addUserToFooter() {
 
 function addNavbarLoginLink() {
     if (isLoggedIn()) {
+        $('#profilelink').show();
+        $('#passwordlink').show();
+        $('#registerlink').hide();
         $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/logout">Log Out</a>')
     } else {
+        $('#registerlink').show();
+        $('#profilelink').hide();
+        $('#passwordlink').hide();
         $('li.loginout').html('<a href="' + eBookConfig.app + '/default/user/login">Login</a>')
     }
 }
@@ -534,12 +551,17 @@ function compareModal(data, status, whatever) {
     var theClass= '';
     for (var k in kl) {
         if (kl[k] == misc.correct) {
-            theClass = 'correct';
+            theClass = 'success';
         } else {
-            theClass = 'incorrect';
+            theClass = 'info';
         }
 
-        body += '<tr><td class='+theClass+'>' + kl[k] + '</td><td class='+theClass+'>' + answers[kl[k]] + '%</td></tr>';
+        body += '<tr><td>' + kl[k] + '</td><td class="compare-me-progress">';
+        pct = answers[kl[k]] + '%';
+        body += '<div class="progress">';
+        body += '  <div class="progress-bar progress-bar-' + theClass + '" style="width:'+pct+';">' + pct;
+        body += '  </div>';
+        body += '</div></td></tr>';
     }
     body += '</table>';
 
@@ -682,7 +704,7 @@ function createScratchActivecode() {
     el = $(html);
     $('body').append(el);
 
-    el.on('shown.bs.modal', function () {
+    el.on('shown.bs.modal show.bs.modal', function () {
         el.find('.CodeMirror').each(function (i, e) {
             e.CodeMirror.refresh();
             e.CodeMirror.focus();
@@ -690,12 +712,12 @@ function createScratchActivecode() {
     });
 
     $(document).bind('keypress', '\\', function(evt) {
-        showScratchActivecode();
+        toggleScratchActivecode();
         return false;
     });
 }
 
-function showScratchActivecode() {
+function toggleScratchActivecode() {
     var divid = "ac_modal_" + document.URL.split('#')[0].split('static')[1].split('?')[0].replaceAll('/', '').replace('.html', '');
     var div = $("#" + divid);
 

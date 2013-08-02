@@ -67,24 +67,28 @@
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
             <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
           </a>
-          <div class="dropdown-menu social-menu">
-            <div>
-              <b>Follow Runestone in social media:</b>
-            </div>
-            <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
-            <br><br>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
 
-            <div>
-              <b>Help support us:</b>
-            </div>
-            <div class="gittip">
-              <iframe style="border:0;"
-                src="https://www.gittip.com/bnmnetp/widget.html"
-                width="48pt" height="22pt" class="gittip-button">
-              </iframe>
-            </div>
-          </div>
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
         </li>
         <!-- end social media dropdown -->
 
@@ -103,13 +107,18 @@
             {% endif %}
             <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
             <li class="divider"></li>
-            <li id="scratch_ac_link"><a href="javascript:showScratchActivecode()">Scratch ActiveCode</a></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
             <li class="divider"></li>
             <li style="width: 240px;">
-              <form class="navbar-search" style="margin:10px; margin-bottom:-3px;" action="{{ pathto('search') }}" method="get">
-                <div class="form-group">
+              <form class="navbar-search" style="margin:10px;" action="{{ pathto('search') }}" method="get">
+                <div class="input-group">
                   <input type="text" class="form-control" name="q" placeholder="Search this book" />
-                </div>
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit"">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
                 <input type="hidden" name="check_keywords" value="yes" />
                 <input type="hidden" name="area" value="default" />
               </form>
@@ -128,11 +137,12 @@
           <ul class="dropdown-menu user-menu">
             <li><span class='loggedinuser'></span></li>
             <li class="divider"></li>
-            <li><a href="{{course_url}}/{{appname}}/default/user/profile">Edit Profile</a></li>
-            <li><a href="{{course_url}}/{{appname}}/default/user/change_password">Change Password</a></li>
+            <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
+            <li><a href="{{course_url}}/{{appname}}/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="{{course_url}}/{{appname}}/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="{{course_url}}/{{appname}}/default/user/register" id="registerlink">Register</a></li>
             <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
-            <li><a href="{{course_url}}/{{appname}}/default/user/register">Register</a></li>
           </ul>
         </li>
         <!-- end user account dropdown -->
@@ -146,7 +156,6 @@
           </a>
           <ul class="dropdown-menu user-menu">
             <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
-            <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructors Page</a></li>
             <li class="divider"></li>
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
             <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>

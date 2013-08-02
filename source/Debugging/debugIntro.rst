@@ -378,10 +378,10 @@ And one last bit of code to fix.
 
         In this example the error message is about ``set_time`` not defined on line 3.  In this case the undefined name is not used in an assignment statement, but is used as a parameter (incorrectly) to a function call.   A search on ``set_time`` reveals that in fact it is only used once in the program.  Did the author mean ``set_alarm``?  If we make that assumption we immediately get another error ``NameError: name 'alarm_time' is not defined on line: 3``.  The variable ``alarm_time`` is defined on line 4, but that does not help us on line 3.  Furthermore we now have to ask the question is this function call ``int(present_time,set_alarm,alarm_time)`` even the correct use of the ``int`` function?  The answer to that is a resounding no.  Lets list all of the things wrong with line 3:
 
-    1.  ``set_time`` is not defined and never used, the author probably meant ``set_alarm``.
-    2.  ``alarm_time`` cannot be used as a parameter before it is defined, even on the next line!
-    3.  ``int`` can only convert one string to an integer at a time.
-    4.  Finally, ``int`` should be used in an assignment statement.  Even if ``int`` was called with the correct number of parameters it would have no real effect.
+        1.  ``set_time`` is not defined and never used, the author probably meant ``set_alarm``.
+        2.  ``alarm_time`` cannot be used as a parameter before it is defined, even on the next line!
+        3.  ``int`` can only convert one string to an integer at a time.
+        4.  Finally, ``int`` should be used in an assignment statement.  Even if ``int`` was called with the correct number of parameters it would have no real effect.
 
 
 .. advanced topic!
