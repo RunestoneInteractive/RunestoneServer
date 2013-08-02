@@ -25,13 +25,6 @@ h5 {
     .navbar-fixed-top {
         position: static;
     }
-
-    .codelens-modal {
-        top: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
-    }
 }
 
 @media (min-width: 768px) {
@@ -247,15 +240,16 @@ div.flash {
 #auth_user_remember {
     margin-top: -20px;
 }
-
 /* End login, registration, Janrain styles */
 
 /* end-of-chapter exercises styles */
-#exercises > ol > li {
+#exercises > ol > li,
+#programming-exercises > ol > li {
     margin-bottom: 30px;
 }
 
-#exercises > ol > li:nth-child(even) {
+#exercises > ol > li:nth-child(even),
+#programming-exercises > ol > li:nth-child(even) {
     padding: 1.2em 1.4em;
     background: #faf7df;
     border: 1px solid #fbeed5;
@@ -263,7 +257,6 @@ div.flash {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
-
 /* End chapter exercises styles */
 
 /* Modal dialog styles (scratch activecode, compare me, etc) */
@@ -300,10 +293,20 @@ div.flash {
     bottom: auto;
 }
 
+@media (max-width: 768px) {
+    /* remove any custom position styles when the screen is small (mobile devices)
+    to prevent the modal from being partially off the screen */
+    .codelens-modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+    }
+}
+
 .codelens-modal > .modal-dialog {
     width: 400px;
 }
-
 /* End modal dialog styles */
 
 .footnote.table {
