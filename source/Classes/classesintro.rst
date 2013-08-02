@@ -527,8 +527,6 @@ The resulting Point, ``mid``, has an x value of 4 and a y value of 8.  We can al
 ``Point`` object.
 
     
-Scratchpad
-----------
 
 .. note::
 

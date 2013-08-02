@@ -476,9 +476,6 @@ As usual, slices select all the elements up to, but not including, the second
 index.
 
 
-Scratchpad
-----------
-
 .. note::
 
     This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
@@ -772,16 +769,6 @@ Here is the same example in codelens.  Step through the code until paying partic
      print(blist)
 
 
-Scratchpad
-----------
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_09_02
-
-
 
 
 
@@ -953,8 +940,6 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
      print(alist)
 
 
-Scratchpad
-----------
 
 .. note::
 
@@ -1071,15 +1056,6 @@ chapter, and write your own applyRules function to implement this L-system.
 This example only uses 6 expansions.  Try it out with a larger number of
 expansions.  You may also want to try this example with different values for
 the angle and distance parameters.
-
-Scratchpad
-----------
-
-.. note::
-
-    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-    .. activecode:: scratch_09_04
 
 
 
@@ -1209,15 +1185,6 @@ it works. We are interested here in both the *value* and its *index* within the
 list, so that we can assign a new value to it.
 
 
-
-Scratchpad
-----------
-
-.. note::
-
-    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-    .. activecode:: scratch_09_05
     
     
     
@@ -1419,8 +1386,6 @@ To write the ``primes_upto`` function we will use the ``is_prime`` function to f
 	    return result
 
 
-Scratchpad
-----------
 
 .. note::
 
@@ -1737,8 +1702,7 @@ of a circle of radius r.
     print(circleInfo(10))
 
 
-Scratchpad
-----------
+
 
 .. note::
 

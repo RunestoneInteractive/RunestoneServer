@@ -541,9 +541,6 @@ What do you think ``fruit[:]`` means?
 
 
 
-Scratchpad
-----------
-
 .. note::
 
     This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
@@ -951,8 +948,6 @@ Here is the same example in codelens so that you can trace the values of the var
          print(s[idx])
          idx = idx + 2
       
-Scratchpad
-----------
 
 .. note::
 
@@ -1074,8 +1069,6 @@ Step thru the function using codelens to see the accumulator variable grow.
          r = item.upper() + r
       print(r)
 
-Scratchpad
-----------
 
 .. note::
 
@@ -1542,9 +1535,6 @@ to be punctuation. Try the following and see what you get.
 
 For more information consult the ``string`` module documentaiton (see `Global Module Index <http://docs.python.org/py3k/py-modindex.html>`_).
 
-
-Scratchpad
-----------
 
 .. note::
 
@@ -2335,17 +2325,16 @@ Exercises
                 :identifier: disqus_d7d1ca00bfff4e7bacf886386fb3302e
 
 
-#. Write a function ``descramble`` that takes a message that is scrambled
-   using the picket fence algorithm as discussed in class.  Try exchanging messages
-   with a friend and the secret message provided below:
+#. Write a function called  ``removeDups`` that takes a string and creates a new string by only adding those characters that are not already present.  In other words,
+   there will never be a duplicate letter added to the new string.
 
    .. actex:: ex_8_19
 
-      def descramble(secret):
+      def removeDups(astring):
           # your code here
 
-      testmess = "ogauain o aescesul erpe hssce esg ueyyudsrea  o hsasgmncnrtltosyuhv ucsflydcytdti ertmsaesrl o eev nafrti sinet"
-      print(descramble(testmess))
+      
+      print(removeDups("mississippi"))   #should print misp
 
 
 #.
