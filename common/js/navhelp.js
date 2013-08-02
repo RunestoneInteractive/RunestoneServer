@@ -23,5 +23,3 @@ function setup() {
 
 
 setup();
-
-introJs().start();
