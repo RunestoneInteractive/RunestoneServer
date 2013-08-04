@@ -272,8 +272,13 @@ div.flash {
     width: 100%;
 }
 
-.compare-me-progress .progress-bar {
+.compare-me-progress .progress-bar,
+.unittest-results-progress .progress-bar {
     color: #333;
+}
+
+.unittest-results-progress {
+    width: 25%;
 }
 
 .compare-modal {
