@@ -649,7 +649,8 @@ function styleUnittestResults() {
         var observer = new MutationObserver(function(mutations) {
             $(mutations).each(function() {
                 if (this.type == "attributes") {
-                    target = $(this.target)
+                    var target = $(this.target);
+                    // apply the .alert classes
                     if(target.text().indexOf("Fail") === -1) {
                         target.removeClass('alert-danger');
                         target.addClass('alert alert-success');
@@ -657,6 +658,26 @@ function styleUnittestResults() {
                         target.removeClass('alert-success');
                         target.addClass('alert alert-danger');
                     }
+                    // add the progress bar indicating the percent of tests passed
+                    var paragraph = target.find('p');
+                    var result_text = paragraph.text().split(" ");
+                    var pct = '';
+                    $(result_text).each(function() {
+                        if (this.indexOf("%") !== -1) {
+                            pct = this;
+                            var html = 'You passed:' +
+                                       '<div class="progress unittest-results-progress">';
+                            if (pct == '100.0%') {
+                                html += '  <div class="progress-bar progress-bar-success" style="width:'+pct+';">';
+                            } else {
+                                html += '  <div class="progress-bar progress-bar-warning" style="width:'+pct+';">';
+                            }
+                            html += pct +
+                                    '  </div>' +
+                                    '</div>';
+                            paragraph.html(html);
+                        }
+                    });
                 }
             });
         });
