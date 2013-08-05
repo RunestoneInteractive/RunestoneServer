@@ -104,8 +104,9 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#the-codelens-tool .cl_caption",
-        highlight: "#the-codelens-tool .cl_caption",
+        attachTo: "#firstexample",
+        highlight: "#firstexample",
+        offset: {left: -375, top:0},
         title: "CodeLens",
         description: "The CodeLens visualizer allows you to execute some code step-by-step, and see the values of all the variables and objects as they are executed.",
         id: "tenth",
@@ -163,8 +164,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#parsons-sortableTrash-174",
-        highlight: "#parsons-sortableTrash-174",
+        attachTo: "#parsons-sortableTrash-88",
+        highlight: "#parsons-sortableTrash-88",
         overlay: true,
         title: "Parsons Problems",
         description: "Drag lines of code from here...",
@@ -173,8 +174,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#ul-parsons-sortableCode-174",
-        highlight: "#ul-parsons-sortableCode-174",
+        attachTo: "#ul-parsons-sortableCode-88",
+        highlight: "#ul-parsons-sortableCode-88",
         overlay: true,
         title: "Parsons Problems",
         description: "...to here.",
@@ -183,8 +184,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#feedbackLink-174",
-        highlight: "#feedbackLink-174",
+        attachTo: "#feedbackLink-88",
+        highlight: "#feedbackLink-88",
         overlay: true,
         title: "Parsons Problems",
         description: "Click this button to check if you've arranged the code in the correct order.",

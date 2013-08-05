@@ -12,7 +12,6 @@ Getting Around The Book
 This page will help you learn how to get around this interactive textbook and use the embedded tools.
 
 
-
 ActiveCode Windows
 ------------------
 
@@ -30,79 +29,8 @@ Take a look at the ActiveCode interpreter in action.  If we take a simple Python
    print(2 + 3)
 
 
-Now try modifying the ActiveCode program shown above.  First, modify the string in the first print statement
-by changing the word *adds* to the word *multiplies*.  Now press *Run*.  You can see that the result of the program
-has changed.  However, it still prints "5" as the answer.  Modify the second print statement by changing the
-addition symbol, the "+", to the multiplication symbol, "*".  Press *Run* to see the new results.
-You can do this as many times as you like.  You can even start completely over by simply deleting all the code from the window.
-
-If you are a registered user and have logged in,
-it is possible to save the changes you make for reloading later. *Save* and *Load* buttons will appear that allow you to keep one copy of the program you are working on.
-Note that these saved programs can be accessed from anywhere if you have logged in.  However, if you are
-working anonymously, then you will lose your work at the end of the session.
-
-
-ActiveCode is even capable of executing graphical programs that use the built in Python turtle module.
-The program shown below is a very interesting graphics program that uses the turtle and the idea of recursion to construct a type of
-fractal called a Sierpinski Triangle.  Once you run the program, try experimenting with the number of triangle levels.  You
-can find this on line 39 (it is currently set to 3).  Try 4!
-Try some other
-changes and see what happens (maybe change a few of the colors or make the level 2).  If you ever want to go back to the original example, simply reload the page in the browser.  One of
-the great things about ActiveCode is that you can experiment as much as you want.  This can be very helpful as you
-are learning to program.
-
-
-
-.. activecode:: codeexample2
-
-    import turtle
-
-    def drawTriangle(points,color,myTurtle):
-        myTurtle.fillcolor(color)
-        myTurtle.up()
-        myTurtle.goto(points[0][0],points[0][1])
-        myTurtle.down()
-        myTurtle.begin_fill()
-        myTurtle.goto(points[1][0],points[1][1])
-        myTurtle.goto(points[2][0],points[2][1])
-        myTurtle.goto(points[0][0],points[0][1])
-        myTurtle.end_fill()
-
-    def getMid(p1,p2):
-        return ( (p1[0]+p2[0]) / 2, (p1[1] + p2[1]) / 2)
-
-    def sierpinski(points,degree,myTurtle):
-        colormap = ['blue','red','green','white','yellow',
-                    'violet','orange']
-        drawTriangle(points,colormap[degree],myTurtle)
-        if degree > 0:
-            sierpinski([points[0],
-                            getMid(points[0], points[1]),
-                            getMid(points[0], points[2])],
-                       degree-1, myTurtle)
-            sierpinski([points[1],
-                            getMid(points[0], points[1]),
-                            getMid(points[1], points[2])],
-                       degree-1, myTurtle)
-            sierpinski([points[2],
-                            getMid(points[2], points[1]),
-                            getMid(points[0], points[2])],
-                       degree-1, myTurtle)
-
-    def main():
-       myTurtle = turtle.Turtle()
-       myWin = turtle.Screen()
-       myPoints = [[-100,-50],[0,100],[100,-50]]
-       sierpinski(myPoints,3,myTurtle)
-       myWin.exitonclick()
-
-    main()
-
-
-
 The CodeLens Tool
 -----------------
-
 
 In addition to ActiveCode, you can also execute Python code with the assistance of a unique visualization tool.  This tool, known as **CodeLens**, allows you to control the step by step execution of a program.  It also lets you see the values of
 all variables as they are created and modified.  The following example shows CodeLens in action on the same simple program as we saw above.  Remember that in ActiveCode, the source code executes from beginning to end and you can see the final result.  In Codelens you can see and control the step by step progress.  Try clicking on the *Forward* button below.
@@ -114,25 +42,11 @@ all variables as they are created and modified.  The following example shows Cod
     print(2 + 3)
 
 
-Note that you can control the step by step execution and you can even move forward and backward through the statements as they execute.  The following example shows a more sophisticated program using Python lists.  The CodeLens tool draws very useful
-pictures as the statements are being executed.  These pictures, called reference diagrams, are very helpful as you learn about the
-more complex aspects of Python.
-
-.. codelens:: secondexample
-
-    fruit = ["apple","orange","banana","cherry"]
-    numlist = [6,7]
-    newlist = fruit + numlist
-    zeros = [0] * 4
-
-    zeros[1] = fruit
-    zeros[1][2] = numlist
-
 Self-Check Questions
 --------------------
 
 Finally, it is also possible to embed simple questions into the text.  These
-questions provide a way for you to check yourselve as you go along.  The questions also provide feedback so that you can
+questions provide a way for you to check yourselves as you go along.  The questions also provide feedback so that you can
 understand why an answer may or may not be correct.
 
 **Check your understanding**
