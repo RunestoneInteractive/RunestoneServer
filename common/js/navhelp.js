@@ -4,8 +4,6 @@
 
 /* Sets up the interactive navhelp */
 
-var is_setup;
-
 function setup() {
     guiders.createGuider({
         buttons: [{name: "Next"}],
