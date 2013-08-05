@@ -64,9 +64,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#codeexample1",
-        highlight: "#codeexample1",
-        overlay: true,
+        attachTo: "#codeexample1 .ac_caption",
+        highlight: "#codeexample1 .ac_caption",
         title: "ActiveCode Blocks",
         description: "ActiveCode blocks allow you to write and execute Python code right in the textbook.",
         id: "sixth",
@@ -92,6 +91,126 @@ function setup() {
         id: "eighth",
         next: "ninth"
     });
+
+    guiders.createGuider({
+        attachTo: "#codeexample1_saveb",
+        highlight: "#codeexample1_saveb",
+        overlay: true,
+        title: "ActiveCode Blocks",
+        description: "If you are logged in, you can save your code, and then load again later.",
+        id: "ninth",
+        next: "tenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#the-codelens-tool .cl_caption",
+        highlight: "#the-codelens-tool .cl_caption",
+        title: "CodeLens",
+        description: "The CodeLens visualizer allows you to execute some code step-by-step, and see the values of all the variables and objects as they are executed.",
+        id: "tenth",
+        next: "eleventh"
+    });
+
+    guiders.createGuider({
+        attachTo: "#firstexample #jmpStepFwd",
+        highlight: "#firstexample #jmpStepFwd",
+        overlay: true,
+        title: "CodeLens Controls",
+        description: "Use these buttons below the code window to control how you step through the code.",
+        id: "eleventh",
+        next: "twelfth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#question1_1",
+        highlight: "#question1_1",
+        overlay: true,
+        title: "Self-Check Questions",
+        description: "These questions allow you to check your understand as you move through the textbook.",
+        id: "twelfth",
+        next: "thirteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#question1_1 button[name='do answer']",
+        highlight: "#question1_1 button[name='do answer']",
+        overlay: true,
+        title: "Self-Check Questions",
+        description: "Click this button to get feedback on your answer(s).",
+        id: "thirteenth",
+        next: "fourteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#question1_1 button[name='compare']",
+        highlight: "#question1_1 button[name='compare']",
+        overlay: true,
+        title: "Self-Check Questions",
+        description: "Click this button to get see how you are doing in relation to other people using the textbook.",
+        id: "fourteenth",
+        next: "fifteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: ".parsons",
+        highlight: ".parsons",
+        overlay: true,
+        title: "Parsons Problems",
+        description: "Parsons exercises ask you to arrange lines of code in the correct order.",
+        id: "fifteenth",
+        next: "sixteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#parsons-sortableTrash-174",
+        highlight: "#parsons-sortableTrash-174",
+        overlay: true,
+        title: "Parsons Problems",
+        description: "Drag lines of code from here...",
+        id: "sixteenth",
+        next: "seventeenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#ul-parsons-sortableCode-174",
+        highlight: "#ul-parsons-sortableCode-174",
+        overlay: true,
+        title: "Parsons Problems",
+        description: "...to here.",
+        id: "seventeenth",
+        next: "eighteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#feedbackLink-174",
+        highlight: "#feedbackLink-174",
+        overlay: true,
+        title: "Parsons Problems",
+        description: "Click this button to check if you've arranged the code in the correct order.",
+        id: "eighteenth",
+        next: "nineteenth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#embedded-videos img",
+        highlight: "#embedded-videos img",
+        overlay: true,
+        title: "Embedded Videos",
+        description: "To play a video embedded in the text, just click the play button.",
+        id: "nineteenth",
+        next: "twentieth"
+    });
+
+    guiders.createGuider({
+        buttons: [{name: "Close"}],
+        attachTo: "body",
+        position: 0,
+        overlay: true,
+        title: "Thank You!",
+        description: "Thanks for using this interactive textbook. ",
+        id: "twentieth"
+    });
+
 }
 
 setup();
