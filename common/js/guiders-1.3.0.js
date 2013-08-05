@@ -54,7 +54,7 @@ var guiders = (function($) {
     "    <h1 class='guiders_title'></h1>",
     "    <div class='guiders_close'></div>",
     "    <p class='guiders_description'></p>",
-    "    <div class='guiders_buttons_container' style='margin-bottom: 10px;'>",
+    "    <div class='guiders_buttons_container' style='margin-bottom: 10px; text-align: right;'>",
     "    </div>",
     "  </div>",
     "  <div class='guiders_arrow'>",
