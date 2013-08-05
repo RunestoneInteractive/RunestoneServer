@@ -200,8 +200,7 @@ on the video shown below, you will hear us talk about the tools that will be des
 
 .. raw:: html
 
-    <link href='_static/introjs.min.css' rel='stylesheet' type='text/css'>
-    <script src='_static/intro.min.js' type='text/javascript'></script>
+    <link href='_static/guiders-1.3.0.css' rel='stylesheet' type='text/css'>
+    <script src='_static/guiders-1.3.0.js' type='text/javascript'></script>
     <script src='_static/navhelp.js' type='text/javascript'></script>
-    <button type='button' class='btn btn-default btn-small' onclick='introJs().start();'>Start help</button>
 
