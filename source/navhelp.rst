@@ -18,11 +18,11 @@ ActiveCode Windows
 
 One of the most important things that you can do when you are learning a programming language is to write programs.  Unfortunately,
 typical textbooks allow you to read about programming but don't allow you to practice.  We have created a unique tool called
-**activecode** that allows you to write, modify, and execute programs right
+**ActiveCode** that allows you to write, modify, and execute programs right
 in the text itself (right from the web browser).  Although this is certainly not the way real programs are written, it provides an excellent
 environment for learning a programming language like Python since you can experiment with the language as you are reading.
 
-Take a look at the activecode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below.
+Take a look at the ActiveCode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *Run* button.   Try pressing the *Run* button below.
 
 .. activecode:: codeexample1
 
@@ -30,10 +30,10 @@ Take a look at the activecode interpreter in action.  If we take a simple Python
    print(2 + 3)
 
 
-Now try modifying the activecode program shown above.  First, modify the string in the first print statement
-by changing the word *adds* to the word *multiplies*.  Now press *run*.  You can see that the result of the program
+Now try modifying the ActiveCode program shown above.  First, modify the string in the first print statement
+by changing the word *adds* to the word *multiplies*.  Now press *Run*.  You can see that the result of the program
 has changed.  However, it still prints "5" as the answer.  Modify the second print statement by changing the
-addition symbol, the "+", to the multiplication symbol, "*".  Press *run* to see the new results.
+addition symbol, the "+", to the multiplication symbol, "*".  Press *Run* to see the new results.
 You can do this as many times as you like.  You can even start completely over by simply deleting all the code from the window.
 
 If you are a registered user and have logged in,
@@ -42,13 +42,13 @@ Note that these saved programs can be accessed from anywhere if you have logged 
 working anonymously, then you will lose your work at the end of the session.
 
 
-Activecode is even capable of executing graphical programs that use the built in Python turtle module.
+ActiveCode is even capable of executing graphical programs that use the built in Python turtle module.
 The program shown below is a very interesting graphics program that uses the turtle and the idea of recursion to construct a type of
 fractal called a Sierpinski Triangle.  Once you run the program, try experimenting with the number of triangle levels.  You
 can find this on line 39 (it is currently set to 3).  Try 4!
 Try some other
 changes and see what happens (maybe change a few of the colors or make the level 2).  If you ever want to go back to the original example, simply reload the page in the browser.  One of
-the great things about activecode is that you can experiment as much as you want.  This can be very helpful as you
+the great things about ActiveCode is that you can experiment as much as you want.  This can be very helpful as you
 are learning to program.
 
 
@@ -104,8 +104,8 @@ The CodeLens Tool
 -----------------
 
 
-In addition to activecode, you can also execute Python code with the assistance of a unique visualization tool.  This tool, known as **codelens**, allows you to control the step by step execution of a program.  It also lets you see the values of
-all variables as they are created and modified.  The following example shows codelens in action on the same simple program as we saw above.  Remember that in activecode, the source code executes from beginning to end and you can see the final result.  In codelens you can see and control the step by step progress.  Try clicking on the forward button below.
+In addition to ActiveCode, you can also execute Python code with the assistance of a unique visualization tool.  This tool, known as **CodeLens**, allows you to control the step by step execution of a program.  It also lets you see the values of
+all variables as they are created and modified.  The following example shows CodeLens in action on the same simple program as we saw above.  Remember that in ActiveCode, the source code executes from beginning to end and you can see the final result.  In Codelens you can see and control the step by step progress.  Try clicking on the *Forward* button below.
 
 .. codelens:: firstexample
     :showoutput:
@@ -114,7 +114,7 @@ all variables as they are created and modified.  The following example shows cod
     print(2 + 3)
 
 
-Note that you can control the step by step execution and you can even move forward and backward thru the statements as they execute.  The following example shows a more sophisticated program using Python lists.  The codelens tool draws very useful
+Note that you can control the step by step execution and you can even move forward and backward through the statements as they execute.  The following example shows a more sophisticated program using Python lists.  The CodeLens tool draws very useful
 pictures as the statements are being executed.  These pictures, called reference diagrams, are very helpful as you learn about the
 more complex aspects of Python.
 
@@ -132,7 +132,7 @@ Self-Check Questions
 --------------------
 
 Finally, it is also possible to embed simple questions into the text.  These
-questions provide a way for the students to check themselves as they go along.  The questions also provide feedback so that you can
+questions provide a way for you to check yourselve as you go along.  The questions also provide feedback so that you can
 understand why an answer may or may not be correct.
 
 **Check your understanding**
