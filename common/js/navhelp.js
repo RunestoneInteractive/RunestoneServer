@@ -8,6 +8,7 @@ var is_setup;
 
 function setup() {
     guiders.createGuider({
+        buttons: [{name: "Next"}],
         attachTo: ".navbar-brand",
         highlight: ".navbar-brand",
         overlay: true,
@@ -76,7 +77,7 @@ function setup() {
         attachTo: "#codeexample1_code_div",
         highlight: "#codeexample1_code_div",
         overlay: true,
-        title: "Code Editor",
+        title: "ActiveCode Editor",
         description: "Write and edit code in this text window...",
         id: "seventh",
         next: "eighth"
@@ -86,7 +87,7 @@ function setup() {
         attachTo: "#codeexample1_runb",
         highlight: "#codeexample1_runb",
         overlay: true,
-        title: "Code Editor",
+        title: "ActiveCode Editor",
         description: "...and then click the 'Run' button to execute your code.",
         id: "eighth",
         next: "ninth"

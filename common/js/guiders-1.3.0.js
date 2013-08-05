@@ -26,7 +26,7 @@ var guiders = (function($) {
   guiders._defaultSettings = {
     attachTo: null, // Selector of the element to attach to.
     autoFocus: true, // Determines whether or not the browser scrolls to the element.
-    buttons: [{name: "Next"}, {name: "Prev"}],
+    buttons: [{name: "Next"}, {name: "Back"}],
     buttonCustomHTML: "",
     classString: null,
     closeOnEscape: true,
