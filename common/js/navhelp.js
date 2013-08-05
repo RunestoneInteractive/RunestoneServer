@@ -7,55 +7,54 @@
 function setup() {
     guiders.createGuider({
         buttons: [{name: "Next"}],
-        attachTo: ".navbar-brand",
-        highlight: ".navbar-brand",
+        attachTo: ".title-link-img",
+        highlight: ".title-link-img",
         overlay: true,
+        position: 3,
         title: "Table of Contents",
-        description: "Click here to see the Table of Contents for this textbook.",
+        description: "Click on the title at any time to see the Table of Contents for this textbook.",
         id: "first",
-        next: "second",
+        next: "second"
     }).show();
 
     guiders.createGuider({
-        attachTo: ".brand-logo",
-        highlight: ".brand-logo",
+        attachTo: ".logo-link-img",
+        highlight: ".logo-link-img",
         overlay: true,
+        position: 3,
         title: "Homepage",
-        description: "Click here to go back to the homepage, where you can see the other textbooks that are available.",
+        description: "Click on the Runestone Interactive logo to go back to the homepage, where you can see the other textbooks that are available.",
         id: "second",
         next: "third"
     });
 
-    el = $('.nav.navbar-nav li.dropdown');
-    el = $(el[4]).addClass('pagenav');
     guiders.createGuider({
-        attachTo: ".pagenav",
-        highlight: ".pagenav",
+        attachTo: ".page-dropdown-img",
+        highlight: ".page-dropdown-img",
         overlay: true,
+        position: 3,
         title: "Page Navigation",
         description: "Click here to jump to a section within the current chapter.",
         id: "third",
         next: "fourth"
     });
 
-    el = $('.nav.navbar-nav li.dropdown');
-    el = $(el[1]).addClass('searchmenu');
     guiders.createGuider({
-        attachTo: ".searchmenu",
-        highlight: ".searchmenu",
+        attachTo: ".search-dropdown-img",
+        highlight: ".search-dropdown-img",
         overlay: true,
+        position: 3,
         title: "Search Menu",
         description: "This menu allows you to search this textbook, as well as open a scratchpad. You can also press the '\\' (backslash) key at any time to open the scratchpad.",
         id: "fourth",
         next: "fifth"
     });
 
-    el = $('.nav.navbar-nav li.dropdown');
-    el = $(el[2]).addClass('usermenu');
     guiders.createGuider({
-        attachTo: ".usermenu",
-        highlight: ".usermenu",
+        attachTo: ".user-dropdown-img",
+        highlight: ".user-dropdown-img",
         overlay: true,
+        position: 3,
         title: "Account Menu",
         description: "Log in or register here so that you can save and load code you write and save your position in the textbook. Don't worry, it's easy!",
         id: "fifth",
@@ -85,6 +84,7 @@ function setup() {
         attachTo: "#codeexample1_runb",
         highlight: "#codeexample1_runb",
         overlay: true,
+        position: 3,
         title: "ActiveCode Editor",
         description: "...and then click the 'Run' button to execute your code.",
         id: "eighth",
@@ -95,6 +95,7 @@ function setup() {
         attachTo: "#codeexample1_saveb",
         highlight: "#codeexample1_saveb",
         overlay: true,
+        position: 3,
         title: "ActiveCode Blocks",
         description: "If you are logged in, you can save your code, and then load again later.",
         id: "ninth",
@@ -102,9 +103,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#firstexample",
-        highlight: "#firstexample",
-        offset: {left: -375, top:0},
+        attachTo: "#firstexample table",
+        highlight: "#firstexample table",
         title: "CodeLens",
         description: "The CodeLens visualizer allows you to execute some code step-by-step, and see the values of all the variables and objects as they are executed.",
         id: "tenth",
@@ -135,6 +135,7 @@ function setup() {
         attachTo: "#question1_1 button[name='do answer']",
         highlight: "#question1_1 button[name='do answer']",
         overlay: true,
+        position: 3,
         title: "Self-Check Questions",
         description: "Click this button to get feedback on your answer(s).",
         id: "thirteenth",
@@ -145,6 +146,7 @@ function setup() {
         attachTo: "#question1_1 button[name='compare']",
         highlight: "#question1_1 button[name='compare']",
         overlay: true,
+        position: 3,
         title: "Self-Check Questions",
         description: "Click this button to get see how you are doing in relation to other people using the textbook.",
         id: "fourteenth",
@@ -162,8 +164,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#parsons-sortableTrash-88",
-        highlight: "#parsons-sortableTrash-88",
+        attachTo: "#parsons-sortableTrash-111",
+        highlight: "#parsons-sortableTrash-111",
         overlay: true,
         title: "Parsons Problems",
         description: "Drag lines of code from here...",
@@ -172,8 +174,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#ul-parsons-sortableCode-88",
-        highlight: "#ul-parsons-sortableCode-88",
+        attachTo: "#ul-parsons-sortableCode-111",
+        highlight: "#ul-parsons-sortableCode-111",
         overlay: true,
         title: "Parsons Problems",
         description: "...to here.",
@@ -182,9 +184,10 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#feedbackLink-88",
-        highlight: "#feedbackLink-88",
+        attachTo: "#feedbackLink-111",
+        highlight: "#feedbackLink-111",
         overlay: true,
+        position: 3,
         title: "Parsons Problems",
         description: "Click this button to check if you've arranged the code in the correct order.",
         id: "eighteenth",

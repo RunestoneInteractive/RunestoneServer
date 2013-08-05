@@ -11,6 +11,29 @@ Getting Around The Book
 
 This page will help you learn how to get around this interactive textbook and use the embedded tools.
 
+Navigation Bar
+--------------
+
+.. image:: _static/navbar_logo_link.png
+    :class: logo-link-img
+
+.. image:: _static/navbar_title_link.png
+    :class: title-link-img
+
+|
+
+.. image:: _static/navbar_page_dropdown.png
+    :class: page-dropdown-img
+
+|
+
+.. image:: _static/navbar_search_dropdown.png
+    :class: search-dropdown-img
+
+|
+
+.. image:: _static/navbar_user_dropdown.png
+    :class: user-dropdown-img
 
 ActiveCode Windows
 ------------------
