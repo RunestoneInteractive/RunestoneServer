@@ -50,6 +50,48 @@ function setup() {
         id: "fourth",
         next: "fifth"
     });
+
+    el = $('.nav.navbar-nav li.dropdown');
+    el = $(el[2]).addClass('usermenu');
+    guiders.createGuider({
+        attachTo: ".usermenu",
+        highlight: ".usermenu",
+        overlay: true,
+        title: "Account Menu",
+        description: "Log in or register here so that you can save and load code you write and save your position in the textbook. Don't worry, it's easy!",
+        id: "fifth",
+        next: "sixth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#codeexample1",
+        highlight: "#codeexample1",
+        overlay: true,
+        title: "ActiveCode Blocks",
+        description: "ActiveCode blocks allow you to write and execute Python code right in the textbook.",
+        id: "sixth",
+        next: "seventh"
+    });
+
+    guiders.createGuider({
+        attachTo: "#codeexample1_code_div",
+        highlight: "#codeexample1_code_div",
+        overlay: true,
+        title: "Code Editor",
+        description: "Write and edit code in this text window...",
+        id: "seventh",
+        next: "eighth"
+    });
+
+    guiders.createGuider({
+        attachTo: "#codeexample1_runb",
+        highlight: "#codeexample1_runb",
+        overlay: true,
+        title: "Code Editor",
+        description: "...and then click the 'Run' button to execute your code.",
+        id: "eighth",
+        next: "ninth"
+    });
 }
 
 setup();
