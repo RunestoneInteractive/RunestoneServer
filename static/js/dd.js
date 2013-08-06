@@ -79,6 +79,16 @@ function buildSuccess(data,status,ignore) {
             if (retdata.status == "true") {
                 window.location.href = retdata.course_url;
             }
+            if (retdata.status == "failed") {
+                clearInterval(iid);
+                $("#spinner").hide();
+                $("#title").text("An error occurred.");
+                $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+                    "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+                    "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+                    "Make sure you include the following traceback information:" +
+                    "<pre>" + retdata.traceback + "</pre>");
+            }
         });
     }, 3000);
 }
