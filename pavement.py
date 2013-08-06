@@ -175,8 +175,6 @@ def allbooks(options):
       options.thinkcspy['all'] = True
       options.pythonds['all'] = True
       options.overview['all'] = True
-      options.devcourse['all'] = True
     thinkcspy(options)
     pythonds(options)
-    devcourse(options)
     overview(options)
