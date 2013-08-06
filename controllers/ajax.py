@@ -291,19 +291,6 @@ def getCorrectStats(miscdata,event):
     miscdata['yourpct'] = pctcorr
 
 
-def verifyInstructorStatus(course, instructor):
-    """
-    Make sure that the instructor specified is actually an instructor for the
-    given course.
-    """
-    if type(course) == str:
-        course = db(db.courses.course_name == course).select(db.courses.id).first()
-
-    return db((db.course_instructor.course == course) &
-             (db.course_instructor.instructor == instructor)
-            ).count() > 0
-
-
 def getStudentResults(question):
         course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 

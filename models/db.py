@@ -81,6 +81,19 @@ def getCourseNameFromId(courseid):
         course_name = db(q).select()[0].course_name
         return course_name
 
+
+def verifyInstructorStatus(course, instructor):
+    """
+    Make sure that the instructor specified is actually an instructor for the
+    given course.
+    """
+    if type(course) == str:
+        course = db(db.courses.course_name == course).select(db.courses.id).first()
+
+    return db((db.course_instructor.course == course) &
+             (db.course_instructor.instructor == instructor)
+            ).count() > 0
+
 class IS_COURSE_ID:
     ''' used to validate that a course name entered (e.g. devcourse) corresponds to a 
         valid course ID (i.e. db.courses.id) '''
