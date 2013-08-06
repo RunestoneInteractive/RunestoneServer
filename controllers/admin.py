@@ -20,7 +20,7 @@ from sphinx.application import Sphinx
 def index():
     return dict()
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassignments():
     sid = request.vars.student
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -35,7 +35,7 @@ def listassignments():
     rset = q.select(db.code.acid,orderby=db.code.acid,distinct=True)
     return dict(exercises=rset,course_id=course.course_name)
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassessments():
     course = db(db.courses.id == auth.user.course_id).select().first()
 
@@ -58,8 +58,7 @@ def listassessments():
     rset = db.executesql(query)
     return dict(solutions=rset)
 
-
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assessdetail():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
     q = db( (db.useinfo.div_id == request.vars.id) & (db.useinfo.course_id == course.course_name) )
@@ -96,7 +95,7 @@ def assessdetail():
 
 
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def gradeassignment():
     sid = request.vars.student
     acid = request.vars.id
@@ -109,7 +108,7 @@ def gradeassignment():
     return dict(solutions=rset,course_id=course.course_name)
 
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def showlog():
     course = db(db.courses.id == auth.user.course_id).select().first()
     grid = SQLFORM.grid(
@@ -123,7 +122,7 @@ def showlog():
         formstyle='divs')
     return dict(grid=grid,course_id=course.course_name)
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def studentactivity():
     course = db(db.courses.id == auth.user.course_id).select().first()
     count = db.useinfo.id.count()
@@ -137,7 +136,7 @@ def studentactivity():
 
     return dict(grid=res,course_id=course.course_name)
     
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def startdate():
     course = db(db.courses.id == auth.user.course_id).select().first()
     if request.vars.startdate:
@@ -150,7 +149,7 @@ def startdate():
         current_start_date = course.term_start_date.strftime("%m/%d/%Y")
         return dict(startdate=current_start_date)
 
-@auth.requires_membership('instructor')
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def rebuildcourse():
     if not request.vars.projectname:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
