@@ -11,7 +11,7 @@ generated and included in that section should be placed on individual
 lines, with one line separating the first source filename and the
 :maxdepth: line.
 
-.. Sources can also be included from subfolders of the source directory.
+.. Sources can also be included from subfolders of the project directory.
 (e.g. "DataStructures/queues.rst").
 
 SECTION 1: A Random Section
