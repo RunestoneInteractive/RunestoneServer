@@ -3,33 +3,34 @@
 from subprocess import call
 import sys
 
-# Define the parameters for the POST request and encode them in
-# a URL-safe format.
-
 outdir = sys.argv[1] + "/_static/"
 
-#outdir = "static/thinkcspy/" + "_static/"
-
-filenames = [outdir + "bookfuncs.js",
-             outdir + "activecode.js",
+filenames = [outdir + "activecode.js",
              outdir + "animationbase.js",
              outdir + "assess.js",
+             outdir + "bookfuncs.js",
              outdir + "bootstrap-sphinx.js",
              outdir + "codemirror.js",
              outdir + "doctools.js",
              outdir + "edu-python.js",
-             outdir + "jquery.tablesorter.js",
+             outdir + "guiders-1.3.0.js",
+             outdir + "jquery.highlight.js",
+             outdir + "jquery.idle-timer.js",
+             outdir + "navhelp.js",
+             outdir + "poll.js",
              outdir + "python.js",
              outdir + "rangy-cssclassapplier.js",
              outdir + "searchtools.js",
-             outdir + "simplemodal.js",
              outdir + "sortmodels.js",
              outdir + "sortviewers.js",
-             outdir + "websupport.js",
              outdir + "user-highlights.js",
-             outdir + "js-parsons/lib/lis.js",
-             outdir + "js-parsons/lib/prettify.js",
-             outdir + "js-parsons/parsons.js"]
+             outdir + "websupport.js",
+             outdir + "lib/lis.js",
+             outdir + "lib/prettify.js",
+             outdir + "js/jquery.corner.js",
+             outdir + "js/opt-frontend.js",
+             outdir + "js/opt-lessons.js",
+             outdir + "js/pytutor.js"]
 
 for filename in filenames:
     print "Minifying " + filename
@@ -41,7 +42,8 @@ for filename in filenames:
           "--js", "a.js",
           "--js_output_file", filename,
           "--compilation_level", "SIMPLE_OPTIMIZATIONS",
-          "--warning_level", "QUIET"])
+          "--warning_level", "QUIET",
+          "--jscomp_off", "internetExplorerChecks"])
 
 call(["rm", "a.js"])
 print "Done."
