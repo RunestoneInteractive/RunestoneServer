@@ -117,14 +117,15 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
         try:
             # copy all the sources into the temporary sourcedir
             shutil.copytree(path.join(workingdir,'source'),sourcedir)
+
+            # copy the index and conf files to the sourcedir
+            shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
+            shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
         except OSError:
-            # this is probably devcourse, thinkcspy, or other builtin course -
-            # let the exception propagate
+            # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
+            # or the conf.py or index.rst files are missing for some reason.
             raise OSError
 
-        # copy the index and conf files to the sourcedir
-        shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
-        shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
 
 
     ########

@@ -8,13 +8,13 @@
 
 {{ if 'mess' in globals(): }}
 
-  <h1>{{=mess}}</h1>
+  <h1 id="title">{{=mess}}</h1>
 
   {{ if building: }}
     <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
 	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
     </div>
-    <p>Your course is being prepared for you. This may take several minutes to complete.
+    <p id="message">Your course is being prepared for you. This may take several minutes to complete.
      When the course is finished you will be redirected to your new course.  Because you
      created the course you are set up as the instructor.</p>
     <script type="text/javascript">
@@ -26,6 +26,16 @@
         $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
           if (data.status == "true") {
             window.location.href = data.course_url;
+          }
+          if (data.status == "failed") {
+            clearInterval(iid);
+            $("#spinner_div").hide();
+            $("#title").text("An error occurred.");
+            $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+                "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+                "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+                "Make sure you include the following traceback information:" +
+                "<pre>" + data.traceback + "</pre>");
           }
         });
       }, 3000)
@@ -75,7 +85,8 @@
   </div>
 
   <div id="spinner_div" style="align: center; display: none;">
-    <p>Your course is being prepared for you.  This may take several minutes to complete. <b>Please do not refresh the page.</b> When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.</p>
+    <h3 id="title">Building your course.</h3>
+    <p id="message">Your course is being prepared for you.  This may take several minutes to complete. <b>Please do not refresh the page.</b> When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.</p>
 	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
   </div>
 
