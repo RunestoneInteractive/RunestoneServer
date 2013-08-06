@@ -1,29 +1,36 @@
-..  Copyright (C)  Brad Miller, David Ranum
-    Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3 or
-    any later version published by the Free Software Foundation; with
-    Invariant Sections being Forward, Prefaces, and Contributor List,
-    no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license
-    is included in the section entitled "GNU Free Documentation License".
-
 
 =====================
 This Is A New Project
 =====================
 
+.. Here is were you specify the content and order of your new book.
 
-Here is the Table of Contents for this book
-:::::::::::::::::::::::::::::::::::::::::::
+.. Each section heading (e.g. "SECTION 1: A Random Section") will be
+a heading in the table of contents. Source files that should be
+generated and included in that section should be placed on individual
+lines, with one line separating the first source filename and the
+:maxdepth: line.
+
+.. Sources can also be included from subfolders of the source directory.
+(e.g. "DataStructures/queues.rst").
+
+SECTION 1: A Random Section
+:::::::::::::::::::::::::::
 
 .. toctree::
    :maxdepth: 2
 
-.. Here is were you would include your source files. For example,
-   if you have a source file called functions.rst, you would
-   include it as a component of this project by putting its name
-   on a line by itself (below the line that says :maxdepth: 2, leaving
-   one blank line between them):
-
-   functions
+   functions.rst
+   DataStructures/queues.rst
 
 
+SECTION 2: Another Random Section
+:::::::::::::::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   morecontent.rst
+   words.rst
+   somestuff.rst
+   MoreThings/apples.rst
