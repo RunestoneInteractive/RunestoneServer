@@ -16,7 +16,7 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('/Users/bmiller/Beta/web2py/applications/runestone/modules/'))
+sys.path.insert(0, os.path.abspath('../modules/'))
 
 # -- General configuration -----------------------------------------------------
 
@@ -104,7 +104,7 @@ html_theme = 'sphinx_bootstrap'
 #html_theme_options = {'nosidebar': 'true'}
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': "Runestone Interactive Overview",
+    'navbar_title': "Everyday Python",
 
     # Tab name for entire site. (Default: "Site")
     'navbar_site_name': "Chapters",
