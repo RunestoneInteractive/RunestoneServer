@@ -15,8 +15,8 @@ like your project's title, any copyright information, etc. (However, you don't a
 to change anything - the defaults in it will at least produce working HTML.)
 
 If your project will not have more than one single page, then you do not need anything more than
-an index.rst file. You can customize any content in index.rst, as long as it follows valid
-reStructuredText syntax. You can also use directives that have been created as part of the
+conf.py and an index.rst file. You can customize any content in index.rst, as long as it follows
+valid reStructuredText syntax. You can also use directives that have been created as part of the
 Runestone Interactive tool set (including ActiveCode, CodeLens, self-check questions, etc).
 
 If you have a more complicated project, with multiple pages, there are instructions in the
@@ -40,3 +40,9 @@ expects to find files in as the <outdir>.
 
 The . (period) means that sphinx-build should look for your conf.py and source rST files in
 the current directory.
+
+
+Making It Interactive
+---------------------
+
+After the above steps,

@@ -35,21 +35,6 @@ master_doc = 'index'
 project = u'<ENTER YOUR PROJECT NAME HERE>' # e.g. How To Think Like a Computer Scientist
 copyright = u'<ENTER YOUR COPYRIGHT NOTICE HERE>' # e.g. "2013, Brad Miller and David Ranum"
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = '3.0'
-# The full version, including alpha/beta/rc tags.
-release = '3.0'
-
-# There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
-
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = ['ActiveIndexFiles/*']
@@ -57,11 +42,10 @@ exclude_patterns = ['ActiveIndexFiles/*']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-
 # -- Options for HTML output ---------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# The theme to use for HTML and HTML Help pages.  See the Sphinx documentation
+# for a list of builtin themes.
 html_theme = 'sphinx_bootstrap'
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -115,8 +99,14 @@ html_short_title ='<INSERT YOUR PROJECT NAME OR OTHER SHORT TITLE HERE>'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static', '../common/js', '../common/css', '../common/ext/skulpt/dist', 
-                    '../common/ext/js-parsons', '../common/ext/codelens/v3', '../common/bootstrap', '../common/images']
+html_static_path = ['_static',
+                    '../common/js',
+                    '../common/css',
+                    '../common/ext/skulpt/dist',
+                    '../common/ext/js-parsons',
+                    '../common/ext/codelens/v3',
+                    '../common/bootstrap',
+                    '../common/images']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
