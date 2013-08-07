@@ -64,6 +64,12 @@ The primary file that you would change to specify the layout of the generated pr
 ``_templates/sphinx_bootstrap/layout.html``.
 
 
+``_static/``
+
+This directory is not created automatically. However, if your textbook will contain static resources like images
+or other external files, this is where the default configuration will expect such resources to be. If you need
+external resources, you should create this directory yourself.
+
 
 Building Your Project
 ---------------------
@@ -112,3 +118,12 @@ Use Your Textbook
 
 With web2py running, you can find your new interactive textbook at:
 ``http://127.0.0.1/runestone/static/<project_name>/index.html.``
+
+There is one option step you may want to perform: to ensure that you web2py redirects you correctly every time,
+you may want to enrol your user account in your newly created course. This is slightly different than making your
+account an instructor. The enroled course set for your user account determines where web2py redirects you when you
+log in.
+
+To enrol yourself, log in to web2py, then go to http://127.0.0.1:8000/runestone/default/user/profile. Enter the
+name of your newly created course (<project_name>) into the ``Course Name`` field, and click "Save Profile". You
+should be redirected immediately to your course.
