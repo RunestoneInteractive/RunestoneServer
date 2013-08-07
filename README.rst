@@ -203,8 +203,8 @@ I have begun a project to document the `Runestone Interactive <http://docs.runes
 Creating Your Own Textbook
 --------------------------
 
-To find instructions on using the Runestone Tools to create your own interactive textbook, see
-[this](README_new_book.rst) page.
+To find instructions on using the Runestone Tools to create your own interactive textbook, see the
+file in this directory README_new_book.rst.
 
 
 Browser Notes
