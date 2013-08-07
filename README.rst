@@ -79,7 +79,6 @@ line and that will build the following targets:
 
 * How to Think Like a Computer Scientist
 * Problem Solving with algorithms and Data Structures using Python
-* A development version of everything combined (devcourse)
 
 You can quickly check the build by opening the file ``static/devcourse/index.html`` in your browser.
 
