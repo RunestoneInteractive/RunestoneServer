@@ -184,9 +184,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
                 warningiserror, tags)
     app.build(force_all, filenames)
 
-    shutil.copy(path.join(outdir, '_static', 'jquery-1.10.2.min.js'),
-            path.join(outdir, '_static', 'jquery.js'))
-
     shutil.rmtree(sourcedir)
 
 
