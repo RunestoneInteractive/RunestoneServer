@@ -25,7 +25,7 @@ can build and use this eBook.
 
 First get Sphinx, Version 1.1.x is current as of this writing.
 
-http://sphinx.pocoo.org
+http://sphinx.pocoo.org
 
 Follow the instructions there to download and install Sphinx.
 
