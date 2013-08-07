@@ -65,6 +65,7 @@ The primary file that you would change to specify the layout of the generated pr
 
 
 ``_static/``
+~~~~~~~~~~~~
 
 This directory is not created automatically. However, if your textbook will contain static resources like images
 or other external files, this is where the default configuration will expect such resources to be. If you need
@@ -107,8 +108,8 @@ you set when you started web2py.
 
 2. Now add your course to the ``courses`` database table. Click the ``[insert new courses]`` link. Enter
 <project_name> in the course_name field, and choose a start date for the course (in the format YYYY-MM-DD).
-Go back to http://127.0.0.1:8000/runestone/appadmin and click ``db.courses``. Note the Id number of your newly
-generated course (under the ``course.id`` column). We will need the ID in the next step.
+Go back to http://127.0.0.1:8000/runestone/appadmin and click ``db.courses``. Note the ID number of your newly
+generated course (under the ``course.id`` column).You will need the ID in the next step.
 
 3. Now you need to set your web2py account to be the instructor for your new course. Go back to
 http://127.0.0.1:8000/runestone/appadmin and click the ``[insert new course_instructor]`` link. Type the ID number
