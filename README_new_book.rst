@@ -14,7 +14,8 @@ In the root of the ``runestone/`` directory, you will find a folder called ``new
 
 This folder contains the basic structure and templates you need to create your own course.
 
-You should make a copy of this folder and give it a short (and unique) name.
+You should make a copy of this folder and give it a short (and unique) name. From now on this document
+will refer to this short name as `<project_name>`.
 
 
 Project Structure
