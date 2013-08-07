@@ -76,7 +76,7 @@ At a command line in your project directory, run this command:
 ``$ paver build``
 
 This tells Sphinx to make the HTML files. This will cause the generated HTML to be placed in
- ``runestone/static/<project_name>``.
+``runestone/static/<project_name>``.
 
 
 Making It Interactive
@@ -93,7 +93,7 @@ you will have to configure web2py to serve your book.
 Assuming you followed the original setup instructions, you should already have a web2py user account and be a
 member of the instructors group. (If now, do so now!)
 
-1. Start web2py and browse to to http://127.0.0.1:8000/runestone/appadmin. Supply the administrative password
+1. Start web2py and browse to http://127.0.0.1:8000/runestone/appadmin. Supply the administrative password
 you set when you started web2py.
 
 2. Now add your course to the ``courses`` database table. Click the ``[insert new courses]`` link. Enter
@@ -111,4 +111,4 @@ Use Your Textbook
 -----------------
 
 With web2py running, you can find your new interactive textbook at:
-http://127.0.0.1/runestone/static/<project_name>/index.html.
+``http://127.0.0.1/runestone/static/<project_name>/index.html.``

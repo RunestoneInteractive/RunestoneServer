@@ -20,7 +20,7 @@ options(
 
     build = Bunch( builddir="../static/"+project_name,
                     sourcedir=".",
-                    outdir="../static/thinkcspy",
+                    outdir="../static/"+project_name,
                     confdir=".",
                     template_args={'course_id':project_name,
                                    'login_required':'false',
