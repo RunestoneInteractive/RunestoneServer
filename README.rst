@@ -21,22 +21,37 @@ Dependencies
 ------------
 
 There are a couple of prerequisites you need to satisfy before you
-can build and use this eBook.
+can build and use this eBook. The easiest/recommended way is to
+use `pip <http://www.pip-installer.org/en/latest/>`_.
 
-First get Sphinx, Version 1.1.x is current as of this writing.
+First get `Sphinx <http://sphinx.pocoo.org>`_, version 1.1.x is current as of this writing:
 
-http://sphinx.pocoo.org
+::
 
-Follow the instructions there to download and install Sphinx.
+    # pip install sphinx
 
-Next install paver, version 1.2.0 is current as of this writing.  If you have ``pip`` installed its as easy as ``pip install paver`` if not, then follow the instructions `on the paver github page <http://paver.github.com/paver/#installation>`_
+Install `paver <http://paver.github.io/paver/>`_, at least version 1.2.0:
 
-Once paver is installed you will also need to install sphincontrib-paverutils, again the easiest route is to use ``pip install sphinxcontrib-paverutils``   Make sure you have version 1.5 or later.
+::
+
+    # pip install paver
 
 
-If you want to run a full blown server -- so you can save activecode assignments etc. then you will need to download and install web2py.  http://web2py.com
+Once paver is installed you will also need to install sphinxcontrib-paverutils, at least version 1.5:
 
-After you install web2py go to the applications folder and check out this repository.  This will be installed as a web2py application automatically.
+::
+
+    # pip install sphinxcontrib-paverutils
+
+
+If you want to run a full blown server -- so you can save ActiveCode assignments, etc. you will need to download and
+install `web2py <http://web2py.com>`_.
+
+The easiest way to do so is to download the "Source Code" distribution from http://www.web2py.com/init/default/download.
+After you download it, extract the zip file to some folder on your hard drive. (web2py requires no real "installation").
+
+Within the ``web2py`` folder that was just extracted, go to the ``applications/`` folder and check out this repository
+(instructions below). This will install the Runestone tools as a web2py application automatically.
 
 Cloning The Runestone Project and its submodules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +72,7 @@ If you are using a GUI git client you may simply get prompted to update the subm
 Configure the Book
 ------------------
 
-Although the book looks like a static website, there are quite a few AJAX calls going on in the background.  The javascript relies on a configuration object called eBookConfig.  To get the right values in the eBookConfig object you need to configure a couple of things prior to running the paver command to build the book.  We have provided a ``paverconfig.py.prototype`` file, you can simply copy that to ``paverconfig.py``.  It contains the following two lines:
+Although the book looks like a static website, there are quite a few AJAX calls going on in the background.  The javascript relies on a configuration object called eBookConfig.  To get the right values in the eBookConfig object you need to configure a couple of things prior to running the paver command to build the book.  We have provided a ``paverconfig.py.prototype`` file that you can simply copy that to ``paverconfig.py`` abd modify.  It contains the following two lines:
 
 ::
 
@@ -80,7 +95,7 @@ line and that will build the following targets:
 * How to Think Like a Computer Scientist
 * Problem Solving with algorithms and Data Structures using Python
 
-You can quickly check the build by opening the file ``static/devcourse/index.html`` in your browser.
+You can quickly check the build by opening the file ``static/thinkcspy/index.html`` in your browser.
 
 Now before you start web2py its convenient to make runestone the default application.  In the top level web2py directory copy routes.example.py to routes.py and Modify the three lines that contain the word runestone to look like this::
 
@@ -104,8 +119,12 @@ Now before you start web2py its convenient to make runestone the default applica
 Running the Server
 ------------------
 
-You will have to set a few configuration values in the file ``models/1.py``. Copy ``models/1.py.prototype`` to ``models/1.py`` and open the newly created 1.py. If you don't wish to use a local SQLite database, change the database_uri (line 13) to match your actual credentials.
-If you wish to use Janrain Engage to provide social network authentication integration, you will also have to set your Janrain API key and domain in 1.py.
+You will have to set a few configuration values in the file ``models/1.py``. Copy ``models/1.py.prototype`` to
+``models/1.py`` and open the newly created 1.py. If you don't wish to use a local SQLite database, change the
+``database_uri`` to match your actual credentials.
+
+If you wish to use Janrain Engage to provide social network authentication integration, you will also have to set your
+Janrain API key and domain in 1.py.
 
 Note: If you do *not* wish to use Janrain, you must comment out lines 159 - 163 of ``models/0.db``::
 
@@ -121,20 +140,20 @@ and uncomment line 164. This will disable Janrain and only use Web2Py integrated
 
 Once you've built the book using the steps above.  You can start the web2py development server by simply running ::
 
-	python web2py.py.
+    python web2py.py.
 
 This will bring up a little gui where you can make up an admin password and click start server.  When the server is running your browswer will open to the welcome application. Unless you've changed the default application as described above.  To see this app simply use the url:  http://127.0.0.1/courselib    -- From there you can register yourself as a user for dev course, which will redirect you to the index for devcourse.  Or if you have built them, you can click on the link for How to think..., or Problem Solving...
 
 If you get an error at this point the most likely reason is that the settings file isn't recognizing your host and is not setting the database correctly.  These lines in models/0.py are important::
 
-	if 'local' in uname()[1] or 'Darwin' in uname()[0]:
+    if 'local' in uname()[1] or 'Darwin' in uname()[0]:
         settings.database_uri = 'sqlite://storage.sqlite'
-	elif 'webfaction' in uname()[1]:  # production is on webfaction
-	        settings.database_uri = 'postgres://production_db:secret@production_server.com/production_db'
-	elif 'luther' in uname()[1]:   # this is my beta machine
-	        settings.database_uri = 'sqlite://storage.sqlite'
-	else:
-	        raise RuntimeError('Host unknown, senttings not configured')
+    elif 'webfaction' in uname()[1]:  # production is on webfaction
+        settings.database_uri = 'postgres://production_db:secret@production_server.com/production_db'
+    elif 'luther' in uname()[1]:   # this is my beta machine
+        settings.database_uri = 'sqlite://storage.sqlite'
+    else:
+        raise RuntimeError('Host unknown, settings not configured')
 
 For your own personal development, you want the first clause of the if statement to match. If you are on a Unix-like system,
 you can replace 'Darwin' with the result of running ``uname`` at a terminal. Another option is to replace 'local' with
