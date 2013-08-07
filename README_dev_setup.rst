@@ -31,6 +31,7 @@ You can use the ``conf.py`` file without modification, but you will almost certa
 it with your own title, author name, copyright notice, etc. Most of the configuration parameters that
 you will want to change are in angle brackets with all-caps placeholder text. (E.g. <YOUR TITLE HERE>).
 
+
 ``index.rst``
 ~~~~~~~~~~~~~
 
@@ -41,6 +42,14 @@ If you are creating a project that will have more than one page, however, ``inde
 specify what other content source files are included as well as in what order the material appears.
 
 ``index.rst`` contains information on how to structure the file and include other sources.
+
+
+``pavement.py``
+~~~~~~~~~~~~~~~
+
+This file is used by the Paver build tool to configure the Sphinx build. The only thing you need to change
+in this file is the parameter ``project_name``. Set this equal to your <project_name>.
+
 
 ``_templates/``
 ~~~~~~~~~~~~~~
@@ -55,19 +64,19 @@ The primary file that you would change to specify the layout of the generated pr
 ``_templates/sphinx_bootstrap/layout.html``.
 
 
+
 Building Your Project
 ---------------------
 
-Once you have customized ``conf.py`` to your liking, and added your content and any other rST sources to
-``index.rst``, you can build your book for the first time.
+Once you have customized ``conf.py`` to your liking, added your content and any other rST sources to
+``index.rst``, and set your course name in ``pavement.py``, you can build your book for the first time.
 
 At a command line in your project directory, run this command:
 
-``$ sphinx-build -b html . ../static/<project_name>``
+``$ paver build``
 
-This tells Sphinx to make the HTML files. The . (period) tells Sphinx to look for source files in the current
-directory. You should obviously replace <project_name> with your own project name. This will cause the generated
-HTML to be put in ``runestone/static/<project_name>``.
+This tells Sphinx to make the HTML files. This will cause the generated HTML to be placed in
+ ``runestone/static/<project_name>``.
 
 
 Making It Interactive
@@ -84,15 +93,15 @@ you will have to configure web2py to serve your book.
 Assuming you followed the original setup instructions, you should already have a web2py user account and be a
 member of the instructors group. (If now, do so now!)
 
-1. Start web2py and browse to to http://127.0.0.1:8000/runestone/appadmin. Supply the password you set when you
-started web2py.
+1. Start web2py and browse to to http://127.0.0.1:8000/runestone/appadmin. Supply the administrative password
+you set when you started web2py.
 
-#. Now add your course to the ``courses`` database table. Click the ``[insert new courses]`` link. Enter
+2. Now add your course to the ``courses`` database table. Click the ``[insert new courses]`` link. Enter
 <project_name> in the course_name field, and choose a start date for the course (in the format YYYY-MM-DD).
 Go back to http://127.0.0.1:8000/runestone/appadmin and click ``db.courses``. Note the Id number of your newly
 generated course (under the ``course.id`` column). We will need the ID in the next step.
 
-#. Now you need to set your web2py account to be the instructor for your new course. Go back to
+3. Now you need to set your web2py account to be the instructor for your new course. Go back to
 http://127.0.0.1:8000/runestone/appadmin and click the ``[insert new course_instructor]`` link. Type the ID number
 you obtained in the previous step into the ``Course`` field, and choose your your web2py username from the
 "Instructor" dropdown. Click submit.
