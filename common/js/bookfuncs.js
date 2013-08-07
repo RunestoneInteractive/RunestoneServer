@@ -106,6 +106,113 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
 
+function createActiveCode(divid,suppliedSource,sid) {
+    var eNode;
+    var acblockid;
+    if (sid !== undefined) {
+        acblockid = divid + "_" + sid;
+    } else {
+        acblockid = divid;
+    }
+
+    edNode = document.getElementById(acblockid);
+    if (edNode.children.length == 0 ) {
+        //edNode.style.display = 'none';
+        edNode.style.backgroundColor = "white";
+        var editor;
+        editor = CodeMirror(edNode, {
+                    mode: {name: "python",
+                        version: 2,
+                        singleLineStringErrors: false},
+                    lineNumbers: true,
+                    indentUnit: 4,
+                    tabMode: "indent",
+                    matchBrackets: true,
+                    onKeyEvent:handleEdKeys
+                });
+
+
+        var myRun = function() {
+            runit(acblockid);
+        };
+        var mySave = function() {
+            saveEditor(divid);
+        };
+        var myLoad = function() {
+            requestCode(divid,sid);
+        };
+        cm_editors[acblockid+"_code"] = editor;
+        editor.parentDiv = acblockid;
+        var runButton = document.createElement("button");
+        runButton.appendChild(document.createTextNode('Run'));
+        runButton.className = runButton.className + ' btn btn-small btn-success';
+        runButton.onclick = myRun;
+        edNode.appendChild(runButton);
+        edNode.appendChild(document.createElement('br'));
+        if (sid === undefined) { // We don't need load and save buttons for grading
+            if(isLoggedIn() == true) {
+                var saveButton = document.createElement("input");
+                saveButton.setAttribute('type','button');
+                saveButton.setAttribute('value','Save');
+                saveButton.className = saveButton.className + ' btn btn-small';
+                saveButton.onclick = mySave;
+                edNode.appendChild(saveButton);
+
+                var loadButton = document.createElement("input");
+                loadButton.setAttribute('type','button');
+                loadButton.setAttribute('value','Load');
+                loadButton.className = loadButton.className + ' btn btn-small';
+                loadButton.onclick = myLoad;
+                edNode.appendChild(loadButton);
+            } else {
+                var saveButton = document.createElement("input");
+                saveButton.setAttribute('type','button');
+                saveButton.setAttribute('value','Save');
+                saveButton.className = saveButton.className + ' btn btn-small disabled';
+                saveButton.setAttribute('data-toggle','tooltip');
+                saveButton.setAttribute('title','Register or log in to save your code');
+                edNode.appendChild(saveButton);
+                $jqTheme(saveButton).tooltip( {
+                    'selector': '',
+                    'placement': 'bottom'
+                });
+
+                var loadButton = document.createElement("input");
+                loadButton.setAttribute('type','button');
+                loadButton.setAttribute('value','Load');
+                loadButton.className = loadButton.className + ' btn btn-small disabled';
+                loadButton.setAttribute('data-toggle','tooltip');
+                loadButton.setAttribute('title','Register or log in to load your saved code');
+                edNode.appendChild(loadButton);
+                $jqTheme(loadButton).tooltip( {
+                    'selector': '',
+                    'placement': 'bottom'
+                });
+            }
+        }
+        edNode.appendChild(document.createElement('br'));
+        var newCanvas = edNode.appendChild(document.createElement("canvas"));
+        newCanvas.id = acblockid+"_canvas";
+        newCanvas.height = 400;
+        newCanvas.width = 400;
+        newCanvas.style.border = '2px solid black';
+        newCanvas.style.display = 'none';
+        var newPre = edNode.appendChild(document.createElement("pre"));
+        newPre.id = acblockid + "_pre";
+        newPre.className = "active_out";
+
+        myLoad();
+        if (! suppliedSource ) {
+            suppliedSource = '\n\n\n\n\n';
+        }
+        if (! editor.getValue()) {
+            suppliedSource = suppliedSource.replace(new RegExp('%22','g'),'"');
+            suppliedSource = suppliedSource.replace(new RegExp('%27','g'),"'");
+            editor.setValue(suppliedSource);
+        }
+    }
+}
+
 function runit(myDiv, theButton, includes, suffix) {
     //var prog = document.getElementById(myDiv + "_code").value;
 
