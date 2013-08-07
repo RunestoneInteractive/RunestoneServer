@@ -84,6 +84,9 @@ At a command line in your project directory, run this command:
 This tells Sphinx to make the HTML files. This will cause the generated HTML to be placed in
 ``runestone/static/<project_name>``.
 
+Note: If you have not created the ``_static`` directory, the above command will cause a warning that that
+directory does not exist. If you aren't using any of your own static resources, you can safely ignore this.
+
 
 Making It Interactive
 ---------------------
