@@ -200,6 +200,13 @@ I have begun a project to document the `Runestone Interactive <http://docs.runes
 * How to write your own extension for runestone interactive
 
 
+Creating Your Own Textbook
+--------------------------
+
+To find instructions on using the Runestone Tools to create your own interactive textbook, see
+[this](README_new_book.rst) page.
+
+
 Browser Notes
 -------------
 

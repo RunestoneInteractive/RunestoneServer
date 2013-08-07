@@ -123,7 +123,7 @@ Use Your Textbook
 With web2py running, you can find your new interactive textbook at:
 ``http://127.0.0.1/runestone/static/<project_name>/index.html.``
 
-There is one option step you may want to perform: to ensure that you web2py redirects you correctly every time,
+There is one optional step you may want to perform: to ensure that you web2py redirects you correctly every time,
 you may want to enrol your user account in your newly created course. This is slightly different than making your
 account an instructor. The enroled course set for your user account determines where web2py redirects you when you
 log in.
