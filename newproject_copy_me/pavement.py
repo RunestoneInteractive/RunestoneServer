@@ -18,17 +18,17 @@ master_app = 'runestone'
 options(
     sphinx = Bunch(docroot=".",),
 
-    build = Bunch( builddir="../static/"+project_name,
-                    sourcedir=".",
-                    outdir="../static/"+project_name,
-                    confdir=".",
-                    template_args={'course_id':project_name,
-                                   'login_required':'false',
-                                   'appname':master_app,
-                                   'loglevel':10,
-                                   'course_url':master_url }
-
-                  )
+    build = Bunch(
+        builddir="../static/"+project_name,
+        sourcedir=".",
+        outdir="../static/"+project_name,
+        confdir=".",
+        template_args={'course_id':project_name,
+                       'login_required':'false',
+                       'appname':master_app,
+                       'loglevel':10,
+                       'course_url':master_url }
+    )
 )
 
 @task
@@ -39,5 +39,5 @@ def build(options):
       options['force_all'] = True
       options['freshenv'] = True
     
-    paverutils.run_sphinx(options,project_name)
+    paverutils.run_sphinx(options,'build')
 
