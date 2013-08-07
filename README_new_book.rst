@@ -102,7 +102,7 @@ students save and load their work, setting assignments, and getting feedback as 
 you will have to configure web2py to serve your book.
 
 Assuming you followed the original setup instructions, you should already have a web2py user account and be a
-member of the instructors group. (If now, do so now!)
+member of the instructors group. (If not, do so now!)
 
 1. Start web2py and browse to http://127.0.0.1:8000/runestone/appadmin. Supply the administrative password
 you set when you started web2py.
