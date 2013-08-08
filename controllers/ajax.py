@@ -444,6 +444,6 @@ def getSphinxBuildStatus():
         return dict(status=status, course_url=course_url)
     else: # task failed
         status = 'failed'
-        tb = db(db.scheduler_run.id == row.id).select().first()['traceback']
+        tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
         return dict(status=status, traceback=tb)
 

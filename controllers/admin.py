@@ -151,7 +151,7 @@ def startdate():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def rebuildcourse():
-    if not request.vars.projectname:
+    if not request.vars.projectname or not request.vars.startdate:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
         return dict(curr_start_date=curr_start_date, confirm=True)
