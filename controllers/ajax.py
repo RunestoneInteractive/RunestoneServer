@@ -164,9 +164,10 @@ def getnumusers():
     response.headers['content-type'] = 'application/json'
 
     query = """select count(*) from (select distinct(sid) from useinfo) as X """
-    rows = db.executesql(query)
 
-    res = {'numusers':rows[0][0]}
+    numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
+
+    res = {'numusers':numusers}
     return json.dumps([res])
 
 #
