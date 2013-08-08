@@ -10,7 +10,7 @@ Getting Started
 First, make sure you've followed all the directions in the README to get the Runestone Tools and
 web2py up and running on your development machine.
 
-In the root of the ``runestone/`` directory, you will find a folder called ``newproject_copy_me/``.
+In the root of the ``runestone/`` repository directory, you will find a folder called ``newproject_copy_me/``.
 
 This folder contains the basic structure and templates you need to create your own course.
 
@@ -132,3 +132,12 @@ log in.
 To enrol yourself, log in to web2py, then go to http://127.0.0.1:8000/runestone/default/user/profile. Enter the
 name of your newly created course (<project_name>) into the ``Course Name`` field, and click "Save Profile". You
 should be redirected immediately to your course.
+
+
+Other Resources
+---------------
+
+Here are some links to resources that may help you use the Runestone Tools.
+
+* `Sphinx reStructured Text primer <http://sphinx-doc.org/rest.html>`_
+* `Documentation on Runestone tools <http://docs.runestoneinteractive.org/build/html/index.html>`_ (ActiveCode, CodeLens, etc)
