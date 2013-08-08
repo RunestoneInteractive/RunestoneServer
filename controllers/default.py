@@ -5,6 +5,10 @@ import json
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
+
+    if not request.args(0):
+        redirect(URL('default', 'user/login'))
+
     if 'register' in request.args(0):
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
