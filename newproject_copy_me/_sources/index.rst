@@ -11,7 +11,7 @@ This Is A New Project
    lines, with one line separating the first source filename and the
    :maxdepth: line.
 
-.. Sources can also be included from subfolders of the project directory.
+.. Sources can also be included from subfolders of this directory.
    (e.g. "DataStructures/queues.rst").
 
 SECTION 1: A Random Section

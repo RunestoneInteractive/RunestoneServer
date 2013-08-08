@@ -32,6 +32,12 @@ You can use the ``conf.py`` file without modification, but you will almost certa
 it with your own title, author name, copyright notice, etc. Most of the configuration parameters that
 you will want to change are in angle brackets with all-caps placeholder text. (E.g. <YOUR TITLE HERE>).
 
+``_sources/``
+~~~~~~~~~~~~~
+
+This directory is where the default configuration expects rST sources to live. You should add your
+sources alongside ``index.rst``.
+
 
 ``index.rst``
 ~~~~~~~~~~~~~
@@ -43,13 +49,6 @@ If you are creating a project that will have more than one page, however, ``inde
 specify what other content source files are included as well as in what order the material appears.
 
 ``index.rst`` contains information on how to structure the file and include other sources.
-
-
-``pavement.py``
-~~~~~~~~~~~~~~~
-
-This file is used by the Paver build tool to configure the Sphinx build. The only thing you need to change
-in this file is the parameter ``project_name``. Set this equal to your <project_name>.
 
 
 ``_templates/``
@@ -71,6 +70,14 @@ The primary file that you would change to specify the layout of the generated pr
 This directory is not created automatically. However, if your textbook will contain static resources like images
 or other external files, this is where the default configuration will expect such resources to be. If you need
 external resources, you should create this directory yourself.
+
+
+``pavement.py``
+~~~~~~~~~~~~~~~
+
+This file is used by the Paver build tool to configure the Sphinx build. The only thing you need to change
+in this file is the parameter ``project_name``. Set this equal to your <project_name>.
+
 
 
 Building Your Project

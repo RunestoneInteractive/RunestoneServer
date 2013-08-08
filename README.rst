@@ -140,14 +140,14 @@ and uncomment the line below. This will disable Janrain and only use Web2Py inte
 
 Once you've built the book using the steps above.  You can start the web2py development server by simply running ::
 
-    python web2py.py.
+    python web2py.py
 
-This will bring up a little gui where you can make up an admin password and click "Start server".
+This will bring up a little GUI where you can make up an admin password and click "start server".
 When the server is running your browser will open to the welcome application, unless you've changed
 the default application as described above.  To see this app simply use the url:  http://127.0.0.1/runestone
 From there, you can click on the link for "How To Think Like A Computer Scientist" or "Problem Solving With
 Algorithms and Data Structures". (See the section Final Configuration below for instructions on registering
-for one of the courses. Registering allows you to save your progress and work._
+for one of the courses. Registering allows you to save your progress and work.)
 
 If you get an error at this point the most likely reason is that the settings file isn't recognizing your host and is not setting the database correctly.  These lines in models/0.py are important::
 
@@ -169,8 +169,7 @@ Final Configuration
 To use the admin functionality you are going to want to do one more bit of configuration:
 
 * Click the "Register" link in the user menu in the upper right corner of the browser window.
-* Fill in the form to create a user account for yourself. You can register for either "How To Think..."
-(use the course name ``thinkcspy``) or "Problem Solving With..." (use the course name ``pythonds``).
+* Fill in the form to create a user account for yourself. You can register for either "How To Think..." (use the course name ``thinkcspy``) or "Problem Solving With..." (use the course name ``pythonds``).
 
 Now, add your new user account to the 'instructors' group using the appadmin
 functionality of web2py:

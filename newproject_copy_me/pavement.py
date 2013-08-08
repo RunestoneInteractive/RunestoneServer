@@ -20,7 +20,7 @@ options(
 
     build = Bunch(
         builddir="../static/"+project_name,
-        sourcedir=".",
+        sourcedir="_sources",
         outdir="../static/"+project_name,
         confdir=".",
         template_args={'course_id':project_name,
