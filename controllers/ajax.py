@@ -165,7 +165,11 @@ def getnumusers():
 
     query = """select count(*) from (select distinct(sid) from useinfo) as X """
 
-    numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
+    try:
+        numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
+    except:
+        # sometimes the DB query takes too long and is timed out - return something anyway
+        numusers = 'more than 250,000'
 
     res = {'numusers':numusers}
     return json.dumps([res])
