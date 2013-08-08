@@ -31,9 +31,9 @@
             clearInterval(iid);
             $("#spinner_div").hide();
             $("#title").text("An error occurred.");
-            $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
-                "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
-                "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+            $("#message").html("An error occurred while building this course. Please check that you entered a valid project name. " +
+                "Project names must not contain spaces or symbols. If you are sure you have entered a valid project name, please " +
+                "submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
                 "Make sure you include the following traceback information:" +
                 "<pre>" + data.traceback + "</pre>");
           }
