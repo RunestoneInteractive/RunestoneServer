@@ -5,6 +5,7 @@ from paver.easy import *
 import paver.setuputils
 paver.setuputils.install_distutils_tasks()
 import os, sys
+import subprocess
 
 from sphinxcontrib import paverutils
 
@@ -87,20 +88,6 @@ options(
                        'course_url':master_url }
 
     ),
-
-    java4python = Bunch(
-        builddir="Java4Python/source",
-        sourcedir="Java4Python/source",
-        outdir="static/java4python",
-        confdir="Java4Python/source",
-        template_args={'course_id':'java4python',
-                       'login_required':'false',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-
-    ),
-
 )
 
 @task
@@ -185,9 +172,10 @@ def allbooks(options):
 @cmdopts([('all','a','rebuild everything')])
 def java4python(options):
     if 'all' in options.java4python:
-      options['force_all'] = True
-      options['freshenv'] = True
+        subprocess.call(["paver", "-f java4python/pavement.py", "build", "-a"])
+    else:
+        subprocess.call(["paver", "-f java4python/pavement.py", "build"])
 
-    paverutils.run_sphinx(options,'java4python')
+    
 
 
