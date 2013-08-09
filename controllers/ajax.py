@@ -185,16 +185,16 @@ def savehighlight():
     pageSection = request.vars.pageSection
     course = request.vars.course
 
-    print 'inserting new highlight'
-    insert_id = db.user_highlights.insert(created_on=datetime.datetime.now(),
-                   user_id=auth.user.id,
-                   course_id=course,
-                   parent_class=parentClass,
-                   range=hrange,
-                   chapter_url=page,
-                   sub_chapter_url=pageSection,
-                   method = method)
-    return str(insert_id)
+    if auth.user:
+        insert_id = db.user_highlights.insert(created_on=datetime.datetime.now(),
+                       user_id=auth.user.id,
+                       course_id=course,
+                       parent_class=parentClass,
+                       range=hrange,
+                       chapter_url=page,
+                       sub_chapter_url=pageSection,
+                       method = method)
+        return str(insert_id)
 
 
 def deletehighlight():
@@ -215,18 +215,18 @@ def gethighlights():
     """
     page = request.vars.page
     course = request.vars.course
-
-    result = db((db.user_highlights.user_id == auth.user.id) & (db.user_highlights.chapter_url == page) & (db.user_highlights.course_id == course) & (db.user_highlights.is_active == 1)).select()
-    rowarray_list = []
-    for row in result:
-        res = {}
-        res['range'] = row.range
-        res['uniqueId'] = row.id
-        res['parentClass'] = row.parent_class
-        res['pageSection'] = row.sub_chapter_url
-        res['method'] = row.method
-        rowarray_list.append(res)
-    return json.dumps(rowarray_list)
+    if auth.user:
+        result = db((db.user_highlights.user_id == auth.user.id) &
+                    (db.user_highlights.chapter_url == page) &
+                    (db.user_highlights.course_id == course) &
+                    (db.user_highlights.is_active == 1)).select()
+        rowarray_list = []
+        for row in result:
+            res = {'range': row.range, 'uniqueId': row.id,
+                   'parentClass': row.parent_class,
+                   'pageSection': row.sub_chapter_url, 'method': row.method}
+            rowarray_list.append(res)
+        return json.dumps(rowarray_list)
 
 
 #
@@ -239,27 +239,37 @@ def updatelastpage():
     lastPageSubchapter = request.vars.lastPageSubchapter
     lastPageScrollLocation = request.vars.lastPageScrollLocation
     course = request.vars.course
-
-    res = db((db.user_state.user_id == auth.user.id) & (db.user_state.course_id == course))
-    res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash, last_page_chapter = lastPageChapter, last_page_subchapter = lastPageSubchapter, last_page_scroll_location = lastPageScrollLocation, last_page_accessed_on = datetime.datetime.now())
+    if auth.user:
+        res = db((db.user_state.user_id == auth.user.id) &
+                 (db.user_state.course_id == course))
+        res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash,
+                   last_page_chapter = lastPageChapter,
+                   last_page_subchapter = lastPageSubchapter,
+                   last_page_scroll_location = lastPageScrollLocation,
+                   last_page_accessed_on = datetime.datetime.now())
 
 
 def getlastpage():
     course = request.vars.course
-
-    result = db((db.user_state.user_id == auth.user.id) & (db.user_state.course_id == course)).select(db.user_state.last_page_url, db.user_state.last_page_hash, db.user_state.last_page_chapter, db.user_state.last_page_scroll_location, db.user_state.last_page_subchapter)
-    rowarray_list = []
-    if result:
-        for row in result:
-            res = {'lastPageUrl': row.last_page_url,
-                   'lastPageHash': row.last_page_hash,
-                   'lastPageChapter': row.last_page_chapter,
-                   'lastPageSubchapter': row.last_page_subchapter,
-                   'lastPageScrollLocation': row.last_page_scroll_location}
-            rowarray_list.append(res)
-        return json.dumps(rowarray_list)
-    else:
-        db.user_state.insert(user_id=auth.user.id, course_id=course)
+    if auth.user:
+        result = db((db.user_state.user_id == auth.user.id) &
+                    (db.user_state.course_id == course)
+                    ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
+                             db.user_state.last_page_chapter,
+                             db.user_state.last_page_scroll_location,
+                             db.user_state.last_page_subchapter)
+        rowarray_list = []
+        if result:
+            for row in result:
+                res = {'lastPageUrl': row.last_page_url,
+                       'lastPageHash': row.last_page_hash,
+                       'lastPageChapter': row.last_page_chapter,
+                       'lastPageSubchapter': row.last_page_subchapter,
+                       'lastPageScrollLocation': row.last_page_scroll_location}
+                rowarray_list.append(res)
+            return json.dumps(rowarray_list)
+        else:
+            db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
 def getCorrectStats(miscdata,event):
