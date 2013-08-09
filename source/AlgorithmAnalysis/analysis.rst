@@ -49,12 +49,14 @@ programming language. There may be many programs for the same algorithm,
 depending on the programmer and the programming language being used.
 
 To explore this difference further, consider the function shown in
-:ref:`Listing <lst_sum1>`. This function solves a familiar problem, computing the
+:ref:`Listing 1 <lst_sum1>`. This function solves a familiar problem, computing the
 sum of the first *n* integers. The algorithm uses the idea of an
 accumulator variable that is initialized to 0. The solution then
 iterates through the *n* integers, adding each to the accumulator.
 
 .. _lst_sum1:
+
+**Listing 1**
 
 .. activecode:: active1
     :caption: Summation of the First n Integers
@@ -76,6 +78,8 @@ assist with readability, and we used an extra assignment statement
 during the accumulation step that was not really necessary.
 
 .. _lst_sum2:
+
+**Listing 2**
 
 .. activecode:: active2
     :caption: Another Summation of the First n Integers
