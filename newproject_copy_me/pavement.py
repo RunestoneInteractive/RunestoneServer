@@ -36,11 +36,17 @@ if project_name == "<project_name>":
   exit()
 
 @task
-@cmdopts([('all','a','rebuild everything')])
+@cmdopts([
+    ('all','a','rebuild everything'),
+    ('outputdir=', 'o', 'output static files here')
+])
 def build(options):
     if 'all' in options.build:
       options['force_all'] = True
       options['freshenv'] = True
+
+    if 'outputdir' in options.build:
+        options.build.outdir = options.build.outputdir
     print 'Building into ', options.build.outdir    
     paverutils.run_sphinx(options,'build')
 
