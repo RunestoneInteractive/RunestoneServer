@@ -86,8 +86,20 @@ options(
                        'loglevel':10,
                        'course_url':master_url }
 
-    )
+    ),
 
+    java4python = Bunch(
+        builddir="Java4Python/source",
+        sourcedir="Java4Python/source",
+        outdir="static/java4python",
+        confdir="Java4Python/source",
+        template_args={'course_id':'java4python',
+                       'login_required':'false',
+                       'appname':master_app,
+                       'loglevel':10,
+                       'course_url':master_url }
+
+    ),
 
 )
 
@@ -168,3 +180,14 @@ def allbooks(options):
     thinkcspy(options)
     pythonds(options)
     overview(options)
+
+@task
+@cmdopts([('all','a','rebuild everything')])
+def java4python(options):
+    if 'all' in options.java4python:
+      options['force_all'] = True
+      options['freshenv'] = True
+
+    paverutils.run_sphinx(options,'java4python')
+
+
