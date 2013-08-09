@@ -24,95 +24,33 @@ options(
     sphinx = Bunch(
         docroot=".",
         ),
-
-    everyday = Bunch(
-        outdir="static/everyday",
-        sourcedir="everyday",
-        builddir="static/everyday",
-        confidir="everyday",
-        template_args={'course_id':'everyday',
-                       'login_required':'false',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-        ),
-
-    thinkcspy = Bunch(
-        builddir="static/thinkcspy",
-        sourcedir="source",
-        outdir="static/thinkcspy",
-        confdir="thinkcspy",
-        template_args={'course_id':'thinkcspy',
-                       'login_required':'false',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-
-    ),
-
-    pythonds = Bunch(
-        builddir="static/pythonds",
-        sourcedir="source",
-        outdir="static/pythonds",
-        confdir="pythonds",
-        template_args={'course_id':'pythonds',
-                       'login_required':'false',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-
-    ),
-
-    overview = Bunch(
-        builddir="static/overview",
-        sourcedir="overview",
-        outdir="static/overview",
-        confdir="overview",
-        template_args={'course_id':'overview',
-                       'login_required':'false',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-
-    ),
-
-    devcourse = Bunch(
-        builddir="static/devcourse",
-        sourcedir="source",
-        outdir="static/devcourse",
-        confdir="devcourse",
-        template_args={'course_id':'devcourse',
-                       'login_required':'true',
-                       'appname':master_app,
-                       'loglevel':10,
-                       'course_url':master_url }
-
-    ),
 )
 
 @task
 @cmdopts([('all','a','rebuild everything')])
 def everyday(options):
-
+    os.chdir("everyday")
     if 'all' in options.everyday:
-      options['force_all'] = True
-      options['freshenv'] = True
-
-    paverutils.run_sphinx(options,'everyday')
-
-    if minify_js:
-        sh('./minifyjs.py %s' % options.everyday.outdir)
+        subprocess.call(["paver","build", "-a",
+                         "--masterapp", master_app,
+                         "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                         "--masterapp", master_app,
+                         "--masterurl", master_url])
 
 @task
 @cmdopts([('all','a','rebuild everything')])
 def thinkcspy(options):
-    sh('cp %s/index.rst %s' % (options.thinkcspy.confdir,options.thinkcspy.sourcedir))
-
+    os.chdir("thinkcspy")
     if 'all' in options.thinkcspy:
-      options['force_all'] = True
-      options['freshenv'] = True
-    
-    paverutils.run_sphinx(options,'thinkcspy')
+        subprocess.call(["paver","build", "-a",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
 
     if minify_js:
         sh('./minifyjs.py %s' % options.thinkcspy.outdir)
@@ -120,13 +58,15 @@ def thinkcspy(options):
 @task
 @cmdopts([('all','a','rebuild everything')])
 def pythonds(options):
-    sh('cp %s/index.rst %s' % (options.pythonds.confdir,options.pythonds.sourcedir))
-
+    os.chdir("pythonds")
     if 'all' in options.pythonds:
-      options['force_all'] = True
-      options['freshenv'] = True
-    
-    paverutils.run_sphinx(options,'pythonds')
+        subprocess.call(["paver","build", "-a",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
 
     if minify_js:
         sh('./minifyjs.py %s' % options.pythonds.outdir)
@@ -134,11 +74,15 @@ def pythonds(options):
 @task
 @cmdopts([('all','a','rebuild everything')])
 def overview(options):
+    os.chdir("overview")
     if 'all' in options.overview:
-      options['force_all'] = True
-      options['freshenv'] = True
-
-    paverutils.run_sphinx(options,'overview')
+        subprocess.call(["paver","build", "-a",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
 
     if minify_js:
         sh('./minifyjs.py %s' % options.overview.outdir)
@@ -146,36 +90,50 @@ def overview(options):
 @task
 @cmdopts([('all','a','rebuild everything')])
 def devcourse(options):
-    sh('cp %s/index.rst %s' % (options.devcourse.confdir,options.devcourse.sourcedir))
-
+    os.chdir("devcourse")
     if 'all' in options.devcourse:
-      options['force_all'] = True
-      options['freshenv'] = True
+        subprocess.call(["paver","build", "-a",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                            "--masterapp", master_app,
+                            "--masterurl", master_url])
 
-    paverutils.run_sphinx(options,'devcourse')
-    
     if minify_js:
         sh('./minifyjs.py %s' % options.devcourse.outdir)
 
 @task
 @cmdopts([('all','a','rebuild everything')])
-def allbooks(options):
-    if 'all' in options.allbooks:
-      options.thinkcspy['all'] = True
-      options.pythonds['all'] = True
-      options.overview['all'] = True
-    thinkcspy(options)
-    pythonds(options)
-    overview(options)
+def java4python(options):
+    os.chdir("java4python")
+    if 'all' in options.java4python:
+        subprocess.call(["paver","build", "-a",
+                         "--masterapp", master_app,
+                         "--masterurl", master_url])
+    else:
+        subprocess.call(["paver", "build",
+                         "--masterapp", master_app,
+                         "--masterurl", master_url])
 
 @task
 @cmdopts([('all','a','rebuild everything')])
-def java4python(options):
-    if 'all' in options.java4python:
-        subprocess.call(["paver", "-f java4python/pavement.py", "build", "-a"])
+def allbooks(options):
+    if 'all' in options.allbooks:
+        opts = Bunch(all=True)
     else:
-        subprocess.call(["paver", "-f java4python/pavement.py", "build"])
+        opts = Bunch()
 
-    
+    options.thinkcspy = opts
+    options.pythonds = opts
+    options.overview = opts
 
+    thinkcspy(options)
+    os.chdir("..")
+
+    pythonds(options)
+    os.chdir("..")
+
+    overview(options)
+    os.chdir("..")
 
