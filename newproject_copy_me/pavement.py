@@ -38,7 +38,9 @@ if project_name == "<project_name>":
 @task
 @cmdopts([
     ('all','a','rebuild everything'),
-    ('outputdir=', 'o', 'output static files here')
+    ('outputdir=', 'o', 'output static files here'),
+    ('masterurl=', 'u', 'override the default master url'),
+    ('masterapp=', 'p', 'override the default master app')
 ])
 def build(options):
     if 'all' in options.build:
@@ -47,6 +49,13 @@ def build(options):
 
     if 'outputdir' in options.build:
         options.build.outdir = options.build.outputdir
+
+    if 'masterurl' in options.build:
+        options.build.template_args['course_url'] = options.build.masterurl
+
+    if 'masterapp' in options.build:
+        options.build.template_args['appname'] = options.build.masterapp
+
     print 'Building into ', options.build.outdir    
     paverutils.run_sphinx(options,'build')
 
