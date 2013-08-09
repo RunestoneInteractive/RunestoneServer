@@ -121,10 +121,9 @@ def java4python(options):
 @task
 @cmdopts([('all','a','rebuild everything')])
 def allbooks(options):
+    opts = Bunch()
     if 'all' in options.allbooks:
-        opts = Bunch(all=True)
-    else:
-        opts = Bunch()
+        opts['all'] = True
 
     options.thinkcspy = opts
     options.pythonds = opts
