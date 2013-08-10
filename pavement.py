@@ -114,7 +114,7 @@ def java4python(options):
     if 'all' in options.java4python:
         params.append("-a")
 
-    os.chdir("java4python")
+    os.chdir("Java4Python")
     subprocess.call(params)
     os.chdir("..")
 
