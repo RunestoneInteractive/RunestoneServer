@@ -135,7 +135,7 @@ h2 {
 
 /* the default Bootstrap color for .alert is hard to read, but
 the colors for the other .alert classes are fine */
-.alert:not(.alert-danger):not(.alert-success):not(.alert-info) {
+.alert {
     color: #333;
 }
 
@@ -175,7 +175,7 @@ the colors for the other .alert classes are fine */
 
 /* .alert-info */
 .admonition.tip, .admonition.note {
-    color: #3a87ad;
+    color: #333;
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
