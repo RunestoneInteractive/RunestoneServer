@@ -9,7 +9,7 @@ from sphinxcontrib import paverutils
 sys.path.append(os.getcwd())
 
 ######## CHANGE THIS ##########
-project_name = "<project_name>"
+project_name = "overview"
 ###############################
 
 master_url = 'http://127.0.0.1:8000'
@@ -20,7 +20,7 @@ options(
 
     build = Bunch(
         builddir="../static/"+project_name,
-        sourcedir="_sources",
+        sourcedir=".",
         outdir="../static/"+project_name,
         confdir=".",
         template_args={'course_id':project_name,

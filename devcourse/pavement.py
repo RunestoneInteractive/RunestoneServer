@@ -9,7 +9,7 @@ from sphinxcontrib import paverutils
 sys.path.append(os.getcwd())
 
 ######## CHANGE THIS ##########
-project_name = "<project_name>"
+project_name = "devcourse"
 ###############################
 
 master_url = 'http://127.0.0.1:8000'
@@ -20,7 +20,7 @@ options(
 
     build = Bunch(
         builddir="../static/"+project_name,
-        sourcedir="_sources",
+        sourcedir="../source/",
         outdir="../static/"+project_name,
         confdir=".",
         template_args={'course_id':project_name,
@@ -43,6 +43,8 @@ if project_name == "<project_name>":
     ('masterapp=', 'p', 'override the default master app')
 ])
 def build(options):
+    sh('cp %s/index.rst %s' % (options.build.confdir,options.build.sourcedir))
+
     if 'all' in options.build:
       options['force_all'] = True
       options['freshenv'] = True
