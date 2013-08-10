@@ -132,9 +132,7 @@ h2 {
 .alert form {
     margin-bottom: 0;
 }
-
-/* the default Bootstrap color for .alert is hard to read, but
-the colors for the other .alert classes are fine */
+/* default bookstrap alert color is hard to read (low contrast). */
 .alert {
     color: #333;
 }
