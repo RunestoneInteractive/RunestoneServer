@@ -60,7 +60,7 @@ def pythonds(options):
     params = ["paver", "build", # task name
               "--masterapp", master_app,
               "--masterurl", master_url]
-    if 'all' in options.overview:
+    if 'all' in options.pythonds:
         params.append("-a")
 
     os.chdir("pythonds")
