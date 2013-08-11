@@ -9,4 +9,4 @@
 	url = https://github.com/bnmnetp/skulpt
 [submodule "Java4Python"]
 	path = Java4Python
-	url = git@github.com:bnmnetp/Java4Python.git
+	url = https://github.com/bnmnetp/Java4Python
