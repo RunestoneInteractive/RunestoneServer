@@ -335,3 +335,8 @@ div.flash {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.ui-sortable-helper {
+    height: auto !important;
+    width: auto !important;
+}
