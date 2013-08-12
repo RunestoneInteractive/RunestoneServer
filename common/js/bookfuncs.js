@@ -82,11 +82,23 @@ function createEditors() {
     edList = document.getElementsByClassName("active_code");
     for (var i = 0; i < edList.length; i++) {
         newEdId = edList[i].id;
+        var includes = edList[i].getAttribute('prefixcode');
+        var first_line = 1;
+        if (includes !== "undefined") {
+            includes = eval(includes)
+            for (var j in includes) {
+                var edinclude = document.getElementById(includes[j]+'_code')
+                first_line = first_line + edinclude.textContent.match(/\n/g).length + 1;
+            }
+        } else {
+            first_line = 1;
+        }
         cm_editors[newEdId] = CodeMirror.fromTextArea(edList[i], {
                                                           mode: {name: "python",
                                                               version: 2,
                                                               singleLineStringErrors: false},
                                                           lineNumbers: true,
+                                                          firstLineNumber: first_line,
                                                           indentUnit: 4,
                                                           indentWithTabs: false,
                                                           matchBrackets: true,

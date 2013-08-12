@@ -50,7 +50,7 @@ START = '''
 EDIT1 = '''
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s">
-<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code">
+<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code", prefixcode="%(include)s">
 %(initialcode)s
 </textarea>
 </div>
