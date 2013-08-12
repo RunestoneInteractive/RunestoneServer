@@ -12,12 +12,14 @@
 .. qnum::
    :prefix: intr-
    :start: 1
+   
+.. highlight:: python
+  :linenothreshold: 500
+
 
 Introduction
 ============
 
-.. highlight:: python
-   :linenothreshold: 5
 
 
 Objectives
@@ -2043,8 +2045,16 @@ methods as exercises.
 **Listing 9**
 
 .. activecode:: fraction_class
-   :include: gcd_cl
    :caption: The Fraction Class
+
+   def gcd(m,n):
+       while m%n != 0:
+           oldm = m
+           oldn = n
+
+           m = oldn
+           n = oldm%oldn
+       return n
 
    class Fraction:
         def __init__(self,top,bottom):
