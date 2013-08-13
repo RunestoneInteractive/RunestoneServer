@@ -164,7 +164,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     confoverrides['html_context.course_id'] = coursename
     confoverrides['html_context.loglevel'] = 10
     confoverrides['html_context.course_url'] = 'http://' + http_host
-    if rvars['loginreq'] == 'yes':
+    if 'loginreq' in rvars:
         confoverrides['html_context.login_required'] = 'true'
     else:
         confoverrides['html_context.login_required'] = 'false'

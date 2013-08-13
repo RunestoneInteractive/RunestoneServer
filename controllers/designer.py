@@ -39,7 +39,7 @@ def build():
     db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
 
     # if make instructor add row to auth_membership
-    if request.vars.instructor == "yes":
+    if 'instructor' in request.vars:
         gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
