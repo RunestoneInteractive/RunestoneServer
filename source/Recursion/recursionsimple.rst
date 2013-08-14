@@ -54,13 +54,14 @@ We will begin our investigation with a simple problem that you already
 know how to solve without using recursion. Suppose that you want to
 calculate the sum of a list of numbers such as:
 :math:`[1, 3, 5, 7, 9]`. An iterative function that computes the sum
-is shown in :ref:`Listing 1 <lst_itsum>`. The function uses an accumulator variable
+is shown in :ref:`ActiveCode 1 <lst_itsum>`. The function uses an accumulator variable
 (``theSum``) to compute a running total of all the numbers in the list
 by starting with :math:`0` and adding each number in the list.
 
 .. _lst_itsum:
 
 .. activecode:: lst_itsum
+    :caption: Iterative Summation
 
     def listsum(numList):
         theSum = 0
@@ -118,16 +119,17 @@ list (``numList[1:]``). To state it in a functional form:
 In this equation :math:`first(numList)` returns the first element of
 the list and :math:`rest(numList)` returns a list of everything but
 the first element. This is easily expressed in Python as shown in
-:ref:`Listing 2 <lst_recsum>`.
+:ref:`ActiveCode 2 <lst_recsum>`.
 
 .. _lst_recsum:
 
 .. activecode:: lst_recsum
+    :caption: Recursive Summation
 
     def listsum(numList):
-        if len(numList) == 1:
+       if len(numList) == 1:
             return numList[0]
-        else:
+       else:
             return numList[0] + listsum(numList[1:])
             
     print(listsum([1,3,5,7,9]))
@@ -152,7 +154,7 @@ point where the problem cannot get any smaller.
    :alt: image
 
 
-   Series of Recursive Calls Adding a List of Numbers
+   Figure 1: Series of Recursive Calls Adding a List of Numbers
 
 When we reach the point where the problem is as simple as it can get, we
 begin to piece together the solutions of each of the small problems
@@ -167,7 +169,7 @@ problem, we have the solution to the whole problem.
    :align: center
    :alt: image
 
-   Series of Recursive Returns from Adding a List of Numbers
+   Figure2: Series of Recursive Returns from Adding a List of Numbers
 
 The Three Laws of Recursion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -195,7 +197,7 @@ represents our problem gets smaller in some way. In the ``listsum``
 algorithm our primary data structure is a list, so we must focus our
 state-changing efforts on the list. Since the base case is a list of
 length 1, a natural progression toward the base case is to shorten the
-list. This is exactly what happens on line 5 of :ref:`Listing 2 <lst_recsum>` when we call ``listsum`` with a shorter list.
+list. This is exactly what happens on line 5 of :ref:`ActiveCode 2 <lst_recsum>` when we call ``listsum`` with a shorter list.
 
 The final law is that the algorithm must call itself. This is the very
 definition of recursion. Recursion is a confusing concept to many
@@ -300,16 +302,15 @@ right side of the diagram.
    :align: center
    :alt: image
 
-   image
+   Figure 3: Converting an Integer to a String in Base 10
 
-    Converting an Integer to a String in Base 10
-
-:ref:`Listing 3 <lst_rectostr>` shows the Python code that implements the algorithm
+:ref:`ActiveCode 3 <lst_rectostr>` shows the Python code that implements the algorithm
 outlined above for any base between 2 and 16.
 
 .. _lst_rectostr:
 
 .. activecode:: lst_rectostr
+    :caption: Recursively Converting from Integer to String
 
     def toStr(n,base):
        convertString = "0123456789ABCDEF"
@@ -336,7 +337,7 @@ to its base 2 string representation (``"1010"``).
    :align: center
    :alt: image
 
-   Converting the Number 10 to its Base 2 String Representation
+   Figure 4: Converting the Number 10 to its Base 2 String Representation
 
 :ref:`Figure 4 <fig_tostr2>` shows that we get the results we are looking for,
 but it looks like the digits are in the wrong order. The algorithm works
@@ -398,11 +399,12 @@ Suppose that instead of concatenating the result of the recursive call
 to ``toStr`` with the string from ``convertString``, we modified our
 algorithm to push the strings onto a stack prior to making the recursive
 call. The code for this modified algorithm is shown in
-:ref:`Listing 4 <lst_recstack>`.
+:ref:`ActiveCode 6 <lst_recstack>`.
 
 .. _lst_recstack:
 
 .. activecode:: lst_recstack
+    :caption: Converting an Integer to a String Using a Stack
 
     from pythonds.basic.stack import Stack
 
@@ -434,7 +436,7 @@ them into the final result, ``"1010"``.
 .. figure:: Figures/recstack.png
    :align: center
 
-   Strings Placed on the Stack During Conversion
+   Figure 5: Strings Placed on the Stack During Conversion
 
 
 The previous example gives us some insight into how Python implements a
@@ -446,10 +448,10 @@ call stack after the return statement on line 4.
 
 .. _fig_callstack:
 
-.. figure:: Figures/callstack.png
+.. figure:: Figures/newcallstack.png
    :align: center
 
-   Call Stack Generated from ``toStr(10,2)``
+   Figure 6: Call Stack Generated from ``toStr(10,2)``
 
 
 Notice that the call to ``toStr(2//2,2)`` leaves a return value of
