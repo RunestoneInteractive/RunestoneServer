@@ -55,14 +55,12 @@ programming language. There may be many programs for the same algorithm,
 depending on the programmer and the programming language being used.
 
 To explore this difference further, consider the function shown in
-:ref:`Listing 1 <lst_sum1>`. This function solves a familiar problem, computing the
+:ref:`ActiveCode 1 <lst_sum1>`. This function solves a familiar problem, computing the
 sum of the first *n* integers. The algorithm uses the idea of an
 accumulator variable that is initialized to 0. The solution then
 iterates through the *n* integers, adding each to the accumulator.
 
 .. _lst_sum1:
-
-**Listing 1**
 
 .. activecode:: active1
     :caption: Summation of the First n Integers
@@ -76,7 +74,7 @@ iterates through the *n* integers, adding each to the accumulator.
 
     print(sumOfN(10))
 
-Now look at the function in :ref:`Listing 2 <lst_sum2>`. At first glance it may look
+Now look at the function in :ref:`ActiveCode 2 <lst_sum2>`. At first glance it may look
 strange, but upon further inspection you can see that this function is
 essentially doing the same thing as the previous one. The reason this is
 not obvious is poor coding. We did not use good identifier names to
@@ -84,8 +82,6 @@ assist with readability, and we used an extra assignment statement
 during the accumulation step that was not really necessary.
 
 .. _lst_sum2:
-
-**Listing 2**
 
 .. activecode:: active2
     :caption: Another Summation of the First n Integers
@@ -143,7 +139,7 @@ and then computing the difference, we can get an exact number of seconds
 
 .. _lst_sum11:
 
-**Listing 3**
+**Listing 1**
 
 .. sourcecode:: python
 
@@ -160,7 +156,7 @@ and then computing the difference, we can get an exact number of seconds
 
        return theSum,end-start
 
-:ref:`Listing 3 <lst_sum11>` shows the original ``sumOfN`` function with the timing
+:ref:`Listing 1 <lst_sum11>` shows the original ``sumOfN`` function with the timing
 calls embedded before and after the summation. The function returns a
 tuple consisting of the result and the amount of time (in seconds)
 required for the calculation. If we perform 5 invocations of the
@@ -212,14 +208,12 @@ consistent, averaging about 10 times more seconds. For ``n`` equal to
 In this case, the average again turns out to be about 10 times the
 previous.
 
-Now consider :ref:`Listing 4 <lst_sum3>`, which shows a different means of solving
+Now consider :ref:`ActiveCode 3 <lst_sum3>`, which shows a different means of solving
 the summation problem. This function, ``sumOfN3``, takes advantage of a
 closed equation :math:`\sum_{i=1}^{n} i = \frac {(n)(n+1)}{2}` to
 compute the sum of the first ``n`` integers without iterating.
 
 .. _lst_sum3:
-
-**Listing 4**
 
 .. activecode:: active3
     :caption: Summation Without Iteration
@@ -381,13 +375,13 @@ another.
 
 
 As a final example, suppose that we have the fragment of Python code
-shown in :ref:`Listing 5 <lst_dummycode>`. Although this program does not really do
+shown in :ref:`Listing 2 <lst_dummycode>`. Although this program does not really do
 anything, it is instructive to see how we can take actual code and
 analyze performance.
 
 .. _lst_dummycode:
 
-**Listing 5**
+**Listing 2**
 
 ::
 
@@ -468,11 +462,9 @@ with the special Python value ``None``. However, since strings in Python
 are immutable, the first step in the process will be to convert the
 second string to a list. Each character from the first string can be
 checked against the characters in the list and if found, checked off by
-replacement. :ref:`Listing 6 <lst_anagramSolution>` shows this function.
+replacement. :ref:`ActiveCode 4 <lst_anagramSolution>` shows this function.
 
 .. _lst_anagramSolution:
-
-**Listing 6**
 
 .. activecode:: active5
     :caption: Checking Off
@@ -526,13 +518,11 @@ Another solution to the anagram problem will make use of the fact that
 even though ``s1`` and ``s2`` are different, they are anagrams only if
 they consist of exactly the same characters. So, if we begin by sorting
 each string alphabetically, from a to z, we will end up with the same
-string if the original two strings are anagrams. :ref:`Listing 7 <lst_ana2>` shows
+string if the original two strings are anagrams. :ref:`ActiveCode 5 <lst_ana2>` shows
 this solution. Again, in Python we can use the built-in ``sort`` method
 on lists by simply converting each string to a list at the start.
 
 .. _lst_ana2:
-
-**Listing 7**
 
 .. activecode:: active6
     :caption: Sort and Compare
@@ -599,11 +589,9 @@ character occurs. Since there are 26 possible characters, we can use a
 list of 26 counters, one for each possible character. Each time we see a
 particular character, we will increment the counter at that position. In
 the end, if the two lists of counters are identical, the strings must be
-anagrams. :ref:`Listing 8 <lst_ana4>` shows this solution.
+anagrams. :ref:`ActiveCode 6 <lst_ana4>` shows this solution.
 
 .. _lst_ana4:
-
-**Listing 8**
 
 .. activecode:: active7
     :caption: Count and Compare
@@ -769,12 +757,12 @@ numbers starting with 0. First we’ll try a ``for`` loop and create the
 list by concatenation, then we’ll use append rather than concatenation.
 Next, we’ll try creating the list using list comprehension and finally,
 and perhaps the most obvious way, using the range function wrapped by a
-call to the list constructor. :ref:`Listing 9 <lst_mklist>` shows the code for
+call to the list constructor. :ref:`Listing 3 <lst_mklist>` shows the code for
 making our list four different ways.
 
 .. _lst_mklist:
 
-**Listing 9**
+**Listing 3**
 
 ::
 
@@ -920,7 +908,7 @@ popping from the end takes 0.0003 milliseconds, whereas popping from the
 beginning takes 4.82 milliseconds. For a list of two million elements
 this is a factor of 16,000.
 
-There are a couple of things to notice about :ref:`Listing 10 <lst_popmeas>`. The
+There are a couple of things to notice about :ref:`Listing 4 <lst_popmeas>`. The
 first is the statement ``from __main__ import x``. Although we did not
 define a function we do want to be able to use the list object x in our
 test. This approach allows us to time just the single ``pop`` statement
@@ -932,7 +920,7 @@ the overall size by :math:`0.05\%`
 
 .. _lst_popmeas:
 
-**Listing 10**
+**Listing 4**
 
 ::
 
@@ -954,11 +942,11 @@ While our first test does show that ``pop(0)`` is indeed slower than
 ``pop()``, it does not validate the claim that ``pop(0)`` is
 :math:`O(n)` while ``pop()`` is :math:`O(1)`. To validate that claim
 we need to look at the performance of both calls over a range of list
-sizes. :ref:`Listing 11 <lst_poplists>` implements this test.
+sizes. :ref:`Listing 5 <lst_poplists>` implements this test.
 
 .. _lst_poplists:
 
-**Listing 11**
+**Listing 5**
 
 ::
 
@@ -1048,14 +1036,14 @@ whether or not a number is in the dictionary is not only much faster,
 but the time it takes to check should remain constant even as the
 dictionary grows larger.
 
-:ref:`Listing 12 <lst_listvdict>` implements this comparison. Notice that we are
+:ref:`Listing 6 <lst_listvdict>` implements this comparison. Notice that we are
 performing exactly the same operation, ``number in container``. The
 difference is that on line 7 ``x`` is a list, and on line 9 ``x`` is a
 dictionary.
 
 .. _lst_listvdict:
 
-**Listing 12**
+**Listing 6**
 
 
 .. sourcecode:: python
@@ -1077,7 +1065,7 @@ dictionary.
 
 
 :ref:`Figure 4 <fig_listvdict>` summarizes the results of running
-:ref:`Listing 12 <lst_listvdict>`. You can see that the dictionary is consistently
+:ref:`Listing 6 <lst_listvdict>`. You can see that the dictionary is consistently
 faster. For the smallest list size of 10,000 elements a dictionary is
 89.4 times faster than a list. For the largest list size of 990,000
 elements the dictionary is 11,603 times faster! You can also see that

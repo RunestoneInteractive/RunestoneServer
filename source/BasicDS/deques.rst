@@ -12,6 +12,9 @@
 .. qnum::
    :prefix: deq-
    :start: 1
+   
+.. highlight:: python
+   :linenothreshold: 500
 
 Deques
 ------
@@ -45,7 +48,7 @@ to you to make consistent use of the addition and removal operations.
 .. figure:: Figures/basicdeque.png
    :align: center
 
-   A Deque of Python Data Objects
+   Figure 1: A Deque of Python Data Objects
 
 
 The Deque Abstract Data Type
@@ -86,22 +89,23 @@ get a bit confusing.
 
 .. _tbl_dequeoperations:
 
-============================ ============================ ================== 
-         **Deque Operation**           **Deque Contents**   **Return Value** 
-============================ ============================ ================== 
-             ``d.isEmpty()``                       ``[]``           ``True`` 
-            ``d.addRear(4)``                      ``[4]``                    
-        ``d.addRear('dog')``               ``['dog',4,]``                    
-       ``d.addFront('cat')``          ``['dog',4,'cat']``                    
-        ``d.addFront(True)``     ``['dog',4,'cat',True]``                    
-                ``d.size()``     ``['dog',4,'cat',True]``              ``4`` 
-             ``d.isEmpty()``     ``['dog',4,'cat',True]``          ``False`` 
-          ``d.addRear(8.4)`` ``[8.4,'dog',4,'cat',True]``                    
-          ``d.removeRear()``     ``['dog',4,'cat',True]``            ``8.4`` 
-         ``d.removeFront()``          ``['dog',4,'cat']``           ``True`` 
-============================ ============================ ================== 
+.. table:: **Table 1: Examples of Deque Operations**
 
-    Examples of Deque Operations
+    ============================ ============================ ================== 
+             **Deque Operation**           **Deque Contents**   **Return Value** 
+    ============================ ============================ ================== 
+                 ``d.isEmpty()``                       ``[]``           ``True`` 
+                ``d.addRear(4)``                      ``[4]``                    
+            ``d.addRear('dog')``               ``['dog',4,]``                    
+           ``d.addFront('cat')``          ``['dog',4,'cat']``                    
+            ``d.addFront(True)``     ``['dog',4,'cat',True]``                    
+                    ``d.size()``     ``['dog',4,'cat',True]``              ``4`` 
+                 ``d.isEmpty()``     ``['dog',4,'cat',True]``          ``False`` 
+              ``d.addRear(8.4)`` ``[8.4,'dog',4,'cat',True]``                    
+              ``d.removeRear()``     ``['dog',4,'cat',True]``            ``8.4`` 
+             ``d.removeFront()``          ``['dog',4,'cat']``           ``True`` 
+    ============================ ============================ ================== 
+
 
 Implementing a Deque in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,7 +118,12 @@ the rear of the deque is at position 0 in the list.
 
 .. _lst_dequecode:
 
-.. activecode:: dequecode
+.. highlight:: python
+   :linenothreshold: 5
+
+**Listing 1**
+
+::
 
     class Deque:
         def __init__(self):
@@ -138,6 +147,8 @@ the rear of the deque is at position 0 in the list.
         def size(self):
             return len(self.items)
 
+.. highlight:: python
+   :linenothreshold: 500
 
 In ``removeFront`` we use the ``pop`` method to remove the last element
 from the list. However, in ``removeRear``, the ``pop(0)`` method must
@@ -145,12 +156,34 @@ remove the first element of the list. Likewise, we need to use the
 ``insert`` method (line 12) in ``addRear`` since the ``append`` method
 assumes the addition of a new element to the end of the list.
 
-The following interactive Python session shows the ``Deque`` class in
+CodeLens 1 shows the ``Deque`` class in
 action as we perform the sequence of operations from
 :ref:`Table 1 <tbl_dequeoperations>`.
 
-.. activecode:: deqtest
-   :include: dequecode
+.. codelens:: deqtest
+   :caption: Example Deque Operations
+
+   class Deque:
+       def __init__(self):
+           self.items = []
+
+       def isEmpty(self):
+           return self.items == []
+
+       def addFront(self, item):
+           self.items.append(item)
+
+       def addRear(self, item):
+           self.items.insert(0,item)
+
+       def removeFront(self):
+           return self.items.pop()
+
+       def removeRear(self):
+           return self.items.pop(0)
+
+       def size(self):
+           return len(self.items)
 
    d=Deque()
    print(d.isEmpty())
@@ -195,7 +228,7 @@ the last character (see :ref:`Figure 2 <fig_palindrome>`).
 .. figure:: Figures/palindromesetup.png
    :align: center
 
-   A Deque
+   Figure 2: A Deque
 
 
 Since we can remove both of them directly, we can compare them and
@@ -204,13 +237,15 @@ items, we will eventually either run out of characters or be left with a
 deque of size 1 depending on whether the length of the original string
 was even or odd. In either case, the string must be a palindrome. The
 complete function for palindrome-checking appears in
-:ref:`Listing 2 <lst_palchecker>`.
+:ref:`ActiveCode 1 <lst_palchecker>`.
 
 .. _lst_palchecker:
 
 .. activecode:: palchecker
+   :caption: A Palindrome Checker Using Deque
 
    from pythonds.basic.deque import Deque
+   
    def palchecker(aString):
        chardeque = Deque()
 

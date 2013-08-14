@@ -12,6 +12,9 @@
 .. qnum::
    :prefix: que-
    :start: 1
+   
+.. highlight:: python
+   :linenothreshold: 500
 
 Queues
 ------
@@ -49,7 +52,7 @@ waited the necessary amount of time to get to the front.
 .. figure:: Figures/basicqueue.png
    :align: center
 
-   A Queue of Python Data Objects
+   Figure 1: A Queue of Python Data Objects
 
 
 Computer science also has common examples of queues. Our computer
@@ -102,22 +105,23 @@ is the first item returned by dequeue.
 
 .. _tbl_queueoperations:
 
-============================ ======================== ================== 
-         **Queue Operation**       **Queue Contents**   **Return Value** 
-============================ ======================== ================== 
-             ``q.isEmpty()``                   ``[]``           ``True`` 
-            ``q.enqueue(4)``                  ``[4]``                    
-        ``q.enqueue('dog')``            ``['dog',4]``                    
-         ``q.enqueue(True)``       ``[True,'dog',4]``                    
-                ``q.size()``       ``[True,'dog',4]``              ``3`` 
-             ``q.isEmpty()``       ``[True,'dog',3]``          ``False`` 
-          ``q.enqueue(8.4)``   ``[8.4,True,'dog',4]``                    
-             ``q.dequeue()``     ``[8.4,True,'dog']``              ``4`` 
-             ``q.dequeue()``           ``[8.4,True]``          ``'dog'`` 
-                ``q.size()``           ``[8.4,True]``              ``2`` 
-============================ ======================== ================== 
+.. table:: **Table 1: Example Queue Operations**
 
-    Example Queue Operations
+    ============================ ======================== ================== 
+             **Queue Operation**       **Queue Contents**   **Return Value** 
+    ============================ ======================== ================== 
+                 ``q.isEmpty()``                   ``[]``           ``True`` 
+                ``q.enqueue(4)``                  ``[4]``                    
+            ``q.enqueue('dog')``            ``['dog',4]``                    
+             ``q.enqueue(True)``       ``[True,'dog',4]``                    
+                    ``q.size()``       ``[True,'dog',4]``              ``3`` 
+                 ``q.isEmpty()``       ``[True,'dog',3]``          ``False`` 
+              ``q.enqueue(8.4)``   ``[8.4,True,'dog',4]``                    
+                 ``q.dequeue()``     ``[8.4,True,'dog']``              ``4`` 
+                 ``q.dequeue()``           ``[8.4,True]``          ``'dog'`` 
+                    ``q.size()``           ``[8.4,True]``              ``2`` 
+    ============================ ======================== ================== 
+
 
 Implementing a Queue in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -137,6 +141,8 @@ will be O(n) and dequeue will be O(1).
 
 .. _lst_queuecode:
 
+**Listing 1**
+
 ::
 
     class Queue:
@@ -155,11 +161,12 @@ will be O(n) and dequeue will be O(1).
         def size(self):
             return len(self.items)
 
-The following interactive Python session shows the ``Queue`` class in
+CodeLens 1 shows the ``Queue`` class in
 action as we perform the sequence of operations from
 :ref:`Table 1 <tbl_queueoperations>`.
 
 .. codelens:: ququeuetest
+   :caption: Example Queue Operations
 
    class Queue:
        def __init__(self):
@@ -219,11 +226,13 @@ action as we perform the sequence of operations from
 
       Suppose you have the following series of queue operations.
 
-      q = Queue()
-      q.enqueue('hello')
-      q.enqueue('dog')
-      q.enqueue(3)
-      q.dequeue()
+      ::
+      
+          q = Queue()
+          q.enqueue('hello')
+          q.enqueue('dog')
+          q.enqueue(3)
+          q.dequeue()
 
       What items are left on the queue?
 
@@ -244,7 +253,7 @@ child is left.
 .. figure:: Figures/hotpotato.png
    :align: center
 
-   A Six Person Game of Hot Potato
+   Figure 2: A Six Person Game of Hot Potato
 
 
 This game is a modern-day equivalent of the famous Josephus problem.
@@ -281,10 +290,10 @@ until only one name remains (the size of the queue is 1).
 .. figure:: Figures/namequeue.png
    :align: center
 
-   A Queue Implementation of Hot Potato
+   Figure 3: A Queue Implementation of Hot Potato
 
-The program is shown in :ref:`Listing 2 <lst_josephussim>`. A call to the
-``hotPotato`` function using 7 as the counting constant returns:
+The program is shown in :ref:`ActiveCode 1 <lst_josephussim>`. A call to the
+``hotPotato`` function using 7 as the counting constant returns ``Susan``.
 
 .. _lst_josephussim:
 
@@ -292,6 +301,7 @@ The program is shown in :ref:`Listing 2 <lst_josephussim>`. A call to the
    :caption: Hot Potato Simulation
 
    from pythonds.basic.queue import Queue
+   
    def hotPotato(namelist, num):
        simqueue = Queue()
        for name in namelist:
@@ -353,7 +363,7 @@ in the queue.
 .. figure:: Figures/simulationsetup.png
    :align: center
 
-   Computer Science Laboratory Printing Queue
+   Figure 4: Computer Science Laboratory Printing Queue
 
 
 To model this situation we need to use some probabilities. For example,
@@ -368,15 +378,7 @@ given second, a print task is going to be created? The way to answer
 this is to consider the ratio of tasks to time. Twenty tasks per hour
 means that on average there will be one task every 180 seconds:
 
-:math:`\label{taskequation}
-\frac {20\ tasks}{1\ hour}
-\times
-\frac {1\ hour}  {60\ minutes}
-\times
-\frac {1\ minute} {60\ seconds}
-=
-\frac {1\ task} {180\ seconds}
-`
+:math:`\frac {20\ tasks}{1\ hour} \times \frac {1\ hour}  {60\ minutes} \times \frac {1\ minute} {60\ seconds}=\frac {1\ task} {180\ seconds}`
 
 For every second we can simulate the chance that a print task occurs by
 generating a random number between 1 and 180 inclusive. If the number is
@@ -429,7 +431,7 @@ To design this simulation we will create classes for the three
 real-world objects described above: ``Printer``, ``Task``, and
 ``PrintQueue``.
 
-The ``Printer`` class (:ref:`Listing 3 <lst_printer>`) will need to track whether
+The ``Printer`` class (:ref:`Listing 2 <lst_printer>`) will need to track whether
 it has a current task. If it does, then it is busy (lines 13–17) and the
 amount of time needed can be computed from the number of pages in the
 task. The constructor will also allow the pages-per-minute setting to be
@@ -438,7 +440,12 @@ the printer to idle (line 11) if the task is completed.
 
 .. _lst_printer:
 
-.. activecode:: printerdef
+**Listing 2**
+
+.. highlight:: python
+    :linenothreshold: 5
+
+::
 
    class Printer:
        def __init__(self, ppm):
@@ -460,10 +467,12 @@ the printer to idle (line 11) if the task is completed.
 
        def startNext(self,newtask):
            self.currentTask = newtask
-           self.timeRemaining = newtask.getPages() \
-                                * 60/self.pagerate
+           self.timeRemaining = newtask.getPages() * 60/self.pagerate
+                                
+.. highlight:: python
+    :linenothreshold: 500
 
-The Task class (:ref:`Listing 4 <lst_task>`) will represent a single printing
+The Task class (:ref:`Listing 3 <lst_task>`) will represent a single printing
 task. When the task is created, a random number generator will provide a
 length from 1 to 20 pages. We have chosen to use the ``randrange``
 function from the ``random`` module.
@@ -485,9 +494,14 @@ printing begins.
 
 .. _lst_task:
 
-.. activecode:: taskdef
+**Listing 3**
+
+
+
+.. sourcecode:: python
 
    import random
+   
    class Task:
        def __init__(self,time):
            self.timestamp = time
@@ -502,22 +516,25 @@ printing begins.
        def waitTime(self, currenttime):
            return currenttime - self.timestamp
 
-The main simulation (:ref:`Listing 5 <lst_qumainsim>`) implements the algorithm
+The main simulation (:ref:`Listing 4 <lst_qumainsim>`) implements the algorithm
 described above. The ``printQueue`` object is an instance of our
 existing queue ADT. A boolean helper function, ``newPrintTask``, decides
 whether a new printing task has been created. We have again chosen to
 use the ``randrange`` function from the ``random`` module to return a
 random integer between 1 and 180. Print tasks arrive once every 180
 seconds. By arbitrarily choosing 180 from the range of random integers
-(line 34), we can simulate this random event. The simulation function
+(line 32), we can simulate this random event. The simulation function
 allows us to set the total time and the pages per minute for the
 printer.
 
+.. highlight:: python
+    :linenothreshold: 5
+
 .. _lst_qumainsim:
 
-.. activecode:: qumainsim
-   :include: printerdef, taskdef
-   :caption: Printer Queue Simulation--The Main Simulation
+**Listing 4**
+
+::
 
    from pythonds.basic.queue import Queue
 
@@ -535,18 +552,15 @@ printer.
             task = Task(currentSecond)
             printQueue.enqueue(task)
 
-         if (not labprinter.busy()) and \
-                   (not printQueue.isEmpty()):
+         if (not labprinter.busy()) and (not printQueue.isEmpty()):
            nexttask = printQueue.dequeue()
-           waitingtimes.append( \
-               nexttask.waitTime(currentSecond))
+           waitingtimes.append(nexttask.waitTime(currentSecond))
            labprinter.startNext(nexttask)
 
          labprinter.tick()
 
        averageWait=sum(waitingtimes)/len(waitingtimes)
-       print("Average Wait %6.2f secs %3d tasks remaining."\
-                       %(averageWait,printQueue.size()))
+       print("Average Wait %6.2f secs %3d tasks remaining."%(averageWait,printQueue.size()))
 
    def newPrintTask():
        num = random.randrange(1,181)
@@ -557,6 +571,9 @@ printer.
 
    for i in range(10):
        simulation(3600,5)
+       
+.. highlight:: python
+   :linenothreshold: 500
 
 When we run the simulation, we should not be concerned that the
 results are different each time. This is due to the probabilistic nature
@@ -610,6 +627,85 @@ would be completed in the one hour time frame.
     Average Wait  12.39 secs 0 tasks remaining.
     Average Wait   7.27 secs 0 tasks remaining.
     Average Wait  18.17 secs 0 tasks remaining.
+    
+    
+You can run the simulation for yourself in ActiveCode 2.
+
+.. activecode:: qumainsim
+   :caption: Printer Queue Simulation
+
+   from pythonds.basic.queue import Queue
+
+   import random
+   
+   class Printer:
+       def __init__(self, ppm):
+           self.pagerate = ppm
+           self.currentTask = None
+           self.timeRemaining = 0
+
+       def tick(self):
+           if self.currentTask != None:
+               self.timeRemaining = self.timeRemaining - 1
+               if self.timeRemaining <= 0:
+                   self.currentTask = None
+
+       def busy(self):
+           if self.currentTask != None:
+               return True
+           else:
+               return False
+
+       def startNext(self,newtask):
+           self.currentTask = newtask
+           self.timeRemaining = newtask.getPages() * 60/self.pagerate   
+
+   class Task:
+       def __init__(self,time):
+           self.timestamp = time
+           self.pages = random.randrange(1,21)
+
+       def getStamp(self):
+           return self.timestamp
+
+       def getPages(self):
+           return self.pages
+
+       def waitTime(self, currenttime):
+           return currenttime - self.timestamp
+
+
+   def simulation(numSeconds, pagesPerMinute):
+
+       labprinter = Printer(pagesPerMinute)
+       printQueue = Queue()
+       waitingtimes = []
+
+       for currentSecond in range(numSeconds):
+
+         if newPrintTask():
+            task = Task(currentSecond)
+            printQueue.enqueue(task)
+
+         if (not labprinter.busy()) and (not printQueue.isEmpty()):
+           nexttask = printQueue.dequeue()
+           waitingtimes.append( nexttask.waitTime(currentSecond))
+           labprinter.startNext(nexttask)
+
+         labprinter.tick()
+
+       averageWait=sum(waitingtimes)/len(waitingtimes)
+       print("Average Wait %6.2f secs %3d tasks remaining."%(averageWait,printQueue.size()))
+
+   def newPrintTask():
+       num = random.randrange(1,181)
+       if num == 180:
+           return True
+       else:
+           return False
+
+   for i in range(10):
+       simulation(3600,5)
 
 Discussion
 ^^^^^^^^^^

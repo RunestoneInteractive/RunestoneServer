@@ -369,6 +369,7 @@ point. The integer division operator returns the integer portion of the
 quotient by truncating any fractional part.
 
 .. activecode:: intro_1
+   :caption: Basic Arithmetic Operators
 
     print 2+3*4
     print (2+3)*4
@@ -428,6 +429,7 @@ and logical operators with examples shown in the session that follows.
 
 
 .. activecode:: intro_2
+   :caption: Basic Relational and Logical Operators
 
     print(5==10)
     print(10 > 5)
@@ -551,6 +553,7 @@ result is a repetition of references to the data objects in the
 sequence. This can best be seen by considering the following session:
 
 .. activecode:: intro_3
+   :caption: Repetition of References
 
     myList = [1,2,3,4]
     A = [myList]*3
@@ -588,6 +591,7 @@ use follow.
 
 
 .. activecode:: intro_5
+   :caption: Examples of List Methods
 
     myList = [1024, 3, True, 6.5]
     myList.append(False)
@@ -907,6 +911,7 @@ sequence access except that instead of using the index of the item we
 use the key value. To add a new value is similar.
 
 .. activecode:: intro_7
+   :caption: Using a Dictionary
 
     capitals = {'Iowa':'DesMoines','Wisconsin':'Madison'}
     print(capitals['Iowa'])
@@ -1022,6 +1027,7 @@ second prints the result of some simple processing based on the string
 that is provided.
 
 .. activecode::  strstuff
+   :caption: The input Function Returns a String
 
     aName = input("Please enter your name ")
     print("Your name in all capitals is",aName.upper(),
@@ -1266,6 +1272,7 @@ appending it to a list. The result is a list of all the letters in all
 of the words.
 
 .. activecode:: intro_8
+   :caption: Processing Each Character in a List of Strings
 
     wordlist = ['cat','dog','rabbit']
     letterlist = [ ]
@@ -1934,16 +1941,15 @@ divides :math:`m` evenly. However, if :math:`n` does not divide
 :math:`m` evenly, then the answer is the greatest common divisor of
 :math:`n` and the remainder of :math:`m` divided by :math:`n`. We
 will simply provide an iterative implementation here (see
-:ref:`Listing 6 <lst_gcd>`). Note that this implementation of the GCD algorithm only
+:ref:`ActiveCode 11 <lst_gcd>`). Note that this implementation of the GCD algorithm only
 works when the denominator is positive. This is acceptable for our
 fraction class because we have said that a negative fraction will be
 represented by a negative numerator.
 
 .. _lst_gcd:
 
-**Listing 6**
-
 .. activecode::  gcd_cl
+   :caption: The Greatest Common Divisor Function
 
     def gcd(m,n):
         while m%n != 0:
@@ -1961,13 +1967,13 @@ fraction in lowest terms, we will divide the numerator and the
 denominator by their greatest common divisor. So, for the fraction
 :math:`6/8`, the greatest common divisor is 2. Dividing the top and
 the bottom by 2 creates a new fraction, :math:`3/4` (see
-:ref:`Listing 7 <lst_newaddmethod>`).
+:ref:`Listing 6 <lst_newaddmethod>`).
 
 
 
 .. _lst_newaddmethod:
 
-**Listing 7**
+**Listing 6**
 
 .. sourcecode:: python
 
@@ -2020,13 +2026,13 @@ any class. The ``__eq__`` method compares two objects and returns
 
 In the ``Fraction`` class, we can implement the ``__eq__`` method by
 again putting the two fractions in common terms and then comparing the
-numerators (see :ref:`Listing 8 <lst_cmpmethod>`). It is important to note that there
+numerators (see :ref:`Listing 7 <lst_cmpmethod>`). It is important to note that there
 are other relational operators that can be overridden. For example, the
 ``__le__`` method provides the less than or equal functionality.
 
 .. _lst_cmpmethod:
 
-**Listing 8**
+**Listing 7**
 
 .. sourcecode:: python
 
@@ -2037,12 +2043,10 @@ are other relational operators that can be overridden. For example, the
             return firstnum == secondnum
 
 The complete ``Fraction`` class, up to this point, is shown in
-:ref:`Listing 9 <lst_fractioncode>`. We leave the remaining arithmetic and relational
+:ref:`ActiveCode 12 <lst_fractioncode>`. We leave the remaining arithmetic and relational
 methods as exercises.
 
 .. _lst_fractioncode:
-
-**Listing 9**
 
 .. activecode:: fraction_class
    :caption: The Fraction Class
@@ -2212,11 +2216,11 @@ its output value. This will require that the gate perform the
 appropriate logic based on the current input. In order to produce
 output, the gate needs to know specifically what that logic is. This
 means calling a method to perform the logic computation. The complete
-class is shown in :ref:`Listing 10 <lst_logicgateclass>`.
+class is shown in :ref:`Listing 8 <lst_logicgateclass>`.
 
 .. _lst_logicgateclass:
 
-**Listing 10**
+**Listing 8**
 
 .. sourcecode:: python
 
@@ -2257,7 +2261,7 @@ we will use that terminology in our implementation.
 
 .. _lst_binarygateclass:
 
-**Listing 11**
+**Listing 9**
 
 .. sourcecode:: python
 
@@ -2277,7 +2281,7 @@ we will use that terminology in our implementation.
 
 .. _lst_unarygateclass:
 
-**Listing 12**
+**Listing 10**
 
 .. sourcecode:: python
 
@@ -2293,7 +2297,7 @@ we will use that terminology in our implementation.
             
             
 
-:ref:`Listing 11 <lst_logicgateclass>` and :ref:`Listing 12 <lst_logicgateclass>` implement these two
+:ref:`Listing 9 <lst_logicgateclass>` and :ref:`Listing 10 <lst_logicgateclass>` implement these two
 classes. The constructors in both of these classes start with an
 explicit call to the constructor of the parent class using the ``super``
 function. When creating an instance of the ``BinaryGate`` class, we
@@ -2321,7 +2325,7 @@ inherits two input lines, one output line, and a label.
 
 .. _lst_andgateclass:
 
-**Listing 13**
+**Listing 11**
 
 .. sourcecode:: python
 
@@ -2344,7 +2348,7 @@ performs the boolean operation that was described earlier. This is the
 place where we can provide the ``performGateLogic`` method. For an AND
 gate, this method first must get the two input values and then only
 return 1 if both input values are 1. The complete class is shown in
-:ref:`Listing 13 <lst_andgateclass>`.
+:ref:`Listing 11 <lst_andgateclass>`.
 
 We can show the ``AndGate`` class in action by creating an instance and
 asking it to compute its output. The following session shows an
@@ -2415,18 +2419,18 @@ designing classes, it is very important to distinguish between those
 that have the IS-A relationship (which requires inheritance) and those
 that have HAS-A relationships (with no inheritance).
 
-:ref:`Listing 14 <lst_Connectorclass>` shows the ``Connector`` class. The two gate
+:ref:`Listing 12 <lst_Connectorclass>` shows the ``Connector`` class. The two gate
 instances within each connector object will be referred to as the
 ``fromgate`` and the ``togate``, recognizing that data values will
 “flow” from the output of one gate into an input line of the next. The
 call to ``setNextPin`` is very important for making connections (see
-:ref:`Listing 15 <lst_setpin>`). We need to add this method to our gate classes so
+:ref:`Listing 13 <lst_setpin>`). We need to add this method to our gate classes so
 that each ``togate`` can choose the proper input line for the
 connection.
 
 .. _lst_Connectorclass:
 
-**Listing 14** 
+**Listing 12** 
 
 .. sourcecode:: python
 
@@ -2452,7 +2456,7 @@ to a gate with no available input lines.
 
 .. _lst_setpin:
 
-**Listing 15**
+**Listing 13**
 
 .. sourcecode:: python
 
@@ -2468,7 +2472,7 @@ to a gate with no available input lines.
 Now it is possible to get input from two places: externally, as before,
 and from the output of a gate that is connected to that input line. This
 requires a change to the ``getPinA`` and ``getPinB`` methods (see
-:ref:`Listing 16 <lst_newgetpin>`). If the input line is not connected to anything
+:ref:`Listing 14 <lst_newgetpin>`). If the input line is not connected to anything
 (``None``), then ask the user externally as before. However, if there is
 a connection, the connection is accessed and ``fromgate``’s output value
 is retrieved. This in turn causes that gate to process its logic. This
@@ -2479,7 +2483,7 @@ output.
 
 .. _lst_newgetpin:
 
-**Listing 16**
+**Listing 14**
 
 .. sourcecode:: python
 
@@ -2516,7 +2520,7 @@ circuit. For example:
     Pin B input for gate G2-->1
     0
 
-Try it yourself!
+Try it yourself using ActiveCode 14.
 
 .. activecode:: complete_cuircuit
     :caption: The Complete Circuit Program.
