@@ -40,13 +40,17 @@ it in more than just one way.
 Whats the deal with Logging in?
 ===============================
 
-This edition of the book is hosted as a Google App Engine App. The reason is that for teaching
-purposes we want our students to be able to save their work in a browser in the lab and get
-back to it when they are in their room or in a different lab. We also wanted them to be able to
-turn in homework assignments so that we can grade them. If you are a teacher and want to get
-access to the grading interface contact Brad Miller. You don't need to login to use the
-features of the book, but if you choose to login with any old gmail account you will be able to
-save your work.
+This edition of the book is hosted as a web application on interactivepython.org. The reason is that for teaching purposes we want our students to be able to save their work in a browser in the lab and get back to it when they are in their room or in a different lab. We also wanted them to be able to turn in homework assignments so that we can grade them.
+
+If you are an instructor and want to use this book for your own course do the following:
+
+1. Register as a user yourself for either thinkcspy or pythonds
+2. Go to the instructors page (pull down the Silouhette menu)
+3. Follow the instructions there for creating a custom course.
+
+After you have created the course you can go back to the instructors page and click on the links to view your students homeworks and quiz scores.  Note that You will only see assignments that your students have attempted.  From there you can click on an assignment and see all of the students that have saved the assignment and you can run their code in your browser and enter a grade.
+
+From any multiple choice or fill in the blank question in the body of the book, you can click on 'compare me.'  As an instructor you will see a summary and the answers of all your students.
 
 How to Contribute
 =================
