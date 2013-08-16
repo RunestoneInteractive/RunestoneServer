@@ -40,12 +40,14 @@ if project_name == "<project_name>":
     ('all','a','rebuild everything'),
     ('outputdir=', 'o', 'output static files here'),
     ('masterurl=', 'u', 'override the default master url'),
-    ('masterapp=', 'p', 'override the default master app')
+    ('masterapp=', 'p', 'override the default master app'),
 ])
 def build(options):
     if 'all' in options.build:
       options['force_all'] = True
       options['freshenv'] = True
+
+    options.build.template_args["build_info"] = sh('git describe --long',capture=True)[:-1]
 
     if 'outputdir' in options.build:
         options.build.outdir = options.build.outputdir

@@ -16,6 +16,13 @@ except:
     master_app = 'runestone'
     minify_js = False
 
+
+# Save the most recent
+build_info = sh("git describe --long", capture=True)
+bif = open('build_info','w')
+bif.write(build_info)
+bif.close()
+
 options(
     sphinx = Bunch(
         docroot=".",

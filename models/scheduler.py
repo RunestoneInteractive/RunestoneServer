@@ -4,7 +4,7 @@ from os import path
 import os
 import sys
 import re
-
+from paver.easy import sh
 from sphinx.application import Sphinx
 
 ################
@@ -164,6 +164,16 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     confoverrides['html_context.course_id'] = coursename
     confoverrides['html_context.loglevel'] = 10
     confoverrides['html_context.course_url'] = 'http://' + http_host
+
+    cwd = os.getcwd()
+    os.chdir(path.join('applications',application))
+    build_info = sh("git describe --long", capture=True)
+    bi = open(path.join('custom_courses',coursename,'build_info'),'w')
+    bi.write(build_info)
+    bi.close()
+    os.chdir(cwd)    
+    confoverrides['html_context.build_info'] = build_info[:-1]
+
     if 'loginreq' in rvars:
         confoverrides['html_context.login_required'] = 'true'
     else:

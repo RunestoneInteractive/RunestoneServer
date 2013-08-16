@@ -58,7 +58,7 @@ All the data from past terms is still saved in the database so students that wan
 How do I update my course to get the latest bug fixes?
 ------------------------------------------------------
 
-Here is the link to `rebuild your course <http://interactivepython.org/runestone/admin/rebuildcourse>`_.   We recommend that you do this every so often.  We are even working on a way to let you know that your course is out of date when you come to the instructors page.  Its not done yet, but you'll know when it is.
+Here is the link to `rebuild your course <http://interactivepython.org/runestone/admin/rebuildcourse>`_.   We recommend that you do this every so often.  The instructors page will show you the current version of our software used to build the thinkcspy and pythonds books.  It will also show you the version for your own course.   If you course is out of date you will also get a flash message in the upper right corner of your browser window.
 
 
 I was just experimenting and I want to delete my course

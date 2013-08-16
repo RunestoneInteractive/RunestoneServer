@@ -44,3 +44,5 @@ models/1.py
 /ghostdriver.log
 
 /paverconfig.py
+
+/build_info

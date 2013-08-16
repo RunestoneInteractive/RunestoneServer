@@ -49,3 +49,13 @@
 	</li>
 
 </ul>
+
+<h4>Build Information</h4>
+{{ if build_info: }}
+<table class="table table-striped table-bordered table-condensed">
+<tr><td>Current Version</td><td>My Version</td></tr>
+<tr><td>{{=master_build}}</td><td>{{=build_info}}</td></tr>
+</table>
+{{ pass }}
+
+

@@ -18,7 +18,30 @@ from sphinx.application import Sphinx
 
 @auth.requires_login()
 def index():
-    return dict()
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    # get current build info
+    # read build info from application/custom_courses/course/build_info
+    try:
+        mbf = open(path.join('applications',request.application,'build_info'),'r')
+        master_build = mbf.read()[:-1]
+        mbf.close()
+    except:
+        master_build = ""
+
+    try:
+        mbf = open(path.join('applications',request.application,'custom_courses',row.course_name,'build_info'),'r')
+        my_build = mbf.read()[:-1]
+        mbf.close()
+    except:
+        my_build = ""
+
+    if master_build and my_build:
+        mst_vers,mst_bld,mst_hsh = master_build.split('-')
+        my_vers,my_bld,my_hsh = my_build.split('-')
+        if my_vers != mst_vers:
+            session.flash = "Updates available, consider rebuilding"
+
+    return dict(build_info=my_build, master_build=master_build)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassignments():
