@@ -46,9 +46,9 @@ Once paver is installed you will also need to install sphinxcontrib-paverutils, 
 If you want to run a full blown server, so you can save ActiveCode assignments, etc. you will need to download and
 install `web2py <http://web2py.com>`_.
 
-The easiest way to do so is to download the "Source Code" distribution from http://www.web2py.com/init/default/download.
+The easiest way to do so is to download the **Source Code** distribution from http://www.web2py.com/init/default/download.
 `Here <http://www.web2py.com/examples/static/web2py_src.zip>`_ is a direct link to the zip archive.
-After you download it, extract the zip file to some folder on your hard drive. (web2py requires no real "installation").
+After you download it, extract the zip file to some folder on your hard drive. (web2py requires no real "installation").  I avoid the web2py.app installation on OS X as it messes with the Python path.  I assume the Windows web2py.exe is the same and I would avoid it as well if I used Windows.
 
 Within the ``web2py`` folder that was just extracted, go to the ``applications/`` folder and check out this repository
 (instructions below). This will install the Runestone Tools as a web2py application automatically.
@@ -94,8 +94,9 @@ line and that will build the following targets:
 
 * How to Think Like a Computer Scientist
 * Problem Solving with algorithms and Data Structures using Python
+* An overview page that shows off all the cool features of the Runestone toolkit
 
-You can quickly check the build by opening the file ``static/thinkcspy/index.html`` in your browser.
+The books are built into ``runestone/static/thinkcspy``, ``runestone/static/pythonds`` and ``runestone/static/overview``  assuming that runestone is the name of the folder you cloned into.  When the build is done you can quickly check the build by opening the file ``static/thinkcspy/index.html`` in your browser.
 
 Now before you start web2py its convenient to make runestone the default application.  In the top level web2py directory copy routes.example.py to routes.py and Modify the three lines that contain the word runestone to look like this::
 
