@@ -168,7 +168,7 @@ of the list. ``pop`` operations will manipulate that same end.
 
 .. _lst_stackcode1:
 
-.. activecode:: stack_1
+.. activecode:: stack_1ac
 
    class Stack:
         def __init__(self):
@@ -194,7 +194,7 @@ action as we perform the sequence of operations from
 :ref:`Table 1 <tbl_stackops>`.
 
 .. activecode:: stack_ex_1
-   :include:  stack_1
+   :include:  stack_1ac
 
    s=Stack()
    print(s.isEmpty())
