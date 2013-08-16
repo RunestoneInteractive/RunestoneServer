@@ -67,7 +67,9 @@ db.define_table('courses',
 )
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
-    db.courses.insert(course_name='devcourse', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))        
+    db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
 
 
 ########################################
