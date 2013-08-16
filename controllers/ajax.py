@@ -365,16 +365,19 @@ def getaggregateresults():
     if tot > 0:
         for key in tdata:
             l = key.split(':')
-            answer = l[1]
-            if 'correct' in key:
-                correct = answer
-            count = int(tdata[key])
-            if answer in rdata:
-                count += rdata[answer] / 100.0 * tot
-            pct = round(count / tot * 100.0)
+            try:
+                answer = l[1]
+                if 'correct' in key:
+                    correct = answer
+                count = int(tdata[key])
+                if answer in rdata:
+                    count += rdata[answer] / 100.0 * tot
+                pct = round(count / tot * 100.0)
 
-            if answer != "undefined" and answer != "":
-                rdata[answer] = pct
+                if answer != "undefined" and answer != "":
+                    rdata[answer] = pct
+            except:
+                print "Bad data for %s data is %s " % (question,key)
 
     miscdata['correct'] = correct
     miscdata['course'] = course
