@@ -12,7 +12,7 @@ Can I build my own course and host it here?
 
 Yes, we are currently hosting many courses for many different institutions around the world.  In fact in 2013 one large institution had 800 students using one of the books.
 
-The best approach is to use our system to build our own textbook.  This gives you several advantages as an instructor including:
+The best approach is to use our system to build your own textbook.  This gives you several advantages as an instructor including:
 
 * a simple grading interface for homework problems at the end of each chapter
 * some simple reports on your students activities within the textbook.
