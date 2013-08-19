@@ -85,7 +85,7 @@ Ok, this is a question that has the potential to start nasty religious wars.  Th
 I think there is a bug in your book what should I do?
 -----------------------------------------------------
 
-Please let us know!  You can file bug reports on our `github issues page <http://github.com/bnmnetp/runestone/issues>`_.  Thanks!
+Please let us know!  You can file bug reports on our `github issues page <http://github.com/bnmnetp/runestone/issues>`_.  Thanks!  If you don't have a github account then you can tweet me at iRunestone   or visit our `google.groups discussion <https://groups.google.com/forum/#!forum/runestoneinteractive>`_
 
 
 I have a question that is not covered here!
