@@ -197,7 +197,7 @@ of the list. ``pop`` operations will manipulate that same end.
 
 Remember that nothing happens when we click the ``run`` button other than the
 definition of the class.  We must create a ``Stack`` object and then use it.
-The following interactive Python session shows the ``Stack`` class in
+:ref:`ActiveCode 2 <lst_stackcode1>` shows the ``Stack`` class in
 action as we perform the sequence of operations from
 :ref:`Table 1 <tbl_stackops>`.
 
@@ -284,14 +284,14 @@ benchmark testing.
       :feedback_c: Good job.
       :feedback_d: Remember that a stack is built from the bottom up.
 
-      Given the following sequence of stack operations what is the top item on the stack?
+      Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?
        
       .. code-block:: python
        
        m = Stack()
        m.push('x')
        m.push('y')
-       m.pop():
+       m.pop()
        m.push('z')
        m.peek()
 
@@ -306,7 +306,7 @@ benchmark testing.
       :feedback_c: Good Job.
       :feedback_d: You may want to check out the docs for isEmpty
 
-      Given the following sequence of stack operations, what is the top item on the stack?
+      Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?
 
       .. code-block:: python
   

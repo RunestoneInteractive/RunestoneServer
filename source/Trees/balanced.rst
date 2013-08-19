@@ -9,6 +9,9 @@
 ..  shortname:: BalancedTrees
 ..  description:: Introduction to balanced binary trees
 
+.. highlight:: python
+    :linenothreshold: 500
+
 Balanced Binary Search Trees
 ----------------------------
 
@@ -40,16 +43,20 @@ purposes of implementing an AVL tree, and gaining the benefit of having
 a balanced tree we will define a tree to be in balance if the balance
 factor is -1, 0, or 1. Once the balance factor of a node in a tree is
 outside this range we will need to have a procedure to bring the tree
-back into balance. Figure {fig:unbal} shows an example of an unbalanced,
+back into balance. :ref:`Figure 1 <fig_unbal>` shows an example of an unbalanced,
 right-heavy tree and the balance factors of each node.
 
-    |image1| {An Unbalanced Right-Heavy Tree with Balance Factors}
-    {fig:unbal}
+
+.. _fig_unbal:
+
+.. figure:: Figures/unbalanced.png
+   :align: center
+
+   Figure 1: An Unbalanced Right-Heavy Tree with Balance Factors
+   
 
 AVL Tree Performance
 ~~~~~~~~~~~~~~~~~~~~
-
-{sec:avl-tree-performance}
 
 Before we proceed any further lets look at the result of enforcing this
 new balance factor requirement. Our claim is that by ensuring that a
@@ -57,11 +64,17 @@ tree always has a balance factor of -1, 0, or 1 we can get better Big-O
 performance of key operations. Let us start by thinking about how this
 balance condition changes the worst-case tree. There are two
 possibilities to consider, a left-heavy tree and a right heavy tree. If
-we consider trees of heights 0, 1, 2, and 3, Figure {fig:worstAVL}
+we consider trees of heights 0, 1, 2, and 3, :ref:`Figure 2 <fig_worstAVL>`
 illustrates the most unbalanced left-heavy tree possible under the new
 rules.
 
-    |image2| {Worst-Case Left-Heavy AVL Trees} {fig:worstAVL}
+.. _fig_worstAVL:
+
+.. figure:: Figures/worstAVL.png
+   :align: center
+
+   Figure 2: Worst-Case Left-Heavy AVL Trees
+   
 
 Looking at the total number of nodes in the tree we see that for a tree
 of height 0 there is 1 node, for a tree of height 1 there is :math:`1+1
@@ -113,6 +126,7 @@ we get:
 
 If we rearrange the terms, and take the base 2 log of both sides and
 then solve for :math:`h` we get the following derivation:
+
 .. math::
 
    \log{N_h+1} = (H+2)\log{\Phi} - \frac{1}{2} \log{5} \\
@@ -128,7 +142,6 @@ is great news for searching our AVL tree because it limits the search to
 AVL Tree Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-{sec:avl-tree-impl}
 
 Now that we have demonstrated that keeping an AVL tree in balance is
 going to be a big performance improvement, let us look at how we will
@@ -153,48 +166,57 @@ updating balance factors:
    zero, then the balance of its ancestor nodes does not change.
 
 We will implement the AVL tree as a subclass of ``BinarySearchTree``. To
-begin, we will override the {\_put} method and write a new
+begin, we will override the ``_put`` method and write a new
 ``updateBalance`` helper method. These methods are shown in
-Listing {lst:updbal}. You will notice that the definition for {\_put} is
-exactly the same as in Listing {lst:bstput} except for the additions of
-the calls to ``updateBalance`` on lines {balput:up1} and {balput:up2}.
+:ref:`Listing 1 <lst_updbal>`. You will notice that the definition for ``_put`` is
+exactly the same as in simple binary search trees except for the additions of
+the calls to ``updateBalance`` on lines 7 and 13.
+
+.. highlight:: python
+    :linenothreshold: 5
+
+.. _lst_updbal:
+
+**Listing 1**
+
 
 ::
 
-    [float=htb,caption=Updating Balance Factors,label=lst:updbal]
     def _put(self,key,val,currentNode):
-	if key < currentNode.key:
-	    if currentNode.hasLeftChild():
-		self._put(key,val,currentNode.leftChild)
-	    else:
-		currentNode.leftChild = TreeNode(key,val,
-					parent=currentNode)
-		self.updateBalance(currentNode.leftChild)  #// \label{balput:up1}
-	else:
-	    if currentNode.hasRightChild():
-		self._put(key,val,currentNode.rightChild)
-	    else:
-		currentNode.rightChild = TreeNode(key,val,
-					 parent=currentNode)
-		self.updateBalance(currentNode.rightChild) #// \label{balput:up2}		
+    	if key < currentNode.key:
+    	    if currentNode.hasLeftChild():
+    		    self._put(key,val,currentNode.leftChild)
+    	    else:
+    		    currentNode.leftChild = TreeNode(key,val,parent=currentNode)
+    		    self.updateBalance(currentNode.leftChild)
+    	else:
+    	    if currentNode.hasRightChild():
+    		    self._put(key,val,currentNode.rightChild)
+    	    else:
+    		    currentNode.rightChild = TreeNode(key,val,parent=currentNode)
+    		    self.updateBalance(currentNode.rightChild)		
 
     def updateBalance(self,node):
-	if node.balanceFactor > 1 or node.balanceFactor < -1:  #// \label{updbal:check}
-	    self.rebalance(node)    #// \label{updbal:rebal}
-	    return
-	if node.parent != None:
-	    if node.isLeftChild():
-		node.parent.balanceFactor += 1
-	    elif node.isRightChild():
-		node.parent.balanceFactor -= 1
+    	if node.balanceFactor > 1 or node.balanceFactor < -1:
+    	    self.rebalance(node)    
+    	    return
+    	if node.parent != None:
+    	    if node.isLeftChild():
+    		    node.parent.balanceFactor += 1
+    	    elif node.isRightChild():
+    		    node.parent.balanceFactor -= 1
 
-	    if node.parent.balanceFactor != 0:
-		self.updateBalance(node.parent)
+    	    if node.parent.balanceFactor != 0:
+    		    self.updateBalance(node.parent)
+    		    
+    		    
+.. highlight:: python
+    :linenothreshold: 500
 
 The new ``updateBalance`` method is where most of the work is done. This
 implements the recursive procedure we just described. The
 ``updateBalance`` method first checks to see if the current node is out
-of balance enough to require rebalancing (line {updbal:check}). If that
+of balance enough to require rebalancing (line 16). If that
 is the case then the rebalancing is done and no further updating to
 parents is required. If the current node does not require rebalancing
 then the balance factor of the parent is adjusted. If the balance factor
@@ -208,12 +230,17 @@ sacrificing performance. In order to bring an AVL Tree back into balance
 we will perform one or more **rotations** on the tree.
 
 To understand what a rotation is let us look at a very simple example.
-Consider the tree in the left half of Figure {fig:unbalsimp}. This tree
+Consider the tree in the left half of :ref:`Figure 3 <fig_unbalsimple>`. This tree
 is out of balance with a balance factor of -2. To bring this tree into
 balance we will use a left rotation around the subtree rooted at node A.
 
-    |image3| {Transforming an Unbalanced Tree
-    into a Balanced Tree Using a Left Rotation} {fig:unbalsimp}
+.. _fig_unbalsimple:
+
+.. figure:: Figures/simpleunbalanced.png
+   :align: center
+
+   Figure 3: Transforming an Unbalanced Tree Using a Left Rotation
+   
 
 To perform a left rotation we essentially do the following:
 
@@ -234,7 +261,7 @@ Furthermore we need to make sure to update all of the parent pointers
 appropriately.
 
 Lets look at a slightly more complicated tree to illustrate the right
-rotation. The left side of Figure {fig:rightrot1} shows a tree that is
+rotation. The left side of :ref:`Figure 4 <fig_rightrot1>` shows a tree that is
 left-heavy and with a balance factor of 2 at the root. To perform a
 right rotation we essentially do the following:
 
@@ -248,12 +275,16 @@ right rotation we essentially do the following:
    empty at this point. This allows us to add a new node as the left
    child without any further consideration.
 
-    |image4| {Transforming an Unbalanced Tree
-    into a Balanced Tree Using a Right Rotation} {fig:rightrot1}
+.. _fig_rightrot1:
+
+.. figure:: Figures/rightrotate1.png
+  :align: center
+
+  Figure 4: Transforming an Unbalanced Tree Using a Right Rotation
 
 Now that you have seen the rotations and have the basic idea of how a
-rotation works let us look at the code. Listing {lst:rots} shows the
-code for both the right and the left rotations. In line {rotleft:temp}
+rotation works let us look at the code. :ref:`Listing 2 <lst_bothrotations>` shows the
+code for both the right and the left rotations. In line 2
 we create a temporary variable to keep track of the new root of the
 subtree. As we said before the new root is the right child of the
 previous root. Now that a reference to the right child has been stored
@@ -267,37 +298,47 @@ the old root. If the old root was the root of the entire tree then we
 must set the root of the tree to point to this new root. Otherwise, if
 the old root is a left child then we change the parent of the left child
 to point to the new root; otherwise we change the parent of the right
-child to point to the new root. (lines {rotleft:p1}–{rotleft:p2}).
+child to point to the new root. (lines 10-13).
 Finally we set the parent of the old root to be the new root. This is a
 lot of complicated bookkeeping, so we encourage you to trace through
-this function while looking at Figure {fig:unbalsimp}. The
+this function while looking at :ref:`Figure 3 <fig_unbalsimple>`. The
 ``rotateRight`` method is symmetrical to ``rotateLeft`` so we will leave
 it to you to study the code for ``rotateRight``.
 
+.. _lst_bothrotations:
+
+**Listing 2**
+
+.. highlight:: python
+    :linenothreshold: 5
+
+
 ::
 
-    [label=lst:rots,float=htb,caption=Left and Right Rotations]
-    def rotateLeft(self,rotRoot):
-	newRoot = rotRoot.rightChild		      #// \label{rotleft:temp}
-	rotRoot.rightChild = newRoot.leftChild
-	if newRoot.leftChild != None:
-	    newRoot.leftChild.parent = rotRoot
-	newRoot.parent = rotRoot.parent
-	if rotRoot.isRoot():
-	    self.root = newRoot
-	else:
-	    if rotRoot.isLeftChild():		     #// \label{rotleft:p1}
-		rotRoot.parent.leftChild = newRoot
-	    else:
-		rotRoot.parent.rightChild = newRoot #// \label{rotleft:p2}
-	newRoot.leftChild = rotRoot
-	rotRoot.parent = newRoot
-	rotRoot.balanceFactor = rotRoot.balanceFactor + 1 \	  #// \label{rotleft:bf1}
-			      - min(newRoot.balanceFactor, 0)
-	newRoot.balanceFactor = newRoot.balanceFactor + 1 \
-			      + max(rotRoot.balanceFactor, 0)  #// \label{rotleft:bf2}
 
-Finally, lines {rotleft:bf1}–{rotleft:bf2} require some explanation. In
+    def rotateLeft(self,rotRoot):
+    	newRoot = rotRoot.rightChild
+    	rotRoot.rightChild = newRoot.leftChild
+    	if newRoot.leftChild != None:
+    	    newRoot.leftChild.parent = rotRoot
+    	newRoot.parent = rotRoot.parent
+    	if rotRoot.isRoot():
+    	    self.root = newRoot
+    	else:
+    	    if rotRoot.isLeftChild():
+    		    rotRoot.parent.leftChild = newRoot
+    	    else:
+    	    	rotRoot.parent.rightChild = newRoot
+    	newRoot.leftChild = rotRoot
+    	rotRoot.parent = newRoot
+    	rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor, 0)
+    	newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor, 0)
+			      
+			      
+.. highlight:: python
+  :linenothreshold: 500
+
+Finally, lines 16-17 require some explanation. In
 these two lines we update the balance factors of the old and the new
 root. Since all the other moves are moving entire subtrees around the
 balance factors of all other nodes are unaffected by the rotation. But
@@ -305,9 +346,15 @@ how can we update the balance factors without completely recalculating
 the heights of the new subtrees? The following derivation should
 convince you that these lines are correct.
 
-    |image5| {A Left Rotation} {fig:bfderive}
+.. _fig_bfderive:
 
-Figure {fig:bfderive} shows a left rotation. B and D are the pivotal
+.. figure:: Figures/bfderive.png
+   :align: center
+
+   Figure 5: A Left Rotation
+
+
+:ref:`Figure 5 <fig_bfderive>` shows a left rotation. B and D are the pivotal
 nodes and A, C, E are their subtrees. Let :math:`h_x` denote the
 height of a particular subtree rooted at node :math:`x`. By definition
 we know the following:
@@ -322,8 +369,11 @@ But we know that the old height of D can also be given by :math:`1 +
 max(h_C,h_E)`, that is, the height of D is one more than the maximum
 height of its two children. Remember that :math:`h_c` and
 :math:`h_E` hav not changed. So, let us substitute that in to the
-second equation, which gives us :math:` oldBal(B) = h_A - (1 +
-max(h_C,h_E))` and then subtract the two equations. The following steps
+second equation, which gives us 
+
+:math:`oldBal(B) = h_A - (1 + max(h_C,h_E))` 
+
+and then subtract the two equations. The following steps
 do the subtraction and use some algebra to simplify the equation for
 :math:`newBal(B)`.
 
@@ -357,12 +407,11 @@ steps:
 
 Now we have all of the parts in terms that we readily know. If we
 remember that B is ``rotRoot`` and D is ``newRoot`` then we can see this
-corresponds exactly to the statement on line {rotleft:bf1}, or:
+corresponds exactly to the statement on line 16, or:
 
 ::
 
-    rotRoot.balanceFactor = 
-	rotRoot.balanceFactor + 1 - min(0,newRoot.balanceFactor)
+    rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(0,newRoot.balanceFactor)
 
 A similar derivation gives us the equation for the updated node D, as
 well as the balance factors after a right rotation. We leave these as
@@ -370,19 +419,29 @@ exercises for you.
 
 Now you might think that we are done. We know how to do our left and
 right rotations, and we know when we should do a left or right rotation,
-but take a look at Figure {fig:hardrotate}. Since node A has a balance
+but take a look at :ref:`Figure 6 <fig_hardrotate>`. Since node A has a balance
 factor of -2 we should do a left rotation. But, what happens when we do
 the left rotation around A?
 
-    |image6| {An Unbalanced Tree That is More Difficult to Balance}
-    {fig:hardrotate}
+.. _fig_hardrotate:
 
-Figure {fig:badrotate} shows us that after the left rotation we are now
+.. figure:: Figures/hardunbalanced.png
+   :align: center
+
+   Figure 6: An Unbalanced Tree that is More Difficult to Balance
+
+
+:ref:`Figure 7 <fig_badrotate>` shows us that after the left rotation we are now
 out of balance the other way. If we do a right rotation to correct the
 situation we are right back where we started.
 
-    |image7| {After a Left Rotation the Tree Is Out of Balance in the
-    Other Direction} {fig:badrotate}
+.. _fig_badrotate:
+
+.. figure:: Figures/badrotate.png
+   :align: center
+
+   Figure 7: After a Left Rotation the Tree is Out of Balance in the Other Direction
+
 
 To correct this problem we must use the following set of rules:
 
@@ -396,42 +455,57 @@ To correct this problem we must use the following set of rules:
    right heavy then do a left rotation on the left child, followed by
    the original right rotation.
 
-Figure {fig:rotatelr} shows how these rules solve the dilemma we
-encountered in Figures {fig:hardrotate} and {fig:badrotate}. Starting
+:ref:`Figure 8 <fig_rotatelr>` shows how these rules solve the dilemma we
+encountered in :ref:`Figure 6 <fig_hardrotate>` and :ref:`Figure 7 <fig_badrotate>`. Starting
 with a right rotation around node C puts the tree in a position where
 the left rotation around A brings the entire subtree back into balance.
 
-    |image8| {A Right Rotation Followed by a Left Rotation}
-    {fig:rotatelr}
+.. _fig_rotatelr:
+
+.. figure:: Figures/rotatelr.png
+   :align: center
+
+   Figure 8: A Right Rotation Followed by a Left Rotation
+
 
 The code that implements these rules can be found in our ``rebalance``
-method, which is shown in Listing {lst:rebalance}. Rule number 1 from
-above is implemented by the ``if`` statement starting on line {rot:lr}.
+method, which is shown in :ref:`Listing 2 <lst_rebalance>`. Rule number 1 from
+above is implemented by the ``if`` statement starting on line 2.
 Rule number 2 is implemented by the ``elif`` statement starting on
-line {rot:rl}.
+line 8.
+
+.. _lst_rebalance:
+
+**Listing 3**
+
+.. highlight:: python
+  :linenothreshold: 5
 
 ::
 
-    [label=lst:rebalance,float=htb,caption=Rebalancing Rules Implemented]
     def rebalance(self,node):
-      if node.balanceFactor < 0:   #// \label{rot:lr}
-	  if node.rightChild.balanceFactor > 0:
-	     self.rotateRight(node.rightChild)
-	      self.rotateLeft(node)
-	  else:
-	     self.rotateLeft(node)
-      elif node.balanceFactor > 0:  #// \label{rot:rl}
-	  if node.leftChild.balanceFactor < 0:
-	     self.rotateLeft(node.leftChild)
-	      self.rotateRight(node)
-	  else:
-	     self.rotateRight(node)
+      if node.balanceFactor < 0:
+	     if node.rightChild.balanceFactor > 0:
+	        self.rotateRight(node.rightChild)
+	        self.rotateLeft(node)
+	     else:
+	        self.rotateLeft(node)
+      elif node.balanceFactor > 0:
+	     if node.leftChild.balanceFactor < 0:
+	        self.rotateLeft(node.leftChild)
+	        self.rotateRight(node)
+	     else:
+	        self.rotateRight(node)
+
+
+.. highlight:: python
+   :linenothreshold: 500
 
 The discussion questions provide you the opportunity to rebalance a tree
 that requires a left rotation followed by a right. In addition the
 discussion questions provide you with the opportunity to rebalance some
 trees that are a little more complex than the tree in
-Figure {fig:rotatelr}.
+:ref:`Figure 8 <fig_rotatelr>`.
 
 By keeping the tree in balance at all times, we can ensure that the
 ``get`` method will run in order :math:`O(log_2(n))` time. But the
@@ -451,33 +525,24 @@ subsequent updating and rebalancing as an exercise for you.
 Summary of Map ADT Implementations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{sec:summary-map-adt}
 
 Over the past two chapters we have looked at several data structures
 that can be used to implement the map abstract data type. A binary
 Search on a list, a hash table, a binary search tree, and a balanced
 binary search tree. To conclude this section, let’s summarize the
 performance of each data structure for the key operations defined by the
-map ADT.
-
-=========== ======================  ============   ==================  ====================
-             Sorted List             Hash Table     Binary Search Tree     AVL Tree
-=========== ======================  ============   ==================  ====================
-     put    :math:`O(n)`            :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
-     get    :math:`O(\log_2{n})`    :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
-     in     :math:`O(\log_2{n})`    :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
-     del    :math:`O(n))`           :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
-=========== ======================  ============   ==================  ====================
-
-    {Comparing the Performance of Different Map Implementations}
-    {tab:mapcompare}
+map ADT (see :ref:`Table 1 <tab_compare>`).
 
 
-.. |image1| image:: Figures/unbalanced.png
-.. |image2| image:: Figures/worstAVL.png
-.. |image3| image:: Figures/simpleunbalanced.png
-.. |image4| image:: Figures/rightrotate1.png
-.. |image5| image:: Figures/bfderive.png
-.. |image6| image:: Figures/hardunbalanced.png
-.. |image7| image:: Figures/badrotate.png
-.. |image8| image:: Figures/rotatelr.png
+.. _tab_compare:
+
+.. table:: **Table 1: Comparing the Performance of Different Map Implementations**
+
+    =========== ======================  ============   ==================  ====================
+                 Sorted List             Hash Table     Binary Search Tree     AVL Tree
+    =========== ======================  ============   ==================  ====================
+         put    :math:`O(n)`            :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
+         get    :math:`O(\log_2{n})`    :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
+         in     :math:`O(\log_2{n})`    :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
+         del    :math:`O(n))`           :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
+    =========== ======================  ============   ==================  ====================

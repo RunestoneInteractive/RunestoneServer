@@ -12,6 +12,9 @@
 .. qnum::
    :prefix: sort-
    :start: 1
+   
+.. highlight:: python
+  :linenothreshold: 500
 
 Sorting
 -------
@@ -66,7 +69,7 @@ moved along until the pass is complete.
 .. figure:: Figures/bubblepass.png
    :align: center
 
-   ``bubbleSort``: The First Pass
+   Figure 1: ``bubbleSort``: The First Pass
 
 
 At the start of the second pass, the largest value is now in place.
@@ -74,7 +77,7 @@ There are :math:`n-1` items left to sort, meaning that there will be
 :math:`n-2` pairs. Since each pass places the next largest value in
 place, the total number of passes necessary will be :math:`n-1`. After
 completing the :math:`n-1` passes, the smallest item must be in the
-correct position with no further processing required. :ref:`Listing 1 <lst_bubble>`
+correct position with no further processing required. :ref:`ActiveCode 1 <lst_bubble>`
 shows the complete ``bubbleSort`` function. It takes the list as a
 parameter, and modifies it by exchanging items as necessary.
 
@@ -97,7 +100,7 @@ statement ``a,b=b,a`` will result in two assignment statements being
 done at the same time (see :ref:`Figure 2 <fig_pythonswap>`). Using simultaneous
 assignment, the exchange operation can be done in one statement.
 
-Lines 5-7 in :ref:`Listing 1 <lst_bubble>` perform the exchange of the :math:`i` and
+Lines 5-7 in :ref:`ActiveCode 1 <lst_bubble>` perform the exchange of the :math:`i` and
 :math:(i+1)th items using the three–step procedure described
 earlier. Note that we could also have used the simultaneous assignment
 to swap the items.
@@ -107,7 +110,7 @@ to swap the items.
 .. figure:: Figures/swap.png
    :align: center
 
-   Exchanging Two Values in Python
+   Figure 2: Exchanging Two Values in Python
 
 The following activecode example shows the complete ``bubbleSort`` function working on the list
 shown above.
@@ -116,6 +119,7 @@ shown above.
 .. _lst_bubble:
 
 .. activecode:: lst_bubble
+    :caption: The Bubble Sort
 
     def bubbleSort(alist):
         for passnum in range(len(alist)-1,0,-1):
@@ -137,9 +141,10 @@ The following animation shows ``bubbleSort`` in action.
    :model: BubbleSortModel
    :viewer: BarViewer
 
-For more detail, use codelens to step thru the algorithm.
+For more detail, CodeLens 1 allows you to step thru the algorithm.
 
 .. codelens:: bubbletrace
+    :caption: Tracing the Bubble Sort
     
     def bubbleSort(alist):
         for passnum in range(len(alist)-1,0,-1):
@@ -170,17 +175,18 @@ time.
 
 .. _tbl_bubbleanalysis:
 
-================= ==================
-**Pass**          **Comparisons**
-================= ==================
-         1         :math:`n-1`
-         2         :math:`n-2`
-         3         :math:`n-3`
-         ...       ...
-   :math:`n-1`     :math:`1`
-================= ==================
+.. table:: **Table 1: Comparisons for Each Pass of Bubble Sort**
 
-    Comparisons for Each Pass of Bubble Sort
+    ================= ==================
+    **Pass**          **Comparisons**
+    ================= ==================
+             1         :math:`n-1`
+             2         :math:`n-2`
+             3         :math:`n-3`
+             ...       ...
+       :math:`n-1`     :math:`1`
+    ================= ==================
+
 
 A bubble sort is often considered the most inefficient sorting method
 since it must exchange items before the final location is known. These
@@ -192,12 +198,13 @@ know that the list must be sorted. A bubble sort can be modified to stop
 early if it finds that the list has become sorted. This means that for
 lists that require just a few passes, a bubble sort may have an
 advantage in that it will recognize the sorted list and stop.
-:ref:`Listing 2 <lst_shortbubble>` shows this modification, which is often referred
+:ref:`ActiveCode 2 <lst_shortbubble>` shows this modification, which is often referred
 to as the **short bubble**.
 
 .. _lst_shortbubble:
 
 .. activecode:: lst_shortbubble
+    :caption: The Short Bubble Sort
 
     def shortBubbleSort(alist):
         exchanges = True
@@ -216,9 +223,10 @@ to as the **short bubble**.
     shortBubbleSort(alist)
     print(alist)
     
-Finally, here is ``shortBubbleSort`` in codelens.
+Finally, here is ``shortBubbleSort`` in CodeLens (CodeLens 2)..
     
 .. codelens:: shortbubbletrace
+    :caption: Tracing the Short Bubble Sort
 
     def shortBubbleSort(alist):
         exchanges = True
@@ -269,20 +277,22 @@ final item must be in place after the :math:`(n-1)` st pass.
 the largest remaining item is selected and then placed in its proper
 location. The first pass places 93, the second pass places 77, the third
 places 55, and so on. The function is shown in
-:ref:`Listing 3 <lst_selectionsortcode>`.
+:ref:`ActiveCode 3 <lst_selectionsortcode>`.
 
 .. _fig_selectionsort:
 
 .. figure:: Figures/selectionsort.png
    :align: center
 
-   ``selectionSort``
+   
+   Figure 3: ``selectionSort``
 
 
 .. _lst_selectionsortcode:
 
 
 .. activecode:: lst_selectionsortcode
+    :caption: Selection Sort
 
     def selectionSort(alist):
        for fillslot in range(len(alist)-1,0,-1):
@@ -305,8 +315,12 @@ places 55, and so on. The function is shown in
    :model: SelectionSortModel
    :viewer: BarViewer
    
+
+For more detail, CodeLens 3 allows you to step thru the algorithm.
+   
    
 .. codelens:: selectionsortcodetrace
+    :caption: Tracing the Selection Sort
 
     def selectionSort(alist):
        for fillslot in range(len(alist)-1,0,-1):
@@ -344,7 +358,7 @@ the bubble sort makes 20 exchanges, while the selection sort makes only
       :feedback_c: This one looks similar to the correct answer but instead of swapping the numbers have been shifted to the left to make room for the correct numbers.
       :feedback_d: Selection sort improves upon bubble sort by making fewer swaps.
 
-      Suppose you have the following list of numbers to sort: <br>
+      Suppose you have the following list of numbers to sort:
       [11, 7, 12, 14, 19, 1, 6, 18, 8, 20] which list represents the partially sorted list after three complete passes of selection sort?
 
 
@@ -363,7 +377,7 @@ items represent the ordered sublists as the algorithm makes each pass.
 .. figure:: Figures/insertionsort.png
    :align: center
 
-   ``insertionSort``
+   Figure 4: ``insertionSort``
 
 
 We begin by assuming that a list with one item (position :math:`0`) is
@@ -386,10 +400,10 @@ have a sorted sublist of six items.
 .. figure:: Figures/insertionpass.png
    :align: center
 
-   ``insertionSort``: Fifth Pass of the Sort
+   Figure 5: ``insertionSort``: Fifth Pass of the Sort
 
 
-The implementation of ``insertionSort`` (:ref:`Listing 4 <lst_insertion>`) shows that
+The implementation of ``insertionSort`` (:ref:`ActiveCode 4 <lst_insertion>`) shows that
 there are again :math:`n-1` passes to sort *n* items. The iteration
 starts at position 1 and moves through position :math:`n-1`, as these
 are the items that need to be inserted back into the sorted sublists.
@@ -410,6 +424,7 @@ studies, insertion sort will show very good performance.
 .. _lst_insertion:
 
 .. activecode:: lst_insertion
+    :caption: Insertion Sort
 
     def insertionSort(alist):
        for index in range(1,len(alist)):
@@ -431,10 +446,13 @@ studies, insertion sort will show very good performance.
    :modelfile: sortmodels.js
    :viewerfile: sortviewers.js
    :model: InsertionSortModel
-   :viewer: BoxViewer
+   :viewer: BarViewer
 
+
+For more detail, CodeLens 4 allows you to step thru the algorithm.
 
 .. codelens:: insertionsortcodetrace
+    :caption: Tracing the Insertion Sort
 
     def insertionSort(alist):
        for index in range(1,len(alist)):
@@ -494,7 +512,7 @@ belong.
 .. figure:: Figures/shellsortA.png
    :align: center
 
-   A Shell Sort with Increments of Three
+   Figure 6: A Shell Sort with Increments of Three
 
 
 .. _fig_incrementsB:
@@ -502,7 +520,7 @@ belong.
 .. figure:: Figures/shellsortB.png
    :align: center
 
-   A Shell Sort after Sorting Each Sublist
+   Figure 7: A Shell Sort after Sorting Each Sublist
 
 
 :ref:`Figure 8 <fig_incrementsC>` shows a final insertion sort using an increment of
@@ -516,7 +534,7 @@ this case, we need only four more shifts to complete the process.
 .. figure:: Figures/shellsortC.png
    :align: center
 
-   ShellSort: A Final Insertion Sort with Increment of 1
+   Figure 8: ShellSort: A Final Insertion Sort with Increment of 1
 
 
 .. _fig_incrementsD:
@@ -524,11 +542,11 @@ this case, we need only four more shifts to complete the process.
 .. figure:: Figures/shellsortD.png
    :align: center
 
-   Initial Sublists for a Shell Sort
+   Figure 9: Initial Sublists for a Shell Sort
 
 
 We said earlier that the way in which the increments are chosen is the
-unique feature of the shell sort. The function shown in :ref:`Listing 5 <lst_shell>`
+unique feature of the shell sort. The function shown in :ref:`ActiveCode 5 <lst_shell>`
 uses a different set of increments. In this case, we begin with
 :math:`\frac {n}{2}` sublists. On the next pass,
 :math:`\frac {n}{4}` sublists are sorted. Eventually, a single list is
@@ -542,6 +560,7 @@ an insertion sort with an increment of one.
 .. _lst_shell:
 
 .. activecode:: lst_shellSort
+    :caption: Shell Sort
 
     def shellSort(alist):
         sublistcount = len(alist)//2
@@ -578,8 +597,14 @@ an insertion sort with an increment of one.
    :viewerfile: sortviewers.js
    :model: ShellSortModel
    :viewer: BarViewer
+   
+   
+   
+For more detail, CodeLens 5 allows you to step thru the algorithm.
+
 
 .. codelens:: shellSorttrace
+    :caption: Tracing the Shell Sort
 
     def shellSort(alist):
         sublistcount = len(alist)//2
@@ -667,7 +692,7 @@ the simple lists, now sorted, as they are merged back together.
 .. figure:: Figures/mergesortA.png
    :align: center
 
-   Splitting the List in a Merge Sort
+   Figure 10: Splitting the List in a Merge Sort
 
 
 .. _fig_mergesortB:
@@ -675,11 +700,11 @@ the simple lists, now sorted, as they are merged back together.
 .. figure:: Figures/mergesortB.png
    :align: center
 
-   Lists as They Are Merged Together
+   Figure 11: Lists as They Are Merged Together
 
 
 
-The ``mergeSort`` function shown in :ref:`Listing 6 <lst_merge>` begins by asking the
+The ``mergeSort`` function shown in :ref:`ActiveCode 6 <lst_merge>` begins by asking the
 base case question. If the length of the list is less than or equal to
 one, then we already have a sorted list and no more processing is
 necessary. If, on the other hand, the length is greater than one, then
@@ -691,6 +716,7 @@ most one.
 .. _lst_merge:
 
 .. activecode:: lst_merge
+    :caption: Merge Sort
 
     def mergeSort(alist):
         print("Splitting ",alist)
@@ -753,8 +779,12 @@ list that can be immediately merged with other sorted lists.
    :model: MergeSortModel
    :viewer: BarViewer
   
+  
+For more detail, CodeLens 6 allows you to step thru the algorithm.
+
 
 .. codelens:: mergetrace
+    :caption: Tracing the Merge Sort
 
     def mergeSort(alist):
         print("Splitting ",alist)
@@ -876,7 +906,7 @@ either less than or greater than the pivot value.
 .. figure:: Figures/firstsplit.png
    :align: center
 
-   The First Pivot Value for a Quick Sort
+   Figure 12: The First Pivot Value for a Quick Sort
 
 
 
@@ -895,7 +925,7 @@ of 54.
 .. figure:: Figures/partitionA.png
    :align: center
 
-   Finding the Split Point for 54
+   Figure 13: Finding the Split Point for 54
 
 We begin by incrementing ``leftmark`` until we locate a value that is
 greater than the pivot value. We then decrement ``rightmark`` until we
@@ -918,10 +948,10 @@ can be invoked recursively on the two halves.
 .. figure:: Figures/partitionB.png
    :align: center
 
-   Completing the Partition Process to Find the Split Point for 54
+   Figure 14: Completing the Partition Process to Find the Split Point for 54
 
 
-The ``quickSort`` function shown in :ref:`Listing 7 <lst_quick>` invokes a recursive
+The ``quickSort`` function shown in :ref:`CodeLens 7 <lst_quick>` invokes a recursive
 function, ``quickSortHelper``. ``quickSortHelper`` begins with the same
 base case as the merge sort. If the length of the list is less than or
 equal to one, it is already sorted. If it is greater, then it can be
@@ -931,6 +961,7 @@ implements the process described earlier.
 .. _lst_quick:
 
 .. activecode:: lst_quick
+    :caption: Quick Sort
 
     def quickSort(alist):
        quickSortHelper(alist,0,len(alist)-1)
@@ -979,6 +1010,8 @@ implements the process described earlier.
     quickSort(alist)
     print(alist)
 
+
+
 .. animation:: quick_anim
    :modelfile: sortmodels.js
    :viewerfile: sortviewers.js
@@ -986,7 +1019,10 @@ implements the process described earlier.
    :viewer: BarViewer
 
 
+For more detail, CodeLens 7 lets you step thru the algorithm. 
+
 .. codelens:: quicktrace
+    :caption: Tracing the Quick Sort
 
     def quickSort(alist):
        quickSortHelper(alist,0,len(alist)-1)
