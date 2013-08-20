@@ -57,6 +57,8 @@ Discussion Questions
 
 #. Draw the graph corresponding to the following list of edges.
 
+   .. table:: 
+
            +--------+------+--------+
            | from   | to   | cost   |
            +========+======+========+

@@ -66,7 +66,7 @@ are unweighted.
 .. figure:: Figures/wordgraph.png
    :align: center
 
-   A Small Word Ladder Graph
+   Figure 1: A Small Word Ladder Graph
 
 We could use several different approaches to create the graph we need to
 solve this problem. Let’s start with the assumption that we have a list
@@ -97,7 +97,7 @@ that all the words in the bucket must be connected.
 .. figure:: Figures/wordbuckets.png
    :align: center
 
-   Word Buckets for Words That are Different by One Letter
+   Figure 2: Word Buckets for Words That are Different by One Letter
 
 
 In Python, we can implement the scheme we have just described by using a
@@ -106,12 +106,17 @@ keys in our dictionary. The value stored for that key is a list of
 words. Once we have the dictionary built we can create the graph. We
 start our graph by creating a vertex for each word in the graph. Then we
 create edges between all the vertices we find for words found under the
-same key in the dictionary. The following listing shows the Python
+same key in the dictionary. :ref:`Listing 1 <lst_wordbucket1>` shows the Python
 code required to build the graph.
+
+.. _lst_wordbucket1:
+
+**Listing 1**
 
 ::
 
     from pythonds.graphs import Graph
+    
     def buildGraph(wordFile):
         d = {}
         g = Graph()    
@@ -172,7 +177,7 @@ colored black, it has no white vertices adjacent to it. A gray node, on
 the other hand, may have some white vertices adjacent to it, indicating
 that there are still additional vertices to explore.
 
-The breadth first search algorithm shown in the listing below uses the
+The breadth first search algorithm shown in :ref:`Listing 2 <lst_wordbucket2>` below uses the
 adjacency list graph representation we developed earlier. In addition it uses a ``Queue``,
 a crucial point as we will see, to decide which vertex to explore next.
 
@@ -204,6 +209,11 @@ and four things happen:
    the queue effectively schedules this node for further exploration,
    but not until all the other vertices on the adjacency list of
    ``currentVert`` have been explored.
+   
+   
+.. _lst_wordbucket2:
+
+**Listing 2**
 
 ::
 
@@ -238,7 +248,7 @@ queue after this step.
 .. figure:: Figures/bfs1.png
    :align: center
 
-   The First Step in the Breadth First Search
+   Figure 3: The First Step in the Breadth First Search
 
 In the next step ``bfs`` removes the next node (pool) from the front of
 the queue and repeats the process for all of its adjacent nodes.
@@ -253,7 +263,7 @@ poll. The new state of the tree and queue is shown in :ref:`Figure 4 <fig_bfs2>`
 .. figure:: Figures/bfs2.png
    :align: center
 
-   The Second Step in the Breadth First Search
+   Figure 4: The Second Step in the Breadth First Search
 
 
 
@@ -269,7 +279,7 @@ vertices on the second level of the tree.
 .. figure:: Figures/bfs3.png
    :align: center
    
-   Breadth First Search Tree After Completing One Level
+   Figure 5: Breadth First Search Tree After Completing One Level
 
 
 .. _fig_bfsDone:
@@ -277,7 +287,7 @@ vertices on the second level of the tree.
 .. figure:: Figures/bfsDone.png
    :align: center
 
-   Final Breadth First Search Tree      
+   FIgure 6: Final Breadth First Search Tree      
 
 
 You should continue to work through the algorithm on your own so that
@@ -288,8 +298,12 @@ breadth first search solution is that we have not only solved the
 FOOL–SAGE problem we started out with, but we have solved many other
 problems along the way. We can start at any vertex in the breadth first
 search tree and follow the predecessor arrows back to the root to find
-the shortest word ladder from any word back to fool. The function below shows how to follow the predecessor links to
+the shortest word ladder from any word back to fool. The function below (:ref:`Listing 3 <lst_wordbucket3>`) shows how to follow the predecessor links to
 print out the word ladder.
+
+.. _lst_wordbucket3:
+
+**Listing 3**
 
 ::
 
