@@ -12,6 +12,9 @@
 .. qnum::
    :prefix: stk-
    :start: 1
+   
+.. highlight:: python
+    :linenothreshold: 500
 
 Stacks
 ------
@@ -48,7 +51,7 @@ of primitive Python data objects.
    :align: center
    :scale: 50 %
 
-   A Stack of Books
+   Figure 1: A Stack of Books
 
 .. _fig_objectstack:
 
@@ -56,7 +59,7 @@ of primitive Python data objects.
    :align: center
    :scale: 50 %
 
-   A Stack of Primitive Python Objects
+   Figure 2: A Stack of Primitive Python Objects
 
 One of the most useful ideas related to stacks comes from the simple
 observation of items as they are added and then removed. Assume you
@@ -75,7 +78,7 @@ objects.
 .. figure:: Figures/simplereversal.png
    :align: center
 
-   The Reversal Property of Stacks
+   Figure 3: The Reversal Property of Stacks
 
 
 Considering this reversal property, you can perhaps think of examples of
@@ -120,23 +123,24 @@ far right.
 
 .. _tbl_stackops:
 
-============================ ======================== ==================
-         **Stack Operation**       **Stack Contents**   **Return Value**
-============================ ======================== ==================
-             ``s.isEmpty()``                   ``[]``           ``True``
-               ``s.push(4)``                  ``[4]``
-           ``s.push('dog')``            ``[4,'dog']``
-                ``s.peek()``            ``[4,'dog']``          ``'dog'``
-            ``s.push(True)``       ``[4,'dog',True]``
-                ``s.size()``       ``[4,'dog',True]``              ``3``
-             ``s.isEmpty()``       ``[4,'dog',True]``          ``False``
-             ``s.push(8.4)``   ``[4,'dog',True,8.4]``
-                 ``s.pop()``       ``[4,'dog',True]``            ``8.4``
-                 ``s.pop()``            ``[4,'dog']``           ``True``
-                ``s.size()``            ``[4,'dog']``              ``2``
-============================ ======================== ==================
+.. table:: **Table 1: Sample Stack Operations**
 
-    Sample Stack Operations
+    ============================ ======================== ==================
+             **Stack Operation**       **Stack Contents**   **Return Value**
+    ============================ ======================== ==================
+                 ``s.isEmpty()``                   ``[]``           ``True``
+                   ``s.push(4)``                  ``[4]``
+               ``s.push('dog')``            ``[4,'dog']``
+                    ``s.peek()``            ``[4,'dog']``          ``'dog'``
+                ``s.push(True)``       ``[4,'dog',True]``
+                    ``s.size()``       ``[4,'dog',True]``              ``3``
+                 ``s.isEmpty()``       ``[4,'dog',True]``          ``False``
+                 ``s.push(8.4)``   ``[4,'dog',True,8.4]``
+                     ``s.pop()``       ``[4,'dog',True]``            ``8.4``
+                     ``s.pop()``            ``[4,'dog']``           ``True``
+                    ``s.size()``            ``[4,'dog']``              ``2``
+    ============================ ======================== ==================
+
 
 Implementing a Stack in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,14 +165,16 @@ considered the top of the stack and which will be the base. Once that
 decision is made, the operations can be implemented using the list
 methods such as ``append`` and ``pop``.
 
-The following stack implementation (:ref:`Listing 1 <lst_stackcode1>`) assumes that
+The following stack implementation (:ref:`ActiveCode 1 <lst_stackcode1>`) assumes that
 the end of the list will hold the top element of the stack. As the stack
 grows (as ``push`` operations occur), new items will be added on the end
 of the list. ``pop`` operations will manipulate that same end.
 
 .. _lst_stackcode1:
 
+
 .. activecode:: stack_1ac
+   :caption: Implementing a Stack class using Python lists
 
    class Stack:
         def __init__(self):
@@ -189,7 +195,9 @@ of the list. ``pop`` operations will manipulate that same end.
         def size(self):
             return len(self.items)
 
-The following interactive Python session shows the ``Stack`` class in
+Remember that nothing happens when we click the ``run`` button other than the
+definition of the class.  We must create a ``Stack`` object and then use it.
+:ref:`ActiveCode 2 <lst_stackcode1>` shows the ``Stack`` class in
 action as we perform the sequence of operations from
 :ref:`Table 1 <tbl_stackops>`.
 
@@ -197,6 +205,7 @@ action as we perform the sequence of operations from
    :include:  stack_1ac
 
    s=Stack()
+   
    print(s.isEmpty())
    s.push(4)
    s.push('dog')
@@ -216,11 +225,12 @@ using a list where the top is at the beginning instead of at the end. In
 this case, the previous ``pop`` and ``append`` methods would no longer
 work and we would have to index position 0 (the first item in the list)
 explicitly using ``pop`` and ``insert``. The implementation is shown in
-:ref:`Listing 2 <lst_stackcode2>`.
+:ref:`CodeLens 1 <lst_stackcode2>`.
 
 .. _lst_stackcode2:
 
 .. codelens:: stack_cl_1
+   :caption: Alternative Implementation of the Stack class
 
    class Stack:
         def __init__(self):
@@ -274,11 +284,14 @@ benchmark testing.
       :feedback_c: Good job.
       :feedback_d: Remember that a stack is built from the bottom up.
 
-       Given the following sequence of stack operations what is the top item on the stack?
+      Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?
+       
+      .. code-block:: python
+       
        m = Stack()
        m.push('x')
        m.push('y')
-       m.pop():
+       m.pop()
        m.push('z')
        m.peek()
 
@@ -293,7 +306,7 @@ benchmark testing.
       :feedback_c: Good Job.
       :feedback_d: You may want to check out the docs for isEmpty
 
-      Given the following sequence of stack operations, what is the top item on the stack?
+      Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?
 
       .. code-block:: python
   
@@ -391,8 +404,9 @@ problem.
 .. _fig_parmatch:
 
 .. figure:: Figures/simpleparcheck.png
+   :align: center
 
-   Matching Parentheses
+   Figure 4: Matching Parentheses
 
 Once you agree that a stack is the appropriate data structure for
 keeping the parentheses, the statement of the algorithm is
@@ -405,11 +419,12 @@ closing symbol, the parentheses remain balanced. If at any time there is
 no opening symbol on the stack to match a closing symbol, the string is
 not balanced properly. At the end of the string, when all symbols have
 been processed, the stack should be empty. The Python code to implement
-this algorithm is shown in :ref:`Listing 3 <lst_parcheck1>`.
+this algorithm is shown in :ref:`ActiveCode 4 <lst_parcheck1>`.
 
 .. _lst_parcheck1:
 
 .. activecode:: parcheck1
+    :caption: Solving the Balanced Parentheses Problem
 
     from pythonds.basic.stack import Stack
 
@@ -455,9 +470,9 @@ Balanced Symbols (A General Case)
 The balanced parentheses problem shown above is a specific case of a
 more general situation that arises in many programming languages. The
 general problem of balancing and nesting different kinds of opening and
-closing symbols properly occurs frequently. For example, in Python
-square brackets, [ and ], are used for lists; curly braces, { and }, are
-used for dictionaries; and parentheses, ( and ), are used for tuples and
+closing symbols occurs frequently. For example, in Python
+square brackets, ``[`` and ``]``, are used for lists; curly braces, ``{`` and ``}``, are
+used for dictionaries; and parentheses, ``(`` and ``)``, are used for tuples and
 arithmetic expressions. It is possible to mix symbols as long as each
 maintains its own open and close relationship. Strings of symbols such
 as
@@ -493,8 +508,8 @@ the two symbols do not match, the string is not balanced. Once again, if
 the entire string is processed and nothing is left on the stack, the
 string is correctly balanced.
 
-The Python program to implement this is shown in :ref:`Listing 4 <lst_parcheck2>`.
-The only change appears in line 17 where we call a helper function to
+The Python program to implement this is shown in :ref:`ActiveCode 5 <lst_parcheck2>`.
+The only change appears in line 16 where we call a helper function, ``matches``, to
 assist with symbol-matching. Each symbol that is removed from the stack
 must be checked to see that it matches the current closing symbol. If a
 mismatch occurs, the boolean variable ``balanced`` is set to ``False``.
@@ -502,8 +517,10 @@ mismatch occurs, the boolean variable ``balanced`` is set to ``False``.
 .. _lst_parcheck2:
 
 .. activecode :: parcheck2
+   :caption: Solving the General Balanced Symbol Problem
 
    from pythonds.basic.stack import Stack
+   
    def parChecker(symbolString):
        s = Stack()
        balanced = True
@@ -529,13 +546,17 @@ mismatch occurs, the boolean variable ``balanced`` is set to ``False``.
        opens = "([{"
        closers = ")]}"
        return opens.index(open) == closers.index(close)
+       
+
+   print(parChecker('{{([][])}()}'))
+   print(parChecker('[{()]'))
 
 These two examples show that stacks are very important data structures
 for the processing of language constructs in computer science. Almost
 any notation you can think of has some type of nested symbol that must
 be matched in a balanced order. There are a number of other important
 uses for stacks in computer science. We will continue to explore them
-next.
+in the next sections.
 
 Converting Decimal Numbers to Binary Numbers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -581,23 +602,25 @@ appropriate data structure for solving the problem.
 .. figure:: Figures/dectobin.png
    :align: center
 
-   Decimal-to-Binary Conversion
+   Figure 5: Decimal-to-Binary Conversion
 
 
-The Python code in :ref:`Listing 5 <lst_binconverter>` implements the Divide by 2
+The Python code in :ref:`ActiveCode 6 <lst_binconverter>` implements the Divide by 2
 algorithm. The function ``divideBy2`` takes an argument that is a
-decimal number and repeatedly divides it by 2. Line 6 uses the built-in
-modulo operator, %, to extract the remainder and line 7 then pushes it
+decimal number and repeatedly divides it by 2. Line 7 uses the built-in
+modulo operator, %, to extract the remainder and line 8 then pushes it
 on the stack. After the division process reaches 0, a binary string is
-constructed in lines 10–12. Line 10 creates an empty string. The binary
+constructed in lines 11-13. Line 11 creates an empty string. The binary
 digits are popped from the stack one at a time and appended to the
 right-hand end of the string. The binary string is then returned.
 
 .. _lst_binconverter:
 
 .. activecode:: divby2
+   :caption: Converting from Decimal to Binary
 
    from pythonds.basic.stack import Stack
+   
    def divideBy2(decNumber):
        remstack = Stack()
 
@@ -632,7 +655,7 @@ and
 The function ``divideBy2`` can be modified to accept not only a decimal
 value but also a base for the intended conversion. The “Divide by 2”
 idea is simply replaced with a more general “Divide by base.” A new
-function called ``baseConverter``, shown in :ref:`Listing 6 <lst_baseconverter>`,
+function called ``baseConverter``, shown in :ref:`ActiveCode 7 <lst_baseconverter>`,
 takes a decimal number and any base between 2 and 16 as parameters. The
 remainders are still pushed onto the stack until the value being
 converted becomes 0. The same left-to-right string construction
@@ -647,8 +670,10 @@ beyond 9.
 .. _lst_baseconverter:
 
 .. activecode:: baseconvert
+    :caption: Converting from Decimal to any Base
 
     from pythonds.basic.stack import Stack
+    
     def baseConverter(decNumber,base):
         digits = "0123456789ABCDEF"
 
@@ -666,11 +691,12 @@ beyond 9.
         return newString
 
     print(baseConverter(25,2))
+    print(baseConverter(25,16))
 
 A solution to this problem is to extend the digit set to include some
 alphabet characters. For example, hexadecimal uses the ten decimal
 digits along with the first six alphabet characters for the 16 digits.
-To implement this, a digit string is created (line 3 in
+To implement this, a digit string is created (line 4 in
 :ref:`Listing 6 <lst_baseconverter>`) that stores the digits in their corresponding
 positions. 0 is at position 0, 1 is at position 1, A is at position 10,
 B is at position 11, and so on. When a remainder is removed from the
@@ -781,14 +807,15 @@ relative to one another.
 
 .. _tbl_example1:
 
-============================ ======================= ========================
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
-============================ ======================= ========================
-                       A + B                  \+ A B                    A B +
-                  A + B \* C             \+ A \* B C               A B C \* +
-============================ ======================= ========================
+.. table:: **Table 2: Examples of Infix, Prefix, and Postfix**
 
-     Examples of Infix, Prefix, and Postfix
+    ============================ ======================= ========================
+            **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+    ============================ ======================= ========================
+                           A + B                  \+ A B                    A B +
+                      A + B \* C             \+ A \* B C               A B C \* +
+    ============================ ======================= ========================
+
 
 Now consider the infix expression (A + B) \* C. Recall that in this
 case, infix requires the parentheses to force the performance of the
@@ -812,13 +839,14 @@ ways, this makes infix the least desirable notation to use.
 
 .. _tbl_parexample:
 
-============================ ======================= ========================
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
-============================ ======================= ========================
-                (A + B) \* C              \* + A B C               A B + C \*
-============================ ======================= ========================
+.. table:: **Table 3: An Expression with Parentheses**
 
-    An Expression with Parentheses
+    ============================ ======================= ========================
+            **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+    ============================ ======================= ========================
+                    (A + B) \* C              \* + A B C               A B + C \*
+    ============================ ======================= ========================
+
 
 :ref:`Table 4 <tbl_example3>` shows some additional examples of infix expressions and
 the equivalent prefix and postfix expressions. Be sure that you
@@ -827,16 +855,17 @@ operations being performed.
 
 .. _tbl_example3:
 
-============================ ======================= ========================
-        **Infix Expression**   **Prefix Expression**   **Postfix Expression**
-============================ ======================= ========================
-              A + B \* C + D        \+ \+ A \* B C D           A B C \* + D +
-          (A + B) \* (C + D)          \* + A B + C D           A B + C D + \*
-             A \* B + C \* D        \+ \* A B \* C D          A B \* C D \* +
-               A + B + C + D          \+ + + A B C D            A B + C + D +
-============================ ======================= ========================
+.. table:: **Table 4: Additional Examples of Infix, Prefix, and Postfix**
 
-    Additional Examples of Infix, Prefix, and Postfix
+    ============================ ======================= ========================
+            **Infix Expression**   **Prefix Expression**   **Postfix Expression**
+    ============================ ======================= ========================
+                  A + B \* C + D        \+ \+ A \* B C D           A B C \* + D +
+              (A + B) \* (C + D)          \* + A B + C D           A B + C D + \*
+                 A \* B + C \* D        \+ \* A B \* C D          A B \* C D \* +
+                   A + B + C + D          \+ + + A B C D            A B + C + D +
+    ============================ ======================= ========================
+
 
 Conversion of Infix Expressions to Prefix and Postfix
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -867,7 +896,7 @@ expression would result (see :ref:`Figure 6 <fig_moveright>`).
 .. figure:: Figures/moveright.png
    :align: center
 
-   Moving Operators to the Right for Postfix Notation
+   Figure 6: Moving Operators to the Right for Postfix Notation
 
 If we do the same thing but instead of moving the symbol to the position
 of the right parenthesis, we move it to the left, we get prefix notation
@@ -879,7 +908,7 @@ actually a clue to the final position of the enclosed operator.
 .. figure:: Figures/moveleft.png
    :align: center
 
-   Moving Operators to the Left for Prefix Notation
+   Figure 7: Moving Operators to the Left for Prefix Notation
 
 
 So in order to convert an expression, no matter how complex, to either
@@ -897,7 +926,7 @@ notations.
 .. figure:: Figures/complexmove.png
    :align: center
 
-   Converting a Complex Expression to Prefix and Postfix Notations
+   Figure 8: Converting a Complex Expression to Prefix and Postfix Notations
 
 General Infix-to-Postfix Conversion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -989,7 +1018,7 @@ operators and placing + as the last operator in the postfix expression.
 .. figure:: Figures/intopost.png
    :align: center
 
-   Converting A \* B + C \* D to Postfix Notation
+   Figure 9: Converting A \* B + C \* D to Postfix Notation
 
 In order to code the algorithm in Python, we will use a dictionary
 called ``prec`` to hold the precedence values for the operators. This
@@ -997,12 +1026,10 @@ dictionary will map each operator to an integer that can be compared
 against the precedence levels of other operators (we have arbitrarily
 used the integers 3, 2, and 1). The left parenthesis will receive the
 lowest value possible. This way any operator that is compared against it
-will have higher precedence and will be placed on top of it. Note that
-we have also imported the string module which contains a number of
-predefined variables. In this case we are using a string containing all
-possible upper-case alphabet characters ({string.ascii\_uppercase}) to
-represent all possible operands. The complete conversion function is
-shown in :ref:`Listing 7 <lst_intopost>`.
+will have higher precedence and will be placed on top of it. 
+Line 15 defines the operands to be any upper-case character or digit.
+The complete conversion function is
+shown in :ref:`ActiveCode 8 <lst_intopost>`.
 
 .. _lst_intopost:
 
@@ -1047,7 +1074,7 @@ shown in :ref:`Listing 7 <lst_intopost>`.
 
 --------------
 
-A few examples of execution in the Python shell are shown below.
+A few more examples of execution in the Python shell are shown below.
 
 ::
 
@@ -1095,7 +1122,7 @@ expression is being processed.
 .. figure:: Figures/evalpostfix1.png
    :align: center
 
-   Stack Contents During Evaluation
+   Figure 10: Stack Contents During Evaluation
 
 
 :ref:`Figure 11 <fig_evalpost2>` shows a slightly more complex example, 7 8 + 3 2
@@ -1114,7 +1141,7 @@ the order of the operands is not switched.
 .. figure:: Figures/evalpostfix2.png
    :align: center
 
-   A More Complex Example of Evaluation
+   Figure 11: A More Complex Example of Evaluation
 
 
 Assume the postfix expression is a string of tokens delimited by spaces.
@@ -1140,7 +1167,7 @@ single-digit integer values. The output will be an integer result.
    is on the stack. Pop the ``operandStack`` and return the value.
 
 The complete function for the evaluation of postfix expressions is shown
-in :ref:`Listing 8 <lst_postfixeval>`. To assist with the arithmetic, a helper
+in :ref:`ActiveCode 9 <lst_postfixeval>`. To assist with the arithmetic, a helper
 function ``doMath`` is defined that will take two operands and an
 operator and then perform the proper arithmetic operation.
 
@@ -1174,6 +1201,8 @@ operator and then perform the proper arithmetic operation.
            return op1 + op2
        else:
            return op1 - op2
+           
+   print(postfixEval('7 8 + 3 2 + /'))
 
 It is important to note that in both the postfix conversion and the
 postfix evaluation programs we assumed that there were no errors in the

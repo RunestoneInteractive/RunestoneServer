@@ -9,11 +9,14 @@
 ..  shortname:: ComplexRecursion    
 ..  description:: Recursion that uses many calls
 
+.. highlight:: python
+    :linenothreshold: 500
+
 Complex Recursive Problems
 --------------------------
 
 In the previous sections we looked at some problems that are relatively
-easy to solve, and some graphically interesting problems that can help
+easy to solve and some graphically interesting problems that can help
 us gain a mental model of what is happening in a recursive algorithm. In
 this section we will look at some problems that are really difficult to
 solve using an iterative programming style but are very elegant and easy
@@ -56,7 +59,7 @@ and poles–a pile of books or pieces of paper will work.
    :alt: image
 
    
-   An Example Arrangement of Disks for the Tower of Hanoi
+   Figure 1: An Example Arrangement of Disks for the Tower of Hanoi
 
 How do we go about solving this problem recursively? How would you go
 about solving this problem at all? What is our base case? Let’s think
@@ -98,6 +101,11 @@ Tower of Hanoi puzzle.
 
 .. _lst_hanoi:
 
+**Listing 1**
+
+.. highlight:: python
+    :linenothreshold: 2
+
 ::
 
     def moveTower(height,fromPole, toPole, withPole):
@@ -105,6 +113,9 @@ Tower of Hanoi puzzle.
             moveTower(height-1,fromPole,withPole,toPole)
             moveDisk(fromPole,toPole)
             moveTower(height-1,withPole,toPole,fromPole)
+            
+.. highlight:: python
+    :linenothreshold: 500
 
 Notice that the code in :ref:`Listing 1 <lst_hanoi>` is almost identical to the
 English description. The key to the simplicity of the algorithm is that
@@ -126,14 +137,17 @@ that it gives you a very efficient solution to the puzzle.
 
 .. _lst_movedisk:
 
+**Listing 2**
+
 ::
 
     def moveDisk(fp,tp):
         print("moving disk from",fp,"to",tp)
         
-The following activecode program provides the entire solution for three disks.
+The program in ActiveCode 1 provides the entire solution for three disks.
         
 .. activecode:: hanoi
+    :caption: Solving Tower of Hanoi Recursively
 
     def moveTower(height,fromPole, toPole, withPole):
         if height >= 1:
@@ -143,7 +157,7 @@ The following activecode program provides the entire solution for three disks.
 
     def moveDisk(fp,tp):
         print("moving disk from",fp,"to",tp)
-        
+    
     moveTower(3,"A","B","C")
 
 Now that you have seen the code for both ``moveTower`` and ``moveDisk``,
@@ -151,14 +165,13 @@ you may be wondering why we do not have a data structure that explicitly
 keeps track of what disks are on what poles. Here is a hint: if you were
 going to explicitly keep track of the disks, you would probably use
 three ``Stack`` objects, one for each pole. The answer is that Python
-provides the stacks that we need implicitly through the call stack, just
-like it did in the ``toStr`` problem.
+provides the stacks that we need implicitly through the call stack.
 
 Exploring a Maze
 ----------------
 
 In this section we will look at a problem that has relevance to the
-expanding world of robotics, finding your way out of a maze. If you have
+expanding world of robotics: How do you find your way out of a maze? If you have
 a Roomba vacuum cleaner for your dorm room (don’t all college students?)
 you will wish that you could reprogram it using what you have learned in
 this section. The problem we want to solve is to help our turtle find
@@ -167,7 +180,7 @@ Greek myth about Theseus who was sent into a maze to kill the minotaur.
 Theseus used a ball of thread to help him find his way back out again
 once he had finished off the beast. In our problem we will assume that
 our turtle is dropped down somewhere into the middle of the maze and
-must find its way out. Look at :ref:`Figure 3 <fig_mazescreen>` to get an idea of
+must find its way out. Look at :ref:`Figure 2 <fig_mazescreen>` to get an idea of
 where we are going in this section.
 
 .. _fig_mazescreen:
@@ -175,7 +188,7 @@ where we are going in this section.
 .. figure:: Figures/maze.png
    :align: center
 
-   The Finished Maze Search Program
+   Figure 2: The Finished Maze Search Program
 
 
 To make it easier for us we will assume that our maze is divided up into
@@ -263,6 +276,11 @@ function the search logically starts again with each recursive call.
 
 .. _lst_mazesearch:
 
+.. highlight:: python
+    :linenothreshold: 5
+    
+**Listing 3**
+
 ::
 
     def searchFrom(maze, startRow, startColumn):
@@ -318,12 +336,15 @@ The code for the ``Maze`` class is shown in :ref:`Listing 4 <lst_maze>`, :ref:`L
 The ``__init__`` method takes the name of a file as its
 only parameter. This file is a text file that represents a maze by using
 “+” characters for walls, spaces for open squares, and the letter “S” to
-indicate the starting position. :ref:`Figure 4 <fig_exmaze>` is an example of a
+indicate the starting position. :ref:`Figure 3 <fig_exmaze>` is an example of a
 maze data file. The internal representation of the maze is a list of
 lists. Each row of the ``mazelist`` instance variable is also a list.
 This secondary list contains one character per square using the
-characters described above. For the data file in :ref:`Figure 4 <fig_exmaze>` the
+characters described above. For the data file in :ref:`Figure 3 <fig_exmaze>` the
 internal representation looks like the following:
+
+.. highlight:: python
+    :linenothreshold: 500
 
 ::
 
@@ -340,25 +361,27 @@ internal representation looks like the following:
       ['+','+','+','+',...,'+','+','+',' ','+','+','+']]
 
 The ``drawMaze`` method uses this internal representation to draw the
-initial view of the maze on the screen, see :ref:`Figure 3 <fig_mazescreen>`.
+initial view of the maze on the screen.
 
 .. _fig_exmaze:
 
-    ::
 
-                  ++++++++++++++++++++++
-                  +   +   ++ ++     +   
-                  + +   +       +++ + ++
-                  + + +  ++  ++++   + ++
-                  +++ ++++++    +++ +  +
-                  +          ++  ++    +
-                  +++++ ++++++   +++++ +
-                  +     +   +++++++  + +
-                  + +++++++      S +   +
-                  +                + +++
-                  ++++++++++++++++++ +++
+Figure 3: An Example Maze Data File
 
-    An Example Maze Data File
+::
+    
+      ++++++++++++++++++++++
+      +   +   ++ ++     +   
+      + +   +       +++ + ++
+      + + +  ++  ++++   + ++
+      +++ ++++++    +++ +  +
+      +          ++  ++    +
+      +++++ ++++++   +++++ +
+      +     +   +++++++  + +
+      + +++++++      S +   +
+      +                + +++
+      ++++++++++++++++++ +++
+
 
 The ``updatePosition`` method, as shown in :ref:`Listing 5 <lst_maze1>` uses the
 same internal representation to see if the turtle has run into a wall.
@@ -374,6 +397,11 @@ has navigated to the edge of the maze, either row zero or column zero,
 or the far right column or the bottom row.
 
 .. _lst_maze:
+
+**Listing 4**
+
+.. highlight:: python
+    :linenothreshold: 500
 
 ::
 
@@ -409,6 +437,8 @@ or the far right column or the bottom row.
                                 (rowsInMaze-1)/2+.5)
 
 .. _lst_maze1:
+
+**Listing 5**
 
 ::
 
@@ -466,9 +496,11 @@ or the far right column or the bottom row.
 
 .. _lst_maze2:
 
+**Listing 6**
+
 ::
 
-        def isExit(self,row,col):
+       def isExit(self,row,col):
             return (row == 0 or
                     row == self.rowsInMaze-1 or
                     col == 0 or
@@ -478,7 +510,7 @@ or the far right column or the bottom row.
             return self.mazelist[idx]
 
 
-The complete program is given below as an activecode example.  This program uses the data file ``maze2.txt`` shown below.
+The complete program is shown in ActiveCode 2.  This program uses the data file ``maze2.txt`` shown below.
 Note that it is a much more simple example file in that the exit is very close to the starting position of the turtle.
 
 .. raw:: html
@@ -498,6 +530,7 @@ Note that it is a much more simple example file in that the exit is very close t
     </pre>
 
 .. activecode:: completemaze
+    :caption: Complete Maze Solver
 
     import turtle
 
@@ -711,6 +744,12 @@ where we satisfy the base case condition immediately.
 
 .. _lst_change1:
 
+
+.. highlight:: python
+    :linenothreshold: 5
+
+**Listing 7**
+
 ::
 
     def recMC(coinValueList,change):
@@ -725,6 +764,10 @@ where we satisfy the base case condition immediately.
        return minCoins
 
     print(recMC([1,5,10,25],63))
+
+
+.. highlight:: python
+    :linenothreshold: 500
 
 The trouble with the algorithm in :ref:`Listing 7 <lst_change1>` is that it is
 extremely inefficient. In fact, it takes 67,716,925 recursive calls to
@@ -747,12 +790,12 @@ results.
 
 .. _fig_c1ct:
 
-    .. figure:: Figures/callTree.png
-       :align: center
-       :width: 100%
-       :alt: image
+.. figure:: Figures/callTree.png
+   :align: center
+   :width: 100%
+   :alt: image
 
-       Call Tree for Listing 7
+   Figure 3: Call Tree for Listing 7
 
 The key to cutting down on the amount of work we do is to remember some
 of the past results so we can avoid recomputing results we already know.
@@ -760,12 +803,13 @@ A simple solution is to store the results for the minimum number of
 coins in a table when we find them. Then before we compute a new
 minimum, we first check the table to see if a result is already known.
 If there is already a result in the table, we use the value from the
-table rather than recomputing. :ref:`Listing 8 <lst_change2>` shows a modified
+table rather than recomputing. :ref:`ActiveCode 3 <lst_change2>` shows a modified
 algorithm to incorporate our table lookup scheme.
 
 .. _lst_change2:
 
 .. activecode:: lst_change2
+    :caption: Recursively Counting Coins with Table Lookup
 
     def recDC(coinValueList,change,knownResults):
        minCoins = change
@@ -792,7 +836,7 @@ minimum in the table. Using this modified algorithm reduces the number
 of recursive calls we need to make for the four coin, 63 cent problem to
 221 calls!
 
-Although the algorithm in :ref:`Listing 8 <lst_change2>` is correct, it looks and
+Although the algorithm in :ref:`AcitveCode 3 <lst_change2>` is correct, it looks and
 feels like a bit of a hack.  Also, if we look at the ``knownResults`` lists
 we can see that there are some holes in the table. In fact the term for
 what we have done is not dynamic programming but rather we have improved
@@ -807,7 +851,7 @@ of the algorithm we already know the minimum number of coins needed to
 make change for any smaller amount.
 
 Let’s look at how we would fill in a table of minimum coins to use in
-making change for 11 cents. :ref:`Figure 6 <fig_dpcoins>` illustrates the
+making change for 11 cents. :ref:`Figure 4 <fig_dpcoins>` illustrates the
 process. We start with one cent. The only solution possible is one coin
 (a penny). The next row shows the minimum for one cent and two cents.
 Again, the only solution is two pennies. The fifth row is where things
@@ -817,7 +861,7 @@ that the number of coins needed to make change for four cents is four,
 plus one more penny to make five, equals five coins. Or we can look at
 zero cents plus one more nickel to make five cents equals 1 coin. Since
 the minimum of one and five is one we store 1 in the table. Fast forward
-again to the end of the table and consider 11 cents. :ref:`Figure 7 <fig_eleven>`
+again to the end of the table and consider 11 cents. :ref:`Figure 5 <fig_eleven>`
 shows the three options that we have to consider:
 
 #. A penny plus the minimum number of coins to make change for
@@ -838,7 +882,7 @@ minimum number of coins for 11 cents.
    :align: center
    :alt: image
        
-   Minimum Number of Coins Needed to Make Change
+   Figure 4: Minimum Number of Coins Needed to Make Change
 
 .. _fig_eleven:
 
@@ -846,9 +890,9 @@ minimum number of coins for 11 cents.
    :align: center
    :alt: image
 
-   Three Options to Consider for the Minimum Number of Coins for Eleven Cents
+   Figure 5: Three Options to Consider for the Minimum Number of Coins for Eleven Cents
 
-:ref:`Listing 9 <lst_dpchange>` is a dynamic programming algorithm to solve our
+:ref:`Listing 8 <lst_dpchange>` is a dynamic programming algorithm to solve our
 change-making problem. ``dpMakeChange`` takes three parameters: a list
 of valid coin values, the amount of change we want to make, and a list
 of the minimum number of coins needed to make each value. When the
@@ -856,6 +900,8 @@ function is done ``minCoins`` will contain the solution for all values
 from 0 to the value of ``change``.
 
 .. _lst_dpchange:
+
+**Listing 8**
 
 ::
 
@@ -888,7 +934,7 @@ entry in the table that tells us the last coin we added to make that
 amount. We can keep tracing back through the table until we get to the
 beginning. 
 
-:ref:`Listing 10 <lst_dpremember>` shows the ``dpMakeChange`` algorithm
+:ref:`ActiveCode 4 <lst_dpremember>` shows the ``dpMakeChange`` algorithm
 modified to keep track of the coins used, along with a function
 ``printCoins`` that walks backward through the table to print out the
 value of each coin used.
@@ -909,6 +955,7 @@ array also contains 21, giving us the three 21 cent pieces.
 .. _lst_dpremember:
 
 .. activecode:: lst_dpremember
+    :caption: Complete Solution to the Change Problem
 
     def dpMakeChange(coinValueList,change,minCoins,coinsUsed):
        for cents in range(change+1):

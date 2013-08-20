@@ -12,6 +12,10 @@
 .. qnum::
    :prefix: srch-
    :start: 1
+   
+.. highlight:: python
+   :linenothreshold: 500
+   
 
 Sorting and Searching
 =====================
@@ -82,11 +86,11 @@ the item we were searching for was not present.
 .. figure:: Figures/seqsearch.png
    :align: center
 
-   Sequential Search of a List of Integers
+   Figure 1: Sequential Search of a List of Integers
 
 
 The Python implementation for this algorithm is shown in
-:ref:`Listing 1 <lst_seqsearchpython>`. The function needs the list and the item we
+:ref:`CodeLens 1 <lst_seqsearchpython>`. The function needs the list and the item we
 are looking for and returns a boolean value as to whether it is present.
 The boolean variable ``found`` is initialized to ``False`` and is
 assigned the value ``True`` if we discover the item in the list.
@@ -144,15 +148,16 @@ approximation, so the complexity of the sequential search, is
 
 .. _tbl_seqsearchtable:
 
-==================== ========================== ========================== ========================
-**Case**                      **Best Case**             **Worst Case**         **Average Case**
-==================== ========================== ========================== ========================
-item is present      :math:`1`                  :math:`n`                  :math:`\frac{n}{2}`
-item is not present  :math:`n`                  :math:`n`                  :math:`n`
-==================== ========================== ========================== ========================
+.. table:: **Table 1: Comparisons Used in a Sequential Search of an Unordered List**
+
+    ==================== ========================== ========================== ========================
+    **Case**                      **Best Case**             **Worst Case**         **Average Case**
+    ==================== ========================== ========================== ========================
+    item is present      :math:`1`                  :math:`n`                  :math:`\frac{n}{2}`
+    item is not present  :math:`n`                  :math:`n`                  :math:`n`
+    ==================== ========================== ========================== ========================
 
 
-    Comparisons Used in a Sequential Search of an Unordered List
 
 
 
@@ -173,7 +178,7 @@ something extra. Not only is 54 not the item we are looking for, but no
 other elements beyond 54 can work either since the list is sorted. In
 this case, the algorithm does not have to continue looking through all
 of the items to report that the item was not found. It can stop
-immediately. :ref:`Listing 2 <lst_seqsearchpython2>` shows this variation of the
+immediately. :ref:`CodeLens 2 <lst_seqsearchpython2>` shows this variation of the
 sequential search function.
 
 .. _fig_seqsearch2:
@@ -181,7 +186,7 @@ sequential search function.
 .. figure:: Figures/seqsearch2.png
    :align: center
 
-   Sequential Search of an Ordered List of Integers
+   Figure 2: Sequential Search of an Ordered List of Integers
 
 
 
@@ -218,14 +223,15 @@ the list only in the case where we do not find the item.
 
 .. _tbl_seqsearchtable2:
 
+.. table:: **Table 2: Comparisons Used in Sequential Search of an Ordered List**
+
+
      ================ ============== ==============  ===================
                       **Best Case**  **Worst Case**  **Average Case**
      ================ ============== ==============  ===================
      item is present  :math:`1`        :math:`n`     :math:`\frac{n}{2}`
      item not present :math:`1`        :math:`n`     :math:`\frac{n}{2}`
      ================ ============== ==============  ===================
-
-    Comparisons Used in Sequential Search of an Ordered List
 
 
 .. admonition:: Self Check
@@ -241,7 +247,7 @@ the list only in the case where we do not find the item.
       :feedback_c: No, remember in a sequential search you start at the beginning and check each key until you find what you are looking for or exhaust the list.
       :feedback_d: In this case only 2 comparisons were needed to find the key.
 
-      Suppose you are doing a sequential search of the list <br> [15, 18, 2, 19, 18, 0, 8, 14, 19, 14].  How many comparisons would you need to do in order to find the key 18?
+      Suppose you are doing a sequential search of the list [15, 18, 2, 19, 18, 0, 8, 14, 19, 14].  How many comparisons would you need to do in order to find the key 18?
 
    .. mchoicemf:: question_SRCH_2
       :correct: c
@@ -254,7 +260,7 @@ the list only in the case where we do not find the item.
       :feedback_c: Since 14 is greater than the key value 13 you can stop.
       :feedback_d: Because 12 is less than the key value 13 you need to keep going.
 
-      Suppose you are doing a sequential search of the ordered list <br> [3, 5, 6, 8, 11, 12, 14, 15, 17, 18].  How many comparisons would you need to do in order to find the key 13?
+      Suppose you are doing a sequential search of the ordered list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18].  How many comparisons would you need to do in order to find the key 13?
 
 The Binary Search
 ~~~~~~~~~~~~~~~~~
@@ -277,7 +283,7 @@ item and compare it against what we are looking for. Again, we either
 find it or split the list in half, therefore eliminating another large
 part of our possible search space. :ref:`Figure 3 <fig_binsearch>` shows how this
 algorithm can quickly find the value 54. The complete function is shown
-in :ref:`Listing 3 <lst_binarysearchpy>`.
+in :ref:`CodeLens 3 <lst_binarysearchpy>`.
 
 
 .. _fig_binsearch:
@@ -285,7 +291,7 @@ in :ref:`Listing 3 <lst_binarysearchpy>`.
 .. figure:: Figures/binsearch.png
    :align: center
 
-   Binary Search of an Ordered List of Integers
+   Figure 3: Binary Search of an Ordered List of Integers
 
 
 .. _lst_binarysearchpy:
@@ -323,7 +329,7 @@ middle item. If the item we are searching for is less than the middle
 item, we can simply perform a binary search of the left half of the
 original list. Likewise, if the item is greater, we can perform a binary
 search of the right half. Either way, this is a recursive call to the
-binary search function passing a smaller list. :ref:`Listing 4 <lst_recbinarysearch>`
+binary search function passing a smaller list. :ref:`CodeLens 4 <lst_recbinarysearch>`
 shows this recursive version.
 
 .. _lst_recbinarysearch:
@@ -365,18 +371,18 @@ answer.
 
 .. _tbl_binaryanalysis:
 
+.. table:: **Table 3: Tabular Analysis for a Binary Search**
 
-======================== ====================================== 
-         **Comparisons**   **Approximate Number of Items Left** 
-======================== ====================================== 
-                       1                   :math:`\frac {n}{2}` 
-                       2                   :math:`\frac {n}{4}` 
-                       3                   :math:`\frac {n}{8}` 
-                     ...                                        
-                       i                 :math:`\frac {n}{2^i}` 
-======================== ====================================== 
+    ======================== ====================================== 
+             **Comparisons**   **Approximate Number of Items Left** 
+    ======================== ====================================== 
+                           1                   :math:`\frac {n}{2}` 
+                           2                   :math:`\frac {n}{4}` 
+                           3                   :math:`\frac {n}{8}` 
+                         ...                                        
+                           i                 :math:`\frac {n}{2^i}` 
+    ======================== ====================================== 
 
-    Tabular Analysis for a Binary Search
 
 When we split the list enough times, we end up with a list that has just
 one item. Either that is the item we are looking for or it is not.
@@ -423,7 +429,7 @@ performing a sequential search from the start may be the best choice.
       :feedback_c: Binary search does not start at the beginning and search sequentially, its starts in the middle and halves the list after each compare.
       :feedback_d: It appears that you are starting from the end and halving the list each time.
 
-      Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm.  Which group of numbers correctly shows the sequence of comoparisons used to find the key 8.
+      Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm.  Which group of numbers correctly shows the sequence of comparisons used to find the key 8.
 
    .. mchoicemf:: BSRCH_2
       :correct: d
@@ -470,7 +476,7 @@ In other words, there are *m* slots in the table, named 0 through 10.
 .. figure:: Figures/hashtable.png
    :align: center
 
-   Hash Table with 11 Empty Slots
+   Figure 4: Hash Table with 11 Empty Slots
 
 
 The mapping between an item and the slot where that item belongs in the
@@ -487,18 +493,20 @@ functions, since the result must be in the range of slot names.
 
 .. _tbl_hashvalues1:
 
-================= ================ 
-         **Item**   **Hash Value** 
-================= ================ 
-               54               10 
-               26                4 
-               93                5 
-               17                6 
-               77                0 
-               31                9 
-================= ================ 
+.. table:: **Table 4: Simple Hash Function Using Remainders**
 
-    Simple Hash Function Using Remainders
+
+    ================= ================ 
+             **Item**   **Hash Value** 
+    ================= ================ 
+                   54               10 
+                   26                4 
+                   93                5 
+                   17                6 
+                   77                0 
+                   31                9 
+    ================= ================ 
+
 
 Once the hash values have been computed, we can insert each item into
 the hash table at the designated position as shown in
@@ -513,7 +521,7 @@ is referred to as the **load factor**, and is commonly denoted by
 .. figure:: Figures/hashtable2.png
    :align: center
 
-   Hash Table with Six Items
+   Figure 5: Hash Table with Six Items
 
 
 Now when we want to search for an item, we simply use the hash function
@@ -583,18 +591,20 @@ understand how these values were computed.
 
 .. _tbl_hashvalues2:
 
-================= =============== ================ 
-         **Item**   **Remainder**   **Mid-Square** 
-================= =============== ================ 
-               54              10                3 
-               26               4                7 
-               93               5                9 
-               17               6                8 
-               77               0                4 
-               31               9                6 
-================= =============== ================ 
+.. table:: **Table 5: Comparison of Remainder and Mid-Square Methods**
 
-    {Comparison of Remainder and Mid-Square Methods}
+
+    ================= =============== ================ 
+             **Item**   **Remainder**   **Mid-Square** 
+    ================= =============== ================ 
+                   54              10                3 
+                   26               4                7 
+                   93               5                9 
+                   17               6                8 
+                   77               0                4 
+                   31               9                6 
+    ================= =============== ================ 
+
 
 We can also create hash functions for character-based items such as
 strings. The word “cat” can be thought of as a sequence of ordinal
@@ -610,8 +620,8 @@ values.
     116
 
 We can then take these three ordinal values, add them up, and use the
-remainder method to get a ``hash`` value (see :ref:`Figure 6 <fig_stringhash>`).
-:ref:`Listing 5 <lst_hashfunction1>` shows a function called ``hash`` that takes a
+remainder method to get a hash value (see :ref:`Figure 6 <fig_stringhash>`).
+:ref:`Listing 1 <lst_hashfunction1>` shows a function called ``hash`` that takes a
 string and a table size and returns the hash value in the range from 0
 to ``tablesize``-1.
 
@@ -621,10 +631,12 @@ to ``tablesize``-1.
 .. figure:: Figures/stringhash.png
    :align: center
 
-   Hashing a String Using Ordinal Values
+   Figure 6: Hashing a String Using Ordinal Values
 
 
 .. _lst_hashfunction1:
+
+**Listing 1**
 
 ::
 
@@ -634,8 +646,7 @@ to ``tablesize``-1.
             sum = sum + ord(astring[pos])
 
         return sum%tablesize
-
-Simple Hash Function for Strings
+        
 
 It is interesting to note that when using this hash function, anagrams
 will always be given the same hash value. To remedy this, we could use
@@ -648,7 +659,7 @@ modification to the ``hash`` function is left as an exercise.
 .. figure:: Figures/stringhash2.png
    :align: center
 
-   Hashing a String Using Ordinal Values with Weighting
+   Figure 7: Hashing a String Using Ordinal Values with Weighting
 
 
 You may be able to think of a number of additional ways to compute hash
@@ -698,7 +709,7 @@ and 2, and finally find an empty slot at position 3.
 .. figure:: Figures/linearprobing1.png
    :align: center
 
-   Collision Resolution with Linear Probing
+   Figure 8: Collision Resolution with Linear Probing
 
 
 Once we have built a hash table using open addressing and linear
@@ -725,7 +736,7 @@ finally find an open position. This cluster is shown in
 .. figure:: Figures/clustering.png
    :align: center
 
-   A Cluster of Items for Slot 0
+   Figure 9: A Cluster of Items for Slot 0
 
 
 One way to deal with clustering is to extend the linear probing
@@ -742,7 +753,7 @@ that is empty.
 .. figure:: Figures/linearprobing2.png
    :align: center
 
-   Collision Resolution Using “Plus 3”
+   Figure 10: Collision Resolution Using “Plus 3”
 
 
 The general name for this process of looking for another slot after a
@@ -771,7 +782,7 @@ this technique.
 .. figure:: Figures/quadratic.png
    :align: center
 
-   Collision Resolution with Quadratic Probing
+   Figure 11: Collision Resolution with Quadratic Probing
 
 
 An alternative method for handling the collision problem is to allow
@@ -788,7 +799,7 @@ table that uses chaining to resolve collisions.
 .. figure:: Figures/chaining.png
    :align: center
 
-   Collision Resolution with Chaining
+   Figure 12: Collision Resolution with Chaining
 
 
 When we want to search for an item, we use the hash function to generate
@@ -864,7 +875,7 @@ binary search but it would be even better to use a hash table as
 described above since looking up an item in a hash table can approach
 :math:`O(1)` performance.
 
-In :ref:`Listing x <lst_hashtablecodeconstructor>` we use two lists to create a
+In :ref:`Listing 2 <lst_hashtablecodeconstructor>` we use two lists to create a
 ``HashTable`` class that implements the Map abstract data type. One
 list, called ``slots``, will hold the key items and a parallel list,
 called ``data``, will hold the data values. When we look up a key, the
@@ -877,6 +888,8 @@ can be as efficient as possible.
 
 .. _lst_hashtablecodeconstructor:
 
+**Listing 2**
+
 ::
 
     class HashTable:
@@ -885,11 +898,10 @@ can be as efficient as possible.
             self.slots = [None] * self.size
             self.data = [None] * self.size
 
-Map ADT Implementation--Constructor
 
 ``hashfunction`` implements the simple remainder method. The collision
 resolution technique is linear probing with a “plus 1” rehash function.
-The ``put`` function (see :ref:`Listing x <lst_hashtablecodestore>`) assumes that
+The ``put`` function (see :ref:`Listing 3 <lst_hashtablecodestore>`) assumes that
 there will eventually be an empty slot unless the key is already present
 in the ``self.slots``. It computes the original hash value and if that
 slot is not empty, iterates the ``rehash`` function until an empty slot
@@ -897,6 +909,8 @@ occurs. If a nonempty slot already contains the key, the old data value
 is replaced with the new data value.
 
 .. _lst_hashtablecodestore:
+
+**Listing 3**
 
 ::
 
@@ -928,9 +942,7 @@ is replaced with the new data value.
         return (oldhash+1)%size
 
 
-Map ADT Implementation--Put Method
-
-Likewise, the ``get`` function (see :ref:`Listing x <lst_hashtablecodesearch>`)
+Likewise, the ``get`` function (see :ref:`Listing 4 <lst_hashtablecodesearch>`)
 begins by computing the initial hash value. If the value is not in the
 initial slot, ``rehash`` is used to locate the next possible position.
 Notice that line 15 guarantees that the search will terminate by
@@ -939,12 +951,17 @@ that happens, we have exhausted all possible slots and the item must not
 be present.
 
 The final methods of the ``HashTable`` class provide additional
-dictionary functionality. We overload the {\_\_getitem\_\_} and
-{\_\_setitem\_\_} methods to allow access using``[]``. This means that
+dictionary functionality. We overload the __getitem__ and
+__setitem__ methods to allow access using``[]``. This means that
 once a ``HashTable`` has been created, the familiar index operator will
 be available. We leave the remaining methods as exercises.
 
 .. _lst_hashtablecodesearch:
+
+**Listing 4**
+
+.. highlight:: python
+    :linenothreshold: 5
 
 ::
 
@@ -971,8 +988,13 @@ be available. We leave the remaining methods as exercises.
 
     def __setitem__(self,key,data):
         self.put(key,data)
-
-Map ADT Implementation -- Search Method
+        
+        
+        
+.. highlight:: python
+    :linenothreshold: 500
+    
+    
 
 The following session shows the ``HashTable`` class in action. First we
 will create a hash table and store some items with integer keys and
@@ -1013,6 +1035,92 @@ the value for the key 20 is being replaced.
            'tiger', None, None, 'cow', 'cat']
     >> print(H[99])
     None
+
+
+The complete hash table example can be found in ActiveCode 1.
+
+.. activecode:: hashtablecomplete
+   :caption: Complete Hash Table Example
+   :hidecode:
+   
+   class HashTable:
+       def __init__(self):
+           self.size = 11
+           self.slots = [None] * self.size
+           self.data = [None] * self.size
+
+       def put(self,key,data):
+         hashvalue = self.hashfunction(key,len(self.slots))
+
+         if self.slots[hashvalue] == None:
+           self.slots[hashvalue] = key
+           self.data[hashvalue] = data
+         else:
+           if self.slots[hashvalue] == key:
+             self.data[hashvalue] = data  #replace
+           else:
+             nextslot = self.rehash(hashvalue,len(self.slots))
+             while self.slots[nextslot] != None and \
+                             self.slots[nextslot] != key:
+               nextslot = self.rehash(nextslot,len(self.slots))
+
+             if self.slots[nextslot] == None:
+               self.slots[nextslot]=key
+               self.data[nextslot]=data
+             else:
+               self.data[nextslot] = data #replace
+
+       def hashfunction(self,key,size):
+            return key%size
+
+       def rehash(self,oldhash,size):
+           return (oldhash+1)%size
+
+       def get(self,key):
+         startslot = self.hashfunction(key,len(self.slots))
+
+         data = None
+         stop = False
+         found = False
+         position = startslot
+         while self.slots[position] != None and  \
+                              not found and not stop:
+            if self.slots[position] == key:
+              found = True
+              data = self.data[position]
+            else:
+              position=self.rehash(position,len(self.slots))
+              if position == startslot:
+                  stop = True
+         return data
+
+       def __getitem__(self,key):
+           return self.get(key)
+
+       def __setitem__(self,key,data):
+           self.put(key,data)
+
+   H=HashTable()
+   H[54]="cat"
+   H[26]="dog"
+   H[93]="lion"
+   H[17]="tiger"
+   H[77]="bird"
+   H[31]="cow"
+   H[44]="goat"
+   H[55]="pig"
+   H[20]="chicken"
+   print(H.slots)
+   print(H.data)
+
+   print(H[20])
+
+   print(H[17])
+   H[20]='duck'
+   print(H[20])
+   print(H[99])
+   
+    
 
 Analysis of Hashing
 ^^^^^^^^^^^^^^^^^^^

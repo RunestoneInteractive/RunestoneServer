@@ -9,6 +9,12 @@
 ..  shortname:: AlgorithmAnalysis
 ..  description:: This is the introduction to algorithm analysis and big O notation
 
+
+.. highlight:: python
+   :linenothreshold: 500
+
+
+
 Algorithm Analysis
 ==================
 
@@ -49,7 +55,7 @@ programming language. There may be many programs for the same algorithm,
 depending on the programmer and the programming language being used.
 
 To explore this difference further, consider the function shown in
-:ref:`Listing <lst_sum1>`. This function solves a familiar problem, computing the
+:ref:`ActiveCode 1 <lst_sum1>`. This function solves a familiar problem, computing the
 sum of the first *n* integers. The algorithm uses the idea of an
 accumulator variable that is initialized to 0. The solution then
 iterates through the *n* integers, adding each to the accumulator.
@@ -68,7 +74,7 @@ iterates through the *n* integers, adding each to the accumulator.
 
     print(sumOfN(10))
 
-Now look at the function in :ref:`Listing 2 <lst_sum2>`. At first glance it may look
+Now look at the function in :ref:`ActiveCode 2 <lst_sum2>`. At first glance it may look
 strange, but upon further inspection you can see that this function is
 essentially doing the same thing as the previous one. The reason this is
 not obvious is poor coding. We did not use good identifier names to
@@ -133,7 +139,9 @@ and then computing the difference, we can get an exact number of seconds
 
 .. _lst_sum11:
 
-::
+**Listing 1**
+
+.. sourcecode:: python
 
     import time
 
@@ -148,7 +156,7 @@ and then computing the difference, we can get an exact number of seconds
 
        return theSum,end-start
 
-:ref:`Listing 3 <lst_sum11>` shows the original ``sumOfN`` function with the timing
+:ref:`Listing 1 <lst_sum11>` shows the original ``sumOfN`` function with the timing
 calls embedded before and after the summation. The function returns a
 tuple consisting of the result and the amount of time (in seconds)
 required for the calculation. If we perform 5 invocations of the
@@ -200,7 +208,7 @@ consistent, averaging about 10 times more seconds. For ``n`` equal to
 In this case, the average again turns out to be about 10 times the
 previous.
 
-Now consider :ref:`Listing 3 <lst_sum3>`, which shows a different means of solving
+Now consider :ref:`ActiveCode 3 <lst_sum3>`, which shows a different means of solving
 the summation problem. This function, ``sumOfN3``, takes advantage of a
 closed equation :math:`\sum_{i=1}^{n} i = \frac {(n)(n+1)}{2}` to
 compute the sum of the first ``n`` integers without iterating.
@@ -270,8 +278,8 @@ assignment statements is 1 (:math:`theSum = 0`)
 plus the value of *n* (the number of times we perform
 :math:`theSum=theSum+i`). We can denote this by a function, call it T,
 where :math:`T(n)=1 + n`. The parameter *n* is often referred to as
-the “size of the problem,” and we can read this as “*T*(*n*) is the time
-it takes to solve a problem of size *n*, namely 1+*n* steps.”
+the “size of the problem,” and we can read this as “T(n) is the time
+it takes to solve a problem of size n, namely 1+n steps.”
 
 In the summation functions given above, it makes sense to use the number
 of terms in the summation to denote the size of the problem. We can then
@@ -328,27 +336,31 @@ cases the algorithm performs somewhere in between these two extremes
 (average case). It is important for a computer scientist to understand
 these distinctions so they are not misled by one particular case.
 
-.. _tbl_fntable:
-
-================= =============
-         **f(n)**      **Name**
-================= =============
-      :math:`1`      Constant
- :math:`\log n`   Logarithmic
-      :math:`n`        Linear
-:math:`n\log n`    Log Linear
-  :math:`n^{2}`     Quadratic
-  :math:`n^{3}`         Cubic
-  :math:`2^{n}`   Exponential
-================= =============
-
-    {Common Functions for Big-O}
 
 A number of very common order of magnitude functions will come up over
 and over as you study algorithms. These are shown in :ref:`Table 1 <tbl_fntable>`. In
 order to decide which of these functions is the dominant part of any
 :math:`T(n)` function, we must see how they compare with one another
-as *n* gets large. :ref:`Figure 1 <fig_graphfigure>` shows graphs of the common
+as *n* gets large.
+
+.. _tbl_fntable: 
+
+.. table:: **Table 1: Common Functions for Big-O**
+
+    ================= =============
+             **f(n)**      **Name**
+    ================= =============
+          :math:`1`      Constant
+     :math:`\log n`   Logarithmic
+          :math:`n`        Linear
+    :math:`n\log n`    Log Linear
+      :math:`n^{2}`     Quadratic
+      :math:`n^{3}`         Cubic
+      :math:`2^{n}`   Exponential
+    ================= =============
+
+
+:ref:`Figure 1 <fig_graphfigure>` shows graphs of the common
 functions from :ref:`Table 1 <tbl_fntable>`. Notice that when *n* is small, the
 functions are not very well defined with respect to one another. It is
 hard to tell which is dominant. However, as *n* grows, there is a
@@ -359,15 +371,17 @@ another.
 
 .. figure:: Figures/newplot.png
 
-   Plot of Common Big-O Functions
+   Figure 1: Plot of Common Big-O Functions
 
 
 As a final example, suppose that we have the fragment of Python code
-shown in :ref:`Listing 5 <lst_dummycode>`. Although this program does not really do
+shown in :ref:`Listing 2 <lst_dummycode>`. Although this program does not really do
 anything, it is instructive to see how we can take actual code and
 analyze performance.
 
 .. _lst_dummycode:
+
+**Listing 2**
 
 ::
 
@@ -401,7 +415,7 @@ ignored as *n* grows larger.
 
 .. figure:: Figures/newplot2.png
 
-   Comparing :math:`T(n)` with Common Big-O Functions
+   Figure 2: Comparing :math:`T(n)` with Common Big-O Functions
 
 
 :ref:`Figure 2 <fig_graphfigure2>` shows a few of the common Big-O functions as they
@@ -448,7 +462,7 @@ with the special Python value ``None``. However, since strings in Python
 are immutable, the first step in the process will be to convert the
 second string to a list. Each character from the first string can be
 checked against the characters in the list and if found, checked off by
-replacement. :ref:`Listing 6 <lst_anagramSolution>` shows this function.
+replacement. :ref:`ActiveCode 4 <lst_anagramSolution>` shows this function.
 
 .. _lst_anagramSolution:
 
@@ -504,7 +518,7 @@ Another solution to the anagram problem will make use of the fact that
 even though ``s1`` and ``s2`` are different, they are anagrams only if
 they consist of exactly the same characters. So, if we begin by sorting
 each string alphabetically, from a to z, we will end up with the same
-string if the original two strings are anagrams. :ref:`Listing 7 <lst_ana2>` shows
+string if the original two strings are anagrams. :ref:`ActiveCode 5 <lst_ana2>` shows
 this solution. Again, in Python we can use the built-in ``sort`` method
 on lists by simply converting each string to a list at the start.
 
@@ -554,7 +568,7 @@ there are *n* possible first characters, :math:`n-1` possible
 characters for the second position, :math:`n-2` for the third, and so
 on. The total number of candidate strings is
 :math:`n*(n-1)*(n-2)*...*3*2*1`, which is :math:`n!`. Although some
-of the strings may be duplicates the program cannot know this ahead of
+of the strings may be duplicates, the program cannot know this ahead of
 time and so it will still generate :math:`n!` different strings.
 
 It turns out that :math:`n!` grows even faster than :math:`2^{n}` as
@@ -575,7 +589,7 @@ character occurs. Since there are 26 possible characters, we can use a
 list of 26 counters, one for each possible character. Each time we see a
 particular character, we will increment the counter at that position. In
 the end, if the two lists of counters are identical, the strings must be
-anagrams. :ref:`Listing 8 <lst_ana4>` shows this solution.
+anagrams. :ref:`ActiveCode 6 <lst_ana4>` shows this solution.
 
 .. _lst_ana4:
 
@@ -698,7 +712,7 @@ Performance of Python Data Structures
 -------------------------------------
 
 Now that you have a general idea of Big-O notation
-and the differences in between the different functions, our goal in this
+and the differences between the different functions, our goal in this
 section is to tell you about the Big-O performance for the operations on
 Python lists and dictionaries. We will then show you some timing
 experiments that illustrate the costs and benefits of using certain
@@ -731,7 +745,7 @@ large the list becomes. When an operation like this is independent of
 the size of the list they are :math:`O(1)`.
 
 Another very common programming task is to grow a list. There are two
-ways to create a longer list either using the append method, or the
+ways to create a longer list.  You can use the append method or the
 concatenation operator. The append method is :math:`O(1)`. However,
 the concatenation operator is :math:`O(k)` where :math:`k` is the
 size of the list that is being concatenated. This is important for you
@@ -743,11 +757,12 @@ numbers starting with 0. First we’ll try a ``for`` loop and create the
 list by concatenation, then we’ll use append rather than concatenation.
 Next, we’ll try creating the list using list comprehension and finally,
 and perhaps the most obvious way, using the range function wrapped by a
-call to the list constructor. :ref:`Listing 9 <lst_mklist>` shows the code for
-making our list four different ways. In the remainder of this section we
-will assume this code is saved in the file ``listfuns.py``.
+call to the list constructor. :ref:`Listing 3 <lst_mklist>` shows the code for
+making our list four different ways.
 
 .. _lst_mklist:
+
+**Listing 3**
 
 ::
 
@@ -809,7 +824,7 @@ look very strange to you, so let’s consider it in more detail. You are
 probably very familiar with the ``from``, ``import`` statement, but this
 is usually used at the beginning of a Python program file. In this case
 the statement ``from __main__ import test1`` imports the function
-``test1`` from the {\_\_main\_\_} namespace into the namespace that
+``test1`` from the ``__main__`` namespace into the namespace that
 ``timeit`` sets up for the timing experiment. The ``timeit`` module does
 this because it wants to run the timing tests in an environment that is
 uncluttered by any stray variables you may have created, that may
@@ -833,31 +848,6 @@ concatenation test function takes 6.54 milliseconds. As an exercise you
 could test the time it takes to call an empty function and subtract that
 from the numbers above.
 
-.. _tbl_listbigo:
-
-================== ==================
-         Operation   Big-O Efficiency
-================== ==================
-          index []               O(1)
-  index assignment               O(1)
-            append               O(1)
-             pop()               O(1)
-            pop(i)               O(n)
-    insert(i,item)               O(n)
-      del operator               O(n)
-         iteration               O(n)
-     contains (in)               O(n)
-   get slice [x:y]               O(k)
-         del slice               O(n)
-         set slice             O(n+k)
-           reverse               O(n)
-       concatenate               O(k)
-              sort         O(n log n)
-          multiply              O(nk)
-================== ==================
-
-    Big-O Efficiency of Python List Operations
-
 Now that we have seen how performance can be measured concretely you can
 look at :ref:`Table 2 <tbl_listbigo>` to see the Big-O efficiency of all the
 basic list operations. After thinking carefully about
@@ -873,6 +863,35 @@ that this implementation also allows the index operation to be
 :math:`O(1)`. This is a tradeoff that the Python implementors thought
 was a good one.
 
+
+.. _tbl_listbigo:
+
+.. table:: **Table 2: Big-O Efficiency of Python List Operators**
+
+    ================== ==================
+             Operation   Big-O Efficiency
+    ================== ==================
+              index []               O(1)
+      index assignment               O(1)
+                append               O(1)
+                 pop()               O(1)
+                pop(i)               O(n)
+        insert(i,item)               O(n)
+          del operator               O(n)
+             iteration               O(n)
+         contains (in)               O(n)
+       get slice [x:y]               O(k)
+             del slice               O(n)
+             set slice             O(n+k)
+               reverse               O(n)
+           concatenate               O(k)
+                  sort         O(n log n)
+              multiply              O(nk)
+    ================== ==================
+
+
+
+
 As a way of demonstrating this difference in performance let’s do
 another experiment using the ``timeit`` module. Our goal is to be able
 to verify the performance of the ``pop`` operation on a list of a known
@@ -884,12 +903,12 @@ constant even as the list grows in size, while the time to pop from the
 beginning of the list will continue to increase as the list grows.
 
 :ref:`Listing 10 <lst_popmeas>` shows one attempt to measure the difference
-between the two uses of pop. As you can see from this first example
+between the two uses of pop. As you can see from this first example,
 popping from the end takes 0.0003 milliseconds, whereas popping from the
 beginning takes 4.82 milliseconds. For a list of two million elements
 this is a factor of 16,000.
 
-There are a couple of things to notice about :ref:`Listing 10 <lst_popmeas>`. The
+There are a couple of things to notice about :ref:`Listing 4 <lst_popmeas>`. The
 first is the statement ``from __main__ import x``. Although we did not
 define a function we do want to be able to use the list object x in our
 test. This approach allows us to time just the single ``pop`` statement
@@ -900,6 +919,8 @@ since the initial list is two million elements in size we only reduce
 the overall size by :math:`0.05\%`
 
 .. _lst_popmeas:
+
+**Listing 4**
 
 ::
 
@@ -921,9 +942,11 @@ While our first test does show that ``pop(0)`` is indeed slower than
 ``pop()``, it does not validate the claim that ``pop(0)`` is
 :math:`O(n)` while ``pop()`` is :math:`O(1)`. To validate that claim
 we need to look at the performance of both calls over a range of list
-sizes. :ref:`Listing 11 <lst_poplists>` implements this test.
+sizes. :ref:`Listing 5 <lst_poplists>` implements this test.
 
 .. _lst_poplists:
+
+**Listing 5**
 
 ::
 
@@ -957,7 +980,7 @@ reliable.
 
 .. figure:: Figures/poptime.png
 
-   Comparing the Performance of ``pop`` and ``pop(0)``
+   Figure 3: Comparing the Performance of ``pop`` and ``pop(0)``
 
 Dictionaries
 ~~~~~~~~~~~~
@@ -982,18 +1005,20 @@ that a dictionary could be implemented.
 
 .. _tbl_dictbigo:
 
-================== ==================
-         operation   Big-O Efficiency
-================== ==================
-              copy               O(n)
-          get item               O(1)
-          set item               O(1)
-       delete item               O(1)
-     contains (in)               O(1)
-         iteration               O(n)
-================== ==================
+.. table:: **Table 3: Big-O Efficiency of Python Dictionary Operations**
 
-    {Big-O Efficiency of Python Dictionary Operations}
+    ================== ==================
+             operation   Big-O Efficiency
+    ================== ==================
+                  copy               O(n)
+              get item               O(1)
+              set item               O(1)
+           delete item               O(1)
+         contains (in)               O(1)
+             iteration               O(n)
+    ================== ==================
+
+
 
 For our last performance experiment we will compare the performance of
 the contains operation between lists and dictionaries. In the process we
@@ -1011,14 +1036,18 @@ whether or not a number is in the dictionary is not only much faster,
 but the time it takes to check should remain constant even as the
 dictionary grows larger.
 
-:ref:`Listing 12 <lst_listvdict>` implements this comparison. Notice that we are
+:ref:`Listing 6 <lst_listvdict>` implements this comparison. Notice that we are
 performing exactly the same operation, ``number in container``. The
 difference is that on line 7 ``x`` is a list, and on line 9 ``x`` is a
 dictionary.
 
 .. _lst_listvdict:
 
-::
+**Listing 6**
+
+
+.. sourcecode:: python
+    :linenos:
 
     import timeit
     import random
@@ -1031,9 +1060,12 @@ dictionary.
         x = {j:None for j in range(i)}
         d_time = t.timeit(number=1000)
         print("%d,%10.3f,%10.3f" % (i, lst_time, d_time))
+        
+        
+
 
 :ref:`Figure 4 <fig_listvdict>` summarizes the results of running
-:ref:`Listing 12 <lst_listvdict>`. You can see that the dictionary is consistently
+:ref:`Listing 6 <lst_listvdict>`. You can see that the dictionary is consistently
 faster. For the smallest list size of 10,000 elements a dictionary is
 89.4 times faster than a list. For the largest list size of 990,000
 elements the dictionary is 11,603 times faster! You can also see that
@@ -1049,13 +1081,14 @@ of 990,000 it also took 0.004 milliseconds.
 
 .. figure:: Figures/listvdict.png
 
-    Comparing the ``in`` Operator for Python Lists and Dictionaries
+    Figure 4: Comparing the ``in`` Operator for Python Lists and Dictionaries
 
 Since Python is an evolving language, there are always changes going on
 behind the scenes. The latest information on the performance of Python
 data structures can be found on the Python website. As of this writing
-the Python wiki has a nice time complexity page that can be found at
-``http://wiki.python.org/moin/TimeComplexity``.
+the Python wiki has a nice time complexity page that can be found at the
+`Time Complexity Wiki <http://wiki.python.org/moin/TimeComplexity>`_.
+
 
 
 .. admonition:: Self Check
@@ -1082,10 +1115,10 @@ the Python wiki has a nice time complexity page that can be found at
       :answer_d: mydict['x'] = mydict['x'] + 1
       :answer_e: all of the above are O(1)
       :correct: e
-      :feedback_a: in is a constant operation for a dictionary because you do not have to iterate
-      :feedback_b: deleting an element from a dictionary is a constant operation
-      :feedback_c: Assignment to a dictionary key is constant
-      :feedback_d: Re-assignment to a dictionary key is constant
+      :feedback_a: in is a constant operation for a dictionary because you do not have to iterate but there is a better answer.
+      :feedback_b: deleting an element from a dictionary is a constant operation but there is a better answer.
+      :feedback_c: Assignment to a dictionary key is constant but there is a better answer.
+      :feedback_d: Re-assignment to a dictionary key is constant but there is a better answer.
       :feedback_e: The only dictionary operations that are not O(1) are those that require iteration.                  
 
       Which of the above dictionary operations is O(1)?
@@ -1191,7 +1224,7 @@ Programming Exercises
    algorithm is linear.
 
 #. Can you improve the algorithm from the previous problem to be
-   :math:`On\log(n)`?
+   :math:`O(n\log(n))`?
 
 
 

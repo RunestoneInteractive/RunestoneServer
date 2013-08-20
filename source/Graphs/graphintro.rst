@@ -12,6 +12,9 @@
 .. qnum::
    :prefix: graph-
    :start: 1
+   
+.. highlight:: python
+   :linenothreshold: 500
 
 Graphs
 ======
@@ -57,7 +60,7 @@ computer science at Luther College.
 .. figure:: Figures/CS-Prereqs.png
     :align: center
 
-    Prerequisites for a Computer Science Major
+    Figure 1: Prerequisites for a Computer Science Major
 
 Vocabulary and Definitions
 --------------------------
@@ -118,7 +121,7 @@ and the set of nine edges:
 .. figure:: Figures/digraph.png
    :align: center
 
-   A Simple Example of a Directed Graph
+   Figure 2: A Simple Example of a Directed Graph
 
 The example graph in :ref:`Figure 2 <fig_dgsimple>` helps illustrate two other
 key graph terms:
@@ -193,7 +196,7 @@ edge from vertex :math:`v` to vertex :math:`w`.
 .. figure:: Figures/adjMat.png
    :align: center
 
-   An Adjacency Matrix Representation for a Graph 
+   Figure 3: An Adjacency Matrix Representation for a Graph 
 
 The advantage of the adjacency matrix is that it is simple, and for
 small graphs it is easy to see which nodes are connected to other nodes.
@@ -230,7 +233,7 @@ illustrates the adjacency list representation for the graph in
 .. figure:: Figures/adjlist.png
    :align: center
 
-   An Adjacency List Representation of a Graph
+   Figure 4: An Adjacency List Representation of a Graph
 
 The advantage of the adjacency list implementation is that it allows us
 to compactly represent a sparse graph. The adjacency list also allows us
@@ -242,7 +245,7 @@ Implementation
 
 Using dictionaries, it is easy to implement the adjacency list in
 Python. In our implementation of the Graph abstract data type we will
-create two classes, ``Graph``, which holds the master list of vertices,
+create two classes (see :ref:`Listing 1 <lst_vertex>` and :ref:`Listing 2 <lst_graph>`), ``Graph``, which holds the master list of vertices,
 and ``Vertex``, which will represent each vertex in the graph.
 
 Each ``Vertex`` uses a dictionary to keep track of the vertices to which
@@ -255,6 +258,10 @@ another. The ``getConnections`` method returns all of the vertices in
 the adjacency list, as represented by the ``connectedTo`` instance
 variable. The ``getWeight`` method returns the weight of the edge from
 this vertex to the vertex passed as a parameter.
+
+.. _lst_vertex:
+
+**Listing 1**
 
 ::
 
@@ -284,10 +291,14 @@ dictionary object is represented by the shaded gray box. ``Graph`` also
 provides methods for adding vertices to a graph and connecting one
 vertex to another. The ``getVertices`` method returns the names of all
 of the vertices in the graph. In addition, we have implemented the
-{\_\_iter\_\_} method to make it easy to iterate over all the vertex
+``__iter__`` method to make it easy to iterate over all the vertex
 objects in a particular graph. Together, the two methods allow you to
 iterate over the vertices in a graph by name, or by the objects
 themselves.
+
+.. _lst_graph:
+
+**Listing 2**
 
 ::
 

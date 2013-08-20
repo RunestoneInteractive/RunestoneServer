@@ -94,29 +94,29 @@ Discussion Questions
 #. Consider the following list of integers: [10,9,8,7,6,5,4,3,2,1]. Show
    the binary heap resulting from inserting the integers one at a time.
 
-#. Consider the two different methods we used for implementing a binary
+#. Consider the two different techniques we used for implementing traversals of a binary
    tree. Why must we check before the call to ``preorder`` when
    implementing as a method, whereas we could check inside the call when
    implementing as a function?
 
-#. Show the function calls needed to build the following binary tree.
+12. Show the function calls needed to build the following binary tree.
+
 
 .. figure:: Figures/exerTree.png
-   :align: center
+        :align: center
 
 
-#. Given the following tree, perform the appropriate rotations to bring
-   it back into balance.
-
+13. Given the following tree, perform the appropriate rotations to bring it back into balance.
+   
+   
 .. figure:: Figures/rotexer1.png
-   :align: center
+         :align: center
 
 
-#. Using the following as a starting point, derive the equation
-   that gives the updated balance factor for node D.
-
+14. Using the following as a starting point, derive the equation that gives the updated balance factor for node D.
+   
 .. figure:: Figures/bfderive.png
-   :align: center
+         :align: center
 
 Programming Exercises
 ---------------------

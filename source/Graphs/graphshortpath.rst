@@ -9,6 +9,9 @@
 ..  shortname:: GraphsShortestPath
 ..  description:: Using shortest path algorithm.
 
+.. highlight:: python
+    :linenothreshold: 500
+
 Shortest Path Problems
 ----------------------
 
@@ -25,7 +28,7 @@ just enough to understand another very important graph algorithm.
 .. figure:: Figures/Internet.png
    :align: center
 
-   Overview of Connectivity in the Internet     
+   Figure 1: Overview of Connectivity in the Internet     
 
 
 
@@ -79,7 +82,7 @@ routers as a graph with weighted edges.
 .. figure:: Figures/routeGraph.png
    :align: center
 
-   Connections and Weights between Routers in the Internet
+   Figure 2: Connections and Weights between Routers in the Internet
           
 
 
@@ -113,9 +116,12 @@ is set to a very large number. Theoretically you would set ``dist`` to
 infinity, but in practice we just set it to a number that is larger than
 any real distance we would have in the problem we are trying to solve.
 
-The code for Dijkstra’s algorithm is shown in
-the following listing. When the algorithm finishes the distances are set
+The code for Dijkstra’s algorithm is shown in :ref:`Listing 1 <lst_shortpath>`. When the algorithm finishes the distances are set
 correctly as are the predecessor links for each vertex in the graph.
+
+.. _lst_shortpath:
+
+**Listing 1**
 
 ::
 
@@ -179,12 +185,12 @@ smaller if we go through :math:`x` than from :math:`u` directly to
 distance and change the predecessor for :math:`w` from :math:`u` to
 :math:`x`. See :ref:`Figure 4 <fig_dijb>` for the state of all the vertices.
 
-The next step is to look at the vertices neighboring :math:`v`. This
+The next step is to look at the vertices neighboring :math:`v` (see :ref:`Figure 5 <fig_dijc>`). This
 step results in no changes to the graph, so we move on to node
-:math:`y`. At node :math:`y` we discover that it is cheaper to get
+:math:`y`. At node :math:`y` (see :ref:`Figure 6 <fig_dijd>`) we discover that it is cheaper to get
 to both :math:`w` and :math:`z`, so we adjust the distances and
 predecessor links accordingly. Finally we check nodes :math:`w` and
-:math:`z`. However, no additional changes are found and so the
+:math:`z` (see see :ref:`Figure 6 <fig_dije>` and see :ref:`Figure 8 <fig_dijf>`). However, no additional changes are found and so the
 priority queue is empty and Dijkstra’s algorithm exits.
 
    
@@ -193,42 +199,42 @@ priority queue is empty and Dijkstra’s algorithm exits.
 .. figure:: Figures/dijkstraa.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-3      
+   Figure 3: Tracing Dijkstra’s Algorithm      
    
 .. _fig_dijb:
 
 .. figure:: Figures/dijkstrab.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-4      
+   Figure 4: Tracing Dijkstra’s Algorithm     
    
 .. _fig_dijc:
 
 .. figure:: Figures/dijkstrac.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-5      
+   Figure 5: Tracing Dijkstra’s Algorithm      
    
 .. _fig_dijd:
 
 .. figure:: Figures/dijkstrad.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-6      
+   Figure 6: Tracing Dijkstra’s Algorithm      
    
 .. _fig_dije:
 
 .. figure:: Figures/dijkstrae.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-7      
+   Figure 7: Tracing Dijkstra’s Algorithm      
    
 .. _fig_dijf:
 
 .. figure:: Figures/dijkstraf.png
    :align: center
 
-   Tracing Dijkstra’s Algorithm-8      
+   Figure 8: Tracing Dijkstra’s Algorithm      
 
 
 
@@ -280,7 +286,7 @@ listening to. :ref:`Figure 9 <fig_bcast1>` illustrates the broadcast problem.
 .. figure:: Figures/bcast1.png
    :align: center
 
-   The Broadcast Problem 
+   Figure 9: The Broadcast Problem 
 
 There are some brute force solutions to this problem, so let’s look at
 them first to help understand the broadcast problem better. This will
@@ -337,7 +343,7 @@ that are interested see a copy of the message.
 .. figure:: Figures/mst1.png
    :align: center
 
-   Minimum Spanning Tree for the Broadcast Graph 
+   Figure 10: Minimum Spanning Tree for the Broadcast Graph 
 
 The algorithm we will use to solve this problem is called Prim’s
 algorithm. Prim’s algorithm belongs to a family of algorithms called the
@@ -358,14 +364,18 @@ We define a safe edge as any edge that connects a vertex that is in the
 spanning tree to a vertex that is not in the spanning tree. This ensures
 that the tree will always remain a tree and therefore have no cycles.
 
-The Python code to implement Prim’s algorithm is shown in
-the listing below. Prim’s algorithm is similar to Dijkstra’s algorithm
+The Python code to implement Prim’s algorithm is shown in :ref:`Listing 2 <lst_prims>`. Prim’s algorithm is similar to Dijkstra’s algorithm
 in that they both use a priority queue to select the next vertex to add
 to the growing graph.
+
+**Listing 2**
+
+.. _lst_prims:
 
 ::
 
     from pythonds.graphs import PriorityQueue, Graph, Vertex
+
     def prim(G,start):
         pq = PriorityQueue()
         for v in G:
@@ -383,7 +393,7 @@ to the growing graph.
                   nextVert.setDistance(newCost)
                   pq.decreaseKey(nextVert,newCost)
 
-The following sequence of figures shows the algorithm in operation on our sample
+The following sequence of figures (:ref:`Figure 11 <fig_mst1>` thru :ref:`Figure 17 <fig_mst1>`) shows the algorithm in operation on our sample
 tree. We begin with the starting vertex as A. The distances to all the
 other vertices are initialized to infinity. Looking at the neighbors of
 A we can update distances to two of the additional vertices B and C
@@ -413,48 +423,48 @@ to the tree.
 .. figure:: Figures/prima.png
    :align: center
    
-   Tracing Prim’s Algorithm-11
+   Figure 11: Tracing Prim’s Algorithm
 
 .. _fig_primb:
 
 .. figure:: Figures/primb.png
    :align: center
 
-   Tracing Prim’s Algorithm-12
+   Figure 12: Tracing Prim’s Algorithm
 
 .. _fig_primc:
 
 .. figure:: Figures/primc.png
    :align: center
 
-   Tracing Prim’s Algorithm-13
+   Figure 13: Tracing Prim’s Algorithm
    
 .. _fig_primd:
 
 .. figure:: Figures/primd.png
    :align: center
 
-   Tracing Prim’s Algorithm-14
+   Figure 14: Tracing Prim’s Algorithm
    
 .. _fig_prime:
 
 .. figure:: Figures/prime.png
    :align: center
 
-   Tracing Prim’s Algorithm-15
+   Figure 15: Tracing Prim’s Algorithm
    
 .. _fig_primf:
 
 .. figure:: Figures/primf.png
    :align: center
    
-   Tracing Prim’s Algorithm-16
+   Figure 16: Tracing Prim’s Algorithm
     
 .. _fig_primg:
 
 .. figure:: Figures/primg.png
    :align: center
 
-   Tracing Prim’s Algorithm-17
+   Figure 17: Tracing Prim’s Algorithm
 
 

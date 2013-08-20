@@ -215,10 +215,10 @@ Programming Exercises
 #. Modify the list classes to allow duplicates. Which methods will be
    impacted by this change?
 
-#. Implement {the \_\_str\_\_} method in the UnorderedList class. What
+#. Implement the __str__ method in the UnorderedList class. What
    would be a good string representation for a list?
 
-#. Implement {the \_\_str\_\_} method so that lists are displayed the
+#. Implement __str__ method so that lists are displayed the
    Python way (with square brackets).
 
 #. Implement the remaining operations defined in the UnorderedList ADT

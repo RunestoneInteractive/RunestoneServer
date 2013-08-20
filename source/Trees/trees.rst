@@ -34,7 +34,7 @@ Objectives
 Examples of Trees
 -----------------
 
-{sec:treeexamp} Now that we have studied linear data structures like
+Now that we have studied linear data structures like
 stacks and queues and have some experience with recursion, we will look
 at a common data structure called the **tree**. Trees are used in many
 areas of computer science, including operating systems, graphics,
@@ -46,7 +46,7 @@ structure has its root at the top and its leaves on the bottom.
 
 Before we begin our study of tree data structures, let’s look at a few
 common examples. Our first example of a tree is a classification tree
-from biology. Figure {fig:biotree} shows an example of the biological
+from biology. :ref:`Figure 1 <fig_biotree>` shows an example of the biological
 classification of some animals. From this simple example, we can learn
 about several properties of trees. The first property this example
 demonstrates is that trees are hierarchical. By hierarchical, we mean
@@ -65,7 +65,7 @@ still animals.
    :alt: image
 
 
-   Taxonomy of Some Common Animals Shown as a Tree
+   Figure 1: Taxonomy of Some Common Animals Shown as a Tree
 
 Notice that you can start at the top of the tree and follow a path made
 of circles and arrows all the way to the bottom. At each level of the
@@ -90,11 +90,11 @@ from the root of the tree to a leaf that uniquely identifies each
 species in the animal kingdom; for example, Animalia
 :math:`\rightarrow` Chordate :math:`\rightarrow` Mammal
 :math:`\rightarrow` Carnivora :math:`\rightarrow` Felidae
-:math:`\rightarrow `Felis:math:`\rightarrow` Domestica.
+:math:`\rightarrow` Felis :math:`\rightarrow` Domestica.
 
 Another example of a tree structure that you probably use every day is a
 file system. In a file system, directories, or folders, are structured
-as a tree. Figure {fig:filetree} illustrates a small part of a Unix file
+as a tree. :ref:`Figure 2 <fig_filetree>` illustrates a small part of a Unix file
 system hierarchy.
 
 .. _fig_filetree:
@@ -104,7 +104,7 @@ system hierarchy.
    :align: center
    :alt: image
 
-   A Small Part of the Unix File System Hierarchy
+   Figure 2: A Small Part of the Unix File System Hierarchy
 
 The file system tree has much in common with the biological
 classification tree. You can follow a path from the root to any
@@ -119,7 +119,7 @@ from /etc/httpd to /usr/etc/httpd, but would not affect the contents or
 any children of the httpd directory.
 
 A final example of a tree is a web page. The following is an example of
-a simple web page written using HTML. Figure {fig:html} shows the tree
+a simple web page written using HTML. :ref:`Figure 3 <fig_html>` shows the tree
 that corresponds to each of the HTML tags used to create the page.
 
 ::
@@ -148,7 +148,7 @@ that corresponds to each of the HTML tags used to create the page.
    :align: center
    :alt: image
 
-   A Tree Corresponding to the Markup Elements of a Web Page
+   Figure 3: A Tree Corresponding to the Markup Elements of a Web Page
 
 
 The HTML source code and the tree accompanying the source illustrate
@@ -179,7 +179,7 @@ Edge
 
 Root
     The root of the tree is the only node in the tree that has no
-    incoming edges. In Figure {fig:filetree}, / is the root of the tree.
+    incoming edges. In Figure :ref:`Figure 2 <fig_filetree>`, / is the root of the tree.
 
 Path
     A path is an ordered list of nodes that are connected by edges. For
@@ -190,12 +190,12 @@ Path
 Children
     The set of nodes :math:`c` that have incoming edges from the same
     node to are said to be the children of that node. In Figure
-    {fig:filetree}, nodes log/, spool/, and yp/ are the children of node
+    :ref:`Figure 2 <fig_filetree>`, nodes log/, spool/, and yp/ are the children of node
     var/.
 
 Parent
     A node is the parent of all the nodes it connects to with outgoing
-    edges. In Figure {fig:filetree} the node var/ is the parent of nodes
+    edges. In :ref:`Figure 2 <fig_filetree>` the node var/ is the parent of nodes
     log/, spool/, and yp/.
 
 Sibling
@@ -209,17 +209,17 @@ Subtree
 
 Leaf Node
     A leaf node is a node that has no children. For example, Human and
-    Chimpanzee are leaf nodes in Figure {fig:biotree}.
+    Chimpanzee are leaf nodes in :ref:`Figure 1 <fig_biotree>`.
 
 Level
     The level of a node :math:`n` is the number of edges on the path
     from the root node to :math:`n`. For example, the level of the
-    Felis node in Figure {fig:biotree} is five. By definition, the level
+    Felis node in :ref:`Figure 1 <fig_biotree>` is five. By definition, the level
     of the root node is zero.
 
 Height
     The height of a tree is equal to the maximum level of any node in
-    the tree. The height of the tree in Figure {fig:filetree} is two.
+    the tree. The height of the tree in :ref:`Figure 2 <fig_filetree>` is two.
 
 With the basic vocabulary now defined, we can move on to a formal
 definition of a tree. In fact, we will provide two definitions of a
@@ -240,7 +240,7 @@ edges that connect pairs of nodes. A tree has the following properties:
 -  If each node in the tree has a maximum of two children, we say that
    the tree is a **binary tree**.
 
-Figure {fig:nodeedgetree} illustrates a tree that fits definition one.
+:ref:`Figure 3 <fig_nodeedgetree>` illustrates a tree that fits definition one.
 The arrowheads on the edges indicate the direction of the connection.
 
 .. _fig_nodeedgetree:
@@ -249,20 +249,22 @@ The arrowheads on the edges indicate the direction of the connection.
    :align: center
    :alt: image
 
-   A Tree Consisting of a Set of Nodes and Edges
+   Figure 3: A Tree Consisting of a Set of Nodes and Edges
 
 *Definition Two:* A tree is either empty or consists of a root and zero
 or more subtrees, each of which is also a tree. The root of each subtree
 is connected to the root of the parent tree by an edge.
-Figure {fig:rectree} illustrates this recursive definition of a tree.
+:ref:`Figure 4 <fig_recursivetree>` illustrates this recursive definition of a tree.
 Using the recursive definition of a tree, we know that the tree in
-Figure {fig:rectree} has at least four nodes, since each of the
+:ref:`Figure 4 <fig_recursivetree>` has at least four nodes, since each of the
 triangles representing a subtree must have a root. It may have many more
 nodes than that, but we do not know unless we look deeper into the tree.
+
+.. _fig_recursivetree:
 
 .. figure:: Figures/TreeDefRecursive.png
    :align: center
    :alt: image
 
-   A recursive Definition of a tree
+   Figure 4: A recursive Definition of a tree
 

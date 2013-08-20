@@ -12,11 +12,14 @@
 .. qnum::
    :prefix: list-
    :start: 1
+   
+.. highlight:: python
+  :linenothreshold: 500
 
 Lists
 -----
 
-Throughout the earlier sections of this chapter, we have used Python
+Throughout the discussion of basic data structures, we have used Python
 lists to implement the abstract data types presented. The list is a
 powerful, yet simple, collection mechanism that provides the programmer
 with a wide variety of operations. However, not all programming
@@ -59,7 +62,7 @@ others. Some possible unordered list operations are given below.
 -  ``isEmpty()`` tests to see whether the list is empty. It needs no
    parameters and returns a boolean value.
 
--  ``length()`` returns the number of items in the list. It needs no
+-  ``size()`` returns the number of items in the list. It needs no
    parameters and returns an integer.
 
 -  ``append(item)`` adds a new item to the end of the list making it the
@@ -98,14 +101,14 @@ link from one item to the next.
 .. figure:: Figures/idea.png
    :align: center
 
-   Items Not Constrained in Their Physical Placement
+   Figure 1: Items Not Constrained in Their Physical Placement
 
 .. _fig_idea2:
 
 .. figure:: Figures/idea2.png
    :align: center
 
-   Relative Positions Maintained by Explicit Links.
+   Figure 2: Relative Positions Maintained by Explicit Links.
 
 
 It is important to note that the location of the first item of the list
@@ -129,25 +132,12 @@ should note that we will typically represent a node object as shown in
 :ref:`Figure 4 <fig_node2>`. The ``Node`` class also includes the usual methods
 to access and modify the data and the next reference.
 
-::
-
-        >>> temp = Node(93)
-        >>> temp.getData()
-        93
-
-The special Python reference value ``None`` will play an important role
-in the ``Node`` class and later in the linked list itself. A reference
-to ``None`` will denote the fact that there is no next node. Note in the
-constructor that a node is initially created with ``next`` set to
-``None``. Since this is sometimes referred to as “grounding the node,”
-we will use the standard ground symbol to denote a reference that is
-referring to ``None``. It is always a good idea to explicitly assign
-``None`` to your initial next reference values.
 
 .. _lst_nodeclass:
 
-.. activecode:: nodeclass
-   :caption: Node Class
+**Listing 1**
+
+.. sourcecode:: python
 
    class Node:
        def __init__(self,initdata):
@@ -165,20 +155,39 @@ referring to ``None``. It is always a good idea to explicitly assign
 
        def setNext(self,newnext):
            self.next = newnext
+           
+We create ``Node`` objects in the usual way.
+
+::
+
+        >>> temp = Node(93)
+        >>> temp.getData()
+        93
+
+The special Python reference value ``None`` will play an important role
+in the ``Node`` class and later in the linked list itself. A reference
+to ``None`` will denote the fact that there is no next node. Note in the
+constructor that a node is initially created with ``next`` set to
+``None``. Since this is sometimes referred to as “grounding the node,”
+we will use the standard ground symbol to denote a reference that is
+referring to ``None``. It is always a good idea to explicitly assign
+``None`` to your initial next reference values.
+
+
 
 .. _fig_node:
 
 .. figure:: Figures/node.png
    :align: center
 
-   A Node Object Contains the Item and a Reference to the Next Node
+   Figure 3: A Node Object Contains the Item and a Reference to the Next Node
 
 .. _fig_node2:
 
 .. figure:: Figures/node2.png
    :align: center
 
-   A Typical Representation for a Node
+   Figure 4: A Typical Representation for a Node
 
 
 The ``Unordered List`` Class
@@ -192,6 +201,16 @@ next links. With this in mind, the ``UnorderedList`` class must maintain
 a reference to the first node. :ref:`Listing 2 <lst_listclass>` shows the
 constructor. Note that each list object will maintain a single reference
 to the head of the list.
+
+.. _lst_listclass:
+
+**Listing 2**
+
+::
+    class UnorderedList:
+    
+        def __init__(self):
+            self.head = None
 
 Initially when we construct a list, there are no items. The assignment
 statement
@@ -217,7 +236,7 @@ in the linked structure.
 .. figure:: Figures/initlinkedlist.png
    :align: center
 
-   An Empty List
+   Figure 5: An Empty List
 
 
 .. _fig_linkedlist:
@@ -225,15 +244,10 @@ in the linked structure.
 .. figure:: Figures/linkedlist.png
    :align: center
 
-   A Linked List of Integers
+   Figure 6: A Linked List of Integers
 
 
-.. _lst_listclass:
 
-::
-
-        def __init__(self):
-            self.head = None
 
 The ``isEmpty`` method, shown in :ref:`Listing 3 <lst_isempty>`, simply checks to
 see if the head of the list is a reference to ``None``. The result of
@@ -246,6 +260,8 @@ any reference. Two references are equal if they both refer to the same
 object. We will use this often in our remaining methods.
 
 .. _lst_isempty:
+
+**Listing 3**
 
 ::
 
@@ -304,6 +320,8 @@ no longer be accessed.
 
 .. _lst_add:
 
+**Listing 4**
+
 ::
 
     def add(self,item):
@@ -316,24 +334,24 @@ no longer be accessed.
 .. figure:: Figures/addtohead.png
    :align: center
 
-   Adding a New Node is a Two-Step Process
+   Figure 7: Adding a New Node is a Two-Step Process
 
 .. _fig_wrongorder:
 
 .. figure:: Figures/wrongorder.png
    :align: center
 
-   Result of Reversing the Order of the Two Steps
+   Figure 8: Result of Reversing the Order of the Two Steps
 
 
-The next methods that we will implement–``length``, ``search``, and
+The next methods that we will implement–``size``, ``search``, and
 ``remove``–are all based on a technique known as **linked list
 traversal**. Traversal refers to the process of systematically visiting
 each node. To do this we use an external reference that starts at the
 first node in the list. As we visit each node, we move the reference to
 the next node by “traversing” the next reference.
 
-To implement the ``length`` method, we need to traverse the linked list
+To implement the ``size`` method, we need to traverse the linked list
 and keep a count of the number of nodes that occurred.
 :ref:`Listing 5 <lst_length>` shows the Python code for counting the number of
 nodes in the list. The external reference is called ``current`` and is
@@ -349,9 +367,14 @@ Finally, ``count`` gets returned after the iteration stops.
 
 .. _lst_length:
 
+**Listing 5**
+
+.. highlight:: python
+  :linenothreshold: 5
+
 ::
 
-    def length(self):
+    def size(self):
         current = self.head
         count = 0
         while current != None:
@@ -359,13 +382,15 @@ Finally, ``count`` gets returned after the iteration stops.
             current = current.getNext()
 
         return count
+        
+
 
 .. _fig_traversal:
 
 .. figure:: Figures/traversal.png
    :align: center
 
-   Traversing the Linked List from the Head to the End
+   Figure 9: Traversing the Linked List from the Head to the End
 
 
 Searching for a value in a linked list implementation of an unordered
@@ -377,7 +402,7 @@ the list, that means that the item we are looking for must not be
 present. Also, if we do find the item, there is no need to continue.
 
 :ref:`Listing 6 <lst_search>` shows the implementation for the ``search`` method.
-As in the ``length`` method, the traversal is initialized to start at
+As in the ``size`` method, the traversal is initialized to start at
 the head of the list (line 2). We also use a boolean variable called
 ``found`` to remember whether we have located the item we are searching
 for. Since we have not found the item at the start of the traversal,
@@ -389,6 +414,8 @@ the data item is present in the current node. If so, ``found`` can be
 set to ``True``.
 
 .. _lst_search:
+
+**Listing 6**
 
 ::
 
@@ -421,7 +448,7 @@ value seen above. This process can be seen in :ref:`Figure 10 <fig_searchpic>`.
 .. figure:: Figures/search.png
    :align: center
 
-   Successful Search for the Value 17
+   Figure 10: Successful Search for the Value 17
 
 
 The ``remove`` method requires two logical steps. First, we need to
@@ -457,7 +484,7 @@ which we will call ``previous``, will always travel one node behind
 ``previous`` will be referring to the proper place in the linked list
 for the modification.
 
-{} :ref:`Listing 7 <lst_remove>` shows the complete ``remove`` method. Lines 2–3
+:ref:`Listing 7 <lst_remove>` shows the complete ``remove`` method. Lines 2–3
 assign initial values to the two references. Note that ``current``
 starts out at the list head as in the other traversal examples.
 ``previous``, however, is assumed to always travel one node behind
@@ -478,6 +505,8 @@ the movement of ``previous`` and ``current`` as they progress down the
 list looking for the node containing the value 17.
 
 .. _lst_remove:
+
+**Listing 7**
 
 ::
 
@@ -502,7 +531,7 @@ list looking for the node containing the value 17.
 .. figure:: Figures/removeinit.png
    :align: center
 
-   Initial Values for the ``previous`` and ``current`` References
+   Figure 11: Initial Values for the ``previous`` and ``current`` References
 
 
 .. _fig_prevcurr:
@@ -510,7 +539,7 @@ list looking for the node containing the value 17.
 .. figure:: Figures/prevcurr.png
    :align: center
 
-   ``previous`` and ``current`` Move Down the List
+   Figure 12: ``previous`` and ``current`` Move Down the List
 
 
 Once the searching step of the ``remove`` has been completed, we need to
@@ -529,7 +558,7 @@ to be changed (see :ref:`Figure 14 <fig_removehead>`).
 .. figure:: Figures/remove.png
    :align: center
 
-   Removing an Item from the Middle of the List
+   Figure 13: Removing an Item from the Middle of the List
 
 
 .. _fig_removehead:
@@ -537,7 +566,7 @@ to be changed (see :ref:`Figure 14 <fig_removehead>`).
 .. figure:: Figures/remove2.png
    :align: center
 
-   Removing the First Node from the List
+   Figure 14: Removing the First Node from the List
 
 
 Line 12 allows us to check whether we are dealing with the special case
@@ -555,6 +584,104 @@ arises is whether the two cases shown here will also handle the
 situation where the item to be removed is in the last node of the linked
 list. We leave that for you to consider.
 
+You can try out the ``UnorderedList`` class in ActiveCode 1.  
+
+.. activecode:: unorderedlistcomplete
+   :caption: The Complete UnorderedList Class
+   :hidecode:
+   
+   class Node:
+       def __init__(self,initdata):
+           self.data = initdata
+           self.next = None
+
+       def getData(self):
+           return self.data
+
+       def getNext(self):
+           return self.next
+
+       def setData(self,newdata):
+           self.data = newdata
+
+       def setNext(self,newnext):
+           self.next = newnext
+
+
+   class UnorderedList:
+
+       def __init__(self):
+           self.head = None
+
+       def isEmpty(self):
+           return self.head == None
+
+       def add(self,item):
+           temp = Node(item)
+           temp.setNext(self.head)
+           self.head = temp
+
+       def size(self):
+           current = self.head
+           count = 0
+           while current != None:
+               count = count + 1
+               current = current.getNext()
+
+           return count
+
+       def search(self,item):
+           current = self.head
+           found = False
+           while current != None and not found:
+               if current.getData() == item:
+                   found = True
+               else:
+                   current = current.getNext()
+
+           return found
+
+       def remove(self,item):
+           current = self.head
+           previous = None
+           found = False
+           while not found:
+               if current.getData() == item:
+                   found = True
+               else:
+                   previous = current
+                   current = current.getNext()
+
+           if previous == None:
+               self.head = current.getNext()
+           else:
+               previous.setNext(current.getNext())
+
+   mylist = UnorderedList()
+
+   mylist.add(31)
+   mylist.add(77)
+   mylist.add(17)
+   mylist.add(93)
+   mylist.add(26)
+   mylist.add(54)
+
+   print(mylist.size())
+   print(mylist.search(93))
+   print(mylist.search(100))
+
+   mylist.add(100)
+   print(mylist.search(100))
+   print(mylist.size())
+
+   mylist.remove(54)
+   print(mylist.size())
+   mylist.remove(93)
+   print(mylist.size())
+   mylist.remove(31)
+   print(mylist.size())
+   print(mylist.search(93))
+
 The remaining methods ``append``, ``insert``, ``index``, and ``pop`` are
 left as exercises. Remember that each of these must take into account
 whether the change is taking place at the head of the list or someplace
@@ -567,10 +694,151 @@ starting with 0.
    Part I:  Implement the append method for UnorderedList.  What is the time complexity of the method you created?
 
    .. actex:: self_check_list1
+   
+       class Node:
+           def __init__(self,initdata):
+               self.data = initdata
+               self.next = None
+
+           def getData(self):
+               return self.data
+
+           def getNext(self):
+               return self.next
+
+           def setData(self,newdata):
+               self.data = newdata
+
+           def setNext(self,newnext):
+               self.next = newnext
+
+
+       class UnorderedList:
+
+           def __init__(self):
+               self.head = None
+
+           def isEmpty(self):
+               return self.head == None
+
+           def add(self,item):
+               temp = Node(item)
+               temp.setNext(self.head)
+               self.head = temp
+
+           def size(self):
+               current = self.head
+               count = 0
+               while current != None:
+                   count = count + 1
+                   current = current.getNext()
+
+               return count
+
+           def search(self,item):
+               current = self.head
+               found = False
+               while current != None and not found:
+                   if current.getData() == item:
+                       found = True
+                   else:
+                       current = current.getNext()
+
+               return found
+
+           def remove(self,item):
+               current = self.head
+               previous = None
+               found = False
+               while not found:
+                   if current.getData() == item:
+                       found = True
+                   else:
+                       previous = current
+                       current = current.getNext()
+
+               if previous == None:
+                   self.head = current.getNext()
+               else:
+                   previous.setNext(current.getNext())
+
+       mylist = UnorderedList()
+   
+   
 
    Part I:  You most likely created an append method that was :math:`O(n)`  If you add an instance variable to the UnorderedList class you can create an append method that is :math:`O(1)`.  Modify your append method to be :math:`O(1)`  Be Careful!  To really do this correctly you will need to consider a couple of special cases that may require you to make a modification to the add method as well.
 
    .. actex:: self_check_list2
+   
+       class Node:
+           def __init__(self,initdata):
+               self.data = initdata
+               self.next = None
+
+           def getData(self):
+               return self.data
+
+           def getNext(self):
+               return self.next
+
+           def setData(self,newdata):
+               self.data = newdata
+
+           def setNext(self,newnext):
+               self.next = newnext
+
+
+       class UnorderedList:
+
+           def __init__(self):
+               self.head = None
+
+           def isEmpty(self):
+               return self.head == None
+
+           def add(self,item):
+               temp = Node(item)
+               temp.setNext(self.head)
+               self.head = temp
+
+           def size(self):
+               current = self.head
+               count = 0
+               while current != None:
+                   count = count + 1
+                   current = current.getNext()
+
+               return count
+
+           def search(self,item):
+               current = self.head
+               found = False
+               while current != None and not found:
+                   if current.getData() == item:
+                       found = True
+                   else:
+                       current = current.getNext()
+
+               return found
+
+           def remove(self,item):
+               current = self.head
+               previous = None
+               found = False
+               while not found:
+                   if current.getData() == item:
+                       found = True
+                   else:
+                       previous = current
+                       current = current.getNext()
+
+               if previous == None:
+                   self.head = current.getNext()
+               else:
+                   previous.setNext(current.getNext())
+
+       mylist = UnorderedList()
+   
 
 
 The Ordered List Abstract Data Type
@@ -605,7 +873,7 @@ are the same as those of the unordered list.
 -  ``isEmpty()`` tests to see whether the list is empty. It needs no
    parameters and returns a boolean value.
 
--  ``length()`` returns the number of items in the list. It needs no
+-  ``size()`` returns the number of items in the list. It needs no
    parameters and returns an integer.
 
 -  ``index(item)`` returns the position of item in the list. It needs
@@ -632,7 +900,7 @@ for representing the relative positioning of the items.
 .. figure:: Figures/orderlinkedlist.png
    :align: center
 
-   An Ordered Linked List
+   Figure 15: An Ordered Linked List
 
 
 To implement the ``OrderedList`` class, we will use the same technique
@@ -642,6 +910,8 @@ be denoted by a ``head`` reference to ``None`` (see
 
 .. _lst_orderlist:
 
+**Listing 8**
+
 ::
 
     class OrderedList:
@@ -649,7 +919,7 @@ be denoted by a ``head`` reference to ``None`` (see
             self.head = None
 
 As we consider the operations for the ordered list, we should note that
-the ``isEmpty`` and ``length`` methods can be implemented the same as
+the ``isEmpty`` and ``size`` methods can be implemented the same as
 with unordered lists since they deal only with the number of nodes in
 the list without regard to the actual item values. Likewise, the
 ``remove`` method will work just fine since we still need to find the
@@ -681,7 +951,7 @@ exist further out in the linked list.
 .. figure:: Figures/orderedsearch.png
    :align: center
 
-   Searching an Ordered Linked List
+   Figure 16: Searching an Ordered Linked List
 
 
 :ref:`Listing 9 <lst_ordersearch>` shows the complete ``search`` method. It is
@@ -694,6 +964,10 @@ contains data greater than the item we are looking for, we will set
 the unordered list search.
 
 .. _lst_ordersearch:
+
+**Listing 9**
+
+
 
 ::
 
@@ -734,7 +1008,7 @@ to stop.
 .. figure:: Figures/linkedlistinsert.png
    :align: center
 
-   Adding an Item to an Ordered Linked List
+   Figure 17: Adding an Item to an Ordered Linked List
 
 
 As we saw with unordered lists, it is necessary to have an additional
@@ -756,6 +1030,8 @@ beginning of the linked list or some place in the middle. Again,
 
 .. _lst_orderadd:
 
+**Listing 10**
+
 ::
 
     def add(self,item):
@@ -776,10 +1052,99 @@ beginning of the linked list or some place in the middle. Again,
         else:
             temp.setNext(current)
             previous.setNext(temp)
-
+            
+The ``OrderedList`` class with methods discussed thus far can be found
+in ActiveCode 4.
 We leave the remaining methods as exercises. You should carefully
 consider whether the unordered implementations will work given that the
 list is now ordered.
+
+.. activecode:: orderedlistclass
+   :caption: OrderedList Class Thus Far
+   :hidecode:
+   
+   class Node:
+       def __init__(self,initdata):
+           self.data = initdata
+           self.next = None
+
+       def getData(self):
+           return self.data
+
+       def getNext(self):
+           return self.next
+
+       def setData(self,newdata):
+           self.data = newdata
+
+       def setNext(self,newnext):
+           self.next = newnext
+
+
+   class OrderedList:
+       def __init__(self):
+           self.head = None
+
+       def search(self,item):
+           current = self.head
+           found = False
+           stop = False
+           while current != None and not found and not stop:
+               if current.getData() == item:
+                   found = True
+               else:
+                   if current.getData() > item:
+                       stop = True
+                   else:
+                       current = current.getNext()
+
+           return found
+
+       def add(self,item):
+           current = self.head
+           previous = None
+           stop = False
+           while current != None and not stop:
+               if current.getData() > item:
+                   stop = True
+               else:
+                   previous = current
+                   current = current.getNext()
+
+           temp = Node(item)
+           if previous == None:
+               temp.setNext(self.head)
+               self.head = temp
+           else:
+               temp.setNext(current)
+               previous.setNext(temp)       
+
+       def isEmpty(self):
+           return self.head == None
+
+       def size(self):
+           current = self.head
+           count = 0
+           while current != None:
+               count = count + 1
+               current = current.getNext()
+
+           return count
+
+
+   mylist = OrderedList()
+   mylist.add(31)
+   mylist.add(77)
+   mylist.add(17)
+   mylist.add(93)
+   mylist.add(26)
+   mylist.add(54)
+
+   print(mylist.size())
+   print(mylist.search(93))
+   print(mylist.search(100))
+   
+   
 
 Analysis of Linked Lists
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -787,7 +1152,7 @@ Analysis of Linked Lists
 To analyze the complexity of the linked list operations, we need to
 consider whether they require traversal. Consider a linked list that has
 *n* nodes. The ``isEmpty`` method is :math:`O(1)` since it requires
-one step to check the head reference for ``None``. ``length``, on the
+one step to check the head reference for ``None``. ``size``, on the
 other hand, will always require *n* steps since there is no way to know
 how many nodes are in the linked list without traversing from head to
 end. Therefore, ``length`` is :math:`O(n)`. Adding an item to an
@@ -802,4 +1167,4 @@ You may also have noticed that the performance of this implementation
 differs from the actual performance given earlier for Python lists. This
 suggests that linked lists are not the way Python lists are implemented.
 The actual implementation of a Python list is based on the notion of an
-array. We discuss this in more detail in Chapter 8.
+array. We discuss this in more detail in another chapter.

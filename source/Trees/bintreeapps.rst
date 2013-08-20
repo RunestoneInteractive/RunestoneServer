@@ -9,6 +9,9 @@
 ..  shortname:: BinaryTreeApplications
 ..  description:: What can we do with a binary tree?
 
+.. highlight:: python
+    :linenothreshold: 500
+
 
 Binary Tree Applications
 ------------------------
@@ -19,8 +22,7 @@ Parse Tree
 With the implementation of our tree data structure
 complete, we now look at an example of how a tree can be used to solve
 some real problems. In this section we will look at parse trees. Parse
-trees can be used to represent real-world constructions like sentences
-(see :ref:`Figure x <fig_nlparse>`), or mathematical expressions.
+trees can be used to represent real-world constructions like sentences or mathematical expressions.
 
 .. _fig_nlparse:
 
@@ -28,9 +30,9 @@ trees can be used to represent real-world constructions like sentences
    :align: center
    :alt: image
 
-   A Parse Tree for a Simple Sentence
+   Figure 1: A Parse Tree for a Simple Sentence
 
-:ref:`Figure x <fig_nlparse>` shows the hierarchical structure of a simple
+:ref:`Figure 1 <fig_nlparse>` shows the hierarchical structure of a simple
 sentence. Representing a sentence as a tree structure allows us to work
 with the individual parts of the sentence by using subtrees.
 
@@ -40,11 +42,11 @@ with the individual parts of the sentence by using subtrees.
    :align: center
    :alt: image
 
-   Parse Tree for :math:`((7+3)*(5-2))`
+   Figure 2: Parse Tree for :math:`((7+3)*(5-2))`
 
 We can also represent a mathematical expression such as
 :math:`((7 + 3) * (5 - 2))` as a parse tree, as shown in
-:ref:`Figure x <fig_meparse>`. We have already looked at fully parenthesized
+:ref:`Figure 2 <fig_meparse>`. We have already looked at fully parenthesized
 expressions, so what do we know about this expression? We know that
 multiplication has a higher precedence than either addition or
 subtraction. Because of the parentheses, we know that before we can do
@@ -57,7 +59,7 @@ evaluates to 10. The subtraction, which is the right subtree, evaluates
 to 3. Using the hierarchical structure of trees, we can simply replace
 an entire subtree with one node once we have evaluated the expressions
 in the children. Applying this replacement procedure gives us the
-simplified tree shown in :ref:`Figure x <fig_mesimple>`.
+simplified tree shown in :ref:`Figure 3 <fig_mesimple>`.
 
 .. _fig_mesimple:
 
@@ -65,7 +67,7 @@ simplified tree shown in :ref:`Figure x <fig_mesimple>`.
    :align: center
    :alt: image
 
-   A Simplified Parse Tree for :math:`((7+3)*(5-2))`
+   Figure 3: A Simplified Parse Tree for :math:`((7+3)*(5-2))`
 
 In the rest of this section we are going to examine parse trees in more
 detail. In particular we will look at
@@ -109,7 +111,7 @@ outlined above in action. We will use the expression
 :math:`(3 + (4 * 5))`. We will parse this expression into the
 following list of character tokens ``['(', '3', '+',``
 ``'(', '4', '*', '5' ,')',')']``. Initially we will start out with a
-parse tree that consists of an empty root node. :ref:`Figure x <fig_bldExpstep>`
+parse tree that consists of an empty root node. :ref:`Figure 4 <fig_bldExpstep>`
 illustrates the structure and contents of the parse tree, as each new
 token is processed.
 
@@ -158,9 +160,9 @@ token is processed.
    :alt: image
 
 
-   Tracing Parse Tree Construction
+   Figure 4: Tracing Parse Tree Construction
 
-Using :ref:`Figure x <fig_bldExpstep>`, let’s walk through the example step by
+Using :ref:`Figure 4 <fig_bldExpstep>`, let’s walk through the example step by
 step:
 
 a) Create an empty tree.
@@ -208,7 +210,11 @@ parent off the stack.
 Using the rules described above, along with the ``Stack`` and
 ``BinaryTree`` operations, we are now ready to write a Python function
 to create a parse tree. The code for our parse tree builder is presented
-in Listing {lst:buildexp}.
+in :ref:`ActiveCode 1 <lst_buildparse>`.
+
+.. _lst_buildparse:
+
+
 
 .. activecode::  parsebuild
     :caption: Building a Parse Tree
@@ -243,24 +249,24 @@ in Listing {lst:buildexp}.
         return eTree
 
     pt = buildParseTree("( ( 10 + 5 ) * 3 )")
-    pt.postorder()
+    pt.postorder()  #defined and explained in the next section
 
 
 The four rules for building a parse tree are coded as the first four
-clauses of the ``if`` statement on lines {lst:ptlp}, {lst:ptoper},
-{lst:ptopnd}, and {lst:ptrp} of Listing {lst:buildexp}. In each case you
+clauses of the ``if`` statement on lines 11, 15,
+19, and 24 of :ref:`ActiveCode 1 <lst_buildparse>`. In each case you
 can see that the code implements the rule, as described above, with a
 few calls to the ``BinaryTree`` or ``Stack`` methods. The only error
-checking we do in this function is in the ``else`` clause, where we
+checking we do in this function is in the ``else`` clause where we
 raise a ``ValueError`` exception if we get a token from the list that we
 do not recognize.
 
 Now that we have built a parse tree, what can we do with it? As a first
 example, we will write a function to evaluate the parse tree, returning
 the numerical result. To write this function, we will make use of the
-hierarchical nature of the tree. Look back at :ref:`Figure x <fig_meparse>`.
+hierarchical nature of the tree. Look back at :ref:`Figure 2 <fig_meparse>`.
 Recall that we can replace the original tree with the simplified tree
-shown in :ref:`Figure x <fig_mesimple>`. This suggests that we can write an
+shown in :ref:`Figure 3 <fig_mesimple>`. This suggests that we can write an
 algorithm that evaluates a parse tree by recursively evaluating each
 subtree.
 
@@ -277,20 +283,20 @@ effectively moves us down the tree, toward a leaf node.
 
 To put the results of the two recursive calls together, we can simply
 apply the operator stored in the parent node to the results returned
-from evaluating both children. In the example from :ref:`Figure x <fig_mesimple>`
+from evaluating both children. In the example from :ref:`Figure 3 <fig_mesimple>`
 we see that the two children of the root evaluate to themselves, namely
 10 and 3. Applying the multiplication operator gives us a final result
 of 30.
 
 The code for a recursive ``evaluate`` function is shown in
-Listing {lst:eteval}. First, we obtain references to the left and the
+:ref:`Listing 1 <lst_eval>`. First, we obtain references to the left and the
 right children of the current node. If both the left and right children
 evaluate to ``None``, then we know that the current node is really a
-leaf node. This check is on line {lst:etbc}. If the current node is not
+leaf node. This check is on line 7. If the current node is not
 a leaf node, look up the operator in the current node and apply it to
 the results from recursively evaluating the left and right children.
 
-To implement, we use a dictionary with the keys ``'+', '-', '*'``, and
+To implement the arithmetic, we use a dictionary with the keys ``'+', '-', '*'``, and
 ``'/'``. The values stored in the dictionary are functions from Python’s
 operator module. The operator module provides us with the functional
 versions of many commonly used operators. When we look up an operator in
@@ -299,28 +305,36 @@ the retrieved object is a function, we can call it in the usual way
 ``function(param1,param2)``. So the lookup ``opers['+'](2,2)`` is
 equivalent to ``operator.add(2,2)``.
 
+.. _lst_eval:
+
+**Listing 1**
+
+.. highlight:: python
+    :linenothreshold: 5
+
 ::
 
     def evaluate(parseTree):
-        opers = {'+':operator.add, '-':operator.sub, 
-             '*':operator.mul, '/':operator.truediv}
+        opers = {'+':operator.add, '-':operator.sub, '*':operator.mul, '/':operator.truediv}
+             
         leftC = parseTree.getLeftChild()
         rightC = parseTree.getRightChild()
         
-        if leftC and rightC:  #// \label{lst:etbc}
+        if leftC and rightC:
             fn = opers[parseTree.getRootVal()]
-            return fn(evaluate(leftC),evaluate(rightC)) #//\label{lst:evalexprec}
+            return fn(evaluate(leftC),evaluate(rightC))
         else:
             return parseTree.getRootVal()
 
-..     [caption=A Recursive Function to Evaluate a Binary Parse Tree,label=lst:eteval,float=htbp,index={evaluate}]
 
+.. highlight:: python
+    :linenothreshold: 500
 
 Finally, we will trace the ``evaluate`` function on the parse tree we
-created in :ref:`Figure x <fig_bldExpstep>`. When we first call ``evaluate``, we
+created in :ref:`Figure 4 <fig_bldExpstep>`. When we first call ``evaluate``, we
 pass the root of the entire tree as the parameter ``parseTree``. Then we
 obtain references to the left and right children to make sure they
-exist. The recursive call takes place on line {lst:evalexprec}. We begin
+exist. The recursive call takes place on line 9. We begin
 by looking up the operator in the root of the tree, which is ``'+'``.
 The ``'+'`` operator maps to the ``operator.add`` function call, which
 takes two parameters. As usual for a Python function call, the first
@@ -381,7 +395,7 @@ traversals. First let’s look at the preorder traversal. As an example of
 a tree to traverse, we will represent this book as a tree. The book is
 the root of the tree, and each chapter is a child of the root. Each
 section within a chapter is a child of the chapter, and each subsection
-is a child of its section, and so on. :ref:`Figure x <fig_booktree>` shows a
+is a child of its section, and so on. :ref:`Figure 5 <fig_booktree>` shows a
 limited version of a book with only two chapters. Note that the
 traversal algorithm works for trees with any number of children, but we
 will stick with binary trees for now.
@@ -392,7 +406,7 @@ will stick with binary trees for now.
    :align: center
    :alt: image
 
-   Representing a Book as a Tree
+   Figure 5: Representing a Book as a Tree
 
 Suppose that you wanted to read this book from front to back. The
 preorder traversal gives you exactly that ordering. Starting at the root
@@ -409,17 +423,22 @@ return to Chapter 1. Then we return to the Book node and follow the same
 procedure for Chapter 2.
 
 The code for writing tree traversals is surprisingly elegant, largely
-because the traversals are written recursively. Listing {lst:preorder}
+because the traversals are written recursively. :ref:`Listing 2 <lst_preorder1>`
 shows the Python code for a preorder traversal of a binary tree.
 
 You may wonder, what is the best way to write an algorithm like preorder
 traversal? Should it be a function that simply uses a tree as a data
 structure, or should it be a method of the tree data structure itself?
-Listing {lst:preordext} shows a version of the preorder traversal
+:ref:`Listing 2 <lst_preorder1>` shows a version of the preorder traversal
 written as an external function that takes a binary tree as a parameter.
 The external function is particularly elegant because our base case is
 simply to check if the tree exists. If the tree parameter is ``None``,
 then the function returns without taking any action.
+
+
+.. _lst_preorder1:
+
+**Listing 2**
 
 ::
 
@@ -432,11 +451,15 @@ then the function returns without taking any action.
 
 We can also implement ``preorder`` as a method of the ``BinaryTree``
 class. The code for implementing ``preorder`` as an internal method is
-shown in Listing {lst:preorder}. Notice what happens when we move the
+shown in :ref:`Listing 3 <lst_preorder2>`. Notice what happens when we move the
 code from internal to external. In general, we just replace ``tree``
 with ``self``. However, we also need to modify the base case. The
 internal method must check for the existence of the left and the right
 children *before* making the recursive call to ``preorder``.
+
+.. _lst_preorder2:
+
+**Listing 3**
 
 ::
 
@@ -447,7 +470,6 @@ children *before* making the recursive call to ``preorder``.
         if self.rightChild:
             self.right.preorder()
 
-..     [caption=Preorder Traversal Implemented as a Method of \texttt{BinaryTree},label=lst:preorder,float=htbp,index={preorder}]
 
 
 Which of these two ways to implement ``preorder`` is best? The answer is
@@ -460,9 +482,13 @@ follows very closely with the code we wrote earlier to evaluate a parse
 tree. Therefore we will write the rest of the traversals as external
 functions.
 
-The algorithm for the ``postorder`` traversal, in
-Listing {lst:postorder} is nearly identical to ``preorder``, except that
+The algorithm for the ``postorder`` traversal, shown in
+:ref:`Listing 4 <lst_postorder1>`, is nearly identical to ``preorder`` except that
 we move the call to print to the end of the function.
+
+.. _lst_postorder1:
+
+**Listing 4**
 
 ::
 
@@ -472,47 +498,57 @@ we move the call to print to the end of the function.
             postorder(tree.getRightChild())
             print(tree.getRootVal())
 
-..     [caption=Postorder Traversal Algorithm,label=lst:postorder,float=htbp,index={postorder}]
 
 
 We have already seen a common use for the postorder traversal, namely
-evaluating a parse tree. Look back at Listing {lst:eteval} again. What
+evaluating a parse tree. Look back at :ref:`Listing 1 <lst_eval>` again. What
 we are doing is evaluating the left subtree, evaluating the right
 subtree, and combining them in the root through the function call to an
 operator. Assume that our binary tree is going to store only expression
 tree data. Let’s rewrite the evaluation function, but model it even more
-closely on the ``postorder`` code in Listing {lst:postorder}.
+closely on the ``postorder`` code in :ref:`Listing 4 <lst_postorder1>` (see :ref:`Listing 5 <lst_postordereval>`).
+
+.. _lst_postordereval:
+
+**Listing 5**
+
+.. highlight:: python
+    :linenothreshold: 5
 
 ::
 
     def postordereval(tree):
-        opers = {'+':operator.add, '-':operator.sub, 
-             '*':operator.mul, '/':operator.truediv}
+        opers = {'+':operator.add, '-':operator.sub, '*':operator.mul, '/':operator.truediv}
         res1 = None
         res2 = None
         if tree:
-            res1 = postordereval(tree.getLeftChild())  #// \label{peleft}
-            res2 = postordereval(tree.getRightChild()) #// \label{peright}
+            res1 = postordereval(tree.getLeftChild())
+            res2 = postordereval(tree.getRightChild())
             if res1 and res2:
-                return opers[tree.getRootVal()](res1,res2) #// \label{peeval}
+                return opers[tree.getRootVal()](res1,res2)
             else:
                 return tree.getRootVal()
+                
 
-..     [caption=Postorder Evaluation Algorithm,label=lst:posteval,float=htbp,index={postorder}]
+.. highlight:: python
+    :linenothreshold: 500
 
-
-Notice that the form in Listing {lst:posteval} is the same as the form
-in Listing {lst:postorder}, except that instead of printing the key at
+Notice that the form in :ref:`Listing 4 <lst_postorder1>` is the same as the form
+in :ref:`Listing 5 <lst_postordereval>`, except that instead of printing the key at
 the end of the function, we return it. This allows us to save the values
-returned from the recursive calls in lines {peleft} and {peright}. We
-then use these saved values along with the operator on line {peeval}.
+returned from the recursive calls in lines 6 and 7. We
+then use these saved values along with the operator on line 9.
 
 The final traversal we will look at in this section is the inorder
 traversal. In the inorder traversal we visit the left subtree, followed
-by the root, and finally the right subtree. Listing {lst:inorder} shows
+by the root, and finally the right subtree. :ref:`Listing 6 <lst_inorder1>` shows
 our code for the inorder traversal. Notice that in all three of the
 traversal functions we are simply changing the position of the ``print``
 statement with respect to the two recursive function calls.
+
+.. _lst_inorder1:
+
+**Listing 6**
 
 ::
 
@@ -523,7 +559,6 @@ statement with respect to the two recursive function calls.
           print(tree.getRootVal())
           inorder(tree.getRightChild())
 
-..     [caption=Inorder Traversal Algorithm,label=lst:inorder,float=htbp,index={inorder}]
 
 If we perform a simple inorder traversal of a parse tree we get our
 original expression back, without any parentheses. Let’s modify the
@@ -532,7 +567,11 @@ version of the expression. The only modifications we will make to the
 basic template are as follows: print a left parenthesis *before* the
 recursive call to the left subtree, and print a right parenthesis
 *after* the recursive call to the right subtree. The modified code is
-shown in Listing {lst:prtfpe}.
+shown in :ref:`Listing 7 <lst_printexp>`.
+
+.. _lst_printexp:
+
+**Listing 7**
 
 ::
 
@@ -544,29 +583,6 @@ shown in Listing {lst:prtfpe}.
           sVal = sVal + printexp(tree.getRightChild())+')'
       return sVal
 
-
-..    [caption=Modified Inorder Traversal to Print Fully Parenthesized Expression,label=lst:prtfpe,float=htbp,index={printexp}]
-
-The following Python session shows the ``printexp`` and
-``postordereval`` methods in action.
-
-
-::
-
-    >>> from pythonds.trees import BinaryTree
-    >>> x = BinaryTree('*')
-    >>> x.insertLeft('+')
-    >>> l = x.getLeftChild()
-    >>> l.insertLeft(4)
-    >>> l.insertRight(5)
-    >>> x.insertRight(7)
-    >>> 
-    >>> print(printexp(x))
-    (((4) + (5)) * (7))
-    >>>
-    >>> print(postordereval(x))
-    63
-    >>> 
 
 
 Notice that the ``printexp`` function as we have implemented it puts
