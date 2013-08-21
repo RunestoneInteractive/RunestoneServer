@@ -21,17 +21,17 @@
     }
   }
   </script>
-  <div class='col-lg-7'>
+  <div class='col-md-7'>
     <form name="mainform" action="/{{=request.application}}/{{=request.controller}}/build" method="get"  onsubmit="return validateForm();">
       <div class="form-group row">
-        <div class="col-lg-4">
+        <div class="col-md-4">
           <label for="projectname">Project Name</label>
           <input type="text" class='form-control' placeholder="myproject" name="projectname" id="projectname" />
         </div>
       </div>
 <p>This will be the name your students use when they register.  Make it one word, short (no spaces)</p>
       <div class="form-group row">
-        <div class="col-lg-6">
+        <div class="col-md-6">
           <label for="projectdescription">Description</label>
           <input type="text" class='form-control' placeholder="Enter a short description" name="projectdescription" id="projectdescription" />
         </div>
@@ -88,7 +88,7 @@
       </div>
 
       <div class="form-group row">
-        <div class="col-lg-3">
+        <div class="col-md-3">
           <label for="startdate">Term start date </label>
           <input type="text" name="startdate" id='startdate' class='form-control' data-date-format="mm/dd/yyyy" placeholder="{{=datetime.date.today().strftime('%m/%d/%Y')}}"/>
         </div>

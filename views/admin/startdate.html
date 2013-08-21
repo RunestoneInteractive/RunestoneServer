@@ -4,7 +4,7 @@
 <script src="{{=URL('static', 'js/bootstrap-datepicker.js')}}"></script>
 <h3>Set the course start date</h3>
 
-<div class="col-lg-7">
+<div class="col-md-7">
 <p>This allows you set the start date for the current term of your course. All logs, records, and
 assignments from dates before the start date will not be visible to you or to your students.
 </p>
@@ -13,7 +13,7 @@ assignments from dates before the start date will not be visible to you or to yo
 
 <form name="startdate-form" method="POST" action="/{{=request.application}}/admin/startdate">
     <div class="form-group row">
-      <div class="col-lg-3">
+      <div class="col-md-3">
         <label for="startdate">Term start date</label>
         <input type="text" name="startdate" class="form-control" id="startdate" data-date-format="mm/dd/yyyy" value="{{=startdate}}"/>
       </div>
