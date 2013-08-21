@@ -157,7 +157,7 @@ function createActiveCode(divid,suppliedSource,sid) {
         editor.parentDiv = acblockid;
         var runButton = document.createElement("button");
         runButton.appendChild(document.createTextNode('Run'));
-        runButton.className = runButton.className + ' btn btn-small btn-success';
+        runButton.className = runButton.className + ' btn btn-success';
         runButton.onclick = myRun;
         edNode.appendChild(runButton);
         edNode.appendChild(document.createElement('br'));
@@ -166,21 +166,21 @@ function createActiveCode(divid,suppliedSource,sid) {
                 var saveButton = document.createElement("input");
                 saveButton.setAttribute('type','button');
                 saveButton.setAttribute('value','Save');
-                saveButton.className = saveButton.className + ' btn btn-small';
+                saveButton.className = saveButton.className + ' btn btn-default';
                 saveButton.onclick = mySave;
                 edNode.appendChild(saveButton);
 
                 var loadButton = document.createElement("input");
                 loadButton.setAttribute('type','button');
                 loadButton.setAttribute('value','Load');
-                loadButton.className = loadButton.className + ' btn btn-small';
+                loadButton.className = loadButton.className + ' btn btn-default';
                 loadButton.onclick = myLoad;
                 edNode.appendChild(loadButton);
             } else {
                 var saveButton = document.createElement("input");
                 saveButton.setAttribute('type','button');
                 saveButton.setAttribute('value','Save');
-                saveButton.className = saveButton.className + ' btn btn-small disabled';
+                saveButton.className = saveButton.className + ' btn btn-default disabled';
                 saveButton.setAttribute('data-toggle','tooltip');
                 saveButton.setAttribute('title','Register or log in to save your code');
                 edNode.appendChild(saveButton);
@@ -192,7 +192,7 @@ function createActiveCode(divid,suppliedSource,sid) {
                 var loadButton = document.createElement("input");
                 loadButton.setAttribute('type','button');
                 loadButton.setAttribute('value','Load');
-                loadButton.className = loadButton.className + ' btn btn-small disabled';
+                loadButton.className = loadButton.className + ' btn btn-default disabled';
                 loadButton.setAttribute('data-toggle','tooltip');
                 loadButton.setAttribute('title','Register or log in to load your saved code');
                 edNode.appendChild(loadButton);
@@ -835,12 +835,12 @@ function createScratchActivecode() {
         '          </div>' +
         '          <p class="ac_caption"><span class="ac_caption_text">Scratch Editor</span> </p>' +
 
-        '          <button class="btn btn-small btn-success" id="' + divid + '_runb" onclick="runit(\'' + divid + '\',this, undefined);">Run</button>' +
+        '          <button class="btn btn-success" id="' + divid + '_runb" onclick="runit(\'' + divid + '\',this, undefined);">Run</button>' +
 
         '          <div id="cont"></div>' +
 
-        '          <button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="' + divid + '_saveb" onclick="saveEditor(\'' + divid + '\');">Save</button>' +
-        '          <button class="ac_opt btn btn-default btn-small" style="display: inline-block" id="' + divid + '_loadb" onclick="requestCode(\'' + divid + '\');">Load</button>' +
+        '          <button class="ac_opt btn btn-default" style="display: inline-block" id="' + divid + '_saveb" onclick="saveEditor(\'' + divid + '\');">Save</button>' +
+        '          <button class="ac_opt btn btn-default" style="display: inline-block" id="' + divid + '_loadb" onclick="requestCode(\'' + divid + '\');">Load</button>' +
 
         '          <div style="text-align: center">' +
         '            <canvas id="' + divid + '_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +

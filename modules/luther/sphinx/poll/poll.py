@@ -29,7 +29,7 @@ def setup(app):
     app.add_stylesheet('poll.css')
 
 
-BEGIN = """ <div id='%(divid)s' class='poll alert'> """
+BEGIN = """ <div id='%(divid)s' class='poll alert alert-warning'> """
 
 BEGIN_FORM = """
     <form id='%(divid)s_poll' name='%(divid)s_poll' action="">
@@ -56,7 +56,7 @@ COMMENT = """
 """
 
 END_POLL_INPUT = """
-            <button type='button' id='%(divid)s_submit' class='btn btn-small btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
+            <button type='button' id='%(divid)s_submit' class='btn btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
         </div>
 """
 

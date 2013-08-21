@@ -3,7 +3,7 @@
 {% set script_files = script_files + [
     '_static/jquery-ui-1.10.3.custom.min.js',
     '_static/jquery-fix.js',
-    '_static/bootstrap-3.0.0-rc1/js/bootstrap.min.js',
+    '_static/bootstrap-3.0.0/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
     '_static/waypoints.min.js',
     '_static/rangy-core.js',
@@ -16,7 +16,7 @@
   ]
 %}
 
-{% set css_files = ['_static/bootstrap-3.0.0-rc1/css/bootstrap.min.css'] + css_files %}
+{% set css_files = ['_static/bootstrap-3.0.0/css/bootstrap.min.css'] + css_files %}
 {% if theme_bootswatch_theme %}
   {% set css_files = css_files +
     ['http://netdna.bootstrapcdn.com/bootswatch/2.3.1/' + theme_bootswatch_theme + '/bootstrap.min.css']
@@ -24,7 +24,6 @@
 {% endif %}
 
 {% set css_files = css_files + [
-    '_static/bootstrap-3.0.0-rc1/css/bootstrap-glyphicons.css',
     '_static/jquery-ui-1.10.3.custom.min.css',
     '_static/bootstrap-sphinx.css',
     '_static/user-highlights.css',
@@ -40,25 +39,27 @@
 {% macro navBar() %}
 
 <!-- Begin navbar -->
-<div id="navbar" class="navbar navbar-fixed-top">
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
 
   <div class="container">
 
-    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-    <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-responsive-collapse">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
 
-    <div>
-     <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="/{{appname}}/default/user/login">&nbsp; </a>
-      <a class="navbar-brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+      <div>
+        <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="/{{appname}}/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+      </div>
     </div>
 
-    <div class="nav-collapse collapse navbar-responsive-collapse">
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
 
-      <ul class="nav navbar-nav pull-right">
+      <ul class="nav navbar-nav navbar-right">
 
         <li class="divider-vertical"></li>
 
@@ -114,7 +115,7 @@
                 <div class="input-group">
                   <input type="text" class="form-control" name="q" placeholder="Search this book" />
                   <span class="input-group-btn">
-                    <button class="btn btn-primary" style="margin:0;" type="submit"">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
                       <i class="glyphicon glyphicon-search"></i>
                     </button>
                   </span>
@@ -199,7 +200,7 @@
   eBookConfig.course = '{{course_id}}';
   eBookConfig.logLevel = {{loglevel}};
   eBookConfig.loginRequired = {{login_required}}
-  eBookConfig.build_info = "{{build_info}}"
+  eBookConfig.build_info = "{{build_info}}";
   eBookConfig.isLoggedIn = false;
 </script>
 
@@ -289,10 +290,10 @@
   // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
   $(function() {
     $(".ExecutionVisualizer").each(function() {
-      $(this).find("#jmpFirstInstr").addClass('btn btn-small btn-default');
-      $(this).find("#jmpStepBack").addClass('btn btn-small btn-danger');
-      $(this).find("#jmpStepFwd").addClass('btn btn-small btn-success');
-      $(this).find("#jmpLastInstr").addClass('btn btn-small btn-default');
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
       });
   });
 

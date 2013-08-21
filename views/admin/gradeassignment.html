@@ -38,7 +38,7 @@
       <td>{{ =s[1] }}</td>
       <td>{{ =s[4] }}</td>
       <td>{{ =s[5]}} </td>
-      <td><button class='btn btn-default btn-small' style="margin-left: 5px;" onclick="createActiveCode('{{ =s[0] }}',undefined,'{{ =s[1] }}')">grade</button></td>
+      <td><button class='btn btn-default' style="margin-left: 5px;" onclick="createActiveCode('{{ =s[0] }}',undefined,'{{ =s[1] }}')">grade</button></td>
       <td><div id="{{ =s[0] }}_{{ =s[1] }}"></div></td>
       <td><input type="text" class="form-control " value= "{{=s[2]}}" onchange="sendGrade(this.value,'{{ =s[1] }}','{{ =s[0] }}', {{=s[3]}});" /></td>
     </tr>

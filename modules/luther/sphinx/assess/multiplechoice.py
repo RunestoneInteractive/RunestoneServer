@@ -114,7 +114,7 @@ class MChoiceMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             '''
         
         OPTION = '''
@@ -127,8 +127,8 @@ class MChoiceMF(Assessment):
             <script>
             $(document).ready(function(){checkRadio('%(divid)s');});
             </script>
-            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button> 
-            <button class='btn btn-small btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
+            <button class='btn btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -195,7 +195,7 @@ class MChoiceMA(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             '''
         
         OPTION = '''
@@ -207,8 +207,8 @@ class MChoiceMA(Assessment):
             <script>
             $(document).ready(function(){checkMultipleSelect('%(divid)s');});
             </script>
-            <button class='btn btn-small btn-success' name="do answer" onclick="checkMCMAStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
-            <button class='btn btn-small btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMAStorage('%(divid)s','%(correct)s',%(feedback)s)">Check Me</button>
+            <button class='btn btn-default' id="%(divid)s_bcomp" disabled name="compare" onclick="compareAnswers('%(divid)s');">Compare Me</button>
             </form><br />
             <div id="%(divid)s_feedback">
             </div>
@@ -276,7 +276,7 @@ class MChoiceRandomMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             <p>%(qnumber)s: %(bodytext)s</p>
             <form name="%(divid)s_form" method="get" action="" onsubmit="return true;">
             '''

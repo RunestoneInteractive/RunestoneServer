@@ -11,10 +11,10 @@ def setup(app):
 
 
 BEGIN = """
-    <button type='button' id='%(divid)s_show' class='btn btn-default btn-small' style='margin-bottom:10px;' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">
+    <button type='button' id='%(divid)s_show' class='btn btn-default' style='margin-bottom:10px;' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">
         %(showtitle)s
     </button>
-    <button type='button' id='%(divid)s_hide' class='btn btn-default btn-small' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>%(hidetitle)s</button>
+    <button type='button' id='%(divid)s_hide' class='btn btn-default' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>%(hidetitle)s</button>
     <div id='%(divid)s' style='display:none'>
 """
 
