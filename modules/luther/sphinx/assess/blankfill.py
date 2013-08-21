@@ -94,7 +94,7 @@ class FillInTheBlank(Assessment):
             """
         
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             '''
         
         TEMPLATE_END = '''

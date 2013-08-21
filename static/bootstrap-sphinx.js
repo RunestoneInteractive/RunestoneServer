@@ -118,7 +118,7 @@
 
     // Add Note, Warning styles.
     $('div.note').addClass('alert').addClass('alert-info');
-    $('div.warning').addClass('alert');
+    $('div.warning').addClass('alert').addClass('alert-warning');
 
     // Inline code styles to Bootstrap style.
     $('tt.docutils.literal').not(".xref").each(function (i, e) {

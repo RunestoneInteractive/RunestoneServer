@@ -147,6 +147,7 @@ h2 {
 /* default bookstrap alert color is hard to read (low contrast). */
 .alert {
     color: #333;
+    padding: 10px;
 }
 
 /* override the color styles applied by Skulpt to the unittest results divs */

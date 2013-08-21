@@ -114,7 +114,7 @@ class MChoiceMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             '''
         
         OPTION = '''
@@ -195,7 +195,7 @@ class MChoiceMA(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             '''
         
         OPTION = '''
@@ -276,7 +276,7 @@ class MChoiceRandomMF(Assessment):
             ...
             """
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             <p>%(qnumber)s: %(bodytext)s</p>
             <form name="%(divid)s_form" method="get" action="" onsubmit="return true;">
             '''

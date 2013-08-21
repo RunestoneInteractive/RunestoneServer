@@ -30,7 +30,7 @@ def setup(app):
     app.add_stylesheet('tabbedstuff.css')
 
 
-BEGIN = """<div id='%(divid)s' class='alert'>"""
+BEGIN = """<div id='%(divid)s' class='alert alert-warning'>"""
 
 TABLIST_BEGIN = """<ul class='nav nav-tabs' id='%(divid)s_tab'>"""
 

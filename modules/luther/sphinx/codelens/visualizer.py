@@ -56,7 +56,7 @@ QUESTION = '''
         </button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
         <br />
-        <p id="%(divid)s_feedbacktext" class="feedbacktext alert"></p>
+        <p id="%(divid)s_feedbacktext" class="feedbacktext alert alert-warning"></p>
       </div>
     </div>
   </div>

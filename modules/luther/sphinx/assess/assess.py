@@ -56,7 +56,7 @@ class AddButton(Directive):
             """
         
         TEMPLATE_START = '''
-            <div id="%(divid)s" class="alert">
+            <div id="%(divid)s" class="alert alert-warning">
             <form name="%(divid)s_form" method="get" action="" onsubmit="return false;">
             '''
         

@@ -29,7 +29,7 @@ def setup(app):
     app.add_stylesheet('poll.css')
 
 
-BEGIN = """ <div id='%(divid)s' class='poll alert'> """
+BEGIN = """ <div id='%(divid)s' class='poll alert alert-warning'> """
 
 BEGIN_FORM = """
     <form id='%(divid)s_poll' name='%(divid)s_poll' action="">

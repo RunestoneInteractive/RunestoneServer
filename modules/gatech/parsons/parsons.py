@@ -98,7 +98,7 @@ Example:
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
-        <div class='parsons alert'>
+        <div class='parsons alert alert-warning'>
         %(qnumber)s: %(instructions)s<br /><br />
         <div style="clear:left;"></div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
