@@ -113,6 +113,21 @@ input[type="button"].btn.btn-small {
     pointer-events: auto;
 }
 
+.btn-default {
+    color: #fff;
+    background-color: #474949;
+    border-color: #474949;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active {
+    background-color: #3a3c3c;
+    border-color: #2e2f2f;
+    color: #fff;
+}
+
 .tooltip {
     z-index: 2000 !important;
 }
