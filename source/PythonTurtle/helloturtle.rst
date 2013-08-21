@@ -116,6 +116,62 @@ instructions that all turtles know how to respond to.
     Modify the program by adding the commands necessary to have *alex* complete the
     rectangle.
 
+**Check your understanding**
+
+.. mchoicemf:: test_question3_1_0
+   :answer_a: North
+   :answer_b: South
+   :answer_c: East 
+   :answer_d: West
+   :correct: c
+   :feedback_a: Some turtle systems start with the turtle facing north, but not this one.
+   :feedback_b: No, look at the first example with a turtle.  Which direction does the turtle move?
+   :feedback_c: Yes, the turtle starts out facing east.
+   :feedback_d: No, look at the first example with a turtle.  Which direction does the turtle move?
+
+   Which direction does the Turtle face when it is created?
+
+**Mixed up programs**
+
+.. parsonsprob:: 3_1
+
+   The following program uses a turtle to draw a capital L as shown in the picture to the left of this text, <img src="../_static/TurtleL4.png" width="150" align="left" hspace="10" vspace="5" /> but the lines are mixed up.  The program should do all necessary set-up: import the turtle module, get the window to draw on, and create the turtle.  Remember that the turtle starts off facing east when it is created.  The turtle should turn to face south and draw a line that is 150 pixels long and then turn to face east and draw a line that is 75 pixels long.  We have added a compass to the picture to indicate the directions north, south, west, and east.  <br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>
+   -----
+   import turtle
+   window = turtle.Screen()
+   ella = turtle.Turtle()
+   =====
+   ella.right(90)
+   ella.forward(150)
+   =====
+   ella.left(90)
+   ella.forward(75)
+
+.. parsonsprob:: 3_2
+
+   The following program uses a turtle to draw a checkmark as shown to the left, <img src="../_static/TurtleCheckmark4.png" width="150" align="left" hspace="10" vspace="5" /> but the lines are mixed up.  The program should do all necessary set-up: import the turtle module, get the window to draw on, and create the turtle.  The turtle should turn to face southeast, draw a line that is 75 pixels long, then turn to face northeast, and draw a line that is 150 pixels long.  We have added a compass to the picture to indicate the directions north, south, west, and east.  Northeast is between north and east. Southeast is between south and east. <br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>
+   -----
+   import turtle
+   =====
+   window = turtle.Screen()
+   =====
+   maria = turtle.Turtle()
+   =====
+   maria.right(45)
+   maria.forward(75)
+   =====
+   maria.left(90)
+   maria.forward(150)
+
+.. parsonsprob:: 3_3
+
+   The following program uses a turtle to draw a single line to the west as shown to the left, <img src="../_static/TurtleLineToWest.png" width="150" align="left" hspace="10" vspace="5" /> but the program lines are mixed up.  The program should do all necessary set-up: import the turtle module, get the window to draw on, and create the turtle.  The turtle should then turn to face west and draw a line that is 75 pixels long.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>   
+   -----
+   import turtle
+   window = turtle.Screen()
+   jamal = turtle.Turtle()
+   jamal.left(180)
+   jamal.forward(75)
 
 
 An object can have various methods --- things it can do --- and it can also
@@ -234,10 +290,55 @@ screen until we click on it.
    :feedback_d: This code would turn the turtle to the southeast before drawing.
    :feedback_e: Yes, the turtle starts facing east, so to turn it north you can turn left 90 or right 270 degrees.
 
-   Which of the following would produce the following image? 
+   Which of the following code would produce the following image? 
 
    .. image:: ../_static/turtleTest1.png 
       :alt: long line to north with shorter line to west on top
+
+**Mixed up programs**
+
+.. parsonsprob:: 3_4
+
+   The following program uses a turtle to draw a capital L in white on a blue background as shown to the left, <img src="../_static/BlueTurtleL.png" width="150" align="left" hspace="10" vspace="5" /> but the lines are mixed up.  The program should do all necessary set-up and create the turtle and set the pen size to 10.  The turtle should then turn to face south, draw a line that is 150 pixels long, turn to face east, and draw a line that is 75 pixels long.   Finally, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>
+   -----
+   import turtle
+   wn = turtle.Screen()
+   =====
+   wn.bgcolor("blue")     	
+   jamal = turtle.Turtle()
+   =====
+   jamal.color("white")               	
+   jamal.pensize(10) 
+   =====                
+   jamal.right(90)
+   jamal.forward(150)
+   ===== 
+   jamal.left(90)
+   jamal.forward(75)
+   wn.exitonclick()
+
+.. parsonsprob:: 3_5
+
+   The following program uses a turtle to draw a capital T in white on a green background as shown to the left, <img src="../_static//TurtleT.png" width="150" align="left" hspace="10" vspace="5"/> but the lines are mixed up.  The program should do all necessary set-up, create the turtle, and set the pen size to 10.  After that the turtle should turn to face north, draw a line that is 150 pixels long, turn to face west, and draw a line that is 50 pixels long.  Next, the turtle should turn 180 degrees and draw a line that is 100 pixels long.  Finally, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>  
+   -----
+   import turtle
+   wn = turtle.Screen()
+   wn.bgcolor("green")     	
+   jamal = turtle.Turtle()
+   jamal.color("white")               	
+   jamal.pensize(10) 
+   =====                
+   jamal.left(90)
+   jamal.forward(150)
+   =====
+   jamal.left(90)
+   jamal.forward(50)
+   =====
+   jamal.right(180)
+   jamal.forward(100)
+   =====
+   wn.exitonclick()
+
 
 .. index:: instance
 
@@ -322,6 +423,55 @@ Here are some *How to think like a computer scientist* observations:
    :feedback_b: You can create and use as many turtles as you like.  As long as they have different names, you can operate them independently, and make them move in any order you like.  If you are not totally convinced, try interleaving the instructions for alex and tess in ActiveCode box 3.
 
    True or False: You can only have one active turtle at a time.  If you create a second one, you will no longer be able to access or use the first.
+
+**Mixed up programs**
+
+.. parsonsprob:: 3_6
+
+   The following program has one turtle, "jamal", draw a capital L in blue and then another, "tina", draw a line to the west in orange as shown to the left, <img src="../_static//TwoTurtles1.png" width="150" align="left" hspace="10" vspace="5" />.  The program should do all set-up, have "jamal" draw the L, and then have "tina" draw the line.   Finally, it should set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p>
+   -----
+   import turtle
+   wn = turtle.Screen()
+   =====    	
+   jamal = turtle.Turtle()
+   jamal.pensize(10)
+   jamal.color("blue")               	               
+   jamal.right(90)
+   jamal.forward(150)
+   ===== 
+   jamal.left(90)
+   jamal.forward(75)
+   =====
+   tina = turtle.Turtle()
+   tina.pensize(10)
+   tina.color("orange")
+   tina.left(180)
+   tina.forward(75)
+   =====
+   wn.exitonclick()
+
+.. parsonsprob:: 3_7
+
+   The following program has one turtle, "jamal", draw a line to the north in blue and then another, "tina", draw a line to the east in orange as shown to the left, <img src="../_static//TwoTurtlesL.png" width="150" align="left" hspace="10" vspace="5" />.  The program should import the turtle module, get the window to draw on, create the turtle "jamal", have it draw a line to the north, then create the turtle "tina", and have it draw a line to the east.  Finally, it should set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order.  Then click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order.</p> 
+   -----
+   import turtle
+   =====
+   wn = turtle.Screen()
+   =====   	
+   jamal = turtle.Turtle()
+   jamal.color("blue") 
+   jamal.pensize(10)   
+   =====            	               
+   jamal.left(90)
+   jamal.forward(150)
+   =====
+   tina = turtle.Turtle()
+   tina.pensize(10)  
+   tina.color("orange")
+   tina.forward(150)
+   =====
+   wn.exitonclick()
+
 
 .. index:: for loop
 
@@ -475,6 +625,49 @@ of the computation.
     wn.exitonclick()
 
 In this case, the value of ``aColor`` is used to change the color attribute of ``alex``.  Each iteration causes ``aColor`` to change to the next value in the list.
+
+**Mixed up program**
+
+.. parsonsprob:: 3_8
+
+   The following program uses a turtle to draw a triangle as shown to the left, <img src="../_static//TurtleTriangle.png" width="150" align="left" hspace="10" vspace="5"/> but the lines are mixed up.  The program should do all necessary set-up and create the turtle.  After that, iterate (loop) 3 times, and each time through the loop the turtle should go forward 175 pixels, and then turn left 120 degrees.  After the loop, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order with the correct indention.  Click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order or are incorrectly indented.</p> 
+   -----
+   import turtle 
+   =====         
+   wn = turtle.Screen()
+   marie = turtle.Turtle()
+   =====
+   # repeat 3 times
+   for i in [0,1,2]:  
+   =====   
+     marie.forward(175)
+   =====
+     marie.left(120)
+   =====
+   wn.exitonclick()
+
+**Mixed up program**
+
+.. parsonsprob:: 3_9
+
+   The following program uses a turtle to draw a rectangle as shown to the left, <img src="../_static//TurtleRect.png" width="150" align="left" hspace="10" vspace="5" /> but the lines are mixed up.  The program should do all necessary set-up and create the turtle.  After that, iterate (loop) 2 times, and each time through the loop the turtle should go forward 175 pixels, turn right 90 degrees, go forward 150 pixels, and turn right 90 degrees.  After the loop, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order with the correct indention.  Click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order or are incorrectly indented.</p>  
+   -----
+   import turtle          
+   wn = turtle.Screen()
+   carlos = turtle.Turtle()
+   =====
+   # repeat 2 times
+   for i in [1,2]:  
+   =====   
+     carlos.forward(175)
+   =====
+     carlos.right(90)
+   =====  
+     carlos.forward(150)
+     carlos.right(90)
+   =====
+   wn.exitonclick()
+
 
 **Check your understanding**
 
@@ -794,6 +987,53 @@ footprints created by ``stamp``.  But the program still only has *one* turtle
 instance --- can you figure out which one is the real tess?  (Hint: if you're
 not sure, write a new line of code after the ``for`` loop to change tess'
 color, or to put her pen down and draw a line, or to change her shape, etc.)
+
+**Mixed up program**
+
+.. parsonsprob:: 3_10
+
+   The following program uses the stamp method to create a circle of turtle shapes as shown to the left, <img src="../_static//TurtleCircle.png" width="150" align="left" hspace="10" vspace="5"/> but the lines are mixed up.  The program should do all necessary set-up, create the turtle, set the shape to "turtle", and pick up the pen.  Then the turtle should repeat the following ten times: go forward 50 pixels, leave a copy of the turtle at the current position, reverse for 50 pixels, and then turn right 36 degrees.  After the loop, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order with the correct indention.  Click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order or are incorrectly indented.</p>  
+   -----
+   import turtle
+   wn = turtle.Screen()
+   jose = turtle.Turtle()
+   jose.shape("turtle")
+   jose.penup()
+   =====                   
+   for size in range(10):  
+   =====    
+     jose.forward(50)
+   =====
+     jose.stamp()    
+   =====      
+     jose.forward(-50)
+   =====
+     jose.right(36)             
+   =====
+   wn.exitonclick()
+
+**Mixed up program**
+
+.. parsonsprob:: 3_11
+
+   The following program uses the stamp method to create a line of turtle shapes as shown to the left, <img src="../_static//Turtle3Stamp.png" width="150" align="left" hspace="10" vspace="5" /> but the lines are mixed up.  The program should do all necessary set-up, create the turtle, set the shape to "turtle", and pick up the pen.  Then the turtle should repeat the following three times: go forward 50 pixels and leave a copy of the turtle at the current position.  After the loop, set the window to close when the user clicks in it.<br /><br /><p>Drag the blocks of statements from the left column to the right column and put them in the right order with the correct indention.  Click on <i>Check Me</i> to see if you are right. You will be told if any of the lines are in the wrong order or are incorrectly indented.</p>
+   -----
+   import turtle
+   wn = turtle.Screen()
+   =====
+   nikea = turtle.Turtle()
+   =====
+   nikea.shape("turtle")
+   =====
+   nikea.penup()
+   =====                   
+   for size in range(3):  
+   =====    
+     nikea.forward(50)
+   =====
+     nikea.stamp()   
+   =====                 
+   wn.exitonclick()
 
 .. admonition:: Lab
 

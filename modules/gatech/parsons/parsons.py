@@ -100,14 +100,14 @@ Example:
         TEMPLATE = '''
         <div class='parsons alert'>
         %(qnumber)s: %(instructions)s<br /><br />
+        <div style="clear:left;"></div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
     	<div style="clear:left;"></div>
+        <input type="button" class='btn btn-small btn-success' id="checkMe%(unique_id)s" value="Check Me"/> 
+        <input type="button" class='btn btn-small btn-default' id="reset%(unique_id)s" value="Reset"/>
         <div id="parsons-message-%(unique_id)s"></div>
-        
-        <button id="feedbackLink-%(unique_id)s" class='btn btn-small btn-success'>Get Feedback</button>
-        <button id="newInstanceLink-%(unique_id)s" class='btn btn-small btn-default'>Reset</button>
         </div>
 
     <script>
@@ -124,9 +124,25 @@ Example:
 
 	        } else {
                     logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'%(divid)s'});
+                    msgBox.fadeIn(100);
                     msgBox.attr('class','alert alert-success');
                     msgBox.html("Perfect!")
                 }
+            
+            // set min width and height
+            var sortableul = $("#ul-parsons-sortableCode-%(unique_id)s");
+            var trashul = $("#ul-parsons-sortableTrash-%(unique_id)s");
+            var sortableHeight = sortableul.height();
+            var sortableWidth = sortableul.width();
+            var trashWidth = trashul.width();
+            var trashHeight = trashul.height();
+            var minHeight = Math.max(trashHeight,sortableHeight);
+            var minWidth = Math.max(trashWidth, sortableWidth);
+            trashul.css("min-height",minHeight + "px");
+            sortableul.css("min-height",minHeight + "px");
+            trashul.css("min-width",minWidth + "px");
+            sortableul.css("min-width",minWidth + "px");
+
 	    }
  
 
@@ -134,10 +150,12 @@ Example:
                 'sortableId': 'parsons-sortableCode-%(unique_id)s',
 		'trashId': 'parsons-sortableTrash-%(unique_id)s',
                 'max_wrong_lines': 1,
+                'solution_label': 'Drop blocks here',
                 'feedback_cb' : displayErrors
         });
         pp_%(unique_id)s.init($pjQ("#parsons-orig-%(unique_id)s").text());
 	pp_%(unique_id)s.shuffleLines();
+            
         if(localStorage.getItem('%(divid)s') && localStorage.getItem('%(divid)s-trash')) {
             try {
                 var solution = localStorage.getItem('%(divid)s');
@@ -150,23 +168,41 @@ Example:
             }
 
         }
-            $pjQ("#newInstanceLink-%(unique_id)s").click(function(event){
-                event.preventDefault();
-                pp_%(unique_id)s.shuffleLines();
+            $pjQ("#reset%(unique_id)s").click(function(event){
+              event.preventDefault();
+              pp_%(unique_id)s.shuffleLines();
+            
+            // set min width and height
+            var sortableul = $("#ul-parsons-sortableCode-%(unique_id)s");
+            var trashul = $("#ul-parsons-sortableTrash-%(unique_id)s");
+            var sortableHeight = sortableul.height();
+            var sortableWidth = sortableul.width();
+            var trashWidth = trashul.width();
+            var trashHeight = trashul.height();
+            var minHeight = Math.max(trashHeight,sortableHeight);
+            var minWidth = Math.max(trashWidth, sortableWidth);
+            trashul.css("min-height",minHeight + "px");
+            sortableul.css("min-height",minHeight + "px");
+            trashul.css("min-width",minWidth + "px");
+            sortableul.css("min-width",minWidth + "px");
+              msgBox.hide();
             });
-            $pjQ("#feedbackLink-%(unique_id)s").click(function(event){
-                event.preventDefault();
-
-                var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
-                localStorage.setItem('%(divid)s',hash);
-                hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableTrash-%(unique_id)s");
-                localStorage.setItem('%(divid)s-trash',hash);
-
-                pp_%(unique_id)s.getFeedback();
-
+            
+            $pjQ("#checkMe%(unique_id)s").click(function(event){
+              event.preventDefault();
+              var hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableCode-%(unique_id)s");
+              localStorage.setItem('%(divid)s',hash);
+              hash = pp_%(unique_id)s.getHash("#ul-parsons-sortableTrash-%(unique_id)s");
+              localStorage.setItem('%(divid)s-trash',hash);
+            
+            pp_%(unique_id)s.getFeedback();
+            msgBox.fadeIn(100);
+            
             });
             
         });
+            
+
     </script>
 
 '''
