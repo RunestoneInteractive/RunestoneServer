@@ -56,7 +56,7 @@ COMMENT = """
 """
 
 END_POLL_INPUT = """
-            <button type='button' id='%(divid)s_submit' class='btn btn-small btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
+            <button type='button' id='%(divid)s_submit' class='btn btn-success' onclick="submitPoll('%(divid)s');">Submit</button>
         </div>
 """
 

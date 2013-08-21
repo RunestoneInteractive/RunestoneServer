@@ -32,13 +32,16 @@ h5 {
     .navbar .divider-vertical {
         height: 50px;
         margin: 0 3px;
+        border-right: 1px solid #e8e8e8;
         border-left: 1px solid #f2f2f2;
     }
 }
 
-.navbar>.container .navbar-brand {
+.navbar-brand {
+    font-size: 18px;
     margin-left: 0;
-    /*padding-left: 10px !important;*/
+    padding-left: 10px !important;
+    max-width: none;
 }
 
 .brand-logo {
@@ -97,9 +100,9 @@ h5 {
     background-color: #fff;
 }
 
-button.btn.btn-small,
-input[type="submit"].btn.btn-small,
-input[type="button"].btn.btn-small {
+button.btn, btn.btn-sm,
+input[type="submit"].btn.btn-sm,
+input[type="button"].btn.btn-sm {
     font-size: 1em;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -111,21 +114,6 @@ input[type="button"].btn.btn-small {
 .btn.disabled {
     /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
     pointer-events: auto;
-}
-
-.btn-default {
-    color: #fff;
-    background-color: #474949;
-    border-color: #474949;
-}
-
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active,
-.btn-default.active {
-    background-color: #3a3c3c;
-    border-color: #2e2f2f;
-    color: #fff;
 }
 
 .tooltip {

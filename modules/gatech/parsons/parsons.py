@@ -105,8 +105,8 @@ Example:
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
     	<div style="clear:left;"></div>
-        <input type="button" class='btn btn-small btn-success' id="checkMe%(unique_id)s" value="Check Me"/> 
-        <input type="button" class='btn btn-small btn-default' id="reset%(unique_id)s" value="Reset"/>
+        <input type="button" class='btn btn-success' id="checkMe%(unique_id)s" value="Check Me"/>
+        <input type="button" class='btn btn-default' id="reset%(unique_id)s" value="Reset"/>
         <div id="parsons-message-%(unique_id)s"></div>
         </div>
 
