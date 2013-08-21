@@ -32,16 +32,12 @@ h5 {
     .navbar .divider-vertical {
         height: 50px;
         margin: 0 3px;
-        border-right: 1px solid #e8e8e8;
         border-left: 1px solid #f2f2f2;
     }
 }
 
-.navbar-brand {
-    font-size: 18px;
+.navbar>.container .navbar-brand {
     margin-left: 0;
-    padding-left: 10px !important;
-    max-width: none;
 }
 
 .brand-logo {
@@ -114,6 +110,18 @@ input[type="button"].btn.btn-sm {
 .btn.disabled {
     /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
     pointer-events: auto;
+}
+
+.btn-default {
+    color: #fff;
+    background-color: #474949;
+    border-color: #474949;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+    background-color: #3a3c3c;
+    border-color: #2e2f2f;
+    color: #fff;
 }
 
 .tooltip {
