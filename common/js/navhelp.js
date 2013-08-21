@@ -184,8 +184,8 @@ function setup() {
     });
 
     guiders.createGuider({
-        attachTo: "#feedbackLink-111",
-        highlight: "#feedbackLink-111",
+        attachTo: "#checkMe111",
+        highlight: "#checkMe111",
         overlay: true,
         position: 3,
         title: "Parsons Problems",
