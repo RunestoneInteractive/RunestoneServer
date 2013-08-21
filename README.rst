@@ -1,6 +1,11 @@
 Runestone Interactive Tools and Content
 =======================================
 
+
+.. |buildstatus| image:: https://drone.io/github.com/bnmnetp/runestone/status.png
+
+Build Status |buildstatus|
+
 Important Notice
 ----------------
 
