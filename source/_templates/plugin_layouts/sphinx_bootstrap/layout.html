@@ -3,7 +3,7 @@
 {% set script_files = script_files + [
     '_static/jquery-ui-1.10.3.custom.min.js',
     '_static/jquery-fix.js',
-    '_static/bootstrap-3.0.0-rc1/js/bootstrap.min.js',
+    '_static/bootstrap-3.0.0/js/bootstrap.min.js',
     '_static/bootstrap-sphinx.js',
     '_static/waypoints.min.js',
     '_static/rangy-core.js',
@@ -16,7 +16,7 @@
   ]
 %}
 
-{% set css_files = ['_static/bootstrap-3.0.0-rc1/css/bootstrap.min.css'] + css_files %}
+{% set css_files = ['_static/bootstrap-3.0.0/css/bootstrap.min.css'] + css_files %}
 {% if theme_bootswatch_theme %}
   {% set css_files = css_files +
     ['http://netdna.bootstrapcdn.com/bootswatch/2.3.1/' + theme_bootswatch_theme + '/bootstrap.min.css']
@@ -24,7 +24,6 @@
 {% endif %}
 
 {% set css_files = css_files + [
-    '_static/bootstrap-3.0.0-rc1/css/bootstrap-glyphicons.css',
     '_static/jquery-ui-1.10.3.custom.min.css',
     '_static/bootstrap-sphinx.css',
     '_static/user-highlights.css',
