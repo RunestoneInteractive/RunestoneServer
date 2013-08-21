@@ -128,7 +128,10 @@ Example:
                     msgBox.attr('class','alert alert-success');
                     msgBox.html("Perfect!")
                 }
-            
+
+        }
+
+        $(window).load(function() {
             // set min width and height
             var sortableul = $("#ul-parsons-sortableCode-%(unique_id)s");
             var trashul = $("#ul-parsons-sortableTrash-%(unique_id)s");
@@ -140,10 +143,10 @@ Example:
             var minWidth = Math.max(trashWidth, sortableWidth);
             trashul.css("min-height",minHeight + "px");
             sortableul.css("min-height",minHeight + "px");
+            sortableul.height(minHeight);
             trashul.css("min-width",minWidth + "px");
             sortableul.css("min-width",minWidth + "px");
-
-	    }
+        });
  
 
         var pp_%(unique_id)s = new ParsonsWidget({
