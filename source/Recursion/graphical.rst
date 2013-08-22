@@ -45,7 +45,7 @@ want to draw, as given by the ``len`` parameter, is reduced to zero or
 less. If the length of the line is longer than zero we instruct the
 turtle to go forward by ``len`` units and then turn right 90 degrees.
 The recursive step is when we call drawSpiral again with a reduced
-length. At the end of :ref:`Listing 1 <lst_turt1>` you will notice that we call
+length. At the end of :ref:`ActiveCode 1 <lst_turt1>` you will notice that we call
 the function ``myWin.exitonclick()``, this is a handy little method of
 the window that puts the turtle into a wait mode until you click inside
 the window, after which the program cleans up and exits.
