@@ -369,7 +369,7 @@ point. The integer division operator returns the integer portion of the
 quotient by truncating any fractional part.
 
 .. activecode:: intro_1
-   :caption: Basic Arithmetic Operators
+    :caption: Basic Arithmetic Operators
 
     print 2+3*4
     print (2+3)*4
@@ -429,7 +429,7 @@ and logical operators with examples shown in the session that follows.
 
 
 .. activecode:: intro_2
-   :caption: Basic Relational and Logical Operators
+    :caption: Basic Relational and Logical Operators
 
     print(5==10)
     print(10 > 5)
@@ -553,7 +553,7 @@ result is a repetition of references to the data objects in the
 sequence. This can best be seen by considering the following session:
 
 .. activecode:: intro_3
-   :caption: Repetition of References
+    :caption: Repetition of References
 
     myList = [1,2,3,4]
     A = [myList]*3
@@ -591,7 +591,7 @@ use follow.
 
 
 .. activecode:: intro_5
-   :caption: Examples of List Methods
+    :caption: Examples of List Methods
 
     myList = [1024, 3, True, 6.5]
     myList.append(False)
@@ -911,7 +911,7 @@ sequence access except that instead of using the index of the item we
 use the key value. To add a new value is similar.
 
 .. activecode:: intro_7
-   :caption: Using a Dictionary
+    :caption: Using a Dictionary
 
     capitals = {'Iowa':'DesMoines','Wisconsin':'Madison'}
     print(capitals['Iowa'])
@@ -1027,7 +1027,7 @@ second prints the result of some simple processing based on the string
 that is provided.
 
 .. activecode::  strstuff
-   :caption: The input Function Returns a String
+    :caption: The input Function Returns a String
 
     aName = input("Please enter your name ")
     print("Your name in all capitals is",aName.upper(),
@@ -1272,7 +1272,7 @@ appending it to a list. The result is a list of all the letters in all
 of the words.
 
 .. activecode:: intro_8
-   :caption: Processing Each Character in a List of Strings
+    :caption: Processing Each Character in a List of Strings
 
     wordlist = ['cat','dog','rabbit']
     letterlist = [ ]
@@ -1949,7 +1949,7 @@ represented by a negative numerator.
 .. _lst_gcd:
 
 .. activecode::  gcd_cl
-   :caption: The Greatest Common Divisor Function
+    :caption: The Greatest Common Divisor Function
 
     def gcd(m,n):
         while m%n != 0:
