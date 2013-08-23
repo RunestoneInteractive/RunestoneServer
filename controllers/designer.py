@@ -2,6 +2,7 @@
 # this file is released under public domain and you can use without limitations
 from os import path
 import uuid
+import shutil
 
 #########################################################################
 ## This is a samples controller
@@ -115,6 +116,43 @@ def build_custom():
                 task_name=uuid,
                 mess='Building your course.',
                 course_url=course_url))
+
+@auth.requires_membership('instructor')
+def delete_course():
+
+    verify_form = FORM(TABLE(TR(LABEL("Really Delete:", INPUT(_name='checkyes', requires=IS_NOT_EMPTY(), _type="checkbox"))),
+                       TR(LABEL("Type in the name of the course to verify: ", INPUT(_name='coursename', requires=IS_NOT_EMPTY() ))),
+                       TR(INPUT(_type='submit')),
+                       labels=''))
+    print 'in delete', request.vars
+    deleted = False
+    if verify_form.process().accepted and request.vars.checkyes == 'on':
+        course_name = request.vars.coursename
+        cset = db(db.courses.course_name == course_name)
+        if not cset.isempty():
+            courseid = cset.select(db.courses.id).first()
+            print 'courseid = ', courseid
+            qset = db((db.course_instructor.course == courseid) & (db.course_instructor.instructor == auth.user.id) )
+            if not qset.isempty():
+                qset.delete()
+                students = db(db.auth_user.course_id == courseid)
+                students.update(course_id=1)
+                db(db.courses.id == courseid).delete()
+                try:
+                    shutil.rmtree(path.join('applications',request.application,'static', course_name))
+                    shutil.rmtree(path.join('applications',request.application,'custom_courses', course_name))
+                    deleted = True
+                except:
+                    response.flash = 'Error, %s does not appear to exist' % course_name
+            else:
+                response.flash = 'You are not the instructor of %s' % course_name
+        else:
+            response.flash = 'course, %s, not found' % course_name
+    else:
+        response.flash = 'Must Check the checkbox'
+
+
+    return dict(verify_form=verify_form, deleted=deleted)
 
 def user():
     """

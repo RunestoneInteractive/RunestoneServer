@@ -1,0 +1,9 @@
+{{ extend 'layout.html'}}
+
+<h1>Delete My Course</h1>
+
+{{=verify_form}}
+
+{{ if deleted:}}
+<a href="/{{=request.application}}/admin/index">Back to the Dashboard</a>
+{{pass}}

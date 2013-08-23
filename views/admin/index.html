@@ -2,6 +2,15 @@
 
 <h1>Instructor's Dashboard</h1>
 
+
+<h3>Build Your Own Course</h3>
+<ul>
+	<li>
+		<a href="/{{=request.application}}/designer">Create a Custom Course</a>
+	</li>
+</ul>
+
+
 <h3>Administer Your Course</h3>
 <ul>
 	<li>
@@ -19,6 +28,10 @@
 	<li>
 	  <a href="/{{=request.application}}">Take me to my course</a>
 	</li>
+</ul>
+
+<h3>Course Maintenance</h3>
+<ul>
 	<li>
 	  <a href="/{{=request.application}}/admin/startdate">Change course start date</a>
 	</li>
@@ -30,15 +43,11 @@
 		  {{pass}}
 	  {{ pass }}
 	</li>
-
-</ul>
-
-<h3>Build Your Own Course</h3>
-<ul>
 	<li>
-		<a href="/{{=request.application}}/designer">Create a Custom Course</a>
+		<a href="/{{=request.application}}/designer/delete_course">Delete My Course</a>
 	</li>
 </ul>
+
 
 
 <h3>Contribute to the Project</h3>
