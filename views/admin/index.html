@@ -24,6 +24,11 @@
 	</li>
 	<li>
 	  <a href="/{{=request.application}}/admin/rebuildcourse">Rebuild my course</a>
+	  {{ if my_vers: }}
+		  {{ if my_vers != mst_vers: }}
+		  	<span>(Update Available)</span>
+		  {{pass}}
+	  {{ pass }}
 	</li>
 
 </ul>
@@ -51,10 +56,10 @@
 </ul>
 
 <h4>Build Information</h4>
-<a href="http://github.com/bnmnetp/runestone/blob/master/ChangeLog.rst">View ChangeLog</a>
+<p><a href="http://github.com/bnmnetp/runestone/blob/master/ChangeLog.rst">View ChangeLog</a></p>
 {{ if build_info: }}
 <table class="table table-striped table-bordered table-condensed">
-<tr><td>Current Version</td><td>My Version</td></tr>
+<tr><td>Current Version (version-build-hash)</td><td>My Version</td></tr>
 <tr><td>{{=master_build}}</td><td>{{=build_info}}</td></tr>
 </table>
 {{ pass }}

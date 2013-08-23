@@ -35,13 +35,15 @@ def index():
     except:
         my_build = ""
 
+    my_vers = 0
+    mst_vers = 0
     if master_build and my_build:
         mst_vers,mst_bld,mst_hsh = master_build.split('-')
         my_vers,my_bld,my_hsh = my_build.split('-')
         if my_vers != mst_vers:
-            session.flash = "Updates available, consider rebuilding"
+            response.flash = "Updates available, consider rebuilding"
 
-    return dict(build_info=my_build, master_build=master_build)
+    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers, mst_vers=mst_vers )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassignments():
