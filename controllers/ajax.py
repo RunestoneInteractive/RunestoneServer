@@ -345,11 +345,12 @@ def getaggregateresults():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
+    # Yes, these two things could be done as a join.  but this **may** be better for performance
+    start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
     result = db((db.useinfo.div_id == question) &
                 (db.useinfo.course_id == course) &
-                (db.courses.course_name == course) &
-                (db.useinfo.timestamp >= db.courses.term_start_date)
+                (db.useinfo.timestamp >= start_date)
                 ).select(db.useinfo.act, count, groupby=db.useinfo.act)
 
     tdata = {}
