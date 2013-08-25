@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ### required - do no delete
 import json
+from urllib import unquote
 
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
@@ -15,7 +16,7 @@ def user():
         db.auth_user.course_id.default = ''
 
         # Otherwise, use the referer URL to try to pre-populate
-        ref = request.env.http_referer
+        ref = unquote(request.env.http_referer)
         if ref:
             if '_next' in ref:
                 ref = ref.split("_next")
