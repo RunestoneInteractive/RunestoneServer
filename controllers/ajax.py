@@ -200,9 +200,10 @@ def savehighlight():
 def deletehighlight():
     uniqueId = request.vars.uniqueId
 
-    print 'deleting highlight'
-    db(db.user_highlights.id == uniqueId).update(is_active = 0)
-
+    if uniqueId:
+        db(db.user_highlights.id == uniqueId).update(is_active = 0)
+    else:
+        print 'uniqueId is None'
 
 def gethighlights():
     """
