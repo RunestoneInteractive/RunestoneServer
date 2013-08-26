@@ -16,8 +16,9 @@ def user():
         db.auth_user.course_id.default = ''
 
         # Otherwise, use the referer URL to try to pre-populate
-        ref = unquote(request.env.http_referer)
+        ref = request.env.http_referer
         if ref:
+            ref = unquote(ref)
             if '_next' in ref:
                 ref = ref.split("_next")
                 url_parts = ref[1].split("/")
