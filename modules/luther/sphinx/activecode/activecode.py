@@ -20,20 +20,23 @@ from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 import json
+import os
 
 def setup(app):
+    version = '2.1.0'
+    staticserver = 'runestonestatic.appspot.com'
     app.add_directive('activecode',ActiveCode)
     app.add_directive('actex',ActiveExercise)
-    app.add_stylesheet('codemirror.css')
-    app.add_stylesheet('activecode.css')
+    app.add_stylesheet('http://%s/static/%s/codemirror.css' % (staticserver,version))
+    app.add_stylesheet('http://%s/static/%s/activecode.css' % (staticserver,version))
 
-    app.add_javascript('jquery.highlight.js')
-    app.add_javascript('bookfuncs.js')
-    app.add_javascript('codemirror.js')
-    app.add_javascript('python.js')
-    app.add_javascript('activecode.js')
-    app.add_javascript('skulpt.js')
-    app.add_javascript('builtin.js')
+    app.add_javascript('http://%s/static/%s/jquery.highlight.js' % (staticserver,version))
+    app.add_javascript('http://%s/static/%s/bookfuncs.js' % (staticserver, version))
+    app.add_javascript('http://%s/static/%s/codemirror.js' % (staticserver, version))
+    app.add_javascript('http://%s/static/%s/python.js' % (staticserver, version))
+    app.add_javascript('http://%s/static/%s/activecode.js' % (staticserver, version))
+    app.add_javascript('http://%s/static/%s/skulpt.js' % (staticserver, version))
+    app.add_javascript('http://%s/static/%s/builtin.js' % (staticserver, version))
 
     app.add_node(ActivcodeNode, html=(visit_ac_node, depart_ac_node))
 
@@ -195,7 +198,6 @@ class ActiveCode(Directive):
 
     def run(self):
         env = self.state.document.settings.env
-
         # keep track of how many activecodes we have.... could be used to automatically make a unique id for them.
         if not hasattr(env,'activecodecounter'):
             env.activecodecounter = 0

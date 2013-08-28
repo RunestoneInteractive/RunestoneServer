@@ -49,7 +49,9 @@ def build(options):
       options['force_all'] = True
       options['freshenv'] = True
 
-    options.build.template_args["build_info"] = sh('git describe --long',capture=True)[:-1]
+    bi = sh('git describe --long',capture=True)[:-1]
+    bi = bi.split('-')[0]
+    options.build.template_args["build_info"] = bi
 
     if 'outputdir' in options.build:
         options.build.outdir = options.build.outputdir
