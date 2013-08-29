@@ -388,7 +388,7 @@ def getaggregateresults():
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and auth.has_membership('instructor', auth.user.id):
+    if auth.user and verifyInstructorStatus(course,auth.user.id):  #auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 
