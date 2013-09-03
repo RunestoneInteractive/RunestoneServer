@@ -172,7 +172,8 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     bi.write(build_info)
     bi.close()
     os.chdir(cwd)    
-    confoverrides['html_context.build_info'] = build_info[:-1]
+    build_split = build_info.split('-')
+    confoverrides['html_context.build_info'] = build_split[0]
 
     if 'loginreq' in rvars:
         confoverrides['html_context.login_required'] = 'true'
