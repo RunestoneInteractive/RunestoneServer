@@ -60,7 +60,7 @@ follows:
 
 -  ``buildHeap(list)`` builds a new heap from a list of keys.
 
-:ref:`ActiveCode1 <lst_heap1>` demonstrates the use of some of the binary
+:ref:`ActiveCode 1 <lst_heap1>` demonstrates the use of some of the binary
 heap methods.  Notice that no matter the order that we add items to the heap, the smallest
 is removed each time.  We will now turn our attention to creating an implementation for this idea.
 
@@ -153,16 +153,18 @@ We will begin our implementation of a binary heap with the constructor.
 Since the entire binary heap can be represented by a single list, all
 the constructor will do is initialize the list and an attribute
 ``currentSize`` to keep track of the current size of the heap.
-:ref:`Listing 1 <lst_heap1>` shows the Python code for the constructor. You
+:ref:`Listing 1 <lst_heap1a>` shows the Python code for the constructor. You
 will notice that an empty binary heap has a single zero as the first
 element of ``heapList`` and that this zero is not used, but is there so
 that simple integer division can be used in later methods.
 
-.. _lst_heap1:
+.. _lst_heap1a:
+
 
 **Listing 1**
 
 ::
+    
     class BinHeap:
         def __init__(self):
             self.heapList = [0]
@@ -369,7 +371,7 @@ list representation of this series of swaps as shown in
           i = 0  [0, 2, 3, 6, 5, 9]
           
 
-The complete binary heap implementation can be seen in Active
+The complete binary heap implementation can be seen in ActiveCode 2.
 
 
 

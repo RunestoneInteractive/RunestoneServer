@@ -656,7 +656,7 @@ at :math:`O(n^{\frac {3}{2}})`.
 .. admonition:: Self Check
 
    .. mchoicemf:: question_sort_4
-      :correct: d
+      :correct: a
       :answer_a: [5, 3, 8, 7, 16, 19, 9, 17, 20, 12]
       :answer_b: [3, 7, 5, 8, 9, 12, 19, 16, 20, 17]
       :answer_c: [3, 5, 7, 8, 9, 12, 16, 17, 19, 20]
