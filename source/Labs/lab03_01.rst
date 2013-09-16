@@ -25,7 +25,7 @@ Its easy to use:
    :nocanvas:
 
    import random
-   x = random.randint(1,10)
+   x = random.randrange(1,10)
    print(x)
 
 The ``randrange`` function as called in the example above, generates a random
