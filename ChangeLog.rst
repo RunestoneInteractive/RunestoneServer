@@ -54,3 +54,10 @@ Perhaps the biggest surprise of this project is the number of people that have f
 * Update to turtle chapter with more parson's problems.
 * Bug fixes
 
+
+2.1.1 September 15, 2013
+------------------------
+
+* Fix use of randrange in lab03 #311
+* Shell sort self check answer wrong
+* 
