@@ -115,7 +115,7 @@ is the first item returned by dequeue.
             ``q.enqueue('dog')``            ``['dog',4]``                    
              ``q.enqueue(True)``       ``[True,'dog',4]``                    
                     ``q.size()``       ``[True,'dog',4]``              ``3`` 
-                 ``q.isEmpty()``       ``[True,'dog',3]``          ``False`` 
+                 ``q.isEmpty()``       ``[True,'dog',4]``          ``False`` 
               ``q.enqueue(8.4)``   ``[8.4,True,'dog',4]``                    
                  ``q.dequeue()``     ``[8.4,True,'dog']``              ``4`` 
                  ``q.dequeue()``           ``[8.4,True]``          ``'dog'`` 
