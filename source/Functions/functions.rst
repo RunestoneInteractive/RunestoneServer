@@ -295,8 +295,8 @@ been defined, we can call it as many times as we like with whatever actual param
      def drawSquare(t, sz):
          """Make turtle t draw a square of with side sz."""
          for i in range(4):
-       t.forward(sz)
-       t.left(90)
+             t.forward(sz)
+             t.left(90)
 
 
 
@@ -321,7 +321,7 @@ been defined, we can call it as many times as we like with whatever actual param
          """Make turtle t draw a square of with side sz."""
          for i in range(4):
              t.forward(sz)
-       t.left(90)
+             t.left(90)
 
 
 
