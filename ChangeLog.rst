@@ -60,4 +60,9 @@ Perhaps the biggest surprise of this project is the number of people that have f
 
 * Fix use of randrange in lab03 #311
 * Shell sort self check answer wrong
-* 
+
+2.1.2 September 21, 2013
+------------------------
+
+* IMPORTANT:  Bug Fix - random.randrange(X) was not returning a properly constructed Python int.  If you are
+using random numbers this is pretty important as it will unexpectedly manifest itself in goofy ways.
