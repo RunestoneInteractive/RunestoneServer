@@ -41,8 +41,8 @@ def setup(app):
     app.add_javascript('codemirror.js' )
     app.add_javascript('python.js' )
     app.add_javascript('activecode.js')
-    app.add_javascript('skulpt.js' )
-    app.add_javascript('builtin.js')
+    app.add_javascript('skulpt.min.js' )
+    app.add_javascript('skulpt-stdlib.js')
 
     app.add_node(ActivcodeNode, html=(visit_ac_node, depart_ac_node))
 
