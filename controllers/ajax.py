@@ -132,7 +132,7 @@ def getprog():
 @auth.requires_membership('instructor')
 def savegrade():
     res = db(db.code.id == request.vars.id)
-    res.update(grade = int(request.vars.grade))
+    res.update(grade = float(request.vars.grade))
 
 
 #@auth.requires_login()
