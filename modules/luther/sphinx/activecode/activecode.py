@@ -67,9 +67,13 @@ EDIT1 = '''
 
 <button class='btn btn-success' id="%(divid)s_runb" onclick="runit('%(divid)s',this, %(include)s);">Run</button>
 '''
+
 UNHIDE='''
-<button class='btn btn-default' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();\
-$('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
+<button class='btn btn-default' id="%(divid)s_showb" onclick="$('#%(divid)s_code_div').toggle();cm_editors['%(divid)s_code'].refresh();$('#%(divid)s_saveb').toggle();$('#%(divid)s_loadb').toggle()">Show/Hide Code</button>
+'''
+
+GRADES = '''
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('%(divid)s')"/>
 '''
 
 AUDIO = '''
@@ -124,6 +128,7 @@ $(document).ready(function() {
 </script>
 '''
 
+#'
 class ActivcodeNode(nodes.General, nodes.Element):
     def __init__(self,content):
         """
