@@ -126,7 +126,7 @@ def gradeassignment():
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name from code as T, auth_user
+    rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
         where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
              (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
              (auth.user.course_id,acid))

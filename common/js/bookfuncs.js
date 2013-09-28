@@ -494,6 +494,11 @@ function sendGrade(grade, sid, acid, id) {
     jQuery.get(eBookConfig.ajaxURL + 'savegrade', data);
 }
 
+function sendComment(comment, sid, acid, id) {
+    data = {'sid': sid, 'acid': acid, 'comment': comment, 'id': id};
+    jQuery.get(eBookConfig.ajaxURL + 'savegrade', data);
+}
+
 function gotUser(data, status, whatever) {
     var mess = '';
     var caughtErr = false;
@@ -884,6 +889,7 @@ function showGradeSummary(data, status, whatever) {
     if (report['grade']) {
 	body = "<h4>Grade Report</h4>" +
                "<p>This assignment: " + report['grade'] + "</p>" +
+               "<p>" + report['comment'] + "</p>" +
 	       "<p>Number of graded assignments: " + report['count'] + "</p>" +
 	       "<p>Average score: " +  report['avg'] + "</p>"
 	

@@ -132,7 +132,10 @@ def getprog():
 @auth.requires_membership('instructor')
 def savegrade():
     res = db(db.code.id == request.vars.id)
-    res.update(grade = float(request.vars.grade))
+    if request.vars.grade:
+        res.update(grade = float(request.vars.grade))
+    else:
+        res.update(comment = request.vars.comment)
 
 
 #@auth.requires_login()
@@ -478,18 +481,23 @@ def getassignmentgrade():
 
     divid = request.vars.div_id
     course_id = auth.user.course_id
-    "select grade from code where sid='%s' and acid='%s' and grade is not null order by timestamp desc"
+    "select grade, comment from code where sid='%s' and acid='%s' and grade is not null order by timestamp desc"
     result = db( (db.code.sid == sid) &
                  (db.code.acid == divid) &
                  (db.code.course_id == course_id) &
-                 (db.code.grade != None) ).select(db.code.grade,orderby=~db.code.timestamp).first()
+                 (db.code.grade != None) ).select(db.code.grade,db.code.comment,orderby=~db.code.timestamp).first()
 
     ret = {}
     if result:
-        ret['grade'] = result.grade # result.comment
+        ret['grade'] = result.grade
+        if result.comment:
+            ret['comment'] = result.comment
+        else:
+            ret['comment'] = "No Comments"
     else:
         ret['grade'] = "not graded yet"
-        
+        ret['comment'] = "No Comments"
+
     query = '''select avg(grade), count(grade)
                from code where sid='%s' and course_id=%d and grade is not null;''' % (sid,course_id)
 
