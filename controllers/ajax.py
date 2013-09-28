@@ -499,7 +499,7 @@ def getassignmentgrade():
         ret['comment'] = "No Comments"
 
     query = '''select avg(grade), count(grade)
-               from code where sid='%s' and course_id=%d and grade is not null;''' % (sid,course_id)
+               from code where sid='%s' and course_id='%d' and grade is not null;''' % (sid,course_id)
 
     rows = db.executesql(query)
     ret['avg'] = rows[0][0]
