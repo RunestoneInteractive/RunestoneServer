@@ -877,3 +877,44 @@ function toggleScratchActivecode() {
     div.modal('toggle');
 
 }
+
+function showGradeSummary(data, status, whatever) {
+    var report = eval(data)[0];
+    // check for report['message']
+    if (report['grade']) {
+	body = "<h4>Grade Report</h4>" +
+               "<p>This assignment: " + report['grade'] + "</p>" +
+	       "<p>Number of graded assignments: " + report['count'] + "</p>" +
+	       "<p>Average score: " +  report['avg'] + "</p>"
+	
+    } else {
+	body = "<h4>You must be Logged in to see your grade</h4>";
+    }
+    var html = '<div class="modal fade">' +
+        '  <div class="modal-dialog compare-modal">' +
+        '    <div class="modal-content">' +
+        '      <div class="modal-header">' +
+        '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+        '        <h4 class="modal-title">Assignment Feedback</h4>' +
+        '      </div>' +
+        '      <div class="modal-body">' +
+        body +
+        '      </div>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>';
+
+    el = $(html);
+    el.modal();
+
+
+}
+
+function createGradeSummary(div_id) {
+    // get grade and comments for this assignment
+    // get summary of all grades for this student
+    // display grades in modal window
+    var data = {'div_id':div_id}
+    jQuery.get(eBookConfig.ajaxURL + 'getassignmentgrade', data, showGradeSummary);
+
+}

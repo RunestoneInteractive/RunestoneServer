@@ -160,6 +160,8 @@ def visit_ac_node(self,node):
         node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
         res += UNHIDE
+    if 'gradebutton' in node.ac_components:
+        res += GRADES
     if 'suffix' in node.ac_components:
         res += SUFF
     if 'nopre' not in node.ac_components:
@@ -275,6 +277,7 @@ class ActiveExercise(ActiveCode):
 
     def run(self):
         self.options['hidecode'] = True
+        self.options['gradebutton'] = True
         return super(ActiveExercise,self).run()
 
 

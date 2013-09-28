@@ -284,7 +284,7 @@ def getCorrectStats(miscdata,event):
     if sid:
         course = db(db.courses.course_name == miscdata['course']).select().first()
 
-        correctquery = '''select 
+        correctquery = '''select
 (select cast(count(*) as float) from useinfo where sid='%s'
                                                and event='%s'
                                                and DATE(timestamp) >= DATE('%s')
@@ -296,7 +296,7 @@ def getCorrectStats(miscdata,event):
 ) as result;
 ''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
 
-        try:    
+        try:
             rows = db.executesql(correctquery)
             pctcorr = round(rows[0][0]*100)
         except:
@@ -467,3 +467,34 @@ def getSphinxBuildStatus():
         tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
         return dict(status=status, traceback=tb)
 
+def getassignmentgrade():
+    print 'in getassignmentgrade'
+    if auth.user:
+        sid = auth.user.username
+    else:
+        return json.dumps([dict(message="not logged in")])
+
+    response.headers['content-type'] = 'application/json'
+
+    divid = request.vars.div_id
+    course_id = auth.user.course_id
+    "select grade from code where sid='%s' and acid='%s' and grade is not null order by timestamp desc"
+    result = db( (db.code.sid == sid) &
+                 (db.code.acid == divid) &
+                 (db.code.course_id == course_id) &
+                 (db.code.grade != None) ).select(db.code.grade,orderby=~db.code.timestamp).first()
+
+    ret = {}
+    if result:
+        ret['grade'] = result.grade # result.comment
+    else:
+        ret['grade'] = "not graded yet"
+        
+    query = '''select avg(grade), count(grade)
+               from code where sid='%s' and course_id=%d and grade is not null;''' % (sid,course_id)
+
+    rows = db.executesql(query)
+    ret['avg'] = rows[0][0]
+    ret['count'] = rows[0][1]
+
+    return json.dumps([ret])
