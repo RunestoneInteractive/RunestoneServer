@@ -66,3 +66,10 @@ Perhaps the biggest surprise of this project is the number of people that have f
 
 * IMPORTANT:  Bug Fix - random.randrange(X) was not returning a properly constructed Python int.  If you are
 using random numbers this is pretty important as it will unexpectedly manifest itself in goofy ways.
+
+2.1.3 September 28, 2013
+------------------------
+
+* Add Feedback button to end of chapter homework problems.  This button will show the grade for this assignment, and the average of all assignments.
+* Add the ability for instructors to type in comments when they grade assignments.
+
