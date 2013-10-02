@@ -129,7 +129,7 @@ instructions that all turtles know how to respond to.
    :feedback_c: Yes, the turtle starts out facing east.
    :feedback_d: No, look at the first example with a turtle.  Which direction does the turtle move?
 
-   Which direction does the Turtle face when it is created?
+   Which direction does the Turtle face when it is first created?
 
 **Mixed up programs**
 
