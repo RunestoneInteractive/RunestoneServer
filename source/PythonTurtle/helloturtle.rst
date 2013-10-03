@@ -129,7 +129,6 @@ instructions that all turtles know how to respond to.
    :feedback_c: Yes, the turtle starts out facing east.
    :feedback_d: No, look at the first example with a turtle.  Which direction does the turtle move?
 
-   Which direction does the Turtle face when it is first created?
    Which direction does the Turtle face when it is created?
 
 **Mixed up programs**
@@ -279,16 +278,16 @@ screen until we click on it.
    True or False: A Turtle object can have any name that follows the naming rules from Chapter 2.
 
 .. mchoicemf:: test_question3_1_4
-   :answer_a: <img src="../_static/test1Alt1.png" alt="right turn of 90 degrees before drawing">
-   :answer_b: <img src="../_static/test1Alt2.png" alt="left turn of 180 degrees before drawing">
-   :answer_c: <img src="../_static/test1Alt3.png" alt="left turn of 270 degrees before drawing">
-   :answer_d: <img src="../_static/test1Alt4.png" alt="right turn of 45 degrees before drawing">
-   :answer_e: <img src="../_static/test1correct.png" alt="left turn of 90 degrees before drawing">
+   :answer_a: <img src="../_static/test1Alt1.png" alt="right turn of 90 degrees before drawing, draw a line 150 pixels long, turn left 90, and draw a line 75 pixels long">
+   :answer_b: <img src="../_static/test1Alt2.png" alt="left turn of 180 degrees before drawing,  draw a line 150 pixels long, turn left 90, and draw a line 75 pixels long">
+   :answer_c: <img src="../_static/test1Alt3.png" alt="left turn of 270 degrees before drawing,  draw a line 150 pixels long, turn left 90, and draw a line 75 pixels long">
+   :answer_d: <img src="../_static/test1Alt4v2.png" alt="right turn of 270 degrees before drawing, draw a line 150 pixels long, turn right 90, and draw a line 75 pixels long">
+   :answer_e: <img src="../_static/test1correct.png" alt="left turn of 90 degrees before drawing,  draw a line 150 pixels long, turn left 90, and draw a line 75 pixels long">
    :correct: e
    :feedback_a: This code would turn the turtle to the south before drawing
    :feedback_b: This code would turn the turtle to the west before drawing
    :feedback_c: This code would turn the turtle to the south before drawing
-   :feedback_d: This code would turn the turtle to the southeast before drawing.
+   :feedback_d: This code is almost correct, but the short end would be facing east instead of west.  
    :feedback_e: Yes, the turtle starts facing east, so to turn it north you can turn left 90 or right 270 degrees.
 
    Which of the following code would produce the following image? 
