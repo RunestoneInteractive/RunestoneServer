@@ -6,24 +6,19 @@ Runestone Interactive Tools and Content
 
 Build Status |buildstatus|
 
-Important Notice
-----------------
+Important Notes
+---------------
 
-On July 26, 2013 We made some structural changes which involved moving the
-three extisting submodules.  skulpt, codelens, and js-parson.  Submodules are
-a known PITA for many git operations.  If you have an existing project here is
-what you should do.
+1.  We do our development on Linux and OS X.  We use standard Unix commands that may not exist on Windows.  If you want to install on Windows, you may need to install the Cygwin tools and do your work in that environment.
 
-1.  git pull or follow the fetch instructions for your Fork.
-2.  git submodule init
-3.  git submodule sync
-4.  git submodule update
+2.  The latest version of web2py has moved some important files out of its root directory.  As of 10/1/13 I have not experimented with this release.  More information on these moved files (routes.py for example) can be found `here <http://web2py.com/init/default/changelog>`_
 
-If you are Forking this repo for the first time, you can just proceed to the
-dependencies.
 
 Dependencies
 ------------
+
+
+First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
 
 There are a couple of prerequisites you need to satisfy before you can build and use this
 eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
