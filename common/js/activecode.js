@@ -1,12 +1,13 @@
 var elem; // current audio element playing
-var dur = 0; // the time that the current audio file takes to play in seconds
-var interval = 0; // curent timer (used to play the next audio file)
 var currIndex; // current index
 var len; // current length of audio files for tour
 var buttonCount; // number of audio tour buttons
 var aname; // the audio file name
 var ahash; // hash of the audio file name to the lines to highlight
 var theDivid; // div id 
+var afile; // file name for audio
+var playing = false; // flag to say if playing or not
+var tourName;
 
 String.prototype.replaceAll = function (target, replacement) {
     return this.split(target).join(replacement);
@@ -45,13 +46,15 @@ var createAudioTourHTML = function (divid, code, bnum, audio_text) {
     //laying out the HTML content
 
     var bcount = 0;
-    var html_string = "<div class='modal-lightsout'></div><div class='modal-profile'><h2>Take an audio tour through the code!</h2><div class='modal-close-profile'></div><p id='windowcode'></p><p id='" + divid + "_audiocode'></p>";
+    var html_string = "<div class='modal-lightsout'></div><div class='modal-profile'><h3>Take an audio tour!</h3><div class='modal-close-profile'></div><p id='windowcode'></p><p id='" + divid + "_audiocode'></p>";
+    html_string += "<p id='status'></p>";
     html_string += "<input type='image' src='../_static/first.png' width='25' id='first_audio' name='first_audio' title='Play first audio in tour' alt='Play first audio in tour' disabled/>" + "<input type='image' src='../_static/prev.png' width='25' id='prev_audio' name='prev_audio' title='Play previous audio in tour' alt='Play previous audio in tour' disabled/>" + "<input type='image' src='../_static/pause.png' width='25' id='pause_audio' name='pause_audio' title='Pause current audio' alt='Pause current audio' disabled/><input type='image' src='../_static/next.png' width ='25' id='next_audio' name='next_audio' title='Play next audio in tour' alt='Play next audio in tour' disabled/><input type='image' src='../_static/last.png' width ='25' id='last_audio' name='last_audio' title='Play last audio in tour' alt='Play last audio in tour' disabled/><br/>";
     for (var i = 0; i < audio_type.length - 1; i++) {
         html_string += "<input type='button' style='margin-right:5px;' class='btn btn-default btn-sm' id='button_audio_" + i + "' name='button_audio_" + i + "' value=" + bval[i] + " />";
         bcount++;
     }
-    html_string += "<p id='status'></p><p id='hightest'></p><p id='hightest1'></p><br/><br/><p id='test'></p><br/><p id='audi'></p></div>";
+    //html_string += "<p id='hightest'></p><p id='hightest1'></p><br/><br/><p id='test'></p><br/><p id='audi'></p></div>";
+    html_string += "</div>";
 
     $('#cont').html(html_string);
     $('#windowcode').html(first);
@@ -59,23 +62,23 @@ var createAudioTourHTML = function (divid, code, bnum, audio_text) {
     // Position modal box in the center of the page
     $.fn.center = function () {
         this.css("position", "absolute");
-        this.css("top", ( $(window).height() - this.height() ) / 2 + $(window).scrollTop() + "px");
-        // show window on the right so that you can see the output from the code still and still be able to close this window
-        this.css("left", ( $(window).width() - this.width() ) - 60 + $(window).scrollLeft() + "px");
+        // y position
+        this.css("top", ($(window).scrollTop() + $(navbar).height() + 10 + "px"));
+        // show window on the left so that you can see the output from the code still
+        this.css("left", ($(window).scrollLeft() + "px"));
         return this;
     }
 
     $(".modal-profile").center();
     $('.modal-profile').fadeIn("slow");
-    $('.modal-lightsout').css("height", $(document).height());
+    //$('.modal-lightsout').css("height", $(document).height());
     $('.modal-lightsout').fadeTo("slow", .5);
     $('.modal-close-profile').show();
 
     // closes modal box once close link is clicked, or if the lights out divis clicked
     $('.modal-close-profile, .modal-lightsout').click(function () {
-        if (interval) {
+        if (playing) {
             elem.pause();
-            clearInterval(interval);
         }
         //log change to db
         logBookEvent({'event': 'Audio', 'change': 'closeWindow', 'div_id': divid});
@@ -158,7 +161,8 @@ var tour = function (divid, audio_type, bcount) {
 
     var atype = audio_type.split(";");
     var name = atype[0].replaceAll("\"", " ");
-    $('#status').html("Starting" + name + "…");
+    tourName = name;
+    $('#status').html("Starting the " + name);
 
     //log tour type to db
     logBookEvent({'event': 'Audio', 'tour type': name, 'div_id': divid});
@@ -180,33 +184,43 @@ var tour = function (divid, audio_type, bcount) {
         // str+="<audio id="+akey+" preload='auto'><source src='http://ice-web.cc.gatech.edu/ce21/audio/"+
         // akey+".mp3' type='audio/mpeg'><source src='http://ice-web.cc.gatech.edu/ce21/audio/"+akey+
         // ".ogg' type='audio/ogg'>Your browser does not support the audio tag</audio>";
-        str += "<audio id=" + akey + " preload='auto'><source src='../_static/audio/" +
-            akey + ".mp3' type='audio/mpeg'><br /><source src='../_static/audio/" + akey +
-            ".wav' type='audio/wav'>Your browser does not support the audio tag</audio>";
+        str += "<audio id=" + akey + " preload='auto' ><source src='../_static/audio/" + akey +
+            ".wav' type='audio/wav'><source src='../_static/audio/" +
+            akey + ".mp3' type='audio/mpeg'><br />Your browser does not support the audio tag</audio>";
         ahash[akey] = lnums;
         aname.push(akey);
     }
     var ahtml = "#" + divid + "_audiocode";
     $(ahtml).html(str); // set the html to the audio tags
-    len = aname.length;
+    len = aname.length; // set the number of audio file in the tour
 
-    //playing audio
-    dur = 0;
+    // start at the first audio
     currIndex = 0;
 
-    // start outerAudio after 500 milliseconds (don't do too small of a number or several will start at once)
-    interval = setInterval(outerAudio, 500);
+    // play the first audio in the tour
+    playCurrIndexAudio();
 };
+
+function handlePlaying() {
+
+    // if playing audio pause it 
+    if (playing) {
+    
+        elem.pause();
+        
+        // unbind current ended
+        $('#' + afile).unbind('ended');
+    
+        // unhighlight the prev lines
+        unhighlightLines(theDivid, ahash[aname[currIndex]]);
+    }
+
+}
 
 var firstAudio = function () {
 
-    // if playing audio stop it and clear the current interval
-    if (interval) {
-        elem.pause();
-        clearInterval(interval);
-        // unhighlight the prev lines
-        unhighlightLines(theDivid, ahash[aname[currIndex - 1]]);
-    }
+    // if audio is playing handle it
+    handlePlaying();
 
     //log change to db
     logBookEvent({'event': 'Audio', 'change': 'first', 'div_id': theDivid});
@@ -215,58 +229,59 @@ var firstAudio = function () {
     // move to the first audio
     currIndex = 0;
 
-    // start at the next audio after 500 milliseconds
-    interval = setInterval(outerAudio, 500); // start timer
+    // start at the first audio
+    playCurrIndexAudio();
 
 };
 
 var prevAudio = function () {
-    // if there is a previous audio file
-    if (currIndex >= 2) {
-        // if playing audio stop it and clear the current interval
-        if (interval) {
-            elem.pause();
-            clearInterval(interval);
-            // unhighlight the prev lines
-            unhighlightLines(theDivid, ahash[aname[currIndex - 1]]);
-        }
 
-        //log change to db
-        logBookEvent({'event': 'Audio', 'change': 'prev', 'div_id': theDivid});
+   // if there is a previous audio
+   if (currIndex > 0)
+    {
 
+       // if audio is playing handle it
+       handlePlaying();
 
-        // move to previous to the current (but the current index has moved to the next)
-        currIndex = currIndex - 2;
+       //log change to db
+       logBookEvent({'event': 'Audio', 'change': 'prev', 'div_id': theDivid});
 
-        // start at the next audio after 500 milliseconds
-        interval = setInterval(outerAudio, 500); // start timer
+    
+
+       // move to previous to the current (but the current index has moved to the next)
+       currIndex = currIndex - 1;
+
+       // start at the prev audio
+       playCurrIndexAudio();
     }
 
 };
 
 var nextAudio = function () {
-    // if playing audio stop it and clear the current interval
-    if (interval) {
-        elem.pause();
-        clearInterval(interval);
-    }
+
+    // if audio is playing handle it
+    handlePlaying();
 
     //log change to db
     logBookEvent({'event': 'Audio', 'change': 'next', 'div_id': theDivid});
 
-    // start at the next audio after 500 milliseconds
-    interval = setInterval(outerAudio, 500); // start timer
+    // if not at the end
+    if (currIndex < (len - 1))
+    {
+      // start at the next audio
+      currIndex = currIndex + 1;
+      playCurrIndexAudio();
+    }
+    else if (currIndex == (len - 1))
+    {
+       handleTourEnd();
+    }
 };
 
 var lastAudio = function () {
 
-    // if playing audio stop it and clear the current interval
-    if (interval) {
-        elem.pause();
-        clearInterval(interval);
-        // unhighlight the prev lines
-        unhighlightLines(theDivid, ahash[aname[currIndex - 1]]);
-    }
+    // if audio is playing handle it
+    handlePlaying();
 
     //log change to db
     logBookEvent({'event': 'Audio', 'change': 'last', 'div_id': theDivid});
@@ -274,37 +289,26 @@ var lastAudio = function () {
     // move to the last audio
     currIndex = len - 1;
 
-    // start at the next audio after 500 milliseconds
-    interval = setInterval(outerAudio, 500); // start timer
+    // start at last
+    playCurrIndexAudio();
 
-}
-;
-// play the audio at the current index
-var playCurrIndexAudio = function () {
-    // clear the status
-    $('#status').html(" ");
-
-    // play the next audio and highlight the lines
-    playaudio(currIndex, aname, theDivid, ahash);
-
-    currIndex++; // increment the current index
-    if (interval)
-        clearInterval(interval); // stop timer if there is one
-    counter = (dur * 1000); // change the time to milliseconds
-    interval = setInterval(outerAudio, counter); // start timer
 };
 
-var outerAudio = function () {
-    // if index > 0 then unhighlight previous
-    if (currIndex > 0) {
-        unhighlightLines(theDivid, ahash[aname[currIndex - 1]]);
-    }
+// play the audio at the current index
+var playCurrIndexAudio = function () {
 
-    // if the end of the tour
-    if (currIndex == len && interval) {
+    // set playing to false
+    playing = false; 
 
-        // stop the timer
-        clearInterval(interval);
+    // play the current audio and highlight the lines
+    playaudio(currIndex, aname, theDivid, ahash);
+    
+};
+
+// handle the end of the tour
+var handleTourEnd = function() {
+
+   $('#status').html(" The " + tourName + " Ended");
 
         // disable the prev, pause/play, and next buttons and make them more invisible
         $('#first_audio').attr('disabled', 'disabled');
@@ -321,21 +325,72 @@ var outerAudio = function () {
         // enable the tour buttons
         for (var j = 0; j < buttonCount; j++)
             $('#button_audio_' + j).removeAttr('disabled');
+}
+
+// only call this one after the first time
+var outerAudio = function () {
+    
+    // unbind ended
+    $('#' + afile).unbind('ended');
+
+    // set playing to false
+    playing = false;
+
+    // unhighlight previous lines from the last audio
+    unhighlightLines(theDivid, ahash[aname[currIndex]]);
+
+    // increment the currIndex to point to the next one
+    currIndex++; 
+
+    // if the end of the tour reset the buttons
+    if (currIndex == len) {
+       handleTourEnd();
     }
-    else if (currIndex < len) {
+    
+    // else not done yet so play the next audio
+    else {
+    
         // play the audio at the current index
         playCurrIndexAudio();
     }
 };
 
-// play the audio and set the duration and highlight the lines
+// play the audio now that it is ready
+var playWhenReady = function(afile,divid,ahash) { 
+        // unbind current
+        $('#' + afile).unbind('canplaythrough');
+        //console.log("in playWhenReady " + elem.duration);
+   
+        $('#status').html("Playing the " + tourName);
+        elem.currentTime = 0;
+        highlightLines(divid, ahash[afile]);
+        $('#' + afile).bind('ended',function() {
+            outerAudio();
+        });
+        playing = true;
+        elem.play();
+
+}; 
+
+
+// play the audio at the specified index i and set the duration and highlight the lines
 var playaudio = function (i, aname, divid, ahash) {
-    var afile = aname[i];
+    afile = aname[i];
     elem = document.getElementById(afile);
-    elem.currentTime = 0;
-    elem.play();
-    dur = elem.duration; // the length of the audio in seconds
-    highlightLines(divid, ahash[afile]);
+
+    // if this isn't ready to play yet - no duration yet then wait
+    //console.log("in playaudio " + elem.duration);
+    if (isNaN(elem.duration) || elem.duration == 0)
+    {
+       // set the status
+       $('#status').html("Loading audio.  Please wait.");
+       $('#' + afile).bind('canplaythrough',function() {
+         playWhenReady(afile,divid,ahash);
+       });
+    }
+    // otherwise it is ready so play it
+    else 
+        playWhenReady(afile,divid,ahash);
 };
 
 // pause if playing and play if paused
@@ -345,9 +400,8 @@ var pauseAndPlayAudio = function () {
     // if paused and clicked then continue from current
     if (elem.paused) {
         // calcualte the time left to play in milliseconds
-        counter = (dur - elem.currentTime) * 1000;
+        counter = (elem.duration - elem.currentTime) * 1000;
         elem.play(); // start the audio from current spot
-        interval = setInterval(outerAudio, counter); // set timer
         document.getElementById("pause_audio").src = "../_static/pause.png";
         document.getElementById("pause_audio").title = "Pause current audio";
         //log change to db
@@ -355,9 +409,8 @@ var pauseAndPlayAudio = function () {
     }
 
     // if audio was playing pause it
-    else if (interval) {
+    else if (playing) {
         elem.pause(); // pause the audio
-        clearInterval(interval); // clear the highlight
         document.getElementById("pause_audio").src = "../_static/play.png";
         document.getElementById("pause_audio").title = "Play paused audio";
         //log change to db
