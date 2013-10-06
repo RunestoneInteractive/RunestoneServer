@@ -73,3 +73,8 @@ using random numbers this is pretty important as it will unexpectedly manifest i
 * Add Feedback button to end of chapter homework problems.  This button will show the grade for this assignment, and the average of all assignments.
 * Add the ability for instructors to type in comments when they grade assignments.
 
+2.1.4 October 6, 2013
+---------------------
+
+* Fix to turtle problem
+* Fixes to make audio tours work again
