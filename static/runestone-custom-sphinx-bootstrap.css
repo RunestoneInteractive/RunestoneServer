@@ -3,6 +3,7 @@
 body {
     padding-top: 60px;
     padding-bottom: 40px;
+    background-color: #eeeeee;
 }
 
 pre {
@@ -36,8 +37,27 @@ h5 {
     }
 }
 
+div.container {
+    background-color: #ffffff;
+}
+
+div.section {
+    max-width: 400pt;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .navbar>.container .navbar-brand {
     margin-left: 0;
+
+}
+
+.navbar>.container  {
+    background-color: #f8f8f8;
+}
+
+.footer>.container {
+    background-color: #eeeeee;
 }
 
 .brand-logo {
