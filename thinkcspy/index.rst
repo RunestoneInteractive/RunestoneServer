@@ -81,7 +81,7 @@ Benefits of this Interactive Textbook
 Next Steps
 ----------
 
-* Get an overview of the features in this book  `Click Here <http://interactivepython.org/courselib/static/overview/OverviewForSite/overview.html>`_
+* Get an overview of the features in this book  `Click Here <http://interactivepython.org/runestone/static/overview/overview.html>`_
 * To get help moving around the book:  :ref:`quick_help`
 * Check out a sample chapter :ref:`hello_turtles`
 * Check out the :ref:`t_o_c`
