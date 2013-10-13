@@ -30,7 +30,7 @@ CODE = """\
     <div class='video-play-overlay'></div>
 </a>
 <div id="%(divid)s" class="video_popup" >
-<video %(controls)s %(loop)s >
+<video %(controls)s %(preload)s %(loop)s >
     %(sources)s
     No supported video types
 </video>
@@ -71,7 +71,8 @@ class Video(Directive):
     has_content = True
     option_spec = {'controls':directives.flag,
                    'loop': directives.flag,
-                   'thumb': directives.uri
+                   'thumb': directives.uri,
+                   'preload': directives.flag
                    }
 
     def run(self):
@@ -91,6 +92,11 @@ class Video(Directive):
         else:
             self.options['loop'] = ''
 
+        if 'preload' in self.options:
+            self.options['preload'] = 'preload="auto"'
+        else:
+            self.options['preload'] = 'preload="none"'
+            
         self.options['sources'] = "\n    ".join(sources)
         res = CODE % self.options
         if 'popup' in self.options:

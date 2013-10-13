@@ -78,3 +78,10 @@ using random numbers this is pretty important as it will unexpectedly manifest i
 
 * Fix to turtle problem
 * Fixes to make audio tours work again
+
+
+2.1.5 October 13, 2013
+----------------------
+
+* Modify max width of content area to improve overall readability
+* Add a video preload attribute.   Do not preload videos to save bandwidth and decrease load times.
