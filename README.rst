@@ -9,7 +9,7 @@ Build Status |buildstatus|
 Important Notes
 ---------------
 
-1.  We do our development on Linux and OS X.  We use standard Unix commands that may not exist on Windows.  If you want to install on Windows, you may need to install the Cygwin tools and do your work in that environment.
+1.  We do our development on Linux and OS X.  We use standard Unix commands that may not exist on Windows.  If you want to install on Windows, you may need to install the Cygwin tools and do your work in that environment.  See Windows notes at the end for some additional tips.
 
 2.  The latest version of web2py has moved some important files out of its root directory.  As of 10/1/13 I have not experimented with this release.  More information on these moved files (routes.py for example) can be found `here <http://web2py.com/init/default/changelog>`_
 
@@ -238,4 +238,24 @@ Note, because this interactive edition makes use of lots of HTML 5 and Javascrip
 I highly recommend either Chrome, or Safari.  Firefox 6+ works too, but has
 proven to be less reliable than the first two.  I have no idea whether this works
 at all under later versions of Internet Explorer.
+
+Notes on running under Windows
+------------------------------
+
+As I mentioned up front, I'm not a windows user, But, others have figured out how to get the whole works running under windows anyway.  Here are some tips:
+
+1.  In models.0 you will want to add this:
+
+::
+
+    try:
+        from os import uname
+    except:
+        def uname():
+            return ['0', 'windows']
+
+
+   Now you can add a test for windows, and set your database settings accordingly.
+
+2.  In the pavement.py file we use cp to copy some files into place.  I *think* the equivalent on Windows is copy or copy.exe.
 
