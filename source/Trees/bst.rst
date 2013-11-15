@@ -318,7 +318,7 @@ from the ``TreeNode`` besides the payload.
 By implementing the ``__getitem__`` method we can write a Python
 statement that looks just like we are accessing a dictionary, when in
 fact we are using a binary search tree, for example
-``z = myZipTree['Fargo'].  As you can see, all the ``__getitem__`` method does is call
+``z = myZipTree['Fargo']``.  As you can see, all the ``__getitem__`` method does is call
 ``get``.
 
 
