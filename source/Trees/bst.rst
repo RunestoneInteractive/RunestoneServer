@@ -92,7 +92,7 @@ class has a reference to the ``TreeNode`` that is the root of the binary
 search tree. In most cases the external methods defined in the outer
 class simply check to see if the tree is empty. If there are nodes in
 the tree, the request is just passed on to a private method defined in
-the ``BinarySearch`` tree class that takes the root as a parameter. In
+the ``BinarySearchTree`` class that takes the root as a parameter. In
 the case where the tree is empty or we want to delete the key at the
 root of the tree, we must take special action. The code for the
 ``BinarySearchTree`` class constructor along with a few other
