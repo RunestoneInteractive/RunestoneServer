@@ -42,6 +42,8 @@ Key Terms
       subtree                  tree 
 ============= ===================== ==================== 
 
+.. _tree_discuss:
+
 Discussion Questions
 --------------------
 

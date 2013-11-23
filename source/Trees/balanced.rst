@@ -172,16 +172,13 @@ begin, we will override the ``_put`` method and write a new
 exactly the same as in simple binary search trees except for the additions of
 the calls to ``updateBalance`` on lines 7 and 13.
 
-.. highlight:: python
-    :linenothreshold: 5
-
-.. _lst_updbal:
 
 **Listing 1**
 
+.. _lst_updbal:
 
-::
-
+.. code-block:: python
+    
     def _put(self,key,val,currentNode):
     	if key < currentNode.key:
     	    if currentNode.hasLeftChild():
@@ -210,8 +207,6 @@ the calls to ``updateBalance`` on lines 7 and 13.
     		    self.updateBalance(node.parent)
     		    
     		    
-.. highlight:: python
-    :linenothreshold: 500
 
 The new ``updateBalance`` method is where most of the work is done. This
 implements the recursive procedure we just described. The
@@ -309,12 +304,7 @@ it to you to study the code for ``rotateRight``.
 
 **Listing 2**
 
-.. highlight:: python
-    :linenothreshold: 5
-
-
-::
-
+.. code-block:: python
 
     def rotateLeft(self,rotRoot):
     	newRoot = rotRoot.rightChild
@@ -469,7 +459,7 @@ the left rotation around A brings the entire subtree back into balance.
 
 
 The code that implements these rules can be found in our ``rebalance``
-method, which is shown in :ref:`Listing 2 <lst_rebalance>`. Rule number 1 from
+method, which is shown in :ref:`Listing 3 <lst_rebalance>`. Rule number 1 from
 above is implemented by the ``if`` statement starting on line 2.
 Rule number 2 is implemented by the ``elif`` statement starting on
 line 8.
@@ -501,7 +491,7 @@ line 8.
 .. highlight:: python
    :linenothreshold: 500
 
-The discussion questions provide you the opportunity to rebalance a tree
+The :ref:`discussion questions <tree_discuss>` provide you the opportunity to rebalance a tree
 that requires a left rotation followed by a right. In addition the
 discussion questions provide you with the opportunity to rebalance some
 trees that are a little more complex than the tree in
@@ -539,7 +529,7 @@ map ADT (see :ref:`Table 1 <tab_compare>`).
 .. table:: **Table 1: Comparing the Performance of Different Map Implementations**
 
     =========== ======================  ============   ==================  ====================
-                 Sorted List             Hash Table     Binary Search Tree     AVL Tree
+    operation   Sorted List             Hash Table     Binary Search Tree     AVL Tree
     =========== ======================  ============   ==================  ====================
          put    :math:`O(n)`            :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
          get    :math:`O(\log_2{n})`    :math:`O(1)`       :math:`O(n)`    :math:`O(\log_2{n})`   
