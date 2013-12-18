@@ -178,14 +178,14 @@ from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
                                                    request.application)
 
-janrain_form = RPXAccount(request,
-                          api_key=settings.janrain_api_key, # set in 1.py
-                          domain=settings.janrain_domain, # set in 1.py
-                          url=janrain_url)
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
-#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
+# janrain_form = RPXAccount(request,
+#                          api_key=settings.janrain_api_key, # set in 1.py
+#                          domain=settings.janrain_domain, # set in 1.py
+#                          url=janrain_url)
+# auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
+auth.settings.login_form = auth  # uncomment this to just use web2py integrated authentication
 
-request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
+# request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
