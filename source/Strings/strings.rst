@@ -1141,7 +1141,7 @@ above.
         elif lhch == 'B':
             rhstr = 'AB'  # Rule 2
         else:
-            rhstr = ch    # no rules apply so keep the character
+            rhstr = lhch    # no rules apply so keep the character
 
         return rhstr
 
