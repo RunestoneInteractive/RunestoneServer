@@ -46,3 +46,8 @@ models/1.py
 /paverconfig.py
 
 /build_info
+
+.project
+.pydevproject
+.settings
+static/pip
