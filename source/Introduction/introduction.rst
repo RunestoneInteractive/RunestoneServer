@@ -2299,14 +2299,21 @@ we will use that terminology in our implementation.
 
 :ref:`Listing 9 <lst_logicgateclass>` and :ref:`Listing 10 <lst_logicgateclass>` implement these two
 classes. The constructors in both of these classes start with an
-explicit call to the constructor of the parent class using the ``super``
-function. When creating an instance of the ``BinaryGate`` class, we
+explicit call to the constructor of the parent class using the parent's ``__init__``
+method. When creating an instance of the ``BinaryGate`` class, we
 first want to initialize any data items that are inherited from
 ``LogicGate``. In this case, that means the label for the gate. The
 constructor then goes on to add the two input lines (``pinA`` and
 ``pinB``). This is a very common pattern that you should always use when
 building class hierarchies. Child class constructors need to call parent
 class constructors and then move on to their own distinguishing data.
+
+Python
+also has a function called ``super`` which can be used in place of explicitly
+naming the parent class.  This is a more general mechanism, and is widely
+used, especially when a class has more than one parent.  But, this is not something
+we are going to discuss in this introduction.  For example in our example above
+``LogicGate.__init__(self,n)`` could be replaced with ``super(UnaryGate,self).__init__(n)``.
 
 The only behavior that the ``BinaryGate`` class adds is the ability to
 get the values from the two input lines. Since these values come from
