@@ -101,7 +101,7 @@ done at the same time (see :ref:`Figure 2 <fig_pythonswap>`). Using simultaneous
 assignment, the exchange operation can be done in one statement.
 
 Lines 5-7 in :ref:`ActiveCode 1 <lst_bubble>` perform the exchange of the :math:`i` and
-:math:(i+1)th items using the three–step procedure described
+:math:`(i+1)th` items using the three–step procedure described
 earlier. Note that we could also have used the simultaneous assignment
 to swap the items.
 
