@@ -1,0 +1,11 @@
+{
+  "code": "# Example to torture students\n# from UC Berkeley CS61a\n# (only works in Python 3)\n\ndef f(t):\n    def g(t):\n        def h():\n            nonlocal t\n            t += 1\n        return h, lambda: t\n    h, gt = g(0)\n    return h, gt, lambda: t\n\nh, gt, ft = f(0)\nft(), gt()\nh()\nft(), gt()\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 8)", 
+      "line": 8, 
+      "event": "uncaught_exception", 
+      "offset": 22
+    }
+  ]
+}

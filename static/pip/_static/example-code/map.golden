@@ -1,0 +1,6953 @@
+{
+  "code": "# Functional programming with map\n# Adapted from MIT 6.01 course notes (Section A.2.3)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\ndef map(func, lst):\n    if lst == []:\n        return []\n    else:\n        return [func(lst[0])] + map(func, lst[1:])\n    \ndef halveElements(lst):\n    return map(lambda x: x / 2.0, lst)\n  \ninput = [2, 4, 6, 8, 10]\noutput = halveElements(input)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 15, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "halveElements", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 11, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "halveElements", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 12, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": 1.000, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "__return__": 2.000, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "__return__": 3.000, 
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "x": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "x": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "__return__": 4.000, 
+            "x": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "x": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "x": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "__return__": 5.000, 
+            "x": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              9
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f12", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ], 
+        "9": [
+          "LIST"
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              9
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f12", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ], 
+        "9": [
+          "LIST"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              9
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f12", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ], 
+        "9": [
+          "LIST"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              10
+            ], 
+            "lst": [
+              "REF", 
+              9
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f12", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ], 
+        "9": [
+          "LIST"
+        ], 
+        "10": [
+          "LIST"
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              11
+            ], 
+            "lst": [
+              "REF", 
+              8
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f10", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "8": [
+          "LIST", 
+          10
+        ], 
+        "11": [
+          "LIST", 
+          5.000
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              12
+            ], 
+            "lst": [
+              "REF", 
+              7
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f8", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "7": [
+          "LIST", 
+          8, 
+          10
+        ], 
+        "12": [
+          "LIST", 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              13
+            ], 
+            "lst": [
+              "REF", 
+              6
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f6", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "6": [
+          "LIST", 
+          6, 
+          8, 
+          10
+        ], 
+        "13": [
+          "LIST", 
+          3.000, 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              14
+            ], 
+            "lst": [
+              "REF", 
+              5
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f4", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "5": [
+          "LIST", 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "14": [
+          "LIST", 
+          2.000, 
+          3.000, 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "map", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              15
+            ], 
+            "lst": [
+              "REF", 
+              3
+            ], 
+            "func": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "map", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "map_f2", 
+          "ordered_varnames": [
+            "func", 
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "15": [
+          "LIST", 
+          1.000, 
+          2.000, 
+          3.000, 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "halveElements", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              15
+            ], 
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p", 
+          "ordered_varnames": [
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "15": [
+          "LIST", 
+          1.000, 
+          2.000, 
+          3.000, 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "map", 
+        "halveElements", 
+        "input", 
+        "output"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              15
+            ], 
+            "lst": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "halveElements", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "halveElements_f1_p_z", 
+          "ordered_varnames": [
+            "lst", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "map": [
+          "REF", 
+          1
+        ], 
+        "halveElements": [
+          "REF", 
+          2
+        ], 
+        "output": [
+          "REF", 
+          15
+        ], 
+        "input": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "map(func, lst)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "halveElements(lst)", 
+          null
+        ], 
+        "3": [
+          "LIST", 
+          2, 
+          4, 
+          6, 
+          8, 
+          10
+        ], 
+        "15": [
+          "LIST", 
+          1.000, 
+          2.000, 
+          3.000, 
+          4.000, 
+          5.000
+        ]
+      }, 
+      "line": 15, 
+      "event": "return"
+    }
+  ]
+}

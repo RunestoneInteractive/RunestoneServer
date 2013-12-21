@@ -1,0 +1,4 @@
+This document has been moved to embedding-HOWTO.md
+
+View it online at:
+https://github.com/pgbovine/OnlinePythonTutor/blob/master/v3/docs/embedding-HOWTO.md

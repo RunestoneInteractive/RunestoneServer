@@ -1,0 +1,1977 @@
+{
+  "code": "# use lists\nx = None\nfor i in range(6, 0, -1):\n  x = [i, x]\n\n# use tuples\ny = None\nfor i in range(6, 0, -1):\n  y = (i, y)\n\nx[1][0]=y[1][1] # courtesy of John DeNero!\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": null
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 6, 
+        "x": null
+      }, 
+      "heap": {}, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 6, 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 5, 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 5, 
+        "x": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 4, 
+        "x": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 4, 
+        "x": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 3, 
+        "x": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 3, 
+        "x": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 2, 
+        "x": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 2, 
+        "x": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": null
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 6, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": null
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 6, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          7
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 5, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          7
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 5, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 4, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 4, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          9
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 3, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          9
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 3, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          10
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 2, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          10
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 2, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          11
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            10
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          11
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            10
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          12
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            10
+          ]
+        ], 
+        "12": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            11
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "x": [
+          "REF", 
+          6
+        ], 
+        "y": [
+          "REF", 
+          12
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          2, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            10
+          ]
+        ], 
+        "12": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            11
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "i", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "i": 1, 
+        "y": [
+          "REF", 
+          12
+        ], 
+        "x": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          6, 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          5, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "3": [
+          "LIST", 
+          4, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          3, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "LIST", 
+          [
+            "REF", 
+            10
+          ], 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "6": [
+          "LIST", 
+          1, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          6, 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          5, 
+          [
+            "REF", 
+            7
+          ]
+        ], 
+        "9": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            8
+          ]
+        ], 
+        "10": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            9
+          ]
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            10
+          ]
+        ], 
+        "12": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            11
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }
+  ]
+}

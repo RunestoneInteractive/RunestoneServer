@@ -1,0 +1,1143 @@
+{
+  "code": "# Inheritance - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def giveRaise(self, percentage):\n        self.salary = self.salary + self.salary * percentage\n\nclass Prof601(Staff601):\n    salary = 100000\n\n    def __init__(self, name, age):\n        self.name = name\n        self.giveRaise((age - 18) * 0.03)\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Prof601('Pat', 60)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ]
+      }, 
+      "line": 23, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601"
+        ]
+      }, 
+      "line": 16, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601"
+        ]
+      }, 
+      "line": 17, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 18, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "giveRaise", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "percentage": 1.260, 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "giveRaise", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "giveRaise_f2", 
+          "ordered_varnames": [
+            "self", 
+            "percentage"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "giveRaise", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "percentage": 1.260, 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "giveRaise", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "giveRaise_f2", 
+          "ordered_varnames": [
+            "self", 
+            "percentage"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "giveRaise", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": null, 
+            "percentage": 1.260, 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "giveRaise", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "giveRaise_f2", 
+          "ordered_varnames": [
+            "self", 
+            "percentage", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "salary", 
+            226000.000
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "age": 60, 
+            "name": "Pat", 
+            "self": [
+              "REF", 
+              6
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "name", 
+            "age", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "salary", 
+            226000.000
+          ]
+        ]
+      }, 
+      "line": 18, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "Prof601", 
+        "pat"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          6
+        ], 
+        "Prof601": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "giveRaise", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "giveRaise(self, percentage)", 
+          null
+        ], 
+        "3": [
+          "CLASS", 
+          "Prof601", 
+          [
+            "Staff601"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "salary", 
+            100000
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              5
+            ]
+          ]
+        ], 
+        "4": [
+          "FUNCTION", 
+          "__init__(self, name, age)", 
+          null
+        ], 
+        "5": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "6": [
+          "INSTANCE", 
+          "Prof601", 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "salary", 
+            226000.000
+          ]
+        ]
+      }, 
+      "line": 23, 
+      "event": "return"
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--
+
+Online Python Tutor
+https://github.com/pgbovine/OnlinePythonTutor/
+
+Copyright (C) 2010-2013 Philip J. Guo (philip@pgbovine.net)
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ -->
+
+<head>
+  <title>Online Python Tutor - Visualize program execution</title>
+
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+
+<!-- requirements for pytutor.js -->
+<script type="text/javascript" src="js/d3.v2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.ba-bbq.min.js"></script> <!-- for handling back button and URL hashes -->
+<script type="text/javascript" src="js/jquery.jsPlumb-1.3.10-all-min.js "></script> <!-- for rendering SVG connectors
+                                                                                         DO NOT UPGRADE ABOVE 1.3.10 OR ELSE BREAKAGE WILL OCCUR -->
+<script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script> <!-- for sliders and other UI elements -->
+<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.24.custom.css" rel="stylesheet" />
+
+<!-- for annotation bubbles -->
+<script type="text/javascript" src="js/jquery.qtip.min.js"></script>
+<link type="text/css" href="css/jquery.qtip.css" rel="stylesheet" />
+
+<script type="text/javascript" src="js/pytutor.js"></script>
+<link rel="stylesheet" href="css/pytutor.css"/>
+
+
+<!-- requirements for opt-frontend.js -->
+
+<!-- codemirror.net online code editor -->
+<script type="text/javascript" src="js/codemirror/codemirror.js"></script>
+<link type="text/css" href="css/codemirror.css" rel="stylesheet" />
+<script type="text/javascript" src="js/codemirror/python.js"></script>
+
+<script type="text/javascript" src="js/opt-frontend.js"></script>
+<link rel="stylesheet" href="css/opt-frontend.css"/>
+
+</head>
+
+<body>
+
+<div id="pyInputPane">
+
+Write your Python code here:
+<br/>
+
+<div id="codeInputPane"></div> <!-- populate with a CodeMirror instance -->
+
+<p style="margin-top: 10px; line-height: 200%;">
+Execute code using
+  <select id="pythonVersionSelector">
+    <option value="2">Python 2.7</option>
+    <option value="3">Python 3.3</option>
+    <option value="2crazy">Py 2.crazy</option>
+  </select>,
+  <select id="cumulativeModeSelector">
+    <option value="false">hide frames of exited functions</option>
+    <option value="true">show frames of exited functions</option>
+  </select>,
+  <select id="heapPrimitivesSelector">
+    <option value="false">inline primitives and nested objects</option>
+    <option value="true">render all objects on the heap</option>
+  </select>,
+  <select id="drawParentPointerSelector">
+    <option value="false">hide environment parent pointers</option>
+    <option value="true">show environment parent pointers</option>
+  </select>,
+  <select id="textualMemoryLabelsSelector">
+    <option value="false">draw references using arrows</option>
+    <option value="true">use text labels for references</option>
+  </select>, and
+  <select id="showOnlyOutputsSelector">
+    <option value="false">show everything</option>
+    <option value="true">show only outputs</option>
+  </select>.
+</p>
+
+<p>
+<button id="executeBtn" class="bigBtn" type="button">Visualize Execution</button>
+</p>
+
+
+<p style="margin-top: 25px;">Basic Examples:<br/>
+
+<a id="aliasExampleLink" href="#">hello</a> |
+<a id="happyExampleLink" href="#">happy</a> |
+<a id="tutorialExampleLink" href="#">intro</a> |
+<a id="filterExampleLink" href="#">filter</a> |
+<a id="strtokExampleLink" href="#">tokenize</a> |
+<a id="insSortExampleLink" href="#">insertion sort</a> |
+<a id="listCompLink" href="#">list comprehension</a>
+</p>
+
+<p style="margin-top: 15px;">Math-Related Fun:<br/>
+<a id="factExampleLink" href="#">factorial</a> |
+<a id="fibonacciExampleLink" href="#">fibonacci</a> |
+<a id="memoFibExampleLink" href="#">memoized fibonacci</a> |
+<a id="newtonExampleLink" href="#">square root</a> |
+<a id="pwGcdLink" href="#">gcd</a> |
+<a id="towersOfHanoiLink" href="#">towers of hanoi</a>
+</p>
+
+<p style="margin-top: 15px;">Higher-Order Functions:<br/>
+
+<a id="closure1Link" href="#">closure 1</a> |
+<a id="closure2Link" href="#">closure 2</a> |
+<a id="closure3Link" href="#">closure 3</a> |
+<a id="closure4Link" href="#">closure 4</a> |
+<a id="closure5Link" href="#">closure 5</a>
+<br/>
+<!-- <a id="sumCubesLink" href="#">sum cubes</a> | -->
+<a id="mapExampleLink" href="#">list map</a> |
+<a id="sumExampleLink" href="#">summation</a> |
+<a id="lambdaParamLink" href="#">lambda param</a> |
+<a id="tortureLink" href="#">student torture</a>
+
+</p>
+
+<p style="margin-top: 15px;">User Input:<br/>
+
+<a id="rawInputExampleLink" href="#">raw input</a>
+
+</p>
+
+<p style="margin-top: 15px;">Object-Oriented Programming:<br/>
+
+<a id="oop1ExampleLink" href="#">OOP 1</a> |
+<a id="oop2ExampleLink" href="#">OOP 2</a> |
+<a id="oopSmallExampleLink" href="#">OOP 3</a> |
+<a id="inheritanceExampleLink" href="#">inheritance</a>
+
+</p>
+
+<p style="margin-top: 15px;">Linked Lists:<br/>
+<a id="ll1Link" href="#">LL 1</a> |
+<a id="ll2Link" href="#">LL 2</a> |
+<a id="sumListLink" href="#">LL sum</a>
+</p>
+
+<p style="margin-top: 15px;">Pointer Aliasing:<br/>
+<a id="aliasing1Link" href="#">aliasing 1</a> |
+<a id="aliasing2Link" href="#">aliasing 2</a> |
+<a id="aliasing3Link" href="#">aliasing 3</a> |
+<a id="aliasing4Link" href="#">aliasing 4</a>
+<br/>
+<a id="aliasing5Link" href="#">aliasing 5</a> |
+<a id="aliasing6Link" href="#">aliasing 6</a> |
+<a id="aliasing7Link" href="#">aliasing 7</a> |
+<a id="aliasing8Link" href="#">aliasing 8</a> |
+<a id="pwSumListLink" href="#">sumList</a>
+</p>
+
+<p style="margin-top: 15px;">More Python Tricks:<br/>
+<a id="decoratorsLink" href="#">decorators</a> |
+<a id="genPrimesLink" href="#">generators</a> |
+<a id="genExprLink" href="#">gen expr</a> |
+<a id="varargsLink" href="#">varargs</a> |
+<a id="pwTryFinallyLink" href="#">exceptions</a> |
+<a id="forElseLink" href="#">for-else</a> |
+<a id="nonlocalLink" href="#">nonlocal</a>
+</p>
+
+</div>
+
+
+<div id="pyOutputPane">
+</div>
+
+<div id="footer">
+
+<p>
+  <button id="genUrlBtn" class="smallBtn" type="button">Generate URL</button> <input type="text" id="urlOutput" size="70"/>
+</p>
+
+<p>To share this visualization, click the 'Generate URL' button above
+and share that URL. To report a bug, paste the URL along with a brief
+error description in an email addressed to philip@pgbovine.net</p>
+
+<div id="embedLinkDiv">
+<p>
+  <button id="genEmbedBtn" class="smallBtn" type="button">Generate embed code</button> <input type="text" id="embedCodeOutput" size="70"/>
+</p>
+
+<p>To embed this visualization in your webpage, click the 'Generate
+embed code' button above and paste the resulting HTML code into your
+webpage. Adjust the height and width parameters as needed.</p>
+</div>
+
+<a href="http://pythontutor.com/">Online Python Tutor</a> supports <a
+href="http://www.python.org/doc/2.7/">Python 2.7</a> and <a
+href="http://www.python.org/doc/3.3.0/">Python 3.3</a> with limited module
+imports and no file I/O. 
+The following modules may be imported: 
+bisect,
+collections,
+datetime,
+functools,
+heapq,
+itertools,
+json,
+math,
+operator,
+random,
+re,
+string
+</p>
+
+<p>Have a question? Maybe the <a
+href="https://github.com/pgbovine/OnlinePythonTutor/blob/master/v3/docs/user-FAQ.md">FAQ</a>
+or other <a
+href="https://github.com/pgbovine/OnlinePythonTutor/blob/master/v3/docs/">documentation</a>
+can help. Or check out its code at <a
+href="https://github.com/pgbovine/OnlinePythonTutor/">GitHub</a>.</p>
+
+<p>Join the <a
+href="https://groups.google.com/forum/#!forum/pythontutor-users">pythontutor-users</a>
+mailing list to participate in user discussions and <a
+href="https://groups.google.com/forum/#!forum/pythontutor-announce">pythontutor-announce</a>
+to receive occasional announcements.
+(Your name and email address will be kept private; only the list owner can see them.)</p>
+
+<p style="margin-top: 8px;">
+Copyright &copy; 2010-2013 <a href="http://www.pgbovine.net/">Philip Guo</a>.  All rights reserved.
+</p>
+
+</div>
+
+</body>
+</html>
+

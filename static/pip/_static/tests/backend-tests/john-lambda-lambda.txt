@@ -1,0 +1,5 @@
+# another gem from john denero ...
+def a(b):
+    a, b = b(3)
+
+a(lambda a: (lambda b: a, a))

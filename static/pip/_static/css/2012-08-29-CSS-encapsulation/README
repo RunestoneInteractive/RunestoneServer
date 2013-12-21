@@ -1,0 +1,69 @@
+From me:
+
+I just thought of a possible solution for those nasty CSS clashes that
+you guys are encountering:
+
+I could prefix all of my python tutor CSS rules with something like
+div.ExecutionVisualizer. e.g., 
+
+div.ExecutionVisualizer table td {
+  ... blah blah ...
+}
+
+and then when the user creates an ExecutionVisualizer object with
+JavaScript and passes it a div, I use JavaScript to set its class to
+"ExecutionVisualizer".
+
+Thoughts?
+
+
+---
+From John:
+
+That's a good idea.  It would also be great to establish two different
+top-level div classes: one for embedded and one for stand-alone
+visualizers.  Embedded visualizers typically need to be more densely
+laid out, otherwise they eat up the entire page.  You can see my css
+changes for embedding in the master branch of my fork.
+
+https://github.com/papajohn/OnlinePythonTutor/blob/master/PyTutorGAE/css/pytutor.css
+[downloaded as papajohn-pytutor.css]
+
+Ideally, I'd add the option of creating an embedded visualizer or a
+stand-alone one on construction, and each would be allowed to have
+different styles but mostly share the same styles.
+
+
+---
+From Sean:
+
+Philip, just wondering, could you just make a new container div with the
+right class, and stick it into the div passed to your code?  This might
+be easier than fiddling with the class on the div the user gives, and
+I'm also wondering whether there could be unforeseen interactions with
+other classes that might have been prespecified on that div. I don't
+know what the downsides of the new approach are, though.
+
+---
+My thoughts:
+
+- maybe just have a set of css styles for a standalone visualizer, and
+  then add an option or something to flip a bit to make it embedded ...
+  if the visualizer is embedded, then use js to set css for certain
+  attributes
+
+---
+2012-08-29 email from me to John and Sean:
+
+Gentlemen -
+
+I just pushed some changes that implemented:
+
+- Sean's suggestion of creating a div.ExecutionVisualizer within the root DOM node passed into a new ExecutionVisualizer object,
+- prefixing of all CSS rules by div.ExecutionVisualizer
+- some of John's modified CSS
+
+Hopefully CSS clashes are less of a problem from now on.
+
+However, I still didn't implement John's suggestion for an "embedded CSS mode" yet; right now the best thing to do is to either tweak the CSS manually or to write javascript to dynamically modify the CSS.
+

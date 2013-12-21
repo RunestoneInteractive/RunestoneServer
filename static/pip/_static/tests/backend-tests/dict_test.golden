@@ -1,0 +1,730 @@
+{
+  "code": "x = {1 : 2}\nx[('tup', 'le')] = set([1, 2, 3])\n\ndef foo():\n  local_x = {1 : 2}\n  local_y = {}\n  local_y[('tup', 'le')] = set([1, 2, 3])\n  print(\"hello\", list(local_y.values()))\n\nfoo()\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ]
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "local_x": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": [
+            "local_x"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            1, 
+            2
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "local_y": [
+              "REF", 
+              6
+            ], 
+            "local_x": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": [
+            "local_x", 
+            "local_y"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            1, 
+            2
+          ]
+        ], 
+        "6": [
+          "DICT"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "local_y": [
+              "REF", 
+              6
+            ], 
+            "local_x": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": [
+            "local_x", 
+            "local_y"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            1, 
+            2
+          ]
+        ], 
+        "6": [
+          "DICT", 
+          [
+            [
+              "REF", 
+              7
+            ], 
+            [
+              "REF", 
+              8
+            ]
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "8": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "('hello', [set([1, 2, 3])])\n", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "local_y": [
+              "REF", 
+              6
+            ], 
+            "local_x": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": [
+            "local_x", 
+            "local_y", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            1, 
+            2
+          ]
+        ], 
+        "6": [
+          "DICT", 
+          [
+            [
+              "REF", 
+              7
+            ], 
+            [
+              "REF", 
+              8
+            ]
+          ]
+        ], 
+        "7": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "8": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ]
+      }, 
+      "line": 8, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "foo"
+      ], 
+      "stdout": "('hello', [set([1, 2, 3])])\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "foo": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "DICT", 
+          [
+            1, 
+            2
+          ], 
+          [
+            [
+              "REF", 
+              2
+            ], 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "tup", 
+          "le"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3
+        ], 
+        "4": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }
+  ]
+}

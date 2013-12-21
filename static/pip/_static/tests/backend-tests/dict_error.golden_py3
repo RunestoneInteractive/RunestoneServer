@@ -1,0 +1,207 @@
+{
+  "code": "def foo():\n  local_y[('tup', 'le')] = set([1, 2, 3])\n\nfoo()\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "exception_msg": "NameError: global name 'local_y' is not defined", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "func_name": "foo", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "foo", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "foo_f1", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "foo"
+      ], 
+      "stdout": "", 
+      "exception_msg": "NameError: global name 'local_y' is not defined", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "foo": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "foo()", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "exception"
+    }
+  ]
+}

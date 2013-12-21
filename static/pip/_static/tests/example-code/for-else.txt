@@ -1,0 +1,9 @@
+# find primes using a for-else construct
+for n in range(2, 10):
+    x_range = range(2, n)
+    for x in x_range:
+        if n % x == 0:
+            break
+    else:
+        # loop fell through without finding a factor
+        print(n)

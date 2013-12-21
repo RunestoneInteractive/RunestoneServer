@@ -1,0 +1,7 @@
+def f():
+    def g():
+        pass
+    return g
+
+f()()
+f()()

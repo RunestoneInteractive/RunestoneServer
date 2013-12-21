@@ -1,0 +1,4754 @@
+{
+  "code": "# Philip's 10-minute intro to Python\n\n# numbers!\nage = 26\npi = 3.14159\n\n# strings!\ns = 'Rutherford Birchard Hayes'\ntokens = s.split()\nfirstName = tokens[0]\nmiddleName = tokens[1]\nlastName = tokens[2]\ns2 = firstName + ' ' + middleName + ' ' + lastName\n\n# 'if' statement - indentation matters!\nif (s == s2):\n    print('yes!!!')\nelse:\n    print('nooooooo')\n\n# list (mutable sequence)\nbeatles = ['John', 'Paul', 'George']\nbeatles.append('Ringo')\n\n# 'for' loop - indentation matters!\nfor b in beatles:\n    print('Hello ' + b)\n\n# tuple (immutable sequence)\nages = (18, 21, 28, 21, 22, 18, 19, 34, 9)\n\n# set (no order, no duplicates)\nuniqueAges = set(ages)\nuniqueAges.add(18) # already in set, no effect\nuniqueAges.remove(21)\n\n# no guaranteed order when iterating over a set\nfor thisAge in uniqueAges:\n    print(thisAge)\n\n# testing set membership\nif 18 in uniqueAges:\n    print('There is an 18-year-old present!')\n\n# sorting\nbeatles.sort() # in-place\norderedUniqueAges = sorted(uniqueAges) # new list\n\n# dict - mapping unique keys to values\nnetWorth = {}\nnetWorth['Donald Trump'] = 3000000000\nnetWorth['Bill Gates'] = 58000000000\nnetWorth['Tom Cruise'] = 40000000\nnetWorth['Joe Postdoc'] = 20000\n\n# iterating over key-value pairs:\nfor (person, worth) in netWorth.items():\n    if worth < 1000000:\n        print('haha ' + person + ' is not a millionaire')\n\n# testing dict membership\nif 'Tom Cruise' in netWorth:\n    print('show me the money!')\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "age": 26
+      }, 
+      "heap": {}, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "age": 26, 
+        "pi": 3.142
+      }, 
+      "heap": {}, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "age": 26, 
+        "pi": 3.142, 
+        "s": "Rutherford Birchard Hayes"
+      }, 
+      "heap": {}, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "age": 26, 
+        "pi": 3.142, 
+        "s": "Rutherford Birchard Hayes"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "age": 26, 
+        "pi": 3.142, 
+        "s": "Rutherford Birchard Hayes", 
+        "firstName": "Rutherford"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 17, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2"
+      ], 
+      "stdout": "yes!!!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ]
+      }, 
+      "line": 22, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles"
+      ], 
+      "stdout": "yes!!!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George"
+        ]
+      }, 
+      "line": 23, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles"
+      ], 
+      "stdout": "yes!!!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "John", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 27, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "John", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Paul", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 27, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Paul", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "George", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 27, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "George", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 27, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ]
+      }, 
+      "line": 30, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ]
+      }, 
+      "line": 33, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          21, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 34, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          21, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 35, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 34, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 34, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 9, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 9, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 18, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 18, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 19, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 19, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 22, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 22, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 39, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 38, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 42, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 43, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "John", 
+          "Paul", 
+          "George", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 46, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ]
+      }, 
+      "line": 47, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "middleName": "Birchard", 
+        "lastName": "Hayes", 
+        "age": 26, 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "s2": "Rutherford Birchard Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ]
+      }, 
+      "line": 50, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT"
+        ]
+      }, 
+      "line": 51, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ]
+        ]
+      }, 
+      "line": 52, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ]
+        ]
+      }, 
+      "line": 53, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 54, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 57, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Donald Trump", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 3000000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 58, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Donald Trump", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 3000000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 57, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Bill Gates", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 58000000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 58, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Bill Gates", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 58000000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 57, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Joe Postdoc", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 20000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 58, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Joe Postdoc", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 20000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 59, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Joe Postdoc", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 20000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 57, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Tom Cruise", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 40000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 58, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Tom Cruise", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 40000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 57, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Tom Cruise", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 40000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 62, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Tom Cruise", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 40000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 63, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "age", 
+        "pi", 
+        "s", 
+        "tokens", 
+        "firstName", 
+        "middleName", 
+        "lastName", 
+        "s2", 
+        "beatles", 
+        "b", 
+        "ages", 
+        "uniqueAges", 
+        "thisAge", 
+        "orderedUniqueAges", 
+        "netWorth", 
+        "person", 
+        "worth"
+      ], 
+      "stdout": "yes!!!\nHello John\nHello Paul\nHello George\nHello Ringo\n34\n9\n18\n19\n22\n28\nThere is an 18-year-old present!\nhaha Joe Postdoc is not a millionaire\nshow me the money!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "netWorth": [
+          "REF", 
+          6
+        ], 
+        "beatles": [
+          "REF", 
+          2
+        ], 
+        "firstName": "Rutherford", 
+        "uniqueAges": [
+          "REF", 
+          4
+        ], 
+        "middleName": "Birchard", 
+        "s2": "Rutherford Birchard Hayes", 
+        "age": 26, 
+        "orderedUniqueAges": [
+          "REF", 
+          5
+        ], 
+        "ages": [
+          "REF", 
+          3
+        ], 
+        "tokens": [
+          "REF", 
+          1
+        ], 
+        "person": "Tom Cruise", 
+        "s": "Rutherford Birchard Hayes", 
+        "b": "Ringo", 
+        "lastName": "Hayes", 
+        "thisAge": 28, 
+        "pi": 3.142, 
+        "worth": 40000000
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Rutherford", 
+          "Birchard", 
+          "Hayes"
+        ], 
+        "2": [
+          "LIST", 
+          "George", 
+          "John", 
+          "Paul", 
+          "Ringo"
+        ], 
+        "3": [
+          "TUPLE", 
+          18, 
+          21, 
+          28, 
+          21, 
+          22, 
+          18, 
+          19, 
+          34, 
+          9
+        ], 
+        "4": [
+          "SET", 
+          34, 
+          9, 
+          18, 
+          19, 
+          22, 
+          28
+        ], 
+        "5": [
+          "LIST", 
+          9, 
+          18, 
+          19, 
+          22, 
+          28, 
+          34
+        ], 
+        "6": [
+          "DICT", 
+          [
+            "Donald Trump", 
+            3000000000
+          ], 
+          [
+            "Bill Gates", 
+            58000000000
+          ], 
+          [
+            "Joe Postdoc", 
+            20000
+          ], 
+          [
+            "Tom Cruise", 
+            40000000
+          ]
+        ]
+      }, 
+      "line": 63, 
+      "event": "return"
+    }
+  ]
+}

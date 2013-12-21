@@ -1,0 +1,213 @@
+{
+  "code": "x = ('hello', 'world', 1, 2, 3, 'goodbye')\ny = list(x)\nz = set(x)\nw = {\"joe\" : 5, \"mindy\" : 6, \"jack\" : 7}\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ], 
+        "2": [
+          "LIST", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          1
+        ], 
+        "z": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ], 
+        "2": [
+          "LIST", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3, 
+          "goodbye", 
+          "world", 
+          "hello"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z", 
+        "w"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          1
+        ], 
+        "z": [
+          "REF", 
+          3
+        ], 
+        "w": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ], 
+        "2": [
+          "LIST", 
+          "hello", 
+          "world", 
+          1, 
+          2, 
+          3, 
+          "goodbye"
+        ], 
+        "3": [
+          "SET", 
+          1, 
+          2, 
+          3, 
+          "goodbye", 
+          "world", 
+          "hello"
+        ], 
+        "4": [
+          "DICT", 
+          [
+            "mindy", 
+            6
+          ], 
+          [
+            "joe", 
+            5
+          ], 
+          [
+            "jack", 
+            7
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }
+  ]
+}

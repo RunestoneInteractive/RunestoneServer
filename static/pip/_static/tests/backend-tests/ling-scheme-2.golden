@@ -1,0 +1,3788 @@
+{
+  "code": "def iota(n):\n  def loop(acc, k):\n    if k == n:\n      return list(reversed(acc))\n    else:\n      return loop([k] + acc, k + 1)\n  return loop([], 0)\n\nresult = iota(5)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "iota", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "iota", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "iota", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              8
+            ], 
+            "k": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f7", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "8": [
+          "LIST", 
+          4, 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              8
+            ], 
+            "k": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f7", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "8": [
+          "LIST", 
+          4, 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              8
+            ], 
+            "k": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f7", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "8": [
+          "LIST", 
+          4, 
+          3, 
+          2, 
+          1, 
+          0
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              8
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f7", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "8": [
+          "LIST", 
+          4, 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              7
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f6", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "7": [
+          "LIST", 
+          3, 
+          2, 
+          1, 
+          0
+        ], 
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              6
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f5", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "6": [
+          "LIST", 
+          2, 
+          1, 
+          0
+        ], 
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              5
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f4", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "5": [
+          "LIST", 
+          1, 
+          0
+        ], 
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              4
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f3", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "4": [
+          "LIST", 
+          0
+        ], 
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "loop", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "acc": [
+              "REF", 
+              3
+            ], 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "k": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "loop", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "loop_f2", 
+          "ordered_varnames": [
+            "acc", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "3": [
+          "LIST"
+        ], 
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota"
+      ], 
+      "stdout": "", 
+      "func_name": "iota", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p", 
+          "ordered_varnames": [
+            "n", 
+            "loop", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "iota", 
+        "result"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "loop": [
+              "REF", 
+              2
+            ], 
+            "n": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "iota", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "iota_f1_p_z", 
+          "ordered_varnames": [
+            "n", 
+            "loop", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "result": [
+          "REF", 
+          9
+        ], 
+        "iota": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "9": [
+          "LIST", 
+          0, 
+          1, 
+          2, 
+          3, 
+          4
+        ], 
+        "2": [
+          "FUNCTION", 
+          "loop(acc, k)", 
+          1
+        ], 
+        "1": [
+          "FUNCTION", 
+          "iota(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }
+  ]
+}

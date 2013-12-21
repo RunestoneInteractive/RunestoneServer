@@ -1,0 +1,5599 @@
+{
+  "code": "# tests Peter Norvig's watch_module.py with a simple selection sort example\nfrom watch_module import watchfn, watchedlist\n\n# The decorator here says that the 0th positional argument should be a list;\n# we will watch it, and the locals named i, mini, and min_index\n@watchfn((watchedlist, 'i mini min_index'))\ndef selection_sort(A):\n    for i in range(len(A)):\n        mini = min(A[i:])\n        min_index = A[i:].index(mini) + i   \n        if i != min_index:\n            A[min_index], A[i] = A[i], A[min_index]\n    return A\n\nprint(selection_sort([3, 5, 2, 1, 8, 5, 9]))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 15, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 6, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0, 
+            "mini": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0, 
+            "min_index": 3, 
+            "mini": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0, 
+            "min_index": 3, 
+            "mini": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0, 
+            "min_index": 3, 
+            "mini": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 1, 
+            "min_index": 3, 
+            "mini": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 1, 
+            "min_index": 3, 
+            "mini": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 1, 
+            "min_index": 2, 
+            "mini": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 1, 
+            "min_index": 2, 
+            "mini": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 1, 
+            "min_index": 2, 
+            "mini": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 2, 
+            "min_index": 2, 
+            "mini": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 2, 
+            "min_index": 2, 
+            "mini": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 2, 
+            "min_index": 3, 
+            "mini": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 2, 
+            "min_index": 3, 
+            "mini": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 2, 
+            "min_index": 3, 
+            "mini": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 3, 
+            "min_index": 3, 
+            "mini": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 3, 
+            "min_index": 3, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 3, 
+            "min_index": 3, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 3, 
+            "min_index": 3, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 4, 
+            "min_index": 3, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 4, 
+            "min_index": 3, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 4, 
+            "min_index": 5, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 4, 
+            "min_index": 5, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 4, 
+            "min_index": 5, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 5, 
+            "min_index": 5, 
+            "mini": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 5, 
+            "min_index": 5, 
+            "mini": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 5, 
+            "min_index": 5, 
+            "mini": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 5, 
+            "min_index": 5, 
+            "mini": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "min_index": 5, 
+            "mini": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "min_index": 5, 
+            "mini": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "min_index": 6, 
+            "mini": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "min_index": 6, 
+            "mini": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "min_index": 6, 
+            "mini": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 6, 
+            "__return__": [
+              "REF", 
+              9
+            ], 
+            "min_index": 6, 
+            "mini": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "mini", 
+            "min_index", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 13, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 0;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[3, 5, 2, 1, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[3] = 3\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nsetting A[0] = 1\n    watched locals: {'i': 0, 'mini': 1, 'min_index': 3}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 1;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 5, 2, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[2] = 5\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nsetting A[1] = 2\n    watched locals: {'i': 1, 'mini': 2, 'min_index': 2}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 2;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 5, 3, 8, 5, 9]]; value is 3;\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[3] = 5\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nsetting A[2] = 3\n    watched locals: {'i': 2, 'mini': 3, 'min_index': 3}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 4;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nfetching A[[1, 2, 3, 5, 8, 5, 9]]; value is 5;\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[5] = 8\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\nsetting A[4] = 5\n    watched locals: {'i': 4, 'mini': 5, 'min_index': 5}\n[1, 2, 3, 5, 5, 8, 9]\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 15, 
+      "event": "return"
+    }
+  ]
+}

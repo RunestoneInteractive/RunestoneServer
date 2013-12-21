@@ -1,0 +1,35 @@
+def f1(a, b, *rest):
+  pass
+
+f1(1, 2)
+f1(1, 2, 3, 4, 5, 6, 7)
+
+def f2(a, b, **kwrest):
+  pass
+
+f2(1, 2, name='Bob', age=38)
+
+def f3(a, b, *rest, **kwrest):
+  pass
+
+f3(1, 2, 3, 4, name='Bob', age=38)
+======
+{
+  "title": "Optional Function Arguments",
+
+  "description": "Prepending certain argument names with <code>*</code> and <code>**</code> allows Python functions to accept an arbitrary number of optional arguments.",
+
+  "1": "<code>f1</code> is declared with two mandatory arguments (<code>a</code> and <code>b</code>) and an optional <code>*rest</code> argument.",
+
+  "3": "When you call <code>f1</code> with only the two mandatory arguments, <code>rest</code> is an empty tuple.",
+
+  "7": "When you call <code>f1</code> with additional arguments, <code>rest</code> is a tuple that holds the contents of everything after the two mandatory arguments.",
+
+  "10": "<code>f2</code> is declared with two mandatory arguments and an optional <code>**kwrest</code> argument.",
+
+  "12": "When you call <code>f2</code> with additional <i>keyword</i> arguments (e.g., <code>name='Bob', age=38</code>), <code>kwrest</code> becomes a dict bound to their respective keys and values.",
+
+  "15": "You can combine up to one <code>*</code> and one <code>**</code> argument in a function definition.",
+
+  "17": "Now any extra regular arguments (here, the numbers 3 and 4) are found in the <code>*rest</code> tuple, and any extra keyword arguments are in the <code>**kwrest</code> dict."
+}

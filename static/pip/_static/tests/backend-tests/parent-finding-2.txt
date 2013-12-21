@@ -1,0 +1,10 @@
+# make sure OPT finds horse as parent of mask
+def horse(mask):
+    horse = mask
+    def mask(horse):
+        return horse
+    return horse(mask)
+
+mask = lambda horse: horse(2)
+
+horse(mask)

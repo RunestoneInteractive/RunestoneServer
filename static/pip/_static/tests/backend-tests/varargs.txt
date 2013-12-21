@@ -1,0 +1,4 @@
+def parrot(mandatory, mandatory2, *args, **kwargs):
+  pass
+
+parrot('a', 'b', 'c', 'd', 'e', name='Philip', age='35')

@@ -1,0 +1,10 @@
+class A:
+    x = 5
+    class B:
+        y = 6
+        class C:
+            z = 7
+
+a = A()
+b = a.B()
+c = b.C()

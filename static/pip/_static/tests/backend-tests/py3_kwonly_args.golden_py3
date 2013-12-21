@@ -1,0 +1,38 @@
+{
+  "code": "# Python 3 keyword-only arguments\ndef my_sorted(iterable, *, reverse=False, key=None):\n  pass\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "my_sorted"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "my_sorted": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "my_sorted(iterable, reverse, key)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }
+  ]
+}

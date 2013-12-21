@@ -1,0 +1,10 @@
+x = [1, 2, 3, 4, 5]
+y = x
+z = [1, 2, 3, 4, 5]
+x.append(6)
+======
+{
+  "1": "execution point one",
+  "2": "execution point two",
+  "4": "execution point four"
+}

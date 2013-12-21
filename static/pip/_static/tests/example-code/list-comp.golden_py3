@@ -1,0 +1,926 @@
+{
+  "code": "ppl = ['Alice', 'Bob', 'Carol', 'Doug']\nexcited_ppl = [e + '!!' for e in ppl]\nppl_len = [len(x) for x in ppl]\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "e": "Alice"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "e"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "e": "Bob"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "e"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "e": "Carol"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "e"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "e": "Doug"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "e"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "__return__": [
+              "REF", 
+              3
+            ], 
+            "e": "Doug"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "e", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "INSTANCE", 
+          "list_iterator"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ], 
+            "x": "Alice"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ], 
+            "x": "Bob"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ], 
+            "x": "Carol"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ], 
+            "x": "Doug"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<listcomp>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              4
+            ], 
+            "x": "Doug", 
+            "__return__": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<listcomp>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<listcomp>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "4": [
+          "INSTANCE", 
+          "list_iterator"
+        ], 
+        "5": [
+          "LIST", 
+          5, 
+          3, 
+          5, 
+          4
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "excited_ppl", 
+        "ppl_len"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ], 
+        "excited_ppl": [
+          "REF", 
+          3
+        ], 
+        "ppl_len": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "3": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "5": [
+          "LIST", 
+          5, 
+          3, 
+          5, 
+          4
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }
+  ]
+}

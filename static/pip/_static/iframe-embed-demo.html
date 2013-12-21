@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Online Python Tutor - iframe embed demo</title>
+</head>
+
+<body>
+
+<iframe width="800" height="500" frameborder="0" src="http://pythontutor.com/iframe-embed.html#code=%23+From+%22Teaching+with+Python%22+by+John+Zelle%0Adef+happy()%3A%0A++++print(%22Happy+Birthday+to+you!%22)%0A%0Adef+sing(P)%3A%0A++++happy()%0A++++happy()%0A++++print(%22Happy+Birthday+dear+%22+%2B+P+%2B+%22!%22)%0A++++happy()%0A%0A%23+main%0Asing(%22Fred%22)&py=2"> </iframe>
+
+<p/>
+
+<iframe width="800" height="700" frameborder="0" src="http://pythontutor.com/iframe-embed.html#code=%23+use+lists%0Ax+%3D+None%0Afor+i+in+range(6,+0,+-1)%3A%0A++x+%3D+%5Bi,+x%5D%0A%0A%23+use+tuples%0Ay+%3D+None%0Afor+i+in+range(6,+0,+-1)%3A%0A++y+%3D+(i,+y)%0A%0Ax%5B1%5D%5B0%5D%3Dy%5B1%5D%5B1%5D+%23+courtesy+of+John+DeNero!&cumulative=false&py=2&curInstr=29&verticalStack=true"> </iframe>
+
+<p/>
+
+<iframe width="900" height="500" frameborder="0" src="http://pythontutor.com/iframe-embed.html#code=%23+Example+to+torture+students%0A%23+from+UC+Berkeley+CS61a%0A%23+(only+works+in+Python+3)%0A%0Adef+f(t)%3A%0A++++def+g(t)%3A%0A++++++++def+h()%3A%0A++++++++++++nonlocal+t%0A++++++++++++t+%2B%3D+1%0A++++++++return+h,+lambda%3A+t%0A++++h,+gt+%3D+g(0)%0A++++return+h,+gt,+lambda%3A+t%0A%0Ah,+gt,+ft+%3D+f(0)%0Aft(),+gt()%0Ah()%0Aft(),+gt()&cumulative=true&py=3&curInstr=11"> </iframe>
+
+</body>
+</html>

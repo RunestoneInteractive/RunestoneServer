@@ -1,0 +1,38 @@
+li = ['a', 'b', 'mp', 'z', 'e']
+slice1 = li[1:3]
+slice2 = li[1:-1]
+slice3 = li[0:3]
+li.append("new")
+li.insert(2, "new")
+li.extend(["two", "elements"])
+li.remove("z")
+li.remove("new")
+li.remove("new")
+li.remove("c")
+======
+{
+  "title": "Basic List Operations",
+
+  "description": "This lesson was derived from Section 3.2 of <a href='http://www.diveintopython.net/native_data_types/lists.html'>Dive Into Python</a>.",
+
+  "1": "First, you define a list of five elements. Note that after you execute this line, the elements retain their original order. This is not an accident. A list is an ordered set of elements enclosed in square brackets.",
+
+  "2": "You can get a subset of a list, called a \"slice\", by specifying two indices. The return value is a new list containing all the elements of the list, in order, starting with the first slice index (in this case <code>li[1]</code>), up to but not including the second slice index (in this case <code>li[3]</code>).",
+
+  "3": "Slicing works if one or both of the slice indices is negative.  If it helps, you can think of it this way: reading the list from left to right, the first slice index specifies the first element you want, and the second slice index specifies the first element you don't want.  The return value is everything in between.",
+
+  "4": "Lists are zero-based, so <code>li[0:3]</code> returns the first three elements of the list, starting at <code>li[0]</code>, up to but not including <code>li[3]</code>.",
+
+  "5": "<code>append</code> adds a single element to the end of the list.",
+
+  "6": "<code>insert</code> inserts a single element into a list. The numeric argument is the index of the first element that gets bumped out of position. Note that list elements do not need to be unique; there will now be two separate elements with the value '<code>new</code>', <code>li[2]</code> and <code>li[6]</code>.",
+
+  "7": "<code>extend</code> concatenates lists. Note that you do not call <code>extend</code> with multiple arguments; you call it with one argument, a list. In this case, that list has two elements.",
+
+  "8": "<code>remove</code> removes the first occurrence of a value from a list.",
+
+  "9": "<code>remove</code> removes <i>only</i> the first occurrence of a value. In this case, '<code>new</code>' appears twice in the list, but <code>li.remove(\"new\")</code> will remove only the first occurrence.",
+
+  "11": "If the value is not found in the list, Python raises an exception. This mirrors the behavior of the <code>index</code> method."
+
+}

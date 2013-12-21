@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Example of unittests in js-parsons</title>
+    <link href="../parsons.css" rel="stylesheet" />
+    <link href="../lib/prettify.css" rel="stylesheet" />
+    <script src="../lib/prettify.js"></script>
+    <meta charset="utf8" />
+  </head>
+  <body>
+    <h2>Example of "unittests" in js-parsons</h2>
+    <p>Your task is to construct a function which returns the index of the largest
+      element in the array.</p>
+    <div id="sortableTrash" class="sortable-code"><p>Trash</p></div>
+    <div id="sortable" class="sortable-code"><p>Solution</p></div>
+    <div style="clear:both;"></div>
+        <p>
+            <a href="#" id="newInstanceLink">New instance</a>
+            <a href="#" id="feedbackLink">Get feedback</a>
+        </p>
+    <div id="unittest"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="../lib/underscore-min.js"></script>
+    <script src="../lib/lis.js"></script>
+    <script src="../parsons.js"></script>
+    <script src="../lib/skulpt.js"></script>
+    <script>
+    var initial = "def maxindex(arg):\n" +
+                  "  ans = 0\n" +
+                  "  for i in range(len(arg)):\n" +
+                  "    if arg[i] > arg[ans]:\n" +
+                  "      ans = i\n" +
+                  "  return ans\n";
+
+    var unittests = [
+      { message: "Calling function <code>maxindex([0, 2, 4])</code>.", code: "maxi = maxindex([0, 2, 4])", variable: "maxi", expected: 2 },
+      { message: "Calling function <code>maxindex([7, 2, 4])</code>.", code: "maxi = maxindex([7, 2, 4])", variable: "maxi", expected: 0 },
+      { message: "Calling function <code>maxindex([7, 8, 4])</code>.", code: "maxi = maxindex([7, 8, 4])", variable: "maxi", expected: 1 }
+    ];
+    $(document).ready(function(){
+      var parson = new ParsonsWidget({
+                  'sortableId': 'sortable',
+                  'trashId': 'sortableTrash',
+                  'unittests': unittests
+      });
+      parson.init(initial);
+      parson.shuffleLines();
+      $("#newInstanceLink").click(function(event){
+        event.preventDefault();
+        parson.shuffleLines();
+      });
+      $("#feedbackLink").click(function(event){
+        event.preventDefault();
+        var fb = parson.getFeedback();
+        $("#unittest").html("<h2>Feedback from testing your program:</h2>" +
+                            fb.feedback);
+        if (fb.success) { alert("Good, you solved the assignment!"); }
+      });
+   });
+    </script>
+    </body>
+</html>

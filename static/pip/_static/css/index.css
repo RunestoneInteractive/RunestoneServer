@@ -1,0 +1,201 @@
+/* CSS accompanying ../index.html */
+
+body {
+  background-color: white;
+
+  font-family: Georgia, Palatino, Times, serif;
+
+  font-size: 12pt;
+
+  /* use fixed width for simplicity */
+  max-width: 900px;
+  min-width: 900px;
+  width: 900px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* for prose text only */
+p, li {
+  line-height: 1.5;
+}
+
+h1 {
+  font-weight: normal;
+  margin-top: 0px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.smallH1 {
+  font-size: 14pt;
+  margin-left: -2px;
+}
+
+#optLink {
+  font-size: 14pt;
+  text-decoration: none;
+  color: #3D58A2;
+  font-weight: bold;
+}
+
+#optLink:hover {
+  color: #3D58A2;
+  text-decoration: underline;
+}
+
+.titlePane {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+.titlePane h1 {
+  font-size: 22pt;
+  margin-bottom: 5px;
+}
+
+div.mainBodyPane {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.activityPane {
+  /* TOP RIGHT BOTTOM LEFT */
+  padding: 15px 0px /* make right padding ZERO and just right-pad 'p' */ 5px 20px;
+  text-align: left;
+  border: 3px solid #005583;
+}
+
+div.activityPane p {
+  padding-right: 30px;
+}
+
+div.activityPane h1 {
+  font-size: 22pt;
+  margin-bottom: 20pt;
+}
+
+
+ul {
+  padding-left: 18px;
+}
+
+li {
+  margin-bottom: 12px;
+  font-size: 10pt;
+}
+
+a,
+a:visited,
+a:hover {
+  color: #3D58A2;
+}
+
+#learnHeading, #embedHeading, #shareHeading {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 24pt;
+}
+
+#learnHeading {
+  color: #062270;
+}
+
+div#learnPane {
+  margin-top: 6pt;
+  margin-bottom: 8pt;
+  border: 5px solid #062270;
+}
+
+div#learnPane p {
+  padding-right: 100px;
+}
+
+div#learnPane #startLink {
+  font-size: 17pt;
+  font-weight: normal;
+  margin-top: 25px;
+  margin-bottom: 20px;
+  font-family: verdana, arial, helvetica, sans-serif;
+}
+
+div#learnPane #startLink a {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  text-decoration: none;
+}
+
+tt {
+  /*font-size: 85%;*/
+}
+
+div#embedPane {
+  margin-right: 5px;
+  border: 5px solid #5a7973;
+}
+
+
+#embedHeading {
+  color: #5a7973;
+}
+
+div#sharePane {
+  margin-left: 5px;
+  border: 5px solid #4284d3;
+}
+
+#shareHeading {
+  color: #4284d3;
+}
+
+div#detailsPane {
+  margin-top: 0px;
+  margin-left: 5px;
+  border: 0px; /* NO BORDER! */
+}
+
+#partnershipDiv {
+  /*background-color: #d8e1e3;*/
+  background-color: #d9cdb6;
+  width: 60%;
+  padding: 8px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+
+  font-size: 10pt;
+  font-family: Monaco, arial, sans-serif;
+}
+
+table.layoutTbl {
+  border: 0px;
+  max-width: 900px;
+}
+
+table.layoutTbl td#embedPaneTd {
+  width: 60%;
+  vertical-align: top;
+}
+
+table.layoutTbl td#sharePaneTd {
+  width: 40%;
+  vertical-align: top;
+}
+
+
+#footer {
+  color: #666666;
+  font-size: 9pt;
+  border-top: 1px solid #bbbbbb;
+  padding-top: 0px;
+  margin-top: 20px;
+
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+
+  font-family: verdana, arial, helvetica, sans-serif;
+}

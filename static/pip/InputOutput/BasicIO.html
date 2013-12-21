@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basic Input and Output &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="How to be a Successful Programmer" href="../Debugging/debugIntro.html" />
+    <link rel="prev" title="Variables, Expressions and Statements" href="../SimplePythonData/simpledata.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Basic Input and Output</a><ul>
+<li><a class="reference internal" href="#interactive-input-from-the-user">Interactive input from the user</a></li>
+<li><a class="reference internal" href="#output-with-print">Output with print</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - Variables, Expressions and Statements" data-toggle="tooltip">
+    <a href="../SimplePythonData/simpledata.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - How to be a Successful Programmer' data-toggle="tooltip" >
+    <a href="../Debugging/debugIntro.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="basic-input-and-output">
+<h1>Basic Input and Output<a class="headerlink" href="#basic-input-and-output" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Most programs take data inputs of some kind and transform them into data outputs.
+In this course, you will see many kinds of inputs, including data from files and
+data that is fetched from sources on the Internet. Similarly, outputs may be
+displayed on a screen, stored in files, or transmitted over the Internet.  This
+chapter covers the simplest form of input, direct input from a person typing, and
+the simplest form of output, printing results to the screen.</p>
+<div class="section" id="interactive-input-from-the-user">
+<h2>Interactive input from the user<a class="headerlink" href="#interactive-input-from-the-user" title="Permalink to this headline">¶</a></h2>
+<p>To get input from the user, we use a built-in function called <strong>raw_input</strong>. When
+this function is called, the program stops and waits for the user to type
+something. When the user presses <em>Return</em> or <em>Enter</em>, the program resumes and <tt class="docutils literal"><span class="pre">raw_input</span></tt>
+returns what the user typed, as a string.</p>
+<p>In our browser-based python environment, <tt class="docutils literal"><span class="pre">raw_input</span></tt> generates a popup window
+for the user to enter a text input.</p>
+<p>Before getting input from the user, it is a good idea to print a prompt telling the user what to input.
+You can pass a string to <tt class="docutils literal"><span class="pre">raw_input</span></tt> to be displayed to the user before
+pausing for input.</p>
+
+<div id="basicIO_2" >
+
+<br/>
+<div id="basicIO_2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="basicIO_2_code" class="active_code", prefixcode="undefined">
+x = raw_input('What is your name?')
+print x
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (basicIO_2)</span> </p>
+
+<button class='btn btn-success' id="basicIO_2_runb" onclick="runit('basicIO_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_2_saveb" onclick="saveEditor('basicIO_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_2_loadb" onclick="requestCode('basicIO_2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#basicIO_2_saveb').toggle();
+    $('#basicIO_2_loadb').toggle();
+}
+</script>
+
+<pre id="basicIO_2_suffix" style="display:none">
+</pre>
+<pre id="basicIO_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>You always get a string back from <strong>raw_input</strong>. If you expect to get a number,
+you can convert the string to a number using <strong>int()</strong>, as presented in the
+previous chapter.</p>
+
+<div id="basicIO_3" >
+
+<br/>
+<div id="basicIO_3_code_div" style="display: block">
+<textarea cols="50" rows="120" id="basicIO_3_code" class="active_code", prefixcode="undefined">
+x = raw_input('Enter a number, please')
+print type(x)
+print int(x) + 1
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (basicIO_3)</span> </p>
+
+<button class='btn btn-success' id="basicIO_3_runb" onclick="runit('basicIO_3',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_3_saveb" onclick="saveEditor('basicIO_3');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_3_loadb" onclick="requestCode('basicIO_3');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#basicIO_3_saveb').toggle();
+    $('#basicIO_3_loadb').toggle();
+}
+</script>
+
+<pre id="basicIO_3_suffix" style="display:none">
+</pre>
+<pre id="basicIO_3_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Try running the code. Now run it again and see what happens if you enter something other than a number
+when prompted.</p>
+<p>Try changing the print statement to say <tt class="docutils literal"><span class="pre">print</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">1</span></tt>, without converting it
+to an integer using <tt class="docutils literal"><span class="pre">int()</span></tt>. Now what happens when you run it?</p>
+</div>
+<div class="section" id="output-with-print">
+<h2>Output with print<a class="headerlink" href="#output-with-print" title="Permalink to this headline">¶</a></h2>
+<p>We have already been using the <tt class="docutils literal"><span class="pre">print</span></tt> statement. Later in the course, we&#8217;ll see
+some more advanced ways to generate text and write it to various output destinations.
+For now, there are just a few  things that you should know about <tt class="docutils literal"><span class="pre">print</span></tt>.</p>
+<p>First, you can put any python expression after the word <tt class="docutils literal"><span class="pre">print</span></tt></p>
+
+<div id="basicIO_4" >
+
+<br/>
+<div id="basicIO_4_code_div" style="display: block">
+<textarea cols="50" rows="120" id="basicIO_4_code" class="active_code", prefixcode="undefined">
+x = 3
+print x + 2
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (basicIO_4)</span> </p>
+
+<button class='btn btn-success' id="basicIO_4_runb" onclick="runit('basicIO_4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_4_saveb" onclick="saveEditor('basicIO_4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_4_loadb" onclick="requestCode('basicIO_4');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#basicIO_4_saveb').toggle();
+    $('#basicIO_4_loadb').toggle();
+}
+</script>
+
+<pre id="basicIO_4_suffix" style="display:none">
+</pre>
+<pre id="basicIO_4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Second, if you put multiple expressions after <tt class="docutils literal"><span class="pre">print</span></tt>, separated by commas,
+each of the commas will generate a space in the output.</p>
+
+<div id="basicIO_5" >
+
+<br/>
+<div id="basicIO_5_code_div" style="display: block">
+<textarea cols="50" rows="120" id="basicIO_5_code" class="active_code", prefixcode="undefined">
+x = 3
+print "x is", x
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (basicIO_5)</span> </p>
+
+<button class='btn btn-success' id="basicIO_5_runb" onclick="runit('basicIO_5',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_5_saveb" onclick="saveEditor('basicIO_5');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_5_loadb" onclick="requestCode('basicIO_5');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#basicIO_5_saveb').toggle();
+    $('#basicIO_5_loadb').toggle();
+}
+</script>
+
+<pre id="basicIO_5_suffix" style="display:none">
+</pre>
+<pre id="basicIO_5_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Third, each <tt class="docutils literal"><span class="pre">print</span></tt> statement that is executed generates a newline (line break)
+at the end.</p>
+
+<div id="basicIO_6" >
+
+<br/>
+<div id="basicIO_6_code_div" style="display: block">
+<textarea cols="50" rows="120" id="basicIO_6_code" class="active_code", prefixcode="undefined">
+x = 3
+print "x is", x
+print "x squared is", x*x
+print
+print "That's all"
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (basicIO_6)</span> </p>
+
+<button class='btn btn-success' id="basicIO_6_runb" onclick="runit('basicIO_6',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_6_saveb" onclick="saveEditor('basicIO_6');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="basicIO_6_loadb" onclick="requestCode('basicIO_6');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#basicIO_6_saveb').toggle();
+    $('#basicIO_6_loadb').toggle();
+}
+</script>
+
+<pre id="basicIO_6_suffix" style="display:none">
+</pre>
+<pre id="basicIO_6_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

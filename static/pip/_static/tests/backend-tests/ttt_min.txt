@@ -1,0 +1,9 @@
+# minimal tic tac toe implementation and test
+
+import ttt_module
+
+def interactive_player(board, symbol):
+    return int(mouse_input("Click on board"))
+                      
+g = ttt_module.TTTGame(interactive_player, interactive_player, verbose=True)
+print(g.play())

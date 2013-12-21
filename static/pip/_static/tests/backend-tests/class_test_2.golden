@@ -1,0 +1,186 @@
+{
+  "code": "class Outer():\n   pass\n\no = Outer()\no.a = 5\no.b = \"Hi\"\nprint(o)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Outer"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Outer": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Outer", 
+          []
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Outer", 
+        "o"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Outer": [
+          "REF", 
+          1
+        ], 
+        "o": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Outer", 
+          []
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Outer"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Outer", 
+        "o"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Outer": [
+          "REF", 
+          1
+        ], 
+        "o": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Outer", 
+          []
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Outer", 
+          [
+            "a", 
+            5
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Outer", 
+        "o"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Outer": [
+          "REF", 
+          1
+        ], 
+        "o": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Outer", 
+          []
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Outer", 
+          [
+            "a", 
+            5
+          ], 
+          [
+            "b", 
+            "Hi"
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Outer", 
+        "o"
+      ], 
+      "stdout": "<__main__.Outer instance at 0xADDR>\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Outer": [
+          "REF", 
+          1
+        ], 
+        "o": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Outer", 
+          []
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Outer", 
+          [
+            "a", 
+            5
+          ], 
+          [
+            "b", 
+            "Hi"
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }
+  ]
+}

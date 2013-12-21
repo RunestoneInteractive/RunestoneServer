@@ -1,0 +1,361 @@
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; margin: 0.83em 0;}
+h3 { font-size: 1.17em; margin: 1em 0;}
+h1, h2, h3, h4, h5, h6 { font-weight: bold;}
+#header { background-color: #eee; border-bottom: 2px solid orange;}
+#header h1 { padding:10px;font-weight:lighter; letter-spacing:2px; }
+#header a {text-decoration:none;color:black;}
+#login {position: absolute; right: 10px; top: 5px;}
+.box { margin: 30px; border: 1px solid #eee; background-color: #eee; border-radius: 8px 8px 0 0;}
+.box h3 { margin: 0; font-weight: bold; background-color: #eee; color:orange; border-radius: 8px 8px 0 0; border-bottom: 1px solid black; padding:5px; text-align: center;}
+.box ul { background-color: #fff; }
+body {font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;}
+.content h3, .content h2, .content h1 {color:orange;}
+.content {padding: 10px;}
+#start {font-size: 120%; float: right; color: Darkorange;margin:0 20px 10px 0;}
+.help {font-size: 60%;}
+.warning {font-size: 120%; border: 2px solid red; background-color:#eee;padding:10px;}
+
+/* form stuff */
+.content form label {
+    font-weight: normal;
+    padding-left: 0;
+}
+
+.content { overflow: hidden; }
+.content p, .content pre {
+  margin: 10px 5px;
+}
+.content pre {
+  font-family: monospace;
+  font-size: larger;
+}
+.content select {
+    font-size: 16px;
+}
+
+.box {
+  float:left;
+  width:40%;
+  max-width: 600px;
+}
+.collections .title {
+  font-size: 18px;
+  display: block;
+  padding: 3px 2px;
+}
+.collections .description {
+  padding: 4px 5px 4px 20px;
+  display: block;
+  font-size: 14px;
+}
+.collections li {
+  border-bottom: 1px solid #eee;
+  padding: 3px 3px 5px 10px;
+  overflow: hidden;
+}
+.collections li:last-of-type {
+  border-bottom: none;
+}
+.collections li a {
+  text-decoration: none;
+  color: black;
+}
+.clear { clear: both; }
+
+/**** end stylesheet for website ***/
+
+/*** mobile stuff from here to the end */
+
+* {
+  /** disable annoying tap highlight on elements */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+  /** disable text selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body { 
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto
+}
+#sortable {
+  float: right;
+  margin-right: 2%;
+  margin-left: 0;
+}
+.box {
+  width: 96%;
+  max-width: 96%;
+  margin: 2%;
+  position: relative;
+}
+#refresh {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  width: 24px;
+  height: 24px;
+  text-indent: 100%;
+  background-image: url(images/48/refresh.png);
+  background-size: 24px 24px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+@-moz-keyframes rotate {
+  from { -moz-transform: rotate(0); }
+  to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes rotate {
+  from { -webkit-transform: rotate(0); }
+  to { -webkit-transform: rotate(360deg); }
+}
+@keyframes rotate {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+#refresh.active {
+  -moz-animation-duration: 1.5s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-name: rotate;
+  -moz-animation-timing-function: linear;
+  -webkit-animation-duration: 1.5s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: rotate;
+  -webkit-animation-timing-function: linear;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: rotate;
+  animation-timing-function: linear;
+}
+#ul-sortable:empty:before {
+  content: "Drag lines here to construct your solution";
+  color: #777;
+  font-size: 0.9em;
+  padding: 1.4em;
+  display: block;
+  line-height: 0.9em;
+}
+
+#header { 
+  position: relative;
+  padding: 0.3em;
+}
+#header h2 {
+  margin: 0 auto;
+  text-align: center;
+}
+/** styling of the assignment tab **/
+.assignment, .previously {
+  position: absolute;
+  color: white;
+}
+.assignment.ontop, .previously.ontop {
+  z-index: 100;
+}
+.assignmentText, .prevContent {
+  background-color: rgba(0, 0, 0, .5);
+  padding: 20px;
+  border: 2px solid orange;
+  width: 100%;
+}
+.assignment {
+  left: 0;
+  margin-right: 25px;
+  width: 80%;
+}
+.assignmentText {
+  border-radius: 0 0 8px 0;
+  border-width: 2px 2px 2px 0;
+  min-height: 60px;
+}
+.previously {
+  right: 0;
+  margin-left: 25px;
+  display: none;
+  width: 0;
+}
+.previously.available {
+  display: block;
+}
+.previously.visible {
+  width: 80%;
+  right: 40px;
+}
+.visible .prevContent {
+  padding: 20px;
+  border-width: 2px 0 2px 2px;
+}
+.prevContent {
+  margin: 0;
+  color: black;
+  padding: 0;
+  border-width: 0;
+  border-radius: 0 0 0 8px;
+  background-color: rgba(245, 245, 245, 0.9);
+  width: 0;
+  overflow: hidden;
+}
+li.changed {
+  border-right: 5px solid blue;
+}
+
+.tabRight, .tabLeft {
+  display: block;
+  color: white;
+  font-size: 0.7em;
+  height: 20px;
+  line-height: 1.0;
+  padding: 5px;
+  position: absolute;
+  text-align: center;
+  top: 30px;
+  width: 80px;
+  background-color: black;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 40;
+  cursor: pointer;
+}
+/* clickable areas around tabs */
+.clickArea {
+  display: block;
+    height: 120%;
+    width: 110%;
+    position: absolute;
+    left: -5px;
+    top: -10px;
+}
+#header .clickArea {
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 150%;
+}
+.ontop .tabRight, .ontop .tabLeft {
+  background-color: orange;
+}
+.tabRight {
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  border-radius: 8px 8px 0 0;
+  right: -100px;
+}
+.tabLeft {
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  left: -60px;
+  border-radius: 8px 8px 0 0;
+}
+.assignment button {
+  display: block;
+  float: right;
+}
+.assignment .buttonContainer {
+  text-align: right;
+}
+.assignment .buttonContainer:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+#header.timer {
+  border-color: #aaa;
+}
+#timer {
+  height: 2px;
+  width: 0%;
+  background-color: orange;
+  position: absolute;
+  -moz-transform: rotate(180deg);
+}
+
+#modality {
+  display: none;
+  z-index: 50;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+#modality.visible {
+  display: block;
+}
+
+#feedbackDialog p {
+  white-space: pre-line;
+}
+#prevFeedback {
+  float: none;
+}
+/*@media all and (max-width: 320px) and (orientation: portrait){*/
+@media all and (orientation: portrait) {
+  #sortable { width: 100%; margin-bottom: 8px; margin-right: 0;}
+  #sortableTrash { width: 100%; margin-left: 0;}
+}
+@media all and (orientation: landscape) {
+  .currentState, .prevAction { width: 45%; }
+  .currentState { float: left; }
+  .prevAction { float: right; }
+}
+@media all and (max-height: 481px), all and (max-width: 481px) {
+  h1 { font-size: 1em; }
+  h2, h3 { font-size: 0.8em; margin: 0.4em 0; }
+  .box h3 { padding: 8px; }
+  .sortable-code p { font-size: 0.6em; margin: 0.1em; }
+  .ui-sortable li { font-size: 0.8em; }
+  .collections .description { display: none; }
+  .assignmentText { font-size: 0.8em; }
+  .assignment { width: 70%; }
+  .previously.visible { width: 70%; }
+  .tabRight { height: 10px; right: -94px; line-height: 0.5em; top: 35px; }
+  .tabLeft { height: 10px; line-height: 0.8em; left: -55px; top: 35px; font-size: 0.65em;}
+}
+
+/** Re-style the jQueryUI dialogs */
+.downBelow {
+  bottom: 12% !important;
+  top: auto !important;
+}
+.ui-dialog {
+  border-radius: 8px;
+}
+.ui-dialog-buttonpane, .ui-dialog-titlebar {
+  background: none;
+  background-color: transparent;
+  padding-bottom: 0;
+}
+.ui-dialog .ui-dialog-buttonpane {
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+.ui-dialog-titlebar {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.ui-dialog-content {
+  color: rgba(0, 0, 0, 0.8);
+}
+.ui-widget-content {
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: none;
+  background-color: orange;
+}
+.ui-widget-overlay {
+  background: none;
+  background-color: rgba(120, 120, 120, 0.8);
+  -webkit-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+}

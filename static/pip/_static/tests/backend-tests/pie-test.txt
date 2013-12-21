@@ -1,0 +1,3 @@
+import operator
+from math import pi, e
+pie = operator.add(pi, e)

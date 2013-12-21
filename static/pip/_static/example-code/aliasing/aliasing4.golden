@@ -1,0 +1,67 @@
+{
+  "code": "x = [1, 2, 3]\nx.append(x)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          1, 
+          2, 
+          3
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          1, 
+          2, 
+          3, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }
+  ]
+}

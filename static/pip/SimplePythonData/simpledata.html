@@ -1,0 +1,4143 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Variables, Expressions and Statements &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="How to be a Successful Programmer" href="../Debugging/debugIntro.html" />
+    <link rel="prev" title="The Way of the Program" href="../GeneralIntro/introduction.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Variables, Expressions and Statements</a><ul>
+<li><a class="reference internal" href="#values-and-data-types">Values and Data Types</a></li>
+<li><a class="reference internal" href="#type-conversion-functions">Type conversion functions</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#variable-names-and-keywords">Variable Names and Keywords</a></li>
+<li><a class="reference internal" href="#statements-and-expressions">Statements and Expressions</a></li>
+<li><a class="reference internal" href="#operators-and-operands">Operators and Operands</a></li>
+<li><a class="reference internal" href="#input">Input</a></li>
+<li><a class="reference internal" href="#order-of-operations">Order of Operations</a></li>
+<li><a class="reference internal" href="#reassignment">Reassignment</a></li>
+<li><a class="reference internal" href="#updating-variables">Updating Variables</a></li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+<li><a class="reference internal" href="#exercises">Exercises</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - The Way of the Program" data-toggle="tooltip">
+    <a href="../GeneralIntro/introduction.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - How to be a Successful Programmer' data-toggle="tooltip" >
+    <a href="../Debugging/debugIntro.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="variables-expressions-and-statements">
+<h1>Variables, Expressions and Statements<a class="headerlink" href="#variables-expressions-and-statements" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><p id="values-n-types"><span id="index-1"></span>Note: I have left in the screencasts from Brad Miller, where they are available.
+Beware, however, that they refer to the version of this chapter from his book,
+not my edited version of the book.</p>
+<a id="typesnconvert_thumb" style='position:relative;'>
+    <img src="../_static/valuesNtypes.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="typesnconvert" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/TypesNTypeConversion.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/TypesNTypeConversion.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#typesnconvert_thumb').click(function(e) {
+         $('#typesnconvert').show();
+         $('#typesnconvert_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'typesnconvert'});
+         // Log the run event
+      });
+   });
+</script>
+<p>In order to get started learning any programming language there are a number of
+concepts and ideas that are necessary.
+The goal of this chapter is to introduce you to the basic vocabulary of programming and some of the fundamental
+building blocks of Python.</p>
+<div class="section" id="values-and-data-types">
+<h2>Values and Data Types<a class="headerlink" href="#values-and-data-types" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>value</strong> is one of the fundamental things &#8212; like a word or a number &#8212;
+that a program manipulates. The values we have seen so far are <tt class="docutils literal"><span class="pre">5</span></tt> (the
+result when we added <tt class="docutils literal"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">3</span></tt>), and <tt class="docutils literal"><span class="pre">&quot;Hello,</span> <span class="pre">World!&quot;</span></tt>.  We often refer to these values as <strong>objects</strong> and we will use the words value and object interchangeably.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Actually, the 2 and the 3 that are part of the addition above are values(objects) as well.</p>
+</div>
+<p>These objects are classified into different <strong>classes</strong>, or <strong>data types</strong>: <tt class="docutils literal"><span class="pre">4</span></tt>
+is an <em>integer</em>, and <tt class="docutils literal"><span class="pre">&quot;Hello,</span> <span class="pre">World!&quot;</span></tt> is a <em>string</em>, so-called because it
+contains a string or sequence of letters. You (and the interpreter) can identify strings
+because they are enclosed in quotation marks.</p>
+<p>If you are not sure what class a value falls into, Python has a function called
+<strong>type</strong> which can tell you.</p>
+
+<div id="ch02_1" >
+
+<br/>
+<div id="ch02_1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_1_code" class="active_code", prefixcode="undefined">
+print(type("Hello, World!"))
+print(type(17))
+print("Hello, World")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_1)</span> </p>
+
+<button class='btn btn-success' id="ch02_1_runb" onclick="runit('ch02_1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_1_saveb" onclick="saveEditor('ch02_1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_1_loadb" onclick="requestCode('ch02_1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_1_saveb').toggle();
+    $('#ch02_1_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_1_suffix" style="display:none">
+</pre>
+<pre id="ch02_1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Not surprisingly, strings belong to the class <strong>str</strong> and integers belong to the
+class <strong>int</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When we show the value of a string using the <tt class="docutils literal"><span class="pre">print</span></tt> function, such as in the third example above, the quotes are no longer present.  The
+value of the string is the sequence of characters inside the quotes.  The quotes are only necessary to help Python know what the value is.</p>
+</div>
+<p>Continuing with our discussion of data types, numbers with a decimal point belong to a class
+called <strong>float</strong>, because these numbers are represented in a format called
+<em>floating-point</em>.  At this stage, you can treat the words <em>class</em> and <em>type</em>
+interchangeably.  We&#8217;ll come back to a deeper understanding of what a class
+is in later chapters.</p>
+
+<div id="ch02_2" >
+
+<br/>
+<div id="ch02_2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_2_code" class="active_code", prefixcode="undefined">
+print(type(3.2))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_2)</span> </p>
+
+<button class='btn btn-success' id="ch02_2_runb" onclick="runit('ch02_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_2_saveb" onclick="saveEditor('ch02_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_2_loadb" onclick="requestCode('ch02_2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_2_saveb').toggle();
+    $('#ch02_2_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_2_suffix" style="display:none">
+</pre>
+<pre id="ch02_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>What about values like <tt class="docutils literal"><span class="pre">&quot;17&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;3.2&quot;</span></tt>? They look like numbers, but they
+are in quotation marks like strings.</p>
+
+<div id="ch02_3" >
+
+<br/>
+<div id="ch02_3_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_3_code" class="active_code", prefixcode="undefined">
+print(type("17"))
+print(type("3.2"))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_3)</span> </p>
+
+<button class='btn btn-success' id="ch02_3_runb" onclick="runit('ch02_3',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_3_saveb" onclick="saveEditor('ch02_3');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_3_loadb" onclick="requestCode('ch02_3');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_3_saveb').toggle();
+    $('#ch02_3_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_3_suffix" style="display:none">
+</pre>
+<pre id="ch02_3_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>They&#8217;re strings!</p>
+<p>Strings in Python can be enclosed in either single quotes (<tt class="docutils literal"><span class="pre">'</span></tt>) or double
+quotes (<tt class="docutils literal"><span class="pre">&quot;</span></tt>), or three of each (<tt class="docutils literal"><span class="pre">'''</span></tt> or <tt class="docutils literal"><span class="pre">&quot;&quot;&quot;</span></tt>)</p>
+
+<div id="ch02_4" >
+
+<br/>
+<div id="ch02_4_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_4_code" class="active_code", prefixcode="undefined">
+print(type('This is a string.') )
+print(type("And so is this.") )
+print(type("""and this.""") )
+print(type('''and even this...''') )
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_4)</span> </p>
+
+<button class='btn btn-success' id="ch02_4_runb" onclick="runit('ch02_4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_4_saveb" onclick="saveEditor('ch02_4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_4_loadb" onclick="requestCode('ch02_4');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_4_saveb').toggle();
+    $('#ch02_4_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_4_suffix" style="display:none">
+</pre>
+<pre id="ch02_4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Double quoted strings can contain single quotes inside them, as in <tt class="docutils literal"><span class="pre">&quot;Bruce's</span>
+<span class="pre">beard&quot;</span></tt>, and single quoted strings can have double quotes inside them, as in
+<tt class="docutils literal"><span class="pre">'The</span> <span class="pre">knights</span> <span class="pre">who</span> <span class="pre">say</span> <span class="pre">&quot;Ni!&quot;'</span></tt>.
+Strings enclosed with three occurrences of either quote symbol are called
+triple quoted strings.  They can contain either single or double quotes:</p>
+
+<div id="ch02_5" >
+
+<br/>
+<div id="ch02_5_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_5_code" class="active_code", prefixcode="undefined">
+print('''"Oh no", she exclaimed, "Ben's bike is broken!"''')
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_5)</span> </p>
+
+<button class='btn btn-success' id="ch02_5_runb" onclick="runit('ch02_5',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_5_saveb" onclick="saveEditor('ch02_5');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_5_loadb" onclick="requestCode('ch02_5');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_5_saveb').toggle();
+    $('#ch02_5_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_5_suffix" style="display:none">
+</pre>
+<pre id="ch02_5_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Triple quoted strings can even span multiple lines:</p>
+
+<div id="ch02_6" >
+
+<br/>
+<div id="ch02_6_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_6_code" class="active_code", prefixcode="undefined">
+message = """This message will
+span several
+lines."""
+print(message)
+
+print("""This message will span
+several lines
+of the text.""")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_6)</span> </p>
+
+<button class='btn btn-success' id="ch02_6_runb" onclick="runit('ch02_6',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_6_saveb" onclick="saveEditor('ch02_6');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_6_loadb" onclick="requestCode('ch02_6');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_6_saveb').toggle();
+    $('#ch02_6_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_6_suffix" style="display:none">
+</pre>
+<pre id="ch02_6_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Python doesn&#8217;t care whether you use single or double quotes or the
+three-of-a-kind quotes to surround your strings.  Once it has parsed the text of
+your program or command, the way it stores the value is identical in all cases,
+and the surrounding quotes are not part of the value.</p>
+
+<div id="ch02_7" >
+
+<br/>
+<div id="ch02_7_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_7_code" class="active_code", prefixcode="undefined">
+print('This is a string.')
+print("""And so is this.""")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_7)</span> </p>
+
+<button class='btn btn-success' id="ch02_7_runb" onclick="runit('ch02_7',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_7_saveb" onclick="saveEditor('ch02_7');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_7_loadb" onclick="requestCode('ch02_7');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_7_saveb').toggle();
+    $('#ch02_7_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_7_suffix" style="display:none">
+</pre>
+<pre id="ch02_7_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>So the Python language designers usually chose to surround their strings by
+single quotes.  What do think would happen if the string already contained
+single quotes?</p>
+<p>When you type a large integer, you might be tempted to use commas between
+groups of three digits, as in <tt class="docutils literal"><span class="pre">42,000</span></tt>. This is not a legal integer in
+Python, but it does mean something else, which is legal:</p>
+
+<div id="ch02_8" >
+
+<br/>
+<div id="ch02_8_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_8_code" class="active_code", prefixcode="undefined">
+print(42000)
+print(42,000)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_8)</span> </p>
+
+<button class='btn btn-success' id="ch02_8_runb" onclick="runit('ch02_8',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_8_saveb" onclick="saveEditor('ch02_8');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_8_loadb" onclick="requestCode('ch02_8');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_8_saveb').toggle();
+    $('#ch02_8_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_8_suffix" style="display:none">
+</pre>
+<pre id="ch02_8_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Well, that&#8217;s not what we expected at all! Because of the comma, Python chose to
+treat this as a <em>pair</em> of values.     In fact, the print function can print any number of values as long
+as you separate them by commas.  Notice that the values are separated by spaces when they are displayed.</p>
+
+<div id="ch02_8a" >
+
+<br/>
+<div id="ch02_8a_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_8a_code" class="active_code", prefixcode="undefined">
+print(42, 17, 56, 34, 11, 4.35, 32)
+print(3.4, "hello", 45)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_8a)</span> </p>
+
+<button class='btn btn-success' id="ch02_8a_runb" onclick="runit('ch02_8a',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_8a_saveb" onclick="saveEditor('ch02_8a');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_8a_loadb" onclick="requestCode('ch02_8a');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_8a_saveb').toggle();
+    $('#ch02_8a_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_8a_suffix" style="display:none">
+</pre>
+<pre id="ch02_8a_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Remember not to put commas or spaces in your integers, no
+matter how big they are. Also revisit what we said in the previous chapter:
+formal languages are strict, the notation is concise, and even the smallest
+change might mean something quite different from what you intended.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The examples in this online text describe how print works in Python 3.
+When you install python 2.7 on your own machine, it will work slightly
+differently. In particular, when you put several values in parentheses as
+we do here, they don&#8217;t print out quite this way. We will deal with this
+minor difference when the time comes.</p>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_1_1" class="alert alert-warning">
+            sdat-1: How can you determine the type of a variable?<form name="test_question2_1_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_1_1_opt_a" />
+            <label for= "test_question2_1_1_opt_a">  a) Print out the value and determine the data type based on the value printed.</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_1_1_opt_b" />
+            <label for= "test_question2_1_1_opt_b">  b) Use the type function.</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_1_1_opt_c" />
+            <label for= "test_question2_1_1_opt_c">  c) Use it in a known equation and print the result.</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_1_1_opt_d" />
+            <label for= "test_question2_1_1_opt_d">  d) Look at the declaration of the variable.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_1_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_1_1','b',['You may be able to determine the data type based on the printed value, but it may also be  deceptive, like when a string prints, there are no quotes around it.', 'The type function will tell you the class the value belongs to.', 'Only numeric values can be used in equations.', 'In Python variables are not declared. Values, not variables, have types in Python. A variable can even take on values with different types during a program\u0027s execution.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_1_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_1_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_1_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question2_1_2" class="alert alert-warning">
+            sdat-2: What is the data type of &#8216;this is what kind of data&#8217;?<form name="test_question2_1_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_1_2_opt_a" />
+            <label for= "test_question2_1_2_opt_a">  a) Character</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_1_2_opt_b" />
+            <label for= "test_question2_1_2_opt_b">  b) Integer</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_1_2_opt_c" />
+            <label for= "test_question2_1_2_opt_c">  c) Float</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_1_2_opt_d" />
+            <label for= "test_question2_1_2_opt_d">  d) String</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_1_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_1_2','d',['It is not a single character.', 'The data is not numeric.', 'The value is not numeric with a decimal point.', 'Strings can be enclosed in single quotes.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_1_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_1_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_1_2_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="type-conversion-functions">
+<span id="index-2"></span><h2>Type conversion functions<a class="headerlink" href="#type-conversion-functions" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it is necessary to convert values from one type to another.  Python provides
+a few simple functions that will allow us to do that.  The functions <tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt> and <tt class="docutils literal"><span class="pre">str</span></tt>
+will (attempt to) convert their arguments into types <cite>int</cite>, <cite>float</cite> and <cite>str</cite>
+respectively.  We call these <strong>type conversion</strong> functions.</p>
+<p>The <tt class="docutils literal"><span class="pre">int</span></tt> function can take a floating point number or a string, and turn it
+into an int. For floating point numbers, it <em>discards</em> the decimal portion of
+the number - a process we call <em>truncation towards zero</em> on the number line.
+Let us see this in action:</p>
+
+<div id="ch02_20" >
+
+<br/>
+<div id="ch02_20_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_20_code" class="active_code", prefixcode="undefined">
+print(3.14, int(3.14))
+print(3.9999, int(3.9999))       # This doesn't round to the closest int!
+print(3.0,int(3.0))
+print(-3.999,int(-3.999))        # Note that the result is closer to zero
+
+print("2345",int("2345"))        # parse a string to produce an int
+print(17,int(17))                # int even works on integers
+print(int("23bottles"))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_20)</span> </p>
+
+<button class='btn btn-success' id="ch02_20_runb" onclick="runit('ch02_20',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_20_saveb" onclick="saveEditor('ch02_20');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_20_loadb" onclick="requestCode('ch02_20');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_20_saveb').toggle();
+    $('#ch02_20_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_20_suffix" style="display:none">
+</pre>
+<pre id="ch02_20_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The last case shows that a string has to be a syntactically legal number,
+otherwise you&#8217;ll get one of those pesky runtime errors.  Modify the example by deleting the
+<tt class="docutils literal"><span class="pre">bottles</span></tt> and rerun the program.  You should see the integer <tt class="docutils literal"><span class="pre">23</span></tt>.</p>
+<p>The type converter <tt class="docutils literal"><span class="pre">float</span></tt> can turn an integer, a float, or a syntactically
+legal string into a float.</p>
+
+<div id="ch02_21" >
+
+<br/>
+<div id="ch02_21_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_21_code" class="active_code", prefixcode="undefined">
+print(float("123.45"))
+print(type(float("123.45")))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_21)</span> </p>
+
+<button class='btn btn-success' id="ch02_21_runb" onclick="runit('ch02_21',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_21_saveb" onclick="saveEditor('ch02_21');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_21_loadb" onclick="requestCode('ch02_21');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_21_saveb').toggle();
+    $('#ch02_21_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_21_suffix" style="display:none">
+</pre>
+<pre id="ch02_21_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The type converter <tt class="docutils literal"><span class="pre">str</span></tt> turns its argument into a string.  Remember that when we print a string, the
+quotes are removed.  However, if we print the type, we can see that it is definitely <cite>str</cite>.</p>
+
+<div id="ch02_22" >
+
+<br/>
+<div id="ch02_22_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_22_code" class="active_code", prefixcode="undefined">
+print(str(17))
+print(str(123.45))
+print(type(str(123.45)))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_22)</span> </p>
+
+<button class='btn btn-success' id="ch02_22_runb" onclick="runit('ch02_22',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_22_saveb" onclick="saveEditor('ch02_22');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_22_loadb" onclick="requestCode('ch02_22');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_22_saveb').toggle();
+    $('#ch02_22_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_22_suffix" style="display:none">
+</pre>
+<pre id="ch02_22_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_2_1" class="alert alert-warning">
+            <p>sdat-3: What value is printed when the following statement executes?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span> <span class="nb">int</span><span class="p">(</span><span class="mf">53.785</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_2_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_2_1_opt_a" />
+            <label for= "test_question2_2_1_opt_a">  a) Nothing is printed. It generates a runtime error.</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_2_1_opt_b" />
+            <label for= "test_question2_2_1_opt_b">  b) 53</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_2_1_opt_c" />
+            <label for= "test_question2_2_1_opt_c">  c) 54</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_2_1_opt_d" />
+            <label for= "test_question2_2_1_opt_d">  d) 53.785</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_2_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_2_1','b',['The statement is valid Python code.  It calls the int function on 53.785 and then prints the value that is returned.', 'The int function truncates all values after the decimal and prints the integer value.', 'When converting to an integer, the int function does not round.', 'The int function removes the fractional part of 53.785 and returns an integer, which is then printed.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_2_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_2_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_2_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="variables">
+<span id="index-3"></span><h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<a id="assignvid_thumb" style='position:relative;'>
+    <img src="../_static/assignment.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="assignvid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/Variables.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/Variables.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#assignvid_thumb').click(function(e) {
+         $('#assignvid').show();
+         $('#assignvid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'assignvid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>One of the most powerful features of a programming language is the ability to
+manipulate <strong>variables</strong>. A variable is a name that refers to a value.</p>
+<p><strong>Assignment statements</strong> create new variables and also give them values to refer to.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">message</span> <span class="o">=</span> <span class="s">&quot;What&#39;s up, Doc?&quot;</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14159</span>
+</pre></div>
+</div>
+<p>This example makes three assignments. The first assigns the string value
+<tt class="docutils literal"><span class="pre">&quot;What's</span> <span class="pre">up,</span> <span class="pre">Doc?&quot;</span></tt> to a new variable named <tt class="docutils literal"><span class="pre">message</span></tt>. The second gives the
+integer <tt class="docutils literal"><span class="pre">17</span></tt> to <tt class="docutils literal"><span class="pre">n</span></tt>, and the third assigns the floating-point number
+<tt class="docutils literal"><span class="pre">3.14159</span></tt> to a variable called <tt class="docutils literal"><span class="pre">pi</span></tt>.</p>
+<p>The <strong>assignment token</strong>, <tt class="docutils literal"><span class="pre">=</span></tt>, should not be confused with <em>equality</em> (we will see later that equality uses the
+<tt class="docutils literal"><span class="pre">==</span></tt> token).  The assignment statement links a <em>name</em>, on the left hand
+side of the operator, with a <em>value</em>, on the right hand side.  This is why you
+will get an error if you enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">17</span> <span class="o">=</span> <span class="n">n</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">When reading or writing code, say to yourself &#8220;n is assigned 17&#8221; or &#8220;n gets
+the value 17&#8221; or &#8220;n is a reference to the object 17&#8221; or &#8220;n refers to the object 17&#8221;.  Don&#8217;t say &#8220;n equals 17&#8221;.</p>
+</div>
+<p>A common way to represent variables on paper is to write the name with an arrow
+pointing to the variable&#8217;s value. This kind of figure, known as a <strong>reference diagram</strong>, is often called a <strong>state
+snapshot</strong> because it shows what state each of the variables is in at a
+particular instant in time.  (Think of it as the variable&#8217;s state of mind).
+This diagram shows the result of executing the assignment statements shown above.</p>
+<img alt="Reference Diagram" src="../_images/refdiagram1.png" />
+<p>If you ask Python to evaluate a variable, it will produce the value
+that is currently linked to the variable.  In other words, evaluating a variable will give you the value that is referred to
+by the variable.</p>
+
+<div id="ch02_9" >
+
+<br/>
+<div id="ch02_9_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_9_code" class="active_code", prefixcode="undefined">
+message = "What's up, Doc?"
+n = 17
+pi = 3.14159
+
+print(message)
+print(n)
+print(pi)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_9)</span> </p>
+
+<button class='btn btn-success' id="ch02_9_runb" onclick="runit('ch02_9',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_9_saveb" onclick="saveEditor('ch02_9');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_9_loadb" onclick="requestCode('ch02_9');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_9_saveb').toggle();
+    $('#ch02_9_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_9_suffix" style="display:none">
+</pre>
+<pre id="ch02_9_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>In each case the result is the value of the variable.
+To see this in even more detail, we can run the program using codelens.</p>
+
+<div id="ch02_9_codelens"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch02_9_codelens)</span> </p>
+<script type="text/javascript">
+var ch02_9_codelens_trace = {"code": "message = \"What's up, Doc?\"\nn = 17\npi = 3.14159\n\nprint(message)\nprint(n)\nprint(pi)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["message"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?"}, "heap": {}, "line": 2, "event": "step_line"}, {"ordered_globals": ["message", "n"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?", "n": 17}, "heap": {}, "line": 3, "event": "step_line"}, {"ordered_globals": ["message", "n", "pi"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?", "pi": 3.1416, "n": 17}, "heap": {}, "line": 5, "event": "step_line"}, {"ordered_globals": ["message", "n", "pi"], "stdout": "What's up, Doc?\n", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?", "pi": 3.1416, "n": 17}, "heap": {}, "line": 6, "event": "step_line"}, {"ordered_globals": ["message", "n", "pi"], "stdout": "What's up, Doc?\n17\n", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?", "pi": 3.1416, "n": 17}, "heap": {}, "line": 7, "event": "step_line"}, {"ordered_globals": ["message", "n", "pi"], "stdout": "What's up, Doc?\n17\n3.14159\n", "func_name": "<module>", "stack_to_render": [], "globals": {"message": "What's up, Doc?", "pi": 3.1416, "n": 17}, "heap": {}, "line": 7, "event": "return"}]};
+var ch02_9_codelens_vis;
+
+$(document).ready(function() {
+    ch02_9_codelens_vis = new ExecutionVisualizer('ch02_9_codelens',ch02_9_codelens_trace,
+                                {embeddedMode: false,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch02_9_codelens_vis,'ch02_9_codelens');
+    allVisualizers.push(ch02_9_codelens_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch02_9_codelens_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch02_9_codelens'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch02_9_codelens_vis.redrawConnectors();
+});
+</script>
+<p>Now, as you step thru the statements, you can see
+the variables and the values they reference as those references are
+created.</p>
+<p>Variables also have
+types; again, we can ask the interpreter what they are.</p>
+
+<div id="ch02_10" >
+
+<br/>
+<div id="ch02_10_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_10_code" class="active_code", prefixcode="undefined">
+message = "What's up, Doc?"
+n = 17
+pi = 3.14159
+
+print(type(message))
+print(type(n))
+print(type(pi))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_10)</span> </p>
+
+<button class='btn btn-success' id="ch02_10_runb" onclick="runit('ch02_10',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_10_saveb" onclick="saveEditor('ch02_10');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_10_loadb" onclick="requestCode('ch02_10');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_10_saveb').toggle();
+    $('#ch02_10_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_10_suffix" style="display:none">
+</pre>
+<pre id="ch02_10_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The type of a variable is the type of the object it currently refers to.</p>
+<p>We use variables in a program to &#8220;remember&#8221; things, like the current score at
+the football game.  But variables are <em>variable</em>. This means they can change
+over time, just like the scoreboard at a football game.  You can assign a value
+to a variable, and later assign a different value to the same variable.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is different from math. In math, if you give <cite>x</cite> the value 3, it
+cannot change to refer to a different value half-way through your
+calculations!</p>
+</div>
+<p>To see this, read and then run the following program.
+You&#8217;ll notice we change the value of <cite>day</cite> three times, and on the third
+assignment we even give it a value that is of a different type.</p>
+
+<div id="ch02_11"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch02_11)</span> </p>
+<script type="text/javascript">
+var ch02_11_trace = {"code": "day = \"Thursday\"\nprint(day)\nday = \"Friday\"\nprint(day)\nday = 21\nprint(day)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"day": "Thursday"}, "heap": {}, "line": 2, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "Thursday\n", "func_name": "<module>", "stack_to_render": [], "globals": {"day": "Thursday"}, "heap": {}, "line": 3, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "Thursday\n", "func_name": "<module>", "stack_to_render": [], "globals": {"day": "Friday"}, "heap": {}, "line": 4, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "Thursday\nFriday\n", "func_name": "<module>", "stack_to_render": [], "globals": {"day": "Friday"}, "heap": {}, "line": 5, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "Thursday\nFriday\n", "func_name": "<module>", "stack_to_render": [], "globals": {"day": 21}, "heap": {}, "line": 6, "event": "step_line"}, {"ordered_globals": ["day"], "stdout": "Thursday\nFriday\n21\n", "func_name": "<module>", "stack_to_render": [], "globals": {"day": 21}, "heap": {}, "line": 6, "event": "return"}]};
+var ch02_11_vis;
+
+$(document).ready(function() {
+    ch02_11_vis = new ExecutionVisualizer('ch02_11',ch02_11_trace,
+                                {embeddedMode: false,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch02_11_vis,'ch02_11');
+    allVisualizers.push(ch02_11_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch02_11_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch02_11'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch02_11_vis.redrawConnectors();
+});
+</script>
+<p>A great deal of programming is about having the computer remember things.  For example, we might want to keep
+track of the number of missed calls on your phone.  Each time another call is missed, we will arrange to update
+or change the variable so that it will always reflect the correct value.</p>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_3_2" class="alert alert-warning">
+            <p>sdat-4: What is printed when the following statements execute?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">day</span> <span class="o">=</span> <span class="s">&quot;Thursday&quot;</span>
+<span class="n">day</span> <span class="o">=</span> <span class="mf">32.5</span>
+<span class="n">day</span> <span class="o">=</span> <span class="mi">19</span>
+<span class="k">print</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_3_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_3_2_opt_a" />
+            <label for= "test_question2_3_2_opt_a">  a) Nothing is printed. A runtime error occurs.</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_3_2_opt_b" />
+            <label for= "test_question2_3_2_opt_b">  b) Thursday</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_3_2_opt_c" />
+            <label for= "test_question2_3_2_opt_c">  c) 32.5</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_3_2_opt_d" />
+            <label for= "test_question2_3_2_opt_d">  d) 19</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_3_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_3_2','d',['It is legal to change the type of data that a variable holds in Python.', 'This is the first value assigned to the variable day, but the next statements reassign that variable to new values.', 'This is the second value assigned to the variable day, but the next statement reassigns that variable to a new value.', 'The variable day will contain the last value assigned to it when it is printed.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_3_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_3_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_3_2_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="variable-names-and-keywords">
+<span id="index-4"></span><h2>Variable Names and Keywords<a class="headerlink" href="#variable-names-and-keywords" title="Permalink to this headline">¶</a></h2>
+<p><strong>Variable names</strong> can be arbitrarily long. They can contain both letters and
+digits, but they have to begin with a letter or an underscore. Although it is
+legal to use uppercase letters, by convention we don&#8217;t. If you do, remember
+that case matters. <tt class="docutils literal"><span class="pre">Bruce</span></tt> and <tt class="docutils literal"><span class="pre">bruce</span></tt> are different variables.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">Variable names can never contain spaces.</p>
+</div>
+<p>The underscore character ( <tt class="docutils literal"><span class="pre">_</span></tt>) can also appear in a name. It is often used in
+names with multiple words, such as <tt class="docutils literal"><span class="pre">my_name</span></tt> or <tt class="docutils literal"><span class="pre">price_of_tea_in_china</span></tt>.
+There are some situations in which names beginning with an underscore have
+special meaning, so a safe rule for beginners is to start all names with a
+letter.</p>
+<p>If you give a variable an illegal name, you get a syntax error.  In the example below, each
+of the variable names is illegal.</p>
+<div class="highlight-python"><pre>76trombones = "big parade"
+more$ = 1000000
+class = "Computer Science 101"</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">76trombones</span></tt> is illegal because it does not begin with a letter.  <tt class="docutils literal"><span class="pre">more$</span></tt>
+is illegal because it contains an illegal character, the dollar sign. But
+what&#8217;s wrong with <tt class="docutils literal"><span class="pre">class</span></tt>?</p>
+<p>It turns out that <tt class="docutils literal"><span class="pre">class</span></tt> is one of the Python <strong>keywords</strong>. Keywords define
+the language&#8217;s syntax rules and structure, and they cannot be used as variable
+names.
+Python has thirty-something keywords (and every now and again improvements to
+Python introduce or eliminate one or two):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>and</td>
+<td>as</td>
+<td>assert</td>
+<td>break</td>
+<td>class</td>
+<td>continue</td>
+</tr>
+<tr class="row-even"><td>def</td>
+<td>del</td>
+<td>elif</td>
+<td>else</td>
+<td>except</td>
+<td>exec</td>
+</tr>
+<tr class="row-odd"><td>finally</td>
+<td>for</td>
+<td>from</td>
+<td>global</td>
+<td>if</td>
+<td>import</td>
+</tr>
+<tr class="row-even"><td>in</td>
+<td>is</td>
+<td>lambda</td>
+<td>nonlocal</td>
+<td>not</td>
+<td>or</td>
+</tr>
+<tr class="row-odd"><td>pass</td>
+<td>raise</td>
+<td>return</td>
+<td>try</td>
+<td>while</td>
+<td>with</td>
+</tr>
+<tr class="row-even"><td>yield</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>You might want to keep this list handy. If the interpreter complains about one
+of your variable names and you don&#8217;t know why, see if it is on this list.</p>
+<p>Programmers generally choose names for their variables that are meaningful to
+the human readers of the program &#8212; they help the programmer document, or
+remember, what the variable is used for.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>Beginners sometimes confuse &#8220;meaningful to the human readers&#8221; with
+&#8220;meaningful to the computer&#8221;.  So they&#8217;ll wrongly think that because
+they&#8217;ve called some variable <tt class="docutils literal"><span class="pre">average</span></tt> or <tt class="docutils literal"><span class="pre">pi</span></tt>, it will somehow
+automagically calculate an average, or automagically associate the variable
+<tt class="docutils literal"><span class="pre">pi</span></tt> with the value 3.14159.  No! The computer doesn&#8217;t attach semantic
+meaning to your variable names.</p>
+<p class="last">So you&#8217;ll find some instructors who deliberately don&#8217;t choose meaningful
+names when they teach beginners &#8212; not because they don&#8217;t think it is a
+good habit, but because they&#8217;re trying to reinforce the message that you,
+the programmer, have to write some program code to calculate the average,
+or you must write an assignment statement to give a variable the value you
+want it to have.</p>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_4_1" class="alert alert-warning">
+            sdat-5: True or False:  the following is a legal variable name in Python:   A_good_grade_is_A+<form name="test_question2_4_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_4_1_opt_a" />
+            <label for= "test_question2_4_1_opt_a">  a) True</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_4_1_opt_b" />
+            <label for= "test_question2_4_1_opt_b">  b) False</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_4_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_4_1','b',['\u002D  The + character is not allowed in variable names.', '\u002D  The + character is not allowed in variable names (everything else in this name is fine).'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_4_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_4_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_4_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="statements-and-expressions">
+<span id="index-5"></span><h2>Statements and Expressions<a class="headerlink" href="#statements-and-expressions" title="Permalink to this headline">¶</a></h2>
+<a id="expression_vid_thumb" style='position:relative;'>
+    <img src="../_static/expressions.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="expression_vid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/Expressions.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/Expressions.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#expression_vid_thumb').click(function(e) {
+         $('#expression_vid').show();
+         $('#expression_vid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'expression_vid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>A <strong>statement</strong> is an instruction that the Python interpreter can execute. We
+have only seen the assignment statement so far.  Some other kinds of statements
+that we&#8217;ll see shortly are <tt class="docutils literal"><span class="pre">while</span></tt> statements, <tt class="docutils literal"><span class="pre">for</span></tt> statements, <tt class="docutils literal"><span class="pre">if</span></tt>
+statements,  and <tt class="docutils literal"><span class="pre">import</span></tt> statements.  (There are other kinds too!)</p>
+<p id="index-6">An <strong>expression</strong> is a combination of values, variables, operators, and calls
+to functions. Expressions need to be evaluated.  If you ask Python to <tt class="docutils literal"><span class="pre">print</span></tt> an expression, the interpreter
+<strong>evaluates</strong> the expression and displays the result.</p>
+
+<div id="ch02_13" >
+
+<br/>
+<div id="ch02_13_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ch02_13_code" class="active_code", prefixcode="undefined">
+print(1 + 1)
+print(len("hello"))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_13)</span> </p>
+
+<button class='btn btn-success' id="ch02_13_runb" onclick="runit('ch02_13',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_13_saveb" onclick="saveEditor('ch02_13');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_13_loadb" onclick="requestCode('ch02_13');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_13_saveb').toggle();
+    $('#ch02_13_loadb').toggle();
+}
+</script>
+
+
+<button class='btn btn-default' id="ch02_13_showb" onclick="$('#ch02_13_code_div').toggle();cm_editors['ch02_13_code'].refresh();$('#ch02_13_saveb').toggle();$('#ch02_13_loadb').toggle()">Show/Hide Code</button>
+<pre id="ch02_13_suffix" style="display:none">
+</pre>
+<pre id="ch02_13_pre" class="active_out">
+
+</pre>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(window).load(function() {
+        var runb = document.getElementById("ch02_13_runb");
+        runit('ch02_13',runb, undefined);
+    });
+});
+</script>
+
+</div>
+
+<p>In this example <tt class="docutils literal"><span class="pre">len</span></tt> is a built-in Python function that returns the number
+of characters in a string.  We&#8217;ve previously seen the <tt class="docutils literal"><span class="pre">print</span></tt> and the
+<tt class="docutils literal"><span class="pre">type</span></tt> functions, so this is our third example of a function!</p>
+<p>The <em>evaluation of an expression</em> produces a value, which is why expressions
+can appear on the right hand side of assignment statements. A value all by
+itself is a simple expression, and so is a variable.  Evaluating a variable gives the value that the variable refers to.</p>
+
+<div id="ch02_14" >
+
+<br/>
+<div id="ch02_14_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_14_code" class="active_code", prefixcode="undefined">
+y = 3.14
+x = len("hello")
+print(x)
+print(y)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_14)</span> </p>
+
+<button class='btn btn-success' id="ch02_14_runb" onclick="runit('ch02_14',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_14_saveb" onclick="saveEditor('ch02_14');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_14_loadb" onclick="requestCode('ch02_14');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_14_saveb').toggle();
+    $('#ch02_14_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_14_suffix" style="display:none">
+</pre>
+<pre id="ch02_14_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<div class="section" id="operators-and-operands">
+<span id="index-7"></span><h2>Operators and Operands<a class="headerlink" href="#operators-and-operands" title="Permalink to this headline">¶</a></h2>
+<p><strong>Operators</strong> are special tokens that represent computations like addition,
+multiplication and division. The values the operator works on are called
+<strong>operands</strong>.</p>
+<p>The following are all legal Python expressions whose meaning is more or less
+clear:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">20</span> <span class="o">+</span> <span class="mi">32</span>
+<span class="n">hour</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">hour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minute</span>
+<span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span>
+<span class="mi">5</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">-</span> <span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The tokens <tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">-</span></tt>, and <tt class="docutils literal"><span class="pre">*</span></tt>, and the use of parenthesis for grouping,
+mean in Python what they mean in mathematics. The asterisk (<tt class="docutils literal"><span class="pre">*</span></tt>) is the
+token for multiplication, and <tt class="docutils literal"><span class="pre">**</span></tt> is the token for exponentiation.
+Addition, subtraction, multiplication, and exponentiation all do what you
+expect.</p>
+
+<div id="ch02_15" >
+
+<br/>
+<div id="ch02_15_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_15_code" class="active_code", prefixcode="undefined">
+print(2 + 3)
+print(2 - 3)
+print(2 * 3)
+print(2 ** 3)
+print(3 ** 2)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_15)</span> </p>
+
+<button class='btn btn-success' id="ch02_15_runb" onclick="runit('ch02_15',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_15_saveb" onclick="saveEditor('ch02_15');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_15_loadb" onclick="requestCode('ch02_15');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_15_saveb').toggle();
+    $('#ch02_15_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_15_suffix" style="display:none">
+</pre>
+<pre id="ch02_15_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>When a variable name appears in the place of an operand, it is replaced with
+the value that it refers to before the operation is performed.
+For example, what if we wanted to convert 645 minutes into hours?</p>
+<p>In Python 2.7, which we will be using, the division operator <tt class="docutils literal"><span class="pre">/</span></tt> produces a floating point result
+if either of the operands is  of type <strong>float</strong>. If both are of type <strong>int</strong>, then
+it performs <strong>integer division</strong>, which truncates its result down to the next smallest integer.</p>
+
+<div id="ch02_16" >
+
+<br/>
+<div id="ch02_16_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_16_code" class="active_code", prefixcode="undefined">
+minutes = 645
+hours = minutes / 60
+print type(hours)
+print(hours)
+
+alt_hours = float(minutes) / 60
+print type(alt_hours)
+print alt_hours
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_16)</span> </p>
+
+<button class='btn btn-success' id="ch02_16_runb" onclick="runit('ch02_16',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_16_saveb" onclick="saveEditor('ch02_16');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_16_loadb" onclick="requestCode('ch02_16');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_16_saveb').toggle();
+    $('#ch02_16_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch02_16_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch02_16_suffix" style="display:none">
+</pre>
+<pre id="ch02_16_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Pay particular attention to the  two examples above. Take care that you choose
+the correct flavor of the division operator.  If you want a truncated integer output,
+make both of your operands integers. If you want a floating point result, make
+one or both of your operands into floats.</p>
+<p>If you want to be sure to get integer division, even on floating point operands,
+you can use the operator <tt class="docutils literal"><span class="pre">//</span></tt>.</p>
+
+<div id="ch02_16a" >
+
+<br/>
+<div id="ch02_16a_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_16a_code" class="active_code", prefixcode="undefined">
+print 7.0 / 3.0
+print 7.0 // 3.0
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_16a)</span> </p>
+
+<button class='btn btn-success' id="ch02_16a_runb" onclick="runit('ch02_16a',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_16a_saveb" onclick="saveEditor('ch02_16a');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_16a_loadb" onclick="requestCode('ch02_16a');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_16a_saveb').toggle();
+    $('#ch02_16a_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_16a_suffix" style="display:none">
+</pre>
+<pre id="ch02_16a_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p id="index-8">The <strong>modulus operator</strong>, sometimes also called the <strong>remainder operator</strong> or <strong>integer remainder operator</strong> works on integers (and integer expressions) and yields
+the remainder when the first operand is divided by the second. In Python, the
+modulus operator is a percent sign (<tt class="docutils literal"><span class="pre">%</span></tt>). The syntax is the same as for other
+operators.</p>
+
+<div id="ch02_18" >
+
+<br/>
+<div id="ch02_18_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_18_code" class="active_code", prefixcode="undefined">
+quotient = 7 // 3     # This is the integer division operator
+print(quotient)
+remainder = 7 % 3
+print(remainder)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_18)</span> </p>
+
+<button class='btn btn-success' id="ch02_18_runb" onclick="runit('ch02_18',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_18_saveb" onclick="saveEditor('ch02_18');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_18_loadb" onclick="requestCode('ch02_18');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_18_saveb').toggle();
+    $('#ch02_18_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_18_suffix" style="display:none">
+</pre>
+<pre id="ch02_18_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>In the above example, 7 divided by 3 is 2 when we use integer division and there is a remainder of 1.</p>
+<p>The modulus operator turns out to be surprisingly useful. For example, you can
+check whether one number is divisible by another&#8212;if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">y</span></tt> is zero, then
+<tt class="docutils literal"><span class="pre">x</span></tt> is divisible by <tt class="docutils literal"><span class="pre">y</span></tt>.
+Also, you can extract the right-most digit or digits from a number.  For
+example, <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">10</span></tt> yields the right-most digit of <tt class="docutils literal"><span class="pre">x</span></tt> (in base 10).
+Similarly <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">100</span></tt> yields the last two digits.</p>
+<p>Finally, returning to our time example, the remainder operator is extremely useful for doing conversions, say from seconds,
+to hours, minutes and seconds.
+If we start with a number of seconds, say 7684, the following program uses integer division and remainder to convert to an easier form.  Step through it to be sure you understand how the division and remainder operators are being used to
+compute the correct values.</p>
+
+<div id="ch02_19_codelens"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch02_19_codelens)</span> </p>
+<script type="text/javascript">
+var ch02_19_codelens_trace = {"code": "total_secs = 7684\nhours = total_secs // 3600\nsecs_still_remaining = total_secs % 3600\nminutes =  secs_still_remaining // 60\nsecs_finally_remaining = secs_still_remaining  % 60", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["total_secs"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"total_secs": 7684}, "heap": {}, "line": 2, "event": "step_line"}, {"ordered_globals": ["total_secs", "hours"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"hours": 2, "total_secs": 7684}, "heap": {}, "line": 3, "event": "step_line"}, {"ordered_globals": ["total_secs", "hours", "secs_still_remaining"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"hours": 2, "total_secs": 7684, "secs_still_remaining": 484}, "heap": {}, "line": 4, "event": "step_line"}, {"ordered_globals": ["total_secs", "hours", "secs_still_remaining", "minutes"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"hours": 2, "total_secs": 7684, "secs_still_remaining": 484, "minutes": 8}, "heap": {}, "line": 5, "event": "step_line"}, {"ordered_globals": ["total_secs", "hours", "secs_still_remaining", "minutes", "secs_finally_remaining"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"hours": 2, "total_secs": 7684, "secs_still_remaining": 484, "minutes": 8, "secs_finally_remaining": 4}, "heap": {}, "line": 5, "event": "return"}]};
+var ch02_19_codelens_vis;
+
+$(document).ready(function() {
+    ch02_19_codelens_vis = new ExecutionVisualizer('ch02_19_codelens',ch02_19_codelens_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch02_19_codelens_vis,'ch02_19_codelens');
+    allVisualizers.push(ch02_19_codelens_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch02_19_codelens_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch02_19_codelens'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch02_19_codelens_vis.redrawConnectors();
+});
+</script>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_6_1a" class="alert alert-warning">
+            <p>sdat-6: What value is printed when the following statement executes?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="p">(</span><span class="mi">18</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_6_1a_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_6_1a_opt_a" />
+            <label for= "test_question2_6_1a_opt_a">  a) 4.5</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_6_1a_opt_b" />
+            <label for= "test_question2_6_1a_opt_b">  b) 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_6_1a_opt_c" />
+            <label for= "test_question2_6_1a_opt_c">  c) 4</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_6_1a_opt_d" />
+            <label for= "test_question2_6_1a_opt_d">  d) 4.0</label><br />
+            
+            <input type="radio" name="group1" value="e" id="test_question2_6_1a_opt_e" />
+            <label for= "test_question2_6_1a_opt_e">  e) 2</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_6_1a');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_6_1a','c',['Because 18 and 4 are ints, / does integer division.', 'Integer division results in truncation, not rounding up.', 'Because 18 and 4 are ints, / does integer division.', 'Because 18 and 4 are ints, / does integer division and produces an integer.', '/ does division. Perhaps you were thinking of %, which computes the remainder?'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_6_1a_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_6_1a');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_6_1a_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question2_6_1" class="alert alert-warning">
+            <p>sdat-7: What value is printed when the following statement executes?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="p">(</span><span class="mf">18.0</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_6_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_6_1_opt_a" />
+            <label for= "test_question2_6_1_opt_a">  a) 4.5</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_6_1_opt_b" />
+            <label for= "test_question2_6_1_opt_b">  b) 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_6_1_opt_c" />
+            <label for= "test_question2_6_1_opt_c">  c) 4</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_6_1_opt_d" />
+            <label for= "test_question2_6_1_opt_d">  d) 4.0</label><br />
+            
+            <input type="radio" name="group1" value="e" id="test_question2_6_1_opt_e" />
+            <label for= "test_question2_6_1_opt_e">  e) 2</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_6_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_6_1','a',['Because 18.0 is a float, / does exact division.', 'Because 18.0 is a float, / does exact division.', 'Because 18.0 is a float, / does exact division.', 'Because 18.0 is a float, / does exact division.', '/ does division. Perhaps you were thinking of %, which computes the remainder?'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_6_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_6_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_6_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question2_6_2" class="alert alert-warning">
+            <p>sdat-8: What value is printed when the following statement executes?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="p">(</span><span class="mf">18.0</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_6_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_6_2_opt_a" />
+            <label for= "test_question2_6_2_opt_a">  a) 4.5</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_6_2_opt_b" />
+            <label for= "test_question2_6_2_opt_b">  b) 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_6_2_opt_c" />
+            <label for= "test_question2_6_2_opt_c">  c) 4</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_6_2_opt_d" />
+            <label for= "test_question2_6_2_opt_d">  d) 4.0</label><br />
+            
+            <input type="radio" name="group1" value="e" id="test_question2_6_2_opt_e" />
+            <label for= "test_question2_6_2_opt_e">  e) 2</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_6_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_6_2','d',['\u002D The // operator does integer division, not exact divisions', '\u002D Integer division results in truncation, not rounding up.', '\u002D The // operator does integer division, but it yields a float when one of the operands is a float/', '\u002D The // operator does integer division, and  it yields a float when one of the operands is a float.', '\u002D / does division. Perhaps you were thinking of %, which computes the remainder?'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_6_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_6_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_6_2_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question2_6_3" class="alert alert-warning">
+            <p>sdat-9: What value is printed when the following statement executes?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="p">(</span><span class="mi">18</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_6_3_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_6_3_opt_a" />
+            <label for= "test_question2_6_3_opt_a">  a) 4.25</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_6_3_opt_b" />
+            <label for= "test_question2_6_3_opt_b">  b) 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_6_3_opt_c" />
+            <label for= "test_question2_6_3_opt_c">  c) 4</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_6_3_opt_d" />
+            <label for= "test_question2_6_3_opt_d">  d) 2</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_6_3');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_6_3','d',['The % operator returns the remainder after division.', 'The % operator returns the remainder after division.', 'The % operator returns the remainder after division.', 'The % operator returns the remainder after division.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_6_3_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_6_3');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_6_3_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="input">
+<span id="index-9"></span><span id="id1"></span><h2>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h2>
+<a id="inputvid_thumb" style='position:relative;'>
+    <img src="../_static/inputthumb.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="inputvid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/input.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/input.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#inputvid_thumb').click(function(e) {
+         $('#inputvid').show();
+         $('#inputvid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'inputvid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>The program in the previous section works fine but is very limited in that it only works with one value for <tt class="docutils literal"><span class="pre">total_secs</span></tt>.  What if we wanted to rewrite the program so that it was more general?  One thing we could
+do is allow the user to enter any value they wish for the number of seconds.  The program could then print the
+proper result for that starting value.</p>
+<p>In order to do this, we need a way to get <strong>input</strong> from the user.  Luckily, in Python
+there is a built-in function to accomplish this task.  It is called <tt class="docutils literal"><span class="pre">raw_input</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is another function for input, called simply <tt class="docutils literal"><span class="pre">input</span></tt>, but <tt class="docutils literal"><span class="pre">raw_input</span></tt> is preferable
+for reasons that we won&#8217;t go into here.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">n</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Please enter your name: &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The raw_input function allows the user to provide a <strong>prompt string</strong>.  When the function is evaluated, the prompt is
+shown (in the browser, look for a popup window).
+The user of the program can enter the name and press <cite>return</cite>. When this
+happens the text that has been entered is returned from the <cite>input</cite> function,
+and in this case assigned to the variable <cite>n</cite>.  Run this example a few times and try some different names in the input box that appears.</p>
+
+<div id="inputfun" >
+
+<br/>
+<div id="inputfun_code_div" style="display: block">
+<textarea cols="50" rows="120" id="inputfun_code" class="active_code", prefixcode="undefined">
+n = raw_input("Please enter your name: ")
+print("Hello", n)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (inputfun)</span> </p>
+
+<button class='btn btn-success' id="inputfun_runb" onclick="runit('inputfun',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="inputfun_saveb" onclick="saveEditor('inputfun');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="inputfun_loadb" onclick="requestCode('inputfun');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#inputfun_saveb').toggle();
+    $('#inputfun_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="inputfun_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="inputfun_suffix" style="display:none">
+</pre>
+<pre id="inputfun_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>It is very important to note that the <tt class="docutils literal"><span class="pre">input</span></tt> function returns a string value.  Even if you asked the user to enter their age, you would get back a string like
+<tt class="docutils literal"><span class="pre">&quot;17&quot;</span></tt>.  It would be your job, as the programmer, to convert that string into
+an int or a float, using the <tt class="docutils literal"><span class="pre">int</span></tt> or <tt class="docutils literal"><span class="pre">float</span></tt> converter functions we saw
+earlier.</p>
+<p>To modify our previous program, we will add an input statement to allow the user to enter the number of seconds.  Then
+we will convert that string to an integer.  From there the process is the same as before.  To complete the example, we will
+print some appropriate output.</p>
+
+<div id="int_secs" >
+
+<br/>
+<div id="int_secs_code_div" style="display: block">
+<textarea cols="50" rows="120" id="int_secs_code" class="active_code", prefixcode="undefined">
+str_seconds = raw_input("Please enter the number of seconds you wish to convert")
+total_secs = int(str_seconds)
+
+hours = total_secs // 3600
+secs_still_remaining = total_secs % 3600
+minutes =  secs_still_remaining // 60
+secs_finally_remaining = secs_still_remaining  % 60
+
+print("Hrs=", hours, "mins=", minutes, "secs=", secs_finally_remaining)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (int_secs)</span> </p>
+
+<button class='btn btn-success' id="int_secs_runb" onclick="runit('int_secs',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="int_secs_saveb" onclick="saveEditor('int_secs');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="int_secs_loadb" onclick="requestCode('int_secs');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#int_secs_saveb').toggle();
+    $('#int_secs_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="int_secs_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="int_secs_suffix" style="display:none">
+</pre>
+<pre id="int_secs_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The variable <tt class="docutils literal"><span class="pre">str_seconds</span></tt> will refer to the string that is entered by the user. As we said above, even though this string may be <tt class="docutils literal"><span class="pre">7684</span></tt>, it is still a string and not a number.  To convert it to an integer, we use the <tt class="docutils literal"><span class="pre">int</span></tt> function.
+The result is referred to by <tt class="docutils literal"><span class="pre">total_secs</span></tt>.  Now, each time you run the program, you can enter a new value for the number of seconds to be converted.</p>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_7_1" class="alert alert-warning">
+            <p>sdat-10: What is printed when the following statements execute?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">n</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">&quot;Please enter your age: &quot;</span><span class="p">)</span>
+<span class="c"># user types in 18</span>
+<span class="k">print</span> <span class="p">(</span> <span class="nb">type</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_7_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_7_1_opt_a" />
+            <label for= "test_question2_7_1_opt_a">  a) &lt;class 'str'&gt;</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_7_1_opt_b" />
+            <label for= "test_question2_7_1_opt_b">  b) &lt;class 'int'&gt;</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_7_1_opt_c" />
+            <label for= "test_question2_7_1_opt_c">  c) &lt;class 18&gt;</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_7_1_opt_d" />
+            <label for= "test_question2_7_1_opt_d">  d) 18</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_7_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_7_1','a',['All input from users is read in as a string.', 'Even though the user typed in an integer, it does not come into the program as an integer.', '18 is the value of what the user typed, not the type of the data.', '18 is the value of what the user typed, not the type of the data.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_7_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_7_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_7_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="order-of-operations">
+<span id="index-10"></span><h2>Order of Operations<a class="headerlink" href="#order-of-operations" title="Permalink to this headline">¶</a></h2>
+<a id="precedencevid_thumb" style='position:relative;'>
+    <img src="../_static/precedencethumb.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="precedencevid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/precedence.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/precedence.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#precedencevid_thumb').click(function(e) {
+         $('#precedencevid').show();
+         $('#precedencevid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'precedencevid'});
+         // Log the run event
+      });
+   });
+</script>
+<a id="associativityvid_thumb" style='position:relative;'>
+    <img src="../_static/associativitythumb.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="associativityvid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/associativity.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/associativity.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#associativityvid_thumb').click(function(e) {
+         $('#associativityvid').show();
+         $('#associativityvid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'associativityvid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>When more than one operator appears in an expression, the order of evaluation
+depends on the <strong>rules of precedence</strong>. Python follows the same precedence
+rules for its mathematical operators that mathematics does.</p>
+<ol class="arabic simple">
+<li><em>Parentheses</em> have the highest precedence and can be used to force an
+expression to evaluate in the order you want. Since expressions in
+parentheses are evaluated first, <tt class="docutils literal"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">(3-1)</span></tt> is 4, and <tt class="docutils literal"><span class="pre">(1+1)**(5-2)</span></tt> is
+8. You can also use parentheses to make an expression easier to read, as in
+<tt class="docutils literal"><span class="pre">(minute</span> <span class="pre">*</span> <span class="pre">100)</span> <span class="pre">/</span> <span class="pre">60</span></tt>: in this case, the parentheses don&#8217;t change the result,
+but they reinforce that the expression in parentheses will be evaluated first.</li>
+<li><em>Exponentiation</em> has the next highest precedence, so <tt class="docutils literal"><span class="pre">2**1+1</span></tt> is 3 and
+not 4, and <tt class="docutils literal"><span class="pre">3*1**3</span></tt> is 3 and not 27.  Can you explain why?</li>
+<li><em>Multiplication and division</em> operators have the same
+precedence, which is higher than addition and subtraction, which
+also have the same precedence. So <tt class="docutils literal"><span class="pre">2*3-1</span></tt> yields 5 rather than 4, and
+<tt class="docutils literal"><span class="pre">5-2*2</span></tt> is 1, not 6.</li>
+<li>Operators with the <em>same</em> precedence are
+evaluated from left-to-right. In algebra we say they are <em>left-associative</em>.
+So in the expression <tt class="docutils literal"><span class="pre">6-3+2</span></tt>, the subtraction happens first, yielding 3.
+We then add 2 to get the result 5. If the operations had been evaluated from
+right to left, the result would have been <tt class="docutils literal"><span class="pre">6-(3+2)</span></tt>, which is 1.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Due to some historical quirk, an exception to the left-to-right
+left-associative rule is the exponentiation operator <cite>**</cite>. A useful hint
+is to always use parentheses to force exactly the order you want when
+exponentiation is involved:</p>
+
+<div id="ch02_23" >
+
+<br/>
+<div id="ch02_23_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_23_code" class="active_code", prefixcode="undefined">
+print(2 ** 3 ** 2)     # the right-most ** operator gets done first!
+print((2 ** 3) ** 2)   # use parentheses to force the order you want!
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_23)</span> </p>
+
+<button class='btn btn-success' id="ch02_23_runb" onclick="runit('ch02_23',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_23_saveb" onclick="saveEditor('ch02_23');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_23_loadb" onclick="requestCode('ch02_23');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_23_saveb').toggle();
+    $('#ch02_23_loadb').toggle();
+}
+</script>
+
+<pre id="ch02_23_suffix" style="display:none">
+</pre>
+<pre id="ch02_23_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_8_1" class="alert alert-warning">
+            <p>sdat-11: What is the value of the following expression:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">16</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">//</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<form name="test_question2_8_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_8_1_opt_a" />
+            <label for= "test_question2_8_1_opt_a">  a) 14</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_8_1_opt_b" />
+            <label for= "test_question2_8_1_opt_b">  b) 24</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_8_1_opt_c" />
+            <label for= "test_question2_8_1_opt_c">  c) 3</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_8_1_opt_d" />
+            <label for= "test_question2_8_1_opt_d">  d) 13.667</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_8_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_8_1','a',['Using parentheses, the expression is evaluated as (2*5) first, then (10 // 3), then (16\u002D3), and then (13+1).', 'Remember that * has precedence over  \u002D.', 'Remember that // has precedence over \u002D.', 'Remember that // does integer division.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_8_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_8_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_8_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="reassignment">
+<h2>Reassignment<a class="headerlink" href="#reassignment" title="Permalink to this headline">¶</a></h2>
+<a id="reassignmentvid_thumb" style='position:relative;'>
+    <img src="../_static/reassignmentthumb.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="reassignmentvid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/reassignment.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/reassignment.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#reassignmentvid_thumb').click(function(e) {
+         $('#reassignmentvid').show();
+         $('#reassignmentvid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'reassignmentvid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>As we have mentioned previously, it is legal to make more than one assignment to the
+same variable. A new assignment makes an existing variable refer to a new value
+(and stop referring to the old value).</p>
+
+<div id="ch07_reassign1" >
+
+<br/>
+<div id="ch07_reassign1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch07_reassign1_code" class="active_code", prefixcode="undefined">
+bruce = 5
+print(bruce)
+bruce = 7
+print(bruce)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch07_reassign1)</span> </p>
+
+<button class='btn btn-success' id="ch07_reassign1_runb" onclick="runit('ch07_reassign1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_reassign1_saveb" onclick="saveEditor('ch07_reassign1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_reassign1_loadb" onclick="requestCode('ch07_reassign1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch07_reassign1_saveb').toggle();
+    $('#ch07_reassign1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch07_reassign1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch07_reassign1_suffix" style="display:none">
+</pre>
+<pre id="ch07_reassign1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The first time <tt class="docutils literal"><span class="pre">bruce</span></tt> is
+printed, its value is 5, and the second time, its value is 7.  The assignment statement changes
+the value (the object) that <tt class="docutils literal"><span class="pre">bruce</span></tt> refers to.</p>
+<p>Here is what <strong>reassignment</strong> looks like in a reference diagram:</p>
+<img alt="reassignment" src="../_images/reassign1.png" />
+<p>It is important to note that in mathematics, a statement of equality is always true.  If <tt class="docutils literal"><span class="pre">a</span> <span class="pre">is</span> <span class="pre">equal</span> <span class="pre">to</span> <span class="pre">b</span></tt>
+now, then <tt class="docutils literal"><span class="pre">a</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">equal</span> <span class="pre">to</span> <span class="pre">b</span></tt>. In Python, an assignment statement can make
+two variables refer to the same object and therefore have the same value.  They appear to be equal.  However, because of the possibility of reassignment,
+they don&#8217;t have to stay that way:</p>
+
+<div id="ch07_reassign2" >
+
+<br/>
+<div id="ch07_reassign2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch07_reassign2_code" class="active_code", prefixcode="undefined">
+a = 5
+b = a    # after executing this line, a and b are now equal
+print(a,b)
+a = 3    # after executing this line, a and b are no longer equal
+print(a,b)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch07_reassign2)</span> </p>
+
+<button class='btn btn-success' id="ch07_reassign2_runb" onclick="runit('ch07_reassign2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_reassign2_saveb" onclick="saveEditor('ch07_reassign2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_reassign2_loadb" onclick="requestCode('ch07_reassign2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch07_reassign2_saveb').toggle();
+    $('#ch07_reassign2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch07_reassign2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch07_reassign2_suffix" style="display:none">
+</pre>
+<pre id="ch07_reassign2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Line 4 changes the value of <tt class="docutils literal"><span class="pre">a</span></tt> but does not change the value of
+<tt class="docutils literal"><span class="pre">b</span></tt>, so they are no longer equal. We will have much more to say about equality in a later chapter.</p>
+<p>You can step through the code and see how the variable assignments change below.</p>
+
+<div id="reassign"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (reassign)</span> </p>
+<script type="text/javascript">
+var reassign_trace = {"code": "a = 5\nb = a    # after executing this line, a and b are now equal\nprint(a,b)\na = 3    # after executing this line, a and b are no longer equal\nprint(a,b)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["a"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"a": 5}, "heap": {}, "line": 2, "event": "step_line"}, {"ordered_globals": ["a", "b"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"a": 5, "b": 5}, "heap": {}, "line": 3, "event": "step_line"}, {"ordered_globals": ["a", "b"], "stdout": "(5, 5)\n", "func_name": "<module>", "stack_to_render": [], "globals": {"a": 5, "b": 5}, "heap": {}, "line": 4, "event": "step_line"}, {"ordered_globals": ["a", "b"], "stdout": "(5, 5)\n", "func_name": "<module>", "stack_to_render": [], "globals": {"a": 3, "b": 5}, "heap": {}, "line": 5, "event": "step_line"}, {"ordered_globals": ["a", "b"], "stdout": "(5, 5)\n(3, 5)\n", "func_name": "<module>", "stack_to_render": [], "globals": {"a": 3, "b": 5}, "heap": {}, "line": 5, "event": "return"}]};
+var reassign_vis;
+
+$(document).ready(function() {
+    reassign_vis = new ExecutionVisualizer('reassign',reassign_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(reassign_vis,'reassign');
+    allVisualizers.push(reassign_vis);
+
+});
+
+$(document).ready(function() {
+    $("#reassign_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'reassign'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    reassign_vis.redrawConnectors();
+});
+</script>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In some programming languages, a different
+symbol is used for assignment, such as <tt class="docutils literal"><span class="pre">&lt;-</span></tt> or <tt class="docutils literal"><span class="pre">:=</span></tt>.  The intent is
+that this will help to avoid confusion.  Python
+chose to use the tokens <tt class="docutils literal"><span class="pre">=</span></tt> for assignment, and <tt class="docutils literal"><span class="pre">==</span></tt> for equality.  This is a popular
+choice also found in languages like C, C++, Java, and C#.</p>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_9_1" class="alert alert-warning">
+            <p>sdat-12: After the following statements, what are the values of x and y?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">22</span>
+</pre></div>
+</div>
+<form name="test_question2_9_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_9_1_opt_a" />
+            <label for= "test_question2_9_1_opt_a">  a) x is 15 and y is 15</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_9_1_opt_b" />
+            <label for= "test_question2_9_1_opt_b">  b) x is 22 and y is 22</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_9_1_opt_c" />
+            <label for= "test_question2_9_1_opt_c">  c) x is 15 and y is 22</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_9_1_opt_d" />
+            <label for= "test_question2_9_1_opt_d">  d) x is 22 and y is 15</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_9_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_9_1','d',['Look at the last assignment statement which gives x a different value.', 'No, x and y are two separate variables.  Just because x changes in the last assignment statement, it does not change the value that was copied into y in the second statement.', 'Look at the last assignment statement, which reassigns x, and not y.', 'Yes, x has the value 22 and y the value 15.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_9_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_9_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_9_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="updating-variables">
+<h2>Updating Variables<a class="headerlink" href="#updating-variables" title="Permalink to this headline">¶</a></h2>
+<a id="updatevid_thumb" style='position:relative;'>
+    <img src="../_static/updatethumb.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="updatevid" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/update.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/update.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#updatevid_thumb').click(function(e) {
+         $('#updatevid').show();
+         $('#updatevid_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'updatevid'});
+         // Log the run event
+      });
+   });
+</script>
+<p>One of the most common forms of reassignment is an <strong>update</strong> where the new
+value of the variable depends on the old.  For example,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>This means get the current value of x, add one, and then update x with the new
+value.  The new value of x is the old value of x plus 1.  Although this assignment statement may
+look a bit strange, remember that executing assignment is a two-step process.  First, evaluate the
+right-hand side expression.  Second, let the variable name on the left-hand side refer to this new
+resulting object.  The fact that <tt class="docutils literal"><span class="pre">x</span></tt> appears on both sides does not matter.  The semantics of the assignment
+statement makes sure that there is no confusion as to the result.</p>
+
+<div id="ch07_update1" >
+
+<br/>
+<div id="ch07_update1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch07_update1_code" class="active_code", prefixcode="undefined">
+x = 6        # initialize x
+print(x)
+x = x + 1    # update x
+print(x)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch07_update1)</span> </p>
+
+<button class='btn btn-success' id="ch07_update1_runb" onclick="runit('ch07_update1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_update1_saveb" onclick="saveEditor('ch07_update1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch07_update1_loadb" onclick="requestCode('ch07_update1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch07_update1_saveb').toggle();
+    $('#ch07_update1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch07_update1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch07_update1_suffix" style="display:none">
+</pre>
+<pre id="ch07_update1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>If you try to update a variable that doesn&#8217;t exist, you get an error because
+Python evaluates the expression on the right side of the assignment operator
+before it assigns the resulting value to the name on the left.
+Before you can update a variable, you have to <strong>initialize</strong> it, usually with a
+simple assignment.  In the above example, <tt class="docutils literal"><span class="pre">x</span></tt> was initialized to 6.</p>
+<p>Updating a variable by adding 1 is called an <strong>increment</strong>; subtracting 1 is
+called a <strong>decrement</strong>.  Sometimes programmers also talk about <strong>bumping</strong>
+a variable, which means the same as incrementing it by 1.</p>
+<div class="admonition-advanced-topics admonition">
+<p class="first admonition-title">Advanced Topics</p>
+<ul class="last simple">
+<li><a class="reference external" href="at_1_1.html">Topic 1:</a> Python Beyond the Browser.  This is a gentle
+introduction to using Python from the command line.  We&#8217;ll cover this
+later, but if you are curious about what Python looks like outside of this
+eBook, you can have a look here.  There are also instructions for
+installing Python on your computer here.</li>
+<li><a class="reference external" href="http://interactivepython.org/courselib/static/diveintopython3/index.html">Topic 2:</a> Dive Into Python 3,
+this is an online textbook by Mark Pilgrim.  If you have already had some
+programming experience, this book takes you off the deep end with
+both feet.</li>
+</ul>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question2_10_1" class="alert alert-warning">
+            <p>sdat-13: What is printed when the following statements execute?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_10_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_10_1_opt_a" />
+            <label for= "test_question2_10_1_opt_a">  a) 12</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_10_1_opt_b" />
+            <label for= "test_question2_10_1_opt_b">  b) -1</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_10_1_opt_c" />
+            <label for= "test_question2_10_1_opt_c">  c) 11</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_10_1_opt_d" />
+            <label for= "test_question2_10_1_opt_d">  d) Nothing.  An error occurs because x can never be equal to x - 1.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_10_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_10_1','c',['The value of x changes in the second statement.', 'In the second statement, substitute the current value of x before subtracting 1.', 'Yes, this statement sets the value of x equal to the current value minus 1.', 'Remember that variables in Python are different from variables in math in that they (temporarily) hold values, but can be reassigned.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_10_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_10_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_10_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question2_10_2" class="alert alert-warning">
+            <p>sdat-14: What is printed when the following statements execute?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question2_10_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question2_10_2_opt_a" />
+            <label for= "test_question2_10_2_opt_a">  a) 12</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question2_10_2_opt_b" />
+            <label for= "test_question2_10_2_opt_b">  b) 9</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question2_10_2_opt_c" />
+            <label for= "test_question2_10_2_opt_c">  c) 15</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question2_10_2_opt_d" />
+            <label for= "test_question2_10_2_opt_d">  d) Nothing.  An error occurs because x cannot be used that many times in assignment statements.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question2_10_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question2_10_2','c',['The value of x changes in the second statement.', 'Each statement changes the value of x, so 9 is not the final result.', 'Yes, starting with 12, subtract 3, than add 5, and finally add 1.', 'Remember that variables in Python are different from variables in math in that they (temporarily) hold values, but can be reassigned.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question2_10_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question2_10_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question2_10_2_feedback">
+            </div>
+            </div>
+            
+        <div class='parsons alert alert-warning'>
+        sdat-15: Construct the code that will result in the value 134 being printed.<br /><br />
+        <div style="clear:left;"></div>
+        <div id="parsons-orig-1169" style="display:none;">mybankbalance = 100
+mybankbalance = mybankbalance + 34
+print(mybankbalance)</div>
+        <div id="parsons-sortableTrash-1169" class="sortable-code"></div>
+        <div id="parsons-sortableCode-1169" class="sortable-code"></div>
+    	<div style="clear:left;"></div>
+        <input type="button" class='btn btn-success' id="checkMe1169" value="Check Me"/>
+        <input type="button" class='btn btn-default' id="reset1169" value="Reset"/>
+        <div id="parsons-message-1169"></div>
+        </div>
+
+    <script>
+        $pjQ(document).ready(function(){
+            var msgBox = $("#parsons-message-1169");
+            msgBox.hide();
+	    var displayErrors = function (fb) {
+	        if(fb.errors.length > 0) {
+                    var hash = pp_1169.getHash("#ul-parsons-sortableCode-1169");
+                    msgBox.fadeIn(500);
+                    msgBox.attr('class','alert alert-danger');
+                    msgBox.html(fb.errors[0]);
+                    logBookEvent({'event':'parsons', 'act':hash, 'div_id':'question2_10_3'});
+
+	        } else {
+                    logBookEvent({'event':'parsons', 'act':'yes', 'div_id':'question2_10_3'});
+                    msgBox.fadeIn(100);
+                    msgBox.attr('class','alert alert-success');
+                    msgBox.html("Perfect!")
+                }
+
+        }
+
+        $(window).load(function() {
+            // set min width and height
+            var sortableul = $("#ul-parsons-sortableCode-1169");
+            var trashul = $("#ul-parsons-sortableTrash-1169");
+            var sortableHeight = sortableul.height();
+            var sortableWidth = sortableul.width();
+            var trashWidth = trashul.width();
+            var trashHeight = trashul.height();
+            var minHeight = Math.max(trashHeight,sortableHeight);
+            var minWidth = Math.max(trashWidth, sortableWidth);
+            trashul.css("min-height",minHeight + "px");
+            sortableul.css("min-height",minHeight + "px");
+            sortableul.height(minHeight);
+            trashul.css("min-width",minWidth + "px");
+            sortableul.css("min-width",minWidth + "px");
+        });
+ 
+
+        var pp_1169 = new ParsonsWidget({
+                'sortableId': 'parsons-sortableCode-1169',
+		'trashId': 'parsons-sortableTrash-1169',
+                'max_wrong_lines': 1,
+                'solution_label': 'Drop blocks here',
+                'feedback_cb' : displayErrors
+        });
+        pp_1169.init($pjQ("#parsons-orig-1169").text());
+	pp_1169.shuffleLines();
+            
+        if(localStorage.getItem('question2_10_3') && localStorage.getItem('question2_10_3-trash')) {
+            try {
+                var solution = localStorage.getItem('question2_10_3');
+                var trash = localStorage.getItem('question2_10_3-trash');
+                pp_1169.createHTMLFromHashes(solution,trash);
+                pp_1169.getFeedback();
+            } catch(err) {
+                var text = "An error occured restoring old question2_10_3 state.  Error: ";
+                console.log(text + err.message);
+            }
+
+        }
+            $pjQ("#reset1169").click(function(event){
+              event.preventDefault();
+              pp_1169.shuffleLines();
+            
+            // set min width and height
+            var sortableul = $("#ul-parsons-sortableCode-1169");
+            var trashul = $("#ul-parsons-sortableTrash-1169");
+            var sortableHeight = sortableul.height();
+            var sortableWidth = sortableul.width();
+            var trashWidth = trashul.width();
+            var trashHeight = trashul.height();
+            var minHeight = Math.max(trashHeight,sortableHeight);
+            var minWidth = Math.max(trashWidth, sortableWidth);
+            trashul.css("min-height",minHeight + "px");
+            sortableul.css("min-height",minHeight + "px");
+            trashul.css("min-width",minWidth + "px");
+            sortableul.css("min-width",minWidth + "px");
+              msgBox.hide();
+            });
+            
+            $pjQ("#checkMe1169").click(function(event){
+              event.preventDefault();
+              var hash = pp_1169.getHash("#ul-parsons-sortableCode-1169");
+              localStorage.setItem('question2_10_3',hash);
+              hash = pp_1169.getHash("#ul-parsons-sortableTrash-1169");
+              localStorage.setItem('question2_10_3-trash',hash);
+            
+            pp_1169.getFeedback();
+            msgBox.fadeIn(100);
+            
+            });
+            
+        });
+            
+
+    </script>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_02" >
+
+<br/>
+<div id="scratch_02_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_02_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_02)</span> </p>
+
+<button class='btn btn-success' id="scratch_02_runb" onclick="runit('scratch_02',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_02_saveb" onclick="saveEditor('scratch_02');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_02_loadb" onclick="requestCode('scratch_02');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_02_saveb').toggle();
+    $('#scratch_02_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_02_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_02_suffix" style="display:none">
+</pre>
+<pre id="scratch_02_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+</div>
+<div class="section" id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h2>
+<dl class="glossary docutils">
+<dt id="term-assignment-statement">assignment statement</dt>
+<dd><p class="first">A statement that assigns a value to a name (variable). To the left of
+the assignment operator, <tt class="docutils literal"><span class="pre">=</span></tt>, is a name. To the right of the
+assignment token is an expression which is evaluated by the Python
+interpreter and then assigned to the name. The difference between the
+left and right hand sides of the assignment statement is often
+confusing to new programmers. In the following assignment:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p class="last"><tt class="docutils literal"><span class="pre">n</span></tt> plays a very different role on each side of the <tt class="docutils literal"><span class="pre">=</span></tt>. On the
+right it is a <em>value</em> and makes up part of the <em>expression</em> which will
+be evaluated by the Python interpreter before assigning it to the name
+on the left.</p>
+</dd>
+<dt id="term-assignment-token">assignment token</dt>
+<dd><tt class="docutils literal"><span class="pre">=</span></tt> is Python&#8217;s assignment token, which should not be confused
+with the mathematical comparison operator using the same symbol.</dd>
+<dt id="term-class">class</dt>
+<dd>see <strong>data type</strong> below</dd>
+<dt id="term-comment">comment</dt>
+<dd>Information in a program that is meant for other programmers (or anyone
+reading the source code) and has no effect on the execution of the
+program.</dd>
+<dt id="term-data-type">data type</dt>
+<dd>A set of values. The type of a value determines how it can be used in
+expressions. So far, the types you have seen are integers (<tt class="docutils literal"><span class="pre">int</span></tt>),
+floating-point numbers (<tt class="docutils literal"><span class="pre">float</span></tt>), and strings (<tt class="docutils literal"><span class="pre">str</span></tt>).</dd>
+<dt id="term-decrement">decrement</dt>
+<dd>Decrease by 1.</dd>
+<dt id="term-evaluate">evaluate</dt>
+<dd>To simplify an expression by performing the operations in order to
+yield a single value.</dd>
+<dt id="term-expression">expression</dt>
+<dd>A combination of operators and operands (variables and values) that represents a
+single result value.  Expressions are evaluated to give that result.</dd>
+<dt id="term-float">float</dt>
+<dd>A Python data type which stores <em>floating-point</em> numbers.
+Floating-point numbers are stored internally in two parts: a <em>base</em> and
+an <em>exponent</em>. When printed in the standard format, they look like
+decimal numbers. Beware of rounding errors when you use <tt class="docutils literal"><span class="pre">float</span></tt>s,
+and remember that they are only approximate values.</dd>
+<dt id="term-increment">increment</dt>
+<dd>Both as a noun and as a verb, increment means to increase by 1.</dd>
+<dt id="term-initialization-of-a-variable">initialization (of a variable)</dt>
+<dd>To initialize a variable is to give it an initial value.
+Since in Python variables don&#8217;t exist
+until they are assigned values, they are initialized when they are
+created.  In other programming languages this is not the case, and
+variables can be created without being initialized, in which case they
+have either default or <em>garbage</em> values.</dd>
+<dt id="term-int">int</dt>
+<dd>A Python data type that holds positive and negative <strong>whole</strong> numbers.</dd>
+<dt id="term-integer-division">integer division</dt>
+<dd>An operation that divides one integer by another and yields an integer.
+Integer division yields only the whole number of times that the
+numerator is divisible by the denominator and discards any remainder.</dd>
+<dt id="term-keyword">keyword</dt>
+<dd>A reserved word that is used by the compiler to parse program; you
+cannot use keywords like <tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">def</span></tt>, and <tt class="docutils literal"><span class="pre">while</span></tt> as variable
+names.</dd>
+<dt id="term-modulus-operator">modulus operator</dt>
+<dd>Also called remainder operator or integer remainder operator.  Gives the remainder after performing integer division.</dd>
+<dt id="term-object">object</dt>
+<dd>Also known as a data object (or data value).  The fundamental things that programs are designed to
+manipulate (or that programmers ask to do things for them).</dd>
+<dt id="term-operand">operand</dt>
+<dd>One of the values on which an operator operates.</dd>
+<dt id="term-operator">operator</dt>
+<dd>A special symbol that represents a simple computation like addition,
+multiplication, or string concatenation.</dd>
+<dt id="term-prompt-string">prompt string</dt>
+<dd>Used during interactive input to provide the use with hints as to what type of value to enter.</dd>
+<dt id="term-reference-diagram">reference diagram</dt>
+<dd>A picture showing a variable with an arrow pointing to the value (object) that the variable refers to. See also <strong>state snapshot</strong>.</dd>
+<dt id="term-rules-of-precedence">rules of precedence</dt>
+<dd>The set of rules governing the order in which expressions involving
+multiple operators and operands are evaluated.</dd>
+<dt id="term-state-snapshot">state snapshot</dt>
+<dd>A graphical representation of a set of variables and the values to
+which they refer, taken at a particular instant during the program&#8217;s
+execution.</dd>
+<dt id="term-statement">statement</dt>
+<dd>An instruction that the Python interpreter can execute.  So far we have
+only seen the assignment statement, but we will soon meet the
+<tt class="docutils literal"><span class="pre">import</span></tt> statement and the <tt class="docutils literal"><span class="pre">for</span></tt> statement.</dd>
+<dt id="term-str">str</dt>
+<dd>A Python data type that holds a string of characters.</dd>
+<dt id="term-type-conversion-function">type conversion function</dt>
+<dd>A function that can convert a data value from one type to another.</dd>
+<dt id="term-value">value</dt>
+<dd>A number or string (or other things to be named later) that can be
+stored in a variable or computed in an expression.</dd>
+<dt id="term-variable">variable</dt>
+<dd>A name that refers to a value.</dd>
+<dt id="term-variable-name">variable name</dt>
+<dd>A name given to a variable. Variable names in Python consist of a
+sequence of letters (a..z, A..Z, and _) and digits (0..9) that begins
+with a letter.  In best programming practice, variable names should be
+chosen so that they describe their use in the program, making the
+program <em>self documenting</em>.</dd>
+</dl>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><div id='q1' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q1-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q1-Question'><p>Evaluate the following numerical expressions in your head, then use
+the active code window to check your results:</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">5</span> <span class="pre">**</span> <span class="pre">2</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">9</span> <span class="pre">*</span> <span class="pre">5</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">/</span> <span class="pre">12</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">/</span> <span class="pre">15</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">//</span> <span class="pre">12</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">//</span> <span class="pre">15</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">5</span> <span class="pre">%</span> <span class="pre">2</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">9</span> <span class="pre">%</span> <span class="pre">5</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">%</span> <span class="pre">12</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">%</span> <span class="pre">15</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">6</span> <span class="pre">%</span> <span class="pre">6</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">0</span> <span class="pre">%</span> <span class="pre">7</span></tt></li>
+</ol>
+
+<div id="ch02_ex1" >
+
+<br/>
+<div id="ch02_ex1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch02_ex1_code" class="active_code", prefixcode="undefined">
+print(5**2)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch02_ex1)</span> </p>
+
+<button class='btn btn-success' id="ch02_ex1_runb" onclick="runit('ch02_ex1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_ex1_saveb" onclick="saveEditor('ch02_ex1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch02_ex1_loadb" onclick="requestCode('ch02_ex1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch02_ex1_saveb').toggle();
+    $('#ch02_ex1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch02_ex1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch02_ex1_suffix" style="display:none">
+</pre>
+<pre id="ch02_ex1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q1-Answer'><ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">5</span> <span class="pre">**</span> <span class="pre">2</span>&nbsp; <span class="pre">=</span> <span class="pre">25</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">9</span> <span class="pre">*</span> <span class="pre">5</span> <span class="pre">=</span> <span class="pre">45</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">/</span> <span class="pre">12</span> <span class="pre">=</span> <span class="pre">1.25</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">/</span> <span class="pre">15</span> <span class="pre">=</span> <span class="pre">0.8</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">//</span> <span class="pre">12</span> <span class="pre">=</span> <span class="pre">1</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">//</span> <span class="pre">15</span> <span class="pre">=</span> <span class="pre">0</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">5</span> <span class="pre">%</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">1</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">9</span> <span class="pre">%</span> <span class="pre">5</span> <span class="pre">=</span> <span class="pre">4</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">15</span> <span class="pre">%</span> <span class="pre">12</span> <span class="pre">=</span> <span class="pre">3</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">12</span> <span class="pre">%</span> <span class="pre">15</span> <span class="pre">=</span> <span class="pre">12</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">6</span> <span class="pre">%</span> <span class="pre">6</span> <span class="pre">=</span> <span class="pre">0</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">0</span> <span class="pre">%</span> <span class="pre">7</span> <span class="pre">=</span> <span class="pre">0</span></tt></li>
+</ol>
+</div><div class='tab-pane' id='q1-Discussion'><script type="text/javascript">
+    function c0a62044cac248859ce3695b46697ecc_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'c0a62044cac248859ce3695b46697ecc_' + eBookConfig.course;
+                    this.page.url = 'http://c0a62044cac248859ce3695b46697ecc_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'c0a62044cac248859ce3695b46697ecc_' + eBookConfig.course;
+            disqus_url = 'http://c0a62044cac248859ce3695b46697ecc_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="c0a62044cac248859ce3695b46697ecc" onclick="c0a62044cac248859ce3695b46697ecc_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='c0a62044cac248859ce3695b46697ecc']").attr('data-disqus-identifier', 'c0a62044cac248859ce3695b46697ecc_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q1 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q1 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q1 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><dl class="first docutils">
+<dt>What is the order of the arithmetic operations in the following expression.  Evaluate the expression by hand and then check your</dt>
+<dd><p class="first">work.</p>
+<blockquote class="last">
+<div><p>2 + (3 - 1) * 10 / 5 * (2 + 3)</p>
+</div></blockquote>
+</dd>
+</dl>
+
+<div id="ex_2_2" >
+
+<br/>
+<div id="ex_2_2_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_2_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_2)</span> </p>
+
+<button class='btn btn-success' id="ex_2_2_runb" onclick="runit('ex_2_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_2_saveb" onclick="saveEditor('ex_2_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_2_loadb" onclick="requestCode('ex_2_2');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_2_saveb').toggle();
+    $('#ex_2_2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_2_showb" onclick="$('#ex_2_2_code_div').toggle();cm_editors['ex_2_2_code'].refresh();$('#ex_2_2_saveb').toggle();$('#ex_2_2_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_2')"/>
+<pre id="ex_2_2_suffix" style="display:none">
+</pre>
+<pre id="ex_2_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q3' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q3-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q3-Question'><p>Many people keep time using a 24 hour clock (11 is 11am and 23 is 11pm, 0 is midnight).
+If it is currently 13 and you set your alarm to go off in 50 hours, it will be 15 (3pm).
+Write a Python program to solve the general version of the above problem.
+Ask the user for the time now (in hours), and then ask for the number of hours to wait for the alarm.
+Your program should output what the time will be on the clock when the alarm goes off.</p>
+
+<div id="ex_2_3" >
+
+<br/>
+<div id="ex_2_3_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_3_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_3)</span> </p>
+
+<button class='btn btn-success' id="ex_2_3_runb" onclick="runit('ex_2_3',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_3_saveb" onclick="saveEditor('ex_2_3');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_3_loadb" onclick="requestCode('ex_2_3');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_3_saveb').toggle();
+    $('#ex_2_3_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_3_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_3_showb" onclick="$('#ex_2_3_code_div').toggle();cm_editors['ex_2_3_code'].refresh();$('#ex_2_3_saveb').toggle();$('#ex_2_3_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_3')"/>
+<pre id="ex_2_3_suffix" style="display:none">
+</pre>
+<pre id="ex_2_3_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Answer'>
+<div id="q3_answer" >
+
+<br/>
+<div id="q3_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q3_answer_code" class="active_code", prefixcode="undefined">
+## question 3 solution ##
+
+current_time_string = input("What is the current time (in hours)? ")
+waiting_time_string = input("How many hours do you have to wait? ")
+
+current_time_int = int(current_time_string)
+waiting_time_int = int(waiting_time_string)
+
+hours = current_time_int + waiting_time_int
+
+timeofday = hours % 24
+
+print(timeofday)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q3_answer)</span> </p>
+
+<button class='btn btn-success' id="q3_answer_runb" onclick="runit('q3_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q3_answer_saveb" onclick="saveEditor('q3_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q3_answer_loadb" onclick="requestCode('q3_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q3_answer_saveb').toggle();
+    $('#q3_answer_loadb').toggle();
+}
+</script>
+
+<pre id="q3_answer_suffix" style="display:none">
+</pre>
+<pre id="q3_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Discussion'><script type="text/javascript">
+    function a77ed6163c254612b0d649034b261659_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'a77ed6163c254612b0d649034b261659_' + eBookConfig.course;
+                    this.page.url = 'http://a77ed6163c254612b0d649034b261659_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'a77ed6163c254612b0d649034b261659_' + eBookConfig.course;
+            disqus_url = 'http://a77ed6163c254612b0d649034b261659_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="a77ed6163c254612b0d649034b261659" onclick="a77ed6163c254612b0d649034b261659_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='a77ed6163c254612b0d649034b261659']").attr('data-disqus-identifier', 'a77ed6163c254612b0d649034b261659_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q3 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q3 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q3 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">It is possible to name the days 0 thru 6 where day 0 is Sunday and day 6 is Saturday.  If you go on a wonderful holiday
+leaving on day number 3 (a Wednesday) and you return home after 10 nights.
+Write a general version of the program which asks for the starting day number, and
+the length of your stay, and it will tell you the number of day of the week you will return on.</p>
+
+<div id="ex_2_4" >
+
+<br/>
+<div id="ex_2_4_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_4_code" class="active_code", prefixcode="undefined">
+# Problem 4
+# My Name:
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_4)</span> </p>
+
+<button class='btn btn-success' id="ex_2_4_runb" onclick="runit('ex_2_4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_4_saveb" onclick="saveEditor('ex_2_4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_4_loadb" onclick="requestCode('ex_2_4');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_4_saveb').toggle();
+    $('#ex_2_4_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_4_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_4_showb" onclick="$('#ex_2_4_code_div').toggle();cm_editors['ex_2_4_code'].refresh();$('#ex_2_4_saveb').toggle();$('#ex_2_4_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_4')"/>
+<pre id="ex_2_4_suffix" style="display:none">
+</pre>
+<pre id="ex_2_4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q5' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q5-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q5-Question'><p>Take the sentence: <em>All work and no play makes Jack a dull boy.</em>
+Store each word in a separate variable, then print out the sentence on
+one line using <tt class="docutils literal"><span class="pre">print</span></tt>.</p>
+
+<div id="ex_2_5" >
+
+<br/>
+<div id="ex_2_5_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_5_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_5)</span> </p>
+
+<button class='btn btn-success' id="ex_2_5_runb" onclick="runit('ex_2_5',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_5_saveb" onclick="saveEditor('ex_2_5');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_5_loadb" onclick="requestCode('ex_2_5');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_5_saveb').toggle();
+    $('#ex_2_5_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_5_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_5_showb" onclick="$('#ex_2_5_code_div').toggle();cm_editors['ex_2_5_code'].refresh();$('#ex_2_5_saveb').toggle();$('#ex_2_5_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_5')"/>
+<pre id="ex_2_5_suffix" style="display:none">
+</pre>
+<pre id="ex_2_5_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Answer'>
+<div id="q5_answer" >
+
+<br/>
+<div id="q5_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q5_answer_code" class="active_code", prefixcode="undefined">
+## question 5 solution ##
+
+word1 = "All"
+word2 = "work"
+word3 = "and"
+word4 = "no"
+word5 = "play"
+word6 = "makes"
+word7 = "Jack"
+word8 = "a"
+word9 = "dull"
+word10 = "boy."
+
+print(word1, word2, word3, word4, word5, word6, word7, word8, word9, word10)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q5_answer)</span> </p>
+
+<button class='btn btn-success' id="q5_answer_runb" onclick="runit('q5_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q5_answer_saveb" onclick="saveEditor('q5_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q5_answer_loadb" onclick="requestCode('q5_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q5_answer_saveb').toggle();
+    $('#q5_answer_loadb').toggle();
+}
+</script>
+
+<pre id="q5_answer_suffix" style="display:none">
+</pre>
+<pre id="q5_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Discussion'><script type="text/javascript">
+    function d1a30631e500449481955e02d3761dd3_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'd1a30631e500449481955e02d3761dd3_' + eBookConfig.course;
+                    this.page.url = 'http://d1a30631e500449481955e02d3761dd3_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'd1a30631e500449481955e02d3761dd3_' + eBookConfig.course;
+            disqus_url = 'http://d1a30631e500449481955e02d3761dd3_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="d1a30631e500449481955e02d3761dd3" onclick="d1a30631e500449481955e02d3761dd3_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='d1a30631e500449481955e02d3761dd3']").attr('data-disqus-identifier', 'd1a30631e500449481955e02d3761dd3_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q5 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q5 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q5 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Add parenthesis to the expression <tt class="docutils literal"><span class="pre">6</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">2</span></tt> to change its value
+from 4 to -6.</p>
+
+<div id="ex_2_6" >
+
+<br/>
+<div id="ex_2_6_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_6_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_6)</span> </p>
+
+<button class='btn btn-success' id="ex_2_6_runb" onclick="runit('ex_2_6',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_6_saveb" onclick="saveEditor('ex_2_6');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_6_loadb" onclick="requestCode('ex_2_6');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_6_saveb').toggle();
+    $('#ex_2_6_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_6_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_6_showb" onclick="$('#ex_2_6_code_div').toggle();cm_editors['ex_2_6_code'].refresh();$('#ex_2_6_saveb').toggle();$('#ex_2_6_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_6')"/>
+<pre id="ex_2_6_suffix" style="display:none">
+</pre>
+<pre id="ex_2_6_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q7' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q7-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q7-Question'><p>The formula for computing the final amount if one is earning
+compound interest is given on Wikipedia as</p>
+<img alt="formula for compound interest" src="../_images/compoundInterest.png" />
+<p>Write a Python program that assigns the principal amount of 10000 to
+variable <cite>P</cite>, assign to <cite>n</cite> the value 12, and assign to <cite>r</cite> the interest
+rate of 8% (0.08).  Then have the program prompt the user for the number of years,
+<cite>t</cite>, that the money will be compounded for.  Calculate and print the final
+amount after <cite>t</cite> years.</p>
+
+<div id="ex_2_7" >
+
+<br/>
+<div id="ex_2_7_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_7_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_7)</span> </p>
+
+<button class='btn btn-success' id="ex_2_7_runb" onclick="runit('ex_2_7',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_7_saveb" onclick="saveEditor('ex_2_7');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_7_loadb" onclick="requestCode('ex_2_7');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_7_saveb').toggle();
+    $('#ex_2_7_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_7_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_7_showb" onclick="$('#ex_2_7_code_div').toggle();cm_editors['ex_2_7_code'].refresh();$('#ex_2_7_saveb').toggle();$('#ex_2_7_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_7')"/>
+<pre id="ex_2_7_suffix" style="display:none">
+</pre>
+<pre id="ex_2_7_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q7-Answer'>
+<div id="q7_answer" >
+
+<br/>
+<div id="q7_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q7_answer_code" class="active_code", prefixcode="undefined">
+## question 7 solution ##
+
+P = 10000
+n = 12
+r = 0.08
+
+t = int(input("Compound for how many years? "))
+
+final = P * ( ((1 + (r/n)) ** (n * t)) )
+
+print ("The final amount after", t, "years is", final)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q7_answer)</span> </p>
+
+<button class='btn btn-success' id="q7_answer_runb" onclick="runit('q7_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q7_answer_saveb" onclick="saveEditor('q7_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q7_answer_loadb" onclick="requestCode('q7_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q7_answer_saveb').toggle();
+    $('#q7_answer_loadb').toggle();
+}
+</script>
+
+<pre id="q7_answer_suffix" style="display:none">
+</pre>
+<pre id="q7_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q7-Discussion'><script type="text/javascript">
+    function f14145f85af93420ba0c05fca5d1b4d9a_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'f14145f85af93420ba0c05fca5d1b4d9a_' + eBookConfig.course;
+                    this.page.url = 'http://f14145f85af93420ba0c05fca5d1b4d9a_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'f14145f85af93420ba0c05fca5d1b4d9a_' + eBookConfig.course;
+            disqus_url = 'http://f14145f85af93420ba0c05fca5d1b4d9a_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="f14145f85af93420ba0c05fca5d1b4d9a" onclick="f14145f85af93420ba0c05fca5d1b4d9a_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='f14145f85af93420ba0c05fca5d1b4d9a']").attr('data-disqus-identifier', 'f14145f85af93420ba0c05fca5d1b4d9a_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q7 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q7 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q7 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
+back to the user with the answer.</p>
+
+<div id="ex_2_8" >
+
+<br/>
+<div id="ex_2_8_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_8_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_8)</span> </p>
+
+<button class='btn btn-success' id="ex_2_8_runb" onclick="runit('ex_2_8',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_8_saveb" onclick="saveEditor('ex_2_8');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_8_loadb" onclick="requestCode('ex_2_8');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_8_saveb').toggle();
+    $('#ex_2_8_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_8_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_8_showb" onclick="$('#ex_2_8_code_div').toggle();cm_editors['ex_2_8_code'].refresh();$('#ex_2_8_saveb').toggle();$('#ex_2_8_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_8')"/>
+<pre id="ex_2_8_suffix" style="display:none">
+</pre>
+<pre id="ex_2_8_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q9' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q9-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q9-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q9-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q9-Question'><p>Write a program that will compute the area of a rectangle.  Prompt the user to enter the width and height of the rectangle.
+Print a nice message with the answer.</p>
+
+<div id="ex_2_9" >
+
+<br/>
+<div id="ex_2_9_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_9_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_9)</span> </p>
+
+<button class='btn btn-success' id="ex_2_9_runb" onclick="runit('ex_2_9',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_9_saveb" onclick="saveEditor('ex_2_9');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_9_loadb" onclick="requestCode('ex_2_9');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_9_saveb').toggle();
+    $('#ex_2_9_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_9_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_9_showb" onclick="$('#ex_2_9_code_div').toggle();cm_editors['ex_2_9_code'].refresh();$('#ex_2_9_saveb').toggle();$('#ex_2_9_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_9')"/>
+<pre id="ex_2_9_suffix" style="display:none">
+</pre>
+<pre id="ex_2_9_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q9-Answer'>
+<div id="q9_answer" >
+
+<br/>
+<div id="q9_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q9_answer_code" class="active_code", prefixcode="undefined">
+## question 9 solution
+
+width = int(input("Width? "))
+height = int(input("Height? "))
+
+area = width * height
+
+print("The area of the rectangle is", area)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q9_answer)</span> </p>
+
+<button class='btn btn-success' id="q9_answer_runb" onclick="runit('q9_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q9_answer_saveb" onclick="saveEditor('q9_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q9_answer_loadb" onclick="requestCode('q9_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q9_answer_saveb').toggle();
+    $('#q9_answer_loadb').toggle();
+}
+</script>
+
+<pre id="q9_answer_suffix" style="display:none">
+</pre>
+<pre id="q9_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q9-Discussion'><script type="text/javascript">
+    function f69d286cc58943b6aef1d886e279a12b_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'f69d286cc58943b6aef1d886e279a12b_' + eBookConfig.course;
+                    this.page.url = 'http://f69d286cc58943b6aef1d886e279a12b_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'f69d286cc58943b6aef1d886e279a12b_' + eBookConfig.course;
+            disqus_url = 'http://f69d286cc58943b6aef1d886e279a12b_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="f69d286cc58943b6aef1d886e279a12b" onclick="f69d286cc58943b6aef1d886e279a12b_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='f69d286cc58943b6aef1d886e279a12b']").attr('data-disqus-identifier', 'f69d286cc58943b6aef1d886e279a12b_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q9 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q9 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q9 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
+gallons used.  Print a nice message with the answer.</p>
+
+<div id="ex_2_10" >
+
+<br/>
+<div id="ex_2_10_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_10_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_10)</span> </p>
+
+<button class='btn btn-success' id="ex_2_10_runb" onclick="runit('ex_2_10',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_10_saveb" onclick="saveEditor('ex_2_10');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_10_loadb" onclick="requestCode('ex_2_10');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_10_saveb').toggle();
+    $('#ex_2_10_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_10_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_10_showb" onclick="$('#ex_2_10_code_div').toggle();cm_editors['ex_2_10_code'].refresh();$('#ex_2_10_saveb').toggle();$('#ex_2_10_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_10')"/>
+<pre id="ex_2_10_suffix" style="display:none">
+</pre>
+<pre id="ex_2_10_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q11' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q11-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q11-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q11-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q11-Question'><p>Write a program that will convert degrees celsius to degrees fahrenheit.</p>
+
+<div id="ex_2_11" >
+
+<br/>
+<div id="ex_2_11_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_11_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_11)</span> </p>
+
+<button class='btn btn-success' id="ex_2_11_runb" onclick="runit('ex_2_11',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_11_saveb" onclick="saveEditor('ex_2_11');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_11_loadb" onclick="requestCode('ex_2_11');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_11_saveb').toggle();
+    $('#ex_2_11_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_11_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_11_showb" onclick="$('#ex_2_11_code_div').toggle();cm_editors['ex_2_11_code'].refresh();$('#ex_2_11_saveb').toggle();$('#ex_2_11_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_11')"/>
+<pre id="ex_2_11_suffix" style="display:none">
+</pre>
+<pre id="ex_2_11_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q11-Answer'>
+<div id="q11_answer" >
+
+<br/>
+<div id="q11_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q11_answer_code" class="active_code", prefixcode="undefined">
+## question 11 solution ##
+
+deg_c = int(input("What is the temperature in Celsius? "))
+
+# formula to convert C to F is: (degrees Celcius) times (9/5) plus (32)
+deg_f = deg_c * (9 / 5) + 32
+
+print (deg_c, " degrees Celsius is", deg_f, " degrees Farenheit.")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q11_answer)</span> </p>
+
+<button class='btn btn-success' id="q11_answer_runb" onclick="runit('q11_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q11_answer_saveb" onclick="saveEditor('q11_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q11_answer_loadb" onclick="requestCode('q11_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q11_answer_saveb').toggle();
+    $('#q11_answer_loadb').toggle();
+}
+</script>
+
+<pre id="q11_answer_suffix" style="display:none">
+</pre>
+<pre id="q11_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q11-Discussion'><script type="text/javascript">
+    function c4a929d598ab4c46b484f6abbcec2655_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'c4a929d598ab4c46b484f6abbcec2655_' + eBookConfig.course;
+                    this.page.url = 'http://c4a929d598ab4c46b484f6abbcec2655_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'c4a929d598ab4c46b484f6abbcec2655_' + eBookConfig.course;
+            disqus_url = 'http://c4a929d598ab4c46b484f6abbcec2655_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="c4a929d598ab4c46b484f6abbcec2655" onclick="c4a929d598ab4c46b484f6abbcec2655_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='c4a929d598ab4c46b484f6abbcec2655']").attr('data-disqus-identifier', 'c4a929d598ab4c46b484f6abbcec2655_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q11 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q11 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q11 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a program that will convert degrees fahrenheit to degrees celsius.</p>
+
+<div id="ex_2_12" >
+
+<br/>
+<div id="ex_2_12_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_2_12_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_2_12)</span> </p>
+
+<button class='btn btn-success' id="ex_2_12_runb" onclick="runit('ex_2_12',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_12_saveb" onclick="saveEditor('ex_2_12');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_2_12_loadb" onclick="requestCode('ex_2_12');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_2_12_saveb').toggle();
+    $('#ex_2_12_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_2_12_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_2_12_showb" onclick="$('#ex_2_12_code_div').toggle();cm_editors['ex_2_12_code'].refresh();$('#ex_2_12_saveb').toggle();$('#ex_2_12_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_2_12')"/>
+<pre id="ex_2_12_suffix" style="display:none">
+</pre>
+<pre id="ex_2_12_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+</ol>
+</div>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "code": "x = []\nfor i in range(10):\n    x.append(i)\n    if i == 24:\n        pass\n   print y\n", 
+  "trace": [
+    {
+      "exception_msg": "IndentationError: unindent does not match any outer indentation level (<string>, line 6)", 
+      "line": 6, 
+      "event": "uncaught_exception", 
+      "offset": 11
+    }
+  ]
+}

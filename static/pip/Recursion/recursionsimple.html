@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Recursion &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="Visualizing Recursion" href="graphical.html" />
+    <link rel="prev" title="Dictionaries" href="../Dictionaries/dictionaries.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Recursion</a></li>
+<li><a class="reference internal" href="#objectives">Objectives</a></li>
+<li><a class="reference internal" href="#what-is-recursion">What Is Recursion?</a><ul>
+<li><a class="reference internal" href="#calculating-the-sum-of-a-list-of-numbers">Calculating the Sum of a List of Numbers</a></li>
+<li><a class="reference internal" href="#the-three-laws-of-recursion">The Three Laws of Recursion</a></li>
+<li><a class="reference internal" href="#converting-an-integer-to-a-string-in-any-base">Converting an Integer to a String in Any Base</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stack-frames-implementing-recursion">Stack Frames: Implementing Recursion</a></li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - Dictionaries" data-toggle="tooltip">
+    <a href="../Dictionaries/dictionaries.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - Visualizing Recursion' data-toggle="tooltip" >
+    <a href="graphical.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="recursion">
+<h1>Recursion<a class="headerlink" href="#recursion" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="objectives">
+<h1>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h1>
+<p>The goals for this chapter are as follows:</p>
+<ul class="simple">
+<li>To understand that complex problems that may otherwise be difficult
+to solve may have a simple recursive solution.</li>
+<li>To learn how to formulate programs recursively.</li>
+<li>To understand and apply the three laws of recursion.</li>
+<li>To understand recursion as a form of iteration.</li>
+<li>To implement the recursive formulation of a problem.</li>
+<li>To understand how recursion is implemented by a computer system.</li>
+</ul>
+</div>
+<div class="section" id="what-is-recursion">
+<h1>What Is Recursion?<a class="headerlink" href="#what-is-recursion" title="Permalink to this headline">¶</a></h1>
+<p><strong>Recursion</strong> is a method of solving problems that involves breaking a
+problem down into smaller and smaller subproblems until you get to a
+small enough problem that it can be solved trivially. Usually recursion
+involves a function calling itself. While it may not seem like much on
+the surface, recursion allows us to write elegant solutions to problems
+that may otherwise be very difficult to program.</p>
+<div class="section" id="calculating-the-sum-of-a-list-of-numbers">
+<h2>Calculating the Sum of a List of Numbers<a class="headerlink" href="#calculating-the-sum-of-a-list-of-numbers" title="Permalink to this headline">¶</a></h2>
+<p>We will begin our investigation with a simple problem that you already
+know how to solve without using recursion. Suppose that you want to
+calculate the sum of a list of numbers such as:
+<span class="math">\([1, 3, 5, 7, 9]\)</span>. An iterative function that computes the sum
+is shown in <a class="reference internal" href="#lst-itsum"><em>ActiveCode 1</em></a>. The function uses an accumulator variable
+(<tt class="docutils literal"><span class="pre">theSum</span></tt>) to compute a running total of all the numbers in the list
+by starting with <span class="math">\(0\)</span> and adding each number in the list.</p>
+
+<div id="lst_itsum" >
+
+<br/>
+<div id="lst_itsum_code_div" style="display: block">
+<textarea cols="50" rows="120" id="lst_itsum_code" class="active_code", prefixcode="undefined">
+def listsum(numList):
+    theSum = 0
+    for i in numList:
+        theSum = theSum + i
+    return theSum
+
+print(listsum([1,3,5,7,9]))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text">Iterative Summation (lst_itsum)</span> </p>
+
+<button class='btn btn-success' id="lst_itsum_runb" onclick="runit('lst_itsum',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_itsum_saveb" onclick="saveEditor('lst_itsum');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_itsum_loadb" onclick="requestCode('lst_itsum');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#lst_itsum_saveb').toggle();
+    $('#lst_itsum_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="lst_itsum_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="lst_itsum_suffix" style="display:none">
+</pre>
+<pre id="lst_itsum_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Pretend for a minute that you do not have <tt class="docutils literal"><span class="pre">while</span></tt> loops or <tt class="docutils literal"><span class="pre">for</span></tt>
+loops. How would you compute the sum of a list of numbers? If you were a
+mathematician you might start by recalling that addition is a function
+that is defined for two parameters, a pair of numbers. To redefine the
+problem from adding a list to adding pairs of numbers, we could rewrite
+the list as a fully parenthesized expression. Such an expression looks
+like this:</p>
+<div class="math">
+\[((((1 + 3) + 5) + 7) + 9)\]</div>
+<p>We can also parenthesize
+the expression the other way around,</p>
+<div class="math">
+\[(1 + (3 + (5 + (7 + 9))))\]</div>
+<p>Notice that the innermost set of
+parentheses, <span class="math">\((7 + 9)\)</span>, is a problem that we can solve without a
+loop or any special constructs. In fact, we can use the following
+sequence of simplifications to compute a final sum.</p>
+<div class="math">
+\[\begin{split}total = \  (1 + (3 + (5 + (7 + 9)))) \\
+total = \  (1 + (3 + (5 + 16))) \\
+total = \  (1 + (3 + 21)) \\
+total = \  (1 + 24) \\
+total = \  25\end{split}\]</div>
+<p>How can we take this idea and turn it into a Python program? First,
+let’s restate the sum problem in terms of Python lists. We might say the
+the sum of the list <tt class="docutils literal"><span class="pre">numList</span></tt> is the sum of the first element of the
+list (<tt class="docutils literal"><span class="pre">numList[0]</span></tt>), and the sum of the numbers in the rest of the
+list (<tt class="docutils literal"><span class="pre">numList[1:]</span></tt>). To state it in a functional form:</p>
+<div class="math">
+\[  listSum(numList) = first(numList) + listSum(rest(numList))
+\label{eqn:listsum}\]</div>
+<p>In this equation <span class="math">\(first(numList)\)</span> returns the first element of
+the list and <span class="math">\(rest(numList)\)</span> returns a list of everything but
+the first element. This is easily expressed in Python as shown in
+<a class="reference internal" href="#lst-recsum"><em>ActiveCode 2</em></a>.</p>
+
+<div id="lst_recsum" >
+
+<br/>
+<div id="lst_recsum_code_div" style="display: block">
+<textarea cols="50" rows="120" id="lst_recsum_code" class="active_code", prefixcode="undefined">
+def listsum(numList):
+   if len(numList) == 1:
+        return numList[0]
+   else:
+        return numList[0] + listsum(numList[1:])
+
+print(listsum([1,3,5,7,9]))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text">Recursive Summation (lst_recsum)</span> </p>
+
+<button class='btn btn-success' id="lst_recsum_runb" onclick="runit('lst_recsum',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_recsum_saveb" onclick="saveEditor('lst_recsum');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_recsum_loadb" onclick="requestCode('lst_recsum');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#lst_recsum_saveb').toggle();
+    $('#lst_recsum_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="lst_recsum_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="lst_recsum_suffix" style="display:none">
+</pre>
+<pre id="lst_recsum_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>There are a few key ideas in this listing to look at. First, on line 2 we are checking to see if the list is one element long. This
+check is crucial and is our escape clause from the function. The sum of
+a list of length 1 is trivial; it is just the number in the list.
+Second, on line 5 our function calls itself! This is the
+reason that we call the <tt class="docutils literal"><span class="pre">listsum</span></tt> algorithm recursive. A recursive
+function is a function that calls itself.</p>
+<p><a class="reference internal" href="#fig-recsumin"><em>Figure 1</em></a> shows the series of <strong>recursive calls</strong> that are
+needed to sum the list <span class="math">\([1, 3, 5, 7, 9]\)</span>. You should think of
+this series of calls as a series of simplifications. Each time we make a
+recursive call we are solving a smaller problem, until we reach the
+point where the problem cannot get any smaller.</p>
+<div class="figure align-center" id="fig-recsumin">
+<img alt="image" src="../_images/sumlistIn.png" />
+<p class="caption">Figure 1: Series of Recursive Calls Adding a List of Numbers</p>
+</div>
+<p>When we reach the point where the problem is as simple as it can get, we
+begin to piece together the solutions of each of the small problems
+until the initial problem is solved. <a class="reference internal" href="#fig-recsumout"><em>Figure 2</em></a> shows the
+additions that are performed as <tt class="docutils literal"><span class="pre">listsum</span></tt> works its way backward
+through the series of calls. When <tt class="docutils literal"><span class="pre">listsum</span></tt> returns from the topmost
+problem, we have the solution to the whole problem.</p>
+<div class="figure align-center" id="fig-recsumout">
+<img alt="image" src="../_images/sumlistOut.png" />
+<p class="caption">Figure2: Series of Recursive Returns from Adding a List of Numbers</p>
+</div>
+</div>
+<div class="section" id="the-three-laws-of-recursion">
+<h2>The Three Laws of Recursion<a class="headerlink" href="#the-three-laws-of-recursion" title="Permalink to this headline">¶</a></h2>
+<p>Like the robots of Asimov, all recursive algorithms must obey three
+important laws:</p>
+<ol class="arabic simple">
+<li>A recursive algorithm must have a <strong>base case</strong>.</li>
+<li>A recursive algorithm must change its state and move toward the base
+case.</li>
+<li>A recursive algorithm must call itself, recursively.</li>
+</ol>
+<p>Let’s look at each one of these laws in more detail and see how it was
+used in the <tt class="docutils literal"><span class="pre">listsum</span></tt> algorithm. First, a base case is the condition
+that allows the algorithm to stop recursing. A base case is typically a
+problem that is small enough to solve directly. In the <tt class="docutils literal"><span class="pre">listsum</span></tt>
+algorithm the base case is a list of length 1.</p>
+<p>To obey the second law, we must arrange for a change of state that moves
+the algorithm toward the base case. A change of state means that some
+data that the algorithm is using is modified. Usually the data that
+represents our problem gets smaller in some way. In the <tt class="docutils literal"><span class="pre">listsum</span></tt>
+algorithm our primary data structure is a list, so we must focus our
+state-changing efforts on the list. Since the base case is a list of
+length 1, a natural progression toward the base case is to shorten the
+list. This is exactly what happens on line 5 of <a class="reference internal" href="#lst-recsum"><em>ActiveCode 2</em></a> when we call <tt class="docutils literal"><span class="pre">listsum</span></tt> with a shorter list.</p>
+<p>The final law is that the algorithm must call itself. This is the very
+definition of recursion. Recursion is a confusing concept to many
+beginning programmers. As a novice programmer, you have learned that
+functions are good because you can take a large problem and break it up
+into smaller problems. The smaller problems can be solved by writing a
+function to solve each problem. When we talk about recursion it may seem
+that we are talking ourselves in circles. We have a problem to solve
+with a function, but that function solves the problem by calling itself!
+But the logic is not circular at all; the logic of recursion is an
+elegant expression of solving a problem by breaking it down into a
+smaller and easier problems.</p>
+<p>In the remainder of this chapter we will look at more examples of
+recursion. In each case we will focus on designing a solution to a
+problem by using the three laws of recursion.</p>
+<div class="admonition-self-check admonition">
+<p class="first admonition-title">Self Check</p>
+
+            <div id="question_recsimp_1" class="alert alert-warning">
+            rec-1: How many recursive calls are made when computing the sum of the list [2,4,6,8,10]?<form name="question_recsimp_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="question_recsimp_1_opt_a" />
+            <label for= "question_recsimp_1_opt_a">  a) 6</label><br />
+            
+            <input type="radio" name="group1" value="b" id="question_recsimp_1_opt_b" />
+            <label for= "question_recsimp_1_opt_b">  b) 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="question_recsimp_1_opt_c" />
+            <label for= "question_recsimp_1_opt_c">  c) 4</label><br />
+            
+            <input type="radio" name="group1" value="d" id="question_recsimp_1_opt_d" />
+            <label for= "question_recsimp_1_opt_d">  d) 3</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('question_recsimp_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('question_recsimp_1','c',['There are only five numbers on the list, the number of recursive calls will not be greater than the size of the list.', 'The initial call to listsum is not a recursive call.', 'the first recursive call passes the list [4,6,8,10], the second [6,8,10] and so on until [10].', 'This would not be enough calls to cover all the numbers on the list'])">Check Me</button>
+            <button class='btn btn-default' id="question_recsimp_1_bcomp" disabled name="compare" onclick="compareAnswers('question_recsimp_1');">Compare Me</button>
+            </form><br />
+            <div id="question_recsimp_1_feedback">
+            </div>
+            </div>
+            
+            <div id="question_recsimp_2" class="alert alert-warning">
+            rec-2: Suppose you are going to write a recusive function to calculate the factorial of a number.  fact(n) returns n * n-1 * n-2 * ... Where the factorial of zero is definded to be 1.  What would be the most appropriate base case?<form name="question_recsimp_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="question_recsimp_2_opt_a" />
+            <label for= "question_recsimp_2_opt_a">  a) n == 0</label><br />
+            
+            <input type="radio" name="group1" value="b" id="question_recsimp_2_opt_b" />
+            <label for= "question_recsimp_2_opt_b">  b) n == 1</label><br />
+            
+            <input type="radio" name="group1" value="c" id="question_recsimp_2_opt_c" />
+            <label for= "question_recsimp_2_opt_c">  c) n &gt;= 0</label><br />
+            
+            <input type="radio" name="group1" value="d" id="question_recsimp_2_opt_d" />
+            <label for= "question_recsimp_2_opt_d">  d) n &lt;= 1</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('question_recsimp_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('question_recsimp_2','d',['Although this would work there are better and slightly more efficient choices. since fact(1) and fact(0) are the same.', 'A good choice, but what happens if you call fact(0)?', 'This basecase would be true for all numbers greater than zero so fact of any positive number would be 1.', 'Good, this is the most efficient, and even keeps your program from crashing if you try to compute the factorial of a negative number.'])">Check Me</button>
+            <button class='btn btn-default' id="question_recsimp_2_bcomp" disabled name="compare" onclick="compareAnswers('question_recsimp_2');">Compare Me</button>
+            </form><br />
+            <div id="question_recsimp_2_feedback">
+            </div>
+            </div>
+            </div>
+</div>
+<div class="section" id="converting-an-integer-to-a-string-in-any-base">
+<h2>Converting an Integer to a String in Any Base<a class="headerlink" href="#converting-an-integer-to-a-string-in-any-base" title="Permalink to this headline">¶</a></h2>
+<p>Suppose you want to convert an integer to a string in some base between
+binary and hexadecimal. For example, convert the integer 10 to its
+string representation in decimal as <tt class="docutils literal"><span class="pre">&quot;10&quot;</span></tt>, or to its string
+representation in binary as <tt class="docutils literal"><span class="pre">&quot;1010&quot;</span></tt>. While there are many algorithms
+to solve this problem, including the algorithm discussed in the stack
+section, the recursive formulation of the problem is very
+elegant.</p>
+<p>Let’s look at a concrete example using base 10 and the number 769.
+Suppose we have a sequence of characters corresponding to the first 10
+digits, like <tt class="docutils literal"><span class="pre">convString</span> <span class="pre">=</span> <span class="pre">&quot;0123456789&quot;</span></tt>. It is easy to convert a
+number less than 10 to its string equivalent by looking it up in the
+sequence. For example, if the number is 9, then the string is
+<tt class="docutils literal"><span class="pre">convString[9]</span></tt> or <tt class="docutils literal"><span class="pre">&quot;9&quot;</span></tt>. If we can arrange to break up the number
+769 into three single-digit numbers, 7, 6, and 9, then converting it to
+a string is simple. A number less than 10 sounds like a good base case.</p>
+<p>Knowing what our base is suggests that the overall algorithm will
+involve three components:</p>
+<ol class="arabic simple">
+<li>Reduce the original number to a series of single-digit numbers.</li>
+<li>Convert the single digit-number to a string using a lookup.</li>
+<li>Concatenate the single-digit strings together to form the final
+result.</li>
+</ol>
+<p>The next step is to figure out how to change state and make progress
+toward the base case. Since we are working with an integer, let’s
+consider what mathematical operations might reduce a number. The most
+likely candidates are division and subtraction. While subtraction might
+work, it is unclear what we should subtract from what. Integer division
+with remainders gives us a clear direction. Let’s look at what happens
+if we divide a number by the base we are trying to convert to.</p>
+<p>Using integer division to divide 769 by 10, we get 76 with a remainder
+of 9. This gives us two good results. First, the remainder is a number
+less than our base that can be converted to a string immediately by
+lookup. Second, we get a number that is smaller than our original and
+moves us toward the base case of having a single number less than our
+base. Now our job is to convert 76 to its string representation. Again
+we will use integer division plus remainder to get results of 7 and 6
+respectively. Finally, we have reduced the problem to converting 7,
+which we can do easily since it satisfies the base case condition of
+<span class="math">\(n &lt; base\)</span>, where <span class="math">\(base = 10\)</span>. The series of operations
+we have just performed is illustrated in <a class="reference internal" href="#fig-tostr"><em>Figure 3</em></a>. Notice that
+the numbers we want to remember are in the remainder boxes along the
+right side of the diagram.</p>
+<div class="figure align-center" id="fig-tostr">
+<img alt="image" src="../_images/toStr.png" />
+<p class="caption">Figure 3: Converting an Integer to a String in Base 10</p>
+</div>
+<p><a class="reference internal" href="#lst-rectostr"><em>ActiveCode 3</em></a> shows the Python code that implements the algorithm
+outlined above for any base between 2 and 16.</p>
+
+<div id="lst_rectostr" >
+
+<br/>
+<div id="lst_rectostr_code_div" style="display: block">
+<textarea cols="50" rows="120" id="lst_rectostr_code" class="active_code", prefixcode="undefined">
+def toStr(n,base):
+   convertString = "0123456789ABCDEF"
+   if n < base:
+      return convertString[n]
+   else:
+      return toStr(n//base,base) + convertString[n%base]
+
+print(toStr(1453,16))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text">Recursively Converting from Integer to String (lst_rectostr)</span> </p>
+
+<button class='btn btn-success' id="lst_rectostr_runb" onclick="runit('lst_rectostr',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_rectostr_saveb" onclick="saveEditor('lst_rectostr');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_rectostr_loadb" onclick="requestCode('lst_rectostr');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#lst_rectostr_saveb').toggle();
+    $('#lst_rectostr_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="lst_rectostr_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="lst_rectostr_suffix" style="display:none">
+</pre>
+<pre id="lst_rectostr_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Notice that in line 3 we check for the base case where <tt class="docutils literal"><span class="pre">n</span></tt>
+is less than the base we are converting to. When we detect the base
+case, we stop recursing and simply return the string from the
+<tt class="docutils literal"><span class="pre">convertString</span></tt> sequence. In line 6 we satisfy both the
+second and third laws–by making the recursive call and by reducing the
+problem size–using division.</p>
+<p>Let’s trace the algorithm again; this time we will convert the number 10
+to its base 2 string representation (<tt class="docutils literal"><span class="pre">&quot;1010&quot;</span></tt>).</p>
+<div class="figure align-center" id="fig-tostr2">
+<img alt="image" src="../_images/toStrBase2.png" />
+<p class="caption">Figure 4: Converting the Number 10 to its Base 2 String Representation</p>
+</div>
+<p><a class="reference internal" href="#fig-tostr2"><em>Figure 4</em></a> shows that we get the results we are looking for,
+but it looks like the digits are in the wrong order. The algorithm works
+correctly because we make the recursive call first on line
+6, then we add the string representation of the remainder.
+If we reversed returning the <tt class="docutils literal"><span class="pre">convertString</span></tt> lookup and returning the
+<tt class="docutils literal"><span class="pre">toStr</span></tt> call, the resulting string would be backward! But by delaying
+the concatenation operation until after the recursive call has returned,
+we get the result in the proper order. This should remind you of our
+discussion of stacks back in the previous chapter.</p>
+<div class="admonition-self-check admonition">
+<p class="first admonition-title">Self Check</p>
+<p>Write a function that takes a string as a parameter and returns a new string that is the reverse of the old string.</p>
+
+<div id="recursion_sc_1" >
+
+<br/>
+<div id="recursion_sc_1_code_div" style="display: none">
+<textarea cols="50" rows="120" id="recursion_sc_1_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+def reverse(s):
+    return s
+
+testEqual(reverse("hello"),"olleh")
+testEqual(reverse("l"),"l")
+testEqual(reverse("follow"),"wollof")
+testEqual(reverse(""),"")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (recursion_sc_1)</span> </p>
+
+<button class='btn btn-success' id="recursion_sc_1_runb" onclick="runit('recursion_sc_1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="recursion_sc_1_saveb" onclick="saveEditor('recursion_sc_1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="recursion_sc_1_loadb" onclick="requestCode('recursion_sc_1');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#recursion_sc_1_saveb').toggle();
+    $('#recursion_sc_1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="recursion_sc_1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="recursion_sc_1_showb" onclick="$('#recursion_sc_1_code_div').toggle();cm_editors['recursion_sc_1_code'].refresh();$('#recursion_sc_1_saveb').toggle();$('#recursion_sc_1_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('recursion_sc_1')"/>
+<pre id="recursion_sc_1_suffix" style="display:none">
+</pre>
+<pre id="recursion_sc_1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Write a function that takes a string as a parameter and returns True if the string is a palindrome, False otherwise.  Remember that a string is a palindrome if it is spelled the same both forward and backward.  for example:  radar is a palindrome.  for bonus points palindromes can also be phrases, but you need to remove the spaces and punctuation before checking.  for example:  madam i&#8217;m adam  is a palindrome.  Other fun palindromes include:</p>
+<ul class="simple">
+<li>kayak</li>
+<li>aibohphobia</li>
+<li>Live not on evil</li>
+<li>Reviled did I live, said I, as evil I did deliver</li>
+<li>Go hang a salami; I&#8217;m a lasagna hog.</li>
+<li>Able was I ere I saw Elba</li>
+<li>Kanakanak &#8211;  a town in Alaska</li>
+<li>Wassamassaw &#8211; a town in South Dakota</li>
+</ul>
+
+<div id="recursion_sc_2" >
+
+<br/>
+<div id="recursion_sc_2_code_div" style="display: none">
+<textarea cols="50" rows="120" id="recursion_sc_2_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+def removeWhite(s):
+    return s
+
+def isPal(s):
+    return False
+
+testEqual(isPal(removeWhite("x")),True)
+testEqual(isPal(removeWhite("radar")),True)
+testEqual(isPal(removeWhite("hello")),False)
+testEqual(isPal(removeWhite("")),True)
+testEqual(isPal(removeWhite("hannah")),True)
+testEqual(isPal(removeWhite("madam i'm adam")),True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (recursion_sc_2)</span> </p>
+
+<button class='btn btn-success' id="recursion_sc_2_runb" onclick="runit('recursion_sc_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="recursion_sc_2_saveb" onclick="saveEditor('recursion_sc_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="recursion_sc_2_loadb" onclick="requestCode('recursion_sc_2');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#recursion_sc_2_saveb').toggle();
+    $('#recursion_sc_2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="recursion_sc_2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="recursion_sc_2_showb" onclick="$('#recursion_sc_2_code_div').toggle();cm_editors['recursion_sc_2_code'].refresh();$('#recursion_sc_2_saveb').toggle();$('#recursion_sc_2_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('recursion_sc_2')"/>
+<pre id="recursion_sc_2_suffix" style="display:none">
+</pre>
+<pre id="recursion_sc_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+</div>
+</div>
+<div class="section" id="stack-frames-implementing-recursion">
+<h1>Stack Frames: Implementing Recursion<a class="headerlink" href="#stack-frames-implementing-recursion" title="Permalink to this headline">¶</a></h1>
+<p>Suppose that instead of concatenating the result of the recursive call
+to <tt class="docutils literal"><span class="pre">toStr</span></tt> with the string from <tt class="docutils literal"><span class="pre">convertString</span></tt>, we modified our
+algorithm to push the strings onto a stack prior to making the recursive
+call. The code for this modified algorithm is shown in
+<a class="reference internal" href="#lst-recstack"><em>ActiveCode 6</em></a>.</p>
+
+<div id="lst_recstack" >
+
+<br/>
+<div id="lst_recstack_code_div" style="display: block">
+<textarea cols="50" rows="120" id="lst_recstack_code" class="active_code", prefixcode="undefined">
+from pythonds.basic.stack import Stack
+
+rStack = Stack()
+
+def toStr(n,base):
+    convertString = "0123456789ABCDEF"
+    while n > 0:
+        if n < base:
+            rStack.push(convertString[n])
+        else:
+            rStack.push(convertString[n % base])
+        n = n // base
+    res = ""
+    while not rStack.isEmpty():
+        res = res + str(rStack.pop())
+    return res
+
+print(toStr(1453,16))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text">Converting an Integer to a String Using a Stack (lst_recstack)</span> </p>
+
+<button class='btn btn-success' id="lst_recstack_runb" onclick="runit('lst_recstack',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_recstack_saveb" onclick="saveEditor('lst_recstack');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="lst_recstack_loadb" onclick="requestCode('lst_recstack');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#lst_recstack_saveb').toggle();
+    $('#lst_recstack_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="lst_recstack_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="lst_recstack_suffix" style="display:none">
+</pre>
+<pre id="lst_recstack_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Each time we make a call to <tt class="docutils literal"><span class="pre">toStr</span></tt>, we push a character on the stack.
+Returning to the previous example we can see that after the fourth call
+to <tt class="docutils literal"><span class="pre">toStr</span></tt> the stack would look like <a class="reference internal" href="#fig-recstack"><em>Figure 5</em></a>. Notice
+that now we can simply pop the characters off the stack and concatenate
+them into the final result, <tt class="docutils literal"><span class="pre">&quot;1010&quot;</span></tt>.</p>
+<div class="figure align-center" id="fig-recstack">
+<img alt="../_images/recstack.png" src="../_images/recstack.png" />
+<p class="caption">Figure 5: Strings Placed on the Stack During Conversion</p>
+</div>
+<p>The previous example gives us some insight into how Python implements a
+recursive function call. When a function is called in Python, a <strong>stack
+frame</strong> is allocated to handle the local variables of the function. When
+the function returns, the return value is left on top of the stack for
+the calling function to access. <a class="reference internal" href="#fig-callstack"><em>Figure 6</em></a> illustrates the
+call stack after the return statement on line 4.</p>
+<div class="figure align-center" id="fig-callstack">
+<img alt="../_images/newcallstack.png" src="../_images/newcallstack.png" />
+<p class="caption">Figure 6: Call Stack Generated from <tt class="docutils literal"><span class="pre">toStr(10,2)</span></tt></p>
+</div>
+<p>Notice that the call to <tt class="docutils literal"><span class="pre">toStr(2//2,2)</span></tt> leaves a return value of
+<tt class="docutils literal"><span class="pre">&quot;1&quot;</span></tt> on the stack. This return value is then used in place of the
+function call (<tt class="docutils literal"><span class="pre">toStr(1,2)</span></tt>) in the expression <tt class="docutils literal"><span class="pre">&quot;1&quot;</span> <span class="pre">+</span> <span class="pre">convertString[2%2]</span></tt>, which will leave the string <tt class="docutils literal"><span class="pre">&quot;10&quot;</span></tt> on the top of
+the stack. In this way, the Python call stack takes the place of the
+stack we used explicitly in <a class="reference internal" href="#lst-recstack"><em>Listing 4</em></a>. In our list summing
+example, you can think of the return value on the stack taking the place
+of an accumulator variable.</p>
+<p>The stack frames also provide a scope for the variables used by the
+function. Even though we are calling the same function over and over,
+each call creates a new scope for the variables that are local to the
+function.</p>
+<p>If you keep this idea of the stack in your head, you will find it much
+easier to write a proper recursive function.</p>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

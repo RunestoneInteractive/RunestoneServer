@@ -1,0 +1,11 @@
+{
+  "code": "x = 5\ny = x\nz = x + y\n\nfor x haslk;fjlasfhlkjl;sa\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 5)", 
+      "line": 5, 
+      "event": "uncaught_exception", 
+      "offset": 11
+    }
+  ]
+}

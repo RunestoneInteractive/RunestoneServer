@@ -1,0 +1,375 @@
+/* Runestone custom modifications */
+
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background-color: #eeeeee;
+}
+
+pre {
+    margin: 1em 0;
+}
+
+h5 {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* navbar and menu related styles */
+@media (max-width: 768px) {
+    /* Remove top padding when top navbar goes collapsed in narrow viewports */
+    body {
+        padding-top: 0;
+        margin: auto auto auto 5px;
+    }
+
+    .navbar-fixed-top {
+        position: static;
+    }
+}
+
+@media (min-width: 768px) {
+    /* when navbar is collapsed we don't want any vertical dividers taking up space */
+    .navbar .divider-vertical {
+        height: 50px;
+        margin: 0 3px;
+        border-left: 1px solid #f2f2f2;
+    }
+}
+
+div.container {
+    background-color: #ffffff;
+}
+
+div.section {
+    max-width: 500pt;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar>.container .navbar-brand {
+    margin-left: 0;
+
+}
+
+.navbar>.container  {
+    background-color: #f8f8f8;
+}
+
+.footer>.container {
+    background-color: #eeeeee;
+}
+
+.brand-logo {
+    float: left;
+    display: block;
+    background-size: 40px 40px !important;
+    width: 40px;
+    height: 40px;
+    margin-top: 4px;
+}
+
+.social-menu {
+    width: 220px;
+    padding: 10px 10px 15px 20px;
+}
+
+.fb-like {
+    margin-top: 7px;
+}
+
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
+}
+
+.twitter-follow-button {
+    margin-top: 10px;
+}
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
+
+.dropdown-menu > li > span {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loggedinuser {
+    font-weight: bold;
+}
+
+/* end navbar and menu related styles */
+
+.CodeMirror {
+    margin: 0 0 1em 0;
+    background-color: #fff;
+}
+
+button.btn, btn.btn-sm,
+input[type="submit"].btn.btn-sm,
+input[type="button"].btn.btn-sm {
+    font-size: 1em;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.btn {
+    margin: 5px 0;
+}
+
+.btn.disabled {
+    /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
+    pointer-events: auto;
+}
+
+.btn-default,
+.btn-default.disabled,
+.btn-default[disabled],
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover {
+    color: #fff;
+    background-color: #474949;
+    border-color: #474949;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+    background-color: #3a3c3c;
+    border-color: #2e2f2f;
+    color: #fff;
+}
+
+.tooltip {
+    z-index: 2000 !important;
+}
+
+.tooltip.in {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.alert form {
+    margin-bottom: 0;
+}
+/* default bookstrap alert color is hard to read (low contrast). */
+.alert {
+    color: #333;
+    padding: 10px;
+}
+
+/* override the color styles applied by Skulpt to the unittest results divs */
+.unittest-results.alert-danger {
+    background-color: #f2dede !important;
+}
+
+.unittest-results.alert-success {
+    background-color: #dff0d8 !important;
+}
+
+.alert label {
+    font-weight: normal;
+}
+
+/* These admonition styles styles are copied from the Bootstrap .alert classes.
+ Most of the !important declarations are to override the Sphinx basic.css styles */
+.admonition {
+    padding: 8px 35px 8px 14px !important;
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+/* .alert-danger */
+.admonition.caution {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}
+
+/* .alert-info */
+.admonition.tip, .admonition.note {
+    color: #333;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+/* from web2py.css */
+div.flash {
+    font-weight: bold;
+    position: fixed;
+    padding: 10px;
+    top: 55px;
+    right: 45px;
+    opacity: 0.95;
+    margin: 0 0 10px 10px;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    background-image: -webkit-linear-gradient(top, #222, #000);
+    background-image: -o-linear-gradient(top, #222, #000);
+    background-image: -moz-linear-gradient(90deg, #222, #000);
+    background-image: linear-gradient(top, #222, #000);
+    background-repeat: repeat-x;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    z-index: 2000;
+}
+
+/* Styles for the login, registration, and Janrain forms */
+#web2py_user_form {
+    margin-top: 10px;
+}
+
+#web2py_user_form form {
+    float: left;
+    margin-right: 150px;
+    padding-top: 3px;
+}
+
+#web2py_user_form td {
+    padding-bottom: 15px;
+}
+
+#web2py_user_form td.w2p_fw {
+    width: 299px;
+}
+
+#auth-actions {
+    margin-top: 50px;
+}
+
+#sign_in_text td {
+    font-size: 17px;
+    color: #333;
+    font-family: 'lucida grande', Verdana, sans-serif;
+    padding-bottom: 13px;
+}
+
+#auth_user_remember {
+    margin-top: -20px;
+}
+/* End login, registration, Janrain styles */
+
+/* end-of-chapter exercises styles */
+#exercises > ol > li,
+#programming-exercises > ol > li {
+    margin-bottom: 30px;
+}
+
+#exercises > ol > li:nth-child(even),
+#programming-exercises > ol > li:nth-child(even) {
+    padding: 1.2em 1.4em;
+    background: #faf7df;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+/* End chapter exercises styles */
+
+/* Modal dialog styles (scratch activecode, compare me, etc) */
+.scratch-ac-modal {
+    width: 800px;
+}
+
+.compare-modal .progress {
+    margin-bottom: 0;
+}
+
+.compare-me-progress {
+    width: 100%;
+}
+
+.compare-me-progress .progress-bar,
+.unittest-results-progress .progress-bar {
+    color: #333;
+}
+
+.unittest-results-progress {
+    width: 25%;
+}
+
+.compare-modal {
+    width: 350px;
+}
+
+.compare-modal table {
+    border-collapse: separate;
+    border-spacing: 10px 5px;
+}
+
+.codelens-modal {
+    /* we set some custom position styles so that the modal doesn't obscure the codelens visualizer */
+    top: 20%;
+    right: 20%;
+    left: auto;
+    bottom: auto;
+}
+
+@media (max-width: 768px) {
+    /* remove any custom position styles when the screen is small (mobile devices)
+    to prevent the modal from being partially off the screen */
+    .codelens-modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+    }
+}
+
+.codelens-modal > .modal-dialog {
+    width: 400px;
+}
+/* End modal dialog styles */
+
+.footnote.table {
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.footnote.table td.label {
+    padding: 2px 5px 2px 5px;
+    background-color: #d9edf7;
+}
+
+.ac-canvas {
+    background-color: white;
+}
+
+.video-play-overlay {
+    position: absolute;
+    top: -35px;
+    left: 30%;
+    height: 85px;
+    width: 130px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ui-sortable-helper {
+    height: auto !important;
+    width: auto !important;
+}

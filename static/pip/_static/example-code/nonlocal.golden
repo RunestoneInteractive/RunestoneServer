@@ -1,0 +1,11 @@
+{
+  "code": "# 'nonlocal' keyword is only in Python 3\ndef outer():\n    x = 1\n    def inner():\n        nonlocal x\n        x = 2\n        y = x\n        print(\"inner:\", x, y)\n    inner()\n    print(\"outer:\", x)\n\nouter()\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 5)", 
+      "line": 5, 
+      "event": "uncaught_exception", 
+      "offset": 18
+    }
+  ]
+}

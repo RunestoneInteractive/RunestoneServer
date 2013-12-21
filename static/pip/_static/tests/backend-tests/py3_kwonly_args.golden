@@ -1,0 +1,11 @@
+{
+  "code": "# Python 3 keyword-only arguments\ndef my_sorted(iterable, *, reverse=False, key=None):\n  pass\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 2)", 
+      "line": 2, 
+      "event": "uncaught_exception", 
+      "offset": 26
+    }
+  ]
+}

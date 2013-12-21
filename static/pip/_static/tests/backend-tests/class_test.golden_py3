@@ -1,0 +1,1444 @@
+{
+  "code": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __str__(self):\n        return \"(%d, %d)\" % (self.x, self.y)\n\np = Point(1, 2)\nprint(p)\np2 = Point(3, -4)\nprint(p2)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 2, 
+            "x": 1, 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Point"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 2, 
+            "x": 1, 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 2, 
+            "x": 1, 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 2, 
+            "x": 1, 
+            "self": [
+              "REF", 
+              4
+            ], 
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 6, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": "(1, 2)", 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f2", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "y": -4, 
+            "x": 3, 
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f3", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "y": -4, 
+            "x": 3, 
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f3", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "y": -4, 
+            "x": 3, 
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f3", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "<incomplete object>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "y": -4, 
+            "x": 3, 
+            "self": [
+              "REF", 
+              5
+            ], 
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f3", 
+          "ordered_varnames": [
+            "self", 
+            "x", 
+            "y", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p", 
+        "p2"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "p2": [
+          "REF", 
+          5
+        ], 
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p", 
+        "p2"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f4", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "p2": [
+          "REF", 
+          5
+        ], 
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 6, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p", 
+        "p2"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f4", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "p2": [
+          "REF", 
+          5
+        ], 
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p", 
+        "p2"
+      ], 
+      "stdout": "(1, 2)\n", 
+      "func_name": "__str__", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": "(3, -4)", 
+            "self": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__str__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__str___f4", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "p2": [
+          "REF", 
+          5
+        ], 
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Point", 
+        "p", 
+        "p2"
+      ], 
+      "stdout": "(1, 2)\n(3, -4)\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "p2": [
+          "REF", 
+          5
+        ], 
+        "p": [
+          "REF", 
+          4
+        ], 
+        "Point": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Point", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__str__", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, x, y)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__str__(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(1, 2)"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "Point", 
+          "(3, -4)"
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }
+  ]
+}

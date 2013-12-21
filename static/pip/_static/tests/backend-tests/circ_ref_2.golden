@@ -1,0 +1,116 @@
+{
+  "code": "# true indirect circular reference\n\nx = [1, 2]\ny = [3, 4, x]\nx.append(y)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          1, 
+          2
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          1, 
+          2
+        ], 
+        "2": [
+          "LIST", 
+          3, 
+          4, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          1, 
+          2, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "LIST", 
+          3, 
+          4, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }
+  ]
+}

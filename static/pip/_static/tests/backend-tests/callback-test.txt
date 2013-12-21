@@ -1,0 +1,19 @@
+# Tests to make sure that OPT tracks execution from user code (foo) to a
+# function in an external module (callback_module.callback_func) and
+# then back out to user code (bar). If all goes well, then both foo and
+# bar will be displayed on the stack. Ideally
+# callback_module.callback_func should also be on the stack, but since
+# OPT doesn't trace external code, it simply ignores that stack entry.
+
+# The incorrect behavior is NOT to trace inside of bar.
+
+
+import callback_module
+
+def foo():
+  callback_module.callback_func(bar)
+
+def bar():
+    print("I'm in a bar!!!")
+    
+foo()

@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dictionaries &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="Recursion" href="../Recursion/recursionsimple.html" />
+    <link rel="prev" title="Working with Data Files" href="../Files/files.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Dictionaries</a><ul>
+<li><a class="reference internal" href="#dictionary-operations">Dictionary operations</a></li>
+<li><a class="reference internal" href="#dictionary-methods">Dictionary methods</a></li>
+<li><a class="reference internal" href="#aliasing-and-copying">Aliasing and copying</a></li>
+<li><a class="reference internal" href="#sparse-matrices">Sparse matrices</a></li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+<li><a class="reference internal" href="#exercises">Exercises</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - Working with Data Files" data-toggle="tooltip">
+    <a href="../Files/files.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - Recursion' data-toggle="tooltip" >
+    <a href="../Recursion/recursionsimple.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="dictionaries">
+<h1>Dictionaries<a class="headerlink" href="#dictionaries" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">All of the compound data types we have studied in detail so far &#8212; strings,
+lists, and tuples &#8212; are sequential collections.  This means that the items in the collection are
+ordered from left to right and they use integers as indices to access
+the values they contain.</p>
+<p><strong>Dictionaries</strong> are a different kind of collection. They are Python&#8217;s
+built-in <strong>mapping type</strong>. A map is an unordered, associative collection.  The association, or mapping,
+is from a <strong>key</strong>, which can be any immutable type,
+to a <strong>value</strong>, which can be any Python data object.</p>
+<p>As an example, we will create a dictionary to translate English words into
+Spanish. For this dictionary, the keys are strings and the values will also be strings.</p>
+<p>One way to create a dictionary is to start with the empty dictionary and add
+<strong>key-value pairs</strong>. The empty dictionary is denoted <tt class="docutils literal"><span class="pre">{}</span></tt></p>
+
+<div id="chp12_dict1"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (chp12_dict1)</span> </p>
+<script type="text/javascript">
+var chp12_dict1_trace = {"code": "eng2sp = {}\neng2sp['one'] = 'uno'\neng2sp['two'] = 'dos'\neng2sp['three'] = 'tres'", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT"]}, "line": 2, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["one", "uno"]]}, "line": 3, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["two", "dos"], ["one", "uno"]]}, "line": 4, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 4, "event": "return"}]};
+var chp12_dict1_vis;
+
+$(document).ready(function() {
+    chp12_dict1_vis = new ExecutionVisualizer('chp12_dict1',chp12_dict1_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(chp12_dict1_vis,'chp12_dict1');
+    allVisualizers.push(chp12_dict1_vis);
+
+});
+
+$(document).ready(function() {
+    $("#chp12_dict1_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'chp12_dict1'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    chp12_dict1_vis.redrawConnectors();
+});
+</script>
+<p>The first assignment creates an empty dictionary named <tt class="docutils literal"><span class="pre">eng2sp</span></tt>.  The other
+assignments add new key-value pairs to the dictionary.  The left hand side gives the dictionary and the key being associated.  The right hand side gives the value being associated with that key.
+We can print the current
+value of the dictionary in the usual way.
+The key-value pairs of the dictionary are separated by commas. Each pair
+contains a key and a value separated by a colon.</p>
+<p>The order of the pairs may not be what you expected. Python uses complex
+algorithms, designed for very fast access, to determine where the
+key-value pairs are stored in a dictionary.
+For our purposes we can think of this ordering as unpredictable.</p>
+<p>Another way to create a dictionary is to provide a list of key-value pairs
+using the same syntax as the previous output.</p>
+
+<div id="chp12_dict2"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (chp12_dict2)</span> </p>
+<script type="text/javascript">
+var chp12_dict2_trace = {"code": "eng2sp = {'three': 'tres', 'one': 'uno', 'two': 'dos'}\nprint(eng2sp)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 2, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "{'three': 'tres', 'two': 'dos', 'one': 'uno'}\n", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 2, "event": "return"}]};
+var chp12_dict2_vis;
+
+$(document).ready(function() {
+    chp12_dict2_vis = new ExecutionVisualizer('chp12_dict2',chp12_dict2_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(chp12_dict2_vis,'chp12_dict2');
+    allVisualizers.push(chp12_dict2_vis);
+
+});
+
+$(document).ready(function() {
+    $("#chp12_dict2_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'chp12_dict2'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    chp12_dict2_vis.redrawConnectors();
+});
+</script>
+<p>It doesn&#8217;t matter what order we write the pairs. The values in a dictionary are
+accessed with keys, not with indices, so there is no need to care about
+ordering.</p>
+<p>Here is how we use a key to look up the corresponding value.</p>
+
+<div id="chp12_dict3"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (chp12_dict3)</span> </p>
+<script type="text/javascript">
+var chp12_dict3_trace = {"code": "eng2sp = {'three': 'tres', 'one': 'uno', 'two': 'dos'}\n\nvalue = eng2sp['two']\nprint(value)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["eng2sp"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1]}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 3, "event": "step_line"}, {"ordered_globals": ["eng2sp", "value"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1], "value": "dos"}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 4, "event": "step_line"}, {"ordered_globals": ["eng2sp", "value"], "stdout": "dos\n", "func_name": "<module>", "stack_to_render": [], "globals": {"eng2sp": ["REF", 1], "value": "dos"}, "heap": {"1": ["DICT", ["three", "tres"], ["two", "dos"], ["one", "uno"]]}, "line": 4, "event": "return"}]};
+var chp12_dict3_vis;
+
+$(document).ready(function() {
+    chp12_dict3_vis = new ExecutionVisualizer('chp12_dict3',chp12_dict3_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(chp12_dict3_vis,'chp12_dict3');
+    allVisualizers.push(chp12_dict3_vis);
+
+});
+
+$(document).ready(function() {
+    $("#chp12_dict3_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'chp12_dict3'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    chp12_dict3_vis.redrawConnectors();
+});
+</script>
+<p>The key <tt class="docutils literal"><span class="pre">'two'</span></tt> yields the value <tt class="docutils literal"><span class="pre">'dos'</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_11_01" >
+
+<br/>
+<div id="scratch_11_01_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_11_01_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_11_01)</span> </p>
+
+<button class='btn btn-success' id="scratch_11_01_runb" onclick="runit('scratch_11_01',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_11_01_saveb" onclick="saveEditor('scratch_11_01');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_11_01_loadb" onclick="requestCode('scratch_11_01');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_11_01_saveb').toggle();
+    $('#scratch_11_01_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_11_01_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_11_01_suffix" style="display:none">
+</pre>
+<pre id="scratch_11_01_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question11_1_1" class="alert alert-warning">
+            dict-1: A dictionary is an unordered collection of key-value pairs.<form name="test_question11_1_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_1_1_opt_a" />
+            <label for= "test_question11_1_1_opt_a">  a) False</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_1_1_opt_b" />
+            <label for= "test_question11_1_1_opt_b">  b) True</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_1_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_1_1','b',['Dictionaries associate keys with values but there is no assumed order for the entries.', 'Yes, dictionaries are associative collections meaning that they store key\u002Dvalue pairs.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_1_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_1_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_1_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question11_1_2" class="alert alert-warning">
+            <p>dict-2: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">}</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mydict</span><span class="p">[</span><span class="s">&quot;dog&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<form name="test_question11_1_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_1_2_opt_a" />
+            <label for= "test_question11_1_2_opt_a">  a) 12</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_1_2_opt_b" />
+            <label for= "test_question11_1_2_opt_b">  b) 6</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_1_2_opt_c" />
+            <label for= "test_question11_1_2_opt_c">  c) 23</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_1_2_opt_d" />
+            <label for= "test_question11_1_2_opt_d">  d) Error, you cannot use the index operator with a dictionary.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_1_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_1_2','b',['12 is associated with the key cat.', 'Yes, 6 is associated with the key dog.', '23 is associated with the key elephant.', 'The [ ] operator, when used with a dictionary, will look up a value based on its key.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_1_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_1_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_1_2_feedback">
+            </div>
+            </div>
+            <div class="section" id="dictionary-operations">
+<span id="index-1"></span><h2>Dictionary operations<a class="headerlink" href="#dictionary-operations" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">del</span></tt> statement removes a key-value pair from a dictionary. For example,
+the following dictionary contains the names of various fruits and the number of
+each fruit in stock.  If someone buys all of the pears, we can remove the entry from the dictionary.</p>
+
+<div id="ch12_dict4"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch12_dict4)</span> </p>
+<script type="text/javascript">
+var ch12_dict4_trace = {"code": "inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}\n\ndel inventory['pears']", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 217], ["apples", 430], ["oranges", 525], ["bananas", 312]]}, "line": 3, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["apples", 430], ["oranges", 525], ["bananas", 312]]}, "line": 3, "event": "return"}]};
+var ch12_dict4_vis;
+
+$(document).ready(function() {
+    ch12_dict4_vis = new ExecutionVisualizer('ch12_dict4',ch12_dict4_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch12_dict4_vis,'ch12_dict4');
+    allVisualizers.push(ch12_dict4_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch12_dict4_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch12_dict4'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch12_dict4_vis.redrawConnectors();
+});
+</script>
+<p>Dictionaries are also mutable.  As we&#8217;ve seen before with lists, this means that the dictionary can
+be modified by referencing an association on the left hand side of the assignment statement.  In the previous
+example, instead of deleting the entry for <tt class="docutils literal"><span class="pre">pears</span></tt>, we could have set the inventory to <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+
+<div id="ch12_dict4a"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch12_dict4a)</span> </p>
+<script type="text/javascript">
+var ch12_dict4a_trace = {"code": "inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}\n\ninventory['pears'] = 0", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 217], ["apples", 430], ["oranges", 525], ["bananas", 312]]}, "line": 3, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 0], ["apples", 430], ["oranges", 525], ["bananas", 312]]}, "line": 3, "event": "return"}]};
+var ch12_dict4a_vis;
+
+$(document).ready(function() {
+    ch12_dict4a_vis = new ExecutionVisualizer('ch12_dict4a',ch12_dict4a_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch12_dict4a_vis,'ch12_dict4a');
+    allVisualizers.push(ch12_dict4a_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch12_dict4a_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch12_dict4a'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch12_dict4a_vis.redrawConnectors();
+});
+</script>
+<p>Similarily,
+a new shipment of 200 bananas arriving could be handled like this.</p>
+
+<div id="ch12_dict5"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch12_dict5)</span> </p>
+<script type="text/javascript">
+var ch12_dict5_trace = {"code": "inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}\ninventory['bananas'] = inventory['bananas'] + 200\n\n\nnumItems = len(inventory)", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 217], ["apples", 430], ["oranges", 525], ["bananas", 312]]}, "line": 2, "event": "step_line"}, {"ordered_globals": ["inventory"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 217], ["apples", 430], ["oranges", 525], ["bananas", 512]]}, "line": 5, "event": "step_line"}, {"ordered_globals": ["inventory", "numItems"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"numItems": 4, "inventory": ["REF", 1]}, "heap": {"1": ["DICT", ["pears", 217], ["apples", 430], ["oranges", 525], ["bananas", 512]]}, "line": 5, "event": "return"}]};
+var ch12_dict5_vis;
+
+$(document).ready(function() {
+    ch12_dict5_vis = new ExecutionVisualizer('ch12_dict5',ch12_dict5_trace,
+                                {embeddedMode: true,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch12_dict5_vis,'ch12_dict5');
+    allVisualizers.push(ch12_dict5_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch12_dict5_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch12_dict5'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch12_dict5_vis.redrawConnectors();
+});
+</script>
+<p>Notice that there are now 512 bananas&#8212;the dictionary has been modified.  Note also that the <tt class="docutils literal"><span class="pre">len</span></tt> function also works on dictionaries.  It returns the number
+of key-value pairs:</p>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question11_2_1" class="alert alert-warning">
+            <p>dict-3: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">}</span>
+<span class="n">mydict</span><span class="p">[</span><span class="s">&quot;mouse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mydict</span><span class="p">[</span><span class="s">&quot;cat&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">mydict</span><span class="p">[</span><span class="s">&quot;dog&quot;</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mydict</span><span class="p">[</span><span class="s">&quot;mouse&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<form name="test_question11_2_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_2_1_opt_a" />
+            <label for= "test_question11_2_1_opt_a">  a) 12</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_2_1_opt_b" />
+            <label for= "test_question11_2_1_opt_b">  b) 0</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_2_1_opt_c" />
+            <label for= "test_question11_2_1_opt_c">  c) 18</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_2_1_opt_d" />
+            <label for= "test_question11_2_1_opt_d">  d) Error, there is no entry with mouse as the key.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_2_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_2_1','c',['12 is associated with the key cat.', 'The key mouse will be associated with the sum of the two values.', 'Yes, add the value for cat and the value for dog (12 + 6) and create a new entry for mouse.', 'Since the new key is introduced on the left hand side of the assignment statement, a new key\u002Dvalue pair is added to the dictionary.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_2_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_2_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_2_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="dictionary-methods">
+<h2>Dictionary methods<a class="headerlink" href="#dictionary-methods" title="Permalink to this headline">¶</a></h2>
+<p>Dictionaries have a number of useful built-in methods.
+The following table provides a summary and more details can be found in the
+<a class="reference external" href="http://docs.python.org/py3k/library/stdtypes.html#mapping-types-dict">Python Documentation</a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="18%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Parameters</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>keys</td>
+<td>none</td>
+<td>Returns a view of the keys in the dictionary</td>
+</tr>
+<tr class="row-odd"><td>values</td>
+<td>none</td>
+<td>Returns a view of the values in the dictionary</td>
+</tr>
+<tr class="row-even"><td>items</td>
+<td>none</td>
+<td>Returns a view of the key-value pairs in the dictionary</td>
+</tr>
+<tr class="row-odd"><td>get</td>
+<td>key</td>
+<td>Returns the value associated with key; None otherwise</td>
+</tr>
+<tr class="row-even"><td>get</td>
+<td>key,alt</td>
+<td>Returns the value associated with key; alt otherwise</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="docutils literal"><span class="pre">keys</span></tt> method returns what Python 3 calls a <strong>view</strong> of its underlying keys.
+We can iterate over the view or turn the view into a
+list by using the <tt class="docutils literal"><span class="pre">list</span></tt> conversion function.</p>
+
+<div id="chp12_dict6" >
+
+<br/>
+<div id="chp12_dict6_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_dict6_code" class="active_code", prefixcode="undefined">
+inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
+
+for akey in inventory.keys():     # the order in which we get the keys is not defined
+   print("Got key", akey, "which maps to value", inventory[akey])
+
+ks = list(inventory.keys())
+print(ks)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_dict6)</span> </p>
+
+<button class='btn btn-success' id="chp12_dict6_runb" onclick="runit('chp12_dict6',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict6_saveb" onclick="saveEditor('chp12_dict6');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict6_loadb" onclick="requestCode('chp12_dict6');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_dict6_saveb').toggle();
+    $('#chp12_dict6_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_dict6_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_dict6_suffix" style="display:none">
+</pre>
+<pre id="chp12_dict6_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>It is so common to iterate over the keys in a dictionary that you can
+omit the <tt class="docutils literal"><span class="pre">keys</span></tt> method call in the <tt class="docutils literal"><span class="pre">for</span></tt> loop &#8212; iterating over
+a dictionary implicitly iterates over its keys.</p>
+
+<div id="chp12_dict7" >
+
+<br/>
+<div id="chp12_dict7_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_dict7_code" class="active_code", prefixcode="undefined">
+inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
+
+for k in inventory:
+   print("Got key", k)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_dict7)</span> </p>
+
+<button class='btn btn-success' id="chp12_dict7_runb" onclick="runit('chp12_dict7',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict7_saveb" onclick="saveEditor('chp12_dict7');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict7_loadb" onclick="requestCode('chp12_dict7');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_dict7_saveb').toggle();
+    $('#chp12_dict7_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_dict7_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_dict7_suffix" style="display:none">
+</pre>
+<pre id="chp12_dict7_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>As we saw earlier with strings and lists, dictionary methods use dot notation,
+which specifies the name of the method to the right of the dot and the name of
+the object on which to apply the method immediately to the left of the dot. The empty
+parentheses in the case of <tt class="docutils literal"><span class="pre">keys</span></tt> indicate that this method takes no parameters.</p>
+<p>The <tt class="docutils literal"><span class="pre">values</span></tt> and <tt class="docutils literal"><span class="pre">items</span></tt> methods are similar to <tt class="docutils literal"><span class="pre">keys</span></tt>. They return  view objects which can be turned
+into lists or iterated over directly.  Note that the items are shown as tuples containing the key and the associated value.</p>
+
+<div id="chp12_dict8" >
+
+<br/>
+<div id="chp12_dict8_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_dict8_code" class="active_code", prefixcode="undefined">
+inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
+
+print(list(inventory.values()))
+print(list(inventory.items()))
+
+for (k,v) in inventory.items():
+    print("Got",k,"that maps to",v)
+
+for k in inventory:
+    print("Got",k,"that maps to",inventory[k])
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_dict8)</span> </p>
+
+<button class='btn btn-success' id="chp12_dict8_runb" onclick="runit('chp12_dict8',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict8_saveb" onclick="saveEditor('chp12_dict8');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict8_loadb" onclick="requestCode('chp12_dict8');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_dict8_saveb').toggle();
+    $('#chp12_dict8_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_dict8_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_dict8_suffix" style="display:none">
+</pre>
+<pre id="chp12_dict8_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Note that tuples are often useful for getting both the key and the value at the same
+time while you are looping.  The two loops do the same thing.</p>
+<p>The <tt class="docutils literal"><span class="pre">in</span></tt> and <tt class="docutils literal"><span class="pre">not</span> <span class="pre">in</span></tt> operators can test if a key is in the dictionary:</p>
+
+<div id="chp12_dict9" >
+
+<br/>
+<div id="chp12_dict9_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_dict9_code" class="active_code", prefixcode="undefined">
+inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
+print('apples' in inventory)
+print('cherries' in inventory)
+
+if 'bananas' in inventory:
+    print(inventory['bananas'])
+else:
+    print("We have no bananas")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_dict9)</span> </p>
+
+<button class='btn btn-success' id="chp12_dict9_runb" onclick="runit('chp12_dict9',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict9_saveb" onclick="saveEditor('chp12_dict9');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict9_loadb" onclick="requestCode('chp12_dict9');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_dict9_saveb').toggle();
+    $('#chp12_dict9_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_dict9_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_dict9_suffix" style="display:none">
+</pre>
+<pre id="chp12_dict9_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>This operator can be very useful since looking up a non-existent key in a
+dictionary causes a runtime error.</p>
+<p>The <tt class="docutils literal"><span class="pre">get</span></tt> method allows us to access the value associated with a key, similar to the <tt class="docutils literal"><span class="pre">[</span> <span class="pre">]</span></tt> operator.
+The important difference is that <tt class="docutils literal"><span class="pre">get</span></tt> will not cause a runtime error if the key is not present.  It
+will instead return None.  There exists a variation of <tt class="docutils literal"><span class="pre">get</span></tt> that allows a second parameter that serves as an alternative return value
+in the case where the key is not present.  This can be seen in the final example below.  In this case, since &#8220;cherries&#8221; is not a key, return 0 (instead of None).</p>
+
+<div id="chp12_dict10" >
+
+<br/>
+<div id="chp12_dict10_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_dict10_code" class="active_code", prefixcode="undefined">
+inventory = {'apples': 430, 'bananas': 312, 'oranges': 525, 'pears': 217}
+
+print(inventory.get("apples"))
+print(inventory.get("cherries"))
+
+print(inventory.get("cherries",0))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_dict10)</span> </p>
+
+<button class='btn btn-success' id="chp12_dict10_runb" onclick="runit('chp12_dict10',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict10_saveb" onclick="saveEditor('chp12_dict10');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_dict10_loadb" onclick="requestCode('chp12_dict10');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_dict10_saveb').toggle();
+    $('#chp12_dict10_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_dict10_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_dict10_suffix" style="display:none">
+</pre>
+<pre id="chp12_dict10_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_11_02" >
+
+<br/>
+<div id="scratch_11_02_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_11_02_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_11_02)</span> </p>
+
+<button class='btn btn-success' id="scratch_11_02_runb" onclick="runit('scratch_11_02',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_11_02_saveb" onclick="saveEditor('scratch_11_02');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_11_02_loadb" onclick="requestCode('scratch_11_02');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_11_02_saveb').toggle();
+    $('#scratch_11_02_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_11_02_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_11_02_suffix" style="display:none">
+</pre>
+<pre id="scratch_11_02_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question11_3_1" class="alert alert-warning">
+            <p>dict-4: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="n">keylist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mydict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">keylist</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">keylist</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<form name="test_question11_3_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_3_1_opt_a" />
+            <label for= "test_question11_3_1_opt_a">  a) cat</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_3_1_opt_b" />
+            <label for= "test_question11_3_1_opt_b">  b) dog</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_3_1_opt_c" />
+            <label for= "test_question11_3_1_opt_c">  c) elephant</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_3_1_opt_d" />
+            <label for= "test_question11_3_1_opt_d">  d) bear</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_3_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_3_1','c',['keylist is a list of all the keys which is then sorted.  cat would be at index 1.', 'keylist is a list of all the keys which is then sorted.  dog would be at index 2.', 'Yes, the list of keys is sorted and the item at index 3 is printed.', 'keylist is a list of all the keys which is then sorted.  bear would be at index 0.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_3_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_3_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_3_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question11_3_2" class="alert alert-warning">
+            <p>dict-5: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">mydict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;cat&quot;</span><span class="p">)</span><span class="o">//</span><span class="n">mydict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;dog&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question11_3_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_3_2_opt_a" />
+            <label for= "test_question11_3_2_opt_a">  a) 2</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_3_2_opt_b" />
+            <label for= "test_question11_3_2_opt_b">  b) 0.5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_3_2_opt_c" />
+            <label for= "test_question11_3_2_opt_c">  c) bear</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_3_2_opt_d" />
+            <label for= "test_question11_3_2_opt_d">  d) Error, divide is not a valid operation on dictionaries.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_3_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_3_2','a',['get returns the value associated with a given key so this divides 12 by 6.', '12 is divided by 6, not the other way around.', 'Take another look at the example for get above.  get returns the value associated with a given key.', 'The integer division operator is being used on the values returned from the get method, not on the dictionary.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_3_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_3_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_3_2_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question11_3_3" class="alert alert-warning">
+            <p>dict-6: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;dog&quot;</span> <span class="ow">in</span> <span class="n">mydict</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question11_3_3_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_3_3_opt_a" />
+            <label for= "test_question11_3_3_opt_a">  a) True</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_3_3_opt_b" />
+            <label for= "test_question11_3_3_opt_b">  b) False</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_3_3');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_3_3','a',['Yes, dog is a key in the dictionary.', 'The in operator returns True if a key is in the dictionary, False otherwise.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_3_3_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_3_3');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_3_3_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question11_3_4" class="alert alert-warning">
+            <p>dict-7: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="k">print</span><span class="p">(</span><span class="mi">23</span> <span class="ow">in</span> <span class="n">mydict</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question11_3_4_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_3_4_opt_a" />
+            <label for= "test_question11_3_4_opt_a">  a) True</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_3_4_opt_b" />
+            <label for= "test_question11_3_4_opt_b">  b) False</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_3_4');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_3_4','b',['23 is a value in the dictionary, not a key.', 'Yes, the in operator returns True if a key is in the dictionary, False otherwise.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_3_4_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_3_4');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_3_4_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question11_3_5" class="alert alert-warning">
+            <p>dict-8: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">akey</span> <span class="ow">in</span> <span class="n">mydict</span><span class="p">:</span>
+   <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">akey</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+      <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">mydict</span><span class="p">[</span><span class="n">akey</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question11_3_5_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_3_5_opt_a" />
+            <label for= "test_question11_3_5_opt_a">  a) 18</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_3_5_opt_b" />
+            <label for= "test_question11_3_5_opt_b">  b) 43</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_3_5_opt_c" />
+            <label for= "test_question11_3_5_opt_c">  c) 0</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_3_5_opt_d" />
+            <label for= "test_question11_3_5_opt_d">  d) 61</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_3_5');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_3_5','b',['Add the values that have keys greater than 3, not equal to 3.', 'Yes, the for statement iterates over the keys.  It adds the values of the keys that have length greater than 3.', 'This is the accumulator pattern.  total starts at 0 but then changes as the iteration proceeds.', 'Not all the values are added together.  The if statement only chooses some of them.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_3_5_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_3_5');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_3_5_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="aliasing-and-copying">
+<span id="index-2"></span><h2>Aliasing and copying<a class="headerlink" href="#aliasing-and-copying" title="Permalink to this headline">¶</a></h2>
+<p>Because dictionaries are mutable, you need to be aware of aliasing (as we saw with lists).  Whenever
+two variables refer to the same dictionary object, changes to one affect the other.
+For example, <tt class="docutils literal"><span class="pre">opposites</span></tt> is a dictionary that contains pairs
+of opposites.</p>
+
+<div id="ch12_dict11" >
+
+<br/>
+<div id="ch12_dict11_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch12_dict11_code" class="active_code", prefixcode="undefined">
+opposites = {'up': 'down', 'right': 'wrong', 'true': 'false'}
+alias = opposites
+
+print(alias is opposites)
+
+alias['right'] = 'left'
+print(opposites['right'])
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch12_dict11)</span> </p>
+
+<button class='btn btn-success' id="ch12_dict11_runb" onclick="runit('ch12_dict11',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch12_dict11_saveb" onclick="saveEditor('ch12_dict11');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch12_dict11_loadb" onclick="requestCode('ch12_dict11');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch12_dict11_saveb').toggle();
+    $('#ch12_dict11_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch12_dict11_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch12_dict11_suffix" style="display:none">
+</pre>
+<pre id="ch12_dict11_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>As you can see from the <tt class="docutils literal"><span class="pre">is</span></tt> operator, <tt class="docutils literal"><span class="pre">alias</span></tt> and <tt class="docutils literal"><span class="pre">opposites</span></tt> refer to the same object.</p>
+<p>If you want to modify a dictionary and keep a copy of the original, use the dictionary
+<tt class="docutils literal"><span class="pre">copy</span></tt> method.  Since <em>acopy</em> is a copy of the dictionary, changes to it will not effect the original.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">acopy</span> <span class="o">=</span> <span class="n">opposites</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">acopy</span><span class="p">[</span><span class="s">&#39;right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;left&#39;</span>    <span class="c"># does not change opposites</span>
+</pre></div>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question11_4_1" class="alert alert-warning">
+            <p>dict-9: What is printed by the following statements?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;cat&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">&quot;dog&quot;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&quot;elephant&quot;</span><span class="p">:</span><span class="mi">23</span><span class="p">,</span> <span class="s">&quot;bear&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">}</span>
+<span class="n">yourdict</span> <span class="o">=</span> <span class="n">mydict</span>
+<span class="n">yourdict</span><span class="p">[</span><span class="s">&quot;elephant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">999</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mydict</span><span class="p">[</span><span class="s">&quot;elephant&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<form name="test_question11_4_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question11_4_1_opt_a" />
+            <label for= "test_question11_4_1_opt_a">  a) 23</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question11_4_1_opt_b" />
+            <label for= "test_question11_4_1_opt_b">  b) None</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question11_4_1_opt_c" />
+            <label for= "test_question11_4_1_opt_c">  c) 999</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question11_4_1_opt_d" />
+            <label for= "test_question11_4_1_opt_d">  d) Error, there are two different keys named elephant.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question11_4_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question11_4_1','c',['mydict and yourdict are both names for the same dictionary.', 'The dictionary is mutable so changes can be made to the keys and values.', 'Yes, since yourdict is an alias for mydict, the value for the key elephant has been changed.', 'There is only one dictionary with only one key named elephant.  The dictionary has two different names, mydict and yourdict.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question11_4_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question11_4_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question11_4_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="sparse-matrices">
+<span id="index-3"></span><h2>Sparse matrices<a class="headerlink" href="#sparse-matrices" title="Permalink to this headline">¶</a></h2>
+<p>A matrix is a two dimensional collection, typically thought of as having rows and columns of data.  One of the easiest ways to create a matrix is to use a list of lists.  For example, consider the matrix shown below.</p>
+<img alt="sparse matrix" src="../_images/sparse.png" />
+<p>We can represent this collection as five rows, each row having five columns.  Using a list of lists representation, we will have a list of five items, each of which is a list of five items.  The
+outer items represent the rows and the items in the nested lists represent the data in each column.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>One thing that you might note about this example matrix is that there are many items that are zero.  In fact, only three of the
+data values are nonzero.  This type of matrix has a special name.  It is called a <a class="reference external" href="http://en.wikipedia.org/wiki/Sparse_matrix">sparse matrix</a>.</p>
+<p>Since there is really no need to store all of the zeros, the list of lists representation is considered to be inefficient.
+An alternative representation is to use a dictionary. For the keys, we can use tuples that
+contain the row and column numbers. Here is the dictionary representation of
+the same matrix.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">matrix</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We only need three key-value pairs, one for each nonzero element of the matrix.
+Each key is a tuple, and each value is an integer.</p>
+<p>To access an element of the matrix, we could use the <tt class="docutils literal"><span class="pre">[]</span></tt> operator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">matrix</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Notice that the syntax for the dictionary representation is not the same as the
+syntax for the nested list representation. Instead of two integer indices, we
+use one index, which is a tuple of integers.</p>
+<p>There is one problem. If we specify an element that is zero, we get an error,
+because there is no entry in the dictionary with that key.
+The alternative version of the <tt class="docutils literal"><span class="pre">get</span></tt> method solves this problem.
+The first argument will be the key.  The second argument is the value <tt class="docutils literal"><span class="pre">get</span></tt> should
+return if the key is not in the dictionary (which would be 0 since it is sparse).</p>
+
+<div id="chp12_sparse" >
+
+<br/>
+<div id="chp12_sparse_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp12_sparse_code" class="active_code", prefixcode="undefined">
+matrix = {(0, 3): 1, (2, 1): 2, (4, 3): 3}
+print(matrix.get((0,3)))
+
+print(matrix.get((1, 3), 0))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp12_sparse)</span> </p>
+
+<button class='btn btn-success' id="chp12_sparse_runb" onclick="runit('chp12_sparse',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_sparse_saveb" onclick="saveEditor('chp12_sparse');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp12_sparse_loadb" onclick="requestCode('chp12_sparse');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp12_sparse_saveb').toggle();
+    $('#chp12_sparse_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp12_sparse_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp12_sparse_suffix" style="display:none">
+</pre>
+<pre id="chp12_sparse_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition-lab admonition">
+<p class="first admonition-title">Lab</p>
+<ul class="last simple">
+<li><a class="reference external" href="../Labs/lab12_01.html">Counting Letters</a> In this guided lab exercise we will work
+through a problem solving exercise that will use dictionaries to generalize the solution
+to counting the occurrences of all letters in a string.</li>
+</ul>
+</div>
+<div class="admonition-lab admonition">
+<p class="first admonition-title">Lab</p>
+<ul class="last simple">
+<li><a class="reference external" href="../Labs/lab12_02.html">Letter Count Histogram</a> Combine the previous lab with the histogram example.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h2>
+<dl class="glossary docutils">
+<dt id="term-call-graph">call graph</dt>
+<dd>A graph consisting of nodes which represent function frames (or invocations),
+and directed edges (lines with arrows) showing which frames gave
+rise to other frames.</dd>
+<dt id="term-dictionary">dictionary</dt>
+<dd>A collection of key-value pairs that maps from keys to values. The keys
+can be any immutable type, and the values can be any type.</dd>
+<dt id="term-key">key</dt>
+<dd>A data item that is <em>mapped to</em> a value in a dictionary. Keys are used
+to look up values in a dictionary.</dd>
+<dt id="term-key-value-pair">key-value pair</dt>
+<dd>One of the pairs of items in a dictionary. Values are looked up in a
+dictionary by key.</dd>
+<dt id="term-mapping-type">mapping type</dt>
+<dd>A mapping type is a data type comprised of a collection of keys and
+associated values. Python&#8217;s only built-in mapping type is the
+dictionary.  Dictionaries implement the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Associative_array">associative array</a>
+abstract data type.</dd>
+<dt id="term-memo">memo</dt>
+<dd>Temporary storage of precomputed values to avoid duplicating the same computation.</dd>
+</dl>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><div id='q1' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q1-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q1-Question'><p>Write a program that reads in a string on the command line and returns a
+table of the letters of the alphabet in alphabetical order which occur in
+the string together with the number of times each letter occurs. Case should
+be ignored. A sample run of the program would look this this:</p>
+<div class="highlight-python"><pre>$ python letter_counts.py "ThiS is String with Upper and lower case Letters."
+a  2
+c  1
+d  1
+e  5
+g  1
+h  2
+i  4
+l  2
+n  2
+o  1
+p  2
+r  4
+s  5
+t  5
+u  1
+w  2
+$</pre>
+</div>
+
+<div id="ex_11_01" >
+
+<br/>
+<div id="ex_11_01_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_11_01_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_11_01)</span> </p>
+
+<button class='btn btn-success' id="ex_11_01_runb" onclick="runit('ex_11_01',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_01_saveb" onclick="saveEditor('ex_11_01');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_01_loadb" onclick="requestCode('ex_11_01');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_11_01_saveb').toggle();
+    $('#ex_11_01_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_11_01_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_11_01_showb" onclick="$('#ex_11_01_code_div').toggle();cm_editors['ex_11_01_code'].refresh();$('#ex_11_01_saveb').toggle();$('#ex_11_01_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_11_01')"/>
+<pre id="ex_11_01_suffix" style="display:none">
+</pre>
+<pre id="ex_11_01_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q1-Answer'>
+<div id="q1_answer" >
+
+<br/>
+<div id="q1_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q1_answer_code" class="active_code", prefixcode="undefined">
+x = input("Enter a sentence")
+
+x = x.lower() # convert to all lowercase
+
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+letter_count = {} # empty dictionary
+for char in x:
+    if char in alphabet: # ignore any punctuation, numbers, etc
+        if char in letter_count:
+            letter_count[char] = letter_count[char] + 1
+        else:
+            letter_count[char] = 1
+
+keys = letter_count.keys()
+keys.sort()
+for char in keys:
+    print(char, letter_count[char])
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q1_answer)</span> </p>
+
+<button class='btn btn-success' id="q1_answer_runb" onclick="runit('q1_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q1_answer_saveb" onclick="saveEditor('q1_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q1_answer_loadb" onclick="requestCode('q1_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q1_answer_saveb').toggle();
+    $('#q1_answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="q1_answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="q1_answer_suffix" style="display:none">
+</pre>
+<pre id="q1_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q1-Discussion'><script type="text/javascript">
+    function disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_' + eBookConfig.course;
+            disqus_url = 'http://disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_de4f21e35d3a41a4a3ac4ac888f78d1a" onclick="disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_de4f21e35d3a41a4a3ac4ac888f78d1a']").attr('data-disqus-identifier', 'disqus_de4f21e35d3a41a4a3ac4ac888f78d1a_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q1 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q1 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q1 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Give the Python interpreter&#8217;s response to each of the following from a
+continuous interpreter session:</p>
+<ol class="loweralpha">
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;apples&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s">&#39;bananas&#39;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span> <span class="s">&#39;grapes&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s">&#39;banana&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s">&#39;oranges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;grapes&#39;</span> <span class="ow">in</span> <span class="n">d</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s">&#39;pears&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;pears&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fruits</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fruits</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;apples&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;apples&#39;</span> <span class="ow">in</span> <span class="n">d</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Be sure you understand why you get each result. Then apply what you
+have learned to fill in the body of the function below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">add_fruit</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">fruit</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+     <span class="k">pass</span>
+
+<span class="c"># make these tests work...</span>
+<span class="n">new_inventory</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">add_fruit</span><span class="p">(</span><span class="n">new_inventory</span><span class="p">,</span> <span class="s">&#39;strawberries&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="s">&#39;strawberries&#39;</span> <span class="ow">in</span> <span class="n">new_inventory</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">new_inventory</span><span class="p">[</span><span class="s">&#39;strawberries&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">add_fruit</span><span class="p">(</span><span class="n">new_inventory</span><span class="p">,</span> <span class="s">&#39;strawberries&#39;</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">new_inventory</span><span class="p">[</span><span class="s">&#39;strawberries&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><div id='q3' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q3-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q3-Question'><p>Write a program called <tt class="docutils literal"><span class="pre">alice_words.py</span></tt> that creates a text file named
+<tt class="docutils literal"><span class="pre">alice_words.txt</span></tt> containing an alphabetical listing of all the words, and the
+number of times each occurs, in the text version of <cite>Alice&#8217;s Adventures in Wonderland</cite>.
+(You can obtain a free plain text version of the book, along with many others, from
+<a class="reference external" href="http://www.gutenberg.org">http://www.gutenberg.org</a>.) The first 10 lines of your output file should look
+something like this</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Word</p>
+</th>
+<th class="head"><p class="first last">Count</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">a</p>
+</td>
+<td><p class="first last">631</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">a-piece</p>
+</td>
+<td><p class="first last">1</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">abide</p>
+</td>
+<td><p class="first last">1</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">able</p>
+</td>
+<td><p class="first last">1</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">about</p>
+</td>
+<td><p class="first last">94</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">above</p>
+</td>
+<td><p class="first last">3</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">absence</p>
+</td>
+<td><p class="first last">1</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">absurd</p>
+</td>
+<td><p class="first last">2</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>How many times does the word, <tt class="docutils literal"><span class="pre">alice</span></tt>, occur in the book?  If you are writing this
+in the activecode window simply print out the results rather than write them to a file.</p>
+
+<div id="ex_11_02" >
+
+<br/>
+<div id="ex_11_02_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_11_02_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_11_02)</span> </p>
+
+<button class='btn btn-success' id="ex_11_02_runb" onclick="runit('ex_11_02',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_02_saveb" onclick="saveEditor('ex_11_02');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_02_loadb" onclick="requestCode('ex_11_02');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_11_02_saveb').toggle();
+    $('#ex_11_02_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_11_02_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_11_02_showb" onclick="$('#ex_11_02_code_div').toggle();cm_editors['ex_11_02_code'].refresh();$('#ex_11_02_saveb').toggle();$('#ex_11_02_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_11_02')"/>
+<pre id="ex_11_02_suffix" style="display:none">
+</pre>
+<pre id="ex_11_02_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Answer'><div class="highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;alice.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+
+        <span class="c"># remove punctuation</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&quot;&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;?&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;!&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;)&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="c"># ignore case</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c"># ignore numbers</span>
+        <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">count</span><span class="p">:</span>
+                <span class="n">count</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">count</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">keys</span> <span class="o">=</span> <span class="n">count</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+<span class="c"># save the word count analysis to a file</span>
+<span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;alice_words.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="n">word</span><span class="p">]))</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;The word &#39;alice&#39; appears &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">[</span><span class="s">&#39;alice&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; times in the book.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class='tab-pane' id='q3-Discussion'><script type="text/javascript">
+    function disqus_4f2d7860fc3143339c9c6a533c07b62d_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_4f2d7860fc3143339c9c6a533c07b62d_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_4f2d7860fc3143339c9c6a533c07b62d_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_4f2d7860fc3143339c9c6a533c07b62d_' + eBookConfig.course;
+            disqus_url = 'http://disqus_4f2d7860fc3143339c9c6a533c07b62d_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_4f2d7860fc3143339c9c6a533c07b62d" onclick="disqus_4f2d7860fc3143339c9c6a533c07b62d_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_4f2d7860fc3143339c9c6a533c07b62d']").attr('data-disqus-identifier', 'disqus_4f2d7860fc3143339c9c6a533c07b62d_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q3 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q3 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q3 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">What is the longest word in Alice in Wonderland? How many characters does it have?</p>
+
+<div id="ex_11_03" >
+
+<br/>
+<div id="ex_11_03_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_11_03_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_11_03)</span> </p>
+
+<button class='btn btn-success' id="ex_11_03_runb" onclick="runit('ex_11_03',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_03_saveb" onclick="saveEditor('ex_11_03');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_03_loadb" onclick="requestCode('ex_11_03');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_11_03_saveb').toggle();
+    $('#ex_11_03_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_11_03_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_11_03_showb" onclick="$('#ex_11_03_code_div').toggle();cm_editors['ex_11_03_code'].refresh();$('#ex_11_03_saveb').toggle();$('#ex_11_03_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_11_03')"/>
+<pre id="ex_11_03_suffix" style="display:none">
+</pre>
+<pre id="ex_11_03_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q5' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q5-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q5-Question'><p>Here&#8217;s a table of English to Pirate translations</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">English</p>
+</th>
+<th class="head"><p class="first last">Pirate</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">sir</p>
+</td>
+<td><p class="first last">matey</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">hotel</p>
+</td>
+<td><p class="first last">fleabag inn</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">student</p>
+</td>
+<td><p class="first last">swabbie</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">boy</p>
+</td>
+<td><p class="first last">matey</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">madam</p>
+</td>
+<td><p class="first last">proud beauty</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">professor</p>
+</td>
+<td><p class="first last">foul blaggart</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">restaurant</p>
+</td>
+<td><p class="first last">galley</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">your</p>
+</td>
+<td><p class="first last">yer</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">excuse</p>
+</td>
+<td><p class="first last">arr</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">students</p>
+</td>
+<td><p class="first last">swabbies</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">are</p>
+</td>
+<td><p class="first last">be</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">lawyer</p>
+</td>
+<td><p class="first last">foul blaggart</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">the</p>
+</td>
+<td><p class="first last">th&#8217;</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">restroom</p>
+</td>
+<td><p class="first last">head</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">my</p>
+</td>
+<td><p class="first last">me</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">hello</p>
+</td>
+<td><p class="first last">avast</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">is</p>
+</td>
+<td><p class="first last">be</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">man</p>
+</td>
+<td><p class="first last">matey</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Write a program that asks the user for a sentence in English and then translates that
+sentence to Pirate.</p>
+
+<div id="ex_11_04" >
+
+<br/>
+<div id="ex_11_04_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_11_04_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_11_04)</span> </p>
+
+<button class='btn btn-success' id="ex_11_04_runb" onclick="runit('ex_11_04',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_04_saveb" onclick="saveEditor('ex_11_04');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_11_04_loadb" onclick="requestCode('ex_11_04');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_11_04_saveb').toggle();
+    $('#ex_11_04_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_11_04_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_11_04_showb" onclick="$('#ex_11_04_code_div').toggle();cm_editors['ex_11_04_code'].refresh();$('#ex_11_04_saveb').toggle();$('#ex_11_04_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_11_04')"/>
+<pre id="ex_11_04_suffix" style="display:none">
+</pre>
+<pre id="ex_11_04_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Answer'>
+<div id="ch11_q5_answer" >
+
+<br/>
+<div id="ch11_q5_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch11_q5_answer_code" class="active_code", prefixcode="undefined">
+pirate = {}
+pirate['sir'] = 'matey'
+pirate['hotel'] = 'fleabag inn'
+pirate['student'] = 'swabbie'
+pirate['boy'] = 'matey'
+pirate['restaurant'] = 'galley'
+#and so on
+
+sentence = input("Please enter a sentence in English")
+
+psentence = []
+words = sentence.split()
+for aword in words:
+    if aword in pirate:
+        psentence.append(pirate[aword])
+    else:
+        psentence.append(aword)
+
+print(" ").join(psentence)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch11_q5_answer)</span> </p>
+
+<button class='btn btn-success' id="ch11_q5_answer_runb" onclick="runit('ch11_q5_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch11_q5_answer_saveb" onclick="saveEditor('ch11_q5_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch11_q5_answer_loadb" onclick="requestCode('ch11_q5_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch11_q5_answer_saveb').toggle();
+    $('#ch11_q5_answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch11_q5_answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch11_q5_answer_suffix" style="display:none">
+</pre>
+<pre id="ch11_q5_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Discussion'><script type="text/javascript">
+    function disqus_dd296be40c8643999060129b6d8dc7ae_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_dd296be40c8643999060129b6d8dc7ae_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_dd296be40c8643999060129b6d8dc7ae_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_dd296be40c8643999060129b6d8dc7ae_' + eBookConfig.course;
+            disqus_url = 'http://disqus_dd296be40c8643999060129b6d8dc7ae_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_dd296be40c8643999060129b6d8dc7ae" onclick="disqus_dd296be40c8643999060129b6d8dc7ae_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_dd296be40c8643999060129b6d8dc7ae']").attr('data-disqus-identifier', 'disqus_dd296be40c8643999060129b6d8dc7ae_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q5 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q5 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q5 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+</ol>
+</div>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

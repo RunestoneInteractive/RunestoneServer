@@ -1,0 +1,2823 @@
+{
+  "code": "# Tutorial code from Prof. Peter Wentworth\n# Rhodes University, South Africa (http://www.ru.ac.za/)\n\n# Demonstrate recursion that throws an exception\n# at its base case, and the tracing of try ... finally.\n#\n# How many \"survived!\" messages will be printed???\n\ndef f(n):\n    try:\n        x = 10 / n\n        print(\"x is \" + str(x))\n        f(n-1)\n        print(\"survived!\")\n    finally:\n        print(\"Bye from f where n = \" + str(n))\n\nf(4)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 18, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "__return__": null, 
+            "n": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f5", 
+          "ordered_varnames": [
+            "n", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": null, 
+            "x": 10, 
+            "n": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f4", 
+          "ordered_varnames": [
+            "n", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": null, 
+            "x": 5, 
+            "n": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f3", 
+          "ordered_varnames": [
+            "n", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\nBye from f where n = 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": null, 
+            "x": 3, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f2", 
+          "ordered_varnames": [
+            "n", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\nBye from f where n = 3\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\nBye from f where n = 3\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\nBye from f where n = 3\nBye from f where n = 4\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "x": 2, 
+            "n": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "n", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "x is 2\nx is 3\nx is 5\nx is 10\nBye from f where n = 0\nBye from f where n = 1\nBye from f where n = 2\nBye from f where n = 3\nBye from f where n = 4\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(n)", 
+          null
+        ]
+      }, 
+      "line": 18, 
+      "event": "exception"
+    }
+  ]
+}

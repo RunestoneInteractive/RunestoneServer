@@ -1,0 +1,26 @@
+application: google.com:pythontutor
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: false
+
+libraries:
+- name: jinja2
+  version: latest
+
+handlers:
+- url: /js
+  static_dir: js
+
+- url: /css
+  static_dir: css
+
+- url: /example-code
+  static_dir: example-code
+
+- url: /lessons
+  static_dir: lessons
+
+- url: /.*
+  script: pythontutor.app
+

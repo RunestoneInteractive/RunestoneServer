@@ -1,0 +1,9 @@
+def gen_odds():
+  x = 1
+  while True:
+    yield x
+    x += 2
+
+for i in gen_odds():
+  print(i)
+

@@ -1,0 +1,1892 @@
+{
+  "code": "def make_bold(fn):\n    return lambda : \"<b>\" + fn() + \"</b>\"\n\ndef make_italic(fn):\n    return lambda : \"<i>\" + fn() + \"</i>\"\n\n@make_bold\n@make_italic\ndef hello():\n  return \"hello world\"\n  \nhelloHTML = hello()\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_italic", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "make_italic", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1", 
+          "ordered_varnames": [
+            "fn"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_italic", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "make_italic", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1", 
+          "ordered_varnames": [
+            "fn"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_italic", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_bold", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "make_bold", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2", 
+          "ordered_varnames": [
+            "fn"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_bold", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "make_bold", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2", 
+          "ordered_varnames": [
+            "fn"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic"
+      ], 
+      "stdout": "", 
+      "func_name": "make_bold", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "hello", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "hello", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "hello_f5", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 7, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "hello", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "hello", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "hello_f5", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "hello", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "__return__": "hello world"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "hello", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "hello_f5", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": []
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": "<i>hello world</i>"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": "<b><i>hello world</i></b>"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "make_bold", 
+        "make_italic", 
+        "hello", 
+        "helloHTML"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              4
+            ], 
+            "fn": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_italic", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_italic_f1_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": [
+              "REF", 
+              5
+            ], 
+            "fn": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "make_bold", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "make_bold_f2_p_z", 
+          "ordered_varnames": [
+            "fn", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "make_bold": [
+          "REF", 
+          1
+        ], 
+        "make_italic": [
+          "REF", 
+          2
+        ], 
+        "hello": [
+          "REF", 
+          5
+        ], 
+        "helloHTML": "<b><i>hello world</i></b>"
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "make_bold(fn)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "make_italic(fn)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "hello()", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>()", 
+          1
+        ], 
+        "5": [
+          "FUNCTION", 
+          "<lambda>()", 
+          2
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }
+  ]
+}

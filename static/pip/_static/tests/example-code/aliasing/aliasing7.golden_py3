@@ -1,0 +1,248 @@
+{
+  "code": "x = (3, {'joe': 'M', 'jane': 'F'})\ny = (2, x)\nz = (1, y)\nw = (x, y, z)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "DICT", 
+          [
+            "jane", 
+            "F"
+          ], 
+          [
+            "joe", 
+            "M"
+          ]
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          3
+        ], 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "DICT", 
+          [
+            "jane", 
+            "F"
+          ], 
+          [
+            "joe", 
+            "M"
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            1
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          3
+        ], 
+        "x": [
+          "REF", 
+          1
+        ], 
+        "z": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "DICT", 
+          [
+            "jane", 
+            "F"
+          ], 
+          [
+            "joe", 
+            "M"
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z", 
+        "w"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          3
+        ], 
+        "x": [
+          "REF", 
+          1
+        ], 
+        "z": [
+          "REF", 
+          4
+        ], 
+        "w": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "DICT", 
+          [
+            "jane", 
+            "F"
+          ], 
+          [
+            "joe", 
+            "M"
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            1
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          [
+            "REF", 
+            1
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }
+  ]
+}

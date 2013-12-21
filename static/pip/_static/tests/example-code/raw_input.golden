@@ -1,0 +1,33 @@
+{
+  "code": "prefix = \"Hello \"\n\nn1 = raw_input(\"Enter your name\")\n\nn2 = raw_input(\"Enter another name\")\n\nres = prefix + n1 + \" and \" + n2\nprint(res)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "prefix"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "prefix": "Hello "
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "prompt": "Enter your name", 
+      "event": "raw_input"
+    }
+  ]
+}

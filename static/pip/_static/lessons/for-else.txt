@@ -1,0 +1,34 @@
+primes = []
+for n in range(2, 10):
+  x_range = range(2, n)
+  for x in x_range:
+    if n % x == 0:
+      break
+  else:
+    # loop fell through without finding a factor
+    primes.append(n)
+======
+{
+  "title": "For-Else Construct",
+
+  "description": "Loop statements may have an <code>else</code> clause; it is executed when the loop terminates through exhaustion of the list (with <code>for</code>) or when the condition becomes false (with <code>while</code>), but not when the loop is terminated by a <code>break</code> statement. This is exemplified by the following loop, which searches for prime numbers. (Yes, this is the correct code. Look closely: the else clause belongs to the for loop, not the if statement.) <small>[Source: <a href='http://docs.python.org/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops'>Python.org tutorial</a>]</small>",
+
+  "1": "First initialize a list to hold the prime numbers found between 2 and 9 (inclusive).",
+
+  "4": "Note that this inner <code>for</code> loop has an associated <code>else</code> clause on line 7.",
+
+  "5": "The first iteration of this <code>for</code> loop immediately exits and jumps to the <code>else</code> clause because <code>range(2, 2)</code> is empty.",
+
+  "7": "Test whether <code>n</code> is divisible by <code>x</code> to determine primality ...",
+
+  "11": "Since the loop exits again without running a <code>break</code> statement, the <code>else</code> clause is executed.",
+
+  "16": "4 is divisible by 2, so it's not prime. The inner <code>for</code> loop will exit by running the <code>break</code> statement, so its associated <code>else</code> clause will <i>not</i> be executed.",
+
+  "19": "The program now tests whether 5 is divisible by 2, 3, or 4.",
+
+  "26": "Since 5 is prime, the inner <code>for</code> again exits normally, so its associated <code>else</code> clause will be executed.",
+
+  "59": "When the program terminates, <code>primes</code> contains the list of primes found between 2 and 9 (inclusive)"
+
+}

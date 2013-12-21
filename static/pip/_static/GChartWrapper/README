@@ -1,0 +1,24 @@
+Downloaded from https://code.google.com/p/google-chartwrapper/
+
+TODO: add support for GraphViz charts:
+  https://developers.google.com/chart/image/docs/gallery/graphviz
+  GraphViz hack to render balanced binary trees:
+    http://www.graphviz.org/content/FaqBalanceTree
+
+  JSON-based callback support for image maps so that you can click on
+  the generated graphs:
+    https://developers.google.com/chart/image/docs/gallery/graphviz
+
+e.g.,:
+  http://chart.apis.google.com/chart?cht=gv&chl=digraph{C[penwidth=2,color=red],A-%3EB-%3EC-%3EA,C-%3ED,D-%3EE,D-%3EF}
+
+and tweaked to remove dependency on utf-8 encoding, which seems to trip
+up parts of OPT, and to remove unnecessary imports (for security and
+efficiency reasons)
+
+See here for demos:
+  http://justquick.github.io/google-chartwrapper-demos/
+
+See here for the official API, which is now deprecated:
+  https://developers.google.com/chart/image/
+

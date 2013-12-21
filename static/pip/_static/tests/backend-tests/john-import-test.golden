@@ -1,0 +1,282 @@
+{
+  "code": "import math\nimport operator\nimport string\nimport collections\nimport re\nimport json\n\n# causes some errors in regression tests, but fine in GAE ...\n#import random\n#import datetime\n#import functools\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math", 
+        "operator"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "operator": [
+          "REF", 
+          2
+        ], 
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ], 
+        "2": [
+          "module", 
+          "operator"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math", 
+        "operator", 
+        "string"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "operator": [
+          "REF", 
+          2
+        ], 
+        "string": [
+          "REF", 
+          3
+        ], 
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ], 
+        "2": [
+          "module", 
+          "operator"
+        ], 
+        "3": [
+          "module", 
+          "string"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math", 
+        "operator", 
+        "string", 
+        "collections"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "operator": [
+          "REF", 
+          2
+        ], 
+        "collections": [
+          "REF", 
+          4
+        ], 
+        "string": [
+          "REF", 
+          3
+        ], 
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ], 
+        "2": [
+          "module", 
+          "operator"
+        ], 
+        "3": [
+          "module", 
+          "string"
+        ], 
+        "4": [
+          "module", 
+          "collections"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math", 
+        "operator", 
+        "string", 
+        "collections", 
+        "re"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "operator": [
+          "REF", 
+          2
+        ], 
+        "re": [
+          "REF", 
+          5
+        ], 
+        "collections": [
+          "REF", 
+          4
+        ], 
+        "string": [
+          "REF", 
+          3
+        ], 
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ], 
+        "2": [
+          "module", 
+          "operator"
+        ], 
+        "3": [
+          "module", 
+          "string"
+        ], 
+        "4": [
+          "module", 
+          "collections"
+        ], 
+        "5": [
+          "module", 
+          "re"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "math", 
+        "operator", 
+        "string", 
+        "collections", 
+        "re", 
+        "json"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "string": [
+          "REF", 
+          3
+        ], 
+        "re": [
+          "REF", 
+          5
+        ], 
+        "json": [
+          "REF", 
+          6
+        ], 
+        "collections": [
+          "REF", 
+          4
+        ], 
+        "operator": [
+          "REF", 
+          2
+        ], 
+        "math": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "math"
+        ], 
+        "2": [
+          "module", 
+          "operator"
+        ], 
+        "3": [
+          "module", 
+          "string"
+        ], 
+        "4": [
+          "module", 
+          "collections"
+        ], 
+        "5": [
+          "module", 
+          "re"
+        ], 
+        "6": [
+          "module", 
+          "json"
+        ]
+      }, 
+      "line": 6, 
+      "event": "return"
+    }
+  ]
+}

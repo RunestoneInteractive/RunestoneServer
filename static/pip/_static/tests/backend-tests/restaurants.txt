@@ -1,0 +1,16 @@
+# Adapted from an example by David G. Kay
+from collections import namedtuple
+
+Restaurant = namedtuple('Restaurant', 'name cuisine phone dish price')
+
+R1 = Restaurant("Taillevent", "French", "343-3434", "Escargots", 24.50)
+R2 = Restaurant("La Tour D'Argent", "French", "343-3344", "Ris de Veau", 48.50)
+R3 = Restaurant("Pascal", "French", "333-4444", "Bouillabaisse", 32.00)
+R4 = Restaurant("Thai Touch", "Thai", "444-3333", "Mee Krob", 10.95)
+R5 = Restaurant("Thai Dishes", "Thai", "333-4433", "Paht Woon Sen",  8.50)
+R6 = Restaurant("Thai Spoon", "Thai", "334-3344", "Mussamun", 9.00)
+
+RL = [R1, R2, R3, R4, R5, R6]
+
+FrenchRestaurants = [r for r in RL if r.cuisine=="French"]
+print(FrenchRestaurants)

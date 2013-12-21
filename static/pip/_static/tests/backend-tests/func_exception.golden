@@ -1,0 +1,270 @@
+{
+  "code": "def g(x,y):\n    print(\"In g\")\n    ans = x/y\n    return ans\n \ng(5, 0)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "", 
+      "func_name": "g", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 0, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "g", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "g_f1", 
+          "ordered_varnames": [
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "", 
+      "func_name": "g", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 0, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "g", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "g_f1", 
+          "ordered_varnames": [
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "In g\n", 
+      "func_name": "g", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 0, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "g", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "g_f1", 
+          "ordered_varnames": [
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "In g\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "g", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 0, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "g", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "g_f1", 
+          "ordered_varnames": [
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "In g\n", 
+      "func_name": "g", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "y": 0, 
+            "x": 5, 
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "g", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "g_f1", 
+          "ordered_varnames": [
+            "x", 
+            "y", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "g"
+      ], 
+      "stdout": "In g\n", 
+      "exception_msg": "ZeroDivisionError: integer division or modulo by zero", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "g": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "g(x, y)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "exception"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "code": "l1, l2, l3, l4 = 1, 2, 3, 4\n\nt1 = (l1, l2)\nt2 = (l3, l4)\nt = (t1, t2)\nu = ((1, 2), (3, 4))\nv = u[0]\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "l4": 4, 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1", 
+        "t1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "l4": 4, 
+        "t1": [
+          "REF", 
+          1
+        ], 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          2
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1", 
+        "t1", 
+        "t2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "t2": [
+          "REF", 
+          2
+        ], 
+        "t1": [
+          "REF", 
+          1
+        ], 
+        "l4": 4, 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "2": [
+          "TUPLE", 
+          3, 
+          4
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1", 
+        "t1", 
+        "t2", 
+        "t"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "t2": [
+          "REF", 
+          2
+        ], 
+        "t1": [
+          "REF", 
+          1
+        ], 
+        "l4": 4, 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1, 
+        "t": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "2": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "3": [
+          "TUPLE", 
+          [
+            "REF", 
+            1
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1", 
+        "t1", 
+        "t2", 
+        "t", 
+        "u"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "t2": [
+          "REF", 
+          2
+        ], 
+        "t1": [
+          "REF", 
+          1
+        ], 
+        "l4": 4, 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1, 
+        "u": [
+          "REF", 
+          4
+        ], 
+        "t": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "2": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "3": [
+          "TUPLE", 
+          [
+            "REF", 
+            1
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "6": [
+          "TUPLE", 
+          3, 
+          4
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "l4", 
+        "l2", 
+        "l3", 
+        "l1", 
+        "t1", 
+        "t2", 
+        "t", 
+        "u", 
+        "v"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "v": [
+          "REF", 
+          5
+        ], 
+        "t2": [
+          "REF", 
+          2
+        ], 
+        "t1": [
+          "REF", 
+          1
+        ], 
+        "l4": 4, 
+        "l2": 2, 
+        "l3": 3, 
+        "l1": 1, 
+        "u": [
+          "REF", 
+          4
+        ], 
+        "t": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "2": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "3": [
+          "TUPLE", 
+          [
+            "REF", 
+            1
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          1, 
+          2
+        ], 
+        "6": [
+          "TUPLE", 
+          3, 
+          4
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }
+  ]
+}

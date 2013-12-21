@@ -1,0 +1,7 @@
+def repeat(f, n):
+  if n == 0:
+    return []
+  else:
+    return [f()] + repeat(f, n - 1)
+
+repeat(lambda : 5, 5)

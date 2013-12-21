@@ -1,0 +1,1634 @@
+{
+  "code": "# find primes using a for-else construct\nfor n in range(2, 10):\n    x_range = range(2, n)\n    for x in x_range:\n        if n % x == 0:\n            break\n    else:\n        # loop fell through without finding a factor\n        print(n)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "n": 2
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 3
+      }, 
+      "heap": {
+        "1": [
+          "LIST"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 3
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 3, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 3, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 3, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 3, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 4, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 4, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 4, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 4, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 4, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 5, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 4
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 4
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 4
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 5, 
+        "x": 4
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 6, 
+        "x": 4
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 6, 
+        "x": 4
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 6, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 6, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 6, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 7, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 2
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 3
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 3
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 4
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 4
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 5
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 5
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 6
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 6
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 6
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 7, 
+        "x": 6
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          2
+        ], 
+        "n": 8, 
+        "x": 6
+      }, 
+      "heap": {
+        "2": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 8, 
+        "x": 6
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 8, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 8, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 8, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          1
+        ], 
+        "n": 9, 
+        "x": 2
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 2
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "n", 
+        "x_range", 
+        "x"
+      ], 
+      "stdout": "2\n3\n5\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x_range": [
+          "REF", 
+          3
+        ], 
+        "n": 9, 
+        "x": 3
+      }, 
+      "heap": {
+        "3": [
+          "LIST", 
+          2, 
+          3, 
+          4, 
+          5, 
+          6, 
+          7, 
+          8
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }
+  ]
+}

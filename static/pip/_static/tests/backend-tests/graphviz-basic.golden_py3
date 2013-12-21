@@ -1,0 +1,323 @@
+{
+  "code": "from GChartWrapper import GraphViz\nimport html_module\n\nDOTFILE = '''\n/* balanced tree hack from http://www.graphviz.org/content/FaqBalanceTree */\ndigraph G {\n  a [color=red,penwidth=2]\n  a -> b0\n  xb [label=\"\",width=.1,style=invis]\n  a -> xb [style=invis]\n  a -> b1\n\n  {rank=same b0 -> xb -> b1 [style=invis]}\n\n  b0 -> c0\n  xc [label=\"\",width=.1,style=invis]\n  b0 -> xc [style=invis]\n  b0 -> c1\n\n  {rank=same c0 -> xc -> c1 [style=invis]}\n}\n'''\n\ng = GraphViz(DOTFILE)\n\nhtml_module.display_img(str(g))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "GraphViz"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "GraphViz": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "GraphViz", 
+          [
+            "GChart"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "render", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, dot_string)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "render(self)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "GraphViz", 
+        "html_module"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "html_module": [
+          "REF", 
+          4
+        ], 
+        "GraphViz": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "GraphViz", 
+          [
+            "GChart"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "render", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, dot_string)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "render(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "module"
+        ]
+      }, 
+      "line": 22, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "GraphViz", 
+        "html_module", 
+        "DOTFILE"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "DOTFILE": "\n/* balanced tree hack from http://www.graphviz.org/content/FaqBalanceTree */\ndigraph G {\n  a [color=red,penwidth=2]\n  a -> b0\n  xb [label=\"\",width=.1,style=invis]\n  a -> xb [style=invis]\n  a -> b1\n\n  {rank=same b0 -> xb -> b1 [style=invis]}\n\n  b0 -> c0\n  xc [label=\"\",width=.1,style=invis]\n  b0 -> xc [style=invis]\n  b0 -> c1\n\n  {rank=same c0 -> xc -> c1 [style=invis]}\n}\n", 
+        "html_module": [
+          "REF", 
+          4
+        ], 
+        "GraphViz": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "GraphViz", 
+          [
+            "GChart"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "render", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, dot_string)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "render(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "module"
+        ]
+      }, 
+      "line": 24, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "GraphViz", 
+        "html_module", 
+        "DOTFILE", 
+        "g"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "DOTFILE": "\n/* balanced tree hack from http://www.graphviz.org/content/FaqBalanceTree */\ndigraph G {\n  a [color=red,penwidth=2]\n  a -> b0\n  xb [label=\"\",width=.1,style=invis]\n  a -> xb [style=invis]\n  a -> b1\n\n  {rank=same b0 -> xb -> b1 [style=invis]}\n\n  b0 -> c0\n  xc [label=\"\",width=.1,style=invis]\n  b0 -> xc [style=invis]\n  b0 -> c1\n\n  {rank=same c0 -> xc -> c1 [style=invis]}\n}\n", 
+        "html_module": [
+          "REF", 
+          4
+        ], 
+        "g": [
+          "REF", 
+          5
+        ], 
+        "GraphViz": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "GraphViz", 
+          [
+            "GChart"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "render", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, dot_string)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "render(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "GraphViz", 
+          "http://chart.apis.google.com/chart?cht=gv&chl=%0A/%2A+balanced+tree+hack+from+http://www.graphviz.org/content/FaqBalanceTree+%2A/%0Adigraph+G+%7B%0A++a+%5Bcolor=red,penwidth=2%5D%0A++a+-%3E+b0%0A++xb+%5Blabel=%22%22,width=.1,style=invis%5D%0A++a+-%3E+xb+%5Bstyle=invis%5D%0A++a+-%3E+b1%0A%0A++%7Brank=same+b0+-%3E+xb+-%3E+b1+%5Bstyle=invis%5D%7D%0A%0A++b0+-%3E+c0%0A++xc+%5Blabel=%22%22,width=.1,style=invis%5D%0A++b0+-%3E+xc+%5Bstyle=invis%5D%0A++b0+-%3E+c1%0A%0A++%7Brank=same+c0+-%3E+xc+-%3E+c1+%5Bstyle=invis%5D%7D%0A%7D%0A"
+        ]
+      }, 
+      "line": 26, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "GraphViz", 
+        "html_module", 
+        "DOTFILE", 
+        "g"
+      ], 
+      "html_output": "<img src=\"http://chart.apis.google.com/chart?cht=gv&chl=%0A/%2A+balanced+tree+hack+from+http://www.graphviz.org/content/FaqBalanceTree+%2A/%0Adigraph+G+%7B%0A++a+%5Bcolor=red,penwidth=2%5D%0A++a+-%3E+b0%0A++xb+%5Blabel=%22%22,width=.1,style=invis%5D%0A++a+-%3E+xb+%5Bstyle=invis%5D%0A++a+-%3E+b1%0A%0A++%7Brank=same+b0+-%3E+xb+-%3E+b1+%5Bstyle=invis%5D%7D%0A%0A++b0+-%3E+c0%0A++xc+%5Blabel=%22%22,width=.1,style=invis%5D%0A++b0+-%3E+xc+%5Bstyle=invis%5D%0A++b0+-%3E+c1%0A%0A++%7Brank=same+c0+-%3E+xc+-%3E+c1+%5Bstyle=invis%5D%7D%0A%7D%0A\"/>", 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "DOTFILE": "\n/* balanced tree hack from http://www.graphviz.org/content/FaqBalanceTree */\ndigraph G {\n  a [color=red,penwidth=2]\n  a -> b0\n  xb [label=\"\",width=.1,style=invis]\n  a -> xb [style=invis]\n  a -> b1\n\n  {rank=same b0 -> xb -> b1 [style=invis]}\n\n  b0 -> c0\n  xc [label=\"\",width=.1,style=invis]\n  b0 -> xc [style=invis]\n  b0 -> c1\n\n  {rank=same c0 -> xc -> c1 [style=invis]}\n}\n", 
+        "html_module": [
+          "REF", 
+          4
+        ], 
+        "g": [
+          "REF", 
+          5
+        ], 
+        "GraphViz": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "GraphViz", 
+          [
+            "GChart"
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "render", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self, dot_string)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "render(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "5": [
+          "INSTANCE_PPRINT", 
+          "GraphViz", 
+          "http://chart.apis.google.com/chart?cht=gv&chl=%0A/%2A+balanced+tree+hack+from+http://www.graphviz.org/content/FaqBalanceTree+%2A/%0Adigraph+G+%7B%0A++a+%5Bcolor=red,penwidth=2%5D%0A++a+-%3E+b0%0A++xb+%5Blabel=%22%22,width=.1,style=invis%5D%0A++a+-%3E+xb+%5Bstyle=invis%5D%0A++a+-%3E+b1%0A%0A++%7Brank=same+b0+-%3E+xb+-%3E+b1+%5Bstyle=invis%5D%7D%0A%0A++b0+-%3E+c0%0A++xc+%5Blabel=%22%22,width=.1,style=invis%5D%0A++b0+-%3E+xc+%5Bstyle=invis%5D%0A++b0+-%3E+c1%0A%0A++%7Brank=same+c0+-%3E+xc+-%3E+c1+%5Bstyle=invis%5D%7D%0A%7D%0A"
+        ]
+      }, 
+      "line": 26, 
+      "event": "return"
+    }
+  ]
+}

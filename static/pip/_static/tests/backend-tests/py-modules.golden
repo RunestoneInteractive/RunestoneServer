@@ -1,0 +1,132 @@
+{
+  "code": "# test to make sure nothing crashes when tracing code in pure-Python\n# function calls imported from modules\nimport random\nrandom.randint(10, 100)\n\nfrom re import compile\nx = compile('foo')\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "random"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "random": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "random"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "random"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "random": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "random"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "random", 
+        "compile"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "compile": [
+          "REF", 
+          2
+        ], 
+        "random": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "random"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "compile(pattern, flags)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "random", 
+        "compile", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "compile": [
+          "REF", 
+          2
+        ], 
+        "x": [
+          "REF", 
+          3
+        ], 
+        "random": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "module", 
+          "random"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "compile(pattern, flags)", 
+          null
+        ], 
+        "3": [
+          "_sre.SRE_Pattern", 
+          "<_sre.SRE_Pattern object at 0xADDR>"
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }
+  ]
+}

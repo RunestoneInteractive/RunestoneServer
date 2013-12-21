@@ -1,0 +1,85 @@
+/* CSS accompanying ../lesson.html */
+
+body {
+  background-color: white;
+
+  font-family: verdana, arial, helvetica, sans-serif;
+
+  font-size: 10pt;
+
+  max-width: 900px;
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div#lessonHeader {
+  margin-bottom: 15pt;
+  width: 800px;
+}
+
+div#lessonTitle {
+  font-size: 16pt;
+  margin-bottom: 15pt;
+}
+
+div#lessonDescription {
+  font-size: 11pt;
+  line-height: 1.5em;
+}
+
+div#lessonNarration {
+  font-size: 11pt;
+  min-height: 25px;
+  margin-bottom: 12px;
+  line-height: 1.5em;
+  width: 800px;
+}
+
+
+a,
+a:visited,
+a:hover {
+  color: #3D58A2;
+}
+
+span {
+  padding: 0px;
+}
+
+table#pyOutputPane {
+  padding: 10px;
+}
+
+#pyInputPane {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  max-width: 700px;
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#codeInputPane {
+  margin-top: 5px;
+  font-size: 12pt;
+}
+
+button.smallBtn {
+  font-size: 10pt;
+  padding: 3px;
+}
+
+button.bigBtn {
+  font-size: 12pt;
+  padding: 5px;
+}
+
+#footer {
+  color: #666;
+  font-size: 9pt;
+  border-top: 1px solid #bbb;
+  padding-top: 12px;
+  margin-top: 5px;
+}

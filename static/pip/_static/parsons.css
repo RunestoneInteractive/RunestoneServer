@@ -1,0 +1,103 @@
+/** Stylesheet for the puzzles */
+
+.sortable-code {
+    padding-left: 0px;
+    margin-left: 2%;
+    float: left;
+}
+#sortableTrash { width: 38%; }
+#sortable { width: 56%; }
+.sortable-code ul {
+    font-size: 120%;
+    font-family: monospace;
+    list-style: none;
+    background-color: #efefff;
+    padding-bottom: 10px;
+    padding-left: 0;
+    margin-left: 0;
+    border: 1px solid #efefff;;
+}
+ul.output {
+    background-color: #FFA;
+}
+.sortable-code li {
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius: 10px;
+    background-color:#EFEFEF;
+    border:1px solid lightgray;
+    padding:10px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: move;
+}
+.sortable-code li:hover {
+    overflow: visible;
+}
+
+ul.incorrect {
+    border: 1px solid red;
+    background-color: #ffefef;
+}
+
+ul.correct {
+    background-color: #efffef;
+    background-color: #DFF2BF;
+}
+
+li.incorrectIndent {
+    border: 1px solid red;
+    border-left: 10px solid red;
+}
+
+li.correctIndent {
+    border: 1px solid green;
+    border-left: 10px solid green;
+}
+
+li.incorrectPosition, .testcase.incorrect {
+    background-color: #FFBABA;
+    border:1px solid red;
+}
+
+li.correctPosition, .testcase.correct {
+    background-color: #DFF2BF;
+    border:1px solid green;
+}
+
+.testcase { padding: 10px; margin-bottom: 10px;}
+.testcase .errormsg { color: red;}
+.testcase .msg { font-weight: bolder;}
+.testcase.incorrect .expected, .testcase.incorrect .actual { 
+    color: red; 
+    font-weight: bolder;
+}
+.testcase .output { 
+    display: block; 
+    white-space: pre; 
+    background-color: #555555;
+    color: white;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 5px;
+    padding: 5px;
+}
+/** For styling the toggleable elements */
+.jsparson-toggle {
+    padding: 0 15px;
+    display: inline-block;
+    border: 1px dashed black;
+    z-index: 500;
+    cursor: pointer;
+    min-width: 10px;
+    min-height: 15px;
+}
+.jsparson-toggle:empty {
+    border-color: red;
+}
+.jsparson-toggle:empty:before {
+    content: "??";
+    display: block;
+    color: red;
+}

@@ -1,0 +1,8 @@
+# some of the params in f and g have identical names AND values,
+# so make sure they're all displayed properly
+def f(x, y, z):
+  def g(x, y):
+    return x
+  return g(x, y)
+
+f(1, 2, 3)

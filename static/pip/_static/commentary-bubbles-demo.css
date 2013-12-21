@@ -1,0 +1,168 @@
+body {
+  background-color: white;
+
+  font-family: verdana, arial, helvetica, sans-serif;
+
+  font-size: 10pt;
+
+  margin-top:  30px;
+  margin-left: 30px;
+
+  /* center align */
+  /*
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  */
+}
+
+
+div#lessonHeader {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  width: 800px;
+}
+
+div#lessonTitle {
+  font-size: 16pt;
+  margin-bottom: 15pt;
+}
+
+div#lessonDescription {
+  font-size: 11pt;
+  line-height: 1.5em;
+}
+
+div#curStepNarration {
+  font-size: 11pt;
+  min-height: 60px;
+  margin-bottom: 12px;
+  line-height: 1.5em;
+  width: 800px;
+}
+
+
+/* For styling tricks, see: http://css-tricks.com/textarea-tricks/ */
+textarea.bubbleInputText {
+  border: 1px solid #ccc;
+  outline: none;
+  overflow: auto; /* to look pretty on IE */
+
+  /* make sure textarea doesn't grow and stretch the enclosing bubble */
+  resize: none;
+  width: 225px;
+  max-width: 225px;
+  height: 35px;
+  max-height: 35px;
+}
+
+
+.ui-tooltip-pgbootstrap,
+textarea.bubbleInputText {
+  font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 9pt;
+	line-height: 1.3em;
+}
+
+
+/* modified version of Twitter bootstrap style by Philip Guo */
+.ui-tooltip-pgbootstrap{
+	color: #333;
+	background-color: #ffffff;
+
+	max-width: 250px;
+	min-width: 10px;
+
+	border: 2px solid #4284D3;
+
+  cursor: pointer;
+
+	*border-right-width: 2px;
+	*border-bottom-width: 2px;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+  /* way too poofy ...
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  */
+
+	-webkit-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.2);
+
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+}
+
+	.ui-tooltip-pgbootstrap .ui-tooltip-titlebar{
+		font-size: 18px;
+		line-height: 22px;
+
+		border-bottom: 1px solid #ccc;
+		background-color: transparent;
+	}
+
+	.ui-tooltip-pgbootstrap .ui-tooltip-content{
+		padding: 5px /* 5px is minimum or else it might look ugly */ 8px;
+	}
+	
+
+		.ui-tooltip-pgbootstrap .ui-tooltip-titlebar .ui-state-default{
+			right: 9px; top: 49%;
+			border-style: none;
+		}
+
+	.ui-tooltip-pgbootstrap .ui-tooltip-icon{
+		background: white;
+	}
+
+		.ui-tooltip-pgbootstrap .ui-tooltip-icon .ui-icon{
+			width: auto;
+			height: auto;
+			float: right;
+			font-size: 20px;
+			font-weight: bold;
+			line-height: 18px;
+			color: #000000;
+			text-shadow: 0 1px 0 #ffffff;
+			opacity: 0.2;
+			filter: alpha(opacity=20);
+		}
+
+		.ui-tooltip-pgbootstrap .ui-tooltip-icon .ui-icon:hover{
+			color: #000000;
+			text-decoration: none;
+			cursor: pointer;
+			opacity: 0.4;
+			filter: alpha(opacity=40);
+		}
+
+
+/* Add rounded corners to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
+.ui-tooltip-pgbootstrap{
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+.ui-tooltip-pgbootstrap-stub{
+	border: 1px solid #999;
+
+  /*
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+  */
+}
+
+	.ui-tooltip-pgbootstrap-stub .ui-tooltip-content{
+		padding: 6px 9px;
+	}
+	

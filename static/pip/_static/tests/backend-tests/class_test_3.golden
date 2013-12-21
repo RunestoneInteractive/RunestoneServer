@@ -1,0 +1,470 @@
+{
+  "code": "class Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\npat = Staff601()\nprint(pat.course)\n\npat.name = 'Pat'\npat.age = 60\npat.role = 'Professor'\n\nprint(pat.building)\npat.building = 32\nprint(pat.building)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 15, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ]
+        ], 
+        "2": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 15, 
+      "event": "return"
+    }
+  ]
+}

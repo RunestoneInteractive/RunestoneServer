@@ -1,0 +1,9 @@
+# In Python 3, raw_input is called input
+prefix = "Hello "
+
+n1 = input("Enter your name")
+
+n2 = input("Enter another name")
+
+res = prefix + n1 + " and " + n2
+print(res)

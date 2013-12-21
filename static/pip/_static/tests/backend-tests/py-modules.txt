@@ -1,0 +1,7 @@
+# test to make sure nothing crashes when tracing code in pure-Python
+# function calls imported from modules
+import random
+random.randint(10, 100)
+
+from re import compile
+x = compile('foo')

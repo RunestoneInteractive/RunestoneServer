@@ -1,0 +1,487 @@
+/*
+
+Online Python Tutor
+https://github.com/pgbovine/OnlinePythonTutor/
+
+Copyright (C) 2010-2012 Philip J. Guo (philip@pgbovine.net)
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+/* Most recent color scheme redesign: 2012-08-19 */
+
+table.visualizer {
+  font-family: Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+
+td#stack_td,
+td#heap_td {
+  vertical-align:top;
+  font-size: 10pt; /* don't make fonts in the heap so big! */
+}
+
+#dataViz {
+  margin-left: 30px;
+}
+
+table.frameDataViz {
+  border-spacing: 0px;
+  font-size: 12pt;
+  margin-top: 5px;
+  margin-left: 15px;
+  background-color: #dddddd;
+  padding: 5px;
+}
+
+table.frameDataViz td.varname {
+  text-align: right;
+  padding: 5px;
+  padding-right: 8px;
+  border-right: 1px dashed #888888;
+}
+
+table.frameDataViz td.val {
+  padding-left: 8px;
+  padding-right: 5px;
+
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+div#pyCodeOutputDiv {
+  max-width: 550px;
+  max-height: 450px;
+  overflow: auto;
+}
+
+table#pyCodeOutput {
+  font-family: Andale mono, monospace;
+  font-size: 11pt;
+  line-height: 1.1em;
+  border-spacing: 0px;
+  border-top: 1px solid #999999;
+  padding-top: 3px;
+  border-bottom: 1px solid #999999;
+  margin: 6px auto; /* Center code in its pane */
+}
+
+/* don't wrap lines within code output ... FORCE scrollbars to appear */
+table#pyCodeOutput td {
+  white-space: nowrap;
+}
+
+table#pyCodeOutput .lineNo {
+  background-color:#FFFFFF;
+  color:#AAAAAA;
+  margin:0;
+  padding:0.2em;
+  padding-right:0.5em;
+  text-align:right;
+  width:2.1em;
+}
+
+table#pyCodeOutput .cod {
+  /*font-weight: bold;*/
+  margin-left: 3px;
+  padding-left: 7px;
+  text-align: left; /* necessary or else doesn't work properly in IE */
+}
+
+div#editCodeLinkDiv {
+  text-align: center;
+  margin: 12px auto;
+}
+
+#editCodeLinkOnError {
+  color: #142B69;
+  font-size: 9px;
+}
+
+#errorOutput {
+  color: #d03939;
+  /*background-color: #F87D76;*/
+  font-size: 12pt;
+  padding: 2px;
+  line-height: 1.5em;
+  margin-bottom: 4px;
+}
+
+button.bigBtn {
+  font-size: 12pt;
+  padding: 5px;
+}
+
+button.medBtn {
+  font-size: 12pt;
+  padding: 3px;
+}
+
+
+/* VCR control buttons for stepping through execution */
+
+#vcrControls {
+  margin: 15px auto;
+  width: 100%;
+  text-align: center;
+}
+
+#vcrControls button {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#pyStdout {
+  border: 1px solid #999999;
+  font-size: 12pt;
+  padding: 4px;
+  font-family: Andale mono, monospace;
+}
+
+.vizFrame {
+  margin-bottom: 20px;
+  padding-left: 8px;
+  border-left: 2px solid #cccccc;
+}
+
+
+/* Rendering of primitive types */
+
+.nullObj {
+  font-size: 8pt;
+}
+
+/*
+.numberObj {
+  font-size: 10pt;
+}
+
+.boolObj {
+  font-size: 10pt;
+}
+*/
+
+.stringObj, .customObj, .funcObj {
+  font-family: Andale mono, monospace;
+  white-space: nowrap;
+}
+
+.retval {
+  font-size: 9pt;
+}
+
+
+/* Rendering of basic compound types */
+
+table.listTbl, table.tupleTbl, table.setTbl {
+  background-color: #ffffc6;
+}
+
+
+table.listTbl {
+  border: 0px solid black;
+  border-spacing: 0px;
+}
+
+table.listTbl td.listHeader,
+table.tupleTbl td.tupleHeader {
+  padding-left: 4px;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  font-size: 8pt;
+  color: #777;
+  text-align: left;
+  border-left: 1px solid #555555;
+}
+
+table.tupleTbl {
+  border-spacing: 0px;
+  color: black;
+
+  border-bottom: 1px solid #555555; /* must match td.tupleHeader border */
+  border-top: 1px solid #555555; /* must match td.tupleHeader border */
+  border-right: 1px solid #555555; /* must match td.tupleHeader border */
+}
+
+
+table.listTbl td.listElt {
+  border-bottom: 1px solid #555555; /* must match td.listHeader border */
+  border-left: 1px solid #555555; /* must match td.listHeader border */
+}
+
+table.tupleTbl td.tupleElt {
+  border-left: 1px solid #555555; /* must match td.tupleHeader border */
+}
+
+table.customObjTbl {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+table.customObjTbl td.customObjElt {
+  padding: 5px;
+}
+
+table.listTbl td.listElt,
+table.tupleTbl td.tupleElt {
+  padding-top: 0px;
+  padding-bottom: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  vertical-align: bottom;
+}
+
+table.setTbl {
+  border: 1px solid #555555;
+  border-spacing: 0px;
+  text-align: center;
+}
+
+table.setTbl td.setElt {
+  padding: 8px;
+}
+
+
+table.dictTbl,
+table.instTbl,
+table.classTbl {
+  border-spacing: 1px;
+}
+
+table.dictTbl td.dictKey,
+table.instTbl td.instKey,
+table.classTbl td.classKey {
+  background-color: #faebbf;
+}
+
+table.dictTbl td.dictVal,
+table.instTbl td.instVal,
+table.classTbl td.classVal {
+  background-color: #ffffc6;
+}
+
+
+table.dictTbl td.dictKey,
+table.instTbl td.instKey,
+table.classTbl td.classKey {
+  padding-top: 12px /*15px*/;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 4px;
+
+  text-align: right;
+}
+
+table.dictTbl td.dictVal,
+table.instTbl td.instVal,
+table.classTbl td.classVal {
+  padding-top: 12px /*15px*/;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 4px;
+}
+
+
+table.classTbl td,
+table.instTbl td {
+  border-bottom: 1px #888 solid;
+}
+
+table.classTbl td.classVal,
+table.instTbl td.instVal {
+  border-left: 1px #888 solid;
+}
+
+table.classTbl {
+  border-collapse: collapse;
+  border: 1px #888 solid;
+}
+
+/* only add a border to dicts if they're embedded within another object */
+td.listElt table.dictTbl,
+td.tupleElt table.dictTbl,
+td.dictVal table.dictTbl,
+td.instVal table.dictTbl,
+td.classVal table.dictTbl {
+  border: 1px #888 solid;
+}
+
+
+.typeLabel {
+  font-size: 8pt;
+  color: #222222;
+  margin-bottom: 1px;
+}
+
+#footer {
+  color: #666666;
+  font-size: 9pt;
+  border-top: 1px solid #bbbbbb;
+  padding-top: 5px;
+  margin-top: 5px;
+
+  max-width: 700px;
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* new stuff added for Online Python Tutor "2.0" release */
+
+div#stack, div#globals_area {
+  padding-left: 10px;
+  padding-right: 30px;
+
+  /* no longer necessary ... */
+  /*float: left;*/
+  /* border-right: 1px dashed #bbbbbb; */
+}
+
+div.stackFrame, div.zombieStackFrame {
+  background-color: #ffffff;
+  margin-bottom: 15px;
+  padding: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  font-size: 10pt;
+}
+
+div.zombieStackFrame {
+  border-left: 1px dotted #aaa;
+  /*color: #c0c0c0;*/
+  color: #b0b0b0;
+}
+
+div.highlightedStackFrame {
+  background-color: #c5dfea;
+}
+
+div.stackFrame, div.highlightedStackFrame {
+  border-left: 2px solid #a6b3b6;
+}
+
+
+div.stackFrameHeader {
+  font-family: Andale mono, monospace;
+  font-size: 10pt;
+  margin-top: 4px;
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+td.stackFrameVar {
+  text-align: right;
+  padding-right: 8px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+td.stackFrameValue {
+  text-align: left;
+  border-bottom: 1px solid #aaaaaa;
+  border-left: 1px solid #aaaaaa;
+
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-bottom: 3px;
+}
+
+.stackFrameVarTable tr {
+
+}
+
+.stackFrameVarTable {
+  text-align: right;
+  padding-top: 3px;
+
+  /* right-align the table */
+  margin-left: auto;
+  margin-right: 0px;
+}
+
+div#heap {
+  float: left;
+  padding-left: 30px;
+}
+
+td.toplevelHeapObject {
+  /* to make room for transition animations */
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border: 2px dotted white;
+  border-color: white; /* needed for d3 to do transitions */
+}
+
+table.heapRow {
+  margin-bottom: 10px;
+}
+
+div.heapObject {
+  padding-left: 2px; /* leave a TINY amount of room for connector endpoints */
+}
+
+div#stackHeader {
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+div#heapHeader {
+  /*margin-top: 2px;
+  margin-bottom: 13px;*/
+  margin-bottom: 15px;
+}
+
+div#stackHeader,
+div#heapHeader {
+  color: #333333;
+  font-size: 10pt;
+}
+
+#executionSlider {
+  width: 300px;
+  margin: 6px auto;
+}
+
+#executionSliderCaption {
+  font-size: 8pt;
+  color: #666666;
+  margin-top: 15px;
+}
+
+#executionSliderFooter {
+  margin-top: -7px; /* make it butt up against #executionSlider */
+}
+
+
+/* necessary for CodeMirror line highlighting to work! */
+.CodeMirror .errorLine { background: #F89D99 !important; }
+
+
+/* darken slider handle a bit */
+.ui-slider .ui-slider-handle {
+  border: 1px solid #999;
+}

@@ -1,0 +1,10 @@
+def iota(n):
+  def loop(acc, k):
+    if k == n:
+      return list(reversed(acc))
+    else:
+      return loop([k] + acc, k + 1)
+  return loop([], 0)
+
+result = iota(5)
+

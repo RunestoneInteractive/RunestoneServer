@@ -1,0 +1,1144 @@
+{
+  "code": "# tests Peter Norvig's watch_module.py with a simple selection sort example\nfrom watch_module import watchfn, watchedlist\n\n# The decorator here says that the 0th positional argument should be a list;\n# we will watch it, and the locals named i, mini, and min_index\n@watchfn((watchedlist, 'i mini min_index'))\ndef selection_sort(A):\n    for i in range(len(A)):\n        mini = min(A[i:])\n        min_index = A[i:].index(mini) + i   \n        if i != min_index:\n            A[min_index], A[i] = A[i], A[min_index]\n    return A\n\nprint(selection_sort([3, 5, 2, 1, 8, 5, 9]))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 15, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 6, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is slice(0, None, None);\n", 
+      "exception_msg": "KeyError: ('mini',)", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is slice(0, None, None);\n", 
+      "func_name": "selection_sort", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "A": [
+              "REF", 
+              9
+            ], 
+            "i": 0, 
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "selection_sort", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "selection_sort_f1", 
+          "ordered_varnames": [
+            "A", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ], 
+        "9": [
+          "INSTANCE", 
+          "watchedlist", 
+          [
+            "watchedlocals", 
+            [
+              "REF", 
+              10
+            ]
+          ]
+        ], 
+        "10": [
+          "LIST", 
+          "i", 
+          "mini", 
+          "min_index"
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is slice(0, None, None);\n", 
+      "exception_msg": "KeyError: ('mini',)", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 15, 
+      "event": "exception"
+    }, 
+    {
+      "ordered_globals": [
+        "watchedlist", 
+        "watchfn", 
+        "selection_sort"
+      ], 
+      "stdout": "fetching A[[3, 5, 2, 1, 8, 5, 9]]; value is slice(0, None, None);\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "watchedlist": [
+          "REF", 
+          1
+        ], 
+        "watchfn": [
+          "REF", 
+          5
+        ], 
+        "selection_sort": [
+          "REF", 
+          8
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "watchedlist", 
+          [
+            "list"
+          ], 
+          [
+            "__getitem__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "__setitem__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "watchlocals", 
+            [
+              "REF", 
+              4
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__getitem__(self, i)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__setitem__(self, i, val)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "watchlocals(self)", 
+          null
+        ], 
+        "5": [
+          "CLASS", 
+          "watchfn", 
+          [], 
+          [
+            "__call__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              7
+            ]
+          ]
+        ], 
+        "6": [
+          "FUNCTION", 
+          "__call__(self, fn)", 
+          null
+        ], 
+        "7": [
+          "FUNCTION", 
+          "__init__(self, *args, **kwargs)", 
+          null
+        ], 
+        "8": [
+          "FUNCTION", 
+          "wrapped_fn(*args, **kwargs)", 
+          null
+        ]
+      }, 
+      "line": 15, 
+      "event": "return"
+    }, 
+    {
+      "exception_msg": "KeyError: 'mini'", 
+      "event": "uncaught_exception"
+    }
+  ]
+}

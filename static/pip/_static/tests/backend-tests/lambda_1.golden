@@ -1,0 +1,5493 @@
+{
+  "code": "def summation(low, high, f, next):\n  s = 0\n  x = low\n  while x <= high:\n    s = s + f(x)\n    x = next(x)\n  return s\n\ndef sumsquares(low, high):\n  return summation(low, high, lambda x: x**2, lambda x: x+1)\n\nprint(sumsquares(1, 5))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "sumsquares", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "sumsquares", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "high": 5, 
+            "f": [
+              "REF", 
+              4
+            ], 
+            "low": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "high": 5, 
+            "f": [
+              "REF", 
+              4
+            ], 
+            "low": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "high": 5, 
+            "s": 0, 
+            "f": [
+              "REF", 
+              4
+            ], 
+            "low": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 0, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 0, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 0, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 0, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 0, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": 2, 
+            "x": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f4", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 1, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "__return__": 4, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f5", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f6", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f6", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 2
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "__return__": 3, 
+            "x": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f6", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 5, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            "__return__": 9, 
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f7", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f8", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f8", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            "__return__": 4, 
+            "x": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f8", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 14, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            "__return__": 16, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f9", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f10", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f10", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 4
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            "__return__": 5, 
+            "x": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f10", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 30, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            "__return__": 25, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f11", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f12", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f12", 
+          "ordered_varnames": [
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 5
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 12, 
+          "encoded_locals": {
+            "__return__": 6, 
+            "x": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            1
+          ], 
+          "unique_hash": "<lambda>_f12", 
+          "ordered_varnames": [
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "f": [
+              "REF", 
+              4
+            ], 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "high": 5, 
+            "s": 55, 
+            "low": 1, 
+            "__return__": 55, 
+            "x": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "f", 
+            "next", 
+            "s", 
+            "x", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ], 
+        "4": [
+          "FUNCTION", 
+          "<lambda>(x)", 
+          1
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "", 
+      "func_name": "sumsquares", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "__return__": 55, 
+            "low": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "sumsquares"
+      ], 
+      "stdout": "55\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "high": 5, 
+            "__return__": 55, 
+            "low": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "sumsquares", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumsquares_f1_p_z", 
+          "ordered_varnames": [
+            "low", 
+            "high", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "sumsquares": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(low, high, f, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sumsquares(low, high)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }
+  ]
+}

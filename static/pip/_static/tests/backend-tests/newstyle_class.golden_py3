@@ -1,0 +1,817 @@
+{
+  "code": "class A(object):\n  bla = \"A\"\n  def __init__(self):\n    self.blb = \"B\"\n\n  def x(self):\n    self.bla = self.blb\n\na = A()\n\na.x()\n\nprint(a.bla)\nprint(A.bla)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A"
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "A"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A"
+      ], 
+      "stdout": "", 
+      "func_name": "__init__", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "__init__", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "__init___f1", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "x", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "x", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "x_f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "x", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "x", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "x_f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "x", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": null, 
+            "self": [
+              "REF", 
+              4
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "x", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "x_f2", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "bla", 
+            "B"
+          ], 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "bla", 
+            "B"
+          ], 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "B\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "bla", 
+            "B"
+          ], 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "A", 
+        "a"
+      ], 
+      "stdout": "B\nA\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "A": [
+          "REF", 
+          1
+        ], 
+        "a": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "A", 
+          [], 
+          [
+            "__init__", 
+            [
+              "REF", 
+              2
+            ]
+          ], 
+          [
+            "bla", 
+            "A"
+          ], 
+          [
+            "x", 
+            [
+              "REF", 
+              3
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "__init__(self)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "x(self)", 
+          null
+        ], 
+        "4": [
+          "INSTANCE", 
+          "A", 
+          [
+            "bla", 
+            "B"
+          ], 
+          [
+            "blb", 
+            "B"
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "return"
+    }
+  ]
+}

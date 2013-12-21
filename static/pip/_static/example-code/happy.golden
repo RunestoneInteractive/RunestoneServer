@@ -1,0 +1,952 @@
+{
+  "code": "# From \"Teaching with Python\" by John Zelle\ndef happy():\n    print(\"Happy Birthday to you!\")\n\ndef sing(P):\n    happy()\n    happy()\n    print(\"Happy Birthday dear \" + P + \"!\")\n    happy()\n\n# main\nsing(\"Fred\")\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f2", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f2", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f2", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\n", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f3", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f3", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f3", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\n", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\n", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f4", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {}, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f4", 
+          "ordered_varnames": []
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\nHappy Birthday to you!\n", 
+      "func_name": "happy", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "P": "Fred"
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "happy", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "happy_f4", 
+          "ordered_varnames": [
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\nHappy Birthday to you!\n", 
+      "func_name": "sing", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "P": "Fred"
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sing", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sing_f1", 
+          "ordered_varnames": [
+            "P", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "happy", 
+        "sing"
+      ], 
+      "stdout": "Happy Birthday to you!\nHappy Birthday to you!\nHappy Birthday dear Fred!\nHappy Birthday to you!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "sing": [
+          "REF", 
+          2
+        ], 
+        "happy": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "happy()", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "sing(P)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }
+  ]
+}

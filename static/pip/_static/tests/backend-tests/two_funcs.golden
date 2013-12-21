@@ -1,0 +1,1453 @@
+{
+  "code": "def add(a, b, c):\n  d = a + b\n  return c + d\n\ndef double_add(a, b, c):\n  x = add(a, b, c)\n  y = add(a, b, c)\n  return x + y\n\nx = 5\ny = 10\nz = x * y\nprint(add(x, y, z))\nprint(double_add(x, y, z))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "add": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "add": [
+          "REF", 
+          1
+        ], 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 5, 
+            "__return__": 65, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "double_add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "double_add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 5, 
+            "__return__": 65, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "double_add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 5, 
+            "__return__": 65, 
+            "c": 50, 
+            "b": 10, 
+            "d": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "add_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "d", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "double_add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "x": 65, 
+            "c": 50, 
+            "b": 10, 
+            "y": 65
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x", 
+            "y"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n", 
+      "func_name": "double_add", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 5, 
+            "c": 50, 
+            "b": 10, 
+            "__return__": 130, 
+            "y": 65, 
+            "x": 65
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "double_add", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "double_add_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "c", 
+            "x", 
+            "y", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "add", 
+        "double_add", 
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "65\n130\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "add": [
+          "REF", 
+          1
+        ], 
+        "z": 50, 
+        "double_add": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "add(a, b, c)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "double_add(a, b, c)", 
+          null
+        ]
+      }, 
+      "line": 14, 
+      "event": "return"
+    }
+  ]
+}

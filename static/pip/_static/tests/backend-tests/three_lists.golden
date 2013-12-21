@@ -1,0 +1,632 @@
+{
+  "code": "# test case submitted by Peter Wentworth (p.wentworth@ru.ac.za)\n\ndef f(xs):\n    print(xs)\n\na = [10, 20, 30]\nb = a\nc = [10, 20, 30]\nd = 24\ne = (a, b, c)\n\nf(b)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "e": [
+          "REF", 
+          4
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "xs": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "xs"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "e": [
+          "REF", 
+          4
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "xs": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "xs"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "e": [
+          "REF", 
+          4
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d", 
+        "e"
+      ], 
+      "stdout": "[10, 20, 30]\n", 
+      "func_name": "f", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": null, 
+            "xs": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f_f1", 
+          "ordered_varnames": [
+            "xs", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "e": [
+          "REF", 
+          4
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f", 
+        "a", 
+        "b", 
+        "c", 
+        "d", 
+        "e"
+      ], 
+      "stdout": "[10, 20, 30]\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          2
+        ], 
+        "c": [
+          "REF", 
+          3
+        ], 
+        "b": [
+          "REF", 
+          2
+        ], 
+        "e": [
+          "REF", 
+          4
+        ], 
+        "d": 24, 
+        "f": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f(xs)", 
+          null
+        ], 
+        "2": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "3": [
+          "LIST", 
+          10, 
+          20, 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ]
+        ]
+      }, 
+      "line": 12, 
+      "event": "return"
+    }
+  ]
+}

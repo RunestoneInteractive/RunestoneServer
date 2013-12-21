@@ -1,0 +1,11 @@
+{
+  "code": "# test case of Python 3 function annotations inspired by David G. Kay\ndef remove_by_name(L: 'list of Restaurant', name: str) -> 'list of Restaurant':\n    \"\"\" Given name, remove all Restaurants with that name from collection.\n    \"\"\"\n    result = []\n    for r in L:\n        if r.name != name:\n            result.append(r)\n    return result\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 2)", 
+      "line": 2, 
+      "event": "uncaught_exception", 
+      "offset": 21
+    }
+  ]
+}

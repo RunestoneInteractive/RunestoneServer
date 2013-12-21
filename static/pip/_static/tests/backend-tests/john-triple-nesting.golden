@@ -1,0 +1,11 @@
+{
+  "code": "# test in Python 3\ndef f(t):\n    def g(t):\n        def h():\n            nonlocal t\n            t += 1\n        return h, lambda: t\n    h, gt = g(0)\n    return h, gt, lambda: t\nh, gt, ft = f(0)\nft(), gt()\nh()\nft(), gt()\n", 
+  "trace": [
+    {
+      "exception_msg": "SyntaxError: invalid syntax (<string>, line 5)", 
+      "line": 5, 
+      "event": "uncaught_exception", 
+      "offset": 22
+    }
+  ]
+}

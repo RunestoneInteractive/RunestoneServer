@@ -1,0 +1,100 @@
+{
+  "code": "x = (e for e in range(10))\ny = x\nz = (e for e in range(10))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          1
+        ], 
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": [
+          "REF", 
+          1
+        ], 
+        "x": [
+          "REF", 
+          1
+        ], 
+        "z": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }
+  ]
+}

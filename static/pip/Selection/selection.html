@@ -1,0 +1,3478 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Decisions and Selection &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="Iteration Revisited" href="../MoreAboutIteration/moreiteration.html" />
+    <link rel="prev" title="Functions" href="../Functions/functions.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Decisions and Selection</a><ul>
+<li><a class="reference internal" href="#boolean-values-and-boolean-expressions">Boolean Values and Boolean Expressions</a></li>
+<li><a class="reference internal" href="#logical-operators">Logical operators</a></li>
+<li><a class="reference internal" href="#precedence-of-operators">Precedence of Operators</a></li>
+<li><a class="reference internal" href="#conditional-execution-binary-selection">Conditional Execution: Binary Selection</a></li>
+<li><a class="reference internal" href="#omitting-the-else-clause-unary-selection">Omitting the <cite>else</cite> Clause: Unary Selection</a></li>
+<li><a class="reference internal" href="#nested-conditionals">Nested conditionals</a></li>
+<li><a class="reference internal" href="#chained-conditionals">Chained conditionals</a></li>
+<li><a class="reference internal" href="#boolean-functions">Boolean Functions</a></li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+<li><a class="reference internal" href="#exercises">Exercises</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - Functions" data-toggle="tooltip">
+    <a href="../Functions/functions.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - Iteration Revisited' data-toggle="tooltip" >
+    <a href="../MoreAboutIteration/moreiteration.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="decisions-and-selection">
+<h1>Decisions and Selection<a class="headerlink" href="#decisions-and-selection" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><div class="section" id="boolean-values-and-boolean-expressions">
+<span id="index-1"></span><h2>Boolean Values and Boolean Expressions<a class="headerlink" href="#boolean-values-and-boolean-expressions" title="Permalink to this headline">¶</a></h2>
+<a id="booleanexpressions_thumb" style='position:relative;'>
+    <img src="../_static/booleanexpressions.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="booleanexpressions" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/booleanexpressions.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/booleanexpressions.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#booleanexpressions_thumb').click(function(e) {
+         $('#booleanexpressions').show();
+         $('#booleanexpressions_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'booleanexpressions'});
+         // Log the run event
+      });
+   });
+</script>
+<p>The Python type for storing true and false values is called <tt class="docutils literal"><span class="pre">bool</span></tt>, named
+after the British mathematician, George Boole. George Boole created <em>Boolean
+Algebra</em>, which is the basis of all modern computer arithmetic.</p>
+<p>There are only two <strong>boolean values</strong>.  They are <tt class="docutils literal"><span class="pre">True</span></tt> and <tt class="docutils literal"><span class="pre">False</span></tt>.  Capitalization
+is important, since <tt class="docutils literal"><span class="pre">true</span></tt> and <tt class="docutils literal"><span class="pre">false</span></tt> are not boolean values (remember Python is case
+sensitive).</p>
+
+<div id="ch05_1" >
+
+<br/>
+<div id="ch05_1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch05_1_code" class="active_code", prefixcode="undefined">
+print(True)
+print(type(True))
+print(type(False))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch05_1)</span> </p>
+
+<button class='btn btn-success' id="ch05_1_runb" onclick="runit('ch05_1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_1_saveb" onclick="saveEditor('ch05_1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_1_loadb" onclick="requestCode('ch05_1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch05_1_saveb').toggle();
+    $('#ch05_1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch05_1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch05_1_suffix" style="display:none">
+</pre>
+<pre id="ch05_1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Boolean values are not strings!</p>
+<p class="last">It is extremely important to realize that True and False are not strings.   They are not
+surrounded by quotes.  They are the only two values in the data type <tt class="docutils literal"><span class="pre">bool</span></tt>.  Take a close look at the
+types shown below.</p>
+</div>
+
+<div id="ch05_1a" >
+
+<br/>
+<div id="ch05_1a_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch05_1a_code" class="active_code", prefixcode="undefined">
+print(type(True))
+print(type("True"))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch05_1a)</span> </p>
+
+<button class='btn btn-success' id="ch05_1a_runb" onclick="runit('ch05_1a',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_1a_saveb" onclick="saveEditor('ch05_1a');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_1a_loadb" onclick="requestCode('ch05_1a');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch05_1a_saveb').toggle();
+    $('#ch05_1a_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch05_1a_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch05_1a_suffix" style="display:none">
+</pre>
+<pre id="ch05_1a_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>A <strong>boolean expression</strong> is an expression that evaluates to a boolean value.
+The equality operator, <tt class="docutils literal"><span class="pre">==</span></tt>, compares two values and produces a boolean value related to whether the
+two values are equal to one another.</p>
+
+<div id="ch05_2" >
+
+<br/>
+<div id="ch05_2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch05_2_code" class="active_code", prefixcode="undefined">
+print(5 == 5)
+print(5 == 6)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch05_2)</span> </p>
+
+<button class='btn btn-success' id="ch05_2_runb" onclick="runit('ch05_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_2_saveb" onclick="saveEditor('ch05_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_2_loadb" onclick="requestCode('ch05_2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch05_2_saveb').toggle();
+    $('#ch05_2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch05_2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch05_2_suffix" style="display:none">
+</pre>
+<pre id="ch05_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>In the first statement, the two operands are equal, so the expression evaluates
+to <tt class="docutils literal"><span class="pre">True</span></tt>.  In the second statement, 5 is not equal to 6, so we get <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">==</span></tt> operator is one of six common <strong>comparison operators</strong>; the others are:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span>               <span class="c"># x is not equal to y</span>
+<span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span>                <span class="c"># x is greater than y</span>
+<span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span>                <span class="c"># x is less than y</span>
+<span class="n">x</span> <span class="o">&gt;=</span> <span class="n">y</span>               <span class="c"># x is greater than or equal to y</span>
+<span class="n">x</span> <span class="o">&lt;=</span> <span class="n">y</span>               <span class="c"># x is less than or equal to y</span>
+</pre></div>
+</div>
+<p>Although these operations are probably familiar to you, the Python symbols are
+different from the mathematical symbols. A common error is to use a single
+equal sign (<tt class="docutils literal"><span class="pre">=</span></tt>) instead of a double equal sign (<tt class="docutils literal"><span class="pre">==</span></tt>). Remember that <tt class="docutils literal"><span class="pre">=</span></tt>
+is an assignment operator and <tt class="docutils literal"><span class="pre">==</span></tt> is a comparison operator. Also, there is
+no such thing as <tt class="docutils literal"><span class="pre">=&lt;</span></tt> or <tt class="docutils literal"><span class="pre">=&gt;</span></tt>.</p>
+<p>Note too that an equality test is symmetric, but assignment is not. For example,
+if <tt class="docutils literal"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">7</span></tt> then <tt class="docutils literal"><span class="pre">7</span> <span class="pre">==</span> <span class="pre">a</span></tt>. But in Python, the statement <tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">7</span></tt>
+is legal and <tt class="docutils literal"><span class="pre">7</span> <span class="pre">=</span> <span class="pre">a</span></tt> is not. (Can you explain why?)</p>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_1_1" class="alert alert-warning">
+            sel-1: Which of the following is a Boolean expression?  Select all that apply.<form name="test_question6_1_1_form" method="get" action="" onsubmit="return false;">
+            <input type="checkbox" name="group1" value="a" id="test_question6_1_1_opt_a" />
+            <label for= "test_question6_1_1_opt_a">  a) True</label><br />
+            
+            <input type="checkbox" name="group1" value="b" id="test_question6_1_1_opt_b" />
+            <label for= "test_question6_1_1_opt_b">  b) 3 == 4</label><br />
+            
+            <input type="checkbox" name="group1" value="c" id="test_question6_1_1_opt_c" />
+            <label for= "test_question6_1_1_opt_c">  c) 3 + 4</label><br />
+            
+            <input type="checkbox" name="group1" value="d" id="test_question6_1_1_opt_d" />
+            <label for= "test_question6_1_1_opt_d">  d) 3 + 4 == 7</label><br />
+            
+            <input type="checkbox" name="group1" value="e" id="test_question6_1_1_opt_e" />
+            <label for= "test_question6_1_1_opt_e">  e) &quot;False&quot;</label><br />
+            
+            <script>
+            $(document).ready(function(){checkMultipleSelect('test_question6_1_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMAStorage('test_question6_1_1','a,b,d',['True and False are both Boolean literals.', 'The comparison between two numbers via \u003D\u003D results in either True or False (in this case False),  both Boolean values.', '3+4 evaluates to 7, which is a number, not a Boolean value.', '3+4 evaluates to 7.  7 \u003D\u003D 7 then evaluates to True, which is a Boolean value.', 'With the double quotes surrounding it, False is interpreted as a string, not a Boolean value.  If the quotes had not been included, False alone is in fact a Boolean value.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_1_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_1_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_1_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="logical-operators">
+<span id="index-2"></span><h2>Logical operators<a class="headerlink" href="#logical-operators" title="Permalink to this headline">¶</a></h2>
+<p>There are three <strong>logical operators</strong>: <tt class="docutils literal"><span class="pre">and</span></tt>, <tt class="docutils literal"><span class="pre">or</span></tt>, and <tt class="docutils literal"><span class="pre">not</span></tt>. The
+semantics (meaning) of these operators is similar to their meaning in English.
+For example, <tt class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">10</span></tt> is true only if <tt class="docutils literal"><span class="pre">x</span></tt> is greater than 0 <em>and</em>
+at the same time, x is less than 10.  How would you describe this in words?  You would say that
+x is between 0 and 10, not including the endpoints.</p>
+<p><tt class="docutils literal"><span class="pre">n</span> <span class="pre">%</span> <span class="pre">2</span> <span class="pre">==</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">n</span> <span class="pre">%</span> <span class="pre">3</span> <span class="pre">==</span> <span class="pre">0</span></tt> is true if <em>either</em> of the conditions is true,
+that is, if the number is divisible by 2 <em>or</em> divisible by 3.  In this case, one, or the other, or
+both of the parts has to be true for the result to be true.</p>
+<p>Finally, the <tt class="docutils literal"><span class="pre">not</span></tt> operator negates a boolean expression, so <tt class="docutils literal"><span class="pre">not</span>&nbsp; <span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">y</span></tt>
+is true if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">y</span></tt> is false, that is, if <tt class="docutils literal"><span class="pre">x</span></tt> is less than or equal to
+<tt class="docutils literal"><span class="pre">y</span></tt>.</p>
+
+<div id="chp05_3" >
+
+<br/>
+<div id="chp05_3_code_div" style="display: block">
+<textarea cols="50" rows="120" id="chp05_3_code" class="active_code", prefixcode="undefined">
+x = 5
+print(x>0 and x<10)
+
+n = 25
+print(n%2 == 0 or n%3 == 0)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (chp05_3)</span> </p>
+
+<button class='btn btn-success' id="chp05_3_runb" onclick="runit('chp05_3',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp05_3_saveb" onclick="saveEditor('chp05_3');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="chp05_3_loadb" onclick="requestCode('chp05_3');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#chp05_3_saveb').toggle();
+    $('#chp05_3_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="chp05_3_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="chp05_3_suffix" style="display:none">
+</pre>
+<pre id="chp05_3_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition-common-mistake admonition">
+<p class="first admonition-title">Common Mistake!</p>
+<p class="last">There is a very common mistake that occurs when programmers try to write boolean expressions.  For example, what if we have a variable <tt class="docutils literal"><span class="pre">number</span></tt> and we want to check to see if its value is 5,6, or 7.  In words we might say: &#8220;number equal to 5 or 6 or 7&#8221;.  However, if we translate this into Python, <tt class="docutils literal"><span class="pre">number</span> <span class="pre">==</span> <span class="pre">5</span> <span class="pre">or</span> <span class="pre">6</span> <span class="pre">or</span> <span class="pre">7</span></tt>, it will not be correct.  The <tt class="docutils literal"><span class="pre">or</span></tt> operator must join the results of three equality checks.  The correct way to write this is <tt class="docutils literal"><span class="pre">number</span> <span class="pre">==</span> <span class="pre">5</span> <span class="pre">or</span> <span class="pre">number</span> <span class="pre">==</span> <span class="pre">6</span> <span class="pre">or</span> <span class="pre">number</span> <span class="pre">==</span> <span class="pre">7</span></tt>.  This may seem like a lot of typing but it is absolutely necessary.  You cannot take a shortcut.</p>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_2_1" class="alert alert-warning">
+            sel-2: What is the correct Python expression for checking to see if a number stored in a variable x is between 0 and 5.<form name="test_question6_2_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_2_1_opt_a" />
+            <label for= "test_question6_2_1_opt_a">  a) x &gt; 0 and &lt; 5</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_2_1_opt_b" />
+            <label for= "test_question6_2_1_opt_b">  b) 0 &lt; x &lt; 5</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_2_1_opt_c" />
+            <label for= "test_question6_2_1_opt_c">  c) x &gt; 0 or x &lt; 5</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_2_1_opt_d" />
+            <label for= "test_question6_2_1_opt_d">  d) x &gt; 0 and x &lt; 5</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_2_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_2_1','d',['Each comparison must be between exactly two values.  In this case the right\u002Dhand expression \u0026lt\u003B 5 lacks a value on its left.', 'This is tricky.  Although most other programming languages do not allow this syntax, in Python, this syntax is allowed.  However, you should not use it.  Instead, make multiple comparisons by using and or or.', 'Although this is legal Python syntax, the expression is incorrect.  It will evaluate to true for all numbers that are either greater than 0 or less than 5.  Because all numbers are either greater than 0 or less than 5, this expression will always be True.', 'Yes, with an and keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_2_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_2_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_2_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="precedence-of-operators">
+<h2>Precedence of Operators<a class="headerlink" href="#precedence-of-operators" title="Permalink to this headline">¶</a></h2>
+<p>We have now added a number of additional operators to those we learned in the previous chapters.  It is important to understand how these operators relate to the others with respect to operator precedence.  Python will always evaluate the arithmetic operators first (** is highest, then multiplication/division, then addition/subtraction).  Next comes the relational operators.  Finally, the logical operators are done last.  This means that the expression <tt class="docutils literal"><span class="pre">x*5</span> <span class="pre">&gt;=</span> <span class="pre">10</span> <span class="pre">and</span> <span class="pre">y-6</span> <span class="pre">&lt;=</span> <span class="pre">20</span></tt> will be evaluated so as to first perform the arithmetic and then check the relationships.  The <tt class="docutils literal"><span class="pre">and</span></tt> will be done last.  Although many programmers might place parenthesis around the two relational expressions, it is not necessary.</p>
+<p>The following table summarizes the operator precedence from highest to lowest.  A complete table for the entire language can be found in the <a class="reference external" href="http://docs.python.org/py3k/reference/expressions.html#expression-lists">Python Documentation</a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="39%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Level</th>
+<th class="head">Category</th>
+<th class="head">Operators</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>7(high)</td>
+<td>exponent</td>
+<td>**</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>multiplication</td>
+<td>*,/,//,%</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>addition</td>
+<td>+,-</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>relational</td>
+<td>==,!=,&lt;=,&gt;=,&gt;,&lt;</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>logical</td>
+<td>not</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>logical</td>
+<td>and</td>
+</tr>
+<tr class="row-even"><td>1(low)</td>
+<td>logical</td>
+<td>or</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_06_01" >
+
+<br/>
+<div id="scratch_06_01_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_06_01_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_06_01)</span> </p>
+
+<button class='btn btn-success' id="scratch_06_01_runb" onclick="runit('scratch_06_01',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_01_saveb" onclick="saveEditor('scratch_06_01');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_01_loadb" onclick="requestCode('scratch_06_01');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_06_01_saveb').toggle();
+    $('#scratch_06_01_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_06_01_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_06_01_suffix" style="display:none">
+</pre>
+<pre id="scratch_06_01_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_3_1" class="alert alert-warning">
+            sel-3: Which of the following properly expresses the  precedence of operators (using parentheses) in the following expression: 5*3 &gt; 10 and 4+6==11<form name="test_question6_3_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_3_1_opt_a" />
+            <label for= "test_question6_3_1_opt_a">  a) ((5*3) &gt; 10) and ((4+6) == 11)</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_3_1_opt_b" />
+            <label for= "test_question6_3_1_opt_b">  b) (5*(3 &gt; 10)) and (4 + (6 == 11))</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_3_1_opt_c" />
+            <label for= "test_question6_3_1_opt_c">  c) ((((5*3) &gt; 10) and 4)+6) == 11</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_3_1_opt_d" />
+            <label for= "test_question6_3_1_opt_d">  d) ((5*3) &gt; (10 and (4+6))) == 11</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_3_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_3_1','a',['Yes, * and + have higher precedence, followed by \u0026gt\u003B and \u003D\u003D, and then the keyword \u0026quot\u003Band\u0026quot\u003B', 'Arithmetic operators (*, +) have higher precedence than comparison operators (\u0026gt\u003B, \u003D\u003D)', 'This grouping assumes Python simply evaluates from left to right, which is incorrect.  It follows the precedence listed in the table in this section.', 'This grouping assumes that \u0026quot\u003Band\u0026quot\u003B has a higher precedence than \u003D\u003D, which is not true.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_3_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_3_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_3_1_feedback">
+            </div>
+            </div>
+            <span class="target" id="index-3"></span></div>
+<div class="section" id="conditional-execution-binary-selection">
+<span id="index-4"></span><h2>Conditional Execution: Binary Selection<a class="headerlink" href="#conditional-execution-binary-selection" title="Permalink to this headline">¶</a></h2>
+<a id="binaryselection_thumb" style='position:relative;'>
+    <img src="../_static/binaryselection.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="binaryselection" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/binaryselection.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/binaryselection.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#binaryselection_thumb').click(function(e) {
+         $('#binaryselection').show();
+         $('#binaryselection_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'binaryselection'});
+         // Log the run event
+      });
+   });
+</script>
+<p>In order to write useful programs, we almost always need the ability to check
+conditions and change the behavior of the program accordingly. <strong>Selection statements</strong>, sometimes
+also referred to as <strong>conditional statements</strong>, give us this ability. The simplest form of selection is the <strong>if statement</strong>.
+This is sometimes referred to as <strong>binary selection</strong> since there are two possible paths of execution.</p>
+
+<div id="ch05_4" >
+
+<br/>
+<div id="ch05_4_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch05_4_code" class="active_code", prefixcode="undefined">
+x = 15
+
+if x % 2 == 0:
+    print(x, "is even")
+else:
+    print(x, "is odd")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch05_4)</span> </p>
+
+<button class='btn btn-success' id="ch05_4_runb" onclick="runit('ch05_4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_4_saveb" onclick="saveEditor('ch05_4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_4_loadb" onclick="requestCode('ch05_4');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch05_4_saveb').toggle();
+    $('#ch05_4_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch05_4_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch05_4_suffix" style="display:none">
+</pre>
+<pre id="ch05_4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The syntax for an <tt class="docutils literal"><span class="pre">if</span></tt> statement looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">BOOLEAN</span> <span class="n">EXPRESSION</span><span class="p">:</span>
+    <span class="n">STATEMENTS_1</span>        <span class="c"># executed if condition evaluates to True</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">STATEMENTS_2</span>        <span class="c"># executed if condition evaluates to False</span>
+</pre></div>
+</div>
+<p>The boolean expression after the <tt class="docutils literal"><span class="pre">if</span></tt> statement is called the <strong>condition</strong>.
+If it is true, then the indented statements get executed. If not, then the statements
+indented under the <cite>else</cite> clause get executed.</p>
+<div class="sidebar">
+<p class="first sidebar-title">Flowchart of a <strong>if</strong> statement with an <strong>else</strong></p>
+<img alt="../_images/flowchart_if_else.png" class="last" src="../_images/flowchart_if_else.png" />
+</div>
+<p>As with the function definition from the last chapter and other compound
+statements like <tt class="docutils literal"><span class="pre">for</span></tt>, the <tt class="docutils literal"><span class="pre">if</span></tt> statement consists of a header line and a body. The header
+line begins with the keyword <tt class="docutils literal"><span class="pre">if</span></tt> followed by a <em>boolean expression</em> and ends with
+a colon (:).</p>
+<p>The indented statements that follow are called a <strong>block</strong>. The first
+unindented statement marks the end of the block.</p>
+<p>Each of the statements inside the first block of statements is executed in order if the boolean
+expression evaluates to <tt class="docutils literal"><span class="pre">True</span></tt>. The entire first block of statements
+is skipped if the boolean expression evaluates to <tt class="docutils literal"><span class="pre">False</span></tt>, and instead
+all the statements under the <tt class="docutils literal"><span class="pre">else</span></tt> clause are executed.</p>
+<p>There is no limit on the number of statements that can appear under the two clauses of an
+<tt class="docutils literal"><span class="pre">if</span></tt> statement, but there has to be at least one statement in each block.</p>
+<div class="admonition-lab admonition">
+<p class="first admonition-title">Lab</p>
+<ul class="last simple">
+<li><a class="reference external" href="../Labs/montepi.html">Approximating Pi with Simulation</a> In this guided lab exercise we will work
+through a problem solving exercise related to approximating the value of pi using random numbers.</li>
+</ul>
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_4_1" class="alert alert-warning">
+            sel-4: How many statements can appear in each block (the if and the else) in a conditional statement?<form name="test_question6_4_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_4_1_opt_a" />
+            <label for= "test_question6_4_1_opt_a">  a) Just one.</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_4_1_opt_b" />
+            <label for= "test_question6_4_1_opt_b">  b) Zero or more.</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_4_1_opt_c" />
+            <label for= "test_question6_4_1_opt_c">  c) One or more.</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_4_1_opt_d" />
+            <label for= "test_question6_4_1_opt_d">  d) One or more, and each must contain the same number.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_4_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_4_1','c',['Each block may also contain more than one.', 'Each block must contain at least one statement.', 'Yes, a block must contain at least one statement and can have many statements.', 'The blocks may contain different numbers of statements.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_4_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_4_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_4_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question6_4_2" class="alert alert-warning">
+            <p>sel-5: What does the following code print (choose from output a, b, c or nothing).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;TRUE&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;FALSE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question6_4_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_4_2_opt_a" />
+            <label for= "test_question6_4_2_opt_a">  a) TRUE</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_4_2_opt_b" />
+            <label for= "test_question6_4_2_opt_b">  b) FALSE</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_4_2_opt_c" />
+            <label for= "test_question6_4_2_opt_c">  c) TRUE on one line and FALSE on the next</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_4_2_opt_d" />
+            <label for= "test_question6_4_2_opt_d">  d) Nothing will be printed</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_4_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_4_2','b',['TRUE is printed by the if\u002Dblock, which only executes if the conditional (in this case, 4+5 \u003D\u003D 10) is true.  In this case 5+4 is not equal to 10.', 'Since 4+5\u003D\u003D10 evaluates to False, Python will skip over the if block and execute the statement in the else block.', 'Python would never print both TRUE and FALSE because it will only execute one of the if\u002Dblock or the else\u002Dblock, but not both.', 'Python will always execute either the if\u002Dblock (if the condition is true) or the else\u002Dblock (if the condition is false).  It would never skip over both blocks.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_4_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_4_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_4_2_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question6_4_3" class="alert alert-warning">
+            <p>sel-6: What does the following code print?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;TRUE&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;FALSE&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;TRUE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>a. TRUE
+
+b.
+   TRUE
+   FALSE
+
+c.
+   FALSE
+   TRUE
+d.
+   TRUE
+   FALSE
+   TRUE</pre>
+</div>
+<form name="test_question6_4_3_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_4_3_opt_a" />
+            <label for= "test_question6_4_3_opt_a">  a) Output a</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_4_3_opt_b" />
+            <label for= "test_question6_4_3_opt_b">  b) Output b</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_4_3_opt_c" />
+            <label for= "test_question6_4_3_opt_c">  c) Output c</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_4_3_opt_d" />
+            <label for= "test_question6_4_3_opt_d">  d) Output d</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_4_3');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_4_3','c',['Although TRUE is printed after the if\u002Delse statement completes, both blocks within the if\u002Delse statement print something too.  In this case, Python would have had to have skipped both blocks in the if\u002Delse statement, which it never would do.', 'Because there is a TRUE printed after the if\u002Delse statement ends, Python will always print TRUE as the last statement.', 'Python will print FALSE from within the else\u002Dblock (because 5+4 does not equal 10), and then print TRUE after the if\u002Delse statement completes.', 'To print these three lines, Python would have to execute both blocks in the if\u002Delse statement, which it can never do.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_4_3_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_4_3');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_4_3_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="omitting-the-else-clause-unary-selection">
+<span id="index-5"></span><h2>Omitting the <cite>else</cite> Clause: Unary Selection<a class="headerlink" href="#omitting-the-else-clause-unary-selection" title="Permalink to this headline">¶</a></h2>
+<a id="unaryselection_thumb" style='position:relative;'>
+    <img src="../_static/unaryselection.png" />
+    <div class='video-play-overlay'></div>
+</a>
+<div id="unaryselection" class="video_popup" >
+<video controls preload="none"  >
+    <source src="http://media.interactivepython.org/thinkcsVideos/unaryselection.mov" type="video/mp4"></source>
+    <source src="http://media.interactivepython.org/thinkcsVideos/unaryselection.webm" type="video/webm"></source>
+    No supported video types
+</video>
+</div>
+<script>
+   jQuery(function($) {
+      $('#unaryselection_thumb').click(function(e) {
+         $('#unaryselection').show();
+         $('#unaryselection_thumb').hide();
+         logBookEvent({'event':'video','act':'play','div_id': 'unaryselection'});
+         // Log the run event
+      });
+   });
+</script>
+<div class="sidebar">
+<p class="first sidebar-title">Flowchart of an <strong>if</strong> with no <strong>else</strong></p>
+<img alt="../_images/flowchart_if_only.png" class="last" src="../_images/flowchart_if_only.png" />
+</div>
+<p>Another form of the <tt class="docutils literal"><span class="pre">if</span></tt> statement is one in which the <tt class="docutils literal"><span class="pre">else</span></tt> clause is omitted entirely.
+This creates what is sometimes called <strong>unary selection</strong>.
+In this case, when the condition evaluates to <tt class="docutils literal"><span class="pre">True</span></tt>, the statements are
+executed.  Otherwise the flow of execution continues to the statement after the body of the <tt class="docutils literal"><span class="pre">if</span></tt>.</p>
+
+<div id="ch05_unaryselection" >
+
+<br/>
+<div id="ch05_unaryselection_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch05_unaryselection_code" class="active_code", prefixcode="undefined">
+x = 10
+if x < 0:
+    print("The negative number ",  x, " is not valid here.")
+print("This is always printed")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch05_unaryselection)</span> </p>
+
+<button class='btn btn-success' id="ch05_unaryselection_runb" onclick="runit('ch05_unaryselection',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_unaryselection_saveb" onclick="saveEditor('ch05_unaryselection');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch05_unaryselection_loadb" onclick="requestCode('ch05_unaryselection');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch05_unaryselection_saveb').toggle();
+    $('#ch05_unaryselection_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch05_unaryselection_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch05_unaryselection_suffix" style="display:none">
+</pre>
+<pre id="ch05_unaryselection_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>What would be printed if the value of <tt class="docutils literal"><span class="pre">x</span></tt> is negative?  Try it.</p>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_5_1" class="alert alert-warning">
+            <p>sel-7: What does the following code print?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;This is always printed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>a.
+This is always printed
+
+b.
+The negative number -10 is not valid here
+This is always printed
+
+c.
+The negative number -10 is not valid here</pre>
+</div>
+<form name="test_question6_5_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_5_1_opt_a" />
+            <label for= "test_question6_5_1_opt_a">  a) Output a</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_5_1_opt_b" />
+            <label for= "test_question6_5_1_opt_b">  b) Output b</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_5_1_opt_c" />
+            <label for= "test_question6_5_1_opt_c">  c) Output c</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_5_1_opt_d" />
+            <label for= "test_question6_5_1_opt_d">  d) It will cause an error because every if must have an else clause.</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_5_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_5_1','b',['Because \u002D10 is less than 0, Python will execute the body of the if\u002Dstatement here.', 'Python executes the body of the if\u002Dblock as well as the statement that follows the if\u002Dblock.', 'Python will also execute the statement that follows the if\u002Dblock (because it is not enclosed in an else\u002Dblock, but rather just a normal statement).', 'It is valid to have an if\u002Dblock without a corresponding else\u002Dblock (though you cannot have an else\u002Dblock without a corresponding if\u002Dblock).'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_5_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_5_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_5_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question6_5_2" class="alert alert-warning">
+            <p>sel-8: Will the following code cause an error?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;This is always printed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question6_5_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_5_2_opt_a" />
+            <label for= "test_question6_5_2_opt_a">  a) No</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_5_2_opt_b" />
+            <label for= "test_question6_5_2_opt_b">  b) Yes</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_5_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_5_2','b',['Every else\u002Dblock must have exactly one corresponding if\u002Dblock.  If you want to chain if\u002Delse statements together, you must use the else if construct, described in the chained conditionals section.', 'This will cause an error because the second else\u002Dblock is not attached to a corresponding if\u002Dblock.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_5_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_5_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_5_2_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="nested-conditionals">
+<span id="index-6"></span><h2>Nested conditionals<a class="headerlink" href="#nested-conditionals" title="Permalink to this headline">¶</a></h2>
+<p>One conditional can also be <strong>nested</strong> within another. For example, assume we have two integer variables, <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt>.
+The following pattern of selection shows how we might decide how they are related to each other.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;x is less than y&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;x is greater than y&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;x and y must be equal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The outer conditional contains two branches.
+The second branch (the else from the outer) contains another <tt class="docutils literal"><span class="pre">if</span></tt> statement, which
+has two branches of its own. Those two branches could contain
+conditional statements as well.</p>
+<p>The flow of control for this example can be seen in this flowchart illustration.</p>
+<img alt="../_images/flowchart_nested_conditional.png" src="../_images/flowchart_nested_conditional.png" />
+<p>Here is a complete program that defines values for <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt>.  Run the program and see the result.  Then change the values of the variables to change the flow of control.</p>
+
+<div id="sel2" >
+
+<br/>
+<div id="sel2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="sel2_code" class="active_code", prefixcode="undefined">
+x = 10
+y = 10
+
+if x < y:
+    print("x is less than y")
+else:
+    if x > y:
+        print("x is greater than y")
+    else:
+        print("x and y must be equal")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (sel2)</span> </p>
+
+<button class='btn btn-success' id="sel2_runb" onclick="runit('sel2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="sel2_saveb" onclick="saveEditor('sel2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="sel2_loadb" onclick="requestCode('sel2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#sel2_saveb').toggle();
+    $('#sel2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="sel2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="sel2_suffix" style="display:none">
+</pre>
+<pre id="sel2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In some programming languages, matching the if and the else is a problem.  However, in Python this is not the case.
+The indentation pattern tells us exactly which else
+belongs to which if.</p>
+</div>
+<p>If you are still a bit unsure, here is the same selection as part of a codelens example.  Step through it to see how the correct <tt class="docutils literal"><span class="pre">print</span></tt> is chosen.</p>
+
+<div id="sel1"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (sel1)</span> </p>
+<script type="text/javascript">
+var sel1_trace = {"code": "x = 10\ny = 10\n\nif x < y:\n    print(\"x is less than y\")\nelse:\n    if x > y:\n        print(\"x is greater than y\")\n    else:\n        print(\"x and y must be equal\")", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["x"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"x": 10}, "heap": {}, "line": 2, "event": "step_line"}, {"ordered_globals": ["x", "y"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"y": 10, "x": 10}, "heap": {}, "line": 4, "event": "step_line"}, {"ordered_globals": ["x", "y"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"y": 10, "x": 10}, "heap": {}, "line": 7, "event": "step_line"}, {"ordered_globals": ["x", "y"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"y": 10, "x": 10}, "heap": {}, "line": 10, "event": "step_line"}, {"ordered_globals": ["x", "y"], "stdout": "x and y must be equal\n", "func_name": "<module>", "stack_to_render": [], "globals": {"y": 10, "x": 10}, "heap": {}, "line": 10, "event": "return"}]};
+var sel1_vis;
+
+$(document).ready(function() {
+    sel1_vis = new ExecutionVisualizer('sel1',sel1_trace,
+                                {embeddedMode: false,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(sel1_vis,'sel1');
+    allVisualizers.push(sel1_vis);
+
+});
+
+$(document).ready(function() {
+    $("#sel1_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'sel1'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    sel1_vis.redrawConnectors();
+});
+</script>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_6_1" class="alert alert-warning">
+            <p>sel-9: Will the following code cause an error?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="s">&quot; is 0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question6_6_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_6_1_opt_a" />
+            <label for= "test_question6_6_1_opt_a">  a) No</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_6_1_opt_b" />
+            <label for= "test_question6_6_1_opt_b">  b) Yes</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_6_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_6_1','a',['This is a legal nested if\u002Delse statement.  The inner if\u002Delse statement is contained completely within the body of the outer else\u002Dblock.', 'This is a legal nested if\u002Delse statement.  The inner if\u002Delse statement is contained completely within the body of the outer else\u002Dblock.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_6_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_6_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_6_1_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="chained-conditionals">
+<span id="index-7"></span><h2>Chained conditionals<a class="headerlink" href="#chained-conditionals" title="Permalink to this headline">¶</a></h2>
+<p>Python provides an alternative way to write nested selection such as the one shown in the previous section.
+This is sometimes referred to as a <strong>chained
+conditional</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;x is less than y&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;x is greater than y&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;x and y must be equal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The flow of control can be drawn in a different orientation but the resulting pattern is identical to the one shown above.</p>
+<img alt="../_images/flowchart_chained_conditional.png" src="../_images/flowchart_chained_conditional.png" />
+<p><tt class="docutils literal"><span class="pre">elif</span></tt> is an abbreviation of <tt class="docutils literal"><span class="pre">else</span> <span class="pre">if</span></tt>. Again, exactly one branch will be
+executed. There is no limit of the number of <tt class="docutils literal"><span class="pre">elif</span></tt> statements but only a
+single (and optional) final <tt class="docutils literal"><span class="pre">else</span></tt> statement is allowed and it must be the last
+branch in the statement.</p>
+<p>Each condition is checked in order. If the first is false, the next is checked,
+and so on. If one of them is true, the corresponding branch executes, and the
+statement ends. Even if more than one condition is true, only the first true
+branch executes.</p>
+<p>Here is the same program using <tt class="docutils literal"><span class="pre">elif</span></tt>.</p>
+
+<div id="sel4" >
+
+<br/>
+<div id="sel4_code_div" style="display: block">
+<textarea cols="50" rows="120" id="sel4_code" class="active_code", prefixcode="undefined">
+x = 10
+y = 10
+
+if x < y:
+    print("x is less than y")
+elif x > y:
+    print("x is greater than y")
+else:
+    print("x and y must be equal")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (sel4)</span> </p>
+
+<button class='btn btn-success' id="sel4_runb" onclick="runit('sel4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="sel4_saveb" onclick="saveEditor('sel4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="sel4_loadb" onclick="requestCode('sel4');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#sel4_saveb').toggle();
+    $('#sel4_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="sel4_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="sel4_suffix" style="display:none">
+</pre>
+<pre id="sel4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_06_02" >
+
+<br/>
+<div id="scratch_06_02_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_06_02_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_06_02)</span> </p>
+
+<button class='btn btn-success' id="scratch_06_02_runb" onclick="runit('scratch_06_02',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_02_saveb" onclick="saveEditor('scratch_06_02');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_02_loadb" onclick="requestCode('scratch_06_02');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_06_02_saveb').toggle();
+    $('#scratch_06_02_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_06_02_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_06_02_suffix" style="display:none">
+</pre>
+<pre id="scratch_06_02_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_7_1" class="alert alert-warning">
+            <p>sel-10: Which of I, II, and III below gives the same result as the following nested if?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># nested if-else statement</span>
+<span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is 0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">I</span><span class="o">.</span>
+
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">else</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is 0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">II</span><span class="o">.</span>
+
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is 0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">III</span><span class="o">.</span>
+
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;The negative number &quot;</span><span class="p">,</span>  <span class="n">x</span><span class="p">,</span> <span class="s">&quot; is not valid here.&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is a positive number&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&quot; is 0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question6_7_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_7_1_opt_a" />
+            <label for= "test_question6_7_1_opt_a">  a) I only</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_7_1_opt_b" />
+            <label for= "test_question6_7_1_opt_b">  b) II only</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_7_1_opt_c" />
+            <label for= "test_question6_7_1_opt_c">  c) III only</label><br />
+            
+            <input type="radio" name="group1" value="d" id="test_question6_7_1_opt_d" />
+            <label for= "test_question6_7_1_opt_d">  d) II and III</label><br />
+            
+            <input type="radio" name="group1" value="e" id="test_question6_7_1_opt_e" />
+            <label for= "test_question6_7_1_opt_e">  e) I, II, and III</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_7_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_7_1','b',['You can not use a Boolean expression after an else.', 'Yes, II will give the same result.', 'No, III will not give the same result.  The first if statement will be true, but the second will be false, so the else part will execute.', 'No, Although II is correct III will not give the same result.  Try it.', 'No, in I you can not have a Boolean expression after an else.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_7_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_7_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_7_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question6_7_2" class="alert alert-warning">
+            <p>sel-11: What will the following code print if x = 3, y = 5, and z = 2?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&quot;c&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<form name="test_question6_7_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_7_2_opt_a" />
+            <label for= "test_question6_7_2_opt_a">  a) a</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_7_2_opt_b" />
+            <label for= "test_question6_7_2_opt_b">  b) b</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_7_2_opt_c" />
+            <label for= "test_question6_7_2_opt_c">  c) c</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_7_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_7_2','c',['While the value in x is less than the value in y (3 is less than 5) it is not less than the value in z (3 is not less than 2).', 'The value in y is not less than the value in x (5 is not less than 3).', 'Since the first two Boolean expressions are false the else will be executed.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_7_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_7_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_7_2_feedback">
+            </div>
+            </div>
+            </div>
+<div class="section" id="boolean-functions">
+<h2>Boolean Functions<a class="headerlink" href="#boolean-functions" title="Permalink to this headline">¶</a></h2>
+<p>We have already seen that boolean values result from the evaluation of boolean expressions.  Since the result of any
+expression evaluation can be returned by a function (using the <tt class="docutils literal"><span class="pre">return</span></tt> statement),
+functions can return boolean values.  This turns out to be a very convenient way to hide the details of complicated tests. For example:</p>
+
+<div id="ch06_boolfun1" >
+
+<br/>
+<div id="ch06_boolfun1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch06_boolfun1_code" class="active_code", prefixcode="undefined">
+def isDivisible(x, y):
+    if x % y == 0:
+        result = True
+    else:
+        result = False
+
+    return result
+
+print(isDivisible(10,5))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch06_boolfun1)</span> </p>
+
+<button class='btn btn-success' id="ch06_boolfun1_runb" onclick="runit('ch06_boolfun1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch06_boolfun1_saveb" onclick="saveEditor('ch06_boolfun1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch06_boolfun1_loadb" onclick="requestCode('ch06_boolfun1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch06_boolfun1_saveb').toggle();
+    $('#ch06_boolfun1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch06_boolfun1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch06_boolfun1_suffix" style="display:none">
+</pre>
+<pre id="ch06_boolfun1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>The name of this function is <tt class="docutils literal"><span class="pre">isDivisible</span></tt>. It is common to give <strong>boolean
+functions</strong> names that sound like yes/no questions.  <tt class="docutils literal"><span class="pre">isDivisible</span></tt> returns
+either <tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt> to indicate whether the <tt class="docutils literal"><span class="pre">x</span></tt> is or is not
+divisible by <tt class="docutils literal"><span class="pre">y</span></tt>.</p>
+<p>We can make the function more concise by taking advantage of the fact that the
+condition of the <tt class="docutils literal"><span class="pre">if</span></tt> statement is itself a boolean expression. We can return
+it directly, avoiding the <tt class="docutils literal"><span class="pre">if</span></tt> statement altogether:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">isDivisible</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Boolean functions are often used in conditional statements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">isDivisible</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="o">...</span> <span class="c"># do something ...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="o">...</span> <span class="c"># do something else ...</span>
+</pre></div>
+</div>
+<p>It might be tempting to write something like
+<tt class="docutils literal"><span class="pre">if</span> <span class="pre">isDivisible(x,</span> <span class="pre">y)</span> <span class="pre">==</span> <span class="pre">True:</span></tt>
+but the extra comparison is  not necessary.  The following example shows the <tt class="docutils literal"><span class="pre">isDivisible</span></tt> function at work.  Notice how
+descriptive the code is when we move the testing details into a boolean function.  Try it
+with a few other actual parameters to see what is printed.</p>
+
+<div id="ch06_boolfun2" >
+
+<br/>
+<div id="ch06_boolfun2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch06_boolfun2_code" class="active_code", prefixcode="undefined">
+def isDivisible(x, y):
+    if x % y == 0:
+        result = True
+    else:
+        result = False
+
+    return result
+
+if isDivisible(10,5):
+    print("That works")
+else:
+    print("Those values are no good")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch06_boolfun2)</span> </p>
+
+<button class='btn btn-success' id="ch06_boolfun2_runb" onclick="runit('ch06_boolfun2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch06_boolfun2_saveb" onclick="saveEditor('ch06_boolfun2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch06_boolfun2_loadb" onclick="requestCode('ch06_boolfun2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch06_boolfun2_saveb').toggle();
+    $('#ch06_boolfun2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch06_boolfun2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch06_boolfun2_suffix" style="display:none">
+</pre>
+<pre id="ch06_boolfun2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Here is the same program in codelens.  When we evaluate the <tt class="docutils literal"><span class="pre">if</span></tt> statement in the main part of the program, the evaluation of
+the boolean expression causes a call to the <tt class="docutils literal"><span class="pre">isDivisible</span></tt> function.  This is very easy to see in codelens.</p>
+
+<div id="ch06_boolcodelens"></div>
+<p class="cl_caption"><span class="cl_caption_text"> (ch06_boolcodelens)</span> </p>
+<script type="text/javascript">
+var ch06_boolcodelens_trace = {"code": "def isDivisible(x, y):\n    if x % y == 0:\n        result = True\n    else:\n        result = False\n\n    return result\n\nif isDivisible(10,5):\n    print(\"That works\")\nelse:\n    print(\"Those values are no good\")", "trace": [{"ordered_globals": [], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {}, "heap": {}, "line": 1, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 9, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "isDivisible", "stack_to_render": [{"frame_id": 1, "encoded_locals": {"y": 5, "x": 10}, "is_highlighted": true, "is_parent": false, "func_name": "isDivisible", "is_zombie": false, "parent_frame_id_list": [], "unique_hash": "isDivisible_f1", "ordered_varnames": ["x", "y"]}], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 1, "event": "call"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "isDivisible", "stack_to_render": [{"frame_id": 1, "encoded_locals": {"y": 5, "x": 10}, "is_highlighted": true, "is_parent": false, "func_name": "isDivisible", "is_zombie": false, "parent_frame_id_list": [], "unique_hash": "isDivisible_f1", "ordered_varnames": ["x", "y"]}], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 2, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "isDivisible", "stack_to_render": [{"frame_id": 1, "encoded_locals": {"y": 5, "x": 10}, "is_highlighted": true, "is_parent": false, "func_name": "isDivisible", "is_zombie": false, "parent_frame_id_list": [], "unique_hash": "isDivisible_f1", "ordered_varnames": ["x", "y"]}], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 3, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "isDivisible", "stack_to_render": [{"frame_id": 1, "encoded_locals": {"y": 5, "x": 10, "result": true}, "is_highlighted": true, "is_parent": false, "func_name": "isDivisible", "is_zombie": false, "parent_frame_id_list": [], "unique_hash": "isDivisible_f1", "ordered_varnames": ["x", "y", "result"]}], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 7, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "isDivisible", "stack_to_render": [{"frame_id": 1, "encoded_locals": {"y": 5, "x": 10, "__return__": true, "result": true}, "is_highlighted": true, "is_parent": false, "func_name": "isDivisible", "is_zombie": false, "parent_frame_id_list": [], "unique_hash": "isDivisible_f1", "ordered_varnames": ["x", "y", "result", "__return__"]}], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 7, "event": "return"}, {"ordered_globals": ["isDivisible"], "stdout": "", "func_name": "<module>", "stack_to_render": [], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 10, "event": "step_line"}, {"ordered_globals": ["isDivisible"], "stdout": "That works\n", "func_name": "<module>", "stack_to_render": [], "globals": {"isDivisible": ["REF", 1]}, "heap": {"1": ["FUNCTION", "isDivisible(x, y)", null]}, "line": 10, "event": "return"}]};
+var ch06_boolcodelens_vis;
+
+$(document).ready(function() {
+    ch06_boolcodelens_vis = new ExecutionVisualizer('ch06_boolcodelens',ch06_boolcodelens_trace,
+                                {embeddedMode: false,
+                                verticalStack: true,
+                                heightChangeCallback: redrawAllVisualizerArrows,
+                                codeDivWidth: 500
+                                });
+    attachLoggers(ch06_boolcodelens_vis,'ch06_boolcodelens');
+    allVisualizers.push(ch06_boolcodelens_vis);
+
+});
+
+$(document).ready(function() {
+    $("#ch06_boolcodelens_tracecheck").click(function() {
+        logBookEvent({'event':'codelens', 'act': 'check', 'div_id':'ch06_boolcodelens'});
+    });
+});
+
+if (allVisualizers === undefined) {
+   var allVisualizers = [];
+}
+
+
+$(window).resize(function() {
+    ch06_boolcodelens_vis.redrawConnectors();
+});
+</script>
+<p><strong>Check your understanding</strong></p>
+
+            <div id="test_question6_8_1" class="alert alert-warning">
+            sel-12: What is a Boolean function?<form name="test_question6_8_1_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_8_1_opt_a" />
+            <label for= "test_question6_8_1_opt_a">  a) A function that returns True or False</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_8_1_opt_b" />
+            <label for= "test_question6_8_1_opt_b">  b) A function that takes True or False as an argument</label><br />
+            
+            <input type="radio" name="group1" value="c" id="test_question6_8_1_opt_c" />
+            <label for= "test_question6_8_1_opt_c">  c) The same as a Boolean expression</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_8_1');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_8_1','a',['A Boolean function is just like any other function, but it always returns True or False.', 'A Boolean function may take any number of arguments (including 0, though that is rare), of any type.', 'A Boolean expression is a statement that evaluates to True or False, e.g. 5+3\u003D\u003D8.  A function is a series of expressions grouped together with a name that are only executed when you call the function.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_8_1_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_8_1');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_8_1_feedback">
+            </div>
+            </div>
+            
+            <div id="test_question6_8_2" class="alert alert-warning">
+            <p>sel-13: Is the following statement legal in Python (assuming x, y and z are defined to be numbers)?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">z</span>
+</pre></div>
+</div>
+<form name="test_question6_8_2_form" method="get" action="" onsubmit="return false;">
+            <input type="radio" name="group1" value="a" id="test_question6_8_2_opt_a" />
+            <label for= "test_question6_8_2_opt_a">  a) Yes</label><br />
+            
+            <input type="radio" name="group1" value="b" id="test_question6_8_2_opt_b" />
+            <label for= "test_question6_8_2_opt_b">  b) No</label><br />
+            
+
+            <script>
+            $(document).ready(function(){checkRadio('test_question6_8_2');});
+            </script>
+            <button class='btn btn-success' name="do answer" onclick="checkMCMFStorage('test_question6_8_2','a',['It is perfectly valid to return the result of evaluating a Boolean expression.', 'x +y \u003C z is a valid Boolean expression, which will evaluate to True or False.  It is perfectly legal to return True or False from a function, and to have the statement to be evaluated in the same line as the return keyword.'])">Check Me</button>
+            <button class='btn btn-default' id="test_question6_8_2_bcomp" disabled name="compare" onclick="compareAnswers('test_question6_8_2');">Compare Me</button>
+            </form><br />
+            <div id="test_question6_8_2_feedback">
+            </div>
+            </div>
+            <div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_06_03" >
+
+<br/>
+<div id="scratch_06_03_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_06_03_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_06_03)</span> </p>
+
+<button class='btn btn-success' id="scratch_06_03_runb" onclick="runit('scratch_06_03',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_03_saveb" onclick="saveEditor('scratch_06_03');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_06_03_loadb" onclick="requestCode('scratch_06_03');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_06_03_saveb').toggle();
+    $('#scratch_06_03_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_06_03_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_06_03_suffix" style="display:none">
+</pre>
+<pre id="scratch_06_03_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+</div>
+<div class="section" id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h2>
+<dl class="glossary docutils">
+<dt id="term-block">block</dt>
+<dd>A group of consecutive statements with the same indentation.</dd>
+<dt id="term-body">body</dt>
+<dd>The block of statements in a compound statement that follows the
+header.</dd>
+<dt id="term-boolean-expression">boolean expression</dt>
+<dd>An expression that is either true or false.</dd>
+<dt id="term-boolean-function">boolean function</dt>
+<dd>A function that returns a boolean value.  The only possible
+values of the <tt class="docutils literal"><span class="pre">bool</span></tt> type are <tt class="docutils literal"><span class="pre">False</span></tt> and <tt class="docutils literal"><span class="pre">True</span></tt>.</dd>
+<dt id="term-boolean-value">boolean value</dt>
+<dd>There are exactly two boolean values: <tt class="docutils literal"><span class="pre">True</span></tt> and <tt class="docutils literal"><span class="pre">False</span></tt>. Boolean
+values result when a boolean expression is evaluated by the Python
+interepreter.  They have type <tt class="docutils literal"><span class="pre">bool</span></tt>.</dd>
+<dt id="term-branch">branch</dt>
+<dd>One of the possible paths of the flow of execution determined by
+conditional execution.</dd>
+<dt id="term-chained-conditional">chained conditional</dt>
+<dd>A conditional branch with more than two possible flows of execution. In
+Python chained conditionals are written with <tt class="docutils literal"><span class="pre">if</span> <span class="pre">...</span> <span class="pre">elif</span> <span class="pre">...</span> <span class="pre">else</span></tt>
+statements.</dd>
+<dt id="term-comparison-operator">comparison operator</dt>
+<dd>One of the operators that compares two values: <tt class="docutils literal"><span class="pre">==</span></tt>, <tt class="docutils literal"><span class="pre">!=</span></tt>, <tt class="docutils literal"><span class="pre">&gt;</span></tt>,
+<tt class="docutils literal"><span class="pre">&lt;</span></tt>, <tt class="docutils literal"><span class="pre">&gt;=</span></tt>, and <tt class="docutils literal"><span class="pre">&lt;=</span></tt>.</dd>
+<dt id="term-condition">condition</dt>
+<dd>The boolean expression in a conditional statement that determines which
+branch is executed.</dd>
+<dt id="term-conditional-statement">conditional statement</dt>
+<dd>A statement that controls the flow of execution depending on some
+condition. In Python the keywords <tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">elif</span></tt>, and <tt class="docutils literal"><span class="pre">else</span></tt> are
+used for conditional statements.</dd>
+<dt id="term-logical-operator">logical operator</dt>
+<dd>One of the operators that combines boolean expressions: <tt class="docutils literal"><span class="pre">and</span></tt>,
+<tt class="docutils literal"><span class="pre">or</span></tt>, and <tt class="docutils literal"><span class="pre">not</span></tt>.</dd>
+<dt id="term-modulus-operator">modulus operator</dt>
+<dd>An operator, denoted with a percent sign ( <tt class="docutils literal"><span class="pre">%</span></tt>), that works on
+integers and yields the remainder when one number is divided by
+another.</dd>
+<dt id="term-nesting">nesting</dt>
+<dd>One program structure within another, such as a conditional statement
+inside a branch of another conditional statement.</dd>
+</dl>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><div id='q1' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q1-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q1-Question'><p>What do these expressions evaluate to?</p>
+<ol class="arabic">
+<li><p class="first"><tt class="docutils literal"><span class="pre">3</span> <span class="pre">==</span> <span class="pre">3</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">3</span> <span class="pre">!=</span> <span class="pre">3</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">3</span> <span class="pre">&gt;=</span> <span class="pre">4</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">not</span> <span class="pre">(3</span> <span class="pre">&lt;</span> <span class="pre">4)</span></tt></p>
+
+<div id="ex_6_1" >
+
+<br/>
+<div id="ex_6_1_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_1_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_1)</span> </p>
+
+<button class='btn btn-success' id="ex_6_1_runb" onclick="runit('ex_6_1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_1_saveb" onclick="saveEditor('ex_6_1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_1_loadb" onclick="requestCode('ex_6_1');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_1_saveb').toggle();
+    $('#ex_6_1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_1_showb" onclick="$('#ex_6_1_code_div').toggle();cm_editors['ex_6_1_code'].refresh();$('#ex_6_1_saveb').toggle();$('#ex_6_1_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_1')"/>
+<pre id="ex_6_1_suffix" style="display:none">
+</pre>
+<pre id="ex_6_1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+</ol>
+</div><div class='tab-pane' id='q1-Answer'><ol class="arabic simple">
+<li>True</li>
+<li>False</li>
+<li>False</li>
+<li>False</li>
+</ol>
+</div><div class='tab-pane' id='q1-Discussion'><script type="text/javascript">
+    function disqus_eb4a097382404ffe81300aac5744e3fe_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_eb4a097382404ffe81300aac5744e3fe_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_eb4a097382404ffe81300aac5744e3fe_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_eb4a097382404ffe81300aac5744e3fe_' + eBookConfig.course;
+            disqus_url = 'http://disqus_eb4a097382404ffe81300aac5744e3fe_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_eb4a097382404ffe81300aac5744e3fe" onclick="disqus_eb4a097382404ffe81300aac5744e3fe_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_eb4a097382404ffe81300aac5744e3fe']").attr('data-disqus-identifier', 'disqus_eb4a097382404ffe81300aac5744e3fe_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q1 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q1 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q1 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Give the <strong>logical opposites</strong> of these conditions.  You are not allowed to use the <tt class="docutils literal"><span class="pre">not</span></tt> operator.</p>
+<ol class="arabic">
+<li><p class="first"><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">b</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">b</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">18</span>&nbsp; <span class="pre">and</span>&nbsp; <span class="pre">day</span> <span class="pre">==</span> <span class="pre">3</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">18</span>&nbsp; <span class="pre">or</span>&nbsp; <span class="pre">day</span> <span class="pre">!=</span> <span class="pre">3</span></tt></p>
+
+<div id="ex_6_2" >
+
+<br/>
+<div id="ex_6_2_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_2_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_2)</span> </p>
+
+<button class='btn btn-success' id="ex_6_2_runb" onclick="runit('ex_6_2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_2_saveb" onclick="saveEditor('ex_6_2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_2_loadb" onclick="requestCode('ex_6_2');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_2_saveb').toggle();
+    $('#ex_6_2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_2_showb" onclick="$('#ex_6_2_code_div').toggle();cm_editors['ex_6_2_code'].refresh();$('#ex_6_2_saveb').toggle();$('#ex_6_2_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_2')"/>
+<pre id="ex_6_2_suffix" style="display:none">
+</pre>
+<pre id="ex_6_2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+</ol>
+</li>
+<li><div id='q3' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q3-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q3-Question'><p>Write a function which is given an exam mark, and it returns a string &#8212; the grade for that mark &#8212; according to this
+scheme:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="58%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">Mark</p>
+</th>
+<th class="head"><p class="first last">Grade</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><p class="first last">&gt;= 90</p>
+</td>
+<td><p class="first last">A</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">[80-90)</p>
+</td>
+<td><p class="first last">B</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">[70-80)</p>
+</td>
+<td><p class="first last">C</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p class="first last">[60-70)</p>
+</td>
+<td><p class="first last">D</p>
+</td>
+</tr>
+<tr class="row-even"><td><p class="first last">&lt; 60</p>
+</td>
+<td><p class="first last">F</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The square and round brackets denote closed and open intervals.
+A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.</p>
+<p>Test your function by printing the mark and the grade for a number of different marks.</p>
+
+<div id="ex_6_3" >
+
+<br/>
+<div id="ex_6_3_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_3_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_3)</span> </p>
+
+<button class='btn btn-success' id="ex_6_3_runb" onclick="runit('ex_6_3',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_3_saveb" onclick="saveEditor('ex_6_3');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_3_loadb" onclick="requestCode('ex_6_3');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_3_saveb').toggle();
+    $('#ex_6_3_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_3_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_3_showb" onclick="$('#ex_6_3_code_div').toggle();cm_editors['ex_6_3_code'].refresh();$('#ex_6_3_saveb').toggle();$('#ex_6_3_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_3')"/>
+<pre id="ex_6_3_suffix" style="display:none">
+</pre>
+<pre id="ex_6_3_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Answer'>
+<div id="q3_question" >
+
+<br/>
+<div id="q3_question_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q3_question_code" class="active_code", prefixcode="undefined">
+def grade(mark):
+    if mark >= 90:
+        return "A"
+    else:
+        if mark >= 80:
+            return "B"
+        else:
+            if mark >= 70:
+                return "C"
+            else:
+                if mark >= 60:
+                    return "D"
+                else:
+                    return "F"
+
+mark = 83
+print( "Mark:", str(mark), "Grade:", grade(mark))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q3_question)</span> </p>
+
+<button class='btn btn-success' id="q3_question_runb" onclick="runit('q3_question',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q3_question_saveb" onclick="saveEditor('q3_question');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q3_question_loadb" onclick="requestCode('q3_question');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q3_question_saveb').toggle();
+    $('#q3_question_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="q3_question_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="q3_question_suffix" style="display:none">
+</pre>
+<pre id="q3_question_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Discussion'><script type="text/javascript">
+    function disqus_b9e6fd14629949e59da1a4ae827c0032_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_b9e6fd14629949e59da1a4ae827c0032_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_b9e6fd14629949e59da1a4ae827c0032_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_b9e6fd14629949e59da1a4ae827c0032_' + eBookConfig.course;
+            disqus_url = 'http://disqus_b9e6fd14629949e59da1a4ae827c0032_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_b9e6fd14629949e59da1a4ae827c0032" onclick="disqus_b9e6fd14629949e59da1a4ae827c0032_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_b9e6fd14629949e59da1a4ae827c0032']").attr('data-disqus-identifier', 'disqus_b9e6fd14629949e59da1a4ae827c0032_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q3 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q3 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q3 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Modify the turtle bar chart program from the previous chapter so that the bar for any value
+of 200 or more is filled with red, values between [100 and 200) are filled yellow,
+and bars representing values less than 100 are filled green.</p>
+
+<div id="ex_6_4" >
+
+<br/>
+<div id="ex_6_4_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_4_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_4)</span> </p>
+
+<button class='btn btn-success' id="ex_6_4_runb" onclick="runit('ex_6_4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_4_saveb" onclick="saveEditor('ex_6_4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_4_loadb" onclick="requestCode('ex_6_4');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_4_saveb').toggle();
+    $('#ex_6_4_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_4_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_4_showb" onclick="$('#ex_6_4_code_div').toggle();cm_editors['ex_6_4_code'].refresh();$('#ex_6_4_saveb').toggle();$('#ex_6_4_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_4')"/>
+<pre id="ex_6_4_suffix" style="display:none">
+</pre>
+<pre id="ex_6_4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q5' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q5-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q5-Question'><p>In the turtle bar chart program, what do you expect to happen if one or more
+of the data values in the list is negative?   Go back and try it out.  Change the
+program so that when it prints the text value for the negative bars, it puts
+the text above the base of the bar (on the 0 axis).</p>
+
+<div id="ex_6_5" >
+
+<br/>
+<div id="ex_6_5_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_5_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_5)</span> </p>
+
+<button class='btn btn-success' id="ex_6_5_runb" onclick="runit('ex_6_5',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_5_saveb" onclick="saveEditor('ex_6_5');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_5_loadb" onclick="requestCode('ex_6_5');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_5_saveb').toggle();
+    $('#ex_6_5_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_5_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_5_showb" onclick="$('#ex_6_5_code_div').toggle();cm_editors['ex_6_5_code'].refresh();$('#ex_6_5_saveb').toggle();$('#ex_6_5_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_5')"/>
+<pre id="ex_6_5_suffix" style="display:none">
+</pre>
+<pre id="ex_6_5_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Answer'>
+<div id="answer_ex_6_5" >
+
+<br/>
+<div id="answer_ex_6_5_code_div" style="display: block">
+<textarea cols="50" rows="120" id="answer_ex_6_5_code" class="active_code", prefixcode="undefined">
+import turtle
+
+def drawBar(t, height):
+  """ Get turtle t to draw one bar, of height. """
+  t.begin_fill()               # start filling this shape
+  if height < 0:
+      t.write(str(height))
+  t.left(90)
+  t.forward(height)
+  if height >=0:
+      t.write(str(height))
+  t.right(90)
+  t.forward(40)
+  t.right(90)
+  t.forward(height)
+  t.left(90)
+  t.end_fill()                 # stop filling this shape
+
+
+
+xs = [48,-50,200,240,160,260,220]  # here is the data
+maxheight = max(xs)
+minheight = min(xs)
+numbars = len(xs)
+border = 10
+
+tess = turtle.Turtle()           # create tess and set some attributes
+tess.color("blue")
+tess.fillcolor("red")
+tess.pensize(3)
+
+wn = turtle.Screen()             # Set up the window and its attributes
+wn.bgcolor("lightgreen")
+if minheight >0:
+    lly = 0
+else:
+    lly = minheight-border
+
+wn.setworldcoordinates(0-border,lly,40*numbars+border,maxheight+border)
+
+
+for a in xs:
+  drawBar(tess, a)
+
+wn.exitonclick()
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (answer_ex_6_5)</span> </p>
+
+<button class='btn btn-success' id="answer_ex_6_5_runb" onclick="runit('answer_ex_6_5',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="answer_ex_6_5_saveb" onclick="saveEditor('answer_ex_6_5');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="answer_ex_6_5_loadb" onclick="requestCode('answer_ex_6_5');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#answer_ex_6_5_saveb').toggle();
+    $('#answer_ex_6_5_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="answer_ex_6_5_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="answer_ex_6_5_suffix" style="display:none">
+</pre>
+<pre id="answer_ex_6_5_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Discussion'><script type="text/javascript">
+    function disqus_0118bd02de23462bafdb51beb4c85e44_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_0118bd02de23462bafdb51beb4c85e44_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_0118bd02de23462bafdb51beb4c85e44_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_0118bd02de23462bafdb51beb4c85e44_' + eBookConfig.course;
+            disqus_url = 'http://disqus_0118bd02de23462bafdb51beb4c85e44_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_0118bd02de23462bafdb51beb4c85e44" onclick="disqus_0118bd02de23462bafdb51beb4c85e44_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_0118bd02de23462bafdb51beb4c85e44']").attr('data-disqus-identifier', 'disqus_0118bd02de23462bafdb51beb4c85e44_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q5 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q5 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q5 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a function <tt class="docutils literal"><span class="pre">findHypot</span></tt>.  The function will be given the length of two sides of a right-angled triangle and it should return
+the length of the hypotenuse.  (Hint:  <tt class="docutils literal"><span class="pre">x</span> <span class="pre">**</span> <span class="pre">0.5</span></tt> will return the square root, or use <tt class="docutils literal"><span class="pre">sqrt</span></tt> from the math module)</p>
+
+<div id="ex_6_6" >
+
+<br/>
+<div id="ex_6_6_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_6_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def findHypot(a,b):
+    # your code here
+
+testEqual(findHypot(12.0,5.0), 13.0)
+testEqual(findHypot(14.0,48.0), 50.0)
+testEqual(findHypot(21.0,72.0), 75.0)
+testEqual(findHypot(1,1.73205), 1.999999)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_6)</span> </p>
+
+<button class='btn btn-success' id="ex_6_6_runb" onclick="runit('ex_6_6',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_6_saveb" onclick="saveEditor('ex_6_6');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_6_loadb" onclick="requestCode('ex_6_6');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_6_saveb').toggle();
+    $('#ex_6_6_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_6_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_6_showb" onclick="$('#ex_6_6_code_div').toggle();cm_editors['ex_6_6_code'].refresh();$('#ex_6_6_saveb').toggle();$('#ex_6_6_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_6')"/>
+<pre id="ex_6_6_suffix" style="display:none">
+</pre>
+<pre id="ex_6_6_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q7' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q7-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q7-Question'><p>Write a function called <tt class="docutils literal"><span class="pre">is_even(n)</span></tt> that takes an integer as an argument
+and returns <tt class="docutils literal"><span class="pre">True</span></tt> if the argument is an <strong>even number</strong> and <tt class="docutils literal"><span class="pre">False</span></tt> if
+it is <strong>odd</strong>.</p>
+
+<div id="ex_6_7" >
+
+<br/>
+<div id="ex_6_7_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_7_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_even(n):
+    # your code here
+
+testEqual(is_even(10), True)
+testEqual(is_even(5), False)
+testEqual(is_even(1), False)
+testEqual(is_even(0), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_7)</span> </p>
+
+<button class='btn btn-success' id="ex_6_7_runb" onclick="runit('ex_6_7',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_7_saveb" onclick="saveEditor('ex_6_7');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_7_loadb" onclick="requestCode('ex_6_7');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_7_saveb').toggle();
+    $('#ex_6_7_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_7_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_7_showb" onclick="$('#ex_6_7_code_div').toggle();cm_editors['ex_6_7_code'].refresh();$('#ex_6_7_saveb').toggle();$('#ex_6_7_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_7')"/>
+<pre id="ex_6_7_suffix" style="display:none">
+</pre>
+<pre id="ex_6_7_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q7-Answer'>
+<div id="q7_answer" >
+
+<br/>
+<div id="q7_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q7_answer_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_even(n):
+    if n % 2 == 0:
+        return True
+    else:
+        return False
+
+testEqual(is_even(10), True)
+testEqual(is_even(5), False)
+testEqual(is_even(1), False)
+testEqual(is_even(0), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q7_answer)</span> </p>
+
+<button class='btn btn-success' id="q7_answer_runb" onclick="runit('q7_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q7_answer_saveb" onclick="saveEditor('q7_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q7_answer_loadb" onclick="requestCode('q7_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q7_answer_saveb').toggle();
+    $('#q7_answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="q7_answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="q7_answer_suffix" style="display:none">
+</pre>
+<pre id="q7_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q7-Discussion'><script type="text/javascript">
+    function disqus_7ae92646976d4953ac8a163f338b4358_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_7ae92646976d4953ac8a163f338b4358_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_7ae92646976d4953ac8a163f338b4358_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_7ae92646976d4953ac8a163f338b4358_' + eBookConfig.course;
+            disqus_url = 'http://disqus_7ae92646976d4953ac8a163f338b4358_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_7ae92646976d4953ac8a163f338b4358" onclick="disqus_7ae92646976d4953ac8a163f338b4358_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_7ae92646976d4953ac8a163f338b4358']").attr('data-disqus-identifier', 'disqus_7ae92646976d4953ac8a163f338b4358_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q7 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q7 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q7 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Now write the function <tt class="docutils literal"><span class="pre">is_odd(n)</span></tt> that returns <tt class="docutils literal"><span class="pre">True</span></tt> when <tt class="docutils literal"><span class="pre">n</span></tt> is odd
+and <tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+
+<div id="ex_6_8" >
+
+<br/>
+<div id="ex_6_8_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_8_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_odd(n):
+    # your code here
+
+testEqual(is_odd(10), False)
+testEqual(is_odd(5), True)
+testEqual(is_odd(1), True)
+testEqual(is_odd(0), False)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_8)</span> </p>
+
+<button class='btn btn-success' id="ex_6_8_runb" onclick="runit('ex_6_8',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_8_saveb" onclick="saveEditor('ex_6_8');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_8_loadb" onclick="requestCode('ex_6_8');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_8_saveb').toggle();
+    $('#ex_6_8_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_8_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_8_showb" onclick="$('#ex_6_8_code_div').toggle();cm_editors['ex_6_8_code'].refresh();$('#ex_6_8_saveb').toggle();$('#ex_6_8_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_8')"/>
+<pre id="ex_6_8_suffix" style="display:none">
+</pre>
+<pre id="ex_6_8_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q9' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q9-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q9-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q9-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q9-Question'><p>Modify <tt class="docutils literal"><span class="pre">is_odd</span></tt> so that it uses a call to <tt class="docutils literal"><span class="pre">is_even</span></tt> to determine if its
+argument is an odd integer.</p>
+
+<div id="ex_6_9" >
+
+<br/>
+<div id="ex_6_9_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_9_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_odd(n):
+    # your code here
+
+testEqual(is_odd(10), False)
+testEqual(is_odd(5), True)
+testEqual(is_odd(1), True)
+testEqual(is_odd(0), False)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_9)</span> </p>
+
+<button class='btn btn-success' id="ex_6_9_runb" onclick="runit('ex_6_9',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_9_saveb" onclick="saveEditor('ex_6_9');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_9_loadb" onclick="requestCode('ex_6_9');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_9_saveb').toggle();
+    $('#ex_6_9_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_9_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_9_showb" onclick="$('#ex_6_9_code_div').toggle();cm_editors['ex_6_9_code'].refresh();$('#ex_6_9_saveb').toggle();$('#ex_6_9_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_9')"/>
+<pre id="ex_6_9_suffix" style="display:none">
+</pre>
+<pre id="ex_6_9_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q9-Answer'>
+<div id="q9_answer" >
+
+<br/>
+<div id="q9_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q9_answer_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_even(n):
+    if n % 2 == 0:
+        return True
+    else:
+        return False
+
+def is_odd(n):
+    if is_even(n):
+        return False
+    else:
+        return True
+
+testEqual(is_odd(10), False)
+testEqual(is_odd(5), True)
+testEqual(is_odd(1), True)
+testEqual(is_odd(0), False)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q9_answer)</span> </p>
+
+<button class='btn btn-success' id="q9_answer_runb" onclick="runit('q9_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q9_answer_saveb" onclick="saveEditor('q9_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q9_answer_loadb" onclick="requestCode('q9_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q9_answer_saveb').toggle();
+    $('#q9_answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="q9_answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="q9_answer_suffix" style="display:none">
+</pre>
+<pre id="q9_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q9-Discussion'><script type="text/javascript">
+    function disqus_9125792d0c264b65b4d9d72d25485ceb_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_9125792d0c264b65b4d9d72d25485ceb_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_9125792d0c264b65b4d9d72d25485ceb_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_9125792d0c264b65b4d9d72d25485ceb_' + eBookConfig.course;
+            disqus_url = 'http://disqus_9125792d0c264b65b4d9d72d25485ceb_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_9125792d0c264b65b4d9d72d25485ceb" onclick="disqus_9125792d0c264b65b4d9d72d25485ceb_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_9125792d0c264b65b4d9d72d25485ceb']").attr('data-disqus-identifier', 'disqus_9125792d0c264b65b4d9d72d25485ceb_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q9 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q9 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q9 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a function <tt class="docutils literal"><span class="pre">is_rightangled</span></tt> which, given the length of three sides of a triangle,
+will determine whether the triangle is right-angled.  Assume that the third argument to the
+function is always the longest side.  It will return <tt class="docutils literal"><span class="pre">True</span></tt> if the triangle
+is right-angled, or <tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+<p>Hint: floating point arithmetic is not always exactly accurate,
+so it is not safe to test floating point numbers for equality.
+If a good programmer wants to know whether
+<tt class="docutils literal"><span class="pre">x</span></tt> is equal or close enough to <tt class="docutils literal"><span class="pre">y</span></tt>, they would probably code it up as</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span>  <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>      <span class="c"># if x is approximately equal to y</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+
+<div id="ex_6_10" >
+
+<br/>
+<div id="ex_6_10_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_10_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_rightangled(a,b,c):
+    # your code here
+
+testEqual(is_rightangled(1.5,2.0,2.5), True)
+testEqual(is_rightangled(4.0,8.0,16.0), False)
+testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
+testEqual(is_rightangled(4.1,8.2,9.16787), True)
+testEqual(is_rightangled(4.1,8.2,9.168), False)
+testEqual(is_rightangled(0.5,0.4,0.64031), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_10)</span> </p>
+
+<button class='btn btn-success' id="ex_6_10_runb" onclick="runit('ex_6_10',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_10_saveb" onclick="saveEditor('ex_6_10');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_10_loadb" onclick="requestCode('ex_6_10');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_10_saveb').toggle();
+    $('#ex_6_10_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_10_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_10_showb" onclick="$('#ex_6_10_code_div').toggle();cm_editors['ex_6_10_code'].refresh();$('#ex_6_10_saveb').toggle();$('#ex_6_10_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_10')"/>
+<pre id="ex_6_10_suffix" style="display:none">
+</pre>
+<pre id="ex_6_10_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q11' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q11-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q11-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q11-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q11-Question'><p>Extend the above program so that the sides can be given to the function in any order.</p>
+
+<div id="ex_6_11" >
+
+<br/>
+<div id="ex_6_11_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_11_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_rightangled(a,b,c):
+    # your code here
+
+testEqual(is_rightangled(1.5,2.0,2.5), True)
+testEqual(is_rightangled(16.0,4.0,8.0), False)
+testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
+testEqual(is_rightangled(9.16787,4.1,8.2), True)
+testEqual(is_rightangled(4.1,8.2,9.168), False)
+testEqual(is_rightangled(0.5,0.64031,0.4), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_11)</span> </p>
+
+<button class='btn btn-success' id="ex_6_11_runb" onclick="runit('ex_6_11',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_11_saveb" onclick="saveEditor('ex_6_11');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_11_loadb" onclick="requestCode('ex_6_11');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_11_saveb').toggle();
+    $('#ex_6_11_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_11_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_11_showb" onclick="$('#ex_6_11_code_div').toggle();cm_editors['ex_6_11_code'].refresh();$('#ex_6_11_saveb').toggle();$('#ex_6_11_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_11')"/>
+<pre id="ex_6_11_suffix" style="display:none">
+</pre>
+<pre id="ex_6_11_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q11-Answer'>
+<div id="q11_answer" >
+
+<br/>
+<div id="q11_answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="q11_answer_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def is_rightangled(a,b,c):
+    is_rightangled = False
+
+    largest = a
+    if b > largest:
+        # largest = b
+        if abs((a**2) + (c**2) - (b**2)) < 0.001:
+            is_rightangled = True
+    if c > largest:
+        # largest = c
+        if abs((a**2) + (b**2) - (c**2)) < 0.001:
+            is_rightangled = True
+    else:
+        # largest = a
+        if abs((c**2) + (b**2) - (a**2)) < 0.001:
+            is_rightangled = True
+
+    return is_rightangled
+
+testEqual(is_rightangled(1.5,2.0,2.5), True)
+testEqual(is_rightangled(4.0,8.0,16.0), False)
+testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
+testEqual(is_rightangled(4.1,8.2,9.16787), True)
+testEqual(is_rightangled(4.1,8.2,9.168), False)
+testEqual(is_rightangled(0.5,0.4,0.64031), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (q11_answer)</span> </p>
+
+<button class='btn btn-success' id="q11_answer_runb" onclick="runit('q11_answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q11_answer_saveb" onclick="saveEditor('q11_answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="q11_answer_loadb" onclick="requestCode('q11_answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#q11_answer_saveb').toggle();
+    $('#q11_answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="q11_answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="q11_answer_suffix" style="display:none">
+</pre>
+<pre id="q11_answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q11-Discussion'><script type="text/javascript">
+    function disqus_b25992fa70fc4e7581d84315df38d796_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_b25992fa70fc4e7581d84315df38d796_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_b25992fa70fc4e7581d84315df38d796_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_b25992fa70fc4e7581d84315df38d796_' + eBookConfig.course;
+            disqus_url = 'http://disqus_b25992fa70fc4e7581d84315df38d796_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_b25992fa70fc4e7581d84315df38d796" onclick="disqus_b25992fa70fc4e7581d84315df38d796_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_b25992fa70fc4e7581d84315df38d796']").attr('data-disqus-identifier', 'disqus_b25992fa70fc4e7581d84315df38d796_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q11 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q11 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q11 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">A year is a <strong>leap year</strong> if it is divisible by 4 unless it is a century that is not divisible by 400.
+Write a function that takes a year as a parameter and returns <tt class="docutils literal"><span class="pre">True</span></tt> if the year is a leap year, <tt class="docutils literal"><span class="pre">False</span></tt> otherwise.</p>
+
+<div id="ex_6_12" >
+
+<br/>
+<div id="ex_6_12_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_12_code" class="active_code", prefixcode="undefined">
+from test import testEqual
+
+def isLeap(year):
+    # your code here
+
+testEqual(isLeap(1944), True)
+testEqual(isLeap(2011), False)
+testEqual(isLeap(1986), False)
+testEqual(isLeap(1800), False)
+testEqual(isLeap(1900), False)
+testEqual(isLeap(2000), True)
+testEqual(isLeap(2056), True)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_12)</span> </p>
+
+<button class='btn btn-success' id="ex_6_12_runb" onclick="runit('ex_6_12',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_12_saveb" onclick="saveEditor('ex_6_12');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_12_loadb" onclick="requestCode('ex_6_12');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_12_saveb').toggle();
+    $('#ex_6_12_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_12_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_12_showb" onclick="$('#ex_6_12_code_div').toggle();cm_editors['ex_6_12_code'].refresh();$('#ex_6_12_saveb').toggle();$('#ex_6_12_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_12')"/>
+<pre id="ex_6_12_suffix" style="display:none">
+</pre>
+<pre id="ex_6_12_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q13' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q13-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q13-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q13-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q13-Question'><p>Implement the calculator for the date of Easter.</p>
+<p>The following algorithm computes the date for Easter Sunday for any year between 1900 to 2099.</p>
+<p>Ask the user to enter a year.
+Compute the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>a = year % 19</li>
+<li>b = year % 4</li>
+<li>c = year % 7</li>
+<li>d = (19 * a + 24) % 30</li>
+<li>e = (2 * b + 4 * c + 6 * d + 5) % 7</li>
+<li>dateofeaster = 22 + d + e</li>
+</ol>
+</div></blockquote>
+<p>Special note: The algorithm can give a date in April.  Also, if the year is one of four special
+years (1954, 1981, 2049, or 2076) then subtract 7 from the date.</p>
+<p>Your program should print an error message if the user provides a date that is out of range.</p>
+
+<div id="ex_6_13" >
+
+<br/>
+<div id="ex_6_13_code_div" style="display: none">
+<textarea cols="50" rows="120" id="ex_6_13_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ex_6_13)</span> </p>
+
+<button class='btn btn-success' id="ex_6_13_runb" onclick="runit('ex_6_13',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_13_saveb" onclick="saveEditor('ex_6_13');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ex_6_13_loadb" onclick="requestCode('ex_6_13');">Load</button>
+
+<script>
+if ('none' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ex_6_13_saveb').toggle();
+    $('#ex_6_13_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ex_6_13_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+
+<button class='btn btn-default' id="ex_6_13_showb" onclick="$('#ex_6_13_code_div').toggle();cm_editors['ex_6_13_code'].refresh();$('#ex_6_13_saveb').toggle();$('#ex_6_13_loadb').toggle()">Show/Hide Code</button>
+
+<input type="button" class='btn btn-default ' id="gradeb" name="Show Feedback" value="Show Feedback" onclick="createGradeSummary('ex_6_13')"/>
+<pre id="ex_6_13_suffix" style="display:none">
+</pre>
+<pre id="ex_6_13_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q13-Answer'>
+<div id="answer_ex_6_13" >
+
+<br/>
+<div id="answer_ex_6_13_code_div" style="display: block">
+<textarea cols="50" rows="120" id="answer_ex_6_13_code" class="active_code", prefixcode="undefined">
+year = int(input("Please enter a year"))
+if year >= 1900 and year <= 2099:
+    a = year % 19
+    b = year % 4
+    c = year % 7
+    d = (19*a + 24) % 30
+    e = (2*b + 4*c + 6*d + 5) % 7
+    dateofeaster = 22 + d + e
+
+    if year == 1954 or year == 2981 or year == 2049 or year == 2076:
+        dateofeaster = dateofeaster - 7
+
+    if dateofeaster > 31:
+        print("April", dateofeaster - 31)
+    else:
+        print("March", dateofeaster)
+else:
+    print("ERROR...year out of range")
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (answer_ex_6_13)</span> </p>
+
+<button class='btn btn-success' id="answer_ex_6_13_runb" onclick="runit('answer_ex_6_13',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="answer_ex_6_13_saveb" onclick="saveEditor('answer_ex_6_13');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="answer_ex_6_13_loadb" onclick="requestCode('answer_ex_6_13');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#answer_ex_6_13_saveb').toggle();
+    $('#answer_ex_6_13_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="answer_ex_6_13_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="answer_ex_6_13_suffix" style="display:none">
+</pre>
+<pre id="answer_ex_6_13_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q13-Discussion'><script type="text/javascript">
+    function disqus_2dfd6acf1ca849c2853dad606d1ba255_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_2dfd6acf1ca849c2853dad606d1ba255_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_2dfd6acf1ca849c2853dad606d1ba255_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_2dfd6acf1ca849c2853dad606d1ba255_' + eBookConfig.course;
+            disqus_url = 'http://disqus_2dfd6acf1ca849c2853dad606d1ba255_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_2dfd6acf1ca849c2853dad606d1ba255" onclick="disqus_2dfd6acf1ca849c2853dad606d1ba255_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_2dfd6acf1ca849c2853dad606d1ba255']").attr('data-disqus-identifier', 'disqus_2dfd6acf1ca849c2853dad606d1ba255_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q13 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q13 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q13 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+</ol>
+</div>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

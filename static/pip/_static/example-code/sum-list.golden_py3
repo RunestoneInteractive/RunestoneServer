@@ -1,0 +1,3466 @@
+{
+  "code": "myList = (1, (2, (3, (4, (5, None)))))\n\ndef sumList(node, subtotal):\n  if not node:\n    return subtotal\n  else:\n    return sumList(node[1], subtotal + node[0])\n\ntotal = sumList(myList, 0)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "node": null, 
+            "subtotal": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f6", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "node": null, 
+            "subtotal": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f6", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "node": null, 
+            "subtotal": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f6", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "subtotal": 10
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            "node": null, 
+            "__return__": 15, 
+            "subtotal": 15
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f6", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "subtotal": 6
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              5
+            ], 
+            "__return__": 15, 
+            "subtotal": 10
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f5", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "subtotal": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              4
+            ], 
+            "__return__": 15, 
+            "subtotal": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f4", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "subtotal": 1
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              3
+            ], 
+            "__return__": 15, 
+            "subtotal": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f3", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "subtotal": 0
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              2
+            ], 
+            "__return__": 15, 
+            "subtotal": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f2", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList"
+      ], 
+      "stdout": "", 
+      "func_name": "sumList", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "node": [
+              "REF", 
+              1
+            ], 
+            "__return__": 15, 
+            "subtotal": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sumList", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sumList_f1", 
+          "ordered_varnames": [
+            "node", 
+            "subtotal", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "myList", 
+        "sumList", 
+        "total"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "total": 15, 
+        "myList": [
+          "REF", 
+          1
+        ], 
+        "sumList": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "TUPLE", 
+          1, 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          2, 
+          [
+            "REF", 
+            3
+          ]
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          [
+            "REF", 
+            4
+          ]
+        ], 
+        "4": [
+          "TUPLE", 
+          4, 
+          [
+            "REF", 
+            5
+          ]
+        ], 
+        "5": [
+          "TUPLE", 
+          5, 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "sumList(node, subtotal)", 
+          null
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }
+  ]
+}

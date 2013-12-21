@@ -1,0 +1,7 @@
+# make sure OPT finds f as the parent of g
+def f(x, y):
+    def g(x):
+        return x + y
+    return g(3)
+
+f(1, 2)

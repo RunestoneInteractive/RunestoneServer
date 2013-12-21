@@ -1,0 +1,404 @@
+{
+  "code": "ppl = ['Alice', 'Bob', 'Carol', 'Doug']\nexcited_ppl = [e + '!!' for e in ppl]\nppl_len = [len(x) for x in ppl]\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Alice", 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Bob", 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Carol", 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ], 
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "x": "Alice"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ], 
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "x": "Bob"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ], 
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "x": "Carol"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl", 
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "e": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ], 
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "x": "Doug"
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ppl", 
+        "e", 
+        "excited_ppl", 
+        "x", 
+        "ppl_len"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "excited_ppl": [
+          "REF", 
+          2
+        ], 
+        "ppl_len": [
+          "REF", 
+          3
+        ], 
+        "e": "Doug", 
+        "x": "Doug", 
+        "ppl": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          "Alice", 
+          "Bob", 
+          "Carol", 
+          "Doug"
+        ], 
+        "2": [
+          "LIST", 
+          "Alice!!", 
+          "Bob!!", 
+          "Carol!!", 
+          "Doug!!"
+        ], 
+        "3": [
+          "LIST", 
+          5, 
+          3, 
+          5, 
+          4
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }
+  ]
+}

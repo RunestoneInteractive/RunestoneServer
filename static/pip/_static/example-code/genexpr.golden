@@ -1,0 +1,2170 @@
+{
+  "code": "# NB: there's a known bug when frames of exited functions are displayed\nx = (i for i in range(10))\n\nfor e in x:\n    print(e)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f1", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f1", 
+          "ordered_varnames": [
+            ".0"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 0, 
+            "__return__": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f1", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 0
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 0
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 0
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 0
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 0
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 1, 
+            "__return__": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f2", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 0
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 1
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 1
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f3", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 1
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f3", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 1
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 2, 
+            "__return__": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f3", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 1
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 2
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 2
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f4", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 2
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 2
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f4", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 2
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 3, 
+            "__return__": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f4", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 2
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 3
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 3
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f5", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 3
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f5", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 3
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 5, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 4, 
+            "__return__": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f5", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 3
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 4
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 4
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f6", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 4
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 4
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f6", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 4
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 6, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 5, 
+            "__return__": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f6", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 4
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 5
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 5
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f7", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 5
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 5
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f7", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 5
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 7, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 6, 
+            "__return__": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f7", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 5
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 6
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 6
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f8", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 6
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 6
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f8", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 6
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 8, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 7, 
+            "__return__": 7
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f8", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 6
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 7
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 7
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 7
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f9", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 7
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 7
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f9", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 7
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 9, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 8, 
+            "__return__": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f9", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 7
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 8
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 8
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f10", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 8
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 8
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f10", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 8
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 10, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 9, 
+            "__return__": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f10", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 8
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f11", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 9
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f11", 
+          "ordered_varnames": [
+            ".0", 
+            "i"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n", 
+      "func_name": "<genexpr>", 
+      "stack_to_render": [
+        {
+          "frame_id": 11, 
+          "encoded_locals": {
+            ".0": [
+              "REF", 
+              2
+            ], 
+            "i": 9, 
+            "__return__": null
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<genexpr>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<genexpr>_f11", 
+          "ordered_varnames": [
+            ".0", 
+            "i", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ], 
+        "2": [
+          "listiterator", 
+          "<listiterator object at 0xADDR>"
+        ]
+      }, 
+      "line": 2, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "e"
+      ], 
+      "stdout": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": [
+          "REF", 
+          1
+        ], 
+        "e": 9
+      }, 
+      "heap": {
+        "1": [
+          "generator", 
+          "<generator object <genexpr> at 0xADDR>"
+        ]
+      }, 
+      "line": 4, 
+      "event": "return"
+    }
+  ]
+}

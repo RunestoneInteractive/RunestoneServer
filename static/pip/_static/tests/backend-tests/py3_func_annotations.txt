@@ -1,0 +1,9 @@
+# test case of Python 3 function annotations inspired by David G. Kay
+def remove_by_name(L: 'list of Restaurant', name: str) -> 'list of Restaurant':
+    """ Given name, remove all Restaurants with that name from collection.
+    """
+    result = []
+    for r in L:
+        if r.name != name:
+            result.append(r)
+    return result

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Example of js-parsons toggle-exercises</title>
+    <link rel="stylesheet" href="../parsons.css" />
+    <link rel="stylesheet" href="../lib/prettify.css" />
+    <script src="../lib/prettify.js"></script>
+    <meta charset="utf8"/>
+  </head>
+  <body>
+    <h2>Example of js-parsons toggle-exercises</h2>
+    <p>Construct a function which returns the largest of the three given arguments.
+      You can change the value of a toggleable element (<span class="jsparson-toggle"></span>) by clicking.</p>
+    <div id="sortableTrash" class="sortable-code"><p>Trash</p></div>
+    <div id="sortable" class="sortable-code"><p>Solution</p></div>
+    <div style="clear:both;"></div>
+        <p>
+            <a href="#" id="newInstanceLink">New instance</a>
+            <a href="#" id="feedbackLink">Get feedback</a>
+        </p>
+    <div id="unittest"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script src="../lib/underscore-min.js"></script>
+    <script src="../lib/lis.js"></script>
+    <script src="../parsons.js"></script>
+    <script src="../lib/skulpt.js"></script>
+    <script>
+    var initial = "def find_largest(a, b, c):\n" + 
+                  "if <span class='jsparson-toggle' data-type='abc'></span> > <span class='jsparson-toggle' data-type='abc'></span>:\n" + 
+                  "if <span class='jsparson-toggle' data-type='abc'></span> > <span class='jsparson-toggle' data-type='abc'></span>:\n" + 
+                  "return <span class='jsparson-toggle' data-type='abc'></span>\n" + 
+                  "else:\n" + 
+                  "return <span class='jsparson-toggle' data-type='abc'></span>\n" + 
+                  "elif <span class='jsparson-toggle' data-type='abc'></span> > <span class='jsparson-toggle' data-type='abc'></span>:\n" + 
+                  "return <span class='jsparson-toggle' data-type='abc'></span>\n" + 
+                  "else:\n" + 
+                  "return <span class='jsparson-toggle' data-type='abc'></span>\n";
+    var unittests = [
+     { message: "Calling function <code>find_largest(0, 2, 4)</code>.", code: "ans = find_largest(0, 2, 4)", variable: "ans", expected: 4 },
+     { message: "Calling function <code>find_largest(4, 2, 4)</code>.", code: "ans = find_largest(4, 2, 4)", variable: "ans", expected: 4 },
+     { message: "Calling function <code>find_largest(-5, -1, -4)</code>.", code: "ans = find_largest(-5, -1, -4)", variable: "ans", expected: -1 },
+     { message: "Calling function <code>find_largest(7, 2, 4)</code>.", code: "ans = find_largest(7, 2, 4)", variable: "ans", expected: 7 }
+     ];
+       $(document).ready(function(){
+            var parson = new ParsonsWidget({
+                'sortableId': 'sortable',
+                        'trashId': 'sortableTrash',
+                        'unittests': unittests,
+                        toggleTypeHandlers: {abc: ["a", "b", "c"]}
+            });
+            parson.init(initial);
+                  parson.shuffleLines();
+            $("#newInstanceLink").click(function(event){
+                event.preventDefault();
+                parson.shuffleLines();
+            });
+            $("#feedbackLink").click(function(event){
+                event.preventDefault();
+                var fb = parson.getFeedback();
+                $("#unittest").html("<h2>Feedback from testing your program:</h2>" + fb.feedback);
+                if (fb.success) { alert("Good, you solved the assignment!"); }
+            });
+         });
+    </script>
+    </body>
+</html>

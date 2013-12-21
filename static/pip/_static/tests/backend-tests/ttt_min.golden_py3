@@ -1,0 +1,722 @@
+{
+  "code": "# minimal tic tac toe implementation and test\n\nimport ttt_module\n\ndef interactive_player(board, symbol):\n    return int(mouse_input(\"Click on board\"))\n                      \ng = ttt_module.TTTGame(interactive_player, interactive_player, verbose=True)\nprint(g.play())\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ttt_module"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "ttt_module": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "module"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ttt_module", 
+        "interactive_player"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "ttt_module": [
+          "REF", 
+          1
+        ], 
+        "interactive_player": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "interactive_player(board, symbol)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ttt_module", 
+        "interactive_player", 
+        "g"
+      ], 
+      "stdout": "Initializing TTTGame\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "js_output": "$('#htmlOutputDiv table td').click(function(){myVisualizer.executeCodeWithRawInputFunc($(this).attr('id'), myVisualizer.curInstr)})", 
+      "globals": {
+        "ttt_module": [
+          "REF", 
+          1
+        ], 
+        "g": [
+          "REF", 
+          3
+        ], 
+        "interactive_player": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "interactive_player(board, symbol)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "TTTGame", 
+          [
+            "board", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "lines", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "players", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "symbols", 
+            [
+              "REF", 
+              15
+            ]
+          ], 
+          [
+            "tomove", 
+            0
+          ], 
+          [
+            "verbose", 
+            true
+          ], 
+          [
+            "winner", 
+            null
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " "
+        ], 
+        "5": [
+          "LIST", 
+          [
+            "REF", 
+            6
+          ], 
+          [
+            "REF", 
+            7
+          ], 
+          [
+            "REF", 
+            8
+          ], 
+          [
+            "REF", 
+            9
+          ], 
+          [
+            "REF", 
+            10
+          ], 
+          [
+            "REF", 
+            11
+          ], 
+          [
+            "REF", 
+            12
+          ], 
+          [
+            "REF", 
+            13
+          ]
+        ], 
+        "6": [
+          "TUPLE", 
+          0, 
+          1, 
+          2
+        ], 
+        "7": [
+          "TUPLE", 
+          3, 
+          4, 
+          5
+        ], 
+        "8": [
+          "TUPLE", 
+          6, 
+          7, 
+          8
+        ], 
+        "9": [
+          "TUPLE", 
+          0, 
+          3, 
+          6
+        ], 
+        "10": [
+          "TUPLE", 
+          1, 
+          4, 
+          7
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          5, 
+          8
+        ], 
+        "12": [
+          "TUPLE", 
+          0, 
+          4, 
+          8
+        ], 
+        "13": [
+          "TUPLE", 
+          2, 
+          4, 
+          6
+        ], 
+        "14": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "15": [
+          "LIST", 
+          "X", 
+          "O"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "ttt_module", 
+        "interactive_player", 
+        "g"
+      ], 
+      "html_output": "<TABLE><TR><TD id=0> </TD> <TD id=1> </TD> <TD id=2> </TD></TR> <TR><TD id=3> </TD> <TD id=4> </TD> <TD id=5> </TD></TR> <TR><TD id=6> </TD> <TD id=7> </TD> <TD id=8> </TD></TR></TABLE><P,>X to play</P,>", 
+      "stdout": "Initializing TTTGame\n<TABLE><TR><TD id=0> </TD> <TD id=1> </TD> <TD id=2> </TD></TR> <TR><TD id=3> </TD> <TD id=4> </TD> <TD id=5> </TD></TR> <TR><TD id=6> </TD> <TD id=7> </TD> <TD id=8> </TD></TR></TABLE><P,>X to play</P,>\n", 
+      "func_name": "interactive_player", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "symbol": "X", 
+            "board": [
+              "REF", 
+              16
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "interactive_player", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "interactive_player_f1", 
+          "ordered_varnames": [
+            "board", 
+            "symbol"
+          ]
+        }
+      ], 
+      "js_output": "$('#htmlOutputDiv table td').click(function(){myVisualizer.executeCodeWithRawInputFunc($(this).attr('id'), myVisualizer.curInstr)})", 
+      "css_output": "#htmlOutputDiv table, #htmlOutputDiv td, #htmlOutputDiv th {\n  background-color: white;\n  border-collapse: collapse;\n  border: 2px solid black; }\n#htmlOutputDiv td, #htmlOutputDiv th {\n  width: 30px;\n  height: 30px;\n  font-family: sans-serif;\n  text-align: center; }", 
+      "globals": {
+        "ttt_module": [
+          "REF", 
+          1
+        ], 
+        "g": [
+          "REF", 
+          3
+        ], 
+        "interactive_player": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "interactive_player(board, symbol)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "TTTGame", 
+          [
+            "board", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "lines", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "players", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "symbols", 
+            [
+              "REF", 
+              15
+            ]
+          ], 
+          [
+            "tomove", 
+            0
+          ], 
+          [
+            "verbose", 
+            true
+          ], 
+          [
+            "winner", 
+            null
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " "
+        ], 
+        "5": [
+          "LIST", 
+          [
+            "REF", 
+            6
+          ], 
+          [
+            "REF", 
+            7
+          ], 
+          [
+            "REF", 
+            8
+          ], 
+          [
+            "REF", 
+            9
+          ], 
+          [
+            "REF", 
+            10
+          ], 
+          [
+            "REF", 
+            11
+          ], 
+          [
+            "REF", 
+            12
+          ], 
+          [
+            "REF", 
+            13
+          ]
+        ], 
+        "6": [
+          "TUPLE", 
+          0, 
+          1, 
+          2
+        ], 
+        "7": [
+          "TUPLE", 
+          3, 
+          4, 
+          5
+        ], 
+        "8": [
+          "TUPLE", 
+          6, 
+          7, 
+          8
+        ], 
+        "9": [
+          "TUPLE", 
+          0, 
+          3, 
+          6
+        ], 
+        "10": [
+          "TUPLE", 
+          1, 
+          4, 
+          7
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          5, 
+          8
+        ], 
+        "12": [
+          "TUPLE", 
+          0, 
+          4, 
+          8
+        ], 
+        "13": [
+          "TUPLE", 
+          2, 
+          4, 
+          6
+        ], 
+        "14": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "15": [
+          "LIST", 
+          "X", 
+          "O"
+        ], 
+        "16": [
+          "LIST", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " "
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "ttt_module", 
+        "interactive_player", 
+        "g"
+      ], 
+      "html_output": "<TABLE><TR><TD id=0> </TD> <TD id=1> </TD> <TD id=2> </TD></TR> <TR><TD id=3> </TD> <TD id=4> </TD> <TD id=5> </TD></TR> <TR><TD id=6> </TD> <TD id=7> </TD> <TD id=8> </TD></TR></TABLE><P,>X to play</P,>", 
+      "stdout": "Initializing TTTGame\n<TABLE><TR><TD id=0> </TD> <TD id=1> </TD> <TD id=2> </TD></TR> <TR><TD id=3> </TD> <TD id=4> </TD> <TD id=5> </TD></TR> <TR><TD id=6> </TD> <TD id=7> </TD> <TD id=8> </TD></TR></TABLE><P,>X to play</P,>\n", 
+      "func_name": "interactive_player", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "symbol": "X", 
+            "board": [
+              "REF", 
+              16
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "interactive_player", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "interactive_player_f1", 
+          "ordered_varnames": [
+            "board", 
+            "symbol"
+          ]
+        }
+      ], 
+      "js_output": "$('#htmlOutputDiv table td').click(function(){myVisualizer.executeCodeWithRawInputFunc($(this).attr('id'), myVisualizer.curInstr)})", 
+      "css_output": "#htmlOutputDiv table, #htmlOutputDiv td, #htmlOutputDiv th {\n  background-color: white;\n  border-collapse: collapse;\n  border: 2px solid black; }\n#htmlOutputDiv td, #htmlOutputDiv th {\n  width: 30px;\n  height: 30px;\n  font-family: sans-serif;\n  text-align: center; }", 
+      "globals": {
+        "ttt_module": [
+          "REF", 
+          1
+        ], 
+        "g": [
+          "REF", 
+          3
+        ], 
+        "interactive_player": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "module"
+        ], 
+        "2": [
+          "FUNCTION", 
+          "interactive_player(board, symbol)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "TTTGame", 
+          [
+            "board", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "lines", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "players", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "symbols", 
+            [
+              "REF", 
+              15
+            ]
+          ], 
+          [
+            "tomove", 
+            0
+          ], 
+          [
+            "verbose", 
+            true
+          ], 
+          [
+            "winner", 
+            null
+          ]
+        ], 
+        "4": [
+          "LIST", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " "
+        ], 
+        "5": [
+          "LIST", 
+          [
+            "REF", 
+            6
+          ], 
+          [
+            "REF", 
+            7
+          ], 
+          [
+            "REF", 
+            8
+          ], 
+          [
+            "REF", 
+            9
+          ], 
+          [
+            "REF", 
+            10
+          ], 
+          [
+            "REF", 
+            11
+          ], 
+          [
+            "REF", 
+            12
+          ], 
+          [
+            "REF", 
+            13
+          ]
+        ], 
+        "6": [
+          "TUPLE", 
+          0, 
+          1, 
+          2
+        ], 
+        "7": [
+          "TUPLE", 
+          3, 
+          4, 
+          5
+        ], 
+        "8": [
+          "TUPLE", 
+          6, 
+          7, 
+          8
+        ], 
+        "9": [
+          "TUPLE", 
+          0, 
+          3, 
+          6
+        ], 
+        "10": [
+          "TUPLE", 
+          1, 
+          4, 
+          7
+        ], 
+        "11": [
+          "TUPLE", 
+          2, 
+          5, 
+          8
+        ], 
+        "12": [
+          "TUPLE", 
+          0, 
+          4, 
+          8
+        ], 
+        "13": [
+          "TUPLE", 
+          2, 
+          4, 
+          6
+        ], 
+        "14": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            2
+          ]
+        ], 
+        "15": [
+          "LIST", 
+          "X", 
+          "O"
+        ], 
+        "16": [
+          "LIST", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " ", 
+          " "
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "prompt": "Click on board", 
+      "event": "mouse_input"
+    }
+  ]
+}

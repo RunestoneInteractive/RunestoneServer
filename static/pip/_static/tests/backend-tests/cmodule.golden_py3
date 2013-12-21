@@ -1,0 +1,37 @@
+{
+  "code": "# importing some C-ish module ...\n# make sure this doesn't crash in Python 2 or 3\nfrom datetime import datetime_CAPI\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "datetime_CAPI"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "datetime_CAPI": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "INSTANCE", 
+          "PyCapsule"
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }
+  ]
+}

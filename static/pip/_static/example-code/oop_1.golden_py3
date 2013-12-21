@@ -1,0 +1,1272 @@
+{
+  "code": "# Object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601()\nprint(pat.course)\n\npat.name = 'Pat'\npat.age = 60\npat.role = 'Professor'\n\nprint(pat.building)\npat.building = 32\nprint(pat.building)\n\nprint(pat.salutation())\nprint(Staff601.salutation(pat))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601"
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601"
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 17, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ]
+        ]
+      }, 
+      "line": 18, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 20, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 21, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 22, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 24, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f1", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f1", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": "Professor Pat", 
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f1", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\nProfessor Pat\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 25, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\nProfessor Pat\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\nProfessor Pat\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f2", 
+          "ordered_varnames": [
+            "self"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\nProfessor Pat\n", 
+      "func_name": "salutation", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "__return__": "Professor Pat", 
+            "self": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "salutation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "salutation_f2", 
+          "ordered_varnames": [
+            "self", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "Staff601", 
+        "pat"
+      ], 
+      "stdout": "6.01\n34\n32\nProfessor Pat\nProfessor Pat\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "Staff601": [
+          "REF", 
+          1
+        ], 
+        "pat": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "CLASS", 
+          "Staff601", 
+          [], 
+          [
+            "building", 
+            34
+          ], 
+          [
+            "course", 
+            "6.01"
+          ], 
+          [
+            "room", 
+            501
+          ], 
+          [
+            "salutation", 
+            [
+              "REF", 
+              2
+            ]
+          ]
+        ], 
+        "2": [
+          "FUNCTION", 
+          "salutation(self)", 
+          null
+        ], 
+        "3": [
+          "INSTANCE", 
+          "Staff601", 
+          [
+            "age", 
+            60
+          ], 
+          [
+            "building", 
+            32
+          ], 
+          [
+            "name", 
+            "Pat"
+          ], 
+          [
+            "role", 
+            "Professor"
+          ]
+        ]
+      }, 
+      "line": 25, 
+      "event": "return"
+    }
+  ]
+}

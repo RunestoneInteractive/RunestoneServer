@@ -1,0 +1,817 @@
+{
+  "code": "def a(b):\n    a = b(3)\n    a(100)\n\na(lambda a: (lambda b: a))\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "a", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "a", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2", 
+          "ordered_varnames": [
+            "a"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2", 
+          "ordered_varnames": [
+            "a"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "a", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": [
+              "REF", 
+              3
+            ], 
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b", 
+            "a"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": [
+              "REF", 
+              3
+            ], 
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b", 
+            "a"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "b": 100
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": [
+              "REF", 
+              3
+            ], 
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b", 
+            "a"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "b": 100
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "b"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<lambda>", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": [
+              "REF", 
+              3
+            ], 
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b", 
+            "a"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": 3, 
+            "b": 100
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "<lambda>", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [
+            2
+          ], 
+          "unique_hash": "<lambda>_f3", 
+          "ordered_varnames": [
+            "b", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "a", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": [
+              "REF", 
+              3
+            ], 
+            "__return__": null, 
+            "b": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "a", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "a_f1", 
+          "ordered_varnames": [
+            "b", 
+            "a", 
+            "__return__"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "<lambda>(a)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "a"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 3, 
+            "__return__": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": true, 
+          "func_name": "<lambda>", 
+          "is_zombie": true, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "<lambda>_f2_p_z", 
+          "ordered_varnames": [
+            "a", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "a": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "a(b)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "<lambda>(b)", 
+          2
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }
+  ]
+}

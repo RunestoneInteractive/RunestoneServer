@@ -1,0 +1,21 @@
+def map(f, xs):
+  if xs == []:
+    return []
+  else:
+    return [f(xs[0])] + list(map(f, xs[1:]))
+
+def append(xs, ys):
+  if xs == []:
+    return ys
+  else:
+    return [xs[0]] + append(xs[1:], ys)
+
+def pairs(xs):
+  if xs == []:
+    return []
+  elif xs[1:] == []:
+    return []
+  else:
+    return append(map(lambda x: [xs[0], x], xs[1:]), pairs(xs[1:]))
+
+result = pairs([1, 2, 3])

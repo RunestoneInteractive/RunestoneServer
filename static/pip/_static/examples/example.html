@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Simple js-parsons example assignment</title>
+        <link href="../parsons.css" rel="stylesheet" />
+        <link href="../lib/prettify.css" rel="stylesheet" />
+        <script src="../lib/prettify.js"></script>
+    </head>
+    <body>
+        <h2>Simple js-parsons example assignment</h2>
+        <p>Construct a function by drag&amp;dropping and reordering lines from the
+            left to the right.
+            The constructed function should return True if the parameter is True and
+            return False otherwise.</p>
+        <p><strong>Note:</strong> The correct solution is obviously a dumb way to do
+            it. This exercise is merely trying to give an example of a Parson's
+            puzzle with js-parsons, not teach you Python :)</p>
+        <div id="sortableTrash" class="sortable-code"></div>
+        <div id="sortable" class="sortable-code">
+        </div>
+        <div style="clear:both;"></div>
+        <p>
+            <a href="#" id="newInstanceLink">New instance</a>
+            <a href="#" id="feedbackLink">Get feedback</a>
+        </p>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+        <script src="../lib/underscore-min.js"></script>
+        <script src="../lib/lis.js"></script>
+        <script src="../parsons.js"></script>
+        <script>
+        var initial = 'def is_true(boolean_value):\n' +
+                      '  if boolean_value:\n' +
+                      '    return True\n' +
+                      '  return False\n';
+        var parson;
+
+        function displayErrors(fb) {
+            if(fb.errors.length > 0) {
+                alert(fb.errors[0]);
+            }
+        } 
+
+        $(document).ready(function(){
+            parson = new ParsonsWidget({
+                'sortableId': 'sortable',
+                'trashId': 'sortableTrash',
+                'max_wrong_lines': 1,
+                'feedback_cb' : displayErrors
+            });
+            parson.init(initial);
+            parson.shuffleLines();
+            $("#newInstanceLink").click(function(event){
+                event.preventDefault();
+                parson.shuffleLines();
+            });
+            $("#feedbackLink").click(function(event){
+                event.preventDefault();
+                parson.getFeedback();
+            });
+        });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1693 @@
+{
+  "code": "def summation(n, term, next):\n  total, k = 0, 1\n  while k <= n:\n    total, k = total + term(k), next(k)\n    return total\n\ndef cube(k):\n  return pow(k, 3)\n\ndef successor(k):\n  return k + 1\n\ndef sum_cubes(n):\n  return summation(n, cube, successor)\n\nsum_cubes(3)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "sum_cubes", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "sum_cubes", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "term": [
+              "REF", 
+              2
+            ], 
+            "n": 3, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 1, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "term": [
+              "REF", 
+              2
+            ], 
+            "n": 3, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 4, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "cube", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "cube", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "cube_f3", 
+          "ordered_varnames": [
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 7, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "cube", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "cube", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "cube_f3", 
+          "ordered_varnames": [
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "cube", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "__return__": 1, 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "cube", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "cube_f3", 
+          "ordered_varnames": [
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "successor", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "successor", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "successor_f4", 
+          "ordered_varnames": [
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 10, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "successor", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "successor", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "successor_f4", 
+          "ordered_varnames": [
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "successor", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 0, 
+            "k": 1, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }, 
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "__return__": 2, 
+            "k": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "successor", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "successor_f4", 
+          "ordered_varnames": [
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "n": 3, 
+            "term": [
+              "REF", 
+              2
+            ], 
+            "total": 1, 
+            "k": 2, 
+            "next": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "summation", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "n": 3
+          }, 
+          "is_highlighted": false, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n"
+          ]
+        }, 
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "term": [
+              "REF", 
+              2
+            ], 
+            "k": 2, 
+            "n": 3, 
+            "next": [
+              "REF", 
+              3
+            ], 
+            "__return__": 1, 
+            "total": 1
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "summation", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "summation_f2", 
+          "ordered_varnames": [
+            "n", 
+            "term", 
+            "next", 
+            "total", 
+            "k", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "sum_cubes", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "__return__": 1, 
+            "n": 3
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "sum_cubes", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "sum_cubes_f1", 
+          "ordered_varnames": [
+            "n", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 14, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "summation", 
+        "cube", 
+        "successor", 
+        "sum_cubes"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "summation": [
+          "REF", 
+          1
+        ], 
+        "cube": [
+          "REF", 
+          2
+        ], 
+        "sum_cubes": [
+          "REF", 
+          4
+        ], 
+        "successor": [
+          "REF", 
+          3
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "summation(n, term, next)", 
+          null
+        ], 
+        "2": [
+          "FUNCTION", 
+          "cube(k)", 
+          null
+        ], 
+        "3": [
+          "FUNCTION", 
+          "successor(k)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "sum_cubes(n)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }
+  ]
+}

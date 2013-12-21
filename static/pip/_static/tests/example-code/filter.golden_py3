@@ -1,0 +1,1505 @@
+{
+  "code": "input = [(\"Mary\", 27), (\"Joe\", 30), (\"Ruth\", 43), (\"Bob\", 17), (\"Jenny\", 22)]\n\nyoungPeople = []\n\nfor (person, age) in input:\n    if age < 30:\n        youngPeople.append(person)\n    else:\n        print(\"HAHA \" + person + \" is too old!\")\n\nprint(\"There are \" + str(len(youngPeople)) + \" young people\")\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "input": [
+          "REF", 
+          1
+        ], 
+        "youngPeople": [
+          "REF", 
+          7
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Mary", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 27, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Mary", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 27, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Mary", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 27, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Joe", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 30, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Joe", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 30, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Joe", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 30, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Ruth", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 43, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Ruth", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 43, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Ruth", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 43, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Bob", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 17, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Bob", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 17, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Bob", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 17, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Jenny", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 22, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob"
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Jenny", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 22, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob"
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Jenny", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 22, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob", 
+          "Jenny"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Jenny", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 22, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob", 
+          "Jenny"
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "input", 
+        "youngPeople", 
+        "person", 
+        "age"
+      ], 
+      "stdout": "HAHA Joe is too old!\nHAHA Ruth is too old!\nThere are 3 young people\n", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "person": "Jenny", 
+        "youngPeople": [
+          "REF", 
+          7
+        ], 
+        "age": 22, 
+        "input": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "LIST", 
+          [
+            "REF", 
+            2
+          ], 
+          [
+            "REF", 
+            3
+          ], 
+          [
+            "REF", 
+            4
+          ], 
+          [
+            "REF", 
+            5
+          ], 
+          [
+            "REF", 
+            6
+          ]
+        ], 
+        "2": [
+          "TUPLE", 
+          "Mary", 
+          27
+        ], 
+        "3": [
+          "TUPLE", 
+          "Joe", 
+          30
+        ], 
+        "4": [
+          "TUPLE", 
+          "Ruth", 
+          43
+        ], 
+        "5": [
+          "TUPLE", 
+          "Bob", 
+          17
+        ], 
+        "6": [
+          "TUPLE", 
+          "Jenny", 
+          22
+        ], 
+        "7": [
+          "LIST", 
+          "Mary", 
+          "Bob", 
+          "Jenny"
+        ]
+      }, 
+      "line": 11, 
+      "event": "return"
+    }
+  ]
+}

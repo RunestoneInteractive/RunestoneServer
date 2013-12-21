@@ -1,0 +1,10013 @@
+{
+  "code": "from collections import namedtuple\n\nRestaurant = namedtuple('Restaurant', 'name cuisine phone dish price')\n\nR1 = Restaurant(\"Taillevent\", \"French\", \"343-3434\", \"Escargots\", 24.50)\nR2 = Restaurant(\"La Tour D'Argent\", \"French\", \"343-3344\", \"Ris de Veau\", 48.50)\nR3 = Restaurant(\"Pascal\", \"French\", \"333-4444\", \"Bouillabaisse\", 32.00)\nR4 = Restaurant(\"Thai Touch\", \"Thai\", \"444-3333\", \"Mee Krob\", 10.95)\nR5 = Restaurant(\"Thai Dishes\", \"Thai\", \"333-4433\", \"Paht Woon Sen\",  8.50)\nR6 = Restaurant(\"Thai Spoon\", \"Thai\", \"334-3344\", \"Mussamun\", 9.00)\nR7 = Restaurant(\"McDonald's\", \"Burgers\", \"333-4443\", \"Big Mac\", 3.95)\nR8 = Restaurant(\"Burger King\", \"Burgers\", \"444-3344\", \"Whopper\", 3.75)\nR9 = Restaurant(\"Wahoo's\", \"Fish Tacos\", \"443-4443\", \"Mahi Mahi Burrito\", 7.50)\nR10 = Restaurant(\"In-N-Out Burger\", \"Burgers\", \"434-3344\", \"Cheeseburger\", 2.50)\nR11 = Restaurant(\"The Shack\", \"Burgers\", \"333-3334\", \"Hot Link Burger\", 4.50)\nR12 = Restaurant(\"Gina's\", \"Pizza\", \"334-4433\", \"Combo Pizza\", 12.95)\nR13 = Restaurant(\"Peacock, Room\", \"Indian\", \"333-4443\", \"Rogan Josh\", 12.50)\nR14 = Restaurant(\"Gaylord\", \"Indian\", \"333-3433\", \"Tandoori Chicken\", 13.50)\nR15 = Restaurant(\"Mr. Chow\", \"Chinese\", \"222-3333\", \"Peking Duck\", 24.50)\nR16 = Restaurant(\"Chez Panisse\", \"California\", \"222-3322\", \"Grilled Duck Breast\", 25.00)\nR17 = Restaurant(\"Spago\", \"California\", \"333-2222\", \"Striped Bass\", 24.50)\nR18 = Restaurant(\"Sriped Bass\", \"Seafood\", \"333-2233\", \"Cedar Plank Salmon\", 21.50)\nR19 = Restaurant(\"Golden Pagoda\", \"Chinese\", \"232-3232\", \"Egg Foo Young\", 8.50)\nR20 = Restaurant(\"Langer's\", \"Delicatessen\", \"333-2223\", \"Pastrami Sandwich\", 11.50)\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "namedtuple": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ]
+      }, 
+      "line": 7, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ]
+      }, 
+      "line": 10, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ]
+      }, 
+      "line": 12, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ]
+      }, 
+      "line": 15, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ]
+      }, 
+      "line": 17, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ]
+      }, 
+      "line": 18, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ]
+      }, 
+      "line": 19, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ]
+      }, 
+      "line": 20, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15", 
+        "R16"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R16": [
+          "REF", 
+          31
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "31": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Grilled Duck Breast"
+          ], 
+          [
+            "name", 
+            "Chez Panisse"
+          ], 
+          [
+            "phone", 
+            "222-3322"
+          ], 
+          [
+            "price", 
+            25.000
+          ]
+        ]
+      }, 
+      "line": 21, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15", 
+        "R16", 
+        "R17"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R16": [
+          "REF", 
+          31
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R17": [
+          "REF", 
+          32
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "31": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Grilled Duck Breast"
+          ], 
+          [
+            "name", 
+            "Chez Panisse"
+          ], 
+          [
+            "phone", 
+            "222-3322"
+          ], 
+          [
+            "price", 
+            25.000
+          ]
+        ], 
+        "32": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Striped Bass"
+          ], 
+          [
+            "name", 
+            "Spago"
+          ], 
+          [
+            "phone", 
+            "333-2222"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ]
+      }, 
+      "line": 22, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15", 
+        "R16", 
+        "R17", 
+        "R18"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R16": [
+          "REF", 
+          31
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R17": [
+          "REF", 
+          32
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R18": [
+          "REF", 
+          33
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "31": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Grilled Duck Breast"
+          ], 
+          [
+            "name", 
+            "Chez Panisse"
+          ], 
+          [
+            "phone", 
+            "222-3322"
+          ], 
+          [
+            "price", 
+            25.000
+          ]
+        ], 
+        "32": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Striped Bass"
+          ], 
+          [
+            "name", 
+            "Spago"
+          ], 
+          [
+            "phone", 
+            "333-2222"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "33": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Seafood"
+          ], 
+          [
+            "dish", 
+            "Cedar Plank Salmon"
+          ], 
+          [
+            "name", 
+            "Sriped Bass"
+          ], 
+          [
+            "phone", 
+            "333-2233"
+          ], 
+          [
+            "price", 
+            21.500
+          ]
+        ]
+      }, 
+      "line": 23, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15", 
+        "R16", 
+        "R17", 
+        "R18", 
+        "R19"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R16": [
+          "REF", 
+          31
+        ], 
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R17": [
+          "REF", 
+          32
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R18": [
+          "REF", 
+          33
+        ], 
+        "R19": [
+          "REF", 
+          34
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "31": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Grilled Duck Breast"
+          ], 
+          [
+            "name", 
+            "Chez Panisse"
+          ], 
+          [
+            "phone", 
+            "222-3322"
+          ], 
+          [
+            "price", 
+            25.000
+          ]
+        ], 
+        "32": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Striped Bass"
+          ], 
+          [
+            "name", 
+            "Spago"
+          ], 
+          [
+            "phone", 
+            "333-2222"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "33": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Seafood"
+          ], 
+          [
+            "dish", 
+            "Cedar Plank Salmon"
+          ], 
+          [
+            "name", 
+            "Sriped Bass"
+          ], 
+          [
+            "phone", 
+            "333-2233"
+          ], 
+          [
+            "price", 
+            21.500
+          ]
+        ], 
+        "34": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Egg Foo Young"
+          ], 
+          [
+            "name", 
+            "Golden Pagoda"
+          ], 
+          [
+            "phone", 
+            "232-3232"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ]
+      }, 
+      "line": 24, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "namedtuple", 
+        "Restaurant", 
+        "R1", 
+        "R2", 
+        "R3", 
+        "R4", 
+        "R5", 
+        "R6", 
+        "R7", 
+        "R8", 
+        "R9", 
+        "R10", 
+        "R11", 
+        "R12", 
+        "R13", 
+        "R14", 
+        "R15", 
+        "R16", 
+        "R17", 
+        "R18", 
+        "R19", 
+        "R20"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "R5": [
+          "REF", 
+          20
+        ], 
+        "R16": [
+          "REF", 
+          31
+        ], 
+        "R17": [
+          "REF", 
+          32
+        ], 
+        "R14": [
+          "REF", 
+          29
+        ], 
+        "R15": [
+          "REF", 
+          30
+        ], 
+        "R12": [
+          "REF", 
+          27
+        ], 
+        "R13": [
+          "REF", 
+          28
+        ], 
+        "R10": [
+          "REF", 
+          25
+        ], 
+        "R11": [
+          "REF", 
+          26
+        ], 
+        "R3": [
+          "REF", 
+          18
+        ], 
+        "R18": [
+          "REF", 
+          33
+        ], 
+        "R19": [
+          "REF", 
+          34
+        ], 
+        "R4": [
+          "REF", 
+          19
+        ], 
+        "namedtuple": [
+          "REF", 
+          1
+        ], 
+        "R6": [
+          "REF", 
+          21
+        ], 
+        "R7": [
+          "REF", 
+          22
+        ], 
+        "R1": [
+          "REF", 
+          16
+        ], 
+        "R2": [
+          "REF", 
+          17
+        ], 
+        "Restaurant": [
+          "REF", 
+          2
+        ], 
+        "R8": [
+          "REF", 
+          23
+        ], 
+        "R9": [
+          "REF", 
+          24
+        ], 
+        "R20": [
+          "REF", 
+          35
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "namedtuple(typename, field_names, verbose, rename)", 
+          null
+        ], 
+        "2": [
+          "CLASS", 
+          "Restaurant", 
+          [
+            "tuple"
+          ], 
+          [
+            "__getnewargs__", 
+            [
+              "REF", 
+              3
+            ]
+          ], 
+          [
+            "__new__", 
+            [
+              "REF", 
+              4
+            ]
+          ], 
+          [
+            "__repr__", 
+            [
+              "REF", 
+              5
+            ]
+          ], 
+          [
+            "__slots__", 
+            [
+              "REF", 
+              6
+            ]
+          ], 
+          [
+            "_asdict", 
+            [
+              "REF", 
+              7
+            ]
+          ], 
+          [
+            "_fields", 
+            [
+              "REF", 
+              8
+            ]
+          ], 
+          [
+            "_make", 
+            [
+              "REF", 
+              9
+            ]
+          ], 
+          [
+            "_replace", 
+            [
+              "REF", 
+              10
+            ]
+          ], 
+          [
+            "cuisine", 
+            [
+              "REF", 
+              11
+            ]
+          ], 
+          [
+            "dish", 
+            [
+              "REF", 
+              12
+            ]
+          ], 
+          [
+            "name", 
+            [
+              "REF", 
+              13
+            ]
+          ], 
+          [
+            "phone", 
+            [
+              "REF", 
+              14
+            ]
+          ], 
+          [
+            "price", 
+            [
+              "REF", 
+              15
+            ]
+          ]
+        ], 
+        "3": [
+          "FUNCTION", 
+          "__getnewargs__(self)", 
+          null
+        ], 
+        "4": [
+          "staticmethod", 
+          "<staticmethod object at 0xADDR>"
+        ], 
+        "5": [
+          "FUNCTION", 
+          "__repr__(self)", 
+          null
+        ], 
+        "6": [
+          "TUPLE"
+        ], 
+        "7": [
+          "FUNCTION", 
+          "_asdict(self)", 
+          null
+        ], 
+        "8": [
+          "TUPLE", 
+          "name", 
+          "cuisine", 
+          "phone", 
+          "dish", 
+          "price"
+        ], 
+        "9": [
+          "classmethod", 
+          "<classmethod object at 0xADDR>"
+        ], 
+        "10": [
+          "FUNCTION", 
+          "_replace(_self, **kwds)", 
+          null
+        ], 
+        "11": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "12": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "13": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "14": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "15": [
+          "property", 
+          "<property object at 0xADDR>"
+        ], 
+        "16": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Escargots"
+          ], 
+          [
+            "name", 
+            "Taillevent"
+          ], 
+          [
+            "phone", 
+            "343-3434"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "17": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Ris de Veau"
+          ], 
+          [
+            "name", 
+            "La Tour D'Argent"
+          ], 
+          [
+            "phone", 
+            "343-3344"
+          ], 
+          [
+            "price", 
+            48.500
+          ]
+        ], 
+        "18": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "French"
+          ], 
+          [
+            "dish", 
+            "Bouillabaisse"
+          ], 
+          [
+            "name", 
+            "Pascal"
+          ], 
+          [
+            "phone", 
+            "333-4444"
+          ], 
+          [
+            "price", 
+            32.000
+          ]
+        ], 
+        "19": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mee Krob"
+          ], 
+          [
+            "name", 
+            "Thai Touch"
+          ], 
+          [
+            "phone", 
+            "444-3333"
+          ], 
+          [
+            "price", 
+            10.950
+          ]
+        ], 
+        "20": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Paht Woon Sen"
+          ], 
+          [
+            "name", 
+            "Thai Dishes"
+          ], 
+          [
+            "phone", 
+            "333-4433"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "21": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Thai"
+          ], 
+          [
+            "dish", 
+            "Mussamun"
+          ], 
+          [
+            "name", 
+            "Thai Spoon"
+          ], 
+          [
+            "phone", 
+            "334-3344"
+          ], 
+          [
+            "price", 
+            9.000
+          ]
+        ], 
+        "22": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Big Mac"
+          ], 
+          [
+            "name", 
+            "McDonald's"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            3.950
+          ]
+        ], 
+        "23": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Whopper"
+          ], 
+          [
+            "name", 
+            "Burger King"
+          ], 
+          [
+            "phone", 
+            "444-3344"
+          ], 
+          [
+            "price", 
+            3.750
+          ]
+        ], 
+        "24": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Fish Tacos"
+          ], 
+          [
+            "dish", 
+            "Mahi Mahi Burrito"
+          ], 
+          [
+            "name", 
+            "Wahoo's"
+          ], 
+          [
+            "phone", 
+            "443-4443"
+          ], 
+          [
+            "price", 
+            7.500
+          ]
+        ], 
+        "25": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Cheeseburger"
+          ], 
+          [
+            "name", 
+            "In-N-Out Burger"
+          ], 
+          [
+            "phone", 
+            "434-3344"
+          ], 
+          [
+            "price", 
+            2.500
+          ]
+        ], 
+        "26": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Burgers"
+          ], 
+          [
+            "dish", 
+            "Hot Link Burger"
+          ], 
+          [
+            "name", 
+            "The Shack"
+          ], 
+          [
+            "phone", 
+            "333-3334"
+          ], 
+          [
+            "price", 
+            4.500
+          ]
+        ], 
+        "27": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Pizza"
+          ], 
+          [
+            "dish", 
+            "Combo Pizza"
+          ], 
+          [
+            "name", 
+            "Gina's"
+          ], 
+          [
+            "phone", 
+            "334-4433"
+          ], 
+          [
+            "price", 
+            12.950
+          ]
+        ], 
+        "28": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Rogan Josh"
+          ], 
+          [
+            "name", 
+            "Peacock, Room"
+          ], 
+          [
+            "phone", 
+            "333-4443"
+          ], 
+          [
+            "price", 
+            12.500
+          ]
+        ], 
+        "29": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Indian"
+          ], 
+          [
+            "dish", 
+            "Tandoori Chicken"
+          ], 
+          [
+            "name", 
+            "Gaylord"
+          ], 
+          [
+            "phone", 
+            "333-3433"
+          ], 
+          [
+            "price", 
+            13.500
+          ]
+        ], 
+        "30": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Peking Duck"
+          ], 
+          [
+            "name", 
+            "Mr. Chow"
+          ], 
+          [
+            "phone", 
+            "222-3333"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "31": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Grilled Duck Breast"
+          ], 
+          [
+            "name", 
+            "Chez Panisse"
+          ], 
+          [
+            "phone", 
+            "222-3322"
+          ], 
+          [
+            "price", 
+            25.000
+          ]
+        ], 
+        "32": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "California"
+          ], 
+          [
+            "dish", 
+            "Striped Bass"
+          ], 
+          [
+            "name", 
+            "Spago"
+          ], 
+          [
+            "phone", 
+            "333-2222"
+          ], 
+          [
+            "price", 
+            24.500
+          ]
+        ], 
+        "33": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Seafood"
+          ], 
+          [
+            "dish", 
+            "Cedar Plank Salmon"
+          ], 
+          [
+            "name", 
+            "Sriped Bass"
+          ], 
+          [
+            "phone", 
+            "333-2233"
+          ], 
+          [
+            "price", 
+            21.500
+          ]
+        ], 
+        "34": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Chinese"
+          ], 
+          [
+            "dish", 
+            "Egg Foo Young"
+          ], 
+          [
+            "name", 
+            "Golden Pagoda"
+          ], 
+          [
+            "phone", 
+            "232-3232"
+          ], 
+          [
+            "price", 
+            8.500
+          ]
+        ], 
+        "35": [
+          "INSTANCE", 
+          "Restaurant", 
+          [
+            "cuisine", 
+            "Delicatessen"
+          ], 
+          [
+            "dish", 
+            "Pastrami Sandwich"
+          ], 
+          [
+            "name", 
+            "Langer's"
+          ], 
+          [
+            "phone", 
+            "333-2223"
+          ], 
+          [
+            "price", 
+            11.500
+          ]
+        ]
+      }, 
+      "line": 24, 
+      "event": "return"
+    }
+  ]
+}

@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Classes and Objects - Digging a little deeper &mdash; Programs, Information, and People: Interactive Edition</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/poll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/video.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/pytutor.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/activecode.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/tabbedstuff.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/parsons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/lib/prettify.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.css" type="text/css" />
+    <link rel="stylesheet" href="../../runestone-custom-sphinx-bootstrap.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/poll.js"></script>
+    <script type="text/javascript" src="../_static/js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="../_static/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery.jsPlumb-1.3.10-all-min.js"></script>
+    <script type="text/javascript" src="../_static/js/pytutor.js"></script>
+    <script type="text/javascript" src="../_static/jquery.highlight.js"></script>
+    <script type="text/javascript" src="../_static/bookfuncs.js"></script>
+    <script type="text/javascript" src="../_static/codemirror.js"></script>
+    <script type="text/javascript" src="../_static/python.js"></script>
+    <script type="text/javascript" src="../_static/activecode.js"></script>
+    <script type="text/javascript" src="../_static/skulpt.min.js"></script>
+    <script type="text/javascript" src="../_static/skulpt-stdlib.js"></script>
+    <script type="text/javascript" src="../_static/assess.js"></script>
+    <script type="text/javascript" src="../_static/animationbase.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../_static/lib/prettify.js"></script>
+    <script type="text/javascript" src="../_static/lib/underscore-min.js"></script>
+    <script type="text/javascript" src="../_static/lib/lis.js"></script>
+    <script type="text/javascript" src="../_static/parsons.js"></script>
+    <script type="text/javascript" src="../_static/parsons-noconflict.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery-fix.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-core.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-textrange.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/user-highlights.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.idle-timer.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/processing-1.4.1.min.js"></script>
+    <script type="text/javascript" src="http://runestonestatic.appspot.com/static/2.1.5/jquery.hotkey.js"></script>
+    <link rel="top" title="Programs, Information, and People: Interactive Edition" href="../index.html" />
+    <link rel="next" title="Astronomy Animation" href="../Labs/astronomylab.html" />
+    <link rel="prev" title="Classes and Objects - the Basics" href="classesintro.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://127.0.0.1:8000' ? 'http://127.0.0.1:8000' : 'http://127.0.0.1:8000';
+  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = 'pip';
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = false
+  eBookConfig.build_info = "2.1.5";
+  eBookConfig.isLoggedIn = false;
+</script>
+
+<div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+<script>
+var _prum = [['id', '521dfcc4abe53d0749000000'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+
+
+  </head>
+  <body>
+
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("../_static/img/logo_small.png") no-repeat 0px 0px;' href="/runestone/default/user/login">&nbsp; </a>
+        <a class="navbar-brand" href="../toc.html">Programs, Information, and People</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- search dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-search" style='opacity:0.9;'></i>
+          </a>
+          <ul class='dropdown-menu'>
+            
+                <li><a href='../toc.html'>Table of Contents</a></li>
+            
+            <li><a href='/runestone/static/pip/genindex.html'>Book Index</a></li>
+            <li class="divider"></li>
+            <li id="scratch_ac_link"><a href="javascript:toggleScratchActivecode()">Scratch ActiveCode</a></li>
+            <li class="divider"></li>
+            <li style="width: 240px;">
+              <form class="navbar-search" style="margin:10px;" action="../search.html" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" style="margin:0;" type="submit">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+            </li>
+          </ul>
+        </li>
+        <!-- end search dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><span class='loggedinuser'></span></li>
+            <li class="divider"></li>
+            <li><a href='http://127.0.0.1:8000/runestone/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/profile" id="profilelink">Edit Profile</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="http://127.0.0.1:8000/runestone/default/user/register" id="registerlink">Register</a></li>
+            <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+            <li><a href='/runestone/static/pip/navhelp.html'>Navigation Help</a></li>
+            <li><a href='/runestone/static/overview/instructor.html'>Help for Instructors</a></li>            
+            <li class="divider"></li>
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+        <!-- end help menu dropdown -->
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Classes and Objects - Digging a little deeper</a><ul>
+<li><a class="reference internal" href="#fractions">Fractions</a></li>
+<li><a class="reference internal" href="#objects-are-mutable">Objects are Mutable</a></li>
+<li><a class="reference internal" href="#sameness">Sameness</a></li>
+<li><a class="reference internal" href="#arithmetic-methods">Arithmetic Methods</a></li>
+<li><a class="reference internal" href="#glossary">Glossary</a></li>
+<li><a class="reference internal" href="#exercises">Exercises</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+          <li class="divider-vertical"></li>
+        
+        
+          
+  <li id="relations-prev" title="Previous Chapter - Classes and Objects - the Basics" data-toggle="tooltip">
+    <a href="classesintro.html" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  
+  <li id="relations-next" title='Next Chapter - Astronomy Animation' data-toggle="tooltip" >
+    <a href="../Labs/astronomylab.html" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
+        
+        
+          <li></li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  
+  <div class="section" id="classes-and-objects-digging-a-little-deeper">
+<h1>Classes and Objects - Digging a little deeper<a class="headerlink" href="#classes-and-objects-digging-a-little-deeper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fractions">
+<span id="index-0"></span><h2>Fractions<a class="headerlink" href="#fractions" title="Permalink to this headline">¶</a></h2>
+<p>We have all had to work with fractions when we were younger.  Or, perhaps you do a lot of cooking and have to
+manage measurements for ingredients.  In any case, fractions are something that we are familiar with.
+In this chapter we will develop a class to represent a fraction including some of the most common methods that we
+would like fractions to be able to do.</p>
+<p>A fraction is most commonly thought of as two integers, one over the other, with a line separating them.  The number
+on the top is called the numerator and the number on the bottom is called the denominator.  Sometimes people use a slash
+for the line and sometimes they use a straight line.  The fact is that it really does not matter so long as you know which
+is the numerator and which is the denominator.</p>
+<p>To design our class, we simply need to use the analysis above to realize that the <cite>state</cite> of a fraction object can be
+completely described by representing two integers.  We can begin by implementing the <tt class="docutils literal"><span class="pre">Fraction</span></tt> class and the <tt class="docutils literal"><span class="pre">__init__</span></tt>
+method which will allow the user to provide a numerator and a denominator for the fraction being created.</p>
+
+<div id="fractions_init" >
+
+<br/>
+<div id="fractions_init_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_init_code" class="active_code", prefixcode="undefined">
+class Fraction:
+
+    def __init__(self,top,bottom):
+
+        self.num = top        #the numerator is on top
+        self.den = bottom     #the denominator is on the bottom
+
+    def __str__(self):
+        return str(self.num) + "/" + str(self.den)
+
+    def getNum(self):
+        return self.num
+
+    def getDen(self):
+        return self.den
+
+myfraction = Fraction(3,4)
+print(myfraction)
+
+print(myfraction.getNum())
+print(myfraction.getDen())
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_init)</span> </p>
+
+<button class='btn btn-success' id="fractions_init_runb" onclick="runit('fractions_init',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_init_saveb" onclick="saveEditor('fractions_init');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_init_loadb" onclick="requestCode('fractions_init');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_init_saveb').toggle();
+    $('#fractions_init_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_init_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_init_suffix" style="display:none">
+</pre>
+<pre id="fractions_init_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Note that the <tt class="docutils literal"><span class="pre">__str__</span></tt> method provides a &#8220;typical&#8221; looking fraction using a slash between the numerator and denominator.
+The figure below shows the state of <tt class="docutils literal"><span class="pre">myfraction</span></tt>.  We have also added a few simple accessor methods, <tt class="docutils literal"><span class="pre">getNum</span></tt> and <tt class="docutils literal"><span class="pre">getDen</span></tt>, that can return the
+state values for the fraction.</p>
+<img alt="../_images/fractionpic1.png" src="../_images/fractionpic1.png" />
+</div>
+<div class="section" id="objects-are-mutable">
+<span id="index-1"></span><h2>Objects are Mutable<a class="headerlink" href="#objects-are-mutable" title="Permalink to this headline">¶</a></h2>
+<p>We can change the state of an object by making an assignment to one of its instance variables.
+For example, we could change the numerator of the fraction by assigning a new
+value to <tt class="docutils literal"><span class="pre">self.num</span></tt>.  Likewise, we could do the same thing for <tt class="docutils literal"><span class="pre">self.den</span></tt>.</p>
+<p>One place where this type of modification makes sense is when we place a fraction in <strong>lowest terms</strong>.  Lowest terms simply
+means that the numerator and denominator do not share any common factors.  For example, <tt class="docutils literal"><span class="pre">12/16</span></tt> is a fraction but it is
+not in lowest terms since 2 can divide into both 12 and 16.  We call 2 a <strong>common divisor</strong>.  If we divide the numerator
+and the denominator by a common divisor, we get an equivalent fraction.  If we divide by the <strong>greatest common divisor</strong>,
+we will get the lowest terms representation.  In this case 4 would be the greatest common divisor and the lowest terms
+representation would be 3/4.</p>
+<p>There is a very nice iterative method for computing the greatest common divisor of two integers.  Try to run the
+function on a number of different examples.</p>
+
+<div id="fractions_gcd" >
+
+<br/>
+<div id="fractions_gcd_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_gcd_code" class="active_code", prefixcode="undefined">
+def gcd(m,n):
+    while m%n != 0:
+        oldm = m
+        oldn = n
+
+        m = oldn
+        n = oldm%oldn
+
+    return n
+
+print(gcd(12,16))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_gcd)</span> </p>
+
+<button class='btn btn-success' id="fractions_gcd_runb" onclick="runit('fractions_gcd',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_gcd_saveb" onclick="saveEditor('fractions_gcd');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_gcd_loadb" onclick="requestCode('fractions_gcd');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_gcd_saveb').toggle();
+    $('#fractions_gcd_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_gcd_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_gcd_suffix" style="display:none">
+</pre>
+<pre id="fractions_gcd_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Now that we have a function that can help us with finding the greatest common divisor, we can use that to implement
+a fraction method called <tt class="docutils literal"><span class="pre">simplify</span></tt>.  We will ask the fraction &#8220;to put itself in lowest terms&#8221;.</p>
+<p>The <tt class="docutils literal"><span class="pre">simplify</span></tt> method will pass the numerator and the denominator to the <tt class="docutils literal"><span class="pre">gcd</span></tt> function to find the
+greatest common divisor.  It will then modify itself by dividing its <tt class="docutils literal"><span class="pre">num</span></tt> and its <tt class="docutils literal"><span class="pre">den</span></tt> by that value.</p>
+
+<div id="fractions_simplify" >
+
+<br/>
+<div id="fractions_simplify_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_simplify_code" class="active_code", prefixcode="undefined">
+def gcd(m,n):
+    while m%n != 0:
+        oldm = m
+        oldn = n
+
+        m = oldn
+        n = oldm%oldn
+
+    return n
+
+class Fraction:
+
+    def __init__(self,top,bottom):
+
+        self.num = top        #the numerator is on top
+        self.den = bottom     #the denominator is on the bottom
+
+    def __str__(self):
+        return str(self.num) + "/" + str(self.den)
+
+    def simplify(self):
+        common = gcd(self.num, self.den)
+
+        self.num = self.num // common
+        self.den = self.den // common
+
+myfraction = Fraction(12,16)
+
+print(myfraction)
+myfraction.simplify()
+print(myfraction)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_simplify)</span> </p>
+
+<button class='btn btn-success' id="fractions_simplify_runb" onclick="runit('fractions_simplify',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_simplify_saveb" onclick="saveEditor('fractions_simplify');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_simplify_loadb" onclick="requestCode('fractions_simplify');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_simplify_saveb').toggle();
+    $('#fractions_simplify_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_simplify_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_simplify_suffix" style="display:none">
+</pre>
+<pre id="fractions_simplify_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>There are two important things to note about this implementation.  First, the <tt class="docutils literal"><span class="pre">gcd</span></tt> function is not
+a method of the class.  It does not belong to <tt class="docutils literal"><span class="pre">Fraction</span></tt>.  Instead it is a function that is used by <tt class="docutils literal"><span class="pre">Fraction</span></tt>
+to assist in a task that needs to be performed.  This type of function is often called a <strong>helper function</strong>.  Second,
+the <tt class="docutils literal"><span class="pre">simplify</span></tt> method does not return anything.  Its job is to modify the object itself.  This type of method is
+known as a <strong>mutator</strong> method because it mutates or changes the internal state of the object.</p>
+</div>
+<div class="section" id="sameness">
+<span id="index-2"></span><h2>Sameness<a class="headerlink" href="#sameness" title="Permalink to this headline">¶</a></h2>
+<p>The meaning of the word <em>same</em> seems perfectly clear until you give it some
+thought and then you realize there is more to it than you expected.</p>
+<p>For example, if you say, Chris and I have the same car, you mean that his car
+and yours are the same make and model, but that they are two different cars. If
+you say, Chris and I have the same mother, you mean that his mother and yours
+are the same person.</p>
+<p>When you talk about objects, there is a similar ambiguity. For example, if two
+<tt class="docutils literal"><span class="pre">Fractions</span></tt>s are the same, does that mean they contain the same data
+(same numerator and denominator) or that they are actually the same object?</p>
+<p>We&#8217;ve already seen the <tt class="docutils literal"><span class="pre">is</span></tt> operator in the chapter on lists, where we
+talked about aliases.
+It allows us to find out if two references refer to the same object.</p>
+
+<div id="fractions_is" >
+
+<br/>
+<div id="fractions_is_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_is_code" class="active_code", prefixcode="undefined">
+class Fraction:
+
+    def __init__(self,top,bottom):
+
+        self.num = top        #the numerator is on top
+        self.den = bottom     #the denominator is on the bottom
+
+    def __str__(self):
+        return str(self.num) + "/" + str(self.den)
+
+
+myfraction = Fraction(3,4)
+yourfraction = Fraction(3,4)
+print(myfraction is yourfraction)
+
+ourfraction = myfraction
+print(myfraction is ourfraction)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_is)</span> </p>
+
+<button class='btn btn-success' id="fractions_is_runb" onclick="runit('fractions_is',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_is_saveb" onclick="saveEditor('fractions_is');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_is_loadb" onclick="requestCode('fractions_is');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_is_saveb').toggle();
+    $('#fractions_is_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_is_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_is_suffix" style="display:none">
+</pre>
+<pre id="fractions_is_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Even though <tt class="docutils literal"><span class="pre">myfraction</span></tt> and <tt class="docutils literal"><span class="pre">yourfraction</span></tt> contain the same numerator and denominator, they are not the
+same object.</p>
+<img alt="../_images/fractionpic2.png" src="../_images/fractionpic2.png" />
+<p>If we assign <tt class="docutils literal"><span class="pre">myfraction</span></tt> to <tt class="docutils literal"><span class="pre">ourfraction</span></tt>, then the two variables are aliases
+of the same object.</p>
+<img alt="../_images/fractionpic3.png" src="../_images/fractionpic3.png" />
+<p>This type of equality is called <strong>shallow equality</strong> because it compares only
+the references, not the contents of the objects.  Using the == operator to check equality between two user
+defined objects
+will return the shallow equality result.  In other words, the <tt class="docutils literal"><span class="pre">Fraction</span></tt> objects are equal (==) if they are the same object.</p>
+<p>Of course, we could define equality to mean the fractions are the same in that they have the same numerator and the same
+denominator.  For example, here is a boolean function that performs this check.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">sameFraction</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="n">f2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">==</span> <span class="n">f2</span><span class="o">.</span><span class="n">getNum</span><span class="p">())</span> <span class="ow">and</span> <span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">getDen</span><span class="p">()</span> <span class="o">==</span> <span class="n">f2</span><span class="o">.</span><span class="n">getDen</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This type of equality is known as <strong>deep equality</strong> since it compares the values &#8220;deep&#8221; in the object, not just the reference to the object.</p>
+
+<div id="fractions_eq1" >
+
+<br/>
+<div id="fractions_eq1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_eq1_code" class="active_code", prefixcode="undefined">
+def sameFraction(f1,f2):
+    return (f1.getNum() == f2.getNum()) and (f1.getDen() == f2.getDen())
+
+class Fraction:
+
+    def __init__(self,top,bottom):
+
+        self.num = top        #the numerator is on top
+        self.den = bottom     #the denominator is on the bottom
+
+    def __str__(self):
+        return str(self.num) + "/" + str(self.den)
+
+    def getNum(self):
+        return self.num
+
+    def getDen(self):
+        return self.den
+
+
+myfraction = Fraction(3,4)
+yourfraction = Fraction(3,4)
+print(myfraction is yourfraction)
+print(sameFraction(myfraction,yourfraction))
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_eq1)</span> </p>
+
+<button class='btn btn-success' id="fractions_eq1_runb" onclick="runit('fractions_eq1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_eq1_saveb" onclick="saveEditor('fractions_eq1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_eq1_loadb" onclick="requestCode('fractions_eq1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_eq1_saveb').toggle();
+    $('#fractions_eq1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_eq1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_eq1_suffix" style="display:none">
+</pre>
+<pre id="fractions_eq1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>Of course, if the two variables refer to the same object, they have both
+shallow and deep equality.</p>
+<div class="admonition-beware-of admonition">
+<p class="first admonition-title">Beware of  ==</p>
+<p>&#8220;When I use a word,&#8221; Humpty Dumpty said, in a rather scornful tone, &#8220;it means just what I choose it to mean &#8212; neither more nor less.&#8221;   <em>Alice in Wonderland</em></p>
+<p>Python has a powerful feature that allows a designer of a class to decide what an operation
+like <tt class="docutils literal"><span class="pre">==</span></tt> or <tt class="docutils literal"><span class="pre">&lt;</span></tt> should mean.  (We&#8217;ve just shown how we can control how our own objects
+are converted to strings, so we&#8217;ve already made a start!)  We&#8217;ll cover more detail later.
+But sometimes the implementors will attach shallow equality semantics, and
+sometimes deep equality, as shown in this little experiment:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;== on Points returns&quot;</span><span class="p">,</span> <span class="n">p</span> <span class="o">==</span> <span class="n">s</span><span class="p">)</span>  <span class="c"># by default, == does a shallow equality test here</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;== on lists returns&quot;</span><span class="p">,</span>  <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>  <span class="c"># by default, == does a deep equality test on lists</span>
+</pre></div>
+</div>
+<p>This outputs:</p>
+<div class="highlight-python"><pre>== on Points returns False
+== on lists returns True</pre>
+</div>
+<p class="last">So we conclude that even though the two lists (or tuples, etc.) are distinct objects
+with different memory addresses, in one case the <tt class="docutils literal"><span class="pre">==</span></tt> operator tests for deep equality,
+while in the case of points it makes a shallow test.</p>
+</div>
+</div>
+<div class="section" id="arithmetic-methods">
+<h2>Arithmetic Methods<a class="headerlink" href="#arithmetic-methods" title="Permalink to this headline">¶</a></h2>
+<p>We will conclude this chapter by adding a few more methods to our <tt class="docutils literal"><span class="pre">Fraction</span></tt> class.  In particular, we will implement
+arithmetic.  To begin, consider what it means to add two fractions together.
+Remember that you can only add fractions if they have the same denominator.  The easiest way to find a common denominator is
+to multiply the two individual denominators together.  Anything we do to the denominator needs to the done to the numerator.  This gives us the following equation for fraction addition:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">a</span><span class="o">/</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="o">/</span><span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">ad</span> <span class="o">+</span> <span class="n">cb</span><span class="p">)</span><span class="o">/</span><span class="n">bd</span>
+</pre></div>
+</div>
+<p>Our <tt class="docutils literal"><span class="pre">add</span></tt> method will take a <tt class="docutils literal"><span class="pre">Fraction</span></tt> as a parameter.  It will return a new <tt class="docutils literal"><span class="pre">Fraction</span></tt> representing the sum.  We
+will use the equation shown above to compute the new numerator and the new denominator.  Since this equation will not
+give us lowest terms, we will utilize a similar technique as was used in the <tt class="docutils literal"><span class="pre">simplify</span></tt> method to find the
+greatest common divisor and then divide each part of the new fraction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">otherfraction</span><span class="p">):</span>
+
+    <span class="n">newnum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">*</span><span class="n">otherfraction</span><span class="o">.</span><span class="n">den</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">den</span><span class="o">*</span><span class="n">otherfraction</span><span class="o">.</span><span class="n">num</span>
+    <span class="n">newden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">den</span> <span class="o">*</span> <span class="n">otherfraction</span><span class="o">.</span><span class="n">den</span>
+
+    <span class="n">common</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">newnum</span><span class="p">,</span><span class="n">newden</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">newnum</span><span class="o">//</span><span class="n">common</span><span class="p">,</span><span class="n">newden</span><span class="o">//</span><span class="n">common</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can try the addition method and then modify the fractions and retry.</p>
+
+<div id="fractions_add1" >
+
+<br/>
+<div id="fractions_add1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="fractions_add1_code" class="active_code", prefixcode="undefined">
+def gcd(m,n):
+    while m%n != 0:
+        oldm = m
+        oldn = n
+
+        m = oldn
+        n = oldm%oldn
+
+    return n
+
+class Fraction:
+
+    def __init__(self,top,bottom):
+
+        self.num = top        #the numerator is on top
+        self.den = bottom     #the denominator is on the bottom
+
+    def __str__(self):
+        return str(self.num) + "/" + str(self.den)
+
+    def simplify(self):
+        common = gcd(self.num, self.den)
+
+        self.num = self.num // common
+        self.den = self.den // common
+
+    def add(self,otherfraction):
+
+        newnum = self.num*otherfraction.den + self.den*otherfraction.num
+        newden = self.den * otherfraction.den
+
+        common = gcd(newnum,newden)
+
+        return Fraction(newnum//common,newden//common)
+
+f1 = Fraction(1,2)
+f2 = Fraction(1,4)
+
+f3 = f1.add(f2)
+print(f3)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (fractions_add1)</span> </p>
+
+<button class='btn btn-success' id="fractions_add1_runb" onclick="runit('fractions_add1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_add1_saveb" onclick="saveEditor('fractions_add1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="fractions_add1_loadb" onclick="requestCode('fractions_add1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#fractions_add1_saveb').toggle();
+    $('#fractions_add1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="fractions_add1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="fractions_add1_suffix" style="display:none">
+</pre>
+<pre id="fractions_add1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+<p>One final modification to this method will be quite useful.  Instead invoking the <tt class="docutils literal"><span class="pre">add</span></tt> method, we can use the
+addition operator &#8220;+&#8221;.  This requires that we implement another special method, this time called <tt class="docutils literal"><span class="pre">__add__</span></tt>.
+The details of the method are the same.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">otherfraction</span><span class="p">):</span>
+
+    <span class="n">newnum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="o">*</span><span class="n">otherfraction</span><span class="o">.</span><span class="n">den</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">den</span><span class="o">*</span><span class="n">otherfraction</span><span class="o">.</span><span class="n">num</span>
+    <span class="n">newden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">den</span> <span class="o">*</span> <span class="n">otherfraction</span><span class="o">.</span><span class="n">den</span>
+
+    <span class="n">common</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">newnum</span><span class="p">,</span><span class="n">newden</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">newnum</span><span class="o">//</span><span class="n">common</span><span class="p">,</span><span class="n">newden</span><span class="o">//</span><span class="n">common</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, now we can perform addition in the same manner that we are used to with other numeric data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f1</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">f3</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span>    <span class="c"># calls the __add__ method of f1</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition-operator-versus-add-method admonition">
+<p class="first admonition-title">+ operator versus __add__ method</p>
+<p class="last">It turns out that addition is a method that exists for integers as well.  4+5 can be written as (4).__add__(5).
+We are asking 4 to invoke its add method, passing 5 as the other value.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.</p>
+
+<div id="scratch_cl_02" >
+
+<br/>
+<div id="scratch_cl_02_code_div" style="display: block">
+<textarea cols="50" rows="120" id="scratch_cl_02_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (scratch_cl_02)</span> </p>
+
+<button class='btn btn-success' id="scratch_cl_02_runb" onclick="runit('scratch_cl_02',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_cl_02_saveb" onclick="saveEditor('scratch_cl_02');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="scratch_cl_02_loadb" onclick="requestCode('scratch_cl_02');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#scratch_cl_02_saveb').toggle();
+    $('#scratch_cl_02_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="scratch_cl_02_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="scratch_cl_02_suffix" style="display:none">
+</pre>
+<pre id="scratch_cl_02_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div>
+</div>
+<div class="section" id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h2>
+<dl class="glossary docutils">
+<dt id="term-deep-copy">deep copy</dt>
+<dd>To copy the contents of an object as well as any embedded objects, and
+any objects embedded in them, and so on; implemented by the
+<tt class="docutils literal"><span class="pre">deepcopy</span></tt> function in the <tt class="docutils literal"><span class="pre">copy</span></tt> module.</dd>
+<dt id="term-deep-equality">deep equality</dt>
+<dd>Equality of values, or two references that point to objects that have
+the same value.</dd>
+<dt id="term-shallow-copy">shallow copy</dt>
+<dd>To copy the contents of an object, including any references to embedded
+objects; implemented by the <tt class="docutils literal"><span class="pre">copy</span></tt> function in the <tt class="docutils literal"><span class="pre">copy</span></tt> module.</dd>
+<dt id="term-shallow-equality">shallow equality</dt>
+<dd>Equality of references, or two references that point to the same object.</dd>
+</dl>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><div id='q1' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q1-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q1-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q1-Question'><p>We can represent a rectangle by knowing three things: the location of its lower left corner, its width, and its height.
+Create a class definition for a Rectangle class using this idea.  To create a Rectangle object at location (4,5) with width 6
+and height 5, we would do the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class='tab-pane' id='q1-Answer'>
+<div id="ch_cl2_answer1" >
+
+<br/>
+<div id="ch_cl2_answer1_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_answer1_code" class="active_code", prefixcode="undefined">
+class Point:
+    """ Point class for representing and manipulating x,y coordinates. """
+
+    def __init__(self, initX, initY):
+
+        self.x = initX
+        self.y = initY
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    def __str__(self):
+        return "x=" + str(self.x) + ", y=" + str(self.y)
+
+
+class Rectangle:
+    """Rectangle class using Point, width and height"""
+
+    def __init__(self, initP, initW, initH):
+
+        self.location = initP
+        self.width = initW
+        self.height = initH
+
+loc = Point(4,5)
+r = Rectangle(loc, 6, 5)
+print(r)
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_answer1)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_answer1_runb" onclick="runit('ch_cl2_answer1',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_answer1_saveb" onclick="saveEditor('ch_cl2_answer1');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_answer1_loadb" onclick="requestCode('ch_cl2_answer1');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_answer1_saveb').toggle();
+    $('#ch_cl2_answer1_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_answer1_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_answer1_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_answer1_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q1-Discussion'><script type="text/javascript">
+    function disqus_ch_cl2_q1_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_ch_cl2_q1_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_ch_cl2_q1_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_ch_cl2_q1_' + eBookConfig.course;
+            disqus_url = 'http://disqus_ch_cl2_q1_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_ch_cl2_q1" onclick="disqus_ch_cl2_q1_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_ch_cl2_q1']").attr('data-disqus-identifier', 'disqus_ch_cl2_q1_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q1 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q1 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q1 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Add the following accessor methods to the Rectangle class: <tt class="docutils literal"><span class="pre">getWidth</span></tt>, <tt class="docutils literal"><span class="pre">getHeight</span></tt>, <tt class="docutils literal"><span class="pre">__str__</span></tt>.</p>
+
+<div id="ch_cl2_q2" >
+
+<br/>
+<div id="ch_cl2_q2_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_q2_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_q2)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_q2_runb" onclick="runit('ch_cl2_q2',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q2_saveb" onclick="saveEditor('ch_cl2_q2');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q2_loadb" onclick="requestCode('ch_cl2_q2');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_q2_saveb').toggle();
+    $('#ch_cl2_q2_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_q2_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_q2_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_q2_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q3' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q3-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q3-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q3-Question'><p>Add a method <tt class="docutils literal"><span class="pre">area</span></tt> to the Rectangle class that returns the area of any instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">area</span><span class="p">(),</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class='tab-pane' id='q3-Answer'>
+<div id="ch_cl2_q3answer" >
+
+<br/>
+<div id="ch_cl2_q3answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_q3answer_code" class="active_code", prefixcode="undefined">
+class Point:
+    """ Point class for representing and manipulating x,y coordinates. """
+
+    def __init__(self, initX, initY):
+
+        self.x = initX
+        self.y = initY
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    def __str__(self):
+        return "x=" + str(self.x) + ", y=" + str(self.y)
+
+
+class Rectangle:
+    """Rectangle class using Point, width and height"""
+
+    def __init__(self, initP, initW, initH):
+
+        self.location = initP
+        self.width = initW
+        self.height = initH
+
+    def area(self):
+        return self.width * self.height
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_q3answer)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_q3answer_runb" onclick="runit('ch_cl2_q3answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q3answer_saveb" onclick="saveEditor('ch_cl2_q3answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q3answer_loadb" onclick="requestCode('ch_cl2_q3answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_q3answer_saveb').toggle();
+    $('#ch_cl2_q3answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_q3answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_q3answer_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_q3answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q3-Discussion'><script type="text/javascript">
+    function disqus_d43c8f8afb2c4c808917bb7e948dbcbe_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_d43c8f8afb2c4c808917bb7e948dbcbe_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_d43c8f8afb2c4c808917bb7e948dbcbe_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_d43c8f8afb2c4c808917bb7e948dbcbe_' + eBookConfig.course;
+            disqus_url = 'http://disqus_d43c8f8afb2c4c808917bb7e948dbcbe_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_d43c8f8afb2c4c808917bb7e948dbcbe" onclick="disqus_d43c8f8afb2c4c808917bb7e948dbcbe_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_d43c8f8afb2c4c808917bb7e948dbcbe']").attr('data-disqus-identifier', 'disqus_d43c8f8afb2c4c808917bb7e948dbcbe_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q3 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q3 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q3 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a <tt class="docutils literal"><span class="pre">perimeter</span></tt> method in the Rectangle class so that we can find
+the perimeter of any rectangle instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">perimeter</span><span class="p">(),</span> <span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+
+<div id="ch_cl2_q4" >
+
+<br/>
+<div id="ch_cl2_q4_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_q4_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_q4)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_q4_runb" onclick="runit('ch_cl2_q4',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q4_saveb" onclick="saveEditor('ch_cl2_q4');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q4_loadb" onclick="requestCode('ch_cl2_q4');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_q4_saveb').toggle();
+    $('#ch_cl2_q4_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_q4_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_q4_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_q4_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+<li><div id='q5' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q5-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q5-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q5-Question'><p>Write a <tt class="docutils literal"><span class="pre">transpose</span></tt> method in the Rectangle class that swaps the width
+and the height of any rectangle instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div class='tab-pane' id='q5-Answer'>
+<div id="ch_cl2_q5answer" >
+
+<br/>
+<div id="ch_cl2_q5answer_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_q5answer_code" class="active_code", prefixcode="undefined">
+class Point:
+    """ Point class for representing and manipulating x,y coordinates. """
+
+    def __init__(self, initX, initY):
+
+        self.x = initX
+        self.y = initY
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    def __str__(self):
+        return "x=" + str(self.x) + ", y=" + str(self.y)
+
+
+class Rectangle:
+    """Rectangle class using Point, width and height"""
+
+    def __init__(self, initP, initW, initH):
+
+        self.location = initP
+        self.width = initW
+        self.height = initH
+
+    def transpose(self):
+        temp = self.width
+        self.width = self.height
+        self.height = temp
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_q5answer)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_q5answer_runb" onclick="runit('ch_cl2_q5answer',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q5answer_saveb" onclick="saveEditor('ch_cl2_q5answer');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q5answer_loadb" onclick="requestCode('ch_cl2_q5answer');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_q5answer_saveb').toggle();
+    $('#ch_cl2_q5answer_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_q5answer_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_q5answer_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_q5answer_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q5-Discussion'><script type="text/javascript">
+    function disqus_chcl_q5disc_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_chcl_q5disc_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_chcl_q5disc_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_chcl_q5disc_' + eBookConfig.course;
+            disqus_url = 'http://disqus_chcl_q5disc_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_chcl_q5disc" onclick="disqus_chcl_q5disc_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_chcl_q5disc']").attr('data-disqus-identifier', 'disqus_chcl_q5disc_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q5 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q5 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q5 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">Write a new method in the Rectangle class to test if a Point falls within
+the rectangle.  For this exercise, assume that a rectangle at (0,0) with
+width 10 and height 5 has <em>open</em> upper bounds on the width and height,
+i.e. it stretches in the x direction from [0 to 10), where 0 is included
+but 10 is excluded, and from [0 to 5) in the y direction.  So
+it does not contain the point (10, 2).  These tests should pass:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.99999</span><span class="p">)),</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)),</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><div id='q7' class='alert alert-warning'><ul class='nav nav-tabs' id='%(divid)s_tab'>
+<li>
+    <a data-toggle='tab' href='#q7-Question'><span>Question</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Answer'><span>Answer</span></a>
+</li>
+
+<li>
+    <a data-toggle='tab' href='#q7-Discussion'><span>Discussion</span></a>
+</li>
+</ul><div class='tab-content'><div class='tab-pane' id='q7-Question'><p>Write a new method called <tt class="docutils literal"><span class="pre">diagonal</span></tt> that will return the length of the diagonal that runs
+from the lower left corner to the opposite corner.</p>
+</div><div class='tab-pane' id='q7-Answer'>
+<div id="ch_cl2_answer7" >
+
+<br/>
+<div id="ch_cl2_answer7_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_answer7_code" class="active_code", prefixcode="undefined">
+class Point:
+    """ Point class for representing and manipulating x,y coordinates. """
+
+    def __init__(self, initX, initY):
+
+        self.x = initX
+        self.y = initY
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    def __str__(self):
+        return "x=" + str(self.x) + ", y=" + str(self.y)
+
+
+class Rectangle:
+    """Rectangle class using Point, width and height"""
+
+    def __init__(self, initP, initW, initH):
+
+        self.location = initP
+        self.width = initW
+        self.height = initH
+
+    def diagonal(self):
+
+        d = (self.width**2 + self.height**2)**0.5
+        return d
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_answer7)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_answer7_runb" onclick="runit('ch_cl2_answer7',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_answer7_saveb" onclick="saveEditor('ch_cl2_answer7');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_answer7_loadb" onclick="requestCode('ch_cl2_answer7');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_answer7_saveb').toggle();
+    $('#ch_cl2_answer7_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_answer7_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_answer7_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_answer7_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</div><div class='tab-pane' id='q7-Discussion'><script type="text/javascript">
+    function disqus_5f1e3f17064f44088a896e9bc0e10b4d_disqus(source) { 
+        if (window.DISQUS) {
+
+            $('#disqus_thread').insertAfter(source); //put the DIV for the Disqus box after the link
+
+            //if Disqus exists, call it's reset method with new parameters
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = 'disqus_5f1e3f17064f44088a896e9bc0e10b4d_' + eBookConfig.course;
+                    this.page.url = 'http://disqus_5f1e3f17064f44088a896e9bc0e10b4d_'+eBookConfig.course+'.interactivepython.com/#!';
+                }
+            });
+
+        } else {
+            //insert a wrapper in HTML after the relevant "show comments" link
+            $('<div id="disqus_thread"></div>').insertAfter(source);
+
+            // set Disqus required vars
+            disqus_shortname = 'interactivepython';    
+            disqus_identifier = 'disqus_5f1e3f17064f44088a896e9bc0e10b4d_' + eBookConfig.course;
+            disqus_url = 'http://disqus_5f1e3f17064f44088a896e9bc0e10b4d_'+eBookConfig.course+'.interactivepython.com/#!';
+
+            //append the Disqus embed script to HTML
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            $('head').append(dsq);
+
+        }
+    }
+</script>
+
+<a href="#disqus_thread" class='disqus_thread_link' data-disqus-identifier="disqus_5f1e3f17064f44088a896e9bc0e10b4d" onclick="disqus_5f1e3f17064f44088a896e9bc0e10b4d_disqus(this);">Show Comments</a>
+<script type='text/javascript'>
+    $("a[data-disqus-identifier='disqus_5f1e3f17064f44088a896e9bc0e10b4d']").attr('data-disqus-identifier', 'disqus_5f1e3f17064f44088a896e9bc0e10b4d_' + eBookConfig.course);
+</script>
+</div></div>
+    </div>
+    <script type='text/javascript'>
+        $('#q7 .nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+
+        // activate the first tab
+        var el = $('#q7 .nav-tabs a')[0];
+        $(el).tab('show');
+
+        $('#q7 .nav-tabs a').on('shown.bs.tab', function (e) {
+            var content_div = $(e.target.attributes.href.value);
+            content_div.find('.disqus_thread_link').each(function() {
+                $(this).click();
+            });
+
+            content_div.find('.CodeMirror').each(function(i, el) {
+                el.CodeMirror.refresh();
+            });
+        })
+    </script>
+</li>
+<li><p class="first">In games, we often put a rectangular &#8220;bounding box&#8221; around our sprites in
+the game.  We can then do <em>collision detection</em> between, say, bombs and
+spaceships, by comparing whether their rectangles overlap anywhere.</p>
+<p>Write a function to determine whether two rectangles collide. <em>Hint:
+this might be quite a tough exercise!  Think carefully about all the
+cases before you code.</em></p>
+
+<div id="ch_cl2_q8" >
+
+<br/>
+<div id="ch_cl2_q8_code_div" style="display: block">
+<textarea cols="50" rows="120" id="ch_cl2_q8_code" class="active_code", prefixcode="undefined">
+
+
+</textarea>
+</div>
+<p class="ac_caption"><span class="ac_caption_text"> (ch_cl2_q8)</span> </p>
+
+<button class='btn btn-success' id="ch_cl2_q8_runb" onclick="runit('ch_cl2_q8',this, undefined);">Run</button>
+
+<div id="cont"></div>
+
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q8_saveb" onclick="saveEditor('ch_cl2_q8');">Save</button>
+<button class="ac_opt btn btn-default" style="display: inline-block" id="ch_cl2_q8_loadb" onclick="requestCode('ch_cl2_q8');">Load</button>
+
+<script>
+if ('block' == 'none') {
+    // a hack to preserve the inline-block display style. Toggle() will use display: block
+    // (instead of inline-block) if the previous display style was 'none'
+    $('#ch_cl2_q8_saveb').toggle();
+    $('#ch_cl2_q8_loadb').toggle();
+}
+</script>
+
+
+<div style="text-align: center">
+<canvas id="ch_cl2_q8_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+</div>
+<pre id="ch_cl2_q8_suffix" style="display:none">
+</pre>
+<pre id="ch_cl2_q8_pre" class="active_out">
+
+</pre>
+
+
+</div>
+
+</li>
+</ol>
+</div>
+</div>
+
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span> | <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013 Paul Resnick, Brad Miller, David Ranum, Created using Runestone Interactive.
+    </p>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(addUserToFooter);
+    $(document).ready(addNavbarLoginLink);
+    $(document).ready(createEditors);
+    $(document).ready(getNumUsers);
+    $(document).ready(getOnlineUsers);
+    $(document).ready(createScratchActivecode());
+    $(document).ready(styleUnittestResults());
+</script>
+
+<script type="text/javascript">
+  // add the video play button overlay image
+  $(".video-play-overlay").each(function() {
+    $(this).css('background-image', "url(\'../_static/play_overlay_icon.png\')")
+    });
+
+  // This function is needed to allow the dropdown search bar to work;
+  // The default behaviour is that the dropdown menu closes when something in
+  // it (like the search bar) is clicked
+  $(function() {
+    // Fix input element click problem
+    $('.dropdown input, .dropdown label').click(function(e) {
+      e.stopPropagation();
+      });
+  });
+
+  // style codelens buttons (doing it here because PyTutor is a submodule owned by someone else
+  $(function() {
+    $(".ExecutionVisualizer").each(function() {
+      $(this).find("#jmpFirstInstr").addClass('btn btn-default');
+      $(this).find("#jmpStepBack").addClass('btn btn-danger');
+      $(this).find("#jmpStepFwd").addClass('btn btn-success');
+      $(this).find("#jmpLastInstr").addClass('btn btn-default');
+      });
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32029811-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,86 @@
+/* CSS accompanying ../visualize.html */
+
+h1 {
+  font-weight: normal;
+  font-size: 20pt;
+  font-family: georgia, serif;
+  line-height: 1em;  /* enforce single spacing so that Georgia works */
+
+  margin-top: 0px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 12pt;
+  font-weight: normal;
+  font-family: georgia, serif;
+  line-height: 1.1em; /* enforce single spacing so that Georgia works */
+
+  margin-top: 2px;
+  margin-bottom: 20px;
+}
+
+
+body {
+  background-color: white;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+a,
+a:visited,
+a:hover {
+  color: #3D58A2;
+}
+
+span {
+  padding: 0px;
+}
+
+table#pyOutputPane {
+  padding: 10px;
+}
+
+#pyInputPane {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  max-width: 700px;
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#codeInputPane {
+  margin-top: 5px;
+  font-size: 12pt;
+  border: 1px solid #ddd;
+}
+
+button.smallBtn {
+  font-size: 10pt;
+  padding: 3px;
+}
+
+button.bigBtn {
+  font-size: 13pt;
+  padding: 6px;
+  margin-top: 6px;
+}
+
+#footer {
+  color: #666666;
+  font-size: 9pt;
+  border-top: 1px solid #bbbbbb;
+  padding-top: 5px;
+  margin-top: 5px;
+
+  max-width: 700px;
+  /* center align */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* necessary for CodeMirror error line highlighting to work! */
+.CodeMirror .errorLine { background: #ffff3f !important; }

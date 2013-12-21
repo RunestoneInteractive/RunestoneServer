@@ -1,0 +1,1015 @@
+{
+  "code": "# Demonstrate *args and **kwargs\ndef f1(a, b, *rest):\n    pass\n\nf1(1, 2)\nf1(1, 2, 3, 4, 5, 6, 7)\n\ndef f2(a, b, **kwrest):\n    pass\n\nf2(1, 2, name='Bob', age=38)\n\ndef f3(a, b, *rest, **kwrest):\n    pass\n\nf3(1, 2, 3, 4, name='Bob', age=38)\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ]
+      }, 
+      "line": 5, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "2": [
+          "TUPLE"
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "2": [
+          "TUPLE"
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 1, 
+          "encoded_locals": {
+            "a": 1, 
+            "__return__": null, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              2
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f1", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "2": [
+          "TUPLE"
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ]
+      }, 
+      "line": 6, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 2, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "f1", 
+      "stack_to_render": [
+        {
+          "frame_id": 2, 
+          "encoded_locals": {
+            "a": 1, 
+            "__return__": null, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              3
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f1", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f1_f2", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "3": [
+          "TUPLE", 
+          3, 
+          4, 
+          5, 
+          6, 
+          7
+        ]
+      }, 
+      "line": 3, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f1"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ]
+      }, 
+      "line": 8, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ]
+      }, 
+      "line": 11, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2"
+      ], 
+      "stdout": "", 
+      "func_name": "f2", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "kwrest": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f2", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f2_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "kwrest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 8, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2"
+      ], 
+      "stdout": "", 
+      "func_name": "f2", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "kwrest": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f2", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f2_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "kwrest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2"
+      ], 
+      "stdout": "", 
+      "func_name": "f2", 
+      "stack_to_render": [
+        {
+          "frame_id": 3, 
+          "encoded_locals": {
+            "a": 1, 
+            "__return__": null, 
+            "b": 2, 
+            "kwrest": [
+              "REF", 
+              5
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f2", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f2_f3", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "kwrest", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "5": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 9, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ]
+      }, 
+      "line": 13, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2", 
+        "f3"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ], 
+        "f3": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "f3(a, b, *rest, **kwrest)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2", 
+        "f3"
+      ], 
+      "stdout": "", 
+      "func_name": "f3", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              8
+            ], 
+            "kwrest": [
+              "REF", 
+              7
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f3", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f3_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest", 
+            "kwrest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ], 
+        "f3": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "8": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "f3(a, b, *rest, **kwrest)", 
+          null
+        ], 
+        "7": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 13, 
+      "event": "call"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2", 
+        "f3"
+      ], 
+      "stdout": "", 
+      "func_name": "f3", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 1, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              8
+            ], 
+            "kwrest": [
+              "REF", 
+              7
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f3", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f3_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest", 
+            "kwrest"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ], 
+        "f3": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "8": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "f3(a, b, *rest, **kwrest)", 
+          null
+        ], 
+        "7": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2", 
+        "f3"
+      ], 
+      "stdout": "", 
+      "func_name": "f3", 
+      "stack_to_render": [
+        {
+          "frame_id": 4, 
+          "encoded_locals": {
+            "a": 1, 
+            "__return__": null, 
+            "b": 2, 
+            "rest": [
+              "REF", 
+              8
+            ], 
+            "kwrest": [
+              "REF", 
+              7
+            ]
+          }, 
+          "is_highlighted": true, 
+          "is_parent": false, 
+          "func_name": "f3", 
+          "is_zombie": false, 
+          "parent_frame_id_list": [], 
+          "unique_hash": "f3_f4", 
+          "ordered_varnames": [
+            "a", 
+            "b", 
+            "rest", 
+            "kwrest", 
+            "__return__"
+          ]
+        }
+      ], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ], 
+        "f3": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "8": [
+          "TUPLE", 
+          3, 
+          4
+        ], 
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "f3(a, b, *rest, **kwrest)", 
+          null
+        ], 
+        "7": [
+          "DICT", 
+          [
+            "age", 
+            38
+          ], 
+          [
+            "name", 
+            "Bob"
+          ]
+        ]
+      }, 
+      "line": 14, 
+      "event": "return"
+    }, 
+    {
+      "ordered_globals": [
+        "f1", 
+        "f2", 
+        "f3"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "f1": [
+          "REF", 
+          1
+        ], 
+        "f2": [
+          "REF", 
+          4
+        ], 
+        "f3": [
+          "REF", 
+          6
+        ]
+      }, 
+      "heap": {
+        "1": [
+          "FUNCTION", 
+          "f1(a, b, *rest)", 
+          null
+        ], 
+        "4": [
+          "FUNCTION", 
+          "f2(a, b, **kwrest)", 
+          null
+        ], 
+        "6": [
+          "FUNCTION", 
+          "f3(a, b, *rest, **kwrest)", 
+          null
+        ]
+      }, 
+      "line": 16, 
+      "event": "return"
+    }
+  ]
+}
