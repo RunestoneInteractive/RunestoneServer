@@ -266,8 +266,7 @@ beginning and only removed after that. Within that loop each call to
 the loop and the calls to delMin take :math:`O(V \log(V))`. The
 ``for`` loop is executed once for each edge in the
 graph, and within the ``for`` loop the call to ``decreaseKey`` takes
-time :math:`O(E
-\log(V))`. So the combined running time is :math:` O((V+E) \log(V))`.
+time :math:`O(E\log(V)).` So the combined running time is :math:`O((V+E) \log(V)).`
 
 Prim’s Spanning Tree Algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,9 +354,9 @@ The basic idea in constructing a spanning tree is as follows:
 
 ::
 
-   While :math:`T` is not yet a spanning tree
+   While T is not yet a spanning tree
       Find an edge that is safe to add to the tree
-      Add the new edge to :math:`T`
+      Add the new edge to T
 
 The trick is in the step that directs us to “find an edge that is safe.”
 We define a safe edge as any edge that connects a vertex that is in the
@@ -388,7 +387,7 @@ to the growing graph.
             for nextVert in currentVert.getConnections():
               newCost = currentVert.getWeight(nextVert) \
                       + currentVert.getDistance()
-              if v in pq and newCost<nextVert.getDistance():
+              if nextVert in pq and newCost<nextVert.getDistance():
                   nextVert.setPred(currentVert)
                   nextVert.setDistance(newCost)
                   pq.decreaseKey(nextVert,newCost)
