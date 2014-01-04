@@ -1,3 +1,0 @@
-# Python 3 keyword-only arguments
-def my_sorted(iterable, *, reverse=False, key=None):
-  pass
