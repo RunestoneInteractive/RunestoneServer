@@ -136,6 +136,7 @@ db.define_table('auth_user',
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
+    Field('section', type='string', default='2'),
     format='%(username)s',
     migrate='runestone_auth_user.table')
 

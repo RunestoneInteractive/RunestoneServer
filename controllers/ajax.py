@@ -9,7 +9,7 @@ logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
-def hsblog():    # Human Subjects Board Log
+def hsblog():  # Human Subjects Board Log
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -18,7 +18,7 @@ def hsblog():    # Human Subjects Board Log
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
-            sid = str(int(time.time()*1000))+"@"+request.client
+            sid = str(int(time.time() * 1000)) + "@" + request.client
             setCookie = True
     act = request.vars.act
     div_id = request.vars.div_id
@@ -26,16 +26,16 @@ def hsblog():    # Human Subjects Board Log
     course = request.vars.course
     ts = datetime.datetime.now()
 
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
-        response.cookies['ipuser']['expires'] = 24*3600*90
+        response.cookies['ipuser']['expires'] = 24 * 3600 * 90
         response.cookies['ipuser']['path'] = '/'
     return json.dumps(res)
 
-def runlog():    # Log errors and runs with code
+def runlog():  # Log errors and runs with code
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -44,7 +44,7 @@ def runlog():    # Log errors and runs with code
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
-            sid = str(int(time.time()*1000))+"@"+request.client
+            sid = str(int(time.time() * 1000)) + "@" + request.client
             setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
@@ -57,13 +57,13 @@ def runlog():    # Log errors and runs with code
     else:
         act = 'run'
         event = 'activecode'
-    db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    db.acerror_log.insert(sid=sid, div_id=div_id, timestamp=ts, course_id=course, code=code, emessage=error_info)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
-        response.cookies['ipuser']['expires'] = 24*3600*90
+        response.cookies['ipuser']['expires'] = 24 * 3600 * 90
         response.cookies['ipuser']['path'] = '/'
     return json.dumps(res)
 
@@ -78,9 +78,45 @@ def saveprog():
 
     response.headers['content-type'] = 'application/json'
 
+    # ## check if there is a deadline for this exercise, and if it has passed
+    # INSTRUCTIONS:
+    # 1. Decide a prefix to use for all the graded actex exercises for a week.
+    #    For example, name the exercises week2_1, week2_2, week2_3, etc.
+    # 2. Insert a row in the table pipactex_deadline, using the runeston/appadmin web interface. Fill
+    #    in with the prefix. For example, week2. Or reading3.
+    #   a. Fill in the "deadline" field if all sections have the same deadline.
+    #   b. Fill in all three deadlines if it's something with a different deadline
+    #    for the different sections. For example, use this for the reading reaction papers.
+    def strip_suffix(id):
+        idx = id.rfind('-') - 1
+        return id[:idx]
+    dl = db(db.pipactex_deadline.acid_prefix == strip_suffix(acid)).select().first()
+    if dl:
+        ts = datetime.datetime.now()
+        if dl.deadline:
+            deadline = dl.deadline
+        else:
+            try:
+                section = auth.user.section
+                if section == '2':
+                    deadline = dl.wed11deadline
+                elif section == '3':
+                    deadline = dl.wed4deadline
+                elif section == '4':
+                    deadline = dl.th3deadline
+                else:
+                    return json.dumps(json.dumps(["ERROR: Your section number is unknown"]))
+            except Exception as e:
+                if not auth.user:
+                    return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+                else:
+                    return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
+        if deadline and deadline < ts:
+            return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (ts)])
+
     try:
         db.code.insert(sid=auth.user.username,
-            acid=acid,code=code,
+            acid=acid, code=code,
             timestamp=datetime.datetime.now(),
             course_id=auth.user.course_id)
     except Exception as e:
@@ -119,12 +155,12 @@ def getprog():
         result = db(query)
         res['acid'] = acid
         if not result.isempty():
-            r = result.select(orderby=~codetbl.timestamp).first().code
+            r = result.select(orderby= ~codetbl.timestamp).first().code
             res['source'] = r
             if sid:
                 res['sid'] = sid
         else:
-            logging.debug("Did not find anything to load for %s"%sid)
+            logging.debug("Did not find anything to load for %s" % sid)
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
@@ -133,20 +169,20 @@ def getprog():
 def savegrade():
     res = db(db.code.id == request.vars.id)
     if request.vars.grade:
-        res.update(grade = float(request.vars.grade))
+        res.update(grade=float(request.vars.grade))
     else:
-        res.update(comment = request.vars.comment)
+        res.update(comment=request.vars.comment)
 
 
-#@auth.requires_login()
+# @auth.requires_login()
 def getuser():
     response.headers['content-type'] = 'application/json'
 
     if  auth.user:
-        res = {'email':auth.user.email,'nick':auth.user.username}
+        res = {'email':auth.user.email, 'nick':auth.user.username}
     else:
-        res = dict(redirect=auth.settings.login_url) #?_next=....
-    logging.debug("returning login info: %s",res)
+        res = dict(redirect=auth.settings.login_url)  # ?_next=....
+    logging.debug("returning login info: %s", res)
     return json.dumps([res])
 
 
@@ -196,7 +232,7 @@ def savehighlight():
                        range=hrange,
                        chapter_url=page,
                        sub_chapter_url=pageSection,
-                       method = method)
+                       method=method)
         return str(insert_id)
 
 
@@ -204,7 +240,7 @@ def deletehighlight():
     uniqueId = request.vars.uniqueId
 
     if uniqueId:
-        db(db.user_highlights.id == uniqueId).update(is_active = 0)
+        db(db.user_highlights.id == uniqueId).update(is_active=0)
     else:
         print 'uniqueId is None'
 
@@ -246,11 +282,11 @@ def updatelastpage():
     if auth.user:
         res = db((db.user_state.user_id == auth.user.id) &
                  (db.user_state.course_id == course))
-        res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash,
-                   last_page_chapter = lastPageChapter,
-                   last_page_subchapter = lastPageSubchapter,
-                   last_page_scroll_location = lastPageScrollLocation,
-                   last_page_accessed_on = datetime.datetime.now())
+        res.update(last_page_url=lastPageUrl, last_page_hash=lastPageHash,
+                   last_page_chapter=lastPageChapter,
+                   last_page_subchapter=lastPageSubchapter,
+                   last_page_scroll_location=lastPageScrollLocation,
+                   last_page_accessed_on=datetime.datetime.now())
 
 
 def getlastpage():
@@ -276,7 +312,7 @@ def getlastpage():
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
-def getCorrectStats(miscdata,event):
+def getCorrectStats(miscdata, event):
     sid = None
     if auth.user:
         sid = auth.user.username
@@ -301,7 +337,7 @@ def getCorrectStats(miscdata,event):
 
         try:
             rows = db.executesql(correctquery)
-            pctcorr = round(rows[0][0]*100)
+            pctcorr = round(rows[0][0] * 100)
         except:
             pctcorr = 'unavailable in sqlite'
     else:
@@ -313,12 +349,12 @@ def getCorrectStats(miscdata,event):
 def getStudentResults(question):
         course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-        q = db( (db.useinfo.div_id == question) &
+        q = db((db.useinfo.div_id == question) &
                 (db.useinfo.course_id == course.course_name) &
                 (db.courses.course_name == course.course_name) &
-                (db.useinfo.timestamp >= db.courses.term_start_date) )
+                (db.useinfo.timestamp >= db.courses.term_start_date))
 
-        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+        res = q.select(db.useinfo.sid, db.useinfo.act, orderby=db.useinfo.sid)
 
         resultList = []
         if len(res) > 0:
@@ -382,7 +418,7 @@ def getaggregateresults():
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
             except:
-                print "Bad data for %s data is %s " % (question,key)
+                print "Bad data for %s data is %s " % (question, key)
 
     miscdata['correct'] = correct
     miscdata['course'] = course
@@ -391,7 +427,7 @@ def getaggregateresults():
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and verifyInstructorStatus(course,auth.user.id):  #auth.has_membership('instructor', auth.user.id):
+    if auth.user and verifyInstructorStatus(course, auth.user.id):  # auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 
@@ -434,22 +470,22 @@ def gettop10Answers():
     response.headers['content-type'] = 'application/json'
     rows = []
 
-    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
+    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question, course)
     try:
         rows = db.executesql(query)
-        res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')],
+        res = [{'answer':row[0][row[0].index(':') + 1:row[0].rindex(':')],
                 'count':row[1]} for row in rows ]
     except:
         res = 'error in query'
 
     miscdata = {'course': course}
-    getCorrectStats(miscdata,'fillb')
+    getCorrectStats(miscdata, 'fillb')
 
-    if auth.user and auth.has_membership('instructor',auth.user.id):
+    if auth.user and auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         miscdata['reslist'] = resultList
 
-    return json.dumps([res,miscdata])
+    return json.dumps([res, miscdata])
 
 
 def getSphinxBuildStatus():
@@ -457,7 +493,7 @@ def getSphinxBuildStatus():
     course_url = request.vars.course_url
 
     row = scheduler.task_status(task_name)
-    st= row['status']
+    st = row['status']
 
     if st == 'COMPLETED':
         status = 'true'
@@ -465,13 +501,13 @@ def getSphinxBuildStatus():
     elif st == 'RUNNING' or st == 'QUEUED' or st == 'ASSIGNED':
         status = 'false'
         return dict(status=status, course_url=course_url)
-    else: # task failed
+    else:  # task failed
         status = 'failed'
         tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
         return dict(status=status, traceback=tb)
 
 def getassignmentgrade():
-    print 'in getassignmentgrade'
+   #  print 'in getassignmentgrade'
     if auth.user:
         sid = auth.user.username
     else:
@@ -482,10 +518,10 @@ def getassignmentgrade():
     divid = request.vars.div_id
     course_id = auth.user.course_id
     "select grade, comment from code where sid='%s' and acid='%s' and grade is not null order by timestamp desc"
-    result = db( (db.code.sid == sid) &
+    result = db((db.code.sid == sid) &
                  (db.code.acid == divid) &
                  (db.code.course_id == course_id) &
-                 (db.code.grade != None) ).select(db.code.grade,db.code.comment,orderby=~db.code.timestamp).first()
+                 (db.code.grade != None)).select(db.code.grade, db.code.comment, orderby= ~db.code.timestamp).first()
 
     ret = {}
     if result:
@@ -499,7 +535,7 @@ def getassignmentgrade():
         ret['comment'] = "No Comments"
 
     query = '''select avg(grade), count(grade)
-               from code where sid='%s' and course_id='%d' and grade is not null;''' % (sid,course_id)
+               from code where sid='%s' and course_id='%d' and grade is not null;''' % (sid, course_id)
 
     rows = db.executesql(query)
     ret['avg'] = rows[0][0]
