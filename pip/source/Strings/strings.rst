@@ -20,6 +20,15 @@ Strings
 
 .. index:: compound data type, character, subscript operator, index
 
+STOP: THIS CHAPTER ISN'T READY FOR YOU
+--------------------------------------
+
+If you're already here, congratulations, you've been working ahead. I'm delighted to hear it, but I regret that
+this chapter, and everything beyond it, have not yet been edited for this course. You can keep going,
+but you may find references to things we haven't covered yet, or other confusing things. And
+we may be adding new exercises that you will be expected to do. It's probably best to just
+wait for the instructors to catch up with you. Sorry!
+
 Strings Revisited
 -----------------
 
@@ -496,7 +505,7 @@ selecting a character:
 
 The `slice` operator ``[n:m]`` returns the part of the string from the n'th character
 to the m'th character, *including the first* but *excluding the last*. 
- other words,  start with the character at index n and
+In other words,  start with the character at index n and
 go up to but *do not include* the character at index m.
 
 If you omit the first index (before the colon), the slice starts at the

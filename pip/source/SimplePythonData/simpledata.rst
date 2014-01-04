@@ -1363,18 +1363,14 @@ Exercises
             #. ``6 % 6 = 0``
             #. ``0 % 7 = 0``
 
-        .. tab:: Discussion
 
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: c0a62044cac248859ce3695b46697ecc
-
-#. What is the order of the arithmetic operations in the following expression.  Evaluate the expression by hand and then check your
+#. What is the order of the arithmetic operations in the following expression?  Evaluate the expression by hand and then check your
      work.
 
       2 + (3 - 1) * 10 / 5 * (2 + 3)
 
    .. actex:: ex_2_2
+   
 
 
 
@@ -1384,7 +1380,7 @@ Exercises
 
         .. tab:: Question
 
-            Many people keep time using a 24 hour clock (11 is 11am and 23 is 11pm, 0 is midnight).  
+            Optional. Many people keep time using a 24 hour clock (11 is 11am and 23 is 11pm, 0 is midnight).  
             If it is currently 13 and you set your alarm to go off in 50 hours, it will be 15 (3pm).
             Write a Python program to solve the general version of the above problem.
             Ask the user for the time now (in hours), and then ask for the number of hours to wait for the alarm.
@@ -1411,12 +1407,6 @@ Exercises
 
                 print(timeofday)
 
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: a77ed6163c254612b0d649034b261659
-
 
 #. It is possible to name the days 0 thru 6 where day 0 is Sunday and day 6 is Saturday.  If you go on a wonderful holiday
    leaving on day number 3 (a Wednesday) and you return home after 10 nights.
@@ -1435,7 +1425,7 @@ Exercises
 
         .. tab:: Question
 
-            Take the sentence: *All work and no play makes Jack a dull boy.*
+            Optional. Take the sentence: *All work and no play makes Jack a dull boy.*
             Store each word in a separate variable, then print out the sentence on
             one line using ``print``.
 
@@ -1462,17 +1452,13 @@ Exercises
                 print(word1, word2, word3, word4, word5, word6, word7, word8, word9, word10)
         
 
-        .. tab:: Discussion
 
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: d1a30631e500449481955e02d3761dd3
-
-
-#. Add parenthesis to the expression ``6 * 1 - 2`` to change its value
+#. Add parentheses to the expression ``6 * 1 - 2`` to change its value
    from 4 to -6.
 
    .. actex:: ex_2_6
+      
+      print 6 * 1 -2
 
   
 #.
@@ -1481,7 +1467,7 @@ Exercises
 
         .. tab:: Question
 
-            The formula for computing the final amount if one is earning
+            Optional. The formula for computing the final amount if one is earning
             compound interest is given on Wikipedia as
 
             .. image:: Figures/compoundInterest.png
@@ -1494,7 +1480,13 @@ Exercises
             amount after `t` years.
 
             .. actex:: ex_2_7
+            
+                P = 10000
+                n = 12
+                r = 0.08
 
+                t = ??
+                
         .. tab:: Answer
 
             .. activecode:: q7_answer
@@ -1513,14 +1505,8 @@ Exercises
                 print ("The final amount after", t, "years is", final)
 
     
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: f14145f85af93420ba0c05fca5d1b4d9a
-
   
-#. Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
+#. Optional: Write a program that will compute the area of a circle.  Prompt the user to enter the radius and print a nice message
    back to the user with the answer.
 
    .. actex:: ex_2_8
@@ -1532,7 +1518,7 @@ Exercises
 
         .. tab:: Question
 
-            Write a program that will compute the area of a rectangle.  Prompt the user to enter the width and height of the rectangle.
+            Optional. Write a program that will compute the area of a rectangle.  Prompt the user to enter the width and height of the rectangle.
             Print a nice message with the answer.
 
             .. actex:: ex_2_9
@@ -1552,12 +1538,6 @@ Exercises
                 print("The area of the rectangle is", area)
 
 
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: f69d286cc58943b6aef1d886e279a12b
-
   
 #. Write a program that will compute MPG for a car.  Prompt the user to enter the number of miles driven and the number of
    gallons used.  Print a nice message with the answer.
@@ -1571,7 +1551,7 @@ Exercises
 
         .. tab:: Question
 
-            Write a program that will convert degrees celsius to degrees fahrenheit.
+            Optional. Write a program that will convert degrees celsius to degrees fahrenheit.
 
             .. actex:: ex_2_11
         
@@ -1596,7 +1576,7 @@ Exercises
                 :identifier: c4a929d598ab4c46b484f6abbcec2655
 
   
-#. Write a program that will convert degrees fahrenheit to degrees celsius.
+#. Optional. Write a program that will convert degrees fahrenheit to degrees celsius.
 
    .. actex:: ex_2_12
 

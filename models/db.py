@@ -163,6 +163,7 @@ mail.settings.sender = 'you@gmail.com'
 mail.settings.login = 'username:password'
 
 ## configure auth policy
+auth.settings.actions_disabled.append('register')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
