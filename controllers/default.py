@@ -33,10 +33,10 @@ def user():
 
     form = auth()
 
-    if 'register' in request.args(0):
+    if 'register' in request.args(0) and request.janrain_form:
         # add the Janrain login form
         form[0][5][2] = ''
-        form = (DIV(form,request.janrain_form.login_form()))
+        form = (DIV(form, request.janrain_form.login_form()))
 
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
