@@ -27,6 +27,9 @@ sys.path.insert(0, os.path.abspath('../modules'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.mathjax','luther.sphinx.disqus','luther.sphinx.reveal','luther.sphinx.poll','luther.sphinx.video','luther.sphinx.codelens','luther.sphinx.activecode','luther.sphinx.tabbedStuff', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons']
 
+# Make it use https version of mathjax
+mathjax_path = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../source/_templates']
 
