@@ -14,6 +14,8 @@ import datetime
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     db = DAL(settings.database_uri,fake_migrate_all=False)
+    session.connect(request, response, masterapp='runestone', db=db)
+
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore')
@@ -150,7 +152,7 @@ db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_emai
                                IS_NOT_IN_DB(db, db.auth_user.email))
 db.auth_user.course_id.requires = IS_COURSE_ID()
 
-auth.define_tables(migrate='runestone_')
+auth.define_tables(username=True, signature=False, migrate='runestone_')
 
 # create the instructor group if it doesn't already exist
 if not db(db.auth_group.role == 'instructor').select().first():
