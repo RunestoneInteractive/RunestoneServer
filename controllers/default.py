@@ -89,10 +89,12 @@ def bio():
     existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
     form = SQLFORM(db.user_biography, existing_record,
         fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type'],
+        keepvalues = True,
         )
     form.vars.user_id = auth.user.id
     if form.process().accepted:
-        response.flash = 'form accepted'
+        session.flash = 'form accepted'
+        redirect(URL('default','bio'))
     elif form.errors:
         response.flash = 'form has errors'
     return dict(form=form)
