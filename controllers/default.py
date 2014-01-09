@@ -84,14 +84,17 @@ def about():
 def ack():
     return dict()
 
+@auth.requires_login()
 def bio():
-    form = SQLFORM(db.user_biography)
+    existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
+    form = SQLFORM(db.user_biography, existing_record,
+        fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type'],
+        )
+    form.vars.user_id = auth.user.id
     if form.process().accepted:
         response.flash = 'form accepted'
     elif form.errors:
         response.flash = 'form has errors'
-    else:
-        response.flash = 'please fill out the form'
     return dict(form=form)
 
     
