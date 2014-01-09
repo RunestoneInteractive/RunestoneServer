@@ -92,6 +92,7 @@ def bio():
         showid = False,
         fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type','image'],
         keepvalues = True,
+        upload = URL('download')
         )
     form.vars.user_id = auth.user.id
     if form.process().accepted:
