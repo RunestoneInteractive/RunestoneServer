@@ -88,7 +88,8 @@ def ack():
 def bio():
     existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
     form = SQLFORM(db.user_biography, existing_record,
-        fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type'],
+        showid = False,
+        fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type','image'],
         keepvalues = True,
         )
     form.vars.user_id = auth.user.id

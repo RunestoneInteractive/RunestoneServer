@@ -5,4 +5,5 @@ db.define_table('user_biography',
   Field('interesting_fact', 'text'),
   Field('programming_experience', 'text'),
   Field('laptop_type', requires=IS_IN_SET(['Windows','Mac','Chromebook','Unix/Linux','Other'])),
+  Field('image','upload', label="A photo of yourself"),
   migrate='runestone_user_biography.table')
