@@ -4,5 +4,5 @@ db.define_table('user_biography',
   Field('pronounced_name', 'string'),
   Field('interesting_fact', 'text'),
   Field('programming_experience', 'text'),
-  Field('laptop_type', 'string'),
+  Field('laptop_type', requires=IS_IN_SET(['Windows','Mac','Chromebook','Unix/Linux','Other'])),
   migrate='runestone_user_biography.table')
