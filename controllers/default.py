@@ -84,4 +84,22 @@ def about():
 def ack():
     return dict()
 
+@auth.requires_login()
+def bio():
+    existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
+    db.user_biography.laptop_type.widget = SQLFORM.widgets.radio.widget
+    form = SQLFORM(db.user_biography, existing_record,
+        showid = False,
+        fields = ['prefered_name','pronounced_name','interesting_fact','programming_experience','laptop_type','image'],
+        keepvalues = True,
+        upload = URL('download')
+        )
+    form.vars.user_id = auth.user.id
+    if form.process().accepted:
+        session.flash = 'form accepted'
+        redirect(URL('default','bio'))
+    elif form.errors:
+        response.flash = 'form has errors'
+    return dict(form=form)
+
     
