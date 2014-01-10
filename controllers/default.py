@@ -97,7 +97,8 @@ def bio():
         col3={'prefered_name': "Name you would like to be called by in class. Pronunciation hints are also welcome!",
               'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? an expert on South American insects? going into the Peace Corps after graduation? have a company that you started last summer? have an unusual favorite color?",
               'programming_experience': "Have you ever done any programming before? If so, please describe briefly. (Note: no prior programming experience is required for this course. I just like to know whether you have programmed before.)",
-              'image': 'I use a flashcard app to help me learn student names. Please provide a recent photo. (Optional. If you have religious or privacy or other objections to providing a photo, feel free to skip this.)'}
+              'image': 'I use a flashcard app to help me learn student names. Please provide a recent photo. (Optional. If you have religious or privacy or other objections to providing a photo, feel free to skip this.)',
+              'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?"}
         )
     form.vars.user_id = auth.user.id
     if form.process().accepted:
