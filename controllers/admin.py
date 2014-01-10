@@ -16,7 +16,7 @@ from sphinx.application import Sphinx
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
 
-@auth.requires_login()
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
     # get current build info
