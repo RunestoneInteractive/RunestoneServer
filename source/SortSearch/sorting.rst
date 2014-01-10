@@ -281,7 +281,7 @@ places 55, and so on. The function is shown in
 
 .. _fig_selectionsort:
 
-.. figure:: Figures/selectionsort.png
+.. figure:: Figures/selectionsortnew.png
    :align: center
 
    
