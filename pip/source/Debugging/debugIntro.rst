@@ -6,7 +6,7 @@
     Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
     the license is included in the section entitled "GNU Free Documentation
     License".
-
+..  Edits by Paul Resnick
 
 How to be a Successful Programmer
 =================================
@@ -40,6 +40,8 @@ So, where to start?  The problem requires two pieces of input from the user, so 
    print(current_time)
    print(wait_time)
 
+
+If you haven't yet, click Run: get in the habit of checking whether small things are working before you go on. 
 
 So far so good.  Now lets take the next step.  We need to figure out what the time will be after waiting ``wait_time`` number of hours.  A good first approximation to that is to simply add ``wait_time`` to ``current_time`` and print out the result.  So lets try that.
 
@@ -149,7 +151,7 @@ Lets try the program again, but this time in an activecode:
    print(final_time_int)
 
 
-Aha!  Now we have an error message that might be useful.  The name error tells us that  ``wait_time_int`` is not defined.  It also tells us that the error is on line 5.  Thats **really** useful information.  Now look at line five and you will see that ``wait_time_int`` is used on both the left and the right hand side of the assignment statement. 
+Aha!  Now we have an error message that might be useful.  The name error tells us that  ``wait_time_int`` is not defined.  It also tells us that the error is on line 5.  That's **really** useful information.  Now look at line five and you will see that ``wait_time_int`` is used on both the left and the right hand side of the assignment statement. 
 
 .. mchoicemf:: db_qex32
    :answer_a: You cannot use a variable on both the left and right hand sides of an assignment statement.
@@ -266,9 +268,26 @@ Here are a couple examples of Parse errors in the example program we have been u
 
         The error message points you to line 1 and in this case that is exactly where the error occurs. In this case your biggest clue is to notice the difference in  highlighting on the line.  Notice that the words "current time" are a different color than those around them.  Why is this?  Because "current time" is in double quotes inside another pair of double quotes Python things that you are finishing off one string, then you have some other names and findally another string.  But you haven't separated these names or strings by commas, and you haven't added them together with the concatenation operator (+).  So, there are several corrections you could make.  First you could make the argument to input be as follows:  ``"what is the 'current time' (in hours 0-23)"``  Notice that here we have correctly used single quotes inside double quotes.   Another option is to simply remove the extra double quotes.  Why were you quoting "current time" anyway?  ``"what is the current time (in hours 0-23)"``
 
-**Finding Clues**  If you follow the same advice as for the last problem, comment out line one, you will immediately get a different error message.  Here's where you need to be very careful and not panic.  The error message you get now is: ``NameError: name 'current_time_str' is not defined on line 4``.  You might be very tempted to think that this is somehow related to the earlier problem and immediately conclude that there is something wrong with the variable name ``current_time_str`` but if you reflect for a minute  You will see that by commenting out line one you have caused a new and unrelated error.  That is you have commented out the creation of the name ``current_time_str``.  So of course when you want to convert it to an ``int`` you will get the NameError.  Yes, this can be confusing, but it will become much easier with experience.  Its also important to keep calm, and evaluate each new clue carefully so you don't waste time chasing problems that are not really there.  
+**Finding Clues**  If you follow the same advice as for the last problem, comment out line one, you will immediately get a different error message.  Here's where you need to be very careful and not panic.  The error message you get now is: ``NameError: name 'current_time_str' is not defined on line 4``.  You might be very tempted to think that this is somehow related to the earlier problem and immediately conclude that there is something wrong with the variable name ``current_time_str`` but if you reflect for a minute  You will see that by commenting out line one you have caused a new and unrelated error.  That is, you have commented out the creation of the name ``current_time_str``.  So of course when you want to convert it to an ``int`` you will get the NameError.  Yes, this can be confusing, but it will become much easier with experience.  It's also important to keep calm, and evaluate each new clue carefully so you don't waste time chasing problems that are not really there.  
 
 Uncomment line 1 and you are back to the ParseError.  Another track is to eliminate a possible source of error.  Rather than commenting out the entire line you might just try to assign ``current_time_str`` to a constant value.  For example you might make line one look like this:  ``current_time_str = "10"  #input("what is the "current time" (in hours 0-23)?")``.  Now you have assigned ``current_time_str`` to the string 10, and commented out the input statement.  And now the program works!  So you conclude that the problem must have something to do with the input function.
+
+The color coding that happens automatically in ActiveCode windows can help with identifying some kinds of syntax errors.
+For example, in original code for the exercise above, notice that "What is the" is in one color, and current time is in another color. That's
+your clue that it thinks the string ends after the word the (because there's a closing double-quote). Also, notice that
+when you put your cursor to left of a ``)``, it changes the color of that parenthesis and its matching ``(``. And similarly if
+you put the cursor to the left of ``(``. But check what happens if the ``(`` has no matching ``)``.
+
+.. mchoicemf:: db_qex33
+   :answer_a: Nothing. The program has a syntax error and can't run.
+   :answer_b: The left parenthesis turns green.
+   :answer_c: The left parenthesis turns red.
+   :correct: c
+   :feedback_a: You may be reading too fast and not trying to test your understanding using an ActiveCode window
+   :feedback_b: Sounds like you tried it on a left paren that did have a matching right paren.
+   :feedback_c: This color coding is your friend and can help you notice and fix parenthesis errors
+
+   In an ActiveCode window, what happens when you put the cursor left of a left parenthesis ``(`` that has no matching right parenthesis ``)``?
 
 
 TypeError
@@ -298,7 +317,7 @@ Here's an example of a type error created by a Polish learner.  See if you can f
 
     .. admonition:: Solution
 
-        In finding this error there are few lessons to think about.  First, you may find it very disconcerting that you cannot understand the whole program.  Unless you speak Polish then this won't be an issue.  But, learning what you can ignore, and what you need to focus on is a very important part of the debugging process.  Second, types and good variable names are important and can be very helpful.  In this case a and x are not particularly helpful names, and in particular they do not help you think about the types of your variables, which as the error message implies is the root of the problem here.  The rest of the lessons we will get back to in a minute.
+        In finding this error there are a few lessons to think about.  First, you may find it very disconcerting that you cannot understand the whole program.  Unless, of course, you speak Polish.  But, learning what you can ignore, and what you need to focus on is a very important part of the debugging process.  Second, types and good variable names are important and can be very helpful.  In this case a and x are not particularly helpful names, and in particular they do not help you think about the types of your variables, which as the error message implies is the root of the problem here.  The rest of the lessons we will get back to in a minute.
 
         The error message provided to you gives you a pretty big hint.  ``TypeError: unsupported operand type(s) for FloorDiv: 'str' and 'number' on line: 5``  On line five we are trying to use integer division on x and 24.  The error message tells you that you are tyring to divide a string by a number.  In this case you know that 24 is a number so x must be a string.  But how?  You can see the function call on line 3 where you are converting x to an integer.  ``int(x)`` or so you think.  This is lesson three and is one of the most common errors we see in introductory programming.  What is the difference between ``int(x)`` and ``x = int(x)``
 
@@ -336,7 +355,7 @@ Name errors almost always mean that you have used a variable before it has a val
 
 **Finding Clues**  With name errors one of the best things you can do is use the editor, or browser search function.  Quite often if you search for the exact word in the error message one of two things will happen:
 
-1.  The word you are searching for will appear only once in your code, its also likely that it will be on the right hand side of an assignment statment, or as a parameter to a function.  That should confirm for you that you have a typo somewhere.  If the name in question **is** what you thought it should be then you probably have a typo on the left hand side of an assignment statement on a line before your error message occurs.  Start looking backward at your assignment statements.  In some cases its really nice to leave all the highlighted strings from the search function visible as they will help you very quickly find a line where you might have expected your variable to be highlighted.
+1.  The word you are searching for will appear only once in your code, its also likely that it will be on the right hand side of an assignment statment, or as a parameter to a function.  That should confirm for you that you have a typo somewhere.  If the name in question **is** what you thought it should be then you probably have a typo on the left hand side of an assignment statement on a line before your error message occurs.  Start looking backward at your assignment statements.  In some cases it's really nice to leave all the highlighted strings from the search function visible as they will help you very quickly find a line where you might have expected your variable to be highlighted.
 
 2.  The second thing that may happen is that you will be looking directly at a line where you expected the search to find the string in question, but it will not be highlighted.  Most often that will be the typo right there.
 
@@ -414,7 +433,7 @@ Value errors occur when you pass a parameter to a function and the function is e
    print(final_time_int)
 
 
-Run the program but instead of typing in anything to the dialog box just click OK.  You should see the following error message:  ``ValueError: invalid literal for int() with base 10: '' on line: 4``   This error is not because you have made a mistake in your program.  Although sometimes we do want to check the user input to make sure its valid, but we don't have all the tools we need for that yet.  The error happens because the user did not give us something we can convert to an integer, instead we gave it an empty value.  Try running the program again.  Now this time enter "ten" instead of the number 10.  You will get a similar error message.
+Run the program but instead of typing in anything to the dialog box just click OK.  You should see the following error message:  ``ValueError: invalid literal for int() with base 10: '' on line: 2``   This error is not because you have made a mistake in your program.  Although usually we do want to check the user input to make sure its valid, we don't have all the tools we need for that yet at this point in the course.  The error happens because the user did not give us something we can convert to an integer, instead we gave it an empty value.  Try running the program again.  Now this time enter "ten" instead of the number 10.  You will get a similar error message.
 
 ValueErrors are not always caused by user input error, but in this program that is the case.  We'll look again at ValueErrors again when we get to more complicated programs.  For now it is worth repeating that you need to keep track of the types of your variables, and understand what types your function is expecting.  You can do this by writing comments in your code, or by naming your variables in a way that reminds you of their type.
 
