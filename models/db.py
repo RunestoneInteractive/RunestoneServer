@@ -110,6 +110,20 @@ class IS_COURSE_ID:
         return (value, self.e)
 
 
+db.define_table('sections',
+  Field('name',
+    type='string',
+    label=T('Name')
+    ),
+  Field('course_id',
+    db.courses,
+    label=('Course Name'),
+    required=True
+    ),
+  migrate='runestone_sections.table'
+  )
+
+
 db.define_table('auth_user',
     Field('username', type='string',
           label=T('Username')),
