@@ -152,7 +152,7 @@ db.define_table('auth_user',
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
-    Field('section', type='string', default='2'),
+    Field('section_id', db.sections, required=False, writable=False, readable=False),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')
