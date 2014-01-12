@@ -1653,15 +1653,15 @@ Exercises
 
         .. tab:: Answer
 
-            a. 'Python'[1] = 'y'
-            #. 'Strings are sequences of characters.'[5] = 'g'
-            #. len('wonderful') = 9
-            #. 'Mystery'[:4] = 'Myst'
-            #. 'p' in 'Pineapple' = True
-            #. 'apple' in 'Pineapple' = True
-            #. 'pear' not in 'Pineapple' = True
-            #. 'apple' > 'pineapple' = False
-            #. 'pineapple' < 'Peach' = False
+            a. 'Python'[1] evaluates to 'y'
+            #. 'Strings are sequences of characters.'[5] evaluates to 'g'
+            #. len('wonderful') evaluates to 9
+            #. 'Mystery'[:4] evaluates to 'Myst'
+            #. 'p' in 'Pineapple' evaluates to True
+            #. 'apple' in 'Pineapple' evaluates to True
+            #. 'pear' not in 'Pineapple' evaluates to True
+            #. 'apple' > 'pineapple' evaluates to False
+            #. 'pineapple' < 'Peach' evaluates to False
 
 #.  
    .. tabbed:: q2
@@ -1681,18 +1681,27 @@ Exercises
             print y
 
 
-
-#.  Write code that asks the user to type something and removes all the vowels from it, then prints it out.
-
-   .. actex:: ex_3_2
-
-
-#.  Write code that transforms the list ``[3, 6, 9]`` into the list ``[3, 0, 9]`` and then prints it out
-
-   .. actex:: ex_3_3
+#.  
+   .. tabbed:: q3
    
-      w = [3, 6, 9]
-      # add code that changes w
+      .. tab:: Question
+
+         Write code that asks the user to type something and removes all the vowels from it, then prints it out.
+
+         .. actex:: ex_3_2
+
+
+#.  
+   .. tabbed:: q4
+
+      .. tab:: Question
       
-      print w 
+         Write code that transforms the list ``[3, 6, 9]`` into the list ``[3, 0, 9]`` and then prints it out
+   
+      .. actex:: ex_3_3
+
+         w = [3, 6, 9]
+         # add code that changes w
+         
+         print w 
    
