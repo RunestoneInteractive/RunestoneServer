@@ -262,10 +262,17 @@ def sections_delete():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_update():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    section = db(db.sections.id == request.vars.id).select().first()
+    if not section or section.course_id != course.id:
+        redirect(URL('admin','sections_list'))
     #show text field for adding users to course
     #show all users in section - in form that will remove users from section
     #show all users in course but not in section - will add users to section
-    return dict()
+    return dict(
+        section = section,
+        users = db(db.auth_user.section_id == section.id).select()
+        )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_add_users():
