@@ -239,9 +239,11 @@ def buildmodulelist():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_list():
     course = db(db.courses.id == auth.user.course_id).select().first()
+    sections = db(db.sections.course_id == course.id).select()
     # get all sections - for course, list number of users in each section
     return dict(
-        sections=[]
+        course = course,
+        sections = sections
         )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
