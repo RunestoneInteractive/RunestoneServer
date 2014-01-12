@@ -144,6 +144,16 @@ Labs
    Labs/sequencelab.rst
    Labs/sinlab.rst
 
+Assignments
+:::::::::::
+
+.. toctree::
+   :maxdepth: 1
+
+   Assignments/Readingresp.rst
+   Assignments/PS1.rst
+
+
 Appendices
 ::::::::::
 
