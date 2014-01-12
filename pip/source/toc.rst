@@ -29,22 +29,15 @@ Debugging Interlude 1
    :maxdepth: 2
 
    Debugging/debugIntro.rst
-   
-Strings
-:::::::
+
+
+Sequences
+:::::::::
 
 .. toctree::
    :maxdepth: 2
 
-   Strings/strings.rst
-
-Lists
-:::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Lists/lists.rst
+   Sequences/index.rst
 
 
 Python Modules
