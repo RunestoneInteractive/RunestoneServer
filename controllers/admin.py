@@ -236,5 +236,42 @@ def buildmodulelist():
     session.flash = 'Module Database Rebuild Finished'
     redirect('/%s/admin'%request.application)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_list():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    # get all sections - for course, list number of users in each section
+    return dict(
+        sections=[]
+        )
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_create():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    # show form for adding section. Will requrire unique name.
+    # section will also recieve course ID
+    return dict()
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_delete():
+    # remove all users from section
+    # delete section
+    # return to list
+    return dict()
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_update():
+    #show text field for adding users to course
+    #show all users in section - in form that will remove users from section
+    #show all users in course but not in section - will add users to section
+    return dict()
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_add_users():
+    #adds users from either CSV list of email addresses OR array of email addresses
+    #if "add only flag" remove all other users from section
+    return dict()
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_remove_users():
+    #remove users from section via either CSV list of email addresses OR array of email addresses 
+    return dict()
