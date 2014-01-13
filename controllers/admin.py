@@ -249,9 +249,17 @@ def sections_list():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_create():
     course = db(db.courses.id == auth.user.course_id).select().first()
-    # show form for adding section. Will requrire unique name.
-    # section will also recieve course ID
-    return dict()
+    form = FORM(
+        INPUT(_name="name", requires=IS_NOT_EMPTY()),
+        INPUT(_type="Submit"),
+        )
+    if form.accepts(request,session):
+        section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
+        session.flash = "Section Created"
+        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
+    return dict(
+        form = form,
+        )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_delete():
