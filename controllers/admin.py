@@ -126,11 +126,25 @@ def gradeassignment():
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-        where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
-             (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-             (auth.user.course_id,acid))
-    return dict(solutions=rset,course_id=course.course_name)
+    section = db(db.sections.id == request.vars.section_id).select().first()
+
+    if section:
+        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
+            where sid = username and T.course_id = '%s' and  acid = '%s' and section_id='%s' and timestamp =
+                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
+                 (auth.user.course_id,acid,section.id))
+    else:
+        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
+            where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
+                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
+                 (auth.user.course_id,acid))
+    return dict(
+        acid = acid,
+        sid = sid,
+        sections = db(db.sections.course_id == auth.user.course_id).select(),
+        solutions=rset,
+        course_id=course.course_name
+        )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
