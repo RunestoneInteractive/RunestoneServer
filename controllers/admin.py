@@ -266,12 +266,17 @@ def sections_update():
     section = db(db.sections.id == request.vars.id).select().first()
     if not section or section.course_id != course.id:
         redirect(URL('admin','sections_list'))
+    bulk_email_form = FORM(
+        TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY),
+        INPUT(_type='Submit'),
+        )
     #show text field for adding users to course
     #show all users in section - in form that will remove users from section
     #show all users in course but not in section - will add users to section
     return dict(
         section = section,
-        users = db(db.auth_user.section_id == section.id).select()
+        users = db(db.auth_user.section_id == section.id).select(),
+        bulk_email_form = bulk_email_form,
         )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
