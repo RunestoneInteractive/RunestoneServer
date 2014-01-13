@@ -8,6 +8,8 @@
     License".
 ..  Edits by Paul Resnick
 
+.. _debugging_1:
+
 How to be a Successful Programmer
 =================================
 

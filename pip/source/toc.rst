@@ -3,6 +3,13 @@
 Table of Contents
 :::::::::::::::::
 
+Assignments
+:::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Assignments/assignments.rst
 
 General Introduction
 ::::::::::::::::::::
@@ -39,6 +46,13 @@ Sequences
 
    Sequences/index.rst
 
+Iteration
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Iteration/iteration.rst
 
 Python Modules
 ::::::::::::::

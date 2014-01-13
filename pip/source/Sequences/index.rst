@@ -14,6 +14,8 @@
    :prefix: str-
    :start: 1
 
+.. _sequences_chap:
+
 Sequences
 =========
 

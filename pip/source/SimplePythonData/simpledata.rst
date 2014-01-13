@@ -13,6 +13,8 @@
 .. qnum::
    :prefix: sdat-
    :start: 1
+   
+.. _simple_python_data:
 
 Variables, Expressions and Statements
 =====================================
