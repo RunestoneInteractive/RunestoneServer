@@ -268,14 +268,16 @@ def sections_update():
         redirect(URL('admin','sections_list'))
     bulk_email_form = FORM(
         TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY()),
+        INPUT(_name="overwrite", _type="Checkbox"),
         INPUT(_type='Submit'),
         )
     if bulk_email_form.accepts(request,session):
-        #remove all users from section
+        if bulk_email_form.vars.overwrite:
+            section.clear_users()
         users_added_count = 0
         for email_address in bulk_email_form.vars.emails_csv.split(','):
             user = db(db.auth_user.email == email_address.lower()).select().first()
-            if user:
+            if user and user.section_id != section.id:
                 user.section_id = section.id
                 user.update_record()
                 users_added_count += 1
