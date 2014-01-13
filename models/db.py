@@ -122,6 +122,13 @@ db.define_table('sections',
     ),
   migrate='runestone_sections.table'
   )
+class ExtendedSection(object):
+  def clear_users(self):
+    def clear(self=self):
+      for user in db(db.auth_user.section_id == self.sections.id).select():
+        user.update_record(section_id='')
+    return clear
+db.sections.virtualfields.append(ExtendedSection())
 
 
 db.define_table('auth_user',
