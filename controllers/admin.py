@@ -267,10 +267,22 @@ def sections_update():
     if not section or section.course_id != course.id:
         redirect(URL('admin','sections_list'))
     bulk_email_form = FORM(
-        TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY),
+        TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY()),
         INPUT(_type='Submit'),
         )
-    #show text field for adding users to course
+    if bulk_email_form.accepts(request,session):
+        #remove all users from section
+        users_added_count = 0
+        for email_address in bulk_email_form.vars.emails_csv.split(','):
+            user = db(db.auth_user.email == email_address.lower()).select().first()
+            if user:
+                user.section_id = section.id
+                user.update_record()
+                users_added_count += 1
+        session.flash = "%d Emails Added" % (users_added_count)
+        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
+    elif bulk_email_form.errors:
+        response.flash = "Error Processing Request"
     #show all users in section - in form that will remove users from section
     #show all users in course but not in section - will add users to section
     return dict(
