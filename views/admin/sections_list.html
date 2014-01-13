@@ -2,6 +2,7 @@
 <h1>Sections for {{=course.course_name}}</h1>
 <ul>
 {{for section in sections:}}
-<li><a href="/{{=request.application}}/admin/sections_update?id={{=section.id}}">{{=section.name}}</a></li>
+<li><a href="sections_update?id={{=section.id}}">{{=section.name}}</a></li>
 {{pass}}
 </ul>
+<a href="sections_create">Create a New Section</a>

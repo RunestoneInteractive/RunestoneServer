@@ -1,4 +1,5 @@
 {{extend 'layout.html'}}
+<a href="sections_list">All Sections</a>
 <h1>Section: {{=section.name}}</h1>
 <h3>Users in Section</h3>
 <ul>
@@ -8,3 +9,5 @@
 </ul>
 <h2>Update Users in Section</h2>
 {{=bulk_email_form}}
+<h2>Delete Section</h2>
+<a href="sections_delete?id={{section.id}}">Delete {{=section.name}}, click here.</a>
