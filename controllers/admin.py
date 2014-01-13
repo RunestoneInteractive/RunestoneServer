@@ -255,10 +255,14 @@ def sections_create():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_delete():
-    # remove all users from section
-    # delete section
-    # return to list
-    return dict()
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    section = db(db.sections.id == request.vars.id).select().first()
+    if not section or section.course_id != course.id:
+        return redirect(URL('admin','sections_list'))
+    section.clear_users()
+    session.flash = "Deleted Section: %s" % (section.name)
+    db(db.sections.id == section.id).delete()
+    return redirect(URL('admin','sections_list'))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_update():
