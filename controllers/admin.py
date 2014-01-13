@@ -296,14 +296,3 @@ def sections_update():
         users = db(db.auth_user.section_id == section.id).select(),
         bulk_email_form = bulk_email_form,
         )
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def sections_add_users():
-    #adds users from either CSV list of email addresses OR array of email addresses
-    #if "add only flag" remove all other users from section
-    return dict()
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def sections_remove_users():
-    #remove users from section via either CSV list of email addresses OR array of email addresses 
-    return dict()
