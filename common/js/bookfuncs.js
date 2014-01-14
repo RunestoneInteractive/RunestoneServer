@@ -277,7 +277,7 @@ function runit(myDiv, theButton, includes, suffix) {
     // configure Skulpt output function, and module reader
     Sk.configure({output: outf,
                      read: builtinRead,
-                     python3: true
+                     python3: false
                  });
     try {
         Sk.importMainWithBody("<stdin>", false, prog);

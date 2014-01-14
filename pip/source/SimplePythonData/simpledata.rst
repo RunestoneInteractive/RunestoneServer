@@ -873,7 +873,7 @@ The result is referred to by ``total_secs``.  Now, each time you run the program
 
    .. code-block:: python
 
-     n = input("Please enter your age: ")
+     n = raw_input("Please enter your age: ")
      # user types in 18
      print ( type(n) )
 
