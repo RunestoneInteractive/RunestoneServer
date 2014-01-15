@@ -166,6 +166,12 @@ For your own personal development, you want the first clause of the if statement
 you can replace 'Darwin' with the result of running ``uname`` at a terminal. Another option is to replace 'local' with
 your computer's hostname.
 
+Populate chapter tables
+-------------------
+The database contains two tables ``chapters`` and ``sub_chapters`` which are populated using a script by scraping the ``toc.html`` page. In order to run the script, from the command line, navigate to ``runestone/thinkcspy`` and type the command ``python chapterNames.py``
+In order to populate the chapter tables for other courses, create a copy of ``chapterNames.py`` file and modify the line
+``os.chdir("..\\static\\thinkcspy")``
+
 Final Configuration
 -------------------
 To use the admin functionality you are going to want to do one more bit of configuration:
