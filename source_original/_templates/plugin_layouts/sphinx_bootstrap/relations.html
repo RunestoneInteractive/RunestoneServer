@@ -1,0 +1,30 @@
+{%- if prev %}
+  <li id="relations-prev" title="Previous Chapter - {{ prev.title }}" data-toggle="tooltip">
+    <a href="{{ prev.link|e }}" >
+      <i class='glyphicon glyphicon-backward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  {% if not next %}
+    <li class="divider-vertical"></li>
+  {% endif %}
+
+{%- endif %}
+
+{%- if next %}
+  <li id="relations-next" title='Next Chapter - {{ next.title }}' data-toggle="tooltip" >
+    <a href="{{ next.link|e }}" >
+      <i class='glyphicon glyphicon-forward' style='opacity:0.9;'></i>
+    </a>
+  </li>
+  <li class="divider-vertical"></li>
+{%- endif %}
+
+<script type="text/javascript">
+  opts = {'placement':'bottom',
+          'selector': '',
+          'delay': { show: 100, hide: 50}
+         };
+
+  $('#relations-prev').tooltip(opts);
+  $('#relations-next').tooltip(opts);
+</script>
