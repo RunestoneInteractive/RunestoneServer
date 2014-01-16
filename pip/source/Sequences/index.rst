@@ -672,7 +672,9 @@ is a digit using the ``in`` operator.
 The string ``string.ascii_lowercase`` contains all of the ascii letters that the system
 considers to be lowercase. Similarly, ``string.ascii_uppercase`` contains all of the
 uppercase letters. ``string.punctuation`` comprises all the characters considered
-to be punctuation. Try the following and see what you get.
+to be punctuation. You can't actually run the code below in the browser (sorry, limitation of our environment, not
+*all* of python has been implemented.) But the comments indicate what would be produced; later in the
+semester you'll have facilities for actually executing it.
 
 .. activecode:: seq_char_classification
     
@@ -682,10 +684,10 @@ to be punctuation. Try the following and see what you get.
     print(string.punctuation)
     x = "a"
     y = "A"
-    print(x in string.ascii_lowercase)
-    print(x in string.ascii_uppercase)
-    print(y in string.ascii_lowercase)
-    print(y in string.ascii_uppercase) 
+    print(x in string.ascii_lowercase)  # True
+    print(x in string.ascii_uppercase)  # False
+    print(y in string.ascii_lowercase)  # False
+    print(y in string.ascii_uppercase)  # True
 
 
 For more information consult the ``string`` module documentation (see `Global Module Index <http://docs.python.org/py3k/py-modindex.html>`_).
@@ -748,7 +750,7 @@ it important to note that ``len`` only returns the top-most length.
 
     alist =  ["hello", 2.0, 5]
     print(len(alist))
-    print(len(alist[0])
+    print(len(alist[0]))
 
 Note that ``alist[0]`` is the string ``"hello"``, which has length 5. 
 
