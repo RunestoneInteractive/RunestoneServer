@@ -16,11 +16,17 @@
 Working with Data Files
 =======================
 
-So far, the data we have used in this book have all been either coded right into the program, or have been entered by the user.  In real life data reside in files.  For example the images we worked with in the image processing unit ultimately live in files on your hard drive.  Web pages, and word processing documents, and music are other examples of data that live in files.  In this short chapter we will introduce the Python concepts necessary to use data from files in our programs.
+So far, the data we have used in this book have all been either coded right into the program, or have been entered by the user.  
+In real life data reside in files.  For example the images we worked with in the image processing unit ultimately live in files on your hard drive.  
+Web pages, and word processing documents, and music are other examples of data that live in files.  In this short chapter we will introduce the Python concepts necessary to use data from files in our programs.
 
-For our purposes, we will assume that our data files are text files--that is, files filled with characters. The Python programs that you write are stored as text files.  We can create these files in any of a number of ways. For example, we could use a text editor to type in and save the data.  We could also download the data from a website and then save it in a file. Regardless of how the file is created, Python will allow us to manipulate the contents.
+For our purposes, we will assume that our data files are text files--that is, files filled with characters. 
+The Python programs that you write are stored as text files.  We can create these files in any of a number of ways. 
+For example, we could use a text editor to type in and save the data.  We could also download the data from a website and then save it in a file. 
+Regardless of how the file is created, Python will allow us to manipulate the contents.
 
-In Python, we must **open** files before we can use them and **close** them when we are done with them. As you might expect, once a file is opened it becomes a Python object just like all other data. :ref:`Table 1<filemethods1a>` shows the functions and methods that can be used to open and close files.
+In Python, we must **open** files before we can use them and **close** them when we are done with them. As you might expect, once a file is opened it becomes a Python object just like all other data. 
+:ref:`Table 1<filemethods1a>` shows the functions and methods that can be used to open and close files.
 
 .. _filemethods1a:
 
@@ -35,11 +41,24 @@ In Python, we must **open** files before we can use them and **close** them when
 Finding a File on your Disk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Opening a file requires that you, as a programmer, and Python agree about the location of the file on your disk.  The way that files are located on disk is by their **path**  You can think of the filename as the short name for a file, and the path as the full name.  For example on a Mac if you save the file ``hello.txt`` in your home directory the path to that file is ``/Users/yourname/hello.txt``  On a Windows machine the path looks a bit different but the same principles are in use.  For example on windows the path might be ``C:\Users\yourname\My Documents\hello.txt``
+Opening a file requires that you, as a programmer, and Python agree about the location of the file on your disk.  
+The way that files are located on disk is by their **path**  You can think of the filename as the short name for a file, and the path as the full name.  
+For example on a Mac if you save the file ``hello.txt`` in your home directory the path to that file is ``/Users/yourname/hello.txt``  
+On a Windows machine the path looks a bit different but the same principles are in use.  For example on windows the path might be ``C:\Users\yourname\My Documents\hello.txt``
 
-You can access files in folders, also called directories, under your home directory by adding a slash and the name of the folder.  For example, if you had a file called ``hello.py`` in a folder called ``CS150``  that was inside a folder called ``PyCharmProjects`` under your home directory, then the full name for ``hello.py`` stored in the CS150 folder would be ``/Users/yourname/PyCharmProjects/CS150/hello.py``
+You can access files in folders, also called directories, under your home directory by adding a slash and the name of the folder.  
+For example, if you had a file called ``hello.py`` in a folder called ``SI106``  that was inside a folder called ``PyCharmProjects`` under your home directory, 
+then the full name for ``hello.py`` stored in the CS150 folder would be ``/Users/yourname/PyCharmProjects/SI106/hello.py``
 
-Here's the important rule to remember:  If your file and your Python program are in the same directory you can simply use the filename. ``open('myfile.txt','r')`` If your file and your Python program are in different directories then you should use the path to the file ``open(/Users/joebob01/myfile.txt)``.
+Here's the important rule to remember:  If your file and your Python program are in the same directory you can simply use the filename. ``open('myfile.txt','r')`` 
+If your file and your Python program are in different directories then you should use the path to the file ``open(/Users/joebob01/myfile.txt)``.
+
+.. note::
+
+   For security reasons, our code running in your browser doesn't read or write files to your computer's file system. Later in the semester, when you run python
+   natively on your own computer, you will be able to truly read files, using path names as suggested above. To get you started, we have faked it by providing
+   a few files that you can read *as if* they were on your hard disk. In this chapter, we simulate the existence of a textfile called ``qbdata.txt``. You can't
+   open any other files from your local computer from code running this chapter.
 
 Reading a File
 ~~~~~~~~~~~~~~
@@ -50,6 +69,7 @@ would be possible to consider entering this data by hand each time it is used,
 you can imagine that it would be time-consuming and error-prone to do this. In
 addition, it is likely that there could be data from more quarterbacks and
 other years. The format of the data file is as follows
+
 ::
 
     First Name, Last Name, Position, Team, Completions, Attempts, Yards, TDs Ints, Comp%, Rating
@@ -99,16 +119,15 @@ To open this file, we would call the ``open`` function. The variable,
 the ``close`` method. After the file is closed any further attempts to
 use ``fileref`` will result in an error.
 
-    ::
+::
 
-            >>>fileref = open("qbdata.txt","r")
-            >>>
-            >>>fileref.close()
-            >>>
+   fileref = open("qbdata.txt","r")
+   ## other code here that refers to variable fileref
+   fileref.close()
+
 
 Iterating over lines in a file
 ------------------------------
-
 
 We will now use this file as input in a program that will do some data
 processing. In the program, we will **read** each line of the file and
@@ -158,9 +177,9 @@ construct a simple sentence.
 Alternative File Reading Methods
 --------------------------------
 
-
-In addition to the ``for`` loop, Python provides three methods to read data
-from the input file. The ``readline`` method reads one line from the file and
+In addition to the ``for`` loop, Python provides three other methods to read data
+from the input file. You don't really need to use all of them, but in case you encounter them, here's what they do.
+The ``readline`` method reads one line from the file and
 returns it as a string. The string returned by ``readline`` will contain the
 newline character at the end. This method returns the empty string when it
 reaches the end of the file. The ``readlines`` method returns the contents of
@@ -168,45 +187,6 @@ the entire file as a list of strings, where each item in the list represents
 one line of the file. It is also possible to read the entire file into a
 single string with ``read``. :ref:`Table 2 <filemethods2a>` summarizes these methods
 and the following session shows them in action.
-
-Note that we need to reopen the file before each read so that we start from
-the beginning. Each file has a marker that denotes the current read position
-in the file. Any time one of the read methods is called the marker is moved to
-the character immediately following the last character returned. In the case
-of ``readline`` this moves the marker to the first character of the next line
-in the file. In the case of ``read`` or ``readlines`` the marker is moved to
-the end of the file.
-
-
-::
-
-    >>> infile = open("qbdata.txt","r")
-    >>> aline = infile.readline()
-    >>> aline
-    'Colt McCoy QB, CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n'
-    >>>
-    >>> infile = open("qbdata.txt","r")
-    >>> linelist = infile.readlines()
-    >>> print(len(linelist))
-    34
-    >>> print(linelist[0:4])
-    ['Colt McCoy QB CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n',
-     'Josh Freeman QB TB\t291\t474\t3451\t25\t6\t61.4%\t95.9\n',
-     'Michael Vick QB PHI\t233\t372\t3018\t21\t6\t62.6%\t100.2\n',
-     'Matt Schaub QB HOU\t365\t574\t4370\t24\t12\t63.6%\t92.0\n']
-    >>>
-    >>> infile = open("qbdata.txt","r")
-    >>> filestring = infile.read()
-    >>> print(len(filestring))
-    1708
-    >>> print(filestring[:256])
-    Colt McCoy QB CLE	135	222	1576	6	9	60.8%	74.5
-    Josh Freeman QB TB	291	474	3451	25	6	61.4%	95.9
-    Michael Vick QB PHI	233	372	3018	21	6	62.6%	100.2
-    Matt Schaub QB HOU	365	574	4370	24	12	63.6%	92.0
-    Philip Rivers QB SD	357	541	4710	30	13	66.0%	101.8
-    Matt Ha
-    >>>
 
 .. _filemethods2a:
 
@@ -234,35 +214,34 @@ the end of the file.
                                                       returned.
 ======================== =========================== =====================================
 
-Now lets look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
 
-.. activecode:: files_while
+In this course, we will generally either iterate through the contents of a file using a for loop, or use read() to get all of the contents as a single string.
 
-    infile = open("qbdata.txt","r")
-    line = infile.readline()
-    while line:
-        values = line.split()
-        print('QB ', values[0], values[1], 'had a rating of ', values[10] )
-        line = infile.readline()
+In other programming languages, where they don't have the convenient for loop method of going through the lines of the file one by one, they use a different pattern which requires a different kind of loop, 
+the ``while`` loop. Fortunately, you don't need to learn this other pattern, and we will put off consideration of ``while`` loops indefinitely in this course.
 
-    infile.close()
+.. note::
 
-The important thing to notice is that on line 2 we have the statement ``line = infile.readline()``.  
-We call this initial read the **priming read**.
-It is very important because the while condition needs to have a value for the ``line`` variable.  The ``readline`` method will return the
-empty string if there is no more data in the file.  The condition ``while line:`` means `while the content of line is not the empty string`.  Remember that a
-blank line in the file actually has a single character, the ``\n`` character (newline).  So, the only way that a line of data from the
-file can be empty is if you are reading at the end of the file.
+   A common error that novice programmers make is not realizing that all these ways of reading the file, including
+   using the for loop to iterate over the lines, **use up the file**. 
+   If you want to go through the contents twice, for now it is probably easiest to just
+   open it twice, and iterate through it twice. If you cared about efficiency, you might 
+   prefer to save the contents in a variable.
 
-Finally, notice that the last line of the body of the ``while`` loop performs another ``readline``.  This statement will reassign the variable ``line`` to the next line of the file.  It represents the `change of state` that is necessary for the iteration to
-function correctly.  Without it, there would be an infinite loop processing the same line of data over and over.
 
 Writing Text Files
 ------------------
 
-One of the most commonly performed data processing tasks is to read data from a file, manipulate it in some way, and then write the resulting data out to a new data file to be used for other purposes later.  To accomplish this, the ``open`` function discussed above can also be used to create a new file prepared for writing.  Note in :ref:`Table 1<filemethods1a>` above that the only difference between opening a file for writing and  opening a file for reading is the use of the ``'w'`` flag instead of the ``'r'`` flag as the second parameter.  When we open a file for writing, a new, empty file with that name is created and made ready to accept our data. As before, the function returns a reference to the new file object.
+One of the most commonly performed data processing tasks is to read data from a file, manipulate it in some way, and then write the resulting data out to a new data file to be used for other purposes later.  
+To accomplish this, the ``open`` function discussed above can also be used to create a new file prepared for writing.  
+Note in :ref:`Table 1<filemethods1a>` above that the only difference between opening a file for writing and  opening a file for reading is the use of the ``'w'`` flag instead of the ``'r'`` flag as the second parameter.  
+When we open a file for writing, a new, empty file with that name is created and made ready to accept our data. As before, the function returns a reference to the new file object.
 
-:ref:`Table 2 <filemethods2a>` above shows one additional file method that we have not used thus far.  The ``write`` method allows us to add data to a text file.  Recall that text files contain sequences of characters.  We usually think of these character sequences as being the lines of the file where each line ends with the newline ``\n`` character.  Be very careful to notice that the ``write`` method takes one parameter, a string.  When invoked, the characters of the string will be added to the end of the file.  This means that it is the programmers job to include the newline characters as part of the string if desired.
+:ref:`Table 2 <filemethods2a>` above shows one additional file method that we have not used thus far.  
+The ``write`` method allows us to add data to a text file.  Recall that text files contain sequences of characters.  
+We usually think of these character sequences as being the lines of the file where each line ends with the newline ``\n`` character.  
+Be very careful to notice that the ``write`` method takes one parameter, a string.  When invoked, the characters of the string will be added to the end of the file.  
+This means that it is the programmer's job to include the newline characters as part of the string if desired.
 
 As an example, consider the ``qbdata.txt`` file once again.  Assume that we have been asked to provide a file consisting of only the names of the
 quarterbacks.  In addition, the names should be in the order last name followed by first name with the names separated by a comma.  This
@@ -285,11 +264,21 @@ The program below solves part of the problem.  Notice that it reads the data and
 
     infile.close()
 
-When we run this program, we see the lines of output on the screen.  Once we are satisfied that it is creating the appropriate output, the next step is to add the necessary pieces to produce an output file and write the data lines to it.  To start, we need to open a new output file by adding another call to the ``open`` function, ``outfile = open("qbnames.txt",'w')``, using the ``'w'`` flag.  We can choose any file name we like.  If the file does not exist, it will be created.  However, if the file does exist, it will be reinitialized as empty and you will lose any previous contents.  
+When we run this program, we see the lines of output on the screen.  Once we are satisfied that it is creating the appropriate output, the next step is to add the necessary pieces to produce an output file and write the data lines to it.  
+To start, we need to open a new output file by adding another call to the ``open`` function, ``outfile = open("qbnames.txt",'w')``, using the ``'w'`` flag.  We can choose any file name we like.  
+If the file does not exist, it will be created.  However, if the file does exist, it will be reinitialized as empty and you will lose any previous contents.  
 
-Once the file has been created, we just need to call the ``write`` method passing the string that we wish to add to the file.  In this case, the string is already being printed so we will just change the ``print`` into a call to the ``write`` method.  However, there is one additional part of the data line that we need to include.  The newline character needs to be concatenated  to the end of the line.  The entire line now becomes ``outfile.write(dataline + '\n')``.  We also need to close the file when we are done.
+Once the file has been created, we just need to call the ``write`` method passing the string that we wish to add to the file.  
+In this case, the string is already being printed so we will just change the ``print`` into a call to the ``write`` method.  
+However, there is one additional part of the data line that we need to include.  The newline character needs to be concatenated  to the end of the line.  
+The entire line now becomes ``outfile.write(dataline + '\n')``.  The print statement automatically
+outputs a newline character after whatever text it outputs, but the write method does not do that automatically. We also need to close the file when we are done.
 
 The complete program is shown below.
+
+.. note::
+   Unfortunately, as described above, you can't actually write to a file when executing activecode in the browser. So for now, you'll just have to look at
+   this program without being able to execute it.
 
 .. sourcecode:: python
 
@@ -401,602 +390,15 @@ Exercises
                 </pre>
 
             Using the text file ``studentdata.txt`` write a program that prints out the names of
-            students that have more than six quiz scores.
+            students that have more than six quiz scores. 
 
 
 
             .. actex:: ex_6_1
+               
+               # Hint: first see if you can write a program that just prints out the number of scores on each line
+               
+               # Then, make it print the number only if the number is at least six
+               
+               # Then, switch it to printing the name instead of the number
 
-
-        .. tab:: Answer
-
-            .. activecode:: ch_files_q1answer
-
-                f = open("studentdata.txt","r")
-
-                for aline in f:
-                   items = aline.split()
-                   if len(items[1:]) > 6:
-                      print(items[0])
-
-                f.close()
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe
-
-
-
-#. Using the text file ``studentdata.txt`` (shown in exercise 1) write a program that calculates the average grade
-   for each student, and print out the student's name along with their average grade.
-
-   .. actex:: ex_10_2
-
-
-
-#.
-
-    .. tabbed:: q3
-
-        .. tab:: Question
-
-
-            Using the text file ``studentdata.txt`` (shown in exercise 1) write a program that calculates the minimum and
-            maximum score for each student.  Print out their name as well.
-
-
-
-            .. actex:: ex_6_3
-
-
-        .. tab:: Answer
-
-            .. activecode:: ch_files_q3answer
-
-                f = open("studentdata.txt","r")
-
-                for aline in f:
-                   items = aline.split()
-                   print(items[0],"max is", max(items[1:]), "min is", min(items[1:]))
-
-                f.close()
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe_q3
-
-
-
-
-
-
-
-
-
-
-
-#.  Here is a file called ``labdata.txt`` that contains some sample data from a lab experiment.
-
-
-    .. raw:: html
-
-        <pre id='labdata.txt'>
-        44 71
-        79 37
-        78 24
-        41 76
-        19 12
-        19 32
-        28 36
-        22 58
-        89 92
-        91 6
-        53 7
-        27 80
-        14 34
-        8 81
-        80 19
-        46 72
-        83 96
-        88 18
-        96 48
-        77 67
-        </pre>
-
-    Interpret the data file ``labdata.txt`` such that each line contains a an x,y coordinate pair.
-    Write a function called ``plotRegression`` that reads the data from this file
-    and uses a turtle to plot those points and a best fit line according to the following
-    formulas:
-
-    :math:`y = \bar{y} + m(x - \bar{x})`
-
-    :math:`m = \frac{\sum{x_iy_i - n\bar{x}\bar{y}}}{\sum{x_i^2}-n\bar{x}^2}`
-
-    where :math:`\bar{x}` is the mean of the x-values, :math:`\bar{y}` is the mean of the y-
-    values and :math:`n` is the number of points.  If you are not familiar with the
-    mathematical :math:`\sum` it is the sum operation.  For example :math:`\sum{x_i}`
-    means to add up all the x values.
-
-    Your program should analyze the points and correctly scale the window using
-    ``setworldcoordinates`` so that that each point can be plotted.  Then you should
-    draw the best fit line, in a different color, through the points.
-
-
-    .. actex:: ex_10_4
-
-
-#.  
-
-
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-            At the end of this chapter is a very long file called ``mystery.txt`` The lines of this
-            file contain either the word UP or DOWN or a pair of numbers.  UP and DOWN are instructions
-            for a turtle to lift up or put down its tail.  The pair of numbers are some x,y coordinates.
-            Write a program that reads the file ``mystery.txt`` and uses the turtle to draw the picture
-            described by the commands and the set of points.
-
-            .. actex:: ex_10_5
-
-
-
-        .. tab:: Answer
-
-            .. activecode:: ch_files_q5answer
-
-                import turtle
-
-                t = turtle.Turtle()
-                wn = turtle.Screen()
-                wn.setworldcoordinates(-300,-300,300,300)
-
-                f = open("mystery.txt","r")
-
-                for aline in f:
-                    items = aline.split()
-                    if items[0] == "UP":
-                        t.up()
-                    else:
-                        if items[0] == "DOWN":
-                            t.down()
-                        else:
-                            #must be coords
-                            t.goto(int(items[0]),int(items[1]))
-
-                f.close()
-                wn.exitonclick()
-
-
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe_q5
-
-
-
-
-
-
-
-Here is the ``mystery.txt`` file:
-
-
-.. raw:: html
-
-   <pre id="mystery.txt">
-   UP
-   -218 185
-   DOWN
-   -240 189
-   -246 188
-   -248 183
-   -246 178
-   -244 175
-   -240 170
-   -235 166
-   -229 163
-   -220 158
-   -208 156
-   -203 153
-   -194 148
-   -187 141
-   -179 133
-   -171 119
-   -166 106
-   -163 87
-   -161 66
-   -162 52
-   -164 44
-   -167 28
-   -171 6
-   -172 -15
-   -171 -30
-   -165 -46
-   -156 -60
-   -152 -67
-   -152 -68
-   UP
-   -134 -61
-   DOWN
-   -145 -66
-   -152 -78
-   -152 -94
-   -157 -109
-   -157 -118
-   -151 -128
-   -146 -135
-   -146 -136
-   UP
-   -97 -134
-   DOWN
-   -98 -138
-   -97 -143
-   -96 -157
-   -96 -169
-   -98 -183
-   -104 -194
-   -110 -203
-   -114 -211
-   -117 -220
-   -120 -233
-   -122 -243
-   -123 -247
-   -157 -248
-   -157 -240
-   -154 -234
-   -154 -230
-   -153 -229
-   -149 -226
-   -146 -223
-   -145 -219
-   -143 -214
-   -142 -210
-   -141 -203
-   -139 -199
-   -136 -192
-   -132 -184
-   -130 -179
-   -132 -171
-   -133 -162
-   -134 -153
-   -138 -145
-   -143 -137
-   -143 -132
-   -142 -124
-   -138 -112
-   -134 -104
-   -132 -102
-   UP
-   -97 -155
-   DOWN
-   -92 -151
-   -91 -147
-   -89 -142
-   -89 -135
-   -90 -129
-   -90 -128
-   UP
-   -94 -170
-   DOWN
-   -83 -171
-   -68 -174
-   -47 -177
-   -30 -172
-   -15 -171
-   -11 -170
-   UP
-   12 -96
-   DOWN
-   9 -109
-   9 -127
-   7 -140
-   5 -157
-   9 -164
-   22 -176
-   37 -204
-   40 -209
-   49 -220
-   55 -229
-   57 -235
-   57 -238
-   50 -239
-   49 -241
-   51 -248
-   53 -249
-   63 -245
-   70 -243
-   57 -249
-   62 -250
-   71 -250
-   75 -250
-   81 -250
-   86 -248
-   86 -242
-   84 -232
-   85 -226
-   81 -221
-   77 -211
-   73 -205
-   67 -196
-   62 -187
-   58 -180
-   51 -171
-   47 -164
-   46 -153
-   50 -141
-   53 -130
-   54 -124
-   57 -112
-   56 -102
-   55 -98
-   UP
-   48 -164
-   DOWN
-   54 -158
-   60 -146
-   64 -136
-   64 -131
-   UP
-   5 -152
-   DOWN
-   1 -150
-   -4 -145
-   -8 -138
-   -14 -128
-   -19 -119
-   -17 -124
-   UP
-   21 -177
-   DOWN
-   14 -176
-   7 -174
-   -6 -174
-   -14 -170
-   -19 -166
-   -20 -164
-   UP
-   -8 -173
-   DOWN
-   -8 -180
-   -5 -189
-   -4 -201
-   -2 -211
-   -1 -220
-   -2 -231
-   -5 -238
-   -8 -241
-   -9 -244
-   -7 -249
-   6 -247
-   9 -248
-   16 -247
-   21 -246
-   24 -241
-   27 -234
-   27 -226
-   27 -219
-   27 -209
-   27 -202
-   28 -193
-   28 -188
-   28 -184
-   UP
-   -60 -177
-   DOWN
-   -59 -186
-   -57 -199
-   -56 -211
-   -59 -225
-   -61 -233
-   -65 -243
-   -66 -245
-   -73 -246
-   -81 -246
-   -84 -246
-   -91 -245
-   -91 -244
-   -88 -231
-   -87 -225
-   -85 -218
-   -85 -211
-   -85 -203
-   -85 -193
-   -88 -185
-   -89 -180
-   -91 -175
-   -92 -172
-   -93 -170
-   UP
-   -154 -93
-   DOWN
-   -157 -87
-   -162 -74
-   -168 -66
-   -172 -57
-   -175 -49
-   -178 -38
-   -178 -26
-   -178 -12
-   -177 4
-   -175 17
-   -172 27
-   -168 36
-   -161 48
-   -161 50
-   UP
-   -217 178
-   DOWN
-   -217 178
-   -217 177
-   -215 176
-   -214 175
-   -220 177
-   -223 178
-   -223 178
-   -222 178
-   UP
-   -248 185
-   DOWN
-   -245 184
-   -240 182
-   -237 181
-   -234 179
-   -231 177
-   -229 176
-   -228 175
-   -226 174
-   -224 173
-   -223 173
-   -220 172
-   -217 172
-   -216 171
-   -214 170
-   -214 169
-   UP
-   -218 186
-   DOWN
-   -195 173
-   -183 165
-   -175 159
-   -164 151
-   -158 145
-   -152 139
-   -145 128
-   -143 122
-   -139 112
-   -138 105
-   -134 95
-   -131 88
-   -129 78
-   -126 67
-   -125 62
-   -125 54
-   -124 44
-   -125 38
-   -126 30
-   -125 27
-   -125 8
-   -126 5
-   -125 -9
-   -122 -15
-   -115 -25
-   -109 -32
-   -103 -39
-   -95 -42
-   -84 -45
-   -72 -47
-   -56 -48
-   -41 -47
-   -31 -46
-   -18 -45
-   -1 -44
-   9 -43
-   34 -45
-   50 -52
-   67 -61
-   83 -68
-   95 -80
-   112 -97
-   142 -115
-   180 -132
-   200 -146
-   227 -159
-   259 -175
-   289 -185
-   317 -189
-   349 -190
-   375 -191
-   385 -192
-   382 -196
-   366 -199
-   352 -204
-   343 -204
-   330 -205
-   315 -209
-   296 -212
-   276 -214
-   252 -208
-   237 -202
-   218 -197
-   202 -193
-   184 -187
-   164 -179
-   147 -173
-   128 -168
-   116 -164
-   102 -160
-   88 -158
-   78 -159
-   69 -162
-   57 -164
-   56 -165
-   51 -165
-   UP
-   68 -144
-   DOWN
-   83 -143
-   96 -141
-   109 -139
-   119 -146
-   141 -150
-   161 -155
-   181 -163
-   195 -169
-   208 -179
-   223 -187
-   241 -191
-   247 -193
-   249 -194
-   UP
-   -6 -141
-   DOWN
-   -15 -146
-   -29 -150
-   -42 -154
-   -51 -153
-   -60 -152
-   -60 -152
-   UP
-   -90 -134
-   DOWN
-   -85 -131
-   -79 -128
-   -78 -123
-   -80 -115
-   -82 -106
-   -80 -101
-   -76 -101
-   UP
-   -81 -132
-   DOWN
-   -76 -130
-   -71 -126
-   -72 -124
-   UP
-   43 -118
-   DOWN
-   44 -125
-   47 -135
-   41 -156
-   37 -160
-   40 -166
-   47 -171
-   47 -171
-   UP
-   -106 -153
-   DOWN
-   -107 -167
-   -106 -178
-   -109 -192
-   -114 -198
-   -116 -201
-   </pre>
-   mystery.dat
