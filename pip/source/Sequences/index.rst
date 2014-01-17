@@ -625,6 +625,8 @@ The solution here is to concatenate a new first letter onto a slice of
 .. index::
     single: in operator
     single: operator; in
+    
+.. _sequences-in-operator:
 
 The ``in`` and ``not in`` operators
 -----------------------------------

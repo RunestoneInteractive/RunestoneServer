@@ -46,6 +46,7 @@ Sequences
 
    Sequences/index.rst
 
+
 Iteration
 :::::::::
 
@@ -53,6 +54,22 @@ Iteration
    :maxdepth: 2
    
    Iteration/iteration.rst
+
+Selection
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Selection/selection.rst
+
+Files
+:::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Files/files.rst
 
 Python Modules
 ::::::::::::::
@@ -70,13 +87,6 @@ Functions
 
    Functions/functions.rst
 
-Selection
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Selection/selection.rst
 
 
 More About Iteration
@@ -86,15 +96,6 @@ More About Iteration
    :maxdepth: 2
 
    MoreAboutIteration/moreiteration.rst
-
-
-Files
-:::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Files/files.rst
 
 
 Dictionaries
