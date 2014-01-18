@@ -1,4 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
+..  Copyright (C)  Paul Resnick, Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
     Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
@@ -13,6 +13,8 @@
 .. qnum::
    :prefix: sel-
    :start: 1
+   
+.. _decisions_chap:
 
 Decisions and Selection
 =======================
@@ -157,7 +159,14 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
 
 .. admonition:: Common Mistake!
 
-	There is a very common mistake that occurs when programmers try to write boolean expressions.  For example, what if we have a variable ``number`` and we want to check to see if its value is 5,6, or 7.  In words we might say: "number equal to 5 or 6 or 7".  However, if we translate this into Python, ``number == 5 or 6 or 7``, it will not be correct.  The ``or`` operator must join the results of three equality checks.  The correct way to write this is ``number == 5 or number == 6 or number == 7``.  This may seem like a lot of typing but it is absolutely necessary.  You cannot take a shortcut.
+   There is a very common mistake that occurs when programmers try to write boolean expressions.
+   For example, what if we have a variable ``number`` and we want to check to see if its value is 5,6, or 7? 
+   In words we might say: "number equal to 5 or 6 or 7".  However, if we translate this into Python, ``number == 5 or 6 or 7``, it will not be correct.  
+   The ``or`` operator must join the results of three equality checks.  The correct way to write this is ``number == 5 or number == 6 or number == 7``.  
+   
+   This may seem like a lot of typing but it is absolutely necessary.  You cannot take a shortcut.
+   
+   Well, actually, you can take a shortcut but not that way. Remember the :ref:`in operator <sequences-in-operator>` for strings and sequences? You could write ``number in [5, 6, 7]``.
 
 
 **Check your understanding**
@@ -171,7 +180,7 @@ is true if ``x > y`` is false, that is, if ``x`` is less than or equal to
    :feedback_a: Each comparison must be between exactly two values.  In this case the right-hand expression &lt; 5 lacks a value on its left.
    :feedback_b: This is tricky.  Although most other programming languages do not allow this syntax, in Python, this syntax is allowed.  However, you should not use it.  Instead, make multiple comparisons by using and or or.
    :feedback_c: Although this is legal Python syntax, the expression is incorrect.  It will evaluate to true for all numbers that are either greater than 0 or less than 5.  Because all numbers are either greater than 0 or less than 5, this expression will always be True.
-   :feedback_d: Yes, with an and keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true.
+   :feedback_d: Yes, with an `and` keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true.
 
    What is the correct Python expression for checking to see if a number stored in a variable x is between 0 and 5.
 
@@ -291,13 +300,6 @@ all the statements under the ``else`` clause are executed.
 
 There is no limit on the number of statements that can appear under the two clauses of an
 ``if`` statement, but there has to be at least one statement in each block.
-
-
-.. admonition:: Lab
-
-    * `Approximating Pi with Simulation <../Labs/montepi.html>`_ In this guided lab exercise we will work
-      through a problem solving exercise related to approximating the value of pi using random numbers.
-
 
 
 **Check your understanding**
@@ -703,126 +705,6 @@ Here is the same program using ``elif``.
 
 
 
-Boolean Functions
------------------
-
-We have already seen that boolean values result from the evaluation of boolean expressions.  Since the result of any
-expression evaluation can be returned by a function (using the ``return`` statement),
-functions can return boolean values.  This turns out to be a very convenient way to hide the details of complicated tests. For example:
-
-.. activecode:: ch06_boolfun1
-
-    def isDivisible(x, y):
-        if x % y == 0:
-            result = True
-        else:
-            result = False
-
-        return result
-
-    print(isDivisible(10,5))
-
-The name of this function is ``isDivisible``. It is common to give **boolean
-functions** names that sound like yes/no questions.  ``isDivisible`` returns
-either ``True`` or ``False`` to indicate whether the ``x`` is or is not
-divisible by ``y``.
-
-We can make the function more concise by taking advantage of the fact that the
-condition of the ``if`` statement is itself a boolean expression. We can return
-it directly, avoiding the ``if`` statement altogether:
-
-.. sourcecode:: python
-
-    def isDivisible(x, y):
-        return x % y == 0
-
-
-Boolean functions are often used in conditional statements:
-
-.. sourcecode:: python
-
-    if isDivisible(x, y):
-        ... # do something ...
-    else:
-        ... # do something else ...
-
-It might be tempting to write something like
-``if isDivisible(x, y) == True:``
-but the extra comparison is  not necessary.  The following example shows the ``isDivisible`` function at work.  Notice how
-descriptive the code is when we move the testing details into a boolean function.  Try it
-with a few other actual parameters to see what is printed.
-
-.. activecode:: ch06_boolfun2
-
-    def isDivisible(x, y):
-        if x % y == 0:
-            result = True
-        else:
-            result = False
-
-        return result
-
-    if isDivisible(10,5):
-        print("That works")
-    else:
-        print("Those values are no good")
-
-Here is the same program in codelens.  When we evaluate the ``if`` statement in the main part of the program, the evaluation of
-the boolean expression causes a call to the ``isDivisible`` function.  This is very easy to see in codelens.
-
-.. codelens:: ch06_boolcodelens
-    :showoutput:
-
-    def isDivisible(x, y):
-        if x % y == 0:
-            result = True
-        else:
-            result = False
-
-        return result
-
-    if isDivisible(10,5):
-        print("That works")
-    else:
-        print("Those values are no good")
-
-
-
-**Check your understanding**
-
-.. mchoicemf:: test_question6_8_1
-   :answer_a: A function that returns True or False
-   :answer_b: A function that takes True or False as an argument
-   :answer_c: The same as a Boolean expression
-   :correct: a
-   :feedback_a: A Boolean function is just like any other function, but it always returns True or False.
-   :feedback_b: A Boolean function may take any number of arguments (including 0, though that is rare), of any type.
-   :feedback_c: A Boolean expression is a statement that evaluates to True or False, e.g. 5+3==8.  A function is a series of expressions grouped together with a name that are only executed when you call the function.
-
-   What is a Boolean function?
-
-.. mchoicemf:: test_question6_8_2
-   :answer_a: Yes
-   :answer_b: No
-   :correct: a
-   :feedback_a: It is perfectly valid to return the result of evaluating a Boolean expression.
-   :feedback_b: x +y < z is a valid Boolean expression, which will evaluate to True or False.  It is perfectly legal to return True or False from a function, and to have the statement to be evaluated in the same line as the return keyword.
-
-   Is the following statement legal in Python (assuming x, y and z are defined to be numbers)?
-
-   .. code-block:: python
-
-     return x + y < z
-
-
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_06_03
-
-
 
 Glossary
 --------
@@ -838,11 +720,6 @@ Glossary
 
     boolean expression
         An expression that is either true or false.
-
-    boolean function
-        A function that returns a boolean value.  The only possible
-        values of the ``bool`` type are ``False`` and ``True``.
-
 
     boolean value
         There are exactly two boolean values: ``True`` and ``False``. Boolean
@@ -911,12 +788,6 @@ Exercises
             #. False
             #. False
 
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb4a097382404ffe81300aac5744e3fe
-
 
 #.  Give the **logical opposites** of these conditions.  You are not allowed to use the ``not`` operator.
 
@@ -933,13 +804,13 @@ Exercises
 
         .. tab:: Question
 
-            Write a function which is given an exam mark, and it returns a string --- the grade for that mark --- according to this
-            scheme:
+            Write code that asks the user to enter a numeric score (0-100). In response, it should print out the score and 
+            corresponding letter grade, according to the table below.
         
             .. table::
         
                =======   =====
-               Mark      Grade
+               Score     Grade
                =======   =====
                >= 90     A
                [80-90)   B
@@ -951,412 +822,52 @@ Exercises
             The square and round brackets denote closed and open intervals.
             A closed interval includes the number, and open interval excludes it.   So 79.99999 gets grade C , but 80 gets grade B.
         
-            Test your function by printing the mark and the grade for a number of different marks.
-        
+         
             .. actex:: ex_6_3
-
+           
         .. tab:: Answer
+
+            .. activecode:: ans_6_3
             
-            .. activecode:: q3_question
-
-                def grade(mark):
-                    if mark >= 90:
-                        return "A"
-                    else:
-                        if mark >= 80:
-                            return "B"
-                        else:
-                            if mark >= 70:
-                                return "C"
-                            else:
-                                if mark >= 60:
-                                    return "D"
-                                else:
-                                    return "F"
-
-                mark = 83
-                print( "Mark:", str(mark), "Grade:", grade(mark))
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b9e6fd14629949e59da1a4ae827c0032
-
-
-#.  Modify the turtle bar chart program from the previous chapter so that the bar for any value
-    of 200 or more is filled with red, values between [100 and 200) are filled yellow,
-    and bars representing values less than 100 are filled green.
-
-    .. actex:: ex_6_4
-
-#.
-
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-            In the turtle bar chart program, what do you expect to happen if one or more
-            of the data values in the list is negative?   Go back and try it out.  Change the
-            program so that when it prints the text value for the negative bars, it puts
-            the text above the base of the bar (on the 0 axis).
-        
-            .. actex:: ex_6_5
-
-        .. tab:: Answer
+               sc = raw_input("Enter a score from 0 to 100 (decimal points are allowed)")
+               fl_sc = float(sc)
+               
+               if fl_sc < 60:
+                  gr = "F"
+               elif fl_sc <70:
+                  gr = "D"
+               elif fl_sc < 80:
+                  gr = "C"
+               elif fl_sc < 90:
+                  gr = "B"
+               else:
+                  gr = "A"
+               
+               print("Score", fl_sc, "gets a grade of", gr)
+                 
             
-            .. activecode:: answer_ex_6_5
-
-                    import turtle
-
-                    def drawBar(t, height):
-                      """ Get turtle t to draw one bar, of height. """
-                      t.begin_fill()               # start filling this shape
-                      if height < 0:
-                          t.write(str(height))
-                      t.left(90)
-                      t.forward(height)
-                      if height >=0:
-                          t.write(str(height))
-                      t.right(90)
-                      t.forward(40)
-                      t.right(90)
-                      t.forward(height)
-                      t.left(90)
-                      t.end_fill()                 # stop filling this shape
 
 
-
-                    xs = [48,-50,200,240,160,260,220]  # here is the data
-                    maxheight = max(xs)
-                    minheight = min(xs)
-                    numbars = len(xs)
-                    border = 10
-
-                    tess = turtle.Turtle()           # create tess and set some attributes
-                    tess.color("blue")
-                    tess.fillcolor("red")
-                    tess.pensize(3)
-
-                    wn = turtle.Screen()             # Set up the window and its attributes
-                    wn.bgcolor("lightgreen")
-                    if minheight >0:
-                        lly = 0
-                    else:
-                        lly = minheight-border
+#.  A year is a **leap year** if it is divisible by 4, unless it is a century that is not divisible by 400.
+    Write code that asks the user to input a year and output True if it's a leap year, or False otherwise. Use if statements.
     
-                    wn.setworldcoordinates(0-border,lly,40*numbars+border,maxheight+border)
-
-
-                    for a in xs:
-                      drawBar(tess, a)
-
-                    wn.exitonclick()
-
-
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0118bd02de23462bafdb51beb4c85e44
-
-
-#.  Write a function ``findHypot``.  The function will be given the length of two sides of a right-angled triangle and it should return
-    the length of the hypotenuse.  (Hint:  ``x ** 0.5`` will return the square root, or use ``sqrt`` from the math module)
-
-    .. actex:: ex_6_6
-
-        from test import testEqual
-
-        def findHypot(a,b):
-            # your code here
-
-        testEqual(findHypot(12.0,5.0), 13.0)
-        testEqual(findHypot(14.0,48.0), 50.0)
-        testEqual(findHypot(21.0,72.0), 75.0)
-        testEqual(findHypot(1,1.73205), 1.999999)
-
-#.
-
-    .. tabbed:: q7
-
-        .. tab:: Question
-
-           Write a function called ``is_even(n)`` that takes an integer as an argument
-           and returns ``True`` if the argument is an **even number** and ``False`` if
-           it is **odd**.
-        
-           .. actex:: ex_6_7
-        
-               from test import testEqual
-        
-               def is_even(n):
-                   # your code here
-        
-               testEqual(is_even(10), True)
-               testEqual(is_even(5), False)
-               testEqual(is_even(1), False)
-               testEqual(is_even(0), True)
-
-        .. tab:: Answer
-            
-            .. activecode:: q7_answer
-
-                from test import testEqual
-
-                def is_even(n):
-                    if n % 2 == 0:
-                        return True
-                    else:
-                        return False
-
-                testEqual(is_even(10), True)
-                testEqual(is_even(5), False)
-                testEqual(is_even(1), False)
-                testEqual(is_even(0), True)
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_7ae92646976d4953ac8a163f338b4358
-
-
-#. Now write the function ``is_odd(n)`` that returns ``True`` when ``n`` is odd
-   and ``False`` otherwise.
-
-   .. actex:: ex_6_8
-
-       from test import testEqual
-
-       def is_odd(n):
-           # your code here
-
-       testEqual(is_odd(10), False)
-       testEqual(is_odd(5), True)
-       testEqual(is_odd(1), True)
-       testEqual(is_odd(0), False)
-
-#.
-
-    .. tabbed:: q9
-
-        .. tab:: Question
-
-           Modify ``is_odd`` so that it uses a call to ``is_even`` to determine if its
-           argument is an odd integer.
-        
-           .. actex:: ex_6_9
-        
-               from test import testEqual
-        
-               def is_odd(n):
-                   # your code here
-        
-               testEqual(is_odd(10), False)
-               testEqual(is_odd(5), True)
-               testEqual(is_odd(1), True)
-               testEqual(is_odd(0), False)
-        
-
-        .. tab:: Answer
-            
-            .. activecode:: q9_answer
-
-                from test import testEqual
-
-                def is_even(n):
-                    if n % 2 == 0:
-                        return True
-                    else:
-                        return False
-
-                def is_odd(n):
-                    if is_even(n):
-                        return False
-                    else:
-                        return True
-
-                testEqual(is_odd(10), False)
-                testEqual(is_odd(5), True)
-                testEqual(is_odd(1), True)
-                testEqual(is_odd(0), False)
-
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9125792d0c264b65b4d9d72d25485ceb
-
-
-#.  Write a function ``is_rightangled`` which, given the length of three sides of a triangle,
-    will determine whether the triangle is right-angled.  Assume that the third argument to the
-    function is always the longest side.  It will return ``True`` if the triangle
-    is right-angled, or ``False`` otherwise.
-
-    Hint: floating point arithmetic is not always exactly accurate,
-    so it is not safe to test floating point numbers for equality.
-    If a good programmer wants to know whether
-    ``x`` is equal or close enough to ``y``, they would probably code it up as
-
-    .. sourcecode:: python
-
-      if  abs(x-y) < 0.001:      # if x is approximately equal to y
-          ...
-
-
-    .. actex:: ex_6_10
-
-        from test import testEqual
-
-        def is_rightangled(a,b,c):
-            # your code here
-
-        testEqual(is_rightangled(1.5,2.0,2.5), True)
-        testEqual(is_rightangled(4.0,8.0,16.0), False)
-        testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
-        testEqual(is_rightangled(4.1,8.2,9.16787), True)
-        testEqual(is_rightangled(4.1,8.2,9.168), False)
-        testEqual(is_rightangled(0.5,0.4,0.64031), True)
-
-#.
-
-    .. tabbed:: q11
-
-        .. tab:: Question
-
-            Extend the above program so that the sides can be given to the function in any order.
-        
-            .. actex:: ex_6_11
-        
-                from test import testEqual
-        
-                def is_rightangled(a,b,c):
-                    # your code here
-        
-                testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(16.0,4.0,8.0), False)
-                testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
-                testEqual(is_rightangled(9.16787,4.1,8.2), True)
-                testEqual(is_rightangled(4.1,8.2,9.168), False)
-                testEqual(is_rightangled(0.5,0.64031,0.4), True)
-
-        .. tab:: Answer
-            
-            .. activecode:: q11_answer
-
-                from test import testEqual
-
-                def is_rightangled(a,b,c):
-                    is_rightangled = False
-
-                    largest = a
-                    if b > largest:
-                        # largest = b
-                        if abs((a**2) + (c**2) - (b**2)) < 0.001:
-                            is_rightangled = True
-                    if c > largest:
-                        # largest = c
-                        if abs((a**2) + (b**2) - (c**2)) < 0.001:
-                            is_rightangled = True
-                    else:
-                        # largest = a
-                        if abs((c**2) + (b**2) - (a**2)) < 0.001:
-                            is_rightangled = True
-
-                    return is_rightangled
-
-                testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(4.0,8.0,16.0), False)
-                testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
-                testEqual(is_rightangled(4.1,8.2,9.16787), True)
-                testEqual(is_rightangled(4.1,8.2,9.168), False)
-                testEqual(is_rightangled(0.5,0.4,0.64031), True)
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b25992fa70fc4e7581d84315df38d796
-
-
-#.  A year is a **leap year** if it is divisible by 4 unless it is a century that is not divisible by 400.
-    Write a function that takes a year as a parameter and returns ``True`` if the year is a leap year, ``False`` otherwise.
+    Here are some examples of what the output should be for various inputs.
+    
+    .. table::
+    
+         =======  =====
+         Year     Leap?
+         =======  =====
+         1944     True
+         2011     False
+         1986     False
+         1800     False     
+         1900     False
+         2000     True
+         2056     True
+         =======  =====
 
     .. actex:: ex_6_12
 
-        from test import testEqual
 
-        def isLeap(year):
-            # your code here
-
-        testEqual(isLeap(1944), True)
-        testEqual(isLeap(2011), False)
-        testEqual(isLeap(1986), False)
-        testEqual(isLeap(1800), False)
-        testEqual(isLeap(1900), False)
-        testEqual(isLeap(2000), True)
-        testEqual(isLeap(2056), True)
-
-#.
-
-    .. tabbed:: q13
-
-        .. tab:: Question
-
-            Implement the calculator for the date of Easter.
-            
-            The following algorithm computes the date for Easter Sunday for any year between 1900 to 2099.
-            
-            Ask the user to enter a year.
-            Compute the following:
-            
-            
-            
-                1. a = year % 19
-                #. b = year % 4
-                #. c = year % 7
-                #. d = (19 * a + 24) % 30
-                #. e = (2 * b + 4 * c + 6 * d + 5) % 7
-                #. dateofeaster = 22 + d + e
-            
-            
-            Special note: The algorithm can give a date in April.  Also, if the year is one of four special 
-            years (1954, 1981, 2049, or 2076) then subtract 7 from the date.
-            
-            Your program should print an error message if the user provides a date that is out of range.
-        
-            .. actex:: ex_6_13
-        
-
-        .. tab:: Answer
-
-            .. activecode:: answer_ex_6_13
-            
-                year = int(input("Please enter a year"))
-                if year >= 1900 and year <= 2099:
-                    a = year % 19
-                    b = year % 4
-                    c = year % 7
-                    d = (19*a + 24) % 30
-                    e = (2*b + 4*c + 6*d + 5) % 7
-                    dateofeaster = 22 + d + e
-
-                    if year == 1954 or year == 2981 or year == 2049 or year == 2076:
-                        dateofeaster = dateofeaster - 7
-                
-                    if dateofeaster > 31:
-                        print("April", dateofeaster - 31)
-                    else:
-                        print("March", dateofeaster)
-                else:
-                    print("ERROR...year out of range")
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_2dfd6acf1ca849c2853dad606d1ba255
-
-
+#.    (You will work on this one in class.) Print out one line for each of the years shown in the table above, reporting whether or not it is a leap year. (Hint: use a for loop).

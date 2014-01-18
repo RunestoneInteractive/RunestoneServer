@@ -126,25 +126,11 @@ def gradeassignment():
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    section = db(db.sections.id == request.vars.section_id).select().first()
-
-    if section:
-        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-            where sid = username and T.course_id = '%s' and  acid = '%s' and section_id='%s' and timestamp =
-                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-                 (auth.user.course_id,acid,section.id))
-    else:
-        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-            where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
-                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-                 (auth.user.course_id,acid))
-    return dict(
-        acid = acid,
-        sid = sid,
-        sections = db(db.sections.course_id == auth.user.course_id).select(),
-        solutions=rset,
-        course_id=course.course_name
-        )
+    rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
+        where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
+             (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
+             (auth.user.course_id,acid))
+    return dict(solutions=rset,course_id=course.course_name)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -249,31 +235,6 @@ def buildmodulelist():
     
     session.flash = 'Module Database Rebuild Finished'
     redirect('/%s/admin'%request.application)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def sections_list():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    sections = db(db.sections.course_id == course.id).select()
-    # get all sections - for course, list number of users in each section
-    return dict(
-        course = course,
-        sections = sections
-        )
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def sections_create():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    form = FORM(
-        INPUT(_name="name", requires=IS_NOT_EMPTY()),
-        INPUT(_type="Submit"),
-        )
-    if form.accepts(request,session):
-        section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
-        session.flash = "Section Created"
-        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
-    return dict(
-        form = form,
-        )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_delete():
