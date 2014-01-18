@@ -141,7 +141,7 @@ using the open() function.
       security clearance). However, representing oneself as a "professional software engineer"
       without a license from an accredited institution is illegal in many parts of the world.
  
-   ..actex:: ps_2_3
+   .. actex:: ps_2_3
 
       # Write code to open the file, about_programming.txt, and save it in a variable, f. 
       # Print the first two lines of the file.
