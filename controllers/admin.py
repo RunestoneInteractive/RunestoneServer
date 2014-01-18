@@ -126,11 +126,25 @@ def gradeassignment():
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-        where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
-             (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-             (auth.user.course_id,acid))
-    return dict(solutions=rset,course_id=course.course_name)
+    section = db(db.sections.id == request.vars.section_id).select().first()
+
+    if section:
+        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
+            where sid = username and T.course_id = '%s' and  acid = '%s' and section_id='%s' and timestamp =
+                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
+                 (auth.user.course_id,acid,section.id))
+    else:
+        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
+            where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
+                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
+                 (auth.user.course_id,acid))
+    return dict(
+        acid = acid,
+        sid = sid,
+        sections = db(db.sections.course_id == auth.user.course_id).select(),
+        solutions=rset,
+        course_id=course.course_name
+        )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -236,5 +250,71 @@ def buildmodulelist():
     session.flash = 'Module Database Rebuild Finished'
     redirect('/%s/admin'%request.application)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_list():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    sections = db(db.sections.course_id == course.id).select()
+    # get all sections - for course, list number of users in each section
+    return dict(
+        course = course,
+        sections = sections
+        )
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_create():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    form = FORM(
+        INPUT(_name="name", requires=IS_NOT_EMPTY()),
+        INPUT(_type="Submit"),
+        )
+    if form.accepts(request,session):
+        section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
+        session.flash = "Section Created"
+        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
+    return dict(
+        form = form,
+        )
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_delete():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    section = db(db.sections.id == request.vars.id).select().first()
+    if not section or section.course_id != course.id:
+        return redirect(URL('admin','sections_list'))
+    section.clear_users()
+    session.flash = "Deleted Section: %s" % (section.name)
+    db(db.sections.id == section.id).delete()
+    return redirect(URL('admin','sections_list'))
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def sections_update():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    section = db(db.sections.id == request.vars.id).select().first()
+    if not section or section.course_id != course.id:
+        redirect(URL('admin','sections_list'))
+    bulk_email_form = FORM(
+        TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY()),
+        INPUT(_name="overwrite", _type="Checkbox"),
+        INPUT(_type='Submit'),
+        )
+    if bulk_email_form.accepts(request,session):
+        if bulk_email_form.vars.overwrite:
+            section.clear_users()
+        users_added_count = 0
+        for email_address in bulk_email_form.vars.emails_csv.split(','):
+            user = db(db.auth_user.email == email_address.lower()).select().first()
+            if user and user.section_id != section.id:
+                user.section_id = section.id
+                user.update_record()
+                users_added_count += 1
+        session.flash = "%d Emails Added" % (users_added_count)
+        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
+    elif bulk_email_form.errors:
+        response.flash = "Error Processing Request"
+    #show all users in section - in form that will remove users from section
+    #show all users in course but not in section - will add users to section
+    return dict(
+        section = section,
+        users = db(db.auth_user.section_id == section.id).select(),
+        bulk_email_form = bulk_email_form,
+        )
