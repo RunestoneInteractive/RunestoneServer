@@ -109,28 +109,6 @@ class IS_COURSE_ID:
             return (db(db.courses.course_name == value).select()[0].id, None)
         return (value, self.e)
 
-
-db.define_table('sections',
-  Field('name',
-    type='string',
-    label=T('Name')
-    ),
-  Field('course_id',
-    db.courses,
-    label=('Course Name'),
-    required=True
-    ),
-  migrate='runestone_sections.table'
-  )
-class ExtendedSection(object):
-  def clear_users(self):
-    def clear(self=self):
-      for user in db(db.auth_user.section_id == self.sections.id).select():
-        user.update_record(section_id='')
-    return clear
-db.sections.virtualfields.append(ExtendedSection())
-
-
 db.define_table('auth_user',
     Field('username', type='string',
           label=T('Username')),
@@ -159,7 +137,7 @@ db.define_table('auth_user',
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
-    Field('section_id', db.sections, required=False, writable=False, readable=False),
+#    Field('section_id', db.sections, notnull=False, default=0, required=False, writable=False, readable=False),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')
