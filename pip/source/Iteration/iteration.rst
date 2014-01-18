@@ -14,6 +14,8 @@
    :prefix: iter-
    :start: 1
 
+.. _iteration_chap:
+
 Iteration
 =========
 

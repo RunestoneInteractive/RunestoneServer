@@ -13,6 +13,8 @@
 .. qnum::
    :prefix: sel-
    :start: 1
+   
+.. _decisions_chap:
 
 Decisions and Selection
 =======================
