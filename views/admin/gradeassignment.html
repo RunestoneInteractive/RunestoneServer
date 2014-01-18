@@ -20,18 +20,7 @@
     text-decoration: underline;
   }
 </style>
-<h1>{{=acid}}</h1>
-<form method="get" action="">
-  <input type="hidden" name="id" value="{{=acid}}" />
-  <input type="hidden" name="sid" value="{{=sid}}" />
-  <select name="section_id">
-    <option value="">All Sections</option>
-    {{for section in sections:}}
-    <option value="{{=section.id}}">{{=section.name}}</option>
-    {{pass}}
-  </select>
-  <input type="Submit" />
-</form>
+
 <table id="studentlist" class="tablesorter">
 	<thead>
 		<tr>
