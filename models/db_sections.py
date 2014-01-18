@@ -11,6 +11,14 @@ db.define_table('sections',
   migrate='runestone_sections.table'
   )
 class ExtendedSection(object):
+  def get_users(self):
+    def users(self=self):
+      return []
+    return users
+  def add_user(self):
+    def user(self=self):
+      return True
+    return user
   def clear_users(self):
     def clear(self=self):
       for user in db(db.auth_user.section_id == self.sections.id).select():

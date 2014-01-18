@@ -303,18 +303,15 @@ def sections_update():
         users_added_count = 0
         for email_address in bulk_email_form.vars.emails_csv.split(','):
             user = db(db.auth_user.email == email_address.lower()).select().first()
-            if user and user.section_id != section.id:
-                user.section_id = section.id
-                user.update_record()
-                users_added_count += 1
+            if user:
+                if section.add_user(user):
+                    users_added_count += 1
         session.flash = "%d Emails Added" % (users_added_count)
         return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
     elif bulk_email_form.errors:
         response.flash = "Error Processing Request"
-    #show all users in section - in form that will remove users from section
-    #show all users in course but not in section - will add users to section
     return dict(
         section = section,
-        users = db(db.auth_user.section_id == section.id).select(),
+        users = section.get_users(),
         bulk_email_form = bulk_email_form,
         )
