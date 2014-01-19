@@ -154,6 +154,7 @@ using the open() function.
       # Write code to find, and print, the number of lines in the file.
       ## (Hint, if your code is not working the way you expect: what variable are you referring to? Do you need to open the file again, or no?)
 
+
 #. See comments for instructions. This question also deals with the file named ``about_programming.txt``.
 
    .. actex:: ps_2_5
@@ -169,7 +170,7 @@ using the open() function.
 
 #. *BONUS POINT** (not required): Write code to find, and print, the number of vowels in that file.
 
-   ..actex:: ps_2_7
+   ..actex:: ps_2_6
 
       # write your code here, if you choose to try this problem!
       
