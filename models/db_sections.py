@@ -16,8 +16,11 @@ class ExtendedSection(object):
       return section_users(db.sections.id == self.sections.id).select(db.auth_user.ALL)
     return users
   def add_user(self):
+    section = self.sections
     def user_func(user):
-      db.section_users.insert(section=self.sections.id,auth_user=user)
+      for sec in db(db.sections.course_id == self.sections.course_id).select(db.sections.ALL):
+        db((db.section_users.section == sec.id) & (db.section_users.auth_user == user.id)).delete()
+      db.section_users.insert(section=section.id, auth_user=user)
       return True
     return user_func
   def clear_users(self):
