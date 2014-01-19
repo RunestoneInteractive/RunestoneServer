@@ -12,17 +12,18 @@ db.define_table('sections',
   )
 class ExtendedSection(object):
   def get_users(self):
-    def users(self=self):
+    def users():
       return section_users(db.sections.id == self.sections.id).select(db.auth_user.ALL)
     return users
   def add_user(self):
-    def user(self=self):
+    def user_func(user):
+      db.section_users.insert(section=self.sections.id,auth_user=user)
       return True
-    return user
+    return user_func
   def clear_users(self):
-    def clear(self=self):
-      for user in db(db.auth_user.section_id == self.sections.id).select():
-        user.update_record(section_id='')
+    def clear():
+      db(db.section_users.section == self.sections.id).delete()
+      return True
     return clear
 db.sections.virtualfields.append(ExtendedSection())
 
