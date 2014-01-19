@@ -27,7 +27,7 @@ For this week, you have the following graded activities:
       * :ref:`Iteration <iteration_chap>`
    * Before Thursday's class:
       * :ref:`File Input/Output <files_chap>`
-      * :ref:`Conditionals <decisions_chap>`:
+      * :ref:`Conditionals <decisions_chap>`
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
   
@@ -65,24 +65,58 @@ Please write a short paragraph addressing these questions, below.
 Problem Set
 -----------
 
+.. datafile::  about_programming.txt
+   :hide:
+
+   Computer programming (often shortened to programming) is a process that leads from an
+   original formulation of a computing problem to executable programs. It involves
+   activities such as analysis, understanding, and generically solving such problems
+   resulting in an algorithm, verification of requirements of the algorithm including its
+   correctness and its resource consumption, implementation (or coding) of the algorithm in
+   a target programming language, testing, debugging, and maintaining the source code,
+   implementation of the build system and management of derived artefacts such as machine
+   code of computer programs. The algorithm is often only represented in human-parseable
+   form and reasoned about using logic. Source code is written in one or more programming
+   languages (such as C++, C#, Java, Python, Smalltalk, JavaScript, etc.). The purpose of
+   programming is to find a sequence of instructions that will automate performing a
+   specific task or solve a given problem. The process of programming thus often requires
+   expertise in many different subjects, including knowledge of the application domain,
+   specialized algorithms and formal logic.
+   Within software engineering, programming (the implementation) is regarded as one phase in a software development process. There is an on-going debate on the extent to which
+   the writing of programs is an art form, a craft, or an engineering discipline. In
+   general, good programming is considered to be the measured application of all three,
+   with the goal of producing an efficient and evolvable software solution (the criteria
+   for "efficient" and "evolvable" vary considerably). The discipline differs from many
+   other technical professions in that programmers, in general, do not need to be licensed
+   or pass any standardized (or governmentally regulated) certification tests in order to
+   call themselves "programmers" or even "software engineers." Because the discipline
+   covers many areas, which may or may not include critical applications, it is debatable
+   whether licensing is required for the profession as a whole. In most cases, the
+   discipline is self-governed by the entities which require the programming, and sometimes
+   very strict environments are defined (e.g. United States Air Force use of AdaCore and
+   security clearance). However, representing oneself as a "professional software engineer"
+   without a license from an accredited institution is illegal in many parts of the world.
+ 
+
+
 **Due:** **Friday, January 24, 5 pm**
 
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
-1. Print out each element of list ``lbc`` on a separate line. Then print the first character of each element on a separate line.
+1. (2 points) Print out each element of list ``lbc`` on a separate line. Then print the first character of each element on a separate line.
 
-  .. actex:: ps_2_1
+   .. actex:: ps_2_1
+   
+      lbc = ["one","four","two","six","nine","eleven"]
+      
+      # write code to print each element of list lbc on a separate line
+      
+      # write code to print the first character of each element of list lbc on a separate line
 
-    lbc = ["one","four","two","six","nine","eleven"]
 
-    # write code to print each element of list lbc on a separate line
+#. (2 points) See comments for instructions, below. This and the next question deal with the string ``rv``.
 
-    # write code to print the first character of each element of list lbc on a separate line
-
-
-#. See comments for instructions, below. This and the next question deal with the string ``rv``.
-
-  .. actex:: ps_2_2
+   .. actex:: ps_2_2
 
       rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
          Over many a quaint and curious volume of forgotten lore,  
@@ -90,87 +124,59 @@ Problem Set
          As of some one gently rapping, rapping at my chamber door.   
          T is some visitor, I muttered, tapping at my chamber door;           5
          Only this and nothing more."""
-
+      
       # Write code to print the number of characters in the string rv.
+      
+      # Write code to print the number of words in the string rv. 
+      ## Hint: use the split method 
 
-      # Write code to print the number of words in the string rv.
 
-      # (For this and the next question, imagine that you couldn't see the whole string value, 
-      # but you still needed to answer this question?)
+#. (1 point) See comments for instructions, below. 
 
-#. See comments for instructions, below. 
-
-  .. actex:: ps_2_3
+   .. actex:: ps_2_3
     
+      rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+         Over many a quaint and curious volume of forgotten lore,  
+         While I nodded, nearly napping, suddenly there came a tapping,   
+         As of some one gently rapping, rapping at my chamber door.   
+         T is some visitor, I muttered, tapping at my chamber door;           5
+         Only this and nothing more."""
+      
+      # (For these questions, imagine that you couldn't see the whole string value, 
+      # but you still needed to answer them.)
+      
       # Write code to find out whether the word "raven" is in the string rv. 
       # Print "Yes" if it is, and "No" if it isn't.
-
+      
       # Write code to find out whether the word "rapping" is in the string rv. 
       # Print "Yes" if it is, and "No" if it isn't.
 
 
-#. There is a file called ``about_programming.txt`` that you can access in an ActiveCode window
-using the open() function. 
-(It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.) Follow the directions in the exercises below (see the comments in the code window) to manipulate this file.
 
-   .. datafile::  about_programming.txt
-      :hide:
+The remaining questions in the problem set deal with a file called ``about_programming.txt`` 
+that you can access in an ActiveCode window using the open() function. 
+It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.
 
-      Computer programming (often shortened to programming) is a process that leads from an
-      original formulation of a computing problem to executable programs. It involves
-      activities such as analysis, understanding, and generically solving such problems
-      resulting in an algorithm, verification of requirements of the algorithm including its
-      correctness and its resource consumption, implementation (or coding) of the algorithm in
-      a target programming language, testing, debugging, and maintaining the source code,
-      implementation of the build system and management of derived artefacts such as machine
-      code of computer programs. The algorithm is often only represented in human-parseable
-      form and reasoned about using logic. Source code is written in one or more programming
-      languages (such as C++, C#, Java, Python, Smalltalk, JavaScript, etc.). The purpose of
-      programming is to find a sequence of instructions that will automate performing a
-      specific task or solve a given problem. The process of programming thus often requires
-      expertise in many different subjects, including knowledge of the application domain,
-      specialized algorithms and formal logic.
-      Within software engineering, programming (the implementation) is regarded as one phase in a software development process. There is an on-going debate on the extent to which
-      the writing of programs is an art form, a craft, or an engineering discipline. In
-      general, good programming is considered to be the measured application of all three,
-      with the goal of producing an efficient and evolvable software solution (the criteria
-      for "efficient" and "evolvable" vary considerably). The discipline differs from many
-      other technical professions in that programmers, in general, do not need to be licensed
-      or pass any standardized (or governmentally regulated) certification tests in order to
-      call themselves "programmers" or even "software engineers." Because the discipline
-      covers many areas, which may or may not include critical applications, it is debatable
-      whether licensing is required for the profession as a whole. In most cases, the
-      discipline is self-governed by the entities which require the programming, and sometimes
-      very strict environments are defined (e.g. United States Air Force use of AdaCore and
-      security clearance). However, representing oneself as a "professional software engineer"
-      without a license from an accredited institution is illegal in many parts of the world.
- 
+#. (1 point) Write code to open the file, about_programming.txt, and print it out, line by line.
+
    .. actex:: ps_2_4
 
-      # Write code to open the file, about_programming.txt, and save it in a variable, f. 
-      # Print the first two lines of the file.
+      # Don't worry about extra blank lines between each of the lines
+      # (but if you want to get rid of them, try the .strip method)
 
 
-      # Write code to find, and print, the number of lines in the file.
-      ## (Hint, if your code is not working the way you expect: what variable are you referring to? Do you need to open the file again, or no?)
-
-
-#. See comments for instructions. This question also deals with the file named ``about_programming.txt``.
+#. (2 points) Print the number of lines in the file
 
    .. actex:: ps_2_5
 
-      # Write code to find, and print, the number of words in the file.
 
+#. (2 points) Print the number of lines in the file that include the word "programmer".
 
-      # Write code to find, and print, the number of characters in the file.
+   .. actex:: ps_2_6
 
+#. *1 BONUS POINT* (not required): Write code to find, and print, the number of vowels in the file.
 
-      # Write code to find, and print, the number of lines in the file that include the word "programmer".
-
-
-#. *BONUS POINT** (not required): Write code to find, and print, the number of vowels in that file.
-
-   ..actex:: ps_2_6
+   .. actex:: ps_2_6
 
       # Write your code here, if you choose to try this problem!
       
