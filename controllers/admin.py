@@ -264,8 +264,12 @@ def sections_list():
 def sections_create():
     course = db(db.courses.id == auth.user.course_id).select().first()
     form = FORM(
-        INPUT(_name="name", requires=IS_NOT_EMPTY()),
-        INPUT(_type="Submit"),
+        DIV(
+            LABEL("Section Name", _for="section_name"),
+            INPUT(_id="section_name" ,_name="name", requires=IS_NOT_EMPTY(),_class="form-control"),
+            _class="form-group"
+            ),
+        INPUT(_type="Submit", _value="Create Section", _class="btn"),
         )
     if form.accepts(request,session):
         section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
@@ -293,9 +297,19 @@ def sections_update():
     if not section or section.course_id != course.id:
         redirect(URL('admin','sections_list'))
     bulk_email_form = FORM(
-        TEXTAREA(_name="emails_csv", requires=IS_NOT_EMPTY()),
-        INPUT(_name="overwrite", _type="Checkbox"),
-        INPUT(_type='Submit'),
+        DIV(
+            TEXTAREA(_name="emails_csv",
+                requires=IS_NOT_EMPTY(),
+                _class="form-control",
+                ),
+            _class="form-group",
+            ),
+        LABEL(
+            INPUT(_name="overwrite", _type="Checkbox"),
+            "Overwrite Users In Section",
+            _class="checkbox",
+            ),
+        INPUT(_type='Submit', _class="btn", _value="Update Section"),
         )
     if bulk_email_form.accepts(request,session):
         if bulk_email_form.vars.overwrite:
