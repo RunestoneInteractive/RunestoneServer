@@ -176,7 +176,7 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
 
 #. *1 BONUS POINT* (not required): Write code to find, and print, the number of vowels in the file.
 
-   .. actex:: ps_2_6
+   .. actex:: ps_2_7
 
       # Write your code here, if you choose to try this problem!
       
