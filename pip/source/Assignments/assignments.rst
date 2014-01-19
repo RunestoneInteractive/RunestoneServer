@@ -111,7 +111,7 @@ Problem Set
 
 #. There is a file called ``about_programming.txt`` that you can access in an ActiveCode window
 using the open() function. 
-(It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.) Follow the directions (see the comments in the code window) in the exercises below to manipulate this file.
+(It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.) Follow the directions in the exercises below (see the comments in the code window) to manipulate this file.
 
    .. datafile::  about_programming.txt
       :hide:
@@ -172,7 +172,7 @@ using the open() function.
 
    ..actex:: ps_2_6
 
-      # write your code here, if you choose to try this problem!
+      # Write your code here, if you choose to try this problem!
       
 
 
