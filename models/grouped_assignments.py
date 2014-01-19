@@ -8,3 +8,10 @@ db.define_table('assignments',
 	)
 db.assignments.problems = Field.Method(lambda row: [])
 db.assignments.grade = Field.Method(lambda row, user: 10)
+
+db.define_table('grades',
+	Field('auth_user', db.auth_user),
+	Field('assignment', db.assignments),
+	Field('score', 'double'),
+	migrate='runestone_grades.table',
+	)
