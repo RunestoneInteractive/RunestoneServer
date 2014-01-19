@@ -131,13 +131,30 @@ def gradeassignment():
     acid = request.vars.id
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    section = db(db.sections.id == request.vars.section_id).select().first()
+    section_form=FORM(
+        INPUT(_type="hidden", _name="id", _value=acid),
+        _class="form-inline",
+        _method="GET",
+        )
+    section_form.append(LABEL(
+            INPUT(_name="section_id", _type="radio", _value=""),
+            "All Students",
+            _class="radio-inline",
+            ))
+    for section in db(db.sections.course_id == auth.user.course_id).select():
+        section_form.append(LABEL(
+            INPUT(_name="section_id", _type="radio", _value=section.id),
+            section.name,
+            _class="radio-inline",
+            ))
 
-    if section:
+    section_form.append(INPUT(_type="submit", _value="Filter Students", _class="btn btn-default"))
+
+    if section_form.accepts(request.vars, session, keepvalues=True) and section_form.vars.section_id!="":
         rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
             where sid = username and T.course_id = '%s' and  acid = '%s' and section_id='%s' and timestamp =
                  (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-                 (auth.user.course_id,acid,section.id))
+                 (auth.user.course_id,acid,section_form.vars.section_id))
     else:
         rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
             where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
@@ -146,7 +163,7 @@ def gradeassignment():
     return dict(
         acid = acid,
         sid = sid,
-        sections = db(db.sections.course_id == auth.user.course_id).select(),
+        section_form = section_form,
         solutions=rset,
         course_id=course.course_name
         )
