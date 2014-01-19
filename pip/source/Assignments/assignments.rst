@@ -170,7 +170,7 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
    .. actex:: ps_2_5
 
 
-#. (2 points) Print the number of lines in the file that include the word "programmer".
+#. (2 points) Print the number of lines in the file that include the word "program" or any extension of it (program, programs, programming, programmer).
 
    .. actex:: ps_2_6
 
