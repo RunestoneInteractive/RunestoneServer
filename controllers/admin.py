@@ -56,9 +56,14 @@ def listassignments():
     else:
         q = db((db.code.course_id == auth.user.course_id)
              & (db.code.timestamp >= course.term_start_date))
-    
-    rset = q.select(db.code.acid,orderby=db.code.acid,distinct=True)
-    return dict(exercises=rset,course_id=course.course_name)
+    prefixes = {}
+    for row in q.select(db.code.acid,orderby=db.code.acid,distinct=True):
+        acid = row.acid
+        acid_prefix = acid.split('_')[0]
+        if acid_prefix not in prefixes.keys():
+            prefixes[acid_prefix] = []
+        prefixes[acid_prefix].append(acid)
+    return dict(sections=prefixes,course_id=course.course_name)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassessments():
