@@ -84,8 +84,8 @@ def saveprog():
     # 2. Insert a row in the table pipactex_deadline, using the runeston/appadmin web interface. Fill
     #    in with the prefix. For example, week2. Or reading3.
     #   a. Fill in the "deadline" field.
-    #   b. If it applies only to one section, select it
-    #      For example, use this for the reading reaction papers.
+    #   b. Pick the section it applies to.
+    # Note: for readings, you'll have to insert a separate row for each section
     def strip_suffix(id):
         idx = id.rfind('-') - 1
         return id[:idx]
