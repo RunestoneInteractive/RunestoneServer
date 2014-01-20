@@ -150,16 +150,23 @@ def gradeassignment():
 
     section_form.append(INPUT(_type="submit", _value="Filter Students", _class="btn btn-default"))
 
-    if section_form.accepts(request.vars, session, keepvalues=True) and section_form.vars.section_id!="":
-        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-            where sid = username and T.course_id = '%s' and  acid = '%s' and section_id='%s' and timestamp =
-                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-                 (auth.user.course_id,acid,section_form.vars.section_id))
-    else:
-        rset = db.executesql('''select acid, sid, grade, T.id, first_name, last_name, comment from code as T, auth_user
-            where sid = username and T.course_id = '%s' and  acid = '%s' and timestamp =
-                 (select max(timestamp) from code where sid=T.sid and acid=T.acid) order by last_name;''' %
-                 (auth.user.course_id,acid))
+    joined = db((db.code.sid == db.auth_user.username) & (db.section_users.auth_user == db.auth_user.id))
+    q = joined((db.code.course_id == auth.user.course_id) & (db.code.acid == acid))
+
+    if section_form.accepts(request.vars, session, keepvalues=True) and section_form.vars.section_id != "":
+        q = q(db.section_users.section == section_form.vars.section_id)
+
+    rset = q.select(
+        db.code.acid,
+        db.code.sid,
+        db.code.grade,
+        db.code.id,
+        db.auth_user.first_name,
+        db.auth_user.last_name,
+        db.code.comment,
+        distinct = db.code.sid,
+        orderby = db.code.sid|db.code.timestamp,
+        )
     return dict(
         acid = acid,
         sid = sid,
