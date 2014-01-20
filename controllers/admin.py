@@ -164,6 +164,7 @@ def gradeassignment():
         db.auth_user.first_name,
         db.auth_user.last_name,
         db.code.comment,
+        orderby = db.auth_user.last_name,
         )
     return dict(
         acid = acid,
