@@ -109,7 +109,6 @@ class IS_COURSE_ID:
             return (db(db.courses.course_name == value).select()[0].id, None)
         return (value, self.e)
 
-
 db.define_table('auth_user',
     Field('username', type='string',
           label=T('Username')),
@@ -138,7 +137,6 @@ db.define_table('auth_user',
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
-    Field('section', type='string', default='2'),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')
