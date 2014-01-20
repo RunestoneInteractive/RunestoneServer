@@ -36,26 +36,26 @@
 
 {{ for s in solutions: }}
     <tr>
-      <td>{{ =s[1] }}</td>
-      <td>{{ =s[4] }}</td>
-      <td>{{ =s[5]}} </td>
-      <td id="col-grade-{{=s[1]}}">{{=s[2]}}</td>
+      <td>{{ =s.code.sid }}</td>
+      <td>{{ =s.auth_user.first_name }}</td>
+      <td>{{ =s.auth_user.last_name}} </td>
+      <td id="col-grade-{{=s.code.sid}}">{{=s.code.grade}}</td>
       <td>
-        <button class='btn btn-default' data-toggle="modal" data-target="#modal-{{=s[1]}}" onclick="createActiveCode('{{ =s[0] }}',undefined,'{{ =s[1] }}')">grade</button>
-        <div id="modal-{{=s[1]}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <button class='btn btn-default' data-toggle="modal" data-target="#modal-{{=s.code.sid}}" onclick="createActiveCode('{{ =s.code.acid }}',undefined,'{{ =s.code.sid }}')">grade</button>
+        <div id="modal-{{=s.code.sid}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
               <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">{{=s[4]}} {{=s[5]}}</h4>
+              <h4 class="modal-title">{{=s.auth_user.first_name}} {{=s.auth_user.last_name}}</h4>
             </div>
             <div class="modal-body">
-                <div id="{{ =s[0] }}_{{ =s[1] }}"></div>
+                <div id="{{ =s.code.acid }}_{{ =s.code.sid }}"></div>
                 <form>
-                  <label for="#input-grade-{{=s[1]}}">Grade</label>
-                <input id="input-grade-{{=s[1]}}" type="text" class="form-control " value= "{{=s[2]}}" onchange="sendGrade(this.value,'{{ =s[1] }}','{{ =s[0] }}', {{=s[3]}});$('#col-grade-{{=s[1]}}').html(this.value);" />
-                <label for="#input-comments-{{=s[1]}}">Comments</label>
-                <input id="input-comments-{{=s[1]}}" type="text" class="form-control" value="{{=s[6]}}" onchange="sendComment(this.value,'{{ =s[1] }}','{{ =s[0] }}', {{=s[3]}});"/>
+                  <label for="#input-grade-{{=s.code.sid}}">Grade</label>
+                <input id="input-grade-{{=s.code.sid}}" type="text" class="form-control " value= "{{=s.code.grade}}" onchange="sendGrade(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});$('#col-grade-{{=s.code.sid}}').html(this.value);" />
+                <label for="#input-comments-{{=s.code.sid}}">Comments</label>
+                <input id="input-comments-{{=s.code.sid}}" type="text" class="form-control" value="{{=s.code.comment}}" onchange="sendComment(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});"/>
               </form>
             </div>
             <div class="modal-footer">
