@@ -257,77 +257,186 @@ Problem Set
 
 1. (1 pt) Given the following code, write a print statement that will pick out the letter ``"o"``, from the string ``s``. 
 
-   .. actex:: ps_1_1
+   .. tabbed:: ps_1_1s
 
-       s = "Hello, all"
-	   
+      .. tab:: Problem
+
+         .. actex:: ps_1_1
+
+             s = "Hello, all"
+
+      .. tab:: Solution
+
+         .. actex:: ps_1_1_a
+
+            print s[4]
 	   
 
 #. (1 pt) Write code to print this string WITHOUT any ``&`` signs.
 
       This is a really fun&& homework assign&ment. And & I love&& &&Python.
 
-   .. actex:: ps_1_2
-   
-   		# Here's the string provided for you
-   		nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
+   .. tabbed:: ps_1_2s
+
+      .. tab:: Problem
+      
+         .. actex:: ps_1_2
+      
+      		# Here's the string provided for you
+      		nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
+   		
+   		# Write your code to print this string without any "&s", below:
 		
-		# Write your code to print this string without any "&s", below:
-		
+      .. tab:: Solution
+
+         .. actex:: ps_1_2_a
+
+            # Here's the string provided for you
+            nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
+         
+            # Write your code to print this string without any "&s", below:
+            print nst.replace("&","")
+
 
 #. (1 pt) What is the index of the first letter "h" in this sentence? Write code to find it, and print it. (Remember, an index is the __th element of a string or a list, for example.)
 
       This is a really fun homework assigment, and I love Python.
 
-   .. actex:: ps_1_3
+   .. tabbed:: ps_1_3s
+
+      .. tab:: Problem
+
+         .. actex:: ps_1_3
+         
+         		# Here's the sentence, provided for you
+         		st = "This is a really fun homework assigment, and I love Python."
+      		
+      		## Write your code to find the first index of the letter "h" below:
+
+      .. tab:: Solution
    
-   		# Here's the sentence, provided for you
-   		st = "This is a really fun homework assigment, and I love Python."
-		
-		## Write your code to find the first index of the letter "h" below:
-   
+         .. actex:: ps_1_3_a
+         
+               # Here's the sentence, provided for you
+               st = "This is a really fun homework assigment, and I love Python."
+            
+            ## Write your code to find the first index of the letter "h" below:
+            print st.find('h')
+            # also possible
+            print st.index('h')
+
+
 
 #. (3 pts) See comments for instructions.
+   
+   .. tabbed:: ps_1_4s
 
-   .. actex:: ps_1_4
-		
-		abc = [1,2,3,4,5,6,7]
-		
-		# What is the type of value is in the variable abc? 
-		# Write code to find out what type the value of abc is.
-		
-		## Write the type here: _______
-		
-		# write code to extract and print the first three elements of abc
-		
-		# write code to extract and print the last element of abc
-		
-		# write code to extract and print the number 4 from abc
-		
-		# write code to extract and print the number 6 from abc
-		
-		# write code to find out what type the first element of abc is, and print it.
+      .. tab:: Problem
+
+         .. actex:: ps_1_4
+      		
+      		abc = [1,2,3,4,5,6,7]
+      		
+      		# What is the type of value is in the variable abc? 
+      		# Write code to find out what type the value of abc is.
+      		
+      		## Write the type here: _______
+      		
+      		# write code to extract and print the first three elements of abc
+      		
+      		# write code to extract and print the last element of abc
+      		
+      		# write code to extract and print the number 4 from abc
+      		
+      		# write code to extract and print the number 6 from abc
+      		
+      		# write code to find out what type the first element of abc is, and print it.
+
+      .. tab:: Solution
+
+         .. actex:: ps_1_4_a
+            
+            abc = [1,2,3,4,5,6,7]
+            
+            # What is the type of value is in the variable abc? 
+            # Write code to find out what type the value of abc is.
+            print type(abc)
+            ## Write the type here: ___list____
+            
+            # write code to extract and print the first three elements of abc
+            print abc[:3]
+            ## other possibilities include:
+            # print a[0], a[1], a[2]
+            
+            # write code to extract and print the last element of abc
+            print abc[-1]
+            
+            # write code to extract and print the number 4 from abc
+            print abc[3]
+            
+            # write code to extract and print the number 6 from abc
+            print abc[5]
+            
+            # write code to find out what type the first element of abc is, and print it.
+            print type(abc[0])
 
 
 
 #. (2 pts) See the comments for instructions.
 
-   .. actex:: ps_1_5
-   
-		xy_lst = ["hello","goodbye","welcome","106","si 106"]
-		abc_sentence = "Welcome to SI 106, everyone."
-		
-		# write code to extract and print the first element of xy_lst
-		
-		# write code to extract and print the last element of xy_lst
-		
-		# write code to extract and print the first character of abc_sentence
-		
-		# write code to extract and print the last character of abc_sentence
+   .. tabbed:: ps_1_5s
+
+      .. tab:: Problem
+
+         .. actex:: ps_1_5
+         
+      		xy_lst = ["hello","goodbye","welcome","106","si 106"]
+      		abc_sentence = "Welcome to SI 106, everyone."
+      		
+      		# write code to extract and print the first element of xy_lst
+      		
+      		# write code to extract and print the last element of xy_lst
+      		
+      		# write code to extract and print the first character of abc_sentence
+      		
+      		# write code to extract and print the last character of abc_sentence
+
+      .. tab:: Solution
+
+         .. actex:: ps_1_5_a
+         
+            xy_lst = ["hello","goodbye","welcome","106","si 106"]
+            abc_sentence = "Welcome to SI 106, everyone."
+            
+            # write code to extract and print the first element of xy_lst
+            print xy_lst[0]
+            
+            # write code to extract and print the last element of xy_lst
+            print xy_lst[-1]
+            
+            # write code to extract and print the first character of abc_sentence
+            print abc_sentence[0]
+            
+            # write code to extract and print the last character of abc_sentence
+            print abc_sentence[-1]
+
+            ## note that "first" and "last" for sequences are easy when you program! 
 
 			
 #. (2 pts) Write code to ask the user for their name and print out ``"Nice to meet you, <THEIR NAME>"``
-
-   .. actex:: ps_1_6
    
-		# For example, if you enter "Nick", your code should then print "Nice to meet you, Nick"
+   .. tabbed: ps_1_6s
+
+      .. tab:: Problem
+
+         .. actex:: ps_1_6
+         
+      		# For example, if you enter "Nick", your code should then print "Nice to meet you, Nick"
+
+      .. tab:: Solution
+
+         .. actex:: ps_1_6_a
+         
+            # For example, if you enter "Nick", your code should then print "Nice to meet you, Nick"
+            nm = raw_input("Please enter your name: ")
+            print "Nice to meet you,",nm
