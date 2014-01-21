@@ -269,6 +269,7 @@ Problem Set
 
          .. actex:: ps_1_1_a
 
+            s = "Hello, all"
             print s[4]
 	   
 
