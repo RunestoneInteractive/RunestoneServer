@@ -308,8 +308,8 @@ Problem Set
 
          .. actex:: ps_1_3
          
-         		# Here's the sentence, provided for you
-         		st = "This is a really fun homework assigment, and I love Python."
+      		# Here's the sentence, provided for you
+      		st = "This is a really fun homework assigment, and I love Python."
       		
       		## Write your code to find the first index of the letter "h" below:
 
@@ -317,8 +317,8 @@ Problem Set
    
          .. actex:: ps_1_3_a
          
-               # Here's the sentence, provided for you
-               st = "This is a really fun homework assigment, and I love Python."
+            # Here's the sentence, provided for you
+            st = "This is a really fun homework assigment, and I love Python."
             
             ## Write your code to find the first index of the letter "h" below:
             print st.find('h')
@@ -425,7 +425,7 @@ Problem Set
 			
 #. (2 pts) Write code to ask the user for their name and print out ``"Nice to meet you, <THEIR NAME>"``
    
-   .. tabbed: ps_1_6s
+   .. tabbed:: ps_1_6s
 
       .. tab:: Problem
 
