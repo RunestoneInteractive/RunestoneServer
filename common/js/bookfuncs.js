@@ -25,9 +25,6 @@
 
  */
 
-/* This should come from a config object loaded by the book...
- something like configjs  */
-
 
 function handleEdKeys(ed, e) {
     if (e.keyCode === 13) {
@@ -83,6 +80,7 @@ function createEditors() {
     for (var i = 0; i < edList.length; i++) {
         newEdId = edList[i].id;
         var includes = edList[i].getAttribute('prefixcode');
+        var lang = edList[i].getAttribute('lang');
         var first_line = 1;
         if (includes !== "undefined") {
             includes = eval(includes)
@@ -94,7 +92,7 @@ function createEditors() {
             first_line = 1;
         }
         cm_editors[newEdId] = CodeMirror.fromTextArea(edList[i], {
-                                                          mode: {name: "python",
+                                                          mode: {name: lang,
                                                               version: 2,
                                                               singleLineStringErrors: false},
                                                           lineNumbers: true,
@@ -279,8 +277,13 @@ function runit(myDiv, theButton, includes, suffix) {
                      read: builtinRead,
                      python3: true
                  });
+    var lang = document.getElementById(myDiv).lang;
     try {
-        Sk.importMainWithBody("<stdin>", false, prog);
+        if(lang === 'python') {
+            Sk.importMainWithBody("<stdin>", false, prog);
+        } else {
+            eval(prog);
+        }
         logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': 'success'}); // Log the run event
     } catch (e) {
         logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': e.toString()}); // Log the run event

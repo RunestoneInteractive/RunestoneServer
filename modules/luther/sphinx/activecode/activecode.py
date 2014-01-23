@@ -40,6 +40,7 @@ def setup(app):
     app.add_javascript('bookfuncs.js' )
     app.add_javascript('codemirror.js' )
     app.add_javascript('python.js' )
+    app.add_javascript('javascript.js' )
     app.add_javascript('activecode.js')
     app.add_javascript('skulpt.min.js' )
     app.add_javascript('skulpt-stdlib.js')
@@ -52,14 +53,14 @@ def setup(app):
 
 
 START = '''
-<div id="%(divid)s" >
+<div id="%(divid)s" lang="%(language)s" >
 '''
 
 
 EDIT1 = '''
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s">
-<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code", prefixcode="%(include)s">
+<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code", prefixcode="%(include)s" lang="%(language)s">
 %(initialcode)s
 </textarea>
 </div>
@@ -202,6 +203,7 @@ class ActiveCode(Directive):
         'caption':directives.unchanged,
         'include':directives.unchanged,
         'hidecode':directives.flag,
+        'language':directives.unchanged,
         'tour_1':directives.unchanged,
         'tour_2':directives.unchanged,
         'tour_3':directives.unchanged,
@@ -266,6 +268,9 @@ class ActiveCode(Directive):
             self.options['hidecode'] = 'none'
         else:
             self.options['hidecode'] = 'block'
+
+        if 'language' not in self.options:
+            self.options['language'] = 'python'
 
         return [ActivcodeNode(self.options)]
 
