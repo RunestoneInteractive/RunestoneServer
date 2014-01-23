@@ -70,6 +70,14 @@ Files
    :maxdepth: 2
 
    Files/files.rst
+   
+Dictionaries
+::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Dictionaries/dictionaries.rst
 
 Python Modules
 ::::::::::::::
