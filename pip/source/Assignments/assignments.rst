@@ -26,8 +26,8 @@ For this week, you have the following graded activities:
    * Before Tuesday's class:
       * :ref:`Iteration <iteration_chap>`
    * Before Thursday's class:
-      * :ref:`File Input/Output <files_chap>`
       * :ref:`Conditionals <decisions_chap>`
+      * :ref:`File Input/Output <files_chap>` (read the Selection/Conditionals chapter first, or you won't be able to do the last exercise...)
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
   
