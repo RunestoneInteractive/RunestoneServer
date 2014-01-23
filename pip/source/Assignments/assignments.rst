@@ -53,7 +53,7 @@ Problem Set
 
 1. (7 points) Old McDonald had a farm, he records the animals on his farm in a dictionary called 'animals'. In this problem help Old McDonald manage his farm animals.
 
-   .. actex:: ps_2_1
+   .. actex:: ps_3_1
 
       animals = {
          'cows': 2,
@@ -79,7 +79,21 @@ Problem Set
       # Write a statement that tells Old McDonald which animal he has the most of.
       # This statement should print "72 mice" 
 
+2. (2 points) Old McDonald lost a needle in a haystack. Write a while loop that checks for the needle until it is found. Use the function "check_for_needle()" to see if you found the needle. Then print how many times you had to look for the needle.
 
+   .. actex:: ps_3_2
+   
+      import random
+      def check_for_needle():
+         if random.randint(0,100) > 99:
+            return True
+         return False
+
+      # Here is how to use check_for_needle(), just to get you started.
+      if check_for_needle():
+         print "I found it!"
+      else:
+         print "Where is that gosh darn needle?"
 
 
 Week 3: ends January 24
