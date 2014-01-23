@@ -105,51 +105,135 @@ Problem Set
 
 1. (2 points) Print out each element of list ``lbc`` on a separate line. Then print the first character of each element on a separate line.
 
-   .. actex:: ps_2_1
-   
-      lbc = ["one","four","two","six","nine","eleven"]
-      
-      # write code to print each element of list lbc on a separate line
-      
-      # write code to print the first character of each element of list lbc on a separate line
+   .. tabbed:: ps_2_1s
+
+      .. tab:: Problem
+
+         .. actex:: ps_2_1
+         
+            lbc = ["one","four","two","six","nine","eleven"]
+            
+            # write code to print each element of list lbc on a separate line
+            
+            # write code to print the first character of each element of list lbc on a separate line
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_1a
+         
+            lbc = ["one","four","two","six","nine","eleven"]
+            
+            # write code to print each element of list lbc on a separate line
+            for elem in lbc:
+               print elem
+
+            # write code to print the first character of each element of list lbc on a separate line
+            for elem in lbc:
+               print elem[0]
 
 
 #. (2 points) See comments for instructions, below. This and the next question deal with the string ``rv``.
 
-   .. actex:: ps_2_2
+   .. tabbed:: ps_2_2s
 
-      rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
-         Over many a quaint and curious volume of forgotten lore,  
-         While I nodded, nearly napping, suddenly there came a tapping,   
-         As of some one gently rapping, rapping at my chamber door.   
-         T is some visitor, I muttered, tapping at my chamber door;           5
-         Only this and nothing more."""
-      
-      # Write code to print the number of characters in the string rv.
-      
-      # Write code to print the number of words in the string rv. 
-      ## Hint: use the split method 
+      .. tab:: Problem
+
+         .. actex:: ps_2_2
+
+            rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+               Over many a quaint and curious volume of forgotten lore,  
+               While I nodded, nearly napping, suddenly there came a tapping,   
+               As of some one gently rapping, rapping at my chamber door.   
+               T is some visitor, I muttered, tapping at my chamber door;           5
+               Only this and nothing more."""
+            
+            # Write code to print the number of characters in the string rv.
+            
+            # Write code to print the number of words in the string rv. 
+            ## Hint: use the split method 
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_a
+
+            rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+               Over many a quaint and curious volume of forgotten lore,  
+               While I nodded, nearly napping, suddenly there came a tapping,   
+               As of some one gently rapping, rapping at my chamber door.   
+               T is some visitor, I muttered, tapping at my chamber door;           5
+               Only this and nothing more."""
+            
+            # Write code to print the number of characters in the string rv.
+            print len(rv)
+
+            # Write code to print the number of words in the string rv. 
+            ## Hint: use the split method 
+            print len(rv.split())
 
 
 #. (1 point) See comments for instructions, below. 
+   
+   .. tabbed:: ps_2_3s
 
-   .. actex:: ps_2_3
-    
-      rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
-         Over many a quaint and curious volume of forgotten lore,  
-         While I nodded, nearly napping, suddenly there came a tapping,   
-         As of some one gently rapping, rapping at my chamber door.   
-         T is some visitor, I muttered, tapping at my chamber door;           5
-         Only this and nothing more."""
-      
-      # (For these questions, imagine that you couldn't see the whole string value, 
-      # but you still needed to answer them.)
-      
-      # Write code to find out whether the word "raven" is in the string rv. 
-      # Print "Yes" if it is, and "No" if it isn't.
-      
-      # Write code to find out whether the word "rapping" is in the string rv. 
-      # Print "Yes" if it is, and "No" if it isn't.
+      .. tab:: Problem
+
+         .. actex:: ps_2_3
+          
+            rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+               Over many a quaint and curious volume of forgotten lore,  
+               While I nodded, nearly napping, suddenly there came a tapping,   
+               As of some one gently rapping, rapping at my chamber door.   
+               T is some visitor, I muttered, tapping at my chamber door;           5
+               Only this and nothing more."""
+            
+            # (For these questions, imagine that you couldn't see the whole string value, 
+            # but you still needed to answer them.)
+            
+            # Write code to find out whether the word "raven" is in the string rv. 
+            # Print "Yes" if it is, and "No" if it isn't.
+            
+            # Write code to find out whether the word "rapping" is in the string rv. 
+            # Print "Yes" if it is, and "No" if it isn't.
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_3a
+          
+            rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+               Over many a quaint and curious volume of forgotten lore,  
+               While I nodded, nearly napping, suddenly there came a tapping,   
+               As of some one gently rapping, rapping at my chamber door.   
+               T is some visitor, I muttered, tapping at my chamber door;           5
+               Only this and nothing more."""
+            
+            # (For these questions, imagine that you couldn't see the whole string value, 
+            # but you still needed to answer them.)
+            
+            # Write code to find out whether the word "raven" is in the string rv. 
+            # Print "Yes" if it is, and "No" if it isn't.
+            if "raven" in rv:
+               print "Yes"
+            else:
+               print "No"
+
+            # also reasonable:
+            if "raven" in rv.split():
+               print "Yes"
+            else:
+               print "No"
+            
+            # Write code to find out whether the word "rapping" is in the string rv. 
+            # Print "Yes" if it is, and "No" if it isn't.
+            if "rapping" in rv:
+               print "Yes"
+            else:
+               print "No"
+
+            # also reasonable:
+            if "rapping" in rv.split():
+               print "Yes"
+            else:
+               print "No"
 
 
 
@@ -158,11 +242,29 @@ that you can access in an ActiveCode window using the open() function.
 It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.
 
 #. (1 point) Write code to open the file, about_programming.txt, and print it out, line by line.
+   
+   .. tabbed:: ps_2_4s
 
-   .. actex:: ps_2_4
+      .. tab:: Problem
 
-      # Don't worry about extra blank lines between each of the lines
-      # (but if you want to get rid of them, try the .strip method)
+         .. actex:: ps_2_4
+
+            # Don't worry about extra blank lines between each of the lines
+            # (but if you want to get rid of them, try the .strip() method)
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_4a
+
+            # Don't worry about extra blank lines between each of the lines
+            # (but if you want to get rid of them, try the .strip() method)
+            f = open("about_programming.txt", 'r')
+            # here's the code without the .strip() method
+            for orange in f:
+               print orange
+            # here's the code that'll print without all that extra blank space
+            for orange in f:
+               print orange.strip()
 
 
 #. (2 points) Print the number of lines in the file
