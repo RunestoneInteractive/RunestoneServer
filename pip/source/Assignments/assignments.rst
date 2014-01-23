@@ -51,6 +51,35 @@ Problem Set
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
 
+1. (7 points) Old McDonald had a farm, he records the animals on his farm in a dictionary called 'animals'. In this problem help Old McDonald manage his farm animals.
+
+   .. actex:: ps_2_1
+
+      animals = {
+         'cows': 2,
+         'chickens': 8,
+         'pigs': 4,
+         'mice': 72,
+         'cats': 9,
+         'dogs': 1,
+      }
+
+      # Print the number of chickens in the farm
+
+      # Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+
+      # Old McDonald was given a yak. Add a yak to to the animals dictionary.
+
+      # While giving a tour of his farm, a child asks Old McDonald if he has a llama on the farm.
+      # Write a conditional that checks the dictionary for a llama and prints the response "Yes" or "No".
+
+      # Print a statement that lists the names of all the animals on the farm in one line.
+      # This line should read "cows, chickens, pigs, mice, cats, dogs, yak"
+
+      # Write a statement that tells Old McDonald which animal he has the most of.
+      # This statement should print "72 mice" 
+
+
 
 
 Week 3: ends January 24
