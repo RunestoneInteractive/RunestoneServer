@@ -268,20 +268,70 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
 
 
 #. (2 points) Print the number of lines in the file
+   
+   .. tabbed: ps_2_5s
 
-   .. actex:: ps_2_5
+      .. tab:: Problem
+
+         .. actex:: ps_2_5
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_5a
+
+            hmf = open("about_programming.txt", 'r')
+            total = 0
+            for ln in hmf:
+               total = total + 1
+
+            print total
 
 
 #. (2 points) Print the number of lines in the file that include the word "program" or any extension of it (program, programs, programming, programmer).
 
-   .. actex:: ps_2_6
+   .. tabbed:: ps_2_6s
+
+      .. tab:: Problem
+
+         .. actex:: ps_2_6
+
+      .. tab:: Solution
+
+         .. actex:: ps_2_6a
+
+            tot = 0
+            ft = open("about_programming.txt", "r")
+            for mtfq in ft:
+               if "program" in mtfq:
+                  tot = tot + 1
+            print tot
+
 
 #. *1 BONUS POINT* (not required): Write code to find, and print, the number of vowels in the file.
+   
+   .. tabbed:: ps_2_7a
 
-   .. actex:: ps_2_7
+      .. tab:: Problem
 
-      # Write your code here, if you choose to try this problem!
+         .. actex:: ps_2_7
+
+            # Write your code here, if you choose to try this problem!
       
+      .. tab:: Solution
+
+         .. actex:: ps_2_7a
+
+            # Write your code here, if you choose to try this problem!
+
+            # here is one solution
+            f = open("about_programming.txt", 'r')
+            whole_file = f.read()
+            vowels = ["a","e","i","o","u"]
+            amt = 0
+            for v in vowels:
+               amt = amt + whole_file.count(v)
+
+
 
 
 
