@@ -397,6 +397,32 @@ the value in the text entry box and run it again.
    print('value = ', t.value)
 
 
+JavaScript
+----------
+
+We have come to realize that not everyone loves Python as much as we do.
+So we have now made it possible to write activecode examples in pure javascript as well
+as Python.  Here is a simple example:
+
+.. activecode:: jstest1
+   :language: javascript
+
+   var x = 10;
+   var y = 11;
+   var z = x + y;
+   console.log(z);
+   function fact(n) {
+      if(n <= 1) return 1;
+      else {
+          return n * fact(n-1);
+      }
+   }
+   console.log(fact(10));
+   outf('hello world');
+
+
+Adding a javascript example is just as easy as Python, all you need to do is add a ``:language:``
+parameter to the activecode directive.
 
 What To Do Now
 --------------
