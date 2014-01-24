@@ -51,7 +51,7 @@ Problem Set
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
 
-1. (7 points) Old McDonald had a farm, he records the animals on his farm in a dictionary called 'animals'. In this problem help Old McDonald manage his farm animals.
+1. (5 points) Old McDonald had a farm, he records the animals on his farm in a dictionary called 'animals'. In this problem help Old McDonald manage his farm animals.
 
    .. actex:: ps_3_1
 
@@ -77,7 +77,26 @@ Problem Set
       # This line should read "cows, chickens, pigs, mice, cats, dogs, yak"
 
       # Write a statement that tells Old McDonald which animal he has the most of.
-      # This statement should print "72 mice" 
+      # This statement should print "72 mice"
+
+For the next two exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, inbetween the quotation marks.
+
+2. (2 points) Print out all the names of the people who posted in the facebook group.
+
+   .. actex:: ps_3_2
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
+3. (3 points) Use the Facebook data to count the number of times a person has posted in the Facebook group.
+
+   .. actex:: ps_3_3
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
 
 
 Week 3: ends January 24
