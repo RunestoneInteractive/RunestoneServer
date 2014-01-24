@@ -3,7 +3,7 @@ db.define_table('assignments',
 	Field('name', 'string'),
 	Field('points', 'integer'),
 	Field('query', 'string', default="", required=False),
-	Field('grade_type', 'string', default="additive"),
+	Field('grade_type', 'string', default="additive", requires=IS_IN_SET(['additive','checkmark'])),
 	Field('threshold', 'integer', default=1),
 	migrate='runestone_assignments.table'
 	)
