@@ -35,9 +35,16 @@ def create_or_update():
 
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignment = db(db.assignments.id == request.vars.id).select().first()
+	assignment = db(db.assignments.id == request.vars.id and db.assignments.course == course.id).select().first()
 	if not assignment:
 		return redirect(URL("assignments","index"))
+	user_id = auth.user.id
+	if 'sid' in request.vars:
+		user_id = request.vars.sid
+	# Get acid and list
+	problems = assignment.problems()
+
 	return dict(
 		assignment = assignment,
+		problems = problems,
 		)
