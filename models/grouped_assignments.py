@@ -1,4 +1,5 @@
 db.define_table('assignments',
+	Field('course',db.courses),
 	Field('name', 'string'),
 	Field('points', 'integer'),
 	Field('query', 'string', default="", required=False),
