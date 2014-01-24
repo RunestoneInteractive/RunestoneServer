@@ -42,6 +42,7 @@ Reading Response
 Don't forget to click **save**.
    
    Give an example of when you were interacting with someone where you used "Book" responses.
+
    .. actex:: rr_3_1
 
       # Fill in your response in between the triple quotes
@@ -50,6 +51,7 @@ Don't forget to click **save**.
       """
 
    Give an example of when you gave someone an "out of book" response.
+
    .. actex:: rr_3_2
 
       # Fill in your response in between the triple quotes
@@ -58,6 +60,7 @@ Don't forget to click **save**.
       """
 
    What would you like to talk about in section this week?
+   
    .. actex:: rr_3_3
 
       # Fill in your response in between the triple quotes
