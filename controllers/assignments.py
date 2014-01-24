@@ -26,9 +26,18 @@ def create_or_update():
 	form.vars.course = course.id
 	if form.process().accepted:
 		session.flash = 'form accepted'
-		redirect(URL('assignments','index'))
+		return redirect(URL('assignments','index'))
 	elif form.errors:
 		response.flash = 'form has errors'
 	return dict(
 		form = form,
+		)
+
+def detail():
+	course = db(db.courses.id == auth.user.course_id).select().first()
+	assignment = db(db.assignments.id == request.vars.id).select().first()
+	if not assignment:
+		return redirect(URL("assignments","index"))
+	return dict(
+		assignment = assignment,
 		)
