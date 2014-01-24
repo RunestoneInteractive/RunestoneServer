@@ -89,13 +89,25 @@ For the next two exercises, you will analyze data from our group on Facebook. To
       # Delete this line and paste file contents here
       """
 
-3. (3 points) Use the Facebook data to count the number of times a person has posted in the Facebook group.
+      # Your output should look something like:
+      # Paul Resnick
+      # Jackie Cohen
+      # Jackie Cohen
+      # Nick Reid
+      # Jackie Cohen
+
+3. (3 points) Use the Facebook data to count the number of times a person has posted in the Facebook group. You should format the output like "person posted X times".
 
    .. actex:: ps_3_3
 
       fb = """
       # Delete this line and paste file contents here
       """
+
+      # Your output should look something like:
+      # Paul Resnick posted 1 times
+      # Jackie Cohen posted 3 times
+      # Nick Reid posted 2 times
 
 
 
