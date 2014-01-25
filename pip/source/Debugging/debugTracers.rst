@@ -8,8 +8,8 @@
 
 .. _debugging_2:
 
-How to Not Guess What Your Program is Doing
-===========================================
+Don't Guess What Your Program Does
+==================================
 
 To build on lessons learned in the first debugging interlude, we are going to talk about practical ways to to debug your program. Our goal in this section is to encourage you to do anything but guess at what is happening in your program. There are two basic steps to not guessing, and while they might seem obvious, even the most professional programmers occasionally skip these steps. These suggestions are similar to the first debugging interlude, but we don't think they can't be emphsized enough.
 
