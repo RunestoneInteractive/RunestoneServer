@@ -5,6 +5,7 @@ db.define_table('assignments',
 	Field('query', 'string', default="", required=False),
 	Field('grade_type', 'string', default="additive", requires=IS_IN_SET(['additive','checkmark'])),
 	Field('threshold', 'integer', default=1),
+	format='%(name)s',
 	migrate='runestone_assignments.table'
 	)
 
@@ -22,4 +23,11 @@ db.define_table('grades',
 	Field('assignment', db.assignments),
 	Field('score', 'double'),
 	migrate='runestone_grades.table',
+	)
+
+db.define_table('deadlines',
+	Field('assignment', db.assignments, requires=IS_IN_DB(db,'assignments.id',db.assignments._format)),
+	Field('section', db.sections, requires=IS_EMPTY_OR(IS_IN_DB(db,'sections.id','%(name)s'))),
+	Field('deadline','datetime'),
+	migrate='runestone_deadlines.table',
 	)
