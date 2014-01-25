@@ -41,8 +41,9 @@ def detail():
 	user_id = auth.user.id
 	if 'sid' in request.vars:
 		user_id = request.vars.sid
+	user = db(db.auth_user.id == user_id).select().first()
 	# Get acid and list
-	problems = assignment.problems()
+	problems = assignment.problems(user)
 
 	return dict(
 		assignment = assignment,

@@ -7,7 +7,15 @@ db.define_table('assignments',
 	Field('threshold', 'integer', default=1),
 	migrate='runestone_assignments.table'
 	)
-db.assignments.problems = Field.Method(lambda row: [])
+
+def assignment_get_problems(assignment, user):
+	return db(db.code.acid.like(assignment.query+"%"))(db.code.sid==user.username).select(
+		db.code.ALL,
+		orderby=db.code.acid|~db.code.timestamp,
+		distinct=db.code.acid,
+		)
+	return []
+db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
 db.assignments.grade = Field.Method(lambda row, user: 10)
 
 db.define_table('grades',
