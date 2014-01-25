@@ -43,7 +43,7 @@
 Don't Guess What Your Program Does
 ==================================
 
-To build on lessons learned in the first debugging interlude, we are going to talk about practical ways to to debug your program. Our goal in this section is to encourage you to do anything but guess at what is happening in your program. There are three basic steps to not guessing, and while they might seem obvious, even the most professional programmers occasionally skip these steps. These suggestions are similar to the first debugging interlude, but we don't think they can't be emphsized enough.
+To build on lessons learned in the first debugging interlude, we are going to talk about practical ways to to debug your program. Our goal in this section is to encourage you to do anything but guess at what is happening in your program. There are three basic steps to not guessing, and while they might seem obvious, even the most professional programmers occasionally skip these steps. These suggestions are similar to the first debugging interlude, but we don't think they can't be emphasized enough.
 
 The three steps are: Outline, Print, and Clean Up.
 
@@ -52,14 +52,14 @@ What you will find is that these steps iterate on eachother, so start with a gen
 Sketch an Outline
 -----------------
 
-We are suggesting you frist write down all the steps you want the program to do. You can do this in any manner you like. We are going to show you how to outline using comments, but if you are more visual you might want to sketech on a piece of paper and if you are more spatial try walking around the room. The big trick is to understand everything you want to do first in your own words, so then you are translating them to the computer.
+We are suggesting you first write down all the steps you want the program to do. You can do this in any manner you like. We are going to show you how to outline using comments, but if you are more visual you might want to sketch on a piece of paper and if you are more spatial try walking around the room. The big trick is to understand everything you want to do first in your own words, so then you are translating them to the computer.
 
 Print to Understand
 -------------------
 
 After you outline your program, you will want to build one section at a time, and carefully test each section at a time by printing the value of variables. The idea here is to make sure your program is doing what it should be. Writing good print statements can be challenging, but just keep in mind that your goal is to understand how the program is changing.
 
-In the following code block there are some examples of print statements, that can help you understand what is happening in a for loop. In this program we are adding all the even numbers in a list together. You will see a print statment for each loop, and after the loop stops running, which make it easier to see what is happening.
+In the following code block there are some examples of print statements, that can help you understand what is happening in a for loop. In this program we are adding all the even numbers in a list together. You will see a print statement for each loop, and after the loop stops running, which make it easier to see what is happening.
 
 .. activecode:: db2_sample_print
     
@@ -79,7 +79,7 @@ In the following code block there are some examples of print statements, that ca
 Clean Up Afterwards
 -------------------
 
-When you are done with outlining and testing your program, delete these statements from your program. No one really needs to see the test statments you wrote, and leaving test statments in the program might confuse you if you add more to the program.
+When you are done with outlining and testing your program, delete these statements from your program. No one really needs to see the test statements you wrote, and leaving test statements in the program might confuse you if you add more to the program.
 
 Extra comments do help other people read your code, but try to leave in only the bits that you think are the most useful. There is an art to writing good informative comments, and you can only learn this art by reading other people's programs and having your peers read your programs. As a rule for comments, when in doubt, delete it.
 
