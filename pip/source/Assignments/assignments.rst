@@ -23,14 +23,21 @@ For this week you have the following graded activities:
 
 1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click **Save** for each of the exercises.
 
-   * Before Tuesday's class:
+   * Before Tuesday's class:      
+      * :ref:`Dictionaries <dictionaries_chap>`
+   
    * Before Thursday's class:
+      * Accumulating results in dictionaries (coming soon...)
+      * More tips on programming and debugging (coming soon...)
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
-   * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
 
-#. Save answers to the exercises in Problem Set 3:
-   * :ref: 'Problem Set 3 <problem_set_3>'
+   * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
+   * :ref:`Reading response 3 <response_3>`
+
+#. Save answers to the exercises in Problem Set 2:
+
+   * :ref:`Problem Set 3 <problem_set_3>`
 
 .. _response_3:
 
@@ -75,10 +82,12 @@ Problem Set
 
 **Due:** **Friday, January 31, 5 pm**
 
-**Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
+**Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. 
+The last code you have saved for each one by the deadline is what will be graded.
 
 
-1. (5 points) Old McDonald had a farm, he records the animals on his farm in a dictionary called 'animals'. In this problem help Old McDonald manage his farm animals.
+1. (6 points) Old McDonald had a farm. He records the animals on his farm in a dictionary called 'animals'. 
+In this problem help Old McDonald manage his farm animals. Be sure to answer all six parts, a-f.
 
    .. actex:: ps_3_1
 
@@ -91,24 +100,32 @@ Problem Set
          'dogs': 1,
       }
 
-      # Print the number of chickens in the farm
+      # a. Print the number of chickens in the farm (by having your code look it up
+      # in the animals dictionary. "Print(8)" is cheating...)
+      
+      # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
 
-      # Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+      # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
 
-      # Old McDonald was given a yak. Add a yak to to the animals dictionary.
+      # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+      # For example:
+      # 2 cows
+      # 9 cats
+      # ...
 
-      # While giving a tour of his farm, a child asks Old McDonald if he has a llama on the farm.
-      # Write a conditional that checks the dictionary for a llama and prints the response "Yes" or "No".
+      # e. While giving tours of his farm to children, they often inquire about particular
+      # animals. Write code that asks the user to input an animal name, and then
+      # prints out how many of that animal he has; or 0 if he has none.
+      # For example, output "8 chickens" or "0 elephants"
 
-      # Print a statement that lists the names of all the animals on the farm in one line.
-      # This line should read "cows, chickens, pigs, mice, cats, dogs, yak"
+      # f. Write a statement that tells Old McDonald which animal he has the most of.
+      # This statement should print "72 mice", given the current state of the
+      # dictionary, but your code should work correctly even if mice aren't the
+      # most numerous animal on his farm.
 
-      # Write a statement that tells Old McDonald which animal he has the most of.
-      # This statement should print "72 mice"
+For the next three exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, in between the quotation marks. To maintain confidentiality (i.e., only students in 106 can see it), the data lives in a `file on cTools. <https://ctools.umich.edu/access/content/group/80ba0083-6409-4149-8222-f210f9dc6dd1/Problem%20Sets/PS3/simplefbdata.txt>`_
 
-For the next two exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, inbetween the quotation marks.
-
-2. (2 points) Print out all the names of the people who posted in the facebook group.
+#. (2 points) For each post or comment in the facebook group, print out the name of the poster.
 
    .. actex:: ps_3_2
 
@@ -116,14 +133,19 @@ For the next two exercises, you will analyze data from our group on Facebook. To
       # Delete this line and paste file contents here
       """
 
-      # Your output should look something like:
-      # Paul Resnick
-      # Jackie Cohen
-      # Jackie Cohen
-      # Nick Reid
-      # Jackie Cohen
+      x = fb.split("\n")
+      # x now refers to a list, with each line of text as one element in the list.
+      # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+      # why you get the output you do
 
-3. (3 points) Use the Facebook data to count the number of times a person has posted in the Facebook group. You should format the output like "person posted X times".
+      # Your output should look something like:
+      # Paul R.
+      # Jackie C.
+      # Jackie C.
+      # Nick R.
+      # Jackie C.
+
+#. (2 points) Use the Facebook data to count the number of posts (or reply comments) each person made in the Facebook group.
 
    .. actex:: ps_3_3
 
@@ -131,11 +153,22 @@ For the next two exercises, you will analyze data from our group on Facebook. To
       # Delete this line and paste file contents here
       """
 
-      # Your output should look something like:
-      # Paul Resnick posted 1 times
-      # Jackie Cohen posted 3 times
-      # Nick Reid posted 2 times
+      x = fb.split("\n")
 
+      # Your output should look something like this, but with different numbers:
+      # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
+      # Jackie C. posted 3 times
+      # Nick R. posted 2 times
+
+#. (optional: 1 bonus point; this one is much harder)  Use the Facebook data to determine who made the longest post or comment (most characters); print out the poster's name and the contents.
+
+   .. actex:: ps_3_4
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
+      x = fb.split("\n")
 
 
 Week 3: ends January 24
