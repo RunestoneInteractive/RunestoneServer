@@ -15,9 +15,9 @@ def index():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def create_or_update():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	existing_record = db(db.assignments.id == request.vars.id).select().first()
+	assignment = db(db.assignments.id == request.vars.id).select().first()
 	db.assignments.grade_type.widget = SQLFORM.widgets.radio.widget
-	form = SQLFORM(db.assignments, existing_record,
+	form = SQLFORM(db.assignments, assignment,
 	    showid = False,
 	    fields=['name','points','query','grade_type','threshold'],
 	    keepvalues = True,
@@ -29,8 +29,27 @@ def create_or_update():
 		return redirect(URL('assignments','index'))
 	elif form.errors:
 		response.flash = 'form has errors'
+
+	if not assignment:
+		return dict(
+			form = form,
+			)
+
+	new_deadline_form = SQLFORM(db.deadlines,
+		showid = False,
+		fields=['section','deadline'],
+		keepvalues = True,
+		formstyle='table3cols',
+		)
+	new_deadline_form.vars.assignment = assignment
+	if new_deadline_form.process().accepted:
+		session.flash = 'added new deadline'
+	elif new_deadline_form.errors:
+		response.flash = 'error adding deadline'
+
 	return dict(
 		form = form,
+		new_deadline_form = new_deadline_form,
 		)
 
 def detail():
