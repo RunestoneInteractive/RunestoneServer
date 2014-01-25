@@ -47,9 +47,31 @@ def create_or_update():
 	elif new_deadline_form.errors:
 		response.flash = 'error adding deadline'
 
+	deadlines = db(db.deadlines.assignment == assignment.id).select()
+	delete_deadline_form = FORM()
+	for deadline in deadlines:
+		deadline_label = "On %s" % (deadline.deadline)
+		if deadline.section:
+			section = db(db.sections.id == deadline.section).select().first()
+			deadline_label = deadline_label + " for %s" % (section.name)
+		delete_deadline_form.append(LABEL(
+			INPUT(_type="checkbox", _name=deadline.id, _value="delete"),
+			deadline_label,
+			_class="checkbox"
+			))
+	delete_deadline_form.append(INPUT(_type="submit"))
+
+	if delete_deadline_form.accepts(request,session):
+		for var in delete_deadline_form.vars:
+			if delete_deadline_form.vars[var] == "delete":
+				db(db.deadlines.id == var).delete()
+		session.flash = 'Deleted deadline(s)'
+		return redirect(URL('assignments','create_or_update')+'?id=%d' % (assignment.id))
+
 	return dict(
 		form = form,
 		new_deadline_form = new_deadline_form,
+		delete_deadline_form = delete_deadline_form,
 		)
 
 def detail():
