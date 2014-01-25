@@ -14,7 +14,6 @@ def assignment_get_problems(assignment, user):
 		orderby=db.code.acid|~db.code.timestamp,
 		distinct=db.code.acid,
 		)
-	return []
 db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
 db.assignments.grade = Field.Method(lambda row, user: 10)
 
