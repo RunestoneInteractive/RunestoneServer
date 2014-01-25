@@ -45,37 +45,48 @@ Don't Guess What Your Program Does
 
 To build on lessons learned in the first debugging interlude, we are going to talk about practical ways to to debug your program. Our goal in this section is to encourage you to do anything but guess at what is happening in your program. There are three basic steps to not guessing, and while they might seem obvious, even the most professional programmers occasionally skip these steps. These suggestions are similar to the first debugging interlude, but we don't think they can't be emphsized enough.
 
-The three steps are:
+The three steps are: Outline, Print, and Clean Up.
+
+What you will find is that these steps iterate on eachother, so start with a general outline, print what you can, and then clean up your code once it works.
 
 Sketch an Outline
 -----------------
 
-We are suggesting you frist write down all the steps you want the program to do. You can do this in any manner you like. We are going to show you how to outline using comments, but if you are more visual you might want to sketech on a piece of paper and if you are more spatial try walking around the room.
-
-Sometimes the most difficult part of writing a program is figuring out what you need it to do. For most people trying to describe this in a programming language is daunting because you have to think in a foreign syntax with symbols that aren't obvious. The big trick is to put the program into terms that you can understand.
-
-As we stated earlier, we are going to focus on using comments to outline a program, but there are many other methods, and since the value in outlining is for your own understanding. Feel free to translate this method to another medium, be it a whiteboard or pile of post its. Don't worry about communicating to anyone but yourself.
+We are suggesting you frist write down all the steps you want the program to do. You can do this in any manner you like. We are going to show you how to outline using comments, but if you are more visual you might want to sketech on a piece of paper and if you are more spatial try walking around the room. The big trick is to understand everything you want to do first in your own words, so then you are translating them to the computer.
 
 Print to Understand
 -------------------
 
-After you outline your program, build each piece one section at a time. The idea here is to test each section to make sure you are getting what you think you should. What you will find is the real challenge keeping these tests neat enough for you to work with.
+After you outline your program, you will want to build one section at a time, and carefully test each section at a time by printing the value of variables. The idea here is to make sure your program is doing what it should be. Writing good print statements can be challenging, but just keep in mind that your goal is to understand how the program is changing.
+
+In the following code block there are some examples of print statements, that can help you understand what is happening in a for loop. In this program we are adding all the even numbers in a list together. You will see a print statment for each loop, and after the loop stops running, which make it easier to see what is happening.
+
+.. activecode:: db2_sample_print
+    
+    numbers = [1,2,6,4,5,6]
+
+    z = 0
+    for num in numbers:
+      print("*** LOOP ***")
+      print("Num =",num)
+      if(0 % 2):
+        print("Is even. Adding",num,"to",z)
+        z = num + z
+      print ("Z =",z)
+    print("*** LOOP ***")
+
 
 Clean Up Afterwards
 -------------------
 
-The last step is to remove the print statements and outline comments as you get sections of your program working. The reason to do this is so it is easy for you to read your program, and the output your program makes.
+When you are done with outlining and testing your program, delete these statements from your program. No one really needs to see the test statments you wrote, and leaving test statments in the program might confuse you if you add more to the program.
 
-When you are done with your outlining and testing, delete it. No one really needs to see all the test statments you wrote, and leaving your old test statments in the program might confuse you.
-
-To make sure your program is easy for other people to read, only leave in the comments that you think are most useful. There is an art to having good informative comments, and you can only learn this art by reading other people's programs and having your peers read your programs. As a rule for comments, when in doubt, delete it.
-
-What you will find is that these steps iterate on eachother, so start with a general outline, print what you can, outline the finer details, then test those fine details and once you get a section working clean it up and move to the next section.
-
-The rest of this chapter is dedicated to working though an example of this method together. We will write a program that counts the number of different words used in an article. We will then output the most used word.
+Extra comments do help other people read your code, but try to leave in only the bits that you think are the most useful. There is an art to writing good informative comments, and you can only learn this art by reading other people's programs and having your peers read your programs. As a rule for comments, when in doubt, delete it.
 
 An Example
 ----------
+
+The rest of this chapter is dedicated to working though an example of this method together. We will write a program that counts the number of different words used in an article. We will then output the most used word.
 
 Our first step is to make a quick outline, just focusing on the broad steps that the program will take. The trick is to not get caught up in small details at this point, and get the entire program written. If you don't know how to do a specific step that you know needs to happen, don't get caught in that detail, and just write a vague comment and move on.
 
@@ -116,30 +127,7 @@ Filling in Details
 
 We now have an option of which section of code we want to write next, comment number 2 or 3. You could do either section first, but for the sake of this chapter, we are going to write section 3 first because we have an idea of what section 2 will do.
 
--- activecode:: db2_ex_1_2
-    
-    f = open('about_programming.txt', 'r')
-
-    # 2 - Read each word and store it in a dictionary
-
-    # 3 - Find the most used word
-    words = {
-      'this':3,
-      'something':7,
-      'melon':2,
-    }
-    most_used = words.keys()[0]
-    for w in words:
-      print("***** LOOP *****")
-      print("w=",w," occurs",words[w])
-      print("most_used=",most_used," occurs",words[most_used])
-      if words[w] > words[most_used]:
-        print("Set ",w," as most_used")
-        most_used = w
-    print("***** END LOOP *****")
-
-    # 4 - Print the most used word
-    print(most_used)
+**Example**
 
 There are many things different in this version of our program than the last. We have deleted the line that set the variable "most_used" in section 4, because we are now actually setting it in section 3 (on line 11).
 
@@ -149,52 +137,6 @@ Inside the for loop on line 13, we see many different print statements, which al
 
 The last section of our code is section 2, where we need to create a dictionary of each word, and count every time the word appears. Our first step should be to clean up our code from section 3 and sketch out the specific tasks we need to accomplish.
 
--- activecode:: db2_ex_1_3
-    
-    f = open('about_programming.txt', 'r')
-
-    # 2 - Read each word and store it in a dictionary
-    # Define a variable to collect the words -- should be called words
-    # Loop through each line of the file
-    # Break apart each line
-    # If the word doesn't exist in 'words', add it to the dictionary and set it to 1
-    # Otherwise add 1 to the count of words
-
-    # 3 - Find the most used word
-    words = {
-      'this':3,
-      'something':7,
-      'melon':2,
-    }
-    most_used = words.keys()[0]
-    for w in words:
-      if words[w] > words[most_used]:
-        most_used = w
-
-    # 4 - Print the most used word
-    print(most_used)
+**Example**
 
 Now that we have our outline, and only the most relivant print statements, we are ready to start filling in the code.
-
--- activecode:: db2_ex_1_4
-    
-    f = open('about_programming.txt', 'r')
-
-    # 2 - Read each word and store it in a dictionary
-    # Define a variable to collect the words -- should be called words
-    words = {}
-    # Loop through each line of the file
-    for ln in f:
-      # Break apart each line
-      bits = ln.split()
-      # If the word doesn't exist in 'words', add it to the dictionary and set it to 1
-      # Otherwise add 1 to the count of words
-
-    # 3 - Find the most used word
-    most_used = words.keys()[0]
-    for w in words:
-      if words[w] > words[most_used]:
-        most_used = w
-
-    # 4 - Print the most used word
-    print(most_used)
