@@ -17,7 +17,9 @@ The two steps are:
 
 1. **Outline first** We are suggesting you frist write down all the steps you want the program to do. You can do this in any manner you like. We are going to show you how to outline using comments, but if you are more visual you might want to sketech on a piece of paper and if you are more spatial try walking around the room.
 
-2. **Print one section at a time** After you outline your program, build each piece one section at a time. The idea here is to test each section to make sure you are getting what you think you should. What you will find is the real challenge of this techinque is keeping these tests neat enough for you to work with. 
+2. **Print one section at a time** After you outline your program, build each piece one section at a time. The idea here is to test each section to make sure you are getting what you think you should. What you will find is the real challenge of this techinque is keeping these tests neat enough for you to work with.
+
+What you will find is that these steps iterate on eachother, so start with an outline, print what you can, outline the finer details and then test those fine details.
 
 Creating Outlines
 -----------------
