@@ -109,12 +109,92 @@ Notice how there are only two comments with very specific actions. One at the be
 
 The most important things to notice here is that we tested that our file "f". By immediatly testing it, we know that this part of the program works. We also now know what type of variable we are working with, so we could look up how to work with it if we didn't remember.
 
-The other thing to notice is that we already wrote the end of our program. The value of the variable "most_used" is completely fake, but we now know that we want our program to set the variable "most_used" in comment number 3.
+The other thing to notice is that we already wrote the end of our program. The value of the variable "most_used" is fake, but we now know that we want our program to set the variable "most_used" in comment number 3.
+
+Filling in Details
+------------------
 
 We now have an option of which section of code we want to write next, comment number 2 or 3. You could do either section first, but for the sake of this chapter, we are going to write section 3 first because we have an idea of what section 2 will do.
 
-Since we didn't know how to check if a word had already been counted we just skipped over that section with a vague comment.
+-- activecode:: db2_ex_1_2
+    
+    f = open('about_programming.txt', 'r')
 
-Our next step is to write the sections that we know how to do, and write simple statements to make sure they are working correctly.
+    # 2 - Read each word and store it in a dictionary
 
+    # 3 - Find the most used word
+    words = {
+      'this':3,
+      'something':7,
+      'melon':2,
+    }
+    most_used = words.keys()[0]
+    for w in words:
+      print("***** LOOP *****")
+      print("w=",w," occurs",words[w])
+      print("most_used=",most_used," occurs",words[most_used])
+      if words[w] > words[most_used]:
+        print("Set ",w," as most_used")
+        most_used = w
+    print("***** END LOOP *****")
 
+    # 4 - Print the most used word
+    print(most_used)
+
+There are many things different in this version of our program than the last. We have deleted the line that set the variable "most_used" in section 4, because we are now actually setting it in section 3 (on line 11).
+
+On line 6 we defined a dictionary called words. This dictionary represents what section 2 is supposed to accomplish, yet we can assume that our dictionary is shorter and simpler than what will be produced in section 2. This is helpful because we can quickly look at the dictionary words and understand that 'something' is the most used word, so we know exactly the value that should be output at the end.
+
+Inside the for loop on line 13, we see many different print statements, which all explain what is happening each time the program loops through a word. This gives us very clear output as to what is happening in our program.
+
+The last section of our code is section 2, where we need to create a dictionary of each word, and count every time the word appears. Our first step should be to clean up our code from section 3 and sketch out the specific tasks we need to accomplish.
+
+-- activecode:: db2_ex_1_3
+    
+    f = open('about_programming.txt', 'r')
+
+    # 2 - Read each word and store it in a dictionary
+    # Define a variable to collect the words -- should be called words
+    # Loop through each line of the file
+    # Break apart each line
+    # If the word doesn't exist in 'words', add it to the dictionary and set it to 1
+    # Otherwise add 1 to the count of words
+
+    # 3 - Find the most used word
+    words = {
+      'this':3,
+      'something':7,
+      'melon':2,
+    }
+    most_used = words.keys()[0]
+    for w in words:
+      if words[w] > words[most_used]:
+        most_used = w
+
+    # 4 - Print the most used word
+    print(most_used)
+
+Now that we have our outline, and only the most relivant print statements, we are ready to start filling in the code.
+
+-- activecode:: db2_ex_1_4
+    
+    f = open('about_programming.txt', 'r')
+
+    # 2 - Read each word and store it in a dictionary
+    # Define a variable to collect the words -- should be called words
+    words = {}
+    # Loop through each line of the file
+    for ln in f:
+      # Break apart each line
+      bits = ln.split()
+      # If the word doesn't exist in 'words', add it to the dictionary and set it to 1
+      # Otherwise add 1 to the count of words
+
+    # 3 - Find the most used word
+    most_used = words.keys()[0]
+    for w in words:
+      if words[w] > words[most_used]:
+        most_used = w
+
+    # 4 - Print the most used word
+    print(most_used)
