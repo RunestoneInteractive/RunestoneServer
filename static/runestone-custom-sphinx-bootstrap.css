@@ -373,3 +373,8 @@ div.flash {
     height: auto !important;
     width: auto !important;
 }
+
+.activehtml  {
+    width: 500px;
+    height: 400px;
+}

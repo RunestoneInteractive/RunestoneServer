@@ -424,6 +424,31 @@ as Python.  Here is a simple example:
 Adding a javascript example is just as easy as Python, all you need to do is add a ``:language:``
 parameter to the activecode directive.
 
+HTML
+----
+
+Teaching a class on HTML and simple web design?  Why not use activecode for HTML too?
+Although you don't run HTML, clicking the run button will case the HTML to be rendered.
+
+.. activecode:: html1
+   :language: html
+
+   <html>
+   <body>
+   <style>
+       h2 { font-size: 48px;
+            color: red;
+       }
+   </style>
+   <h2>Hello World</h2>
+   <ul>
+       <li>one</li>
+       <li>two</li>
+   </ul>
+   </body>
+   </html>
+
+
 What To Do Now
 --------------
 
