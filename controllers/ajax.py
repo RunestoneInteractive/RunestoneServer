@@ -73,57 +73,36 @@ def runlog():  # Log errors and runs with code
 #
 
 def saveprog():
+    user = auth.user
+    if not user:
+        return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
     acid = request.vars.acid
     code = request.vars.code
 
-    response.headers['content-type'] = 'application/json'
+    now = datetime.datetime.now()
 
-    # ## check if there is a deadline for this exercise, and if it has passed
-    # INSTRUCTIONS:
-    # 1. Decide a prefix to use for all the graded actex exercises for a week.
-    #    For example, name the exercises week2_1, week2_2, week2_3, etc.
-    # 2. Insert a row in the table pipactex_deadline, using the runeston/appadmin web interface. Fill
-    #    in with the prefix. For example, week2. Or reading3.
-    #   a. Fill in the "deadline" field if all sections have the same deadline.
-    #   b. Fill in all three deadlines if it's something with a different deadline
-    #    for the different sections. For example, use this for the reading reaction papers.
+    response.headers['content-type'] = 'application/json'
     def strip_suffix(id):
         idx = id.rfind('-') - 1
         return id[:idx]
-    dl = db(db.pipactex_deadline.acid_prefix == strip_suffix(acid)).select().first()
-    if dl:
-        ts = datetime.datetime.now()
-        if dl.deadline:
-            deadline = dl.deadline
-        else:
-            try:
-                section = auth.user.section
-                if section == '2':
-                    deadline = dl.wed11deadline
-                elif section == '3':
-                    deadline = dl.wed4deadline
-                elif section == '4':
-                    deadline = dl.th3deadline
-                else:
-                    return json.dumps(json.dumps(["ERROR: Your section number is unknown"]))
-            except Exception as e:
-                if not auth.user:
-                    return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-                else:
-                    return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
-        if deadline and deadline < ts:
-            return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (ts)])
-
+    assignment = db(db.assignments.query == strip_suffix(acid)).select().first()
+    section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+    section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).first()
+        
+    if assignment:
+        dl = db(db.deadlines.assignment == assignment.id)((db.deadlines.section == section.id) | (db.deadlines.section==None)).select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        if dl:
+            if dl.deadline < now:
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (now)])
     try:
         db.code.insert(sid=auth.user.username,
             acid=acid, code=code,
             timestamp=datetime.datetime.now(),
             course_id=auth.user.course_id)
     except Exception as e:
-        if not auth.user:
-            return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-        else:
-            return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
+        return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
 
     return json.dumps([acid])
 
