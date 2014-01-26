@@ -88,6 +88,7 @@ def saveprog():
         idx = id.rfind('-') - 1
         return id[:idx]
     assignment = db(db.assignments.query == strip_suffix(acid)).select().first()
+    
     section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).first()
         
@@ -95,7 +96,7 @@ def saveprog():
         dl = db(db.deadlines.assignment == assignment.id)((db.deadlines.section == section.id) | (db.deadlines.section==None)).select(db.deadlines.ALL, orderby=db.deadlines.section).first()
         if dl:
             if dl.deadline < now:
-                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (now)])
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
     try:
         db.code.insert(sid=auth.user.username,
             acid=acid, code=code,
