@@ -6,11 +6,11 @@
     <li>
 		<a href="detail?id={{=row.id}}">{{=row.name}}</a>
 		{{if instructor:}}
-		<a href="create_or_update?id={{=row.id}}">Edit</a>
+		<a href="update?id={{=row.id}}">Edit</a>
 		{{pass}}
 	</li>  
     {{pass}}
 </ul>
 {{if instructor:}}
-<a href="create_or_update">Create Assignment</a>
+<a href="create">Create Assignment</a>
 {{pass}}

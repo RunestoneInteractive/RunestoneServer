@@ -14,9 +14,9 @@ def index():
 		)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def create_or_update():
+def create():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignment = db(db.assignments.id == request.vars.id).select().first()
+	assignment = db(db.assignments.id == request.get_vars.id).select().first()
 	db.assignments.grade_type.widget = SQLFORM.widgets.radio.widget
 	form = SQLFORM(db.assignments, assignment,
 	    showid = False,
@@ -27,15 +27,31 @@ def create_or_update():
 	form.vars.course = course.id
 	if form.process().accepted:
 		session.flash = 'form accepted'
-		return redirect(URL('assignments','index'))
+		return redirect(URL('assignments','update')+'?id=%d' % (form.vars.id))
 	elif form.errors:
 		response.flash = 'form has errors'
+	return dict(
+		form = form,
+		)
 
-	if not assignment:
-		return dict(
-			form = form,
-			)
-
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def update():
+	course = db(db.courses.id == auth.user.course_id).select().first()
+	assignment = db(db.assignments.id == request.get_vars.id).select().first()
+	db.assignments.grade_type.widget = SQLFORM.widgets.radio.widget
+	form = SQLFORM(db.assignments, assignment,
+	    showid = False,
+	    fields=['name','points','query','grade_type','threshold'],
+	    keepvalues = True,
+	    formstyle='table3cols',
+	    )
+	
+	form.vars.course = course.id
+	if form.process().accepted:
+		session.flash = 'form accepted'
+		return redirect(URL('assignments','update')+'?id=%d' % (form.vars.id))
+	elif form.errors:
+		response.flash = 'form has errors'
 	new_deadline_form = SQLFORM(db.deadlines,
 		showid = False,
 		fields=['section','deadline'],
