@@ -10,6 +10,7 @@ def index():
 	assignments = db(db.assignments.course == course.id).select()
 	return dict(
 		assignments = assignments,
+		instructor = verifyInstructorStatus(auth.user.course_name, auth.user),
 		)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -69,6 +70,7 @@ def create_or_update():
 		return redirect(URL('assignments','create_or_update')+'?id=%d' % (assignment.id))
 
 	return dict(
+		assignment = assignment,
 		form = form,
 		new_deadline_form = new_deadline_form,
 		delete_deadline_form = delete_deadline_form,
