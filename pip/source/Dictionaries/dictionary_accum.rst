@@ -448,7 +448,7 @@ Exercises
 
         .. tab:: Answer
             
-            .. activecode:: q1_answer
+            .. activecode:: ex_11_01_answer
 
                 x = input("Enter a sentence")
                 print(x)
@@ -475,6 +475,41 @@ Exercises
             .. disqus::
                 :shortname: interactivepython
                 :identifier: disqus_de4f21e35d3a41a4a3ac4ac888f78d1a
+
+#. (Optional)
+      .. tabbed:: q2
+
+            .. tab:: Question
+
+                  Write a program that finds the most used 7 letter word in scarlet.txt and output the most used word.
+
+                  .. actex:: ex_11_02
+
+                        f = open('scarlet.txt', 'r')
+
+            .. tab:: Answer
+
+                  .. activecode:: ex_11_02_answer
+
+                        f = open('scarlet.txt', 'r')
+                        contents = f.read()
+                        d = {}
+
+                        for w in contents.split():
+                            if len(w) == 7:
+                                if w not in d:
+                                    d[w] = 1
+                                else:
+                                    d[w] = d[w] + 1
+
+                        dkeys = d.keys()
+                        most_used = dkeys[0]
+                        for k in dkeys:
+                            if d[k] > d[most_used]:
+                                most_used = k
+
+                        print "The most used word is '"+most_used+"', which is used "+str(d[most_used])+" times"
+    
    
 
 .. raw:: html
