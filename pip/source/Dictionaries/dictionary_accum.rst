@@ -376,7 +376,9 @@ but you'll learn more if you try to write it yourself first.
       two keys have the same maximum value, it's OK to print out either one. Fill
       in the skeleton code
       
-      .. actex: ex_dict_accum_3
+
+      .. actex:: ex_dict_accum_3
+
          d = {'a': 194, 'b': 54, 'c':34, 'd': 44, 'e': 312, 'full':31}
          
          ks = d.keys()
@@ -386,7 +388,7 @@ but you'll learn more if you try to write it yourself first.
             # bigger than the value associated with the best_key_so_far
             # if so, save the current key as the best so far
             
-         print("key " + best_key_so_far + " has the highest value, " + d[best_key_so_far])
+         print("key " + best_key_so_far + " has the highest value, " + str(d[best_key_so_far]))
    
    .. tab:: Answer 
    
