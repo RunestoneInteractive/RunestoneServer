@@ -415,37 +415,40 @@ Exercises
 
         .. tab:: Question
 
-           Write a program that reads in a string on the command line and returns a
+           Write a program that reads a person's input and returns a
            table of the letters of the alphabet in alphabetical order which occur in
            the string together with the number of times each letter occurs. Case should 
            be ignored. A sample run of the program would look this this::
         
-               $ python letter_counts.py "ThiS is String with Upper and lower case Letters."
-               a  2
-               c  1
-               d  1
-               e  5
-               g  1
-               h  2
-               i  4
-               l  2
-               n  2
-               o  1
-               p  2
-               r  4
-               s  5
-               t  5
-               u  1
-               w  2
-               $
+               "ThiS is String with Upper and lower case Letters."
+               a 2
+               c 1
+               d 1
+               e 5
+               g 1
+               h 2
+               i 4
+               l 2
+               n 2
+               o 1
+               p 2
+               r 4
+               s 5
+               t 5
+               u 1
+               w 2
         
            .. actex:: ex_11_01
+
+               x = input("Enter a sentence")
+               print(x)
 
         .. tab:: Answer
             
             .. activecode:: q1_answer
 
                 x = input("Enter a sentence")
+                print(x)
 
                 x = x.lower() # convert to all lowercase
 
