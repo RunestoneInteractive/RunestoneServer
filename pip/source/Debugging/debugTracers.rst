@@ -63,7 +63,7 @@ Translating your English description of a step into code may be the most challen
 * Is this operation pulling out an item from a list or string or dictionary? If so, use [] to pull out the item you want.
 * Is this operation transforming a string into another string? If so, look at the summary of ref: string operations
 * Is this operation modifying a list? If so, look at the summary of ref: list operations.
-* Is the operation doing something multiple times? If so, you’ll want a ``for`` loop. Start by making a skeleton version of a for loop, and then fill in the parts that are in <brackets>
+* Is the operation doing something multiple times? If so, you’ll want a ``for`` loop. Start by making a skeleton version of a for loop, and then fill in the parts that are in <brackets>::
 
   for <varname> in <seq>:
                   <code block line 1>
@@ -88,6 +88,7 @@ Translating your English description of a step into code may be the most challen
     <some code in for block>
     a = <new_value>
     <other code in for block>
+
   print a
 
 
