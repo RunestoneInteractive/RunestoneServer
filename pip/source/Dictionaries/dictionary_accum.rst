@@ -228,7 +228,7 @@ test that hypothesis
 
 
 Accumulating Results From a Dictionary
-======================================
+--------------------------------------
 
 Just as we have iterated through the elements of a list to accumulate a result,
 we can also iterate through the keys in a dictionary, accumulating a result that may
@@ -409,7 +409,7 @@ but you'll learn more if you try to write it yourself first.
          
 
 Exercises
-=========
+---------
 
 
 #.
