@@ -14,6 +14,8 @@
 .. qnum::
    :prefix: dict-
    :start: 1
+   
+.. _dictionaries_chap:
 
 Dictionaries
 ============

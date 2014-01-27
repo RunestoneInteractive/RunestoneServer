@@ -16,6 +16,161 @@
     :linenothreshold: 500
 
 
+Week 4: ends January 31
+=======================
+
+For this week you have the following graded activities:
+
+1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click **Save** for each of the exercises.
+
+   * Before Tuesday's class:      
+      * :ref:`Dictionaries <dictionaries_chap>`
+   
+   * Before Thursday's class:
+      * More tips on programming and debugging (coming soon...)
+      * :ref: `Accumulating results in and from dictionaries <dictionary_accum_chap>`
+
+#. Turn in the reading response, by 8 PM the night before your registered section meets.
+
+   * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
+   * :ref:`Reading response 3 <response_3>`
+
+#. Save answers to the exercises in Problem Set 2:
+
+   * :ref:`Problem Set 3 <problem_set_3>`
+
+.. _response_3:
+
+Reading Response
+----------------
+
+**Due 8PM the night before your section meets**
+
+Don't forget to click **save**.
+   
+   Give an example of when you were interacting with someone where you used "Book" responses.
+
+   .. actex:: rr_3_1
+
+      # Fill in your response in between the triple quotes
+      """
+
+      """
+
+   Give an example of when you gave someone an "out of book" response.
+
+   .. actex:: rr_3_2
+
+      # Fill in your response in between the triple quotes
+      """
+
+      """
+
+   What would you like to talk about in section this week?
+   
+   .. actex:: rr_3_3
+
+      # Fill in your response in between the triple quotes
+      """
+
+      """
+
+.. _problem_set_3:
+
+Problem Set
+-----------
+
+**Due:** **Friday, January 31, 5 pm**
+
+**Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. 
+The last code you have saved for each one by the deadline is what will be graded.
+
+
+1. (6 points) Old McDonald had a farm. He records the animals on his farm in a dictionary called 'animals'. 
+In this problem help Old McDonald manage his farm animals. Be sure to answer all six parts, a-f.
+
+   .. actex:: ps_3_1
+
+      animals = {
+         'cows': 2,
+         'chickens': 8,
+         'pigs': 4,
+         'mice': 72,
+         'cats': 9,
+         'dogs': 1,
+      }
+
+      # a. Print the number of chickens in the farm (by having your code look it up
+      # in the animals dictionary. "Print(8)" is cheating...)
+      
+      # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
+
+      # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+
+      # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+      # For example:
+      # 2 cows
+      # 9 cats
+      # ...
+
+      # e. While giving tours of his farm to children, they often inquire about particular
+      # animals. Write code that asks the user to input an animal name, and then
+      # prints out how many of that animal he has; or 0 if he has none.
+      # For example, output "8 chickens" or "0 elephants"
+
+      # f. Write a statement that tells Old McDonald which animal he has the most of.
+      # This statement should print "72 mice", given the current state of the
+      # dictionary, but your code should work correctly even if mice aren't the
+      # most numerous animal on his farm.
+
+For the next three exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, in between the quotation marks. To maintain confidentiality (i.e., only students in 106 can see it), the data lives in a `file on cTools. <https://ctools.umich.edu/access/content/group/80ba0083-6409-4149-8222-f210f9dc6dd1/Problem%20Sets/PS3/simplefbdata.txt>`_
+
+#. (2 points) For each post or comment in the facebook group, print out the name of the poster.
+
+   .. actex:: ps_3_2
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
+      x = fb.split("\n")
+      # x now refers to a list, with each line of text as one element in the list.
+      # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+      # why you get the output you do
+
+      # Your output should look something like:
+      # Paul R.
+      # Jackie C.
+      # Jackie C.
+      # Nick R.
+      # Jackie C.
+
+#. (2 points) Use the Facebook data to count the number of posts (or reply comments) each person made in the Facebook group.
+
+   .. actex:: ps_3_3
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
+      x = fb.split("\n")
+
+      # Your output should look something like this, but with different numbers:
+      # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
+      # Jackie C. posted 3 times
+      # Nick R. posted 2 times
+
+#. (optional: 1 bonus point; this one is much harder)  Use the Facebook data to determine who made the longest post or comment (most characters); print out the poster's name and the contents.
+
+   .. actex:: ps_3_4
+
+      fb = """
+      # Delete this line and paste file contents here
+      """
+
+      x = fb.split("\n")
+
+
 Week 3: ends January 24
 =======================
 
@@ -257,114 +412,80 @@ Problem Set
 
 1. (1 pt) Given the following code, write a print statement that will pick out the letter ``"o"``, from the string ``s``. 
 
-   .. tabbed:: ps_1_1s
+   .. actex:: ps_1_1
 
-      .. tab:: Problem
-
-         .. actex:: ps_1_1
-
-             s = "Hello, all"
-
-      .. tab:: Solution
-
-         .. actex:: ps_1_1_a
-
-            s = "Hello, all"
-            print s[4]
-	   
+       s = "Hello, all"
+      
+      
 
 #. (1 pt) Write code to print this string WITHOUT any ``&`` signs.
 
       This is a really fun&& homework assign&ment. And & I love&& &&Python.
 
-   .. tabbed:: ps_1_2s
-
-      .. tab:: Problem
+   .. actex:: ps_1_2
+   
+         # Here's the string provided for you
+         nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
       
-         .. actex:: ps_1_2
+      # Write your code to print this string without any "&s", below:
       
-      		# Here's the string provided for you
-      		nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
-   		
-   		# Write your code to print this string without any "&s", below:
-		
-      .. tab:: Solution
-
-         .. actex:: ps_1_2_a
-
-            # Here's the string provided for you
-            nst = "This is a really fun&& homework assign&ment. And & I love&& &&Python."
-         
-            # Write your code to print this string without any "&s", below:
-            print nst.replace("&","")
-
 
 #. (1 pt) What is the index of the first letter "h" in this sentence? Write code to find it, and print it. (Remember, an index is the __th element of a string or a list, for example.)
 
       This is a really fun homework assigment, and I love Python.
 
-   .. tabbed:: ps_1_3s
-
-      .. tab:: Problem
-
-         .. actex:: ps_1_3
-         
-      		# Here's the sentence, provided for you
-      		st = "This is a really fun homework assigment, and I love Python."
-      		
-      		## Write your code to find the first index of the letter "h" below:
-
-      .. tab:: Solution
+   .. actex:: ps_1_3
    
-         .. actex:: ps_1_3_a
-         
-            # Here's the sentence, provided for you
-            st = "This is a really fun homework assigment, and I love Python."
-            
-            ## Write your code to find the first index of the letter "h" below:
-            print st.find('h')
-            # also possible
-            print st.index('h')
-
-
+         # Here's the sentence, provided for you
+         st = "This is a really fun homework assigment, and I love Python."
+      
+      ## Write your code to find the first index of the letter "h" below:
+   
 
 #. (3 pts) See comments for instructions.
+
+   .. actex:: ps_1_4
+      
+      abc = [1,2,3,4,5,6,7]
+      
+      # What is the type of value is in the variable abc? 
+      # Write code to find out what type the value of abc is.
+      
+      ## Write the type here: _______
+      
+      # write code to extract and print the first three elements of abc
+      
+      # write code to extract and print the last element of abc
+      
+      # write code to extract and print the number 4 from abc
+      
+      # write code to extract and print the number 6 from abc
+      
+      # write code to find out what type the first element of abc is, and print it.
+
+
+
+#. (2 pts) See the comments for instructions.
+
+   .. actex:: ps_1_5
    
-   .. tabbed:: ps_1_4s
+      xy_lst = ["hello","goodbye","welcome","106","si 106"]
+      abc_sentence = "Welcome to SI 106, everyone."
+      
+      # write code to extract and print the first element of xy_lst
+      
+      # write code to extract and print the last element of xy_lst
+      
+      # write code to extract and print the first character of abc_sentence
+      
+      # write code to extract and print the last character of abc_sentence
 
-      .. tab:: Problem
+         
+#. (2 pts) Write code to ask the user for their name and print out ``"Nice to meet you, <THEIR NAME>"``
 
-         .. actex:: ps_1_4
-      		
-      		abc = [1,2,3,4,5,6,7]
-      		
-      		# What is the type of value is in the variable abc? 
-      		# Write code to find out what type the value of abc is.
-      		
-      		## Write the type here: _______
-      		
-      		# write code to extract and print the first three elements of abc
-      		
-      		# write code to extract and print the last element of abc
-      		
-      		# write code to extract and print the number 4 from abc
-      		
-      		# write code to extract and print the number 6 from abc
-      		
-      		# write code to find out what type the first element of abc is, and print it.
-
-      .. tab:: Solution
-
-         .. actex:: ps_1_4_a
-            
-            abc = [1,2,3,4,5,6,7]
-            
-            # What is the type of value is in the variable abc? 
-            # Write code to find out what type the value of abc is.
-            print type(abc)
-            ## Write the type here: ___list____
-            
-            # write code to extract and print the first three elements of abc
+   .. actex:: ps_1_6
+   
+      # For example, if you enter "Nick", your code should then print "Nice to meet you, Nick" abc
             print abc[:3]
             ## other possibilities include:
             # print a[0], a[1], a[2]
