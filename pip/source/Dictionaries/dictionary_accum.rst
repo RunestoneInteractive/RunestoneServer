@@ -210,7 +210,7 @@ the characters, using a for loop to iterate through the keys in x.
 Note that only those letters that actually occur in the text are shown. Some
 punctuation marks that are possible in English, but were never used in the 
 text, are omitted completely. The blank line partway through the output may surprise you.
-That's actually saying that the newline character, `\n`, appears 5154 times in
+That's actually saying that the newline character, `\\n`, appears 5154 times in
 the text. In other words, there are 5154 lines of text in the file. Let's
 test that hypothesis 
 
