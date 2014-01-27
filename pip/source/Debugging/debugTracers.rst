@@ -60,10 +60,13 @@ Code One Section at a Time
 After you outline your program, you should write code one section at a time, and carefully test that section before you go on. The idea here is to make sure your program is doing what you think it’s doing at each stage.
 
 Translating your English description of a step into code may be the most challenging step for you early in your learning about programming. Later it will come more naturally. Here is a checklist of questions that you may find useful in trying to find the right python code to express your idea, based on what you’ve learned so far:
+
 * Is this operation pulling out an item from a list or string or dictionary? If so, use [] to pull out the item you want.
 * Is this operation transforming a string into another string? If so, look at the summary of ref: string operations
 * Is this operation modifying a list? If so, look at the summary of ref: list operations.
-* Is the operation doing something multiple times? If so, you’ll want a ``for`` loop. Start by making a skeleton version of a for loop, and then fill in the parts that are in <brackets>::
+* Is the operation doing something multiple times? If so, you’ll want a ``for`` loop. Start by making a skeleton version of a for loop, and then fill in the parts that are in <brackets>
+
+::
 
   for <varname> in <seq>:
                   <code block line 1>
@@ -71,6 +74,8 @@ Translating your English description of a step into code may be the most challen
                   ...
 
 * Is the operation something that should only occur in some circumstances and not in others? If so, you’ll want an ``if`` statement. Start by making a skeleton version of an if/then/else code snippet, and then fill in the parts that are in <brackets>
+
+::
 
   if <boolean exp>:
     <if block here>
@@ -81,6 +86,8 @@ Translating your English description of a step into code may be the most challen
 
 * Is this an accumulator pattern? If so, start by making a skeleton version of it, and then fill it in.
 
+::
+
   #initialize accumulator
   a = <initial value>
 
@@ -88,7 +95,6 @@ Translating your English description of a step into code may be the most challen
     <some code in for block>
     a = <new_value>
     <other code in for block>
-
   print a
 
 
