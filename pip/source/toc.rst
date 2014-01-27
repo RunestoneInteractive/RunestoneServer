@@ -106,15 +106,7 @@ More About Iteration
    :maxdepth: 2
 
    MoreAboutIteration/moreiteration.rst
-
-
-Dictionaries
-::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Dictionaries/dictionaries.rst
+   
 
 Recursion
 :::::::::
