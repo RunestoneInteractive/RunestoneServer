@@ -400,7 +400,7 @@ but you'll learn more if you try to write it yourself first.
             if d[k] > d[best_key_so_far]:
                best_key_so_far = k
             
-         print("key " + best_key_so_far + " has the highest value, " + d[best_key_so_far])
+         print("key " + best_key_so_far + " has the highest value, " + str(d[best_key_so_far]))
          
 
 Exercises
