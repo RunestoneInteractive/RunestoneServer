@@ -267,7 +267,7 @@ punctuation, capital letters, etc.), we add to the total score.
 Line 18 is the tricky one. We are updating the variable tot to have its old number plus the score for the current letter times the number of occurrences of that letter.
 Try changing some of the letter values and see how it affects the total. Try changing txt to be just a single word that you might play in Scrabble.
 
-Accumulating a maximum value
+Accumulating a Maximum Value
 ----------------------------
 
 Now let's take a detour for a moment, and see how we can use the accumulator 
@@ -355,7 +355,7 @@ max-so-far.
       if d[c] > a:
          a = c
 
-Accumulating the best key
+Accumulating the Best Key
 -------------------------
                
 Now what if we want to find the *key* associated with the maximum value? It would be nice to just find
