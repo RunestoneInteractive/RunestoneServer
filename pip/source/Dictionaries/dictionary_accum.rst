@@ -205,7 +205,7 @@ the characters, using a for loop to iterate through the keys in x.
       x[c] = x[c] + 1
 
    for c in x.keys():
-      print(c " ": " + str(x[c]) + " occurrences")
+      print(c + ": " + str(x[c]) + " occurrences")
    
 Note that only those letters that actually occur in the text are shown. Some
 punctuation marks that are possible in English, but were never used in the 
