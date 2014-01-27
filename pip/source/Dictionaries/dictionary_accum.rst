@@ -30,10 +30,13 @@ usage. For our purposes in the this chapter, we will use the text of the Sherloc
 "A Study in Scarlet", by Sir Arthur Conan Doyle. The text actually includes a few
 lines about the source of the transcription (Project Gutenberg), but those will not 
 materially affect our analyses so we will just leave them in. You can access this text
-within this chapter with the code ``open('scarlet.txt', 'r')``. As with other files 
-that we access in this textbook environment, this one is actually pre-loaded in your browser, 
-not retrieved from your computer's file system. That's why this chapter may be a
-little slower to load than others.
+within this chapter with the code ``open('scarlet.txt', 'r')``.
+
+.. raw:: html
+   
+   <div class="alert alert-info">
+   <p>As with other files that we access in this textbook environment, this one is actually pre-loaded in your browser, not retrieved from your computer's file system. That's why this chapter may be a little slower to load than others. You can view the text of "A Study in Scarlet" at the <a href="#scarlet.txt">bottom of the page.</a></p>
+   </div>
 
 If we want to find out how often the letter 't' occurs, we can accumulate the result
 in a count variable.
@@ -476,7 +479,7 @@ Exercises
 
 .. raw:: html
 
-    <pre id="scarlet.txt" style="display:none;">
+    <pre id="scarlet.txt">
     The Project Gutenberg EBook of A Study In Scarlet, by Arthur Conan Doyle
 
    This eBook is for the use of anyone anywhere at no cost and with
