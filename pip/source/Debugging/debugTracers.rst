@@ -155,9 +155,9 @@ In this program we are adding all the even numbers in a list together, accumulat
     for num in numbers:
       print("*** LOOP ***")
       print("Num =",num)
-      if(0 % 2):
+      if (num % 2) == 0:
         print("Is even. Adding",num,"to",z)
         z = num + z
       print ("Running sum =",z)
     print("*** DONE ***")
-      print (“Total = “ , z)
+    print ("Total = " , z)
