@@ -27,8 +27,8 @@ For this week you have the following graded activities:
       * :ref:`Dictionaries <dictionaries_chap>`
    
    * Before Thursday's class:
-      * Accumulating results in dictionaries (coming soon...)
       * More tips on programming and debugging (coming soon...)
+      * :ref: `Accumulating results in and from dictionaries <dictionary_accum_chap>`
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
 

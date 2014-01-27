@@ -78,6 +78,8 @@ Dictionaries
    :maxdepth: 2
 
    Dictionaries/dictionaries.rst
+   Dictionaries/dictionary_accum.rst
+   
 
 Python Modules
 ::::::::::::::
