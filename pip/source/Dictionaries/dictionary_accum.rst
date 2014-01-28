@@ -84,7 +84,7 @@ many times that letter has occurred.
    txt = f.read()
    # now txt is one long string containing all the characters
    x = {} # start with an empty dictionary
-   x['t'] = 0  # intiialize the t counter
+   x['t'] = 0  # initialize the t counter
    x['s'] = 0  # initialize the s counter
    for c in txt:
       if c == 't':
@@ -111,7 +111,7 @@ character. So lines 9 and 11 could really be the same.
       if c == 't':
          x[c] = x[c] + 1   # increment the t counter
       elif c == 's':
-         x[c] = x[c] + 1   # increament the s counter
+         x[c] = x[c] + 1   # increment the s counter
 
    print("t: " + str(x['t']) + " occurrences")  
    print("s: " + str(x['s']) + " occurrences")   
@@ -121,7 +121,7 @@ statements referred directly to keys, with ``x['s']`` and ``x['t']``. Here we
 are just using a variable ``c`` whose value is 's' or 't', or some other character.
 
 If that made perfect sense to you, skip the next two paragraphs. Otherwise, read on. 
-Let's break down that line in a little more detail, in case that's not clear yet. 
+Let's break down that line in a little more detail. 
 First, note that, as with all
 assignment statements, the right side is evaluated first. In this case ``x[c]`` has to be
 evaluated. As with all expressions, we first have to substitute values for variable names.
@@ -215,7 +215,7 @@ punctuation marks that are possible in English, but were never used in the
 text, are omitted completely. The blank line partway through the output may surprise you.
 That's actually saying that the newline character, `\\n`, appears 5154 times in
 the text. In other words, there are 5154 lines of text in the file. Let's
-test that hypothesis 
+test that hypothesis. 
 
 .. activecode:: dict_accum_7
 
@@ -412,76 +412,12 @@ Exercises
 ---------
 
 
-#.
-
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-           Write a program that reads a person's input and returns a
-           table of the letters of the alphabet in alphabetical order which occur in
-           the string together with the number of times each letter occurs. Case should 
-           be ignored. A sample run of the program would look this this::
-        
-               "ThiS is String with Upper and lower case Letters."
-               a 2
-               c 1
-               d 1
-               e 5
-               g 1
-               h 2
-               i 4
-               l 2
-               n 2
-               o 1
-               p 2
-               r 4
-               s 5
-               t 5
-               u 1
-               w 2
-        
-           .. actex:: ex_11_01
-
-               x = input("Enter a sentence")
-               print(x)
-
-        .. tab:: Answer
-            
-            .. activecode:: ex_11_01_answer
-
-                x = input("Enter a sentence")
-                print(x)
-
-                x = x.lower() # convert to all lowercase
-
-                alphabet = 'abcdefghijklmnopqrstuvwxyz'
-
-                letter_count = {} # empty dictionary
-                for char in x:
-                    if char in alphabet: # ignore any punctuation, numbers, etc
-                        if char in letter_count:
-                            letter_count[char] = letter_count[char] + 1
-                        else:
-                            letter_count[char] = 1
-
-                keys = letter_count.keys()
-                keys.sort()
-                for char in keys:
-                    print(char, letter_count[char])
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_de4f21e35d3a41a4a3ac4ac888f78d1a
-
-#. (Optional)
+#. (Optional: challenge exericse)
       .. tabbed:: q2
 
             .. tab:: Question
 
-                  Write a program that finds the most used 7 letter word in scarlet.txt and output the most used word.
+                  Write a program that finds the most used 7 letter word in scarlet.txt.
 
                   .. actex:: ex_11_02
 
