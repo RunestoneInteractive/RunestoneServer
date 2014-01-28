@@ -379,7 +379,6 @@ but you'll learn more if you try to write it yourself first.
       two keys have the same maximum value, it's OK to print out either one. Fill
       in the skeleton code
       
-
       .. actex:: ex_dict_accum_3
 
          d = {'a': 194, 'b': 54, 'c':34, 'd': 44, 'e': 312, 'full':31}
@@ -419,13 +418,13 @@ Exercises
 
                   Write a program that finds the most used 7 letter word in scarlet.txt.
 
-                  .. actex:: ex_11_02
+                  .. actex:: ex_dict_accum_4
 
                         f = open('scarlet.txt', 'r')
 
             .. tab:: Answer
 
-                  .. activecode:: ex_11_02_answer
+                  .. activecode:: ex_dict_accum_4_answer
 
                         f = open('scarlet.txt', 'r')
                         contents = f.read()

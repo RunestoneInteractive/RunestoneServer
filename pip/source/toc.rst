@@ -81,6 +81,15 @@ Dictionaries
    Dictionaries/dictionary_accum.rst
    
 
+Debugging Interlude 2
+:::::::::::::::::::::
+
+.. toctree::
+    :maxdepth: 2
+
+    Debugging/debugTracers.rst
+
+
 Python Modules
 ::::::::::::::
 
