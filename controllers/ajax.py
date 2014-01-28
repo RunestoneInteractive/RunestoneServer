@@ -73,44 +73,37 @@ def runlog():  # Log errors and runs with code
 #
 
 def saveprog():
+    user = auth.user
+    if not user:
+        return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
     acid = request.vars.acid
     code = request.vars.code
 
+    now = datetime.datetime.now()
+
     response.headers['content-type'] = 'application/json'
-    # ## check if there is a deadline for this exercise, and if it has passed
-    # INSTRUCTIONS:
-    # 1. Decide a prefix to use for all the graded actex exercises for a week.
-    #    For example, name the exercises week2_1, week2_2, week2_3, etc.
-    # 2. Insert a row in the table pipactex_deadline, using the runeston/appadmin web interface. Fill
-    #    in with the prefix. For example, week2. Or reading3.
-    #   a. Fill in the "deadline" field.
-    #   b. Pick the section it applies to.
-    # Note: for readings, you'll have to insert a separate row for each section
     def strip_suffix(id):
         idx = id.rfind('-') - 1
         return id[:idx]
-    dl = db(db.pipactex_deadline.acid_prefix == strip_suffix(acid)).select().first()
-    def get_user_section_names():
-        rows = db((db.sections.id==db.section_users.section) & (auth.user.id==db.section_users.auth_user)).select()
-        return [row.sections.name for row in rows]
-    if dl and dl.deadline:
-        print "there"
-        ts = datetime.datetime.now()
-        print dl.section
-        print get_user_section_names()
-        if (not dl.section) or (dl.section.name in get_user_section_names()):
-            if dl.deadline < ts:
-                return json.dumps(["ERROR: Sorry. The deadline for this assignment for section %s has passed. The deadline was %s GMT" % (dl.section.name, dl.deadline.strftime("%a %b %d %y %H:%M"))])
+    assignment = db(db.assignments.query == strip_suffix(acid)).select().first()
+    
+    section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+    section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).first()
+        
+    if assignment:
+        dl = db(db.deadlines.assignment == assignment.id)((db.deadlines.section == section.id) | (db.deadlines.section==None)).select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        if dl:
+            if dl.deadline < now:
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
     try:
         db.code.insert(sid=auth.user.username,
             acid=acid, code=code,
             timestamp=datetime.datetime.now(),
             course_id=auth.user.course_id)
     except Exception as e:
-        if not auth.user:
-            return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-        else:
-            return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
+        return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
 
     return json.dumps([acid])
 
@@ -164,17 +157,18 @@ def savegrade():
 # @auth.requires_login()
 def getuser():
     response.headers['content-type'] = 'application/json'
-    print "in getuser()"
+
     if  auth.user:
         res = {'email':auth.user.email, 'nick':auth.user.username}
     else:
         res = dict(redirect=auth.settings.login_url)  # ?_next=....
-
+    logging.debug("returning login info: %s", res)
     return json.dumps([res])
 
 
 def getnumonline():
     response.headers['content-type'] = 'application/json'
+
     try:
         query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
         rows = db.executesql(query)
