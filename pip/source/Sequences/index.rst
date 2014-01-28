@@ -279,6 +279,8 @@ to create a new string in which all the
 characters are in uppercase.  ``lower`` works in a similar fashion changing all characters in the string
 to lowercase.  (The original string ``ss`` remains unchanged.  A new string ``tt`` is created.)
 
+.. _string_methods:
+
 In addition to ``upper`` and ``lower``, the following table provides a summary of some other useful string methods.  There are a few activecode examples that follow so that you can try them out.
 
 ==========  ==============      ==================================================================
@@ -700,6 +702,8 @@ For more information consult the ``string`` module documentation (see `Global Mo
    This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
 
    .. activecode:: scratch_08_04
+
+.. _lists:
 
 Lists
 =====

@@ -45,7 +45,11 @@ Building A Program
 
 Building on lessons learned in the first debugging interlude, this chapter offers a strategy for writing a program to solve a problem such as those that appear in the exercises at the ends of the chapters in this book. (A similar approach is helpful for writing larger programs, but that will come later.)
 
-Warning. You may find it tempting to start an exercise by copying and pasting a snippet of code from somewhere in the textbook, and hoping that a small edit will lead to a solution to the current problem. Often this will lead to frustration and confusion; after trying a few code substitutions that feel vaguely familiar to you, you’ll find the code looking kind of complicated and the outputs baffling. Copying and editing snippets of code is actually a useful element of the strategy we outline below. But it comes a little later in the process, not as the first thing. And it requires a fair bit of work to make sure you understand the code snippet that you’ve copied. Only then will you be able to find the *right* small edits to the code snippet to make it do what you want.
+.. admonition:: Warning. 
+
+   You may find it tempting to start an exercise by copying and pasting a snippet of code from somewhere in the textbook, and hoping that a small edit will lead to a solution to the current problem. Often this will lead to frustration and confusion; after trying a few code substitutions that feel vaguely familiar to you, you’ll find the code looking kind of complicated and the outputs baffling. 
+   
+   Copying and editing snippets of code is actually a useful element of the strategy we outline below. But it comes a little later in the process, not as the first thing. And it requires a fair bit of work to make sure you understand the code snippet that you’ve copied. Only then will you be able to find the *right* small edits to the code snippet to make it do what you want.
 
 There are three basic steps to the strategy we recommend: Outline; Code One Section at a Time; Clean Up.
 
@@ -62,8 +66,8 @@ After you outline your program, you should write code one section at a time, and
 Translating your English description of a step into code may be the most challenging step for you early in your learning about programming. Later it will come more naturally. Here is a checklist of questions that you may find useful in trying to find the right python code to express your idea, based on what you’ve learned so far:
 
 * Is this operation pulling out an item from a list or string or dictionary? If so, use [] to pull out the item you want.
-* Is this operation transforming a string into another string? If so, look at the summary of ref: string operations
-* Is this operation modifying a list? If so, look at the summary of ref: list operations.
+* Is this operation transforming a string into another string? If so, look at the summary of :ref:`string methods <string_methods>`
+* Is this operation modifying a list? If so, look at the material on :ref:`lists <lists>`.
 * Is the operation doing something multiple times? If so, you’ll want a ``for`` loop. Start by making a skeleton version of a for loop, and then fill in the parts that are in <brackets>
 
 ::
@@ -107,12 +111,12 @@ When you are done with outlining and testing your program, delete any diagnostic
 
 Extra comments do help other people read your code, but try to leave in only the bits that you think are useful. There is an art to writing good informative comments, and you can only learn this art by reading other people's programs and having your peers read your programs. As a rule of thumb for comments, when in doubt, keep it; it you’re worried it won’t make sense to you or someone else later, add more detail to it.
 
-Understanding a Program
-=======================
+Understanding Code
+==================
 
 Whether you’re trying to understand a code snippet that someone else wrote or trying to understand your own code that isn’t doing exactly what you wanted, you can avoid a lot of frustration if you slow down and spend the time to fully understand that code. It will reduce your anxiety level as well and make programming more fun!
 
-The basic strategy for understanding code is the explain; predict; check; loop.
+The basic strategy for understanding code is the "explain; predict; check" loop.
 
 Explain (Make a reference diagram)
 ----------------------------------
@@ -120,8 +124,9 @@ Explain (Make a reference diagram)
 To understand what a snippet of code (one or more lines) does, you should first form a hypothesis about the *state* of the program just before your snippet executes.
 
 It’s a good idea to make a reference diagram by hand, the kind of diagram that CodeLens produces for you. In particular, for each of the variable names that are referred to in the code snippet you are trying to understand, you should make a prediction about:
-* the type of that variable’s value (integer, string, list, dictionary, etc.)
-* the value of that variable
+
+   * the type of that variable’s value (integer, string, list, dictionary, etc.)   
+   * the value of that variable
 
 You should also be able to state, in English, what each of the operations in your code snippet does. For example, if your code snippet includes a line ``x.append(4)``, then you should be able to say, “The append operation takes a list, x in this case, and appends an item, 4 in this case, to the end of the list. It changes the actual list, so any other variable that is an alias for the list will also have its value changed.”
 
@@ -139,7 +144,7 @@ To check your understanding or your predictions, you will run a program.
 
 To check your understanding about the state of variables before your code snippet runs, add diagnostic print statements that print out the types and values of variables. Add these print statements just *before* the code snippet you are trying to understand.
 
-If you made a prediction about the output that will be generated when the code snippet runs, then you can just run the program. If, however, you made a prediction is about a change that occurs in the value of a variable, you will need to add an extra diagnostic print statement right after the line of code that you think should be changing that variable. 
+If you made a prediction about the output that will be generated when the code snippet runs, then you can just run the program. If, however, you made a prediction about a change that occurs in the value of a variable, you will need to add an extra diagnostic print statement right after the line of code that you think should be changing that variable. 
 
 The diagnostic print statements are temporary.  Once you have verified that a program is doing what you think it’s doing, you will remove these extra print statements.
 
@@ -152,7 +157,7 @@ Example
 
 The following code illustrates what your program might look like after you complete the process above of adding comments that document your understanding and diagnostic print statements that allow you to check your understanding. This is what your code might look like prior to the cleanup phase.
 
-In this program we are adding all the even numbers in a list together, accumulating a sum. You will see a diagnostic print statement inside the code block of the for loop, one inside the if statement, and even a diagnostic else clause that can be deleted entirely. All of these make it easier to check whether it’s doing what it’s supposed to do.
+In this program we are adding all the even numbers in a list together, accumulating a sum. You will see a diagnostic print statement inside the code block of the for loop, and one inside the if statement. All of these make it easier to check whether it’s doing what it’s supposed to do.
     
 .. activecode:: db2_ex_1
 
@@ -168,3 +173,4 @@ In this program we are adding all the even numbers in a list together, accumulat
       print ("Running sum =",z)
     print("*** DONE ***")
     print ("Total = " , z)
+    
