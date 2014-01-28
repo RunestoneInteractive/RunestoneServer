@@ -70,6 +70,25 @@ Files
    :maxdepth: 2
 
    Files/files.rst
+   
+Dictionaries
+::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Dictionaries/dictionaries.rst
+   Dictionaries/dictionary_accum.rst
+   
+
+Debugging Interlude 2
+:::::::::::::::::::::
+
+.. toctree::
+    :maxdepth: 2
+
+    Debugging/debugTracers.rst
+
 
 Python Modules
 ::::::::::::::
@@ -96,15 +115,7 @@ More About Iteration
    :maxdepth: 2
 
    MoreAboutIteration/moreiteration.rst
-
-
-Dictionaries
-::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Dictionaries/dictionaries.rst
+   
 
 Recursion
 :::::::::
