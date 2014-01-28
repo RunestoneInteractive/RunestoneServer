@@ -392,9 +392,9 @@ Problem Set
 
 
 
-The remaining questions in the problem set deal with a file called ``about_programming.txt`` 
-that you can access in an ActiveCode window using the open() function. 
-It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.
+   The remaining questions in the problem set deal with a file called ``about_programming.txt`` 
+   that you can access in an ActiveCode window using the open() function. 
+   It is made up of text from the *Computer Programming* article on Wikipedia; ``http://en.wikipedia.org/wiki/Computer_programming``.
 
 #. (1 point) Write code to open the file, about_programming.txt, and print it out, line by line.
    
@@ -424,7 +424,7 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
 
 #. (2 points) Print the number of lines in the file
    
-   .. tabbed: ps_2_5s
+   .. tabbed:: ps_2_5s
 
       .. tab:: Problem
 
@@ -436,11 +436,23 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
 
             hmf = open("about_programming.txt", 'r')
             total = 0
-            for ln in hmf:
-               total = total + 1
+            for ln in hmf:    # loops the lines in the file, one at a time
+               total = total + 1    # ln is bound to the current line of text, but we don't need to refer to it since we only care that it's another line, not what it is
 
             print total
-
+            
+            # alternative solution
+            hmf = open("about_programming.txt", 'r')
+            ls = hmf.readlines()  # get the text as a list of strings, one for each line
+            print len(ls)
+            
+            # another alternative
+            hmf = open("about_programming.txt", 'r')
+            t = hmf.read()    # save the whole text in string t
+            ls = t.split('\n') # make it into a list of strings, one for each line
+            print len(ls)
+            # you get a slightly different answer here; try to figure out why
+            
 
 #. (2 points) Print the number of lines in the file that include the word "program" or any extension of it (program, programs, programming, programmer).
 
@@ -457,7 +469,7 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
             tot = 0
             ft = open("about_programming.txt", "r")
             for mtfq in ft:
-               if "program" in mtfq:
+               if "program" in mtfq:       # mtfq is bound to the current line of text, and here we do care what that text is
                   tot = tot + 1
             print tot
 
@@ -485,7 +497,7 @@ It is made up of text from the *Computer Programming* article on Wikipedia; ``ht
             amt = 0
             for v in vowels:
                amt = amt + whole_file.count(v)
-
+            print amt
 
 
 
