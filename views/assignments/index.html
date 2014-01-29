@@ -4,7 +4,7 @@
 <ul>
 {{for row in assignments:}}
     <li>
-		<a href="detail?id={{=row.id}}">{{=row.name}}</a>
+		<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
 		{{if instructor:}}
 		<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
 		{{pass}}

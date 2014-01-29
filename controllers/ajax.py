@@ -93,7 +93,12 @@ def saveprog():
     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).first()
         
     if assignment:
-        dl = db(db.deadlines.assignment == assignment.id)((db.deadlines.section == section.id) | (db.deadlines.section==None)).select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        q = db(db.deadlines.assignment == assignment.id)
+        if section:
+            q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
+        else:
+            q = q(db.deadlines.section==None)
+        dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
         if dl:
             if dl.deadline < now:
                 return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])

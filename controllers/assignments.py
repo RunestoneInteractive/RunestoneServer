@@ -83,7 +83,7 @@ def update():
 			if delete_deadline_form.vars[var] == "delete":
 				db(db.deadlines.id == var).delete()
 		session.flash = 'Deleted deadline(s)'
-		return redirect(URL('assignments','create_or_update')+'?id=%d' % (assignment.id))
+		return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
 
 	return dict(
 		assignment = assignment,
