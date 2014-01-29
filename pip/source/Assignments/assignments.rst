@@ -16,10 +16,42 @@
     :linenothreshold: 500
 
 
-Review Problems
-===============
 
-Below are some problems that will help you review the first several concepts we've gone over this semester. These probems are *OPTIONAL*, but if you are struggling with them, please come to office hours and discuss! (We will release solutions in future.)
+Week 4: ends January 31
+=======================
+
+For this week you have the following graded activities:
+
+1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click **Save** for each of the exercises.
+
+   * Before Tuesday's class:      
+      * :ref:`Dictionaries <dictionaries_chap>`
+   
+   * Before Thursday's class:
+      * :ref:`More tips on programming and debugging <debugging_2>` 
+      * :ref:`Accumulating results in and from dictionaries <dictionary_accum_chap>`
+
+#. Turn in the reading response, by 8 PM the night before your registered section meets.
+
+   * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
+   * :ref:`Reading response 3 <response_3>`
+
+#. Save answers to the exercises in Problem Set 2:
+
+   * :ref:`Problem Set 3 <problem_set_3>`
+
+You also have one optional, ungraded activity, some :ref:`Review Problems <review_problems_1>`
+
+.. _review_problems_1:
+
+Review Problems (Ungraded)
+--------------------------
+
+Below are some problems that will help you review the first several concepts we've gone over this semester. 
+These probems are *OPTIONAL*, but if you struggled with PS2, we strongly recommend that you
+work on these before you attempt PS3. If you are struggling with them, please come to office hours and discuss!
+By the time you've done a few of these, the last few should start to come pretty easily.  
+(We will release solutions on Thursday night.)
 
 1. See comments in code for instructions.
 
@@ -51,7 +83,7 @@ Below are some problems that will help you review the first several concepts we'
       # What is the value if you add 5 to the integer in ic?
 
       dcm = [9, 4, 67, 89, 98324, 23, 34, 67, 89, 34, 56, 67, 90, 3242, 9893, 5]
-      # add 4 to each element of the list dcm and print the result
+      # add 14 to each element of the list dcm and print the result
 
       # The output you get should be:
       # 23
@@ -183,29 +215,8 @@ Below are some problems that will help you review the first several concepts we'
       # <type 'int'>
       # <type 'str'>
 
+Congratulations, now hit the "That Was Easy" button and go on. You're ready for the rest of this week's reading and the problem set!
 
-Week 4: ends January 31
-=======================
-
-For this week you have the following graded activities:
-
-1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click **Save** for each of the exercises.
-
-   * Before Tuesday's class:      
-      * :ref:`Dictionaries <dictionaries_chap>`
-   
-   * Before Thursday's class:
-      * :ref:`More tips on programming and debugging <debugging_2>` 
-      * :ref:`Accumulating results in and from dictionaries <dictionary_accum_chap>`
-
-#. Turn in the reading response, by 8 PM the night before your registered section meets.
-
-   * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
-   * :ref:`Reading response 3 <response_3>`
-
-#. Save answers to the exercises in Problem Set 2:
-
-   * :ref:`Problem Set 3 <problem_set_3>`
 
 .. _response_3:
 
