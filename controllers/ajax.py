@@ -162,17 +162,18 @@ def savegrade():
 # @auth.requires_login()
 def getuser():
     response.headers['content-type'] = 'application/json'
-    print "in getuser()"
+
     if  auth.user:
         res = {'email':auth.user.email, 'nick':auth.user.username}
     else:
         res = dict(redirect=auth.settings.login_url)  # ?_next=....
-
+    logging.debug("returning login info: %s", res)
     return json.dumps([res])
 
 
 def getnumonline():
     response.headers['content-type'] = 'application/json'
+
     try:
         query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
         rows = db.executesql(query)
