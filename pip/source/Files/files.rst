@@ -257,12 +257,14 @@ The program below solves part of the problem.  Notice that it reads the data and
 .. activecode:: files_write01
 
     infile = open("qbdata.txt","r")
-    aline = infile.readline()
-    while aline:
+    # note: I have rewrittent the code to iterate using a for loop instead of a while loop; it's much simpler that way!
+    # aline = infile.readline()
+    # while aline:
+    for aline in infile:
         items = aline.split()
         dataline = items[1] + ',' + items[0]
         print(dataline)
-        aline = infile.readline()
+    #    aline = infile.readline()
 
     infile.close()
 
@@ -287,12 +289,14 @@ The complete program is shown below.
     infile = open("qbdata.txt","r")
     outfile = open("qbnames.txt","w")
 
-    aline = infile.readline()
-    while aline:
+    # note: I have rewrittent the code to iterate using a for loop instead of a while loop; it's much simpler that way!
+    # aline = infile.readline()
+    # while aline:
+    for aline in infile:
         items = aline.split()
         dataline = items[1] + ',' + items[0]
         outfile.write(dataline + '\n')
-        aline = infile.readline()
+    #    aline = infile.readline()
 
     infile.close()
     outfile.close()
@@ -396,7 +400,7 @@ Exercises
 
 
 
-            .. actex:: ex_6_1
+            .. actex:: ex_files_1
                
                # Hint: first see if you can write a program that just prints out the number of scores on each line
                

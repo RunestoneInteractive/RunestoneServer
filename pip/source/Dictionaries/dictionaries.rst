@@ -449,11 +449,6 @@ Glossary
 --------
 
 .. glossary::
-       
-    call graph 
-        A graph consisting of nodes which represent function frames (or invocations), 
-        and directed edges (lines with arrows) showing which frames gave
-        rise to other frames.       
         
     dictionary
         A collection of key-value pairs that maps from keys to values. The keys
