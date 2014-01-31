@@ -90,14 +90,6 @@ Debugging Interlude 2
     Debugging/debugTracers.rst
 
 
-Python Modules
-::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   PythonModules/modules.rst
-
 Functions
 :::::::::
 
@@ -105,6 +97,14 @@ Functions
    :maxdepth: 2
 
    Functions/functions.rst
+
+Python Modules
+::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   PythonModules/modules.rst
 
 
 
