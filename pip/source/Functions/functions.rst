@@ -197,7 +197,7 @@ executed a second time.
    :feedback_b: Check again.
    :feedback_c: When the function is invoked, it will print two lines, but it has only been defined, not invoked.
 
-   What will the output be from executing this code?
+   How many lines will be output by executing this code?
    
    .. code-block:: python
 
@@ -219,7 +219,7 @@ executed a second time.
    :feedback_d: Each time the function is invoked, it will print two lines, not one.
    :feedback_e: Three invocations generate two lines each, plus the line "It works"
 
-   What will the output be from executing this code?
+   How many lines will be output by executing this code?
 
    .. code-block:: python
 
