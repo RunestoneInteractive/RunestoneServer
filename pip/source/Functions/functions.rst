@@ -599,7 +599,7 @@ interpreter does these steps:
     def addEm(x, y, z):
         print(x+y+z)
 
-.. mchoicemf: test_questionfunctions_2_3
+.. mchoicemf:: test_questionfunctions_2_3
    :answer_a: 25
    :answer_b: 50
    :answer_c: 25 + 25
@@ -611,14 +611,15 @@ interpreter does these steps:
    
    What will the following code output?
    
-   .. code-block:: python 
+   .. code-block:: python
+
        def square(x):
            y = x * x
            return y
            
        print(square(5) + square(5))
 
-.. mchoicemf: test_questionfunctions_2_4
+.. mchoicemf:: test_questionfunctions_2_4
    :answer_a: 8
    :answer_b: Error: can't put a function invocation inside parentheses
    :correct: a
@@ -628,6 +629,7 @@ interpreter does these steps:
    What will the following code output?
    
    .. code-block:: python 
+   
        def square(x):
            y = x * x
            return y
