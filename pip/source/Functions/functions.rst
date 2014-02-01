@@ -14,6 +14,7 @@
    :prefix: func-
    :start: 1
    
+.. _functions_chap:
 
 Functions
 =========
