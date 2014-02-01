@@ -477,8 +477,9 @@ black-box diagram with the Python code following.
         return y
 
     toSquare = 10
-    result = square(toSquare))
-    print("The result of " + str(toSquare) + " squared is " str(result))
+    result = square(toSquare)
+    print("The result of " + str(toSquare) + " squared is " + str(result))
+
 
 The **return** statement is followed by an expression which is evaluated.  Its
 result is returned to the caller as the "fruit" of calling this function.
@@ -507,7 +508,6 @@ function are in separate boxes.
 
     toSquare = 10
     squareResult = square(toSquare)
-    print("The result of ", toSquare, " squared is ", squareResult)
 
 
 There is one more aspect of function return values that should be noted.  
@@ -527,7 +527,7 @@ function returns.
 
     toSquare = 10
     squareResult = square(toSquare)
-    print("The result of ", toSquare, " squared is ", squareResult)
+    print("The result of " + str(toSquare) + " squared is " + str(squareResult))
 
 The problem with this function is that even though it prints the value of the square, 
 that value will not be returned to the place
@@ -536,6 +536,23 @@ side of an assignment statement, the evaluation of the
 function will be ``None``.  In this case, ``squareResult`` will refer to that 
 value after the assignment statement and therefore the result printed in line 7 is incorrect.  
 Typically, functions will return values that can be printed or processed in some other way by the caller.
+
+A return statement, once executed, immediately terminates execution of a function, even if it is not the
+last statement in the function. In the following code, when line 3 executes, the
+value 5 is returned and assigned to the variable x, then printed. Lines 4 and 5 
+never execute. Run the following code and try making some modifications of
+it to make sure you understand why "there" and 10 never print out.
+
+.. activecode:: functions_5a
+
+   def weird():
+      print("here")
+      return(5)
+      print("there")
+      return(10)
+      
+   x= weird()
+   print(x)
 
 So far, we have just seen return values being assigned to variables. For example, 
 we had the line ``squareResult = square(toSquare)``. As with all assignment statements,
@@ -706,7 +723,8 @@ Glossary
 
             keyword expression:
                 statement
-                statement ...
+                statement 
+                ...
 
     docstring
         If the first thing in a function body is a string (or, we'll see later, in other situations
