@@ -621,15 +621,17 @@ interpreter does these steps:
 
 .. mchoicemf:: test_questionfunctions_2_4
    :answer_a: 8
-   :answer_b: Error: can't put a function invocation inside parentheses
-   :correct: a
-   :feedback_a: It squares 2, yielding the value 4. 4 is then passed as a value to square again
-   :feedback_b: This is a more complicated expression, but still valid. The expression square(2) is evaluated, and the return value 4 substitutes for square(2) in the expression.   
+   :answer_b: 16
+   :answer_c: Error: can't put a function invocation inside parentheses
+   :correct: b
+   :feedback_a: It squares 2, yielding the value 4. But that doesn't mean the next value multiplies 2 and 4.
+   :feedback_b: It squares 2, yielding the value 4. 4 is then passed as a value to square again, yeilding 16.
+   :feedback_c: This is a more complicated expression, but still valid. The expression square(2) is evaluated, and the return value 4 substitutes for square(2) in the expression.   
    
    What will the following code output?
    
    .. code-block:: python 
-   
+
        def square(x):
            y = x * x
            return y
