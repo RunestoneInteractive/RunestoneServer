@@ -19,7 +19,7 @@ For this week you have the following graded activities:
 1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click **Save** for each of the exercises.
 
    * Before Tuesday's class:      
-      * :ref: `Functions <functions_chap>` 
+      * :ref:`Functions <functions_chap>` 
    
    * Before Thursday's class:
       * Local and global variables (not available yet)
