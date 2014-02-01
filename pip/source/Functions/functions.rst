@@ -478,7 +478,7 @@ black-box diagram with the Python code following.
 
     toSquare = 10
     result = square(toSquare)
-    print("The result of " +  toSquare + " squared is " + result)
+    print("The result of",toSquare,"squared is",result)
 
 The **return** statement is followed by an expression which is evaluated.  Its
 result is returned to the caller as the "fruit" of calling this function.
