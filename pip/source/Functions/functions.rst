@@ -734,10 +734,5 @@ Glossary
     parameter
         A name used inside a function to refer to the value which was passed
         to it as an argument.
-
-
-Exercises
----------
-
    
 
