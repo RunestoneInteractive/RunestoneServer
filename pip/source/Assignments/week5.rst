@@ -104,7 +104,7 @@ The last code you have saved for each one by the deadline is what will be graded
       # numbers from 1 through 20 (hint: try printing range(21))
       
       # Write code that invokes the longer function to determine 
-      # whether "supercalifragilisticexpialidocious" or "antidisestablishmentariansim" is longer)
+      # whether "supercalifragilisticexpialidocious" or "antidisestablishmentariansim" is longer
 
 #. (2 points) Warm up exercises on defining functions
 
@@ -118,9 +118,9 @@ The last code you have saved for each one by the deadline is what will be graded
       print(square(3))
       #should be 9
       
-      print(prefix("He", "Hello"))
+      print(is_prefix("He", "Hello"))
       # should be True
-      print(prefix("He", "I said Hello"))
+      print(is_prefix("He", "I said Hello"))
       # should be False
    
 #. (2 points) Define the blanked function
@@ -173,8 +173,7 @@ The last code you have saved for each one by the deadline is what will be graded
       def main():
           max_health = 3
           health = max_health
-          #to_guess = raw_input("What's the word to guess? (Don't let the player see it!)")
-          to_guess = "Reno"
+          to_guess = raw_input("What's the word to guess? (Don't let the player see it!)")
           to_guess = to_guess.upper() # everything in all capitals to avoid confusion
           guesses_so_far = ""
           game_over = False
