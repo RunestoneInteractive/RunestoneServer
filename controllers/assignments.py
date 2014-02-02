@@ -4,15 +4,13 @@ import shutil
 import sys
 from sphinx.application import Sphinx
 
-def index():
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def admin():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	if not verifyInstructorStatus(auth.user.course_name, auth.user):
-		return redirect(URL('assignments','student') + 'sid=%d' % (auth.user.id))
 	# get all assignments
 	assignments = db(db.assignments.course == course.id).select()
 	return dict(
 		assignments = assignments,
-		instructor = verifyInstructorStatus(auth.user.course_name, auth.user),
 		)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -105,12 +103,14 @@ def grade():
 		assignment.grade(row)
 		count_graded += 1
 	session.flash = "Graded %d Assignments" % (count_graded)
-	return redirect(URL('assignments','index'))
+	return redirect(URL('assignments','admin'))
 
 # Student version of index
-def student():
+def index():
+	if 'sid' not in request.vars and verifyInstructorStatus(auth.user.course_name, auth.user):
+		return redirect(URL('assignments','admin'))
 	if 'sid' not in request.vars:
-		return redirect(URL('assignments','index'))
+		return redirect(URL('assignments','index') + 'sid=%d' % (auth.user.id))
 	if auth.user.id != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
 		return redirect(URL('assignments','index'))
 	student = db(db.auth_user.id == request.vars.sid).select().first()

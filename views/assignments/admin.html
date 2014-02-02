@@ -1,17 +1,13 @@
 {{extend 'layout.html'}}
 
 <h2>Assignments</h2>
+<a href="{{=URL('assignments','create')}}">Create Assignment</a>
 <ul>
 {{for row in assignments:}}
     <li>
 		<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
-		{{if instructor:}}
 		<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
 		<a href="{{=URL('assignments','grade')}}?id={{=row.id}}">Grade</a>
-		{{pass}}
 	</li>  
     {{pass}}
 </ul>
-{{if instructor:}}
-<a href="{{=URL('assignments','create')}}">Create Assignment</a>
-{{pass}}
