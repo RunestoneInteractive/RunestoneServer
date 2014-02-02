@@ -40,6 +40,7 @@ def create():
 def update():
 	course = db(db.courses.id == auth.user.course_id).select().first()
 	assignment = db(db.assignments.id == request.get_vars.id).select().first()
+
 	db.assignments.grade_type.widget = SQLFORM.widgets.radio.widget
 	form = SQLFORM(db.assignments, assignment,
 	    showid = False,
@@ -93,6 +94,18 @@ def update():
 		new_deadline_form = new_deadline_form,
 		delete_deadline_form = delete_deadline_form,
 		)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def grade():
+	course = db(db.courses.id == auth.user.course_id).select().first()
+	assignment = db(db.assignments.id == request.get_vars.id).select().first()
+
+	count_graded = 0
+	for row in db(db.auth_user.course_id == course.id).select():
+		assignment.grade(row)
+		count_graded += 1
+	session.flash = "Graded %d Assignments" % (count_graded)
+	return redirect(URL('assignments','index'))
 
 # Student version of index
 def student():

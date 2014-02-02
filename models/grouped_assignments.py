@@ -16,7 +16,25 @@ def assignment_get_problems(assignment, user):
 		distinct=db.code.acid,
 		)
 db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
-db.assignments.grade = Field.Method(lambda row, user: 10)
+def assignment_set_grade(assignment, user):
+	db(db.grades.assignment == assignment.id and db.grades.auth_user == user.id).delete()
+	
+	#threshold grade
+	points = 0.0
+	for prob in assignment.problems(user):
+		if not prob.grade:
+			continue
+		points = points + prob.grade
+	if points >= assignment.threshold:
+		points = assignment.points
+
+	db.grades.insert(
+		auth_user = user.id,
+		assignment = assignment.id,
+		score = points,
+		)
+	return points
+db.assignments.grade = Field.Method(lambda row, user: assignment_set_grade(row.assignments, user))
 
 db.define_table('grades',
 	Field('auth_user', db.auth_user),
