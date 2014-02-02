@@ -116,6 +116,7 @@ def index():
 		return redirect(URL('assignments','index'))
 	student = db(db.auth_user.id == request.vars.sid).select(
 		db.auth_user.id,
+		db.auth_user.username,
 		db.auth_user.first_name,
 		db.auth_user.last_name,
 		db.auth_user.email,
@@ -138,9 +139,12 @@ def index():
 	student.points_total = points_total
 	student.points_percentage = round((points_total/points_possible)*100)
 
+	last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
+
 	return dict(
 		assignments = assignments,
 		student = student,
+		last_action = last_action,
 		)
 
 def detail():
