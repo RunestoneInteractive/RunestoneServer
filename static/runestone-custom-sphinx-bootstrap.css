@@ -2,7 +2,6 @@
 
 body {
     padding-top: 60px;
-    padding-bottom: 40px;
     background-color: #eeeeee;
 }
 
@@ -372,4 +371,78 @@ div.flash {
 .ui-sortable-helper {
     height: auto !important;
     width: auto !important;
+}
+.navLink{
+	z-index:2;
+	display: inline;
+	bottom: 65px;
+	position:fixed;
+}
+
+#relations-next{
+	right: 35px;
+}
+
+#relations-prev{
+	left: 35px;
+}
+
+.navLink a{
+	color: #999;
+}
+
+#completionButton{
+	margin-top: 25px;
+	margin-bottom: 15px;
+	padding-left: 70px;
+	padding-right: 70px;
+	color: #fff;
+	font-weight: bold;
+}
+.buttonAskCompletion{
+	background-color: #ffaa2b;
+	border-color:#ff9f19;
+	font-weight: bold;
+}
+.buttonAskCompletion:hover{
+	background-color: #ff9f19;
+	border-color:#ff9f19;
+}
+
+.buttonConfirmCompletion{
+	background-color: #50d392;
+	border-color:#3dc682;
+
+}
+.buttonConfirmCompletion:hover{
+	background-color: #3dc682;
+	border-color:#3dc682;
+}
+
+.navLinkBg{
+	height: 40px;
+	background-color: #fff;
+	z-index: 1;
+	position: fixed;
+	bottom: 55px;
+	color: #999;
+	font-weight: bold;
+	-webkit-box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
+	-moz-box-shadow:    0px 0px 3px rgba(50, 50, 50, 0.5);
+	box-shadow:         0px 0px 3px rgba(50, 50, 50, 0.5);
+}
+
+.navLinkBg:hover{
+	color: #999;
+}
+
+#navLinkBgRight{
+	right: -1000px;
+	padding: 10px 15px 0 65px;
+}
+
+#navLinkBgLeft{
+	left: -65px;
+	padding-left: 15px;
+	padding-right: 50px;
 }
