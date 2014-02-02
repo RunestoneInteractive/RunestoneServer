@@ -6,6 +6,8 @@ from sphinx.application import Sphinx
 
 def index():
 	course = db(db.courses.id == auth.user.course_id).select().first()
+	if not verifyInstructorStatus(auth.user.course_name, auth.user):
+		return redirect(URL('assignments','student') + 'sid=%d' % (auth.user.id))
 	# get all assignments
 	assignments = db(db.assignments.course == course.id).select()
 	return dict(
@@ -90,6 +92,24 @@ def update():
 		form = form,
 		new_deadline_form = new_deadline_form,
 		delete_deadline_form = delete_deadline_form,
+		)
+
+# Student version of index
+def student():
+	if 'sid' not in request.vars:
+		return redirect(URL('assignments','index'))
+	if auth.user.id != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
+		return redirect(URL('assignments','index'))
+	student = db(db.auth_user.id == request.vars.sid).select().first()
+	if not student:
+		return redirect(URL('assignments','index'))
+
+	course = db(db.courses.id == auth.user.course_id).select().first()
+	assignments = db(db.assignments.course == course.id).select()
+
+	return dict(
+		assignments = assignments,
+		student = student,
 		)
 
 def detail():
