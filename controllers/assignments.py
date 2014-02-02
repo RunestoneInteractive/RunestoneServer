@@ -7,10 +7,11 @@ from sphinx.application import Sphinx
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	# get all assignments
 	assignments = db(db.assignments.course == course.id).select()
+	students = db(db.auth_user.course_id == course.id).select()
 	return dict(
 		assignments = assignments,
+		students = students,
 		)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

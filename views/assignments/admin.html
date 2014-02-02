@@ -11,3 +11,12 @@
 	</li>  
     {{pass}}
 </ul>
+
+<h2>Students</h2>
+<ul>
+	{{for row in students:}}
+	<li>
+		<a href="{{=URL('assignments','index')}}?sid={{=row.id}}">{{=row.first_name}} {{=row.last_name}}</a>
+	</li>
+	{{pass}}
+</ul>
