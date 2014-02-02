@@ -149,17 +149,24 @@ def index():
 
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignment = db(db.assignments.id == request.vars.id and db.assignments.course == course.id).select().first()
+	assignment = db(db.assignments.id == request.vars.id)(db.assignments.course == course.id).select().first()
 	if not assignment:
 		return redirect(URL("assignments","index"))
-	user_id = auth.user.id
+
+	grades = db(db.assignments.id == db.grades.assignment)(db.grades.auth_user == db.auth_user.id)
+	grades = grades(db.assignments.id == assignment.id)
+	grades = grades.select()
+
+	problems = []
+	student = None
 	if 'sid' in request.vars:
-		user_id = request.vars.sid
-	user = db(db.auth_user.id == user_id).select().first()
-	# Get acid and list
-	problems = assignment.problems(user)
+		student_id = request.vars.sid
+		student = db(db.auth_user.id == student_id).select().first()
+		problems = assignment.problems(student)
 
 	return dict(
 		assignment = assignment,
 		problems = problems,
+		grades = grades,
+		student = student,
 		)
