@@ -7,6 +7,7 @@
 		<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
 		{{if instructor:}}
 		<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
+		<a href="{{=URL('assignments','grade')}}?id={{=row.id}}">Grade</a>
 		{{pass}}
 	</li>  
     {{pass}}
