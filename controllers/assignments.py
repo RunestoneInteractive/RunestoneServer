@@ -73,12 +73,20 @@ def update():
 		if deadline.section:
 			section = db(db.sections.id == deadline.section).select().first()
 			deadline_label = deadline_label + " for %s" % (section.name)
-		delete_deadline_form.append(LABEL(
-			INPUT(_type="checkbox", _name=deadline.id, _value="delete"),
-			deadline_label,
-			_class="checkbox"
+		delete_deadline_form.append(
+			DIV(
+				LABEL(
+				INPUT(_type="checkbox", _name=deadline.id, _value="delete"),
+				deadline_label,
+				),
+				_class="checkbox"
 			))
-	delete_deadline_form.append(INPUT(_type="submit"))
+	delete_deadline_form.append(
+		INPUT(
+			_type="submit",
+			_value="Delete Deadlines",
+			_class="btn btn-default"
+			))
 
 	if delete_deadline_form.accepts(request,session):
 		for var in delete_deadline_form.vars:
