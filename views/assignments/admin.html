@@ -1,22 +1,29 @@
 {{extend 'layout.html'}}
 
-<h2>Assignments</h2>
-<a href="{{=URL('assignments','create')}}">Create Assignment</a>
-<ul>
-{{for row in assignments:}}
-    <li>
-		<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
-		<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
-		<a href="{{=URL('assignments','grade')}}?id={{=row.id}}">Grade</a>
-	</li>  
-    {{pass}}
-</ul>
-
-<h2>Students</h2>
-<ul>
-	{{for row in students:}}
-	<li>
-		<a href="{{=URL('assignments','index')}}?sid={{=row.id}}">{{=row.first_name}} {{=row.last_name}}</a>
-	</li>
-	{{pass}}
-</ul>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Students</h2>
+			<ul class="list-group">
+				{{for row in students:}}
+				<li class="list-group-item">
+					<a href="{{=URL('assignments','index')}}?sid={{=row.id}}">{{=row.first_name}} {{=row.last_name}}</a>
+				</li>
+				{{pass}}
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<h2>Assignments</h2>
+			<a class="btn btn-default" href="{{=URL('assignments','create')}}">Create Assignment</a>
+			<ul class="list-group">
+			{{for row in assignments:}}
+			    <li class="list-group-item">
+					<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
+					<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
+					<a href="{{=URL('assignments','grade')}}?id={{=row.id}}">Grade</a>
+				</li>  
+			    {{pass}}
+			</ul>
+		</div>
+	</div>
+</div>
