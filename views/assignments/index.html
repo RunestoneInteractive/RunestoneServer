@@ -3,12 +3,19 @@
 <p class="grade"><strong>{{=student.points_total}} points</strong> of {{=student.points_possible}} points (or {{=student.points_percentage}}%)</p>
 <p class="last_action"><em>Last Action: {{=last_action.timestamp}}</em></p>
 <h2>Assignments</h2>
-<ul>
+<div class="panel-group" id="assignments">
 {{for row in assignments:}}
-    <li>
-		{{=row.assignments.name}}
-		{{=row.grades.score}}
-		{{=row.assignments.points}}
-	</li>  
+    <div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" data-parent="#assignments" href="#assignment-{{=row.assignments.id}}">
+				{{=row.assignments.name}}
+			</a>
+			<div class="pull-right"><strong>{{=row.grades.score}} points</strong> of {{=row.assignments.points}} points</div>
+		</div>
+		<div id="assignment-{{=row.assignments.id}}" class="panel-collapse collapse">
+	      <div class="panel-body">
+	      </div>
+		</div>
+	</div><!-- end .panel -->
     {{pass}}
-</ul>
+</div>
