@@ -44,32 +44,32 @@ Reading Response
 
 Don't forget to click **save**.
    
-   Question 1. Is informatics a "Master Discipline" in the sense that Christian says Philosophy is? Why or why not?
+Question 1. Is informatics a "Master Discipline" in the sense that Christian says Philosophy is? Why or why not?
 
-   .. actex:: rr_4_1
+.. actex:: rr_4_1
 
-      # Fill in your response in between the triple quotes
-      """
+   # Fill in your response in between the triple quotes
+   """
 
-      """
+   """
 
-   Question 2. Have you ever faked being able to do something? Did you get caught? What helped you get caught/not get caught?
+Question 2. Have you ever faked being able to do something? Did you get caught? What helped you get caught/not get caught?
 
-   .. actex:: rr_4_2
+.. actex:: rr_4_2
 
-      # Fill in your response in between the triple quotes
-      """
+   # Fill in your response in between the triple quotes
+   """
 
-      """
+   """
 
-   Question 3. What would you like to talk about in section this week?
-   
-   .. actex:: rr_4_3
+Question 3. What would you like to talk about in section this week?
 
-      # Fill in your response in between the triple quotes
-      """
+.. actex:: rr_4_3
 
-      """
+   # Fill in your response in between the triple quotes
+   """
+
+   """
 
 .. _problem_set_4:
 

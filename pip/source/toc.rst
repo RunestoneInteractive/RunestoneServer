@@ -100,6 +100,7 @@ Functions
    :maxdepth: 2
 
    Functions/functions.rst
+   Functions/functions2.rst
 
 Python Modules
 ::::::::::::::

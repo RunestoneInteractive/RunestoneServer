@@ -656,6 +656,58 @@ interpreter does these steps:
            
        print(square(square(2)))
 
+.. mchoicemf:: test_questionfunctions_2_5
+   :answer_a: 1
+   :answer_b: Yes
+   :answer_c: First one was longer
+   :answer_d: Second one was at least as long
+   :answer_e: Error
+   :correct: c
+   :feedback_a: cyu2 returns the value 1, but that's not what prints.
+   :feedback_b: "Yes" is longer, but that's not what prints.
+   :feedback_c: cyu2 returns the value 1, which is assigned to z.
+   :feedback_d: cyu2 returns the value 1, which is assigned to z.
+   :feedback_e: what do you think will cause an error.
+   
+   What will the following code output?
+   
+   .. code-block:: python 
+
+       def cyu2(s1, s2):
+           x = len(s1)
+           y = len(s2)
+           return x-y
+           
+       z = cyu2("Yes", "no")
+       if z > 0:
+           print("First one was longer")
+       else:
+           print("Second one was at least as long")
+ 
+.. mchoicemf:: test_questionfunctions_2_6
+   :answer_a: square
+   :answer_b: g
+   :answer_c: a number
+   :correct: b
+   :feedback_a: Before executing square, it has to figure out what value to pass in, so g is executed first
+   :feedback_b: g has to be executed and return a value in order to know what paramater value to provide to x.
+   :feedback_c: square and g both have to execute before the number is printed.   
+   
+   Which will print out first, square, g, or a number?
+   
+   .. code-block:: python 
+
+       def square(x):
+           print("square")
+           return x*x
+           
+       def g(y):
+           print("g")
+           return y + 3
+           
+       print(square(g(2)))
+
+
 A function that accumulates
 ---------------------------
 
