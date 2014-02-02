@@ -1,11 +1,15 @@
 {{extend 'layout.html'}}
 <h1>{{=student.first_name}} {{=student.last_name}}</h1>
+<div class="grade">
+	<p><strong>{{=student.points_total}} points</strong> of {{=student.points_possible}} points (or {{=student.points_percentage}}%)</p>
+</div>
 <h2>Assignments</h2>
 <ul>
 {{for row in assignments:}}
     <li>
 		{{=row.assignments.name}}
 		{{=row.grades.score}}
+		{{=row.assignments.points}}
 	</li>  
     {{pass}}
 </ul>
