@@ -17,7 +17,7 @@ def assignment_get_problems(assignment, user):
 		)
 db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
 def assignment_set_grade(assignment, user):
-	db(db.grades.assignment == assignment.id and db.grades.auth_user == user.id).delete()
+	db(db.grades.assignment == assignment.id)(db.grades.auth_user == user.id).delete()
 	
 	#threshold grade
 	points = 0.0
