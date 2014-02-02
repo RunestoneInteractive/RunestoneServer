@@ -118,7 +118,7 @@ def student():
 		return redirect(URL('assignments','index'))
 
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignments = db(db.assignments.course == course.id).select()
+	assignments = db(db.assignments.id == db.grades.assignment)(db.assignments.course == course.id and db.grades.auth_user == auth.user.id).select()
 
 	return dict(
 		assignments = assignments,
