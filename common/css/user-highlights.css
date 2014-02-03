@@ -34,7 +34,7 @@ list-style-image: url('active.png');
 	color:#3dc682;
 	display:none;
 	font-style:italic;
-	opacity: 0.5;
+	opacity: 0.7;
 }
 .infoTextActive{
 	margin-left:10px;
@@ -42,7 +42,7 @@ list-style-image: url('active.png');
 	color:#ff9f19;
 	display:none;
 	font-style:italic;
-	opacity: 0.5;
+	opacity: 0.7;
 }
 .dropdown-menu{
 	background-clip: padding-box;
