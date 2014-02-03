@@ -646,7 +646,7 @@ of mutable objects. Try stepping through it in codelens to see the difference.
 Side Effects
 ------------
 
-We say that a function has a **side effect** on the list object that is passed to it.
+We say that the function changeit has a **side effect** on the list object that is passed to it.
 Global variables are another way to have side effects. For example, similar to examples
 you have seen above, we could make double have a side effect on the global variable y.
 
