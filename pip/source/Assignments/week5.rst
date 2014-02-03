@@ -22,8 +22,8 @@ For this week you have the following graded activities:
       * :ref:`Functions <functions_chap>` 
    
    * Before Thursday's class:
-      * Local and global variables (not available yet)
-
+      * :ref:`Local and global variables <functions2_chap>`
+      
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
 
    * Read *The Most Human Human*, Chapters 6 and 7
