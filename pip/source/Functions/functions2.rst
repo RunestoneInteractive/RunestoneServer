@@ -350,6 +350,24 @@ another good reason not to use global variables. As you can see,
 it makes your code confusing and difficult to
 understand.
 
+If you really want to change the value of a global variable inside a function,
+you can can do it by explicitly declaring the variable to be global, as in the example
+below. Again, you should *not* do this in your code. The example is here only
+to cement your understanding of how python works.
+
+.. codelens::  functions2_4a
+
+    def powerof(x,p):
+        global power  # a really... 
+        power = p     # ...bad idea, but valid code
+        y = x ** power
+        return y
+
+    power = 3
+    result = powerof(10,2)
+    print(result)
+    print(power)
+
 To cement all of these ideas even further lets look at one final example.
 Inside the ``square`` function we are going to make an assignment to the
 parameter ``x``  There's no good reason to do this other than to emphasize
@@ -653,6 +671,7 @@ you have seen above, we could make double have a side effect on the global varia
 .. codelens:: function2_9
    
    def double(n):
+      global y
       y = 2 * n
    
    y = 5
@@ -688,7 +707,8 @@ of mutable objects. To do that, explicitly make a copy of an object and pass the
 copy in to the function. Then return the modified copy and reassign it to the 
 original variable if you want to save the changes. The built-in ``list`` function, which
 takes a sequence as a parameter and returns a new list, works to copy an existing
-list. For dictionaries, there is a .copy() method that can be called.
+list. For dictionaries, you can similarly call the ``dict`` function, passing in a dictionary
+to get a copy of the dictionary back as a return value.
 
 .. codelens:: function2_11
       
