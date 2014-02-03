@@ -55,7 +55,7 @@ following questions:
    executes?
 
 If you try to make use of functions, ones you write or that others write,
-without being able to answer these questions, you will that your debugging
+without being able to answer these questions, you will find that your debugging
 sessions are long and painful. 
 
 The first question is always easy to answer. Look at the line with the function
@@ -555,7 +555,7 @@ main() function.
    :answer_c: 7
    :answer_d: 10
    :answer_e: Error: you can't nest function calls
-   :correct: c
+   :correct: d
    :feedback_a: Better read the section above one more time.
    :feedback_b: Better read the section above one more time.
    :feedback_c: That's h(2), but it is passed to g.
@@ -646,7 +646,7 @@ of mutable objects. Try stepping through it in codelens to see the difference.
 Side Effects
 ------------
 
-We say that changeit has a **side effect** on the list object that is passed to it.
+We say that a function has a **side effect** on the list object that is passed to it.
 Global variables are another way to have side effects. For example, similar to examples
 you have seen above, we could make double have a side effect on the global variable y.
 
