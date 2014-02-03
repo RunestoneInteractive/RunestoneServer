@@ -10,7 +10,6 @@ var extendType;
 function enableUserHighlights(){
 	//check if it's not the contents or index page. 
 	if ((window.location.href).match( /(index.html|genindex.html|navhelp.html|toc.html)/ ) == null){
-		console.log("inside if");
 		//checksum generator for each div.section and paragraph. Add that checksum as a class _[checksumValue]
 		$('body p, body .section').each(function(index) {
 			var s = $(this).text();
@@ -27,8 +26,6 @@ function enableUserHighlights(){
 			currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
 		var data = {lastPageUrl:currentPathname};
 		jQuery.ajax({url: eBookConfig.ajaxURL+'getCompletionStatus',data: data, async: false}).done(function(data) {
-			console.log("completion status data");
-			console.log(data);
 			if (data !="None"){
 				var completionData = $.parseJSON(data);
 				var completionClass, completionMsg;
@@ -75,7 +72,6 @@ function enableUserHighlights(){
 		  var navBgShown = false;
 		  $( window ).scroll(function() {
 			  if($(window).scrollTop() + $(window).height() == $(document).height()) {
-				console.log("bottom");
 			   $("#navLinkBgRight").animate(
 					{"right":navLinkBgRightHalfOpen},200
 			   );
@@ -83,7 +79,6 @@ function enableUserHighlights(){
 							{"left":"0px"},200
 					   );
 				if ($("#completionButton").hasClass("buttonConfirmCompletion")){
-					console.log("animation arrow key");
 					$("#relations-next").animate({"right":relationsNextIconNewPosition},200);
 				}
 			   navBgShown = true;
@@ -124,7 +119,6 @@ function enableUserHighlights(){
 		  });
 
 		  $(window).on('beforeunload', function(e){
-			console.log("inside beforeunload");
 			if (completionFlag == 0){
 				processPageState(completionFlag);
 			}
@@ -236,30 +230,28 @@ function enableUserHighlights(){
 		});
 	}
 	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
-		console.log("inside else if");
 		jQuery.get(eBookConfig.ajaxURL+'getAllCompletionStatus', function(data) {
 			if (data !="None"){
 				subChapterList = $.parseJSON(data);
 
 				var allSubChapterURLs = $("#main-content div li a");
-				console.log(allSubChapterURLs.length);
 				$.each( subChapterList, function(index, item){
 					for (var s = 0; s < allSubChapterURLs.length; s++){
 						if (allSubChapterURLs[s].href.indexOf(item.chapterName+"/"+item.subChapterName) != -1){
 							if (item.completionStatus == 1)
-								$(allSubChapterURLs[s].parentElement).addClass("completed").append('<span class="infoTextCompleted">- Completed this topic on '+item.endDate+"</span>").hover(
+								$(allSubChapterURLs[s].parentElement).addClass("completed").append('<span class="infoTextCompleted">- Completed this topic on '+item.endDate+"</span>").children().first().hover(
 									 function() {
-										$( this ).children(".infoTextCompleted").show();
+										$( this ).next(".infoTextCompleted").show();
 									  }, function() {
-										$( this ).children(".infoTextCompleted").hide()
+										$( this ).next(".infoTextCompleted").hide()
 									  }
 								);
 							else if(item.completionStatus == 0)
-								$(allSubChapterURLs[s].parentElement).addClass("active").append('<span class="infoTextActive">Last read this topic on '+item.endDate+"</span>").hover(
+								$(allSubChapterURLs[s].parentElement).addClass("active").append('<span class="infoTextActive">Last read this topic on '+item.endDate+"</span>").children().first().hover(
 									 function() {
-										$( this ).children(".infoTextActive").show();
+										$( this ).next(".infoTextActive").show();
 									  }, function() {
-										$( this ).children(".infoTextActive").hide()
+										$( this ).next(".infoTextActive").hide()
 									  }
 								);
 						}
@@ -412,7 +404,6 @@ function processPageState(completionFlag){
 	if (currentPathname.indexOf("?") !== -1)
 		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
 	var data = {lastPageUrl:currentPathname, lastPageScrollLocation: $(window).scrollTop(), completionFlag:completionFlag, course:eBookConfig.course};
-	console.log(data);
 	$(document).ajaxError( function(e,jqhxr,settings,exception) {
         console.log("Request Failed for "+settings.url)
     } );
