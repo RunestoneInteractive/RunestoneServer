@@ -444,12 +444,54 @@ For the next three exercises, you will analyze data from our group on Facebook. 
 
 #. (optional: 1 bonus point; this one is much harder)  Use the Facebook data to determine who made the longest post or comment (most characters); print out the poster's name and the contents.
 
-   .. actex:: ps_3_4
+   .. tabbed:: ps_3_4_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
+         .. actex:: ps_3_4
 
+            fb = """
+            # Delete this line and paste file contents here
+            """
 
+            x = fb.split("\n")
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_4
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            # rearrange x into a variable that is easier to work with
+            # one method is a list of dictionaries
+            posts = []
+            name = False
+            for ln in x:
+                if ln[:5] == 'from:':
+                    # if a line with from in it
+                    # set a temporary variable
+                    # that will be used on the next line
+                    name = ln[6:].lstrip()
+                if ln[:8] == 'comment:':
+                    comment = ln[9:].lstrip()
+                    posts.append({
+                        'name':name,
+                        'comment':comment,
+                        })
+
+            # from your nice data structure, use an accumulator pattern.
+
+            # set up a variable that will get overwritten
+            # you could use posts[0]
+            lp = {
+                "name":"",
+                "comment":"",
+            }
+            for p in posts:
+                if not lp or len(p['comment'])>len(lp['comment']):
+                    lp = p
+            print lp['name'],"posted the longest comment:",lp['comment']
