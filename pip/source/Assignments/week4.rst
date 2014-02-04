@@ -263,39 +263,101 @@ The last code you have saved for each one by the deadline is what will be graded
 1. (6 points) Old McDonald had a farm. He records the animals on his farm in a dictionary called 'animals'. 
 In this problem help Old McDonald manage his farm animals. Be sure to answer all six parts, a-f.
 
-   .. actex:: ps_3_1
+   .. tabbed:: ps_3_1_tabs
 
-      animals = {
-         'cows': 2,
-         'chickens': 8,
-         'pigs': 4,
-         'mice': 72,
-         'cats': 9,
-         'dogs': 1,
-      }
+      .. tab:: Problem
 
-      # a. Print the number of chickens in the farm (by having your code look it up
-      # in the animals dictionary. "Print(8)" is cheating...)
-      
-      # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
+         .. actex:: ps_3_1
 
-      # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+            animals = {
+               'cows': 2,
+               'chickens': 8,
+               'pigs': 4,
+               'mice': 72,
+               'cats': 9,
+               'dogs': 1,
+            }
 
-      # d. print out the names and quantities of all animals on his farm, one per line, in any order.
-      # For example:
-      # 2 cows
-      # 9 cats
-      # ...
+            # a. Print the number of chickens in the farm (by having your code look it up
+            # in the animals dictionary. "Print(8)" is cheating...)
+            
+            # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
 
-      # e. While giving tours of his farm to children, they often inquire about particular
-      # animals. Write code that asks the user to input an animal name, and then
-      # prints out how many of that animal he has; or 0 if he has none.
-      # For example, output "8 chickens" or "0 elephants"
+            # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
 
-      # f. Write a statement that tells Old McDonald which animal he has the most of.
-      # This statement should print "72 mice", given the current state of the
-      # dictionary, but your code should work correctly even if mice aren't the
-      # most numerous animal on his farm.
+            # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+            # For example:
+            # 2 cows
+            # 9 cats
+            # ...
+
+            # e. While giving tours of his farm to children, they often inquire about particular
+            # animals. Write code that asks the user to input an animal name, and then
+            # prints out how many of that animal he has; or 0 if he has none.
+            # For example, output "8 chickens" or "0 elephants"
+
+            # f. Write a statement that tells Old McDonald which animal he has the most of.
+            # This statement should print "72 mice", given the current state of the
+            # dictionary, but your code should work correctly even if mice aren't the
+            # most numerous animal on his farm.
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_1a
+
+            animals = {
+               'cows': 2,
+               'chickens': 8,
+               'pigs': 4,
+               'mice': 72,
+               'cats': 9,
+               'dogs': 1,
+            }
+
+            # a. Print the number of chickens in the farm (by having your code look it up
+            # in the animals dictionary. "Print(8)" is cheating...)
+            
+            print(animals['chickens'])
+            
+            # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
+            
+            animals['yak'] = 1
+
+            # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+
+            animals['dogs'] = animals['dogs'] + 1
+
+            # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+            # For example:
+            # 2 cows
+            # 9 cats
+            # ...
+
+            for k in animals:
+               print(animals[k],k)
+
+            # e. While giving tours of his farm to children, they often inquire about particular
+            # animals. Write code that asks the user to input an animal name, and then
+            # prints out how many of that animal he has; or 0 if he has none.
+            # For example, output "8 chickens" or "0 elephants"
+
+            q = input("How many _____ do you have?")
+            if q in animals:
+               print(animals[q],q)
+            else:
+               print(0,q)
+
+            # f. Write a statement that tells Old McDonald which animal he has the most of.
+            # This statement should print "72 mice", given the current state of the
+            # dictionary, but your code should work correctly even if mice aren't the
+            # most numerous animal on his farm.
+
+            keys = animals.keys()
+            best_key = keys[0]
+            for k in keys:
+               if animals[k] > animals[best_key]:
+                  best_key = k
+            print(animals[best_key], best_key)
 
 For the next three exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, in between the quotation marks. To maintain confidentiality (i.e., only students in 106 can see it), the data lives in a `file on cTools. <https://ctools.umich.edu/access/content/group/80ba0083-6409-4149-8222-f210f9dc6dd1/Problem%20Sets/PS3/simplefbdata.txt>`_
 
