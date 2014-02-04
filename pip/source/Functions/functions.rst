@@ -602,7 +602,7 @@ interpreter does these steps:
 
 
 .. mchoicemf:: test_questionfunctions_2_2
-   :answer_a: Nothing (no value)
+   :answer_a: The value None
    :answer_b: The value of x+y+z
    :answer_c: The string 'x+y+z'
    :correct: a
