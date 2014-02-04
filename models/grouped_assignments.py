@@ -17,16 +17,24 @@ def assignment_get_problems(assignment, user):
 		)
 db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
 def assignment_set_grade(assignment, user):
+	# delete the old grades; we're regrading
 	db(db.grades.assignment == assignment.id)(db.grades.auth_user == user.id).delete()
 	
-	#threshold grade
 	points = 0.0
 	for prob in assignment.problems(user):
 		if not prob.grade:
 			continue
 		points = points + prob.grade
-	if points >= assignment.threshold:
-		points = assignment.points
+
+	if assignment.grade_type == 'checkmark':
+		#threshold grade
+		if points >= assignment.threshold:
+			points = assignment.points
+		else:
+			points = 0
+	else:
+		# they got the points they earned
+		pass
 
 	db.grades.insert(
 		auth_user = user.id,

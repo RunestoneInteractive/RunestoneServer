@@ -143,6 +143,8 @@ def index():
 	for row in assignments:
 		points_total += row.grades.score
 		points_possible += row.assignments.points
+	else:
+		points_possible = 1	# no rows; degenerate case
 	student.points_possible = points_possible
 	student.points_total = points_total
 	student.points_percentage = round((points_total/points_possible)*100)
@@ -164,7 +166,6 @@ def detail():
 	grades = db(db.assignments.id == db.grades.assignment)(db.grades.auth_user == db.auth_user.id)
 	grades = grades(db.assignments.id == assignment.id)
 	grades = grades.select()
-
 	problems = []
 	student = None
 	if 'sid' in request.vars:
