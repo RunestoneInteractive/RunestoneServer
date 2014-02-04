@@ -363,23 +363,44 @@ For the next three exercises, you will analyze data from our group on Facebook. 
 
 #. (2 points) For each post or comment in the facebook group, print out the name of the poster.
 
-   .. actex:: ps_3_2
+   .. tabbed:: ps_3_2_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
-      # x now refers to a list, with each line of text as one element in the list.
-      # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
-      # why you get the output you do
+         .. actex:: ps_3_2
 
-      # Your output should look something like:
-      # Paul R.
-      # Jackie C.
-      # Jackie C.
-      # Nick R.
-      # Jackie C.
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+            # x now refers to a list, with each line of text as one element in the list.
+            # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+            # why you get the output you do
+
+            # Your output should look something like:
+            # Paul R.
+            # Jackie C.
+            # Jackie C.
+            # Nick R.
+            # Jackie C.
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_2a
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+            # x now refers to a list, with each line of text as one element in the list.
+            # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+            # why you get the output you do
+
+            for ln in x:
+                if ln[:5] == 'from:':
+                    print ln[6:].lstrip()
 
 #. (2 points) Use the Facebook data to count the number of posts (or reply comments) each person made in the Facebook group.
 
