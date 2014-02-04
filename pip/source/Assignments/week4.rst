@@ -404,18 +404,43 @@ For the next three exercises, you will analyze data from our group on Facebook. 
 
 #. (2 points) Use the Facebook data to count the number of posts (or reply comments) each person made in the Facebook group.
 
-   .. actex:: ps_3_3
+   .. tabbed:: ps_3_3_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
+         .. actex:: ps_3_3
 
-      # Your output should look something like this, but with different numbers:
-      # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
-      # Jackie C. posted 3 times
-      # Nick R. posted 2 times
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            # Your output should look something like this, but with different numbers:
+            # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
+            # Jackie C. posted 3 times
+            # Nick R. posted 2 times
+
+      .. tab:: Solution
+      
+         .. actex:: ps_3_3a
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            posters = {}
+            for ln in x:
+                if ln[:5] == 'from:':
+                    name = ln[6:].lstrip()
+                    if name not in posters:
+                        posters[name] = 1
+                    else:
+                        posters[name] = posters[name] + 1
+            for p in posters:
+                print "%s posted %d times" % (p,posters[p])
 
 #. (optional: 1 bonus point; this one is much harder)  Use the Facebook data to determine who made the longest post or comment (most characters); print out the poster's name and the contents.
 
