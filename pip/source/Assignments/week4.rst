@@ -263,85 +263,235 @@ The last code you have saved for each one by the deadline is what will be graded
 1. (6 points) Old McDonald had a farm. He records the animals on his farm in a dictionary called 'animals'. 
 In this problem help Old McDonald manage his farm animals. Be sure to answer all six parts, a-f.
 
-   .. actex:: ps_3_1
+   .. tabbed:: ps_3_1_tabs
 
-      animals = {
-         'cows': 2,
-         'chickens': 8,
-         'pigs': 4,
-         'mice': 72,
-         'cats': 9,
-         'dogs': 1,
-      }
+      .. tab:: Problem
 
-      # a. Print the number of chickens in the farm (by having your code look it up
-      # in the animals dictionary. "Print(8)" is cheating...)
-      
-      # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
+         .. actex:: ps_3_1
 
-      # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+            animals = {
+               'cows': 2,
+               'chickens': 8,
+               'pigs': 4,
+               'mice': 72,
+               'cats': 9,
+               'dogs': 1,
+            }
 
-      # d. print out the names and quantities of all animals on his farm, one per line, in any order.
-      # For example:
-      # 2 cows
-      # 9 cats
-      # ...
+            # a. Print the number of chickens in the farm (by having your code look it up
+            # in the animals dictionary. "Print(8)" is cheating...)
+            
+            # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
 
-      # e. While giving tours of his farm to children, they often inquire about particular
-      # animals. Write code that asks the user to input an animal name, and then
-      # prints out how many of that animal he has; or 0 if he has none.
-      # For example, output "8 chickens" or "0 elephants"
+            # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
 
-      # f. Write a statement that tells Old McDonald which animal he has the most of.
-      # This statement should print "72 mice", given the current state of the
-      # dictionary, but your code should work correctly even if mice aren't the
-      # most numerous animal on his farm.
+            # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+            # For example:
+            # 2 cows
+            # 9 cats
+            # ...
+
+            # e. While giving tours of his farm to children, they often inquire about particular
+            # animals. Write code that asks the user to input an animal name, and then
+            # prints out how many of that animal he has; or 0 if he has none.
+            # For example, output "8 chickens" or "0 elephants"
+
+            # f. Write a statement that tells Old McDonald which animal he has the most of.
+            # This statement should print "72 mice", given the current state of the
+            # dictionary, but your code should work correctly even if mice aren't the
+            # most numerous animal on his farm.
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_1a
+
+            animals = {
+               'cows': 2,
+               'chickens': 8,
+               'pigs': 4,
+               'mice': 72,
+               'cats': 9,
+               'dogs': 1,
+            }
+
+            # a. Print the number of chickens in the farm (by having your code look it up
+            # in the animals dictionary. "Print(8)" is cheating...)
+            
+            print(animals['chickens'])
+            
+            # b. Old McDonald was given a yak. Add a yak to to the animals dictionary.
+            
+            animals['yak'] = 1
+
+            # c. Old McDonald foud a stray dog. Increase the number of dogs on the farm by 1.
+
+            animals['dogs'] = animals['dogs'] + 1
+
+            # d. print out the names and quantities of all animals on his farm, one per line, in any order.
+            # For example:
+            # 2 cows
+            # 9 cats
+            # ...
+
+            for k in animals:
+               print(animals[k],k)
+
+            # e. While giving tours of his farm to children, they often inquire about particular
+            # animals. Write code that asks the user to input an animal name, and then
+            # prints out how many of that animal he has; or 0 if he has none.
+            # For example, output "8 chickens" or "0 elephants"
+
+            q = input("How many _____ do you have?")
+            if q in animals:
+               print(animals[q],q)
+            else:
+               print(0,q)
+
+            # f. Write a statement that tells Old McDonald which animal he has the most of.
+            # This statement should print "72 mice", given the current state of the
+            # dictionary, but your code should work correctly even if mice aren't the
+            # most numerous animal on his farm.
+
+            keys = animals.keys()
+            best_key = keys[0]
+            for k in keys:
+               if animals[k] > animals[best_key]:
+                  best_key = k
+            print(animals[best_key], best_key)
 
 For the next three exercises, you will analyze data from our group on Facebook. To 'load' the data you will need to copy and paste it into the python prompt, in between the quotation marks. To maintain confidentiality (i.e., only students in 106 can see it), the data lives in a `file on cTools. <https://ctools.umich.edu/access/content/group/80ba0083-6409-4149-8222-f210f9dc6dd1/Problem%20Sets/PS3/simplefbdata.txt>`_
 
 #. (2 points) For each post or comment in the facebook group, print out the name of the poster.
 
-   .. actex:: ps_3_2
+   .. tabbed:: ps_3_2_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
-      # x now refers to a list, with each line of text as one element in the list.
-      # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
-      # why you get the output you do
+         .. actex:: ps_3_2
 
-      # Your output should look something like:
-      # Paul R.
-      # Jackie C.
-      # Jackie C.
-      # Nick R.
-      # Jackie C.
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+            # x now refers to a list, with each line of text as one element in the list.
+            # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+            # why you get the output you do
+
+            # Your output should look something like:
+            # Paul R.
+            # Jackie C.
+            # Jackie C.
+            # Nick R.
+            # Jackie C.
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_2a
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+            # x now refers to a list, with each line of text as one element in the list.
+            # If you're not sure, trying printing x, len(x), x[1], and x[1][0] and make sure you understand
+            # why you get the output you do
+
+            for ln in x:
+                if ln[:5] == 'from:':
+                    print ln[6:].lstrip()
 
 #. (2 points) Use the Facebook data to count the number of posts (or reply comments) each person made in the Facebook group.
 
-   .. actex:: ps_3_3
+   .. tabbed:: ps_3_3_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
+         .. actex:: ps_3_3
 
-      # Your output should look something like this, but with different numbers:
-      # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
-      # Jackie C. posted 3 times
-      # Nick R. posted 2 times
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            # Your output should look something like this, but with different numbers:
+            # Paul R. posted 1 times  (# or, if you're ambitious, make it say 1 time instead of 1 times)
+            # Jackie C. posted 3 times
+            # Nick R. posted 2 times
+
+      .. tab:: Solution
+      
+         .. actex:: ps_3_3a
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            posters = {}
+            for ln in x:
+                if ln[:5] == 'from:':
+                    name = ln[6:].lstrip()
+                    if name not in posters:
+                        posters[name] = 1
+                    else:
+                        posters[name] = posters[name] + 1
+            for p in posters:
+                print "%s posted %d times" % (p,posters[p])
 
 #. (optional: 1 bonus point; this one is much harder)  Use the Facebook data to determine who made the longest post or comment (most characters); print out the poster's name and the contents.
 
-   .. actex:: ps_3_4
+   .. tabbed:: ps_3_4_tabs
 
-      fb = """
-      # Delete this line and paste file contents here
-      """
+      .. tab:: Problem
 
-      x = fb.split("\n")
+         .. actex:: ps_3_4
 
+            fb = """
+            # Delete this line and paste file contents here
+            """
 
+            x = fb.split("\n")
+
+      .. tab:: Solution
+
+         .. actex:: ps_3_4
+
+            fb = """
+            # Delete this line and paste file contents here
+            """
+
+            x = fb.split("\n")
+
+            # rearrange x into a variable that is easier to work with
+            # one method is a list of dictionaries
+            posts = []
+            name = False
+            for ln in x:
+                if ln[:5] == 'from:':
+                    # if a line with from in it
+                    # set a temporary variable
+                    # that will be used on the next line
+                    name = ln[6:].lstrip()
+                if ln[:8] == 'comment:':
+                    comment = ln[9:].lstrip()
+                    posts.append({
+                        'name':name,
+                        'comment':comment,
+                        })
+
+            # from your nice data structure, use an accumulator pattern.
+
+            # set up a variable that will get overwritten
+            # you could use posts[0]
+            lp = {
+                "name":"",
+                "comment":"",
+            }
+            for p in posts:
+                if not lp or len(p['comment'])>len(lp['comment']):
+                    lp = p
+            print lp['name'],"posted the longest comment:",lp['comment']
