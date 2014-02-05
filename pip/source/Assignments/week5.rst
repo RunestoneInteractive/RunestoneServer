@@ -122,7 +122,12 @@ The last code you have saved for each one by the deadline is what will be graded
       # should be True
       print(is_prefix("He", "I said Hello"))
       # should be False
-   
+
+In the next few questions, you'll build components and then a complete program
+that lets people play Hangman. Below is an image from the middle of a game.
+
+.. image:: Figures/HangmanSample.JPG
+
 #. (2 points) Define the blanked function
 
    .. actex:: ps_4_3
