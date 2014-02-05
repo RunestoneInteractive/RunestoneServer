@@ -458,7 +458,7 @@ For the next three exercises, you will analyze data from our group on Facebook. 
 
       .. tab:: Solution
 
-         .. actex:: ps_3_4
+         .. actex:: ps_3_4s
 
             fb = """
             # Delete this line and paste file contents here
@@ -466,32 +466,48 @@ For the next three exercises, you will analyze data from our group on Facebook. 
 
             x = fb.split("\n")
 
-            # rearrange x into a variable that is easier to work with
-            # one method is a list of dictionaries
-            posts = []
-            name = False
+            # use an accumulator pattern, but with two accumulator
+            # variables, one for the longest post, and another
+            # for the person who made it.
+            longest_post = ""   # initialize to empty
+            poster = "" #initialize to empty
+            
+            contents = "" #initialize accumulator for contents of current post
+            name = "" # the person who posted the current/prev post
+            
             for ln in x:
+                # Check if previous post's contents are the longest so far
                 if ln[:5] == 'from:':
-                    # if a line with from in it
-                    # set a temporary variable
-                    # that will be used on the next line
+                    # if a line starting with from
+                    
+                    # check if previous post should replace longest
+                    if len(contents) > len(longest_post):
+                        longest_post = contents
+                        poster = name
+                    
+                    # keep track of the name to
+                    # use on the next iteration
                     name = ln[6:].lstrip()
-                if ln[:8] == 'comment:':
-                    comment = ln[9:].lstrip()
-                    posts.append({
-                        'name':name,
-                        'comment':comment,
-                        })
-
-            # from your nice data structure, use an accumulator pattern.
-
-            # set up a variable that will get overwritten
-            # you could use posts[0]
-            lp = {
-                "name":"",
-                "comment":"",
-            }
-            for p in posts:
-                if not lp or len(p['comment'])>len(lp['comment']):
-                    lp = p
-            print lp['name'],"posted the longest comment:",lp['comment']
+                    contents = "" #initialize an accumulator to get the full string for this comment
+                else:
+                    #it's a content line, but may need to strip off "comment:" or "post:" from beginning
+                    if ln[:8] == 'comment:':
+                        contents = contents + ln[9:]
+                    elif ln[:5] == 'post:':
+                        contents = contents = ln[6:]
+                    else:
+                        # it's a continuation of the comment from previous line
+                        contents = contents + '\n' + ln     
+            
+            # check if last post should replace longest
+            if len(contents) > len(longest_post):
+                longest_post = contents
+                poster = name
+            
+            print(poster)
+            print(longest_post)
+            
+            #Note: Nick has a more elegant solution for this one, that's
+            #a little easier to follow, with fewer special cases, but
+            #it uses "nested" data structures, which we won't be
+            #covering for a couple more weeks.
