@@ -10,6 +10,8 @@ db.define_table('assignments',
 	)
 
 def assignment_get_problems(assignment, user):
+	if 'query' not in assignment or not assignment.query:
+		return []
 	return db(db.code.acid.like(assignment.query+"%"))(db.code.sid==user.username).select(
 		db.code.ALL,
 		orderby=db.code.acid|~db.code.timestamp,

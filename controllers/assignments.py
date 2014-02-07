@@ -120,7 +120,7 @@ def index():
 		return redirect(URL('assignments','admin'))
 	if 'sid' not in request.vars:
 		return redirect(URL('assignments','index') + 'sid=%d' % (auth.user.id))
-	if auth.user.id != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
+	if str(auth.user.id) != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
 		return redirect(URL('assignments','index'))
 	student = db(db.auth_user.id == request.vars.sid).select(
 		db.auth_user.id,
