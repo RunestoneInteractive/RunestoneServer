@@ -28,7 +28,11 @@ def index():
 	assignments = db(db.assignments.id == db.grades.assignment)
 	assignments = assignments(db.assignments.course == course.id)
 	assignments = assignments(db.grades.auth_user == student.id)
-	assignments = assignments.select()
+	assignments = assignments.select(
+		db.assignments.ALL,
+		db.grades.ALL,
+		orderby = db.assignments.name,
+		)
 
 	points_total = 0
 	points_possible = 0
