@@ -4,6 +4,48 @@ import shutil
 import sys
 from sphinx.application import Sphinx
 
+def index():
+	if 'sid' not in request.vars and verifyInstructorStatus(auth.user.course_name, auth.user):
+		return redirect(URL('assignments','admin'))
+	if 'sid' not in request.vars:
+		return redirect(URL('assignments','index') + '?sid=%d' % (auth.user.id))
+	if str(auth.user.id) != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
+		return redirect(URL('assignments','index'))
+	student = db(db.auth_user.id == request.vars.sid).select(
+		db.auth_user.id,
+		db.auth_user.username,
+		db.auth_user.first_name,
+		db.auth_user.last_name,
+		db.auth_user.email,
+		).first()
+	if not student:
+		return redirect(URL('assignments','index'))
+
+	course = db(db.courses.id == auth.user.course_id).select().first()
+	assignments = db(db.assignments.id == db.grades.assignment)
+	assignments = assignments(db.assignments.course == course.id)
+	assignments = assignments(db.grades.auth_user == student.id)
+	assignments = assignments.select()
+
+	points_total = 0
+	points_possible = 0
+	for row in assignments:
+		points_total += row.grades.score
+		points_possible += row.assignments.points
+	else:
+		points_possible = 1	# no rows; degenerate case
+	student.points_possible = points_possible
+	student.points_total = points_total
+	student.points_percentage = round((points_total/points_possible)*100)
+
+	last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
+
+	return dict(
+		assignments = assignments,
+		student = student,
+		last_action = last_action,
+		)
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
 	course = db(db.courses.id == auth.user.course_id).select().first()
@@ -113,49 +155,6 @@ def grade():
 		count_graded += 1
 	session.flash = "Graded %d Assignments" % (count_graded)
 	return redirect(URL('assignments','admin'))
-
-# Student version of index
-def index():
-	if 'sid' not in request.vars and verifyInstructorStatus(auth.user.course_name, auth.user):
-		return redirect(URL('assignments','admin'))
-	if 'sid' not in request.vars:
-		return redirect(URL('assignments','index') + '?sid=%d' % (auth.user.id))
-	if str(auth.user.id) != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
-		return redirect(URL('assignments','index'))
-	student = db(db.auth_user.id == request.vars.sid).select(
-		db.auth_user.id,
-		db.auth_user.username,
-		db.auth_user.first_name,
-		db.auth_user.last_name,
-		db.auth_user.email,
-		).first()
-	if not student:
-		return redirect(URL('assignments','index'))
-
-	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignments = db(db.assignments.id == db.grades.assignment)
-	assignments = assignments(db.assignments.course == course.id)
-	assignments = assignments(db.grades.auth_user == student.id)
-	assignments = assignments.select()
-
-	points_total = 0
-	points_possible = 0
-	for row in assignments:
-		points_total += row.grades.score
-		points_possible += row.assignments.points
-	else:
-		points_possible = 1	# no rows; degenerate case
-	student.points_possible = points_possible
-	student.points_total = points_total
-	student.points_percentage = round((points_total/points_possible)*100)
-
-	last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
-
-	return dict(
-		assignments = assignments,
-		student = student,
-		last_action = last_action,
-		)
 
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
