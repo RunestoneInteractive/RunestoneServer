@@ -119,8 +119,7 @@
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
             {{ if auth.user: }}
-              <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-              <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
+              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
               <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
