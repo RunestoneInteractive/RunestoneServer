@@ -5,6 +5,9 @@ import sys
 from sphinx.application import Sphinx
 
 def index():
+	if not auth.user:
+		session.flash = "Please Login"
+		return redirect(URL('default','index'))
 	if 'sid' not in request.vars and verifyInstructorStatus(auth.user.course_name, auth.user):
 		return redirect(URL('assignments','admin'))
 	if 'sid' not in request.vars:
