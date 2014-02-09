@@ -511,3 +511,7 @@ Exercises
 most frequent characters in the string. [Hint: count the frequencies of all the characters,
 as we've done before, using a dictionary and the accumulator pattern. Then sort the (key, value) pairs.
 Finally, take a slice of the sorted list to get just the top five.]
+
+.. activecode:: sorted_ex_01
+    
+    
