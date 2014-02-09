@@ -282,7 +282,9 @@ You can iterate the key-value pairs.
     d = {"k1": 3, "k2": 7, "k3": "some other value"}
     
     for p in d.items():
+        print p[0]
         print p[1]
+        print '*** LOOP ***'
         
 Each time line 4 is executed, p will refer to one key-value pair from d. A pair is just
 a tuple, so p[0] refers to the key and p[1] refers to the value.
@@ -295,7 +297,9 @@ two variable names.
     d = {"k1": 3, "k2": 7, "k3": "some other value"}
     
     for (k, v) in d.items():
+        print k
         print v
+        print '*** LOOP ***'
 
 More generally, if you have a list of tuples that each has more than two items, and you iterate through
 them with a for loop pulling out information from the tuples, the code will be far more readable if you unpack them
