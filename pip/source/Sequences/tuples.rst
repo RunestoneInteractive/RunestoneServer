@@ -225,8 +225,8 @@ unpacked for assignment to the named parameters.
         
     print(add(3, 4))
     z = (5, 4)
-    print(add(z)) # this line causes an error
     print(add(*z)) # this line will cause the values to be unpacked
+    print(add(z)) # this line causes an error
 
 If you run this, you will be get an error caused by line 6, where it says that
 the function add is expecting two parameters, but you're only passing one parameter
