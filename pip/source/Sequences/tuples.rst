@@ -228,10 +228,9 @@ unpacked for assignment to the named parameters.
     print(add(*z)) # this line will cause the values to be unpacked
     print(add(z)) # this line causes an error
 
-If you run this, you will be get an error caused by line 6, where it says that
+If you run this, you will be get an error caused by line 7, where it says that
 the function add is expecting two parameters, but you're only passing one parameter
-(a tuple). Try commenting out line 6 and you'll see that line 7 works: the tuple
-is unpacked and 5 is bound to x, 4 to y. 
+(a tuple). In line 6 you'll see that the tuple is unpacked and 5 is bound to x, 4 to y. 
 
 Don't worry about mastering this idea yet. But later in the course, if you come
 across some code that someone else has written that uses the * notation inside
