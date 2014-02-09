@@ -340,7 +340,7 @@ Exercises
         a = 3.14159 * r * r
         return c, a
 
-    #fill in this = circleInfo(10) 
+     = circleInfo(10) 
     print("area is " + str(area))
     print("circumference is " + str(circ))
 
