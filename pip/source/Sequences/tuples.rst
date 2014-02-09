@@ -252,7 +252,7 @@ a parameter list, come back and look at this again.
    If you want a function to return two values, contained in variables x and y, which of the following methods will work?
 
 .. mchoicemf:: test_questiontuples_3
-   :answer_a: You can't use different variable names on the left adn right side of an assignment statement.
+   :answer_a: You can't use different variable names on the left and right side of an assignment statement.
    :answer_b: At the end, x still has it's original value instead of y's original value.
    :answer_c: Actually, it works just fine!
    :correct: b
@@ -260,7 +260,7 @@ a parameter list, come back and look at this again.
    :feedback_b: Once you assign x's value to y, y's original value is gone
    :feedback_c: Once you assign x's value to y, y's original value is gone
 
-   Consider the follow alternative way to swap the values of variables x and y. What's wrong with it?
+   Consider the following alternative way to swap the values of variables x and y. What's wrong with it?
    
    .. code-block:: python 
         
