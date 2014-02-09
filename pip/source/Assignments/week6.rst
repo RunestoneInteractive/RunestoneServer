@@ -32,7 +32,7 @@ For this week you have the following graded activities:
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
 
    * Read *The Most Human Human*, Chapters 8 and 9
-   * :ref:`Reading response 5 <response_5>` (Coming soon.)
+   * :ref:`Reading response 5 <response_5>`
 
 #. Save answers to the exercises in Problem Set 5:
 
@@ -74,3 +74,8 @@ Question 3. What's something from these chapters you found particularly interest
    """
 
    """
+
+.. _problem_set_5:
+
+Problem Set 5
+-------------
