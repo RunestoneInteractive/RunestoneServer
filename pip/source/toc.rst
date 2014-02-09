@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 2
 
+   Assignments/week6.rst
    Assignments/week5.rst
    Assignments/week4.rst
    Assignments/week3.rst
@@ -101,6 +102,24 @@ Functions
 
    Functions/functions.rst
    Functions/functions2.rst
+   Functions/optionalParams.rst
+   
+Tuples
+::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Sequences/tuples.rst
+
+Sorting
+:::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Sort/sorted.rst
+
 
 Python Modules
 ::::::::::::::
