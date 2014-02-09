@@ -249,6 +249,14 @@ function runit(myDiv, theButton, includes, suffix) {
             prog = prog + text + "\n"
         }
     }
+    
+    var before_code_div = document.getElementById(myDiv + '_before_code')
+    var before_code = '';
+    if (before_code_div){
+        before_code = before_code_div.innerText || '';  // for some reason Firefox returns undefined when no innerText
+    }
+    prog = prog + '\n' + before_code;
+    
     prog = prog + editor.getValue();
     var spre = document.getElementById(myDiv + '_suffix');
     var suffix = '';
