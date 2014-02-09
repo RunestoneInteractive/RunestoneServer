@@ -156,7 +156,7 @@ of a circle of radius r.
 
 Again, we can take advantage of packing to make the code look a little more readable on line 4
 
-.. activecode:: chp09_tuple3
+.. activecode:: chp09_tuple3a
 
     
     def circleInfo(r):
