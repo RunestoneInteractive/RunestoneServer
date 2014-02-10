@@ -38,16 +38,6 @@ however, they are working with numbers in some other "base" rather than based 10
 For example, in base 8, the rightmost digit is ones, the next digit to the left
 is 8s, and the one to the left of that is the 64s place (8**2).
 
-.. note:: Tom Lehrer's New Math
-
-    Some math educators believe that elementary school students will get a much
-    deeper understanding of the place-value system, and set a foundation for 
-    learning algebra later, if they learn to do arithmetic not only in base-10 but
-    also in base-8 and other bases. This was part of a movement called "The New Math", 
-    though it's not so new now (I had it when I was in elementary school!) Tom
-    Lehrer made a really funny song about it, and it's set with visuals in several
-    YouTube renditions now. Try this very nice `lip-synched version <http://www.youtube.com/watch?v=DfCJgC2zezw>`_. 
-
 The int function provides an optional parameter for the base. When it is
 not specified, the number is converted to an integer assuming the original
 number was in base 10. We say that 10 is the default value. So ``int("100")`` is the
@@ -59,6 +49,16 @@ supplying a different value.
     print(int("100"))
     print(int("100", 10))    # same thing, 10 is the default value for the base
     print(int("100", 8))     # now the base is 8, so the result is 1*64 = 64
+
+.. note:: Tom Lehrer's New Math
+
+    Some math educators believe that elementary school students will get a much
+    deeper understanding of the place-value system, and set a foundation for 
+    learning algebra later, if they learn to do arithmetic not only in base-10 but
+    also in base-8 and other bases. This was part of a movement called "The New Math", 
+    though it's not so new now (I had it when I was in elementary school!) Tom
+    Lehrer made a really funny song about it, and it's set with visuals in several
+    YouTube renditions now. Try this very nice `lip-synched version <http://www.youtube.com/watch?v=DfCJgC2zezw>`_. 
     
 When defining a function, you can specify a default value for a parameter. That
 parameter then becomes an optional parameter when the function is called.

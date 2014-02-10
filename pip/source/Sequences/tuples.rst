@@ -156,7 +156,7 @@ of a circle of radius r.
 
 Again, we can take advantage of packing to make the code look a little more readable on line 4
 
-.. activecode:: chp09_tuple3
+.. activecode:: chp09_tuple3a
 
     
     def circleInfo(r):
@@ -225,13 +225,12 @@ unpacked for assignment to the named parameters.
         
     print(add(3, 4))
     z = (5, 4)
-    print(add(z)) # this line causes an error
     print(add(*z)) # this line will cause the values to be unpacked
+    print(add(z)) # this line causes an error
 
-If you run this, you will be get an error caused by line 6, where it says that
+If you run this, you will be get an error caused by line 7, where it says that
 the function add is expecting two parameters, but you're only passing one parameter
-(a tuple). Try commenting out line 6 and you'll see that line 7 works: the tuple
-is unpacked and 5 is bound to x, 4 to y. 
+(a tuple). In line 6 you'll see that the tuple is unpacked and 5 is bound to x, 4 to y. 
 
 Don't worry about mastering this idea yet. But later in the course, if you come
 across some code that someone else has written that uses the * notation inside
@@ -253,7 +252,7 @@ a parameter list, come back and look at this again.
    If you want a function to return two values, contained in variables x and y, which of the following methods will work?
 
 .. mchoicemf:: test_questiontuples_3
-   :answer_a: You can't use different variable names on the left adn right side of an assignment statement.
+   :answer_a: You can't use different variable names on the left and right side of an assignment statement.
    :answer_b: At the end, x still has it's original value instead of y's original value.
    :answer_c: Actually, it works just fine!
    :correct: b
@@ -261,7 +260,7 @@ a parameter list, come back and look at this again.
    :feedback_b: Once you assign x's value to y, y's original value is gone
    :feedback_c: Once you assign x's value to y, y's original value is gone
 
-   Consider the follow alternative way to swap the values of variables x and y. What's wrong with it?
+   Consider the following alternative way to swap the values of variables x and y. What's wrong with it?
    
    .. code-block:: python 
         
@@ -283,7 +282,9 @@ You can iterate the key-value pairs.
     d = {"k1": 3, "k2": 7, "k3": "some other value"}
     
     for p in d.items():
+        print p[0]
         print p[1]
+        print '*** LOOP ***'
         
 Each time line 4 is executed, p will refer to one key-value pair from d. A pair is just
 a tuple, so p[0] refers to the key and p[1] refers to the value.
@@ -296,7 +297,9 @@ two variable names.
     d = {"k1": 3, "k2": 7, "k3": "some other value"}
     
     for (k, v) in d.items():
+        print k
         print v
+        print '*** LOOP ***'
 
 More generally, if you have a list of tuples that each has more than two items, and you iterate through
 them with a for loop pulling out information from the tuples, the code will be far more readable if you unpack them
@@ -337,7 +340,7 @@ Exercises
         a = 3.14159 * r * r
         return c, a
 
-    #fill in this = circleInfo(10) 
+     = circleInfo(10) 
     print("area is " + str(area))
     print("circumference is " + str(circ))
 

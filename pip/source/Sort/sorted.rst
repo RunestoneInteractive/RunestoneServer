@@ -233,13 +233,6 @@ Below, sorting on absolute value has been rewritten using lambda notation.
 .. activecode:: sort_8
 
     L1 = [1, 7, 4, -2, 3]
-     
-    def absolute(x):
-        print("--- figuring out what to write on the post-it note for " + str(x)) 
-        if x >= 0:
-            return x
-        else:
-            return -x
     
     print("About to call sorted")
     L2 = sorted(L1, None, lambda x: abs(x))
@@ -518,3 +511,7 @@ Exercises
 most frequent characters in the string. [Hint: count the frequencies of all the characters,
 as we've done before, using a dictionary and the accumulator pattern. Then sort the (key, value) pairs.
 Finally, take a slice of the sorted list to get just the top five.]
+
+.. activecode:: sorted_ex_01
+    
+    
