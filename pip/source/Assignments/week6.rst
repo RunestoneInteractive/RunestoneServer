@@ -202,7 +202,7 @@ complete initial code. Everythin except the function called **guess** will be hi
 
 
 This problem set will walk you through making a series of improvements to the
-guess function. Right now, it picks a random letter from the alphabet and guesses it if it hasn't been guessed already. But with more information, we can change the function to make a better guess that is more likely to be in a word.
+guess function. Right now, it picks a random letter from the alphabet and guesses it if (even if it was guessed previously!) But with more information, we can change the function to make a better guess that is more likely to be in the word.
 
 First, take a look at the game function. 
 
@@ -940,6 +940,7 @@ let the graders figure it out, but most likely you've got an error.
     import sys #don't worry about this line; you'll understand it next week
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
+    <<<<
     
     # paste your letter_frequencies, better_guess, and possible_words functions here
     
