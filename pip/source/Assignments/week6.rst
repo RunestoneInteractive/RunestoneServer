@@ -81,11 +81,10 @@ Problem Set 5
 -------------
 
 This problem set builds from the previous problem set's solution. You will write
-code that makes the next guess, instead of having a person do it. To keep your
-code window manageable, and to prevent you from accidentally changing the scaffolding code,
-we have "hidden" much of the code that calls your code. For your edification, 
-here's the complete initial code. All except guess will be hidden from your
-activecode windows.
+code that makes the next guess in a hangman game, instead of having a person do it.
+
+To keep your code window manageable, and to prevent you from accidentally changing the scaffolding code, we have "hidden" much of the code that calls your code. For your edification, here's the
+complete initial code. Everythin except the function called **guess** will be hidden from your activecode windows.
 
 .. sourcecode:: python
    
@@ -203,22 +202,20 @@ activecode windows.
 
 
 This problem set will walk you through making a series of improvements to the
-guess function. But first, take a look at the game function. 
+guess function. Right now, it picks a random letter from the alphabet and guesses it if it hasn't been guessed already. But with more information, we can change the function to make a better guess that is more likely to be in a word.
+
+First, take a look at the game function. 
 
 Note that when game is called, no parameter values are provided, and so the default
-values are used. With manual set to True, lots of feedback is given and the user has
-to click OK to initiate each guess. Without it, the game runs to completion and 
-only the number of guesses used and the minimum that could have been used are
-returned.
+values are used. With the parameter **manual** set to (assigned the value) True, lots of feedback is given and the user has to click OK to initiate each guess. 
 
-With better set to False, the guess function, which is already defined in the provided code,
-is called. With better set to True, a function that you will define in a later exercise
-would get called. 
+But without the argument **manual** being set to (assigned the value) True, the game runs till it is completed, and only two things are returned: the number of guesses used and the minimum number of guesses that could have been used.
 
-Try passing some parameter values in the invocation of game, in order to change
-how it works.
+With the argument **better** set to False, the **guess** function, which is already defined in the provided code, is called. If the argument **better** is set to True, a different function (that you will define in a later exercise) will get called instead.
 
-1. (1 point) Change the invocation of game so that the maximum number of wrong guesses is 3
+Try passing some different parameter values in the invocation of the function **game**, in order to see how it works. Remember, a function invocation is the same as a function call. (Remember the last problem in Problem Set 4 and all the examples from the textbook?)
+
+1. (1 point) Change the invocation of the function game in the code below, so that the maximum number of wrong guesses is 3. 
 
 .. actex:: ps5_1
     
@@ -943,7 +940,6 @@ let the graders figure it out, but most likely you've got an error.
     import sys #don't worry about this line; you'll understand it next week
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
     
     # paste your letter_frequencies, better_guess, and possible_words functions here
     
