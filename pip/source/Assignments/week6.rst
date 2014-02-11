@@ -25,7 +25,7 @@ For this week you have the following graded activities:
       * :ref:`Sorting <invoking_sort_chap>`
    
    * Before Thursday's class:
-      * importing modules (coming soon)
+      * :ref:`Import Modules <modules_chap>`
       * test cases (coming soon)
 
 
@@ -38,6 +38,8 @@ For this week you have the following graded activities:
 
    * :ref:`Problem Set 5 <problem_set_5>` (Coming soon.)
 
+#. Supplemental exercises
+   * :ref:`In-class exercises Tuesday <session_10>`
 
 .. _response_5:
 
@@ -10711,3 +10713,95 @@ let the graders figure it out, but most likely you've got an error.
     ZYMOSAN
     ZYZZYVA
     
+.. _session_10:
+
+Tuesday In-class Exercises
+--------------------------
+
+Call greet so that it prints out::
+ 
+    Hello Jackie
+    Hello Nick
+
+.. actex:: session_10_1
+
+    def greet(x, y = ["Jackie", "Nick"], z = 1):
+        for nm in y:
+            for i in range(z):
+                print (x + " " + nm)
+
+Call greet so that it prints out::
+ 
+    Hello Prof. Resnick
+    Hello Prof. Resnick
+    Hello Prof. Resnick
+
+.. actex:: session_10_2
+
+    def greet(x, y = ["Jackie", "Nick"], z = 1):
+        for nm in y:
+            for i in range(z):
+                print (x + " " + nm)
+
+Define the function `t` so that it multiples its two arguments, but has default
+values such that it produces the outputs specified
+
+.. actex:: session_10_3
+ 
+    t()
+    #prints 1
+    
+    t(2)
+    #prints 2
+    
+    t(2, 3)
+    #prints 6
+
+                
+Expand the definition of the function print_d so that it produces the following
+outputs::
+
+    #alphabetic order
+    Jackie, 100
+    Lara, 150
+    Nick, 42
+    
+    # reverse order
+    Nick, 42
+    Lara, 150
+    Jackie, 100
+    
+    # sorted by values
+    Nick, 42
+    Jackie, 100
+    Lara, 150
+
+.. actex:: session_10_4
+
+    # change the definition of print_d
+    def print_d(d):
+        pairs = d.items()
+        for (k, v) in pairs:
+            print(k + ", " + v)
+    
+    d = {"Nick" : 42, "Jackie": 100, "Lara": 150}        
+
+    #alhabetic order
+    print_d(d)
+    
+    # reverse order
+    print_d(d, True)
+    
+    # sorted by values
+    print_d(d, False, True)
+
+Define a function filtered_count that takes a list as its first parameter and
+a function as its second parameter. The function passed as the second value should be a boolean function that
+takes a single parameter and returns True or False.
+
+.. actex:: session_10_5
+
+    def filtered_count(...
+
+    print(filtered_count([4, 2, 0, 5, 6, 5], lambda x: x > 3))
+    # Should return 4, the count of items in the list that are bigger than 3
