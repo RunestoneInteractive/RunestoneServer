@@ -105,8 +105,6 @@ CANVAS = '''
 
 SUFF = '''<pre id="%(divid)s_suffix" style="display:none">%(suffix)s</pre>'''
 
-BEFORE_CODE = '''<pre id="%(divid)s_before_code" style="display:none">%(before_code)s</pre>'''
-
 PRE = '''
 <pre id="%(divid)s_pre" class="active_out">
 
@@ -164,8 +162,6 @@ def visit_ac_node(self,node):
         res += UNHIDE
     if 'gradebutton' in node.ac_components:
         res += GRADES
-    if 'before_code' in node.ac_components:
-        res += BEFORE_CODE
     if 'suffix' in node.ac_components:
         res += SUFF
     if 'nopre' not in node.ac_components:
@@ -223,27 +219,19 @@ class ActiveCode(Directive):
         self.options['divid'] = self.arguments[0]
 
         if self.content:
-            if "<<<<" in self.content:
-                start_idx = self.content.index("<<<<")
-                before_code = "\n".join(self.content[:start_idx])
-            else:
-                start_idx = -1
-                before_code = "\n"
             if '====' in self.content:
-                end_idx = self.content.index('====')
-                source = "\n".join(self.content[start_idx + 1:end_idx])
-                suffix = "\n".join(self.content[end_idx+1:])
+                idx = self.content.index('====')
+                source = "\n".join(self.content[:idx])
+                suffix = "\n".join(self.content[idx+1:])
             else:
-                source = "\n".join(self.content[start_idx+1:])
+                source = "\n".join(self.content)
                 suffix = "\n"
         else:
             source = '\n'
             suffix = '\n'
-            before_code = '\n'
 
         self.options['initialcode'] = source
         self.options['suffix'] = suffix
-        self.options['before_code'] = before_code
         str=source.replace("\n","*nline*")
         str0=str.replace("\"","*doubleq*")
         str1=str0.replace("(","*open*")
