@@ -85,128 +85,12 @@ Problem Set 5
 This problem set builds from the previous problem set's solution. You will write
 code that makes the next guess in a hangman game, instead of having a person do it.
 
-To keep your code window manageable, and to prevent you from accidentally changing the scaffolding code, we have "hidden" much of the code that calls your code. For your edification, here's the
-complete initial code. Everythin except the function called **guess** will be hidden from your activecode windows.
+A version of the **guess** function is provided. It picks a random letter from the alphabet and guesses it if (even if it was guessed previously!) But with more information, we can change the function to make a better guess that is more likely to be in the word.
 
-.. sourcecode:: python
-   
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
-                    else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
+You will have to write a new function, **better_guess**. The problem set will walk you through making a series of improvements to the
+guess function. 
 
-
-This problem set will walk you through making a series of improvements to the
-guess function. Right now, it picks a random letter from the alphabet and guesses it if (even if it was guessed previously!) But with more information, we can change the function to make a better guess that is more likely to be in the word.
-
-First, take a look at the game function. 
+First, take a look at the game function that is provided.
 
 Note that when game is called, no parameter values are provided, and so the default
 values are used. With the parameter **manual** set to (assigned the value) True, lots of feedback is given and the user has to click OK to initiate each guess. 
@@ -217,10 +101,13 @@ With the argument **better** set to False, the **guess** function, which is alre
 
 Try passing some different parameter values in the invocation of the function **game**, in order to see how it works. Remember, a function invocation is the same as a function call. (Remember the last problem in Problem Set 4 and all the examples from the textbook?)
 
-1. (1 point) Change the invocation of the function game in the code below, so that the maximum number of wrong guesses is 3. 
+In the code windows below, there is a big chunk of code that is provided to you that you should **not change**, except perhaps to add some print statements temporarily to figure out what it's doing. 
+
+1. (1 point) Change the invocation of the function game at the bottom of the code below, so that the maximum number of wrong guesses is 3. 
 
 .. actex:: ps5_1
     
+    #### Don't change any of this provided code ######
     
     def guess(blanked, guessed_already, manual = True):
         """Return a single letter (upper case)"""
@@ -334,11 +221,12 @@ Try passing some different parameter values in the invocation of the function **
         
         return len(guesses_so_far), len(set(list(to_guess)))
         
-    import sys #don't worry about this line; you'll understand it next week
+    import sys 
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
-    # change this call so that a game is played with a maximum of 3 wrong guesses 
+    ###### Don't change code above this line; just read and understand it #####
+    
+    # Run this. Then change this call so that a game is played with a maximum of 3 wrong guesses 
     # before the game ends.
     game()
 
@@ -351,10 +239,12 @@ minimum number of guesses it could have made. Print out the ratio. The closer to
 the better your guesser.
 
 (Hint: you will go crazy clicking OK forever unless you set the manual parameter to False in your
-calls to game.)
+calls to the function game.)
     
 .. actex:: ps5_2
 
+    #### Don't change any of this provided code ######
+    
     def guess(blanked, guessed_already, manual = True):
         """Return a single letter (upper case)"""
         # Initial version picks a letter completely at random,
@@ -467,10 +357,11 @@ calls to game.)
         
         return len(guesses_so_far), len(set(list(to_guess)))
         
-    import sys #don't worry about this line; you'll understand it next week
+    import sys 
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
+    ###### Don't change code above this line; just read and understand it #####
+    
     # write code to call game 50 times and compute the average performance
 
 3. (1 point) Compute letter frequencies.
@@ -494,23 +385,14 @@ messages.
 
     def letter_frequencies(...fill this in...
     
-    ====
     
-    import unittestgui
-
-    class myTests(unittestgui.unittest):
-    
-        def testA(self):
-            test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
-            self.assertEqual(type(letter_frequencies(test_words)), type({}), "You should return a dictionary")
-    
-        def testB(self):
-            test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
-            r = letter_frequencies(test_words)
-            self.assertEqual(r['C'], 1, 'There is one C in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')
-            self.assertEqual(r['O'], 4, 'There are four Os in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')
-    
-    myTests().main()
+    #####some tests 
+    import test    
+    test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
+    r = letter_frequencies(test_words)
+    test.testEqual(type(r), type({}), "letter_frequencies should return a dictionary")
+    test.testEqual(r['C'], 1, 'There is one C in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')
+    test.testEqual(r['O'], 4, 'There are four Os in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')    
     
 
 4. (2 points) Use letter_frequencies to make better guesses. Fill in details of the better_guess function as indicated in the comments.
@@ -518,6 +400,8 @@ messages.
 
 .. actex:: ps5_4
 
+        #### Don't change any of this provided code ######
+    
     def guess(blanked, guessed_already, manual = True):
         """Return a single letter (upper case)"""
         # Initial version picks a letter completely at random,
@@ -630,11 +514,11 @@ messages.
         
         return len(guesses_so_far), len(set(list(to_guess)))
         
-    import sys #don't worry about this line; you'll understand it next week
+    import sys 
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
-    
+    ###### Don't change code above this line; just read and understand it #####
+        
     # copy your letter_frequencies function here
 
     def possible_words(blanked_word, guessed_already, possible_words = all_words):
@@ -649,22 +533,14 @@ messages.
         # return the letter that has the highest count that is not in guessed_already
         # (and print it out if manual is True)       
 
-    ====
-    
-    import unittestgui
-
-    class myTests(unittestgui.unittest):
-    
-        def testA(self):
-            res = better_guess("H___O", "HOWQA")
-            self.assertEqual(type(res), type(""), "better_guess should return a string")
-            self.assertEqual(len(res), 1, "better_guess should return a string with just one character")
-    
-        def testB(self):
-            res = better_guess("HE__O", "HOWQAEN")
-            self.assertEqual(res, "S" , 'better_guess("HE__O", "HOWQAEN") should be S')
-    
-    myTests().main()
+   
+    ###some test cases###
+    import test
+    res = better_guess("H___O", "HOWQA")
+    test.testEqual(type(res), type(""), "better_guess should return a string")
+    test.testEqual(len(res), 1, "better_guess should return a string with just one character")
+    res = better_guess("HE__O", "HOWQAEN")
+    test.testEqual(res, "S" , 'better_guess("HE__O", "HOWQAEN") should be S')
 
 5. (3 points) Make a better version of possible words
 
@@ -683,6 +559,8 @@ let the graders figure it out, but most likely you've got an error.
 
 .. actex:: ps5_5 
 
+        #### Don't change any of this provided code ######
+    
     def guess(blanked, guessed_already, manual = True):
         """Return a single letter (upper case)"""
         # Initial version picks a letter completely at random,
@@ -795,35 +673,33 @@ let the graders figure it out, but most likely you've got an error.
         
         return len(guesses_so_far), len(set(list(to_guess)))
         
-    import sys #don't worry about this line; you'll understand it next week
+    import sys 
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
-
+    ###### Don't change code above this line; just read and understand it #####
+    
     def possible_words(blanked_word, guessed_already, possible_words = all_words):
         return possible_words # replace this with something better
 
 
 
+    #### Some comments #####
+    import test
     
-    import unittestgui
-
-    class myTests(unittestgui.unittest):
-    
-        def testA(self):
-            res = possible_words("H___O", "HOWQA")
-            self.assertEqual(type(res), type([]), "possible_words should return a list")
-            self.assertEqual(type(res[0]), type(""), "possible_words should return a list of strings")
-            self.assertEqual(len(res), 54, 'possible_words("H___O", "HOWQA") should return TKTK words')
+    res = possible_words("H___O", "HOWQA")
+    test.testEqual(type(res), type([]), "possible_words should return a list")
+    test.testEqual(type(res[0]), type(""), "possible_words should return a list of strings")
+    test.testEqual(len(res), 54, 'possible_words("H___O", "HOWQA") should return TKTK words')
     
     
-    myTests().main()
 
 
 6. (1 point) Put it all together
 
 .. actex:: ps5_6
 
+        #### Don't change any of this provided code ######
+    
     def guess(blanked, guessed_already, manual = True):
         """Return a single letter (upper case)"""
         # Initial version picks a letter completely at random,
@@ -836,12 +712,9 @@ let the graders figure it out, but most likely you've got an error.
         return alphabet[idx]
         
     all_words = []
-    i = 0
     f = open('words.txt', 'r')
     for l in f:
-        i =i + 1
-        if i%10 == 0:
-            all_words.append(l.strip().upper())
+        all_words.append(l.strip().upper())
     f.close()
     
     import random
@@ -939,11 +812,12 @@ let the graders figure it out, but most likely you've got an error.
         
         return len(guesses_so_far), len(set(list(to_guess)))
         
-    import sys #don't worry about this line; you'll understand it next week
+    import sys 
     sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
     
-    <<<<
+    ###### Don't change code above this line; just read and understand it #####
     
+        
     # paste your letter_frequencies, better_guess, and possible_words functions here
     
     # paste two copies of your code for computing, over 50 games, the ratio of 
@@ -10782,7 +10656,7 @@ outputs::
     def print_d(d):
         pairs = d.items()
         for (k, v) in pairs:
-            print(k + ", " + v)
+            print(k + ", " + str(v))
     
     d = {"Nick" : 42, "Jackie": 100, "Lara": 150}        
 
