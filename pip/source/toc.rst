@@ -129,7 +129,13 @@ Python Modules
 
    PythonModules/modules.rst
 
+Test Cases
+::::::::::
 
+.. toctree::
+   :maxdepth: 2
+   
+   Testing/simpleTest.rst
 
 More About Iteration
 ::::::::::::::::::::

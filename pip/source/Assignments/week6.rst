@@ -26,7 +26,8 @@ For this week you have the following graded activities:
    
    * Before Thursday's class:
       * :ref:`Import Modules <modules_chap>`
-      * test cases (coming soon)
+      * :ref:`Test cases <simple_tests_chap>`
+      * :ref:`Print vs. Return <print_vs_return>`
 
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
