@@ -390,9 +390,10 @@ messages.
     import test    
     test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
     r = letter_frequencies(test_words)
-    test.testEqual(type(r), type({}), "letter_frequencies should return a dictionary")
-    test.testEqual(r['C'], 1, 'There is one C in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')
-    test.testEqual(r['O'], 4, 'There are four Os in ["HELLO", "GOODBYE", "LOVE", "PEACE"]')    
+    # letter_frequencies should return a dictionary
+    test.testEqual(type(r), type({}))
+    test.testEqual(r['C'], 1)
+    test.testEqual(r['O'], 4)    
     
 
 4. (2 points) Use letter_frequencies to make better guesses. Fill in details of the better_guess function as indicated in the comments.
@@ -537,10 +538,11 @@ messages.
     ###some test cases###
     import test
     res = better_guess("H___O", "HOWQA")
-    test.testEqual(type(res), type(""), "better_guess should return a string")
-    test.testEqual(len(res), 1, "better_guess should return a string with just one character")
+    # should return a string
+    test.testEqual(type(res), type(""))
+    test.testEqual(len(res), 1)
     res = better_guess("HE__O", "HOWQAEN")
-    test.testEqual(res, "S" , 'better_guess("HE__O", "HOWQAEN") should be S')
+    test.testEqual(res, "S")
 
 5. (3 points) Make a better version of possible words
 
@@ -687,9 +689,10 @@ let the graders figure it out, but most likely you've got an error.
     import test
     
     res = possible_words("H___O", "HOWQA")
-    test.testEqual(type(res), type([]), "possible_words should return a list")
-    test.testEqual(type(res[0]), type(""), "possible_words should return a list of strings")
-    test.testEqual(len(res), 54, 'possible_words("H___O", "HOWQA") should return TKTK words')
+    #should return a list of strings
+    test.testEqual(type(res), type([]))
+    test.testEqual(type(res[0]), type(""))
+    test.testEqual(len(res), 54)
     
     
 
