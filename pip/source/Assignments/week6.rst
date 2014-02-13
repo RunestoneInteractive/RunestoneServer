@@ -39,8 +39,10 @@ For this week you have the following graded activities:
 
    * :ref:`Problem Set 5 <problem_set_5>` (Coming soon.)
 
-#. Supplemental exercises
+#. Supplemental exercises:
+
    * :ref:`In-class exercises Tuesday <session_10>`
+   * :ref:`In-class exercises Thursday <session_11>`
 
 .. _response_5:
 
@@ -10683,3 +10685,41 @@ takes a single parameter and returns True or False.
 
     print(filtered_count([4, 2, 0, 5, 6, 5], lambda x: x > 3))
     # Should return 4, the count of items in the list that are bigger than 3
+    
+    
+.. _session_11:
+
+Thursday In-class Exercises
+---------------------------
+
+If you had trouble with the exercise at the bottom of the sorting chapter, I've broken
+it up into several steps here. 
+
+Step 1. Suppose you had this list, [8, 7, 6, 6, 4, 4, 3, 1, 0], already sorted, how would you make a list of just the best 5? (Hint: take a slice).
+
+.. actex:: session_11_1
+    
+    L = [8, 7, 6, 6, 4, 4, 3, 1, 0]
+
+Now suppose the list wasn't sorted yet. How would get those same five elements from this list?
+
+.. actex:: session_11_2
+
+    L = [0, 1, 6, 7, 3, 6, 8, 4, 4]
+    
+Now make a dictionary of counts for how often these numbers appear in the lists.
+
+.. actex:: session_11_3
+
+    L = [0, 1, 6, 7, 3, 6, 8, 4, 4, 6, 1, 6, 6, 5, 4, 4, 3, 35, 4, 11]
+
+Now sort the (number, count) pairs and keep just the top five pairs
+
+.. actex:: session_11_4
+
+    L = [0, 1, 6, 7, 3, 6, 8, 4, 4, 6, 1, 6, 6, 5, 4, 4, 3, 35, 4, 11]
+    
+Finally, generalize what you've done. Write a function that takes a string as a parameter and returns a list of the five
+most frequent characters in the string. If you're amibitious write a few test cases for it, using import test and then test.testEqual.
+
+.. actex:: session_11_5
