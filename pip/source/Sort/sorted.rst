@@ -279,6 +279,7 @@ Below, sorting on absolute value has been rewritten using lambda notation.
      
     print(sorted(L1, None, lambda x: -x), True)
 
+.. _sort_dictionaries:
 
 Sorting a Dictionary
 --------------------
