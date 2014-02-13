@@ -88,6 +88,75 @@ These are review problems that we worked on and discussed in section this week. 
 
 The problems AND the solutions are provided for you, since you worked on them in class. (Problems and questions you addressed in discussion may vary slightly by section!) We suggest that you try to do the problems again yourself before looking at the solutions (which are heavily commented to address questions that came up in the discussion group work).
 
+1. Define (and call) a function called `` get_vowels `` which takes an **input** of a string and **returns the total number of vowels in the string**.
+
+    .. tabbed:: func_review_1
+
+        .. tab:: Problem
+
+            .. actex:: fr_1
+
+                # Write your code here!
+
+
+                # Here's a sample function call.
+                print get_vowels("Hello all") # This should print: 3
+
+        .. tab:: Solution
+
+            .. actex:: fr_1a
+
+                def get_vowels(s):
+                    vowels = "aeiou"
+                    total = 0
+                    for v in vowels:
+                        total += s.count(v)
+                    return total
+
+                print get_vowels("Hello all")
+
+#. Define (and call) a function called `` sum_a_list `` which **takes any list of integers** and **returns the sum of all integers in the list**.
+
+    .. tabbed:: func_review_2
+
+        .. tab:: Problem
+
+            .. actex:: fr_2
+
+                # Write your code here!
+
+
+                # Here's a sample function call.
+                print sum_a_list([1,4,7,5]) # this should print: 17
+
+                # Extra practice: 
+                # how would you change this function just a LITTLE 
+                # so that the function could also take a string of digits
+                # and return the sum of all those digits.
+                # (Hint: to do this, you only have to type 5 more characters.)
+
+        .. tab:: Solution
+
+            .. actex:: fr_2a
+
+                def sum_a_list(lt):
+                    tot = 0
+                    for i in lt:
+                        tot = tot + i
+                    return tot
+
+                print sum_a_list(1,4,7,5])
+
+                # Here's the version of the function that will work
+                #   for EITHER a list of integers or a string of digits
+                def sum_a_list_or_digitstring(lt):
+                    tot = 0
+                    for i in lt:
+                        tot = tot + int(i)
+                    return tot
+
+                print sum_a_list_or_digitstring("1475")
+
 
 
 .. _problem_set_5:
