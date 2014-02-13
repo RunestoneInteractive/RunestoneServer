@@ -683,7 +683,7 @@ let the graders figure it out, but most likely you've got an error.
     
     ###### Don't change code above this line; just read and understand it #####
     
-    def possible_words(blanked_word, guessed_already, possible_s = all_words):
+    def possible_words(blanked_word, guessed_already, possible_ws = all_words):
         return possible_ws # replace this with something better
 
 
