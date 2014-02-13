@@ -525,8 +525,8 @@ messages.
         
     # copy your letter_frequencies function here
 
-    def possible_words(blanked_word, guessed_already, possible_words = all_words):
-        return possible_words
+    def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+        return possible_ws
 
     def better_guess(blanked, guessed_already, manual = False):
         freqs = letter_frequencies(possible_words(blanked, guessed_already))
@@ -683,8 +683,8 @@ let the graders figure it out, but most likely you've got an error.
     
     ###### Don't change code above this line; just read and understand it #####
     
-    def possible_words(blanked_word, guessed_already, possible_words = all_words):
-        return possible_words # replace this with something better
+    def possible_words(blanked_word, guessed_already, possible_s = all_words):
+        return possible_ws # replace this with something better
 
 
 
@@ -10603,39 +10603,89 @@ Call greet so that it prints out::
     Hello Jackie
     Hello Nick
 
-.. actex:: session_10_1
+.. tabbed:: q1
 
-    def greet(x, y = ["Jackie", "Nick"], z = 1):
-        for nm in y:
-            for i in range(z):
-                print (x + " " + nm)
+    .. tab:: Question
 
+        .. actex:: session_10_1
+        
+            def greet(x, y = ["Jackie", "Nick"], z = 1):
+                for nm in y:
+                    for i in range(z):
+                        print (x + " " + nm)
+
+    .. tab:: Answer
+        
+        .. actex:: session_10_1a
+
+            def greet(x, y = ["Jackie", "Nick"], z = 1):
+                for nm in y:
+                    for i in range(z):
+                        print (x + " " + nm)
+
+            greet("Hello")
+            
 Call greet so that it prints out::
  
     Hello Prof. Resnick
     Hello Prof. Resnick
     Hello Prof. Resnick
 
-.. actex:: session_10_2
+.. tabbed:: q2
 
-    def greet(x, y = ["Jackie", "Nick"], z = 1):
-        for nm in y:
-            for i in range(z):
-                print (x + " " + nm)
+    .. tab:: Question
+    
+        .. actex:: session_10_2
+    
+            def greet(x, y = ["Jackie", "Nick"], z = 1):
+                for nm in y:
+                    for i in range(z):
+                        print (x + " " + nm)
+
+    .. tab:: Answer
+    
+        .. actex:: session_10_2a
+
+            def greet(x, y = ["Jackie", "Nick"], z = 1):
+                for nm in y:
+                    for i in range(z):
+                        print (x + " " + nm)
+
+            greet("Hello", ["Prof. Resnick"], 3)
 
 Define the function `t` so that it multiples its two arguments, but has default
 values such that it produces the outputs specified
 
-.. actex:: session_10_3
- 
-    t()
-    #prints 1
+.. tabbed:: q3
+
+    .. tab:: Question
     
-    t(2)
-    #prints 2
+        .. actex:: session_10_3
+         
+            t()
+            #prints 1
+            
+            t(2)
+            #prints 2
+            
+            t(2, 3)
+            #prints 6
+
+    .. tab:: Answer
     
-    t(2, 3)
-    #prints 6
+        .. actex:: session_10_3a
+
+            def t(x=1, y=1):
+                return x*y
+                
+            print t()
+            #prints 1
+            
+            print t(2)
+            #prints 2
+            
+            print t(2, 3)
+            #prints 6
 
                 
 Expand the definition of the function print_d so that it produces the following
@@ -10656,35 +10706,97 @@ outputs::
     Jackie, 100
     Lara, 150
 
-.. actex:: session_10_4
+.. tabbed:: q4
 
-    # change the definition of print_d
-    def print_d(d):
-        pairs = d.items()
-        for (k, v) in pairs:
-            print(k + ", " + str(v))
+    .. tab:: Question
     
-    d = {"Nick" : 42, "Jackie": 100, "Lara": 150}        
+        .. actex:: session_10_4
+        
+            # change the definition of print_d
+            def print_d(d):
+                pairs = d.items()
+                for (k, v) in pairs:
+                    print(k + ", " + str(v))
+            
+            d = {"Nick" : 42, "Jackie": 100, "Lara": 150}        
+        
+            #alhabetic order
+            print_d(d)
+            
+            # reverse order
+            print_d(d, True)
+            
+            # sorted by values
+            print_d(d, False, True)
+        
+    .. tab:: Answer
+        
+        .. actex:: session_10_4a
+        
+            # change the definition of print_d
+            def print_d(d, reverse=False, by_value=False):
+                pairs = d.items()
+                if by_value:
+                    if reverse:
+                        s = sorted(pairs, None, lambda x: x[1], True)
+                    else:
+                        s = sorted(pairs, None, lambda x: x[1])
+                    # we should have just been able to pass reverse as the
+                    # fourth parameter to sorted, but there seems to be a 
+                    # bug that when we pass False it still sorts in reverse
+                    # order
+                else:
+                    if reverse:
+                        s = sorted(pairs, None, lambda x: x[0], True)
+                    else:
+                        s = sorted(pairs, None, lambda x: x[0])
+                
+                for (k, v) in s:
+                    print(k + ", " + str(v))
+                
+            d = {"Nick" : 42, "Jackie": 100, "Lara": 150}
+        
+            #alhabetic order
+            print_d(d)
+            
+            # reverse order
+            print_d(d, True)
+            
+            # sorted by values
+            print_d(d, False, True)
+            
 
-    #alhabetic order
-    print_d(d)
-    
-    # reverse order
-    print_d(d, True)
-    
-    # sorted by values
-    print_d(d, False, True)
 
 Define a function filtered_count that takes a list as its first parameter and
 a function as its second parameter. The function passed as the second value should be a boolean function that
 takes a single parameter and returns True or False.
 
-.. actex:: session_10_5
+.. tabbed:: q5
 
-    def filtered_count(...
+    .. tab:: Question
+    
+        .. actex:: session_10_5
+    
+            def filtered_count(...
+    
 
-    print(filtered_count([4, 2, 0, 5, 6, 5], lambda x: x > 3))
-    # Should return 4, the count of items in the list that are bigger than 3
+    .. tab:: Answer
+    
+        .. actex:: session_10_5a
+
+            def filtered_count(L, f):
+                
+                count = 0
+                
+                for x in L:
+                    if f(x):
+                        count = count + 1 
+                
+                return count
+
+
+            print(filtered_count([4, 2, 0, 5, 6, 5], lambda x: x > 3))
+            # Should return 4, the count of items in the list that are bigger than 3
     
     
 .. _session_11:
