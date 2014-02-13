@@ -174,8 +174,6 @@ The problems AND the solutions are provided for you, since you worked on them in
                 # Here's a sample function call.
                 common_word("hello hello hello is what they said to the class!") # should print: hello
 
-                # Here's another
-                common_word("hello, said Jackie to Nick") # should print: same
 
                 # For extra practice: you've done something like this before -- 
                 # how would you change this function to print the LONGEST word in the string?
