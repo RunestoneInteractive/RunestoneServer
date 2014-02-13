@@ -78,6 +78,18 @@ Question 3. What's something from these chapters you found particularly interest
 
    """
 
+
+.. _functions_review_5:
+
+Functions Review
+----------------
+
+These are review problems that we worked on and discussed in section this week. Each problem asks you to define a function, specifies the input that the function takes, and what the function should do.
+
+The problems AND the solutions are provided for you, since you worked on them in class. (Problems and questions you addressed in discussion may vary slightly by section!) We suggest that you try to do the problems again yourself before looking at the solutions (which are heavily commented to address questions that came up in the discussion group work).
+
+
+
 .. _problem_set_5:
 
 Problem Set 5
