@@ -161,7 +161,9 @@ def grade():
 		assignment.grade(row)
 		count_graded += 1
 	session.flash = "Graded %d Assignments" % (count_graded)
-	return redirect(URL('assignments','admin'))
+	if request.env.HTTP_REFERER:
+		return redirect(request.env.HTTP_REFERER)
+	return redirect("%s?id=%d" % (URL('assignments','detail'), assignment.id))
 
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
