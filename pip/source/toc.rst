@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 2
 
+   Assignments/week7.rst
    Assignments/week6.rst
    Assignments/week5.rst
    Assignments/week4.rst
@@ -136,6 +137,14 @@ Test Cases
    :maxdepth: 2
    
    Testing/simpleTest.rst
+   
+Nested Data
+:::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   NestedData/nested.rst
 
 More About Iteration
 ::::::::::::::::::::

@@ -37,7 +37,7 @@ For this week you have the following graded activities:
 
 #. Save answers to the exercises in Problem Set 5:
 
-   * :ref:`Problem Set 5 <problem_set_5>` (Coming soon.)
+   * :ref:`Problem Set 5 <problem_set_5>`
 
 #. Supplemental exercises:
 
