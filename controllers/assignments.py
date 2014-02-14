@@ -56,7 +56,7 @@ def index():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
 	course = db(db.courses.id == auth.user.course_id).select().first()
-	assignments = db(db.assignments.course == course.id).select()
+	assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
 	students = db(db.auth_user.course_id == course.id).select()
 	return dict(
 		assignments = assignments,
