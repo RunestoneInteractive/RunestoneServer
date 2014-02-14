@@ -21,7 +21,7 @@ For this week you have the following graded activities:
 
    * Before Tuesday's class:      
       * :ref:`Nested Data <nested_data_chap>`
-      * :ref:`Indefinite Iteration <while_loop>` (coming soon)
+      * :ref:`Indefinite Iteration <while_loop>`
    
    * Before Thursday's class:
       * No additional textbook reading
