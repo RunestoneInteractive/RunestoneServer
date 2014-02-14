@@ -14,7 +14,7 @@ def assignment_get_problems(assignment, user):
 		return []
 	return db(db.code.acid.like(assignment.query+"%"))(db.code.sid==user.username).select(
 		db.code.ALL,
-		orderby=db.code.acid|~db.code.timestamp,
+		orderby=db.code.acid|db.code.timestamp,
 		distinct=db.code.acid,
 		)
 db.assignments.problems = Field.Method(lambda row, user: assignment_get_problems(row.assignments, user))
