@@ -165,6 +165,7 @@ def grade():
 		return redirect(request.env.HTTP_REFERER)
 	return redirect("%s?id=%d" % (URL('assignments','detail'), assignment.id))
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
 	assignment = db(db.assignments.id == request.vars.id)(db.assignments.course == course.id).select().first()
