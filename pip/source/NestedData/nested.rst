@@ -21,11 +21,6 @@ Nested Data and Nested Iteration
 Lists with Complex Items
 ------------------------
 
-.. activecode:: simple_test_1
-
-    import test
-    test.testEqual(2, 1+1)
-
 
 The lists we have seen so far have had numbers or strings as items. Perhaps you 
 noticed the lists of tuples when we sorted the contents of dictionaries.
