@@ -24,8 +24,16 @@
 			<ul class="list-group">
 			{{for row in students:}}
 			<li class="list-group-item">
+				{{ if student and student.id == row.id: }}
+				<span class="badge">{{=row.grade}}</span>
+				<a href="{{=URL('assignments','detail')}}{{=page_args(student=None)}}">
+					<span class="glyphicon glyphicon-remove"></span>
+					{{=row.first_name}} {{=row.last_name}}
+				</a>
+				{{ else: }}
 				<span class="badge">{{=row.grade}}</span>
 				<a href="{{=URL('assignments','detail')}}{{=page_args(student=row)}}">{{=row.first_name}} {{=row.last_name}}</a>
+				{{ pass }}
 			</li>
 			{{pass}}
 		</ul>
@@ -39,13 +47,20 @@
 			{{if len(problems) > 0:}}
 			<ul class="list-group">
 			{{for row in problems:}}
-			    <li class="list-group-item {{if acid==row.acid:}}active{{pass}}">
+			    <li class="list-group-item">
 			    	{{if student:}}
 					<span class="badge">{{=row.grade}}</span>
 					<a href="{{=URL('assignments','detail')}}{{=page_args(student=student,acid=row.acid)}}">{{=row.acid}}</a>
 					<p>{{=row.comment}}</p>
 					{{else:}}
+					{{if acid==row.acid:}}
+					<a href="{{=URL('assignments','detail')}}{{=page_args(acid=None)}}">
+						<span class="glyphicon glyphicon-remove"></span>
+						{{=row.acid}}
+					</a>
+					{{else:}}
 					<a href="{{=URL('assignments','detail')}}{{=page_args(acid=row.acid)}}">{{=row.acid}}</a>
+					{{pass}}
 					{{pass}}
 				</li>  
 				{{pass}}
