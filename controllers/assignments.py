@@ -39,7 +39,7 @@ def index():
 	for row in assignments:
 		points_total += row.grades.score
 		points_possible += row.assignments.points
-	else:
+	if points_possible == 0:
 		points_possible = 1	# no rows; degenerate case
 	student.points_possible = points_possible
 	student.points_total = points_total
