@@ -113,11 +113,11 @@ Try practicing some operations to get or set values in a list of dictionaries.
 
    #write code to print the value associated with key 'c' in the second dictionary (90)
    
-   #write code to print the value associated with key 'b' in the second dictionary
+   #write code to print the value associated with key 'b' in the third dictionary
    
-   #add a third dictionary add the end of the list; print something to check your work.
+   #add a fourth dictionary add the end of the list; print something to check your work.
    
-   #change the value associated with 'c' in the second dictionary from "yes" to "no"; print something to check your work
+   #change the value associated with 'c' in the third dictionary from "yes" to "no"; print something to check your work
    
    
 You can even have a list of functions (!). 
