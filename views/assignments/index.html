@@ -15,7 +15,8 @@
 		<div id="assignment-{{=row.assignments.id}}" class="panel-collapse collapse">
 	      <div class="panel-body">
 	      	<ul class="list-group">
-	      	{{for problem in row.assignments.problems(student):}}
+	      	{{ problems = row.assignments.problems(student)}}
+	      	{{for problem in problems:}}
 	      		<li class="list-group-item">
 	      			<span class="badge">{{=problem.grade}}</span>
 	      			<h4>{{=problem.acid}}</h4>
@@ -23,7 +24,8 @@
 	      			<p>{{=problem.comment}}</p>
 	      			{{pass}}
 	      		</li>
-	      	{{else:}}
+	      	{{pass}}
+	      	{{ if len(problems) < 1: }}
 	      		<div class="alert alert-info">No Problems Recorded</div>
 	      	{{pass}}
 	      	</ul>
