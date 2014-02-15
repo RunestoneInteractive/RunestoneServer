@@ -117,7 +117,7 @@ Try practicing some operations to get or set values in a list of dictionaries.
    
    #add a fourth dictionary add the end of the list; print something to check your work.
    
-   #change the value associated with 'c' in the third dictionary from "yes" to "no"; print something to check your work
+   #change the value associated with 'c' in the third dictionary from "yes" tio "no"; print something to check your work
    
    
 You can even have a list of functions (!). 
@@ -191,7 +191,7 @@ immutable data types (numbers, strings, tuples).
     :answer_b: d[{1:2, 3:4}] = 5
     :answer_c: d['key1']['d'] = d['key2']
     :answer_d: d[key2] =3
-    :correct: a, c
+    :correct: a,c
     :feedback_a: 5 is a valid key; {1:2, 3:4} is a dictionary with two keys, and is a valid value to associate with key 5.
     :feedback_b: Dictionary keys must be of immutable types. A dictionary can't be used as a key in a dictionary.
     :feedback_c: d['key2'] is {'b': 3, 'c': "yes"}, a python object. It can be bound to the key 'd' in a dictionary {'a': 5, 'c': 90, 5: 50}
