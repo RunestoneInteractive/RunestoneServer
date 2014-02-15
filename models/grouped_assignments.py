@@ -46,6 +46,21 @@ def assignment_set_grade(assignment, user):
 	return points
 db.assignments.grade = Field.Method(lambda row, user: assignment_set_grade(row.assignments, user))
 
+def assignment_get_grades(assignment, section=None, problem=None):
+	""" Return a list of users with grades for assignment (or problem) """
+	grades = db(db.grades.assignment == assignment.id)
+	grades = grades.select(db.grades.ALL)
+
+	users = db(db.auth_user.course_id == assignment.course).select(db.auth_user.ALL)
+	for u in users:
+		u.grade = None
+		for g in grades:
+			if g.auth_user.id == u.id:
+				u.grade = g.score
+
+	return users
+db.assignments.grades_get = Field.Method(lambda row, section=None, problem=None: assignment_get_grades(row.assignments, section, problem))
+
 db.define_table('grades',
 	Field('auth_user', db.auth_user),
 	Field('assignment', db.assignments),

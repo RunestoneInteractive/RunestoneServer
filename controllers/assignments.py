@@ -172,9 +172,7 @@ def detail():
 	if not assignment:
 		return redirect(URL("assignments","index"))
 
-	grades = db(db.assignments.id == db.grades.assignment)(db.grades.auth_user == db.auth_user.id)
-	grades = grades(db.assignments.id == assignment.id)
-	grades = grades.select()
+	students = assignment.grades_get()
 	
 	student = None
 	if 'sid' in request.vars:
@@ -193,6 +191,6 @@ def detail():
 	return dict(
 		assignment = assignment,
 		problems = problems,
-		grades = grades,
+		students = students,
 		student = student,
 		)

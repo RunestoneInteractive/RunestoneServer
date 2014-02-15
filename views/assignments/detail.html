@@ -12,10 +12,10 @@
 		<div class="col-md-6">
 			<h3>Students</h3>
 			<ul class="list-group">
-			{{for row in grades:}}
+			{{for row in students:}}
 			<li class="list-group-item">
-				<span class="badge">{{=row.grades.score}}</span>
-				<a href="{{=URL('assignments','detail')}}?id={{=assignment.id}}&sid={{=row.auth_user.id}}">{{=row.auth_user.first_name}} {{=row.auth_user.last_name}}</a>
+				<span class="badge">{{=row.grade}}</span>
+				<a href="{{=URL('assignments','detail')}}?id={{=assignment.id}}&sid={{=row.id}}">{{=row.first_name}} {{=row.last_name}}</a>
 			</li>
 			{{pass}}
 		</ul>
