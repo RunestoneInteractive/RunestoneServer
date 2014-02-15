@@ -176,8 +176,11 @@ def detail():
 	selected_section = None
 	if "section_id" in request.vars:
 		selected_section = int(request.vars.section_id)
+	acid = None
+	if "acid" in request.vars:
+		acid = request.vars.acid
 
-	students = assignment.grades_get(section=selected_section)
+	students = assignment.grades_get(section=selected_section, problem=acid)
 	
 	student = None
 	if 'sid' in request.vars:
@@ -195,7 +198,7 @@ def detail():
 	    	)
 
 	# Used as a convinence function for navigating within the page template
-	def page_args(id=assignment.id, section_id=selected_section, student=student, acid=None):
+	def page_args(id=assignment.id, section_id=selected_section, student=student, acid=acid):
 		arg_str = "?id=%d" % (id)
 		if section_id:
 			arg_str += "&section_id=%d" % section_id
@@ -213,4 +216,5 @@ def detail():
 		sections = sections,
 		selected_section = selected_section,
 		page_args = page_args,
+		acid = acid,
 		)

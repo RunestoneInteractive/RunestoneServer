@@ -39,7 +39,7 @@
 			{{if len(problems) > 0:}}
 			<ul class="list-group">
 			{{for row in problems:}}
-			    <li class="list-group-item">
+			    <li class="list-group-item {{if acid==row.acid:}}active{{pass}}">
 			    	{{if student:}}
 					<span class="badge">{{=row.grade}}</span>
 					<a href="{{=URL('assignments','detail')}}{{=page_args(student=student,acid=row.acid)}}">{{=row.acid}}</a>

@@ -48,20 +48,32 @@ db.assignments.grade = Field.Method(lambda row, user: assignment_set_grade(row.a
 
 def assignment_get_grades(assignment, section_id=None, problem=None):
 	""" Return a list of users with grades for assignment (or problem) """
-	grades = db(db.grades.assignment == assignment.id)
-	grades = grades.select(db.grades.ALL)
 
 	if section_id:
 		section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
 		users = section_users(db.auth_user.course_id == assignment.course).select(db.auth_user.ALL)
 	else:
 		users = db(db.auth_user.course_id == assignment.course).select(db.auth_user.ALL)
-	for u in users:
-		u.grade = None
-		for g in grades:
-			if g.auth_user.id == u.id:
-				u.grade = g.score
-
+	if problem:
+		code = db(db.code.acid == problem)
+		code = code.select(
+			db.code.ALL,
+			orderby = db.code.sid,
+			distinct = db.code.sid,
+			)
+		for u in users:
+			u.grade = None
+			for c in code:
+				if c.sid == u.username:
+					u.grade = c.grade
+	else:
+		grades = db(db.grades.assignment == assignment.id)
+		grades = grades.select(db.grades.ALL)
+		for u in users:
+			u.grade = None
+			for g in grades:
+				if g.auth_user.id == u.id:
+					u.grade = g.score
 	return users
 db.assignments.grades_get = Field.Method(lambda row, section=None, problem=None: assignment_get_grades(row.assignments, section, problem))
 
