@@ -172,6 +172,11 @@ def detail():
 	if not assignment:
 		return redirect(URL("assignments","index"))
 
+	sections = db(db.sections.course_id == course.id).select(db.sections.ALL)
+	selected_section = None
+	if "section_id" in request.vars:
+		selected_section = int(request.vars.section_id)
+
 	students = assignment.grades_get()
 	
 	student = None
@@ -193,4 +198,6 @@ def detail():
 		problems = problems,
 		students = students,
 		student = student,
+		sections = sections,
+		selected_section = selected_section,
 		)
