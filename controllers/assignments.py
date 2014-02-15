@@ -175,13 +175,21 @@ def detail():
 	grades = db(db.assignments.id == db.grades.assignment)(db.grades.auth_user == db.auth_user.id)
 	grades = grades(db.assignments.id == assignment.id)
 	grades = grades.select()
-	problems = []
+	
 	student = None
 	if 'sid' in request.vars:
 		student_id = request.vars.sid
 		student = db(db.auth_user.id == student_id).select().first()
 		problems = assignment.problems(student)
-
+	else:
+	    q = db(db.code.course_id == auth.user.course_id)
+	    q = q(db.code.acid.like(assignment.query+"%"))
+	    problems = q.select(
+	    	db.code.acid,
+	    	db.code.course_id,
+	    	orderby = db.code.acid,
+	    	distinct = db.code.acid,
+	    	)
 	return dict(
 		assignment = assignment,
 		problems = problems,

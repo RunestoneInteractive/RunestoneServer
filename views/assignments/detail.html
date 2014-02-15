@@ -21,25 +21,29 @@
 		</ul>
 		</div>
 		<div class="col-md-6">
-			{{if len(problems) > 0:}}
+			{{if student:}}
 			<h3>Problems for {{=student.first_name}} {{=student.last_name}}</h3>
-			<table>
-				<tr>
-					<td>acid</td>
-					<td>grade</td>
-					<td>comment</td>
-				</tr>
-			{{for row in problems:}}
-			    <tr>
-					<td>{{=row.acid}}</td>
-					<td>{{=row.grade}}</td>
-					<td>{{=row.comment}}</td>
-				</tr>  
-			    {{pass}}
-			</table>
 			{{else:}}
 			<h3>Problems</h3>
-			<p>Select a user to view details</p>
+			{{pass}}
+			{{if len(problems) > 0:}}
+			<ul class="list-group">
+			{{for row in problems:}}
+			    <li class="list-group-item">
+			    	{{if student:}}
+					<span class="badge">{{=row.grade}}</span>
+					{{=row.acid}}
+					<p>{{=row.comment}}</p>
+					{{else:}}
+					{{=row.acid}}
+					{{pass}}
+				</li>  
+				{{pass}}
+			</ul>
+			{{else:}}
+			<div class="alert alert-info">
+				<p>No Problems</p>
+			</div>
 			{{pass}}
 		</div>
 	</div>
