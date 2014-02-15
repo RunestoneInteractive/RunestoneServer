@@ -177,7 +177,7 @@ def detail():
 	if "section_id" in request.vars:
 		selected_section = int(request.vars.section_id)
 
-	students = assignment.grades_get()
+	students = assignment.grades_get(section=selected_section)
 	
 	student = None
 	if 'sid' in request.vars:
@@ -193,6 +193,18 @@ def detail():
 	    	orderby = db.code.acid,
 	    	distinct = db.code.acid,
 	    	)
+
+	# Used as a convinence function for navigating within the page template
+	def page_args(id=assignment.id, section_id=selected_section, student=student, acid=None):
+		arg_str = "?id=%d" % (id)
+		if section_id:
+			arg_str += "&section_id=%d" % section_id
+		if student:
+			arg_str += "&sid=%d" % student.id
+		if acid:
+			arg_str += "&acid=%s" % acid
+		return arg_str
+
 	return dict(
 		assignment = assignment,
 		problems = problems,
@@ -200,4 +212,5 @@ def detail():
 		student = student,
 		sections = sections,
 		selected_section = selected_section,
+		page_args = page_args,
 		)

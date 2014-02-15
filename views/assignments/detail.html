@@ -13,11 +13,11 @@
 			<h3>Students</h3>
 			<ul class="nav nav-pills">
 				<li {{if not selected_section:}}class="active"{{pass}}>
-					<a href="{{=URL('assignments','detail')}}?id={{=assignment.id}}">All Students</a>
+					<a href="{{=URL('assignments','detail')}}{{=page_args(section_id=None)}}">All Students</a>
 				</li>
 				{{ for row in sections: }}
 				<li {{if selected_section==row.id:}}class="active"{{pass}}>
-					<a href="{{=URL('assignments','detail')}}?id={{=assignment.id}}&section_id={{=row.id}}">{{=row.name}}</a>
+					<a href="{{=URL('assignments','detail')}}{{=page_args(section_id=row.id)}}">{{=row.name}}</a>
 				</li>
 				{{ pass }}
 			</ul>
@@ -25,7 +25,7 @@
 			{{for row in students:}}
 			<li class="list-group-item">
 				<span class="badge">{{=row.grade}}</span>
-				<a href="{{=URL('assignments','detail')}}?id={{=assignment.id}}&sid={{=row.id}}">{{=row.first_name}} {{=row.last_name}}</a>
+				<a href="{{=URL('assignments','detail')}}{{=page_args(student=row)}}">{{=row.first_name}} {{=row.last_name}}</a>
 			</li>
 			{{pass}}
 		</ul>
@@ -42,10 +42,10 @@
 			    <li class="list-group-item">
 			    	{{if student:}}
 					<span class="badge">{{=row.grade}}</span>
-					{{=row.acid}}
+					<a href="{{=URL('assignments','detail')}}{{=page_args(student=student,acid=row.acid)}}">{{=row.acid}}</a>
 					<p>{{=row.comment}}</p>
 					{{else:}}
-					{{=row.acid}}
+					<a href="{{=URL('assignments','detail')}}{{=page_args(acid=row.acid)}}">{{=row.acid}}</a>
 					{{pass}}
 				</li>  
 				{{pass}}
