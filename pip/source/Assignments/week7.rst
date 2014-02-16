@@ -55,23 +55,40 @@ In the problem set for this week we will be creating a program that plays the Sh
 
 Before we work on the Shannon game, let's work through a few warm up questions to test your understanding of nested data.
 
-1. (1 point) Follow the directions in the code to read and manipulate the nested data structure 'nd'.
+1. (1 point) Follow the directions in the code to read and manipulate the nested data structure 'heuristics_dictionary'.
 
 .. activecode:: ps_6_1
 
-  nd = [{'zuchini':2, 'apples':5, 'rasins':500, 'carrots':2}, {'apples':2, 'figs':3, 'carrots':5}, {'apples':2, 'carrots':2}]
+  heuristics_dictionary = {
+    'a':{
+       'priority':2,
+       'letters':['b','c','d','n','p','s'],
+       },
+    'q':{
+         'priority':1,
+         'letters':['u','a'],
+         },
+    '.':{
+        'priority':1,
+        'letters':[' '],
+        },
+    '. ':{
+          'priority':3,
+          'letters':['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+          }
+  }
 
-  # print the number of apples in the second dictionary
+  # print each element of the letters list for the key 'q'
 
-  # count and then print the total number of carrots in the list
+  # count the total number of elements in each letters list
 
-  # use a for loop to change each dictionary so that there are no apples
+  # use a for loop to change each dictionary so there are no letters in each letters list
 
 2. (1 point) Count the number of consonants in the 'letters' key of the nested datastructure 'heuristics.'
 
 .. activecode:: ps_6_2
   
-  heuristics = {
+  heuristics_dictionary = {
     'a':{
        'priority':2,
        'letters':['b','c','d','n','p','s'],
