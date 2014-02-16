@@ -209,6 +209,64 @@ Before we work on the Shannon game, let's work through a few warm up questions t
 
   # add tests to make sure program works
 
+6. Create a heuristic guesser, which will take a hueristic dictionary (like in problems 1 & 2) and use that to make a guess.
+
+.. activecode:: ps_6_6
+  
+  ####Don't change this code; add and change code at the bottom #####
+  import random
+  alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+
+  def guess(prev_txt, guessed_already):
+      # guess a letter randomly
+      idx = random.randrange(0, len(alphabet))
+      return alphabet[idx]    
+      
+  def game(txt, feedback=True, guesser = guess):
+      """Plays one game"""
+      
+      # accumulate the text that's been revealed
+      revealed_text = ""
+      
+      # accumulate the total guess count
+      total_guesses = 0
+      # accumulate the total characters to be guessed
+      total_chars = 0
+      
+      # Loop through the letters in the text, making a guess for each
+      for c in txt:
+          if c in alphabet: # skip letters not in our alphabet; don't have to guess them
+              total_chars = total_chars + 1
+              # accumulate the guesses made for this letter
+              guesses = ""
+              guessed = False
+              while not guessed:
+                  # guess until you get it right
+                  g = guesser(revealed_text, guesses)
+                  guesses = guesses + g
+                  if g == c:
+                      guessed = True
+                  if feedback:
+                      print g, 
+              
+              total_guesses = total_guesses + len(guesses)
+              revealed_text = revealed_text + c
+              if feedback:
+                  print(str(c) + " took " + str(len(guesses)) + " guesses ")
+
+      return total_chars, total_guesses
+  
+  # COPY & PASTE YOUR guess_no_dup function here
+
+  heuristic_dictionary = {}
+
+  def guess_by_heuristic(prev_txt, guessed_already, hd=heuristic_dictionary):
+      return guess(prev_txt, guessed_already)
+
+  stats = game("This might be a difficult string to guess.")   
+
+  # add tests to make sure program works  
+
 
 .. datafile::  about_programming.txt
    :hide:
