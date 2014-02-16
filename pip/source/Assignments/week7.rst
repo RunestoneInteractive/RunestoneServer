@@ -42,7 +42,32 @@ For this week you have the following graded activities:
 Reading Response 6
 ------------------
 
-Coming soon
+In what situations do you encounter high surprisal? Low surprisal? What kind of conversations do you have that contain a lot of information? Explain (briefly).
+
+.. actex:: rr_6_1
+
+   # Fill in your response in between the triple quotes
+   s = """
+
+   """
+  
+Give an example of compression other than the ones Christian addresses. Explain. Why? In what situations does this occur?
+
+.. actex:: rr_6_2
+
+   # Fill in your response in between the triple quotes
+   s = """
+
+   """
+
+Was there anything from this chapter you found confusing? If so, what? What are some ways we can apply some of these concepts to what we know about programming, aside from playing the Shannon Game?
+
+.. actex:: rr_6_3
+
+   # Fill in your response in between the triple quotes
+   s = """
+
+   """
 
 .. _problem_set_6:
 
