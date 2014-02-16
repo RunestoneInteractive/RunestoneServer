@@ -110,7 +110,7 @@ Before we work on the Shannon game, let's work through a few warm up questions t
 
   # the correct answer is 28
 
-3. Write a function called letter frequencies that returns a dictionary that counts everytime any character appears in a text.
+3. (2 points) Write a function called letter frequencies that returns a dictionary that counts everytime any character appears in a text.
 
   .. activecode:: ps_6_3
 
@@ -124,7 +124,7 @@ Before we work on the Shannon game, let's work through a few warm up questions t
     test.testEqual(type(freq),type(freq))
     test.testEqual(len(freq.keys()),11)
 
-4. Improve the 'guess_no_dup' function so that the function won't return a guess that is in the second argument "guessed_already". 
+4. (2 points) Improve the 'guess_no_dup' function so that the function won't return a guess that is in the second argument "guessed_already". 
 
   .. activecode:: ps_6_4
 
@@ -147,22 +147,13 @@ Before we work on the Shannon game, let's work through a few warm up questions t
     # not sure how to show there are improvements to the code.
     print guess_no_dup('test string', 'ABC')
 
-(Shannon Game Test)
+5. (2 points) Play the Shannon Game! Use the following game() function to play the Shannon game. Use your letter_frequencies, and guess_no_dup function to implement a new function called guess_by_frequency, to improve the guesses made by the computer.
 
-.. activecode:: ps_6_shannon
+.. activecode:: ps_6_5
 
   ####Don't change this code; add and change code at the bottom #####
   import random
-
-  def letter_frequencies(txt):
-      d = {}
-      for c in txt:
-          if c not in d:
-              d[c] = 1
-          elif c in alphabet:
-              d[c] = d[c] + 1
-          # don't bother tracking letters that aren't in our alphabet
-      return d
+  alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
 
   def guess(prev_txt, guessed_already):
       # guess a letter randomly
@@ -202,60 +193,21 @@ Before we work on the Shannon game, let's work through a few warm up questions t
                   print(str(c) + " took " + str(len(guesses)) + " guesses ")
 
       return total_chars, total_guesses
+  
+  # COPY & PASTE YOUR guess_no_dup function here
 
-  def heuristic_guesser(prev_txt, guessed_already):
-      # note that our lambda function takes a top-level dictionary as an input
-      # and has to sort based on the value of the priority key
-      sorted_heuristics = sorted(heuristics.items(), None, lambda x: x[1]['priority'], True)
-      
-      for (k, d) in sorted_heuristics:
-          if k == guessed_already[-len(k):]:
-              # go through that heuristic's guesses in order until you find one that hasn't been guessed yet
-              for guess in d['guesses']:
-                  if guess not in guessed_already:
-                      print guess
-                      return guess    # this will terminate the nested for loops and exit the function
-      # if you get here, none of the heuristics produced a new guess
-      # so fall back on guess_by_frequency
-      return guess_by_frequency(prev_txt, guessed_already)
-      
-      
-  # note, the last two characters are the single quote and double quote. They are
-  # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
-  # and newlines, \n.
-  alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+  # COPY & PASTE YOUR letter_frequencies function here
 
+  # here we are populating letter frequencies with a bunch of data
   f = open('about_programming.txt', 'r')
   overall_freqs = letter_frequencies(f.read())
-  heuristics = {'q':{'priority': 1, 'guesses':['u', 'a']}}
-
-  #### Don't change any code above this line #####
-  #### RUN
-
-  # game()
-
-  def guess_no_dup(prev_txt, guessed_already):
-      # guess a letter randomly until you find one that hasn't been guessed yet
-      while True:
-          idx = random.randrange(0, len(alphabet))
-          candidate =  alphabet[idx]
-          if candidate not in guessed_already:
-              return candidate     
 
   def guess_by_frequency(prev_txt, guessed_already):
-      in_order = sorted(overall_freqs.items(), None, lambda x: x[1], True)
-      # return the best one that hasn't been guessed yet
-      for (let, count) in in_order:
-          if let not in guessed_already:
-              return let
-      return None # No unguessed letters left; shouldn't happen!   
+      return guess(prev_txt, guessed_already)
 
-  def compare_guessers(txt, guessers):
-      for fn in guessers:
-          print fn, 
-          print game(txt, False, fn)
+  stats = game("This might be a difficult string to guess.")   
 
-  compare_guessers("Try to guess what the next letter will be in this quite short text", [guess, guess_no_dup, guess_by_frequency, heuristic_guesser])
+  # add tests to make sure program works
 
 
 .. datafile::  about_programming.txt
