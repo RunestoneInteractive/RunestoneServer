@@ -269,57 +269,57 @@ Before we work on the Shannon game, let's work through a few warm up questions t
 
 7. (1 point, optional) Write a function that will compare a list of 'guesser' functions to be used in the Shannon game.
   
-  .. active_code:: ps_6_7
+  .. activecode:: ps_6_7
 
-     ####Don't change this code; add and change code at the bottom #####
-  import random
-  alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+    ####Don't change this code; add and change code at the bottom #####
+    import random
+    alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
 
-  def guess(prev_txt, guessed_already):
-      # guess a letter randomly
-      idx = random.randrange(0, len(alphabet))
-      return alphabet[idx]    
-      
-  def game(txt, feedback=True, guesser = guess):
-      """Plays one game"""
-      
-      # accumulate the text that's been revealed
-      revealed_text = ""
-      
-      # accumulate the total guess count
-      total_guesses = 0
-      # accumulate the total characters to be guessed
-      total_chars = 0
-      
-      # Loop through the letters in the text, making a guess for each
-      for c in txt:
-          if c in alphabet: # skip letters not in our alphabet; don't have to guess them
-              total_chars = total_chars + 1
-              # accumulate the guesses made for this letter
-              guesses = ""
-              guessed = False
-              while not guessed:
-                  # guess until you get it right
-                  g = guesser(revealed_text, guesses)
-                  guesses = guesses + g
-                  if g == c:
-                      guessed = True
-                  if feedback:
-                      print g, 
-              
-              total_guesses = total_guesses + len(guesses)
-              revealed_text = revealed_text + c
-              if feedback:
-                  print(str(c) + " took " + str(len(guesses)) + " guesses ")
+    def guess(prev_txt, guessed_already):
+        # guess a letter randomly
+        idx = random.randrange(0, len(alphabet))
+        return alphabet[idx]    
+        
+    def game(txt, feedback=True, guesser = guess):
+        """Plays one game"""
+        
+        # accumulate the text that's been revealed
+        revealed_text = ""
+        
+        # accumulate the total guess count
+        total_guesses = 0
+        # accumulate the total characters to be guessed
+        total_chars = 0
+        
+        # Loop through the letters in the text, making a guess for each
+        for c in txt:
+            if c in alphabet: # skip letters not in our alphabet; don't have to guess them
+                total_chars = total_chars + 1
+                # accumulate the guesses made for this letter
+                guesses = ""
+                guessed = False
+                while not guessed:
+                    # guess until you get it right
+                    g = guesser(revealed_text, guesses)
+                    guesses = guesses + g
+                    if g == c:
+                        guessed = True
+                    if feedback:
+                        print g, 
+                
+                total_guesses = total_guesses + len(guesses)
+                revealed_text = revealed_text + c
+                if feedback:
+                    print(str(c) + " took " + str(len(guesses)) + " guesses ")
 
-      return total_chars, total_guesses
-  
-  # COPY & PASTE YOUR GUESSING FUNCTIONS HERE
+        return total_chars, total_guesses
+    
+    # COPY & PASTE YOUR GUESSING FUNCTIONS HERE
 
-  def find_the_best_guesser(guesser_list=[guess]):
-    return guesser_list.pop()
+    def find_the_best_guesser(guesser_list=[guess]):
+      return guesser_list.pop()
 
-  print find_the_best_guesser([guess])
+    print find_the_best_guesser([guess])
 
 
 .. datafile::  about_programming.txt
