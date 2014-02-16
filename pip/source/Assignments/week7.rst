@@ -124,6 +124,29 @@ Before we work on the Shannon game, let's work through a few warm up questions t
     test.testEqual(type(freq),type(freq))
     test.testEqual(len(freq.keys()),11)
 
+4. Improve the 'guess_no_dup' function so that the function won't return a guess that is in the second argument "guessed_already". 
+
+  .. activecode:: ps_6_4
+
+    import random
+
+    # note, the last two characters are the single quote and double quote. They are
+    # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
+    # and newlines, \n.
+    alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+
+    def guess(prev_txt, guessed_already):
+      # guess a letter randomly
+      idx = random.randrange(0, len(alphabet))
+      return alphabet[idx]  
+
+    # improve this function
+    def guess_no_dup(prev_text, guessed_already):
+      return guess(prev_txt, guessed_already)
+
+    # not sure how to show there are improvements to the code.
+    print guess_no_dup('test string', 'ABC')
+
 (Shannon Game Test)
 
 .. activecode:: ps_6_shannon
