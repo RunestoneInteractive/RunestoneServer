@@ -110,8 +110,21 @@ Before we work on the Shannon game, let's work through a few warm up questions t
 
   # the correct answer is 28
 
+3. Write a function called letter frequencies that returns a dictionary that counts everytime any character appears in a text.
 
-3. (Shannon Game Test)
+  .. activecode:: ps_6_3
+
+    def letter_frequencies(txt):
+      return {}
+
+    freq = letter_frequencies('This is a good phrase.')
+
+    # the following code should work.
+    import test
+    test.testEqual(type(freq),type(freq))
+    test.testEqual(len(freq.keys()),11)
+
+(Shannon Game Test)
 
 .. activecode:: ps_6_shannon
 
