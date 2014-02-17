@@ -217,4 +217,5 @@ def detail():
 		selected_section = selected_section,
 		page_args = page_args,
 		acid = acid,
+		course_id = auth.user.course_name,
 		)
