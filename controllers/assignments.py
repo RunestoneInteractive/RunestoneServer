@@ -218,4 +218,31 @@ def detail():
 		page_args = page_args,
 		acid = acid,
 		course_id = auth.user.course_name,
+		gradingUrl = URL('assignments', 'problem'),
 		)
+
+import json
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def problem():
+	if 'acid' not in request.vars or 'sid' not in request.vars:
+		return json.dumps({'success':False})
+	q = db(db.code.sid == db.auth_user.username)
+	q = q(db.code.acid == request.vars.acid)
+	q = q(db.auth_user.id == request.vars.sid)
+	q = q.select(
+		db.auth_user.ALL,
+		db.code.ALL,
+		orderby = db.code.acid|db.code.timestamp,
+		distinct = db.code.acid,
+		).first()
+	if not q:
+		return json.dumps({'success':False})
+	return json.dumps({
+		'id':"%s-%d" % (q.code.acid, q.auth_user.id),
+		'acid':q.code.acid,
+		'sid':q.auth_user.id,
+		'name':"%s %s" % (q.auth_user.first_name, q.auth_user.last_name),
+		'code':q.code.code,
+		'grade':q.code.grade,
+		'comment':q.code.comment,
+		})

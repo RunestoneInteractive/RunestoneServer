@@ -1,7 +1,8 @@
 {{extend 'layout.html'}}
 
 <script type="text/javascript">
-  eBookConfig.course = '{{=course_id}}'
+  eBookConfig.course = '{{=course_id}}';
+  eBookConfig.gradingURL = '{{=gradingUrl}}'
 </script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
 <!--<script src="/{{=request.application}}/static/{{=course_id}}/_static/builtin.js" type="text/javascript"></script>-->
@@ -87,4 +88,29 @@
 			{{pass}}
 		</div>
 	</div>
+</div>
+<div id="modal-template" class="modal-template template" style="display:none;">
+	<div class="modal-grader modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="" class="activecode-target"></div>
+                <form>
+	                <label for="input-grade">Grade</label>
+	                <input id="input-grade" type="text" class="form-control" value= ""/>
+	                <label for="input-comments">Comments</label>
+	                <input id="input-comments" type="text" class="form-control" value="" />
+	                <input type="submit" value="Save Grade" class="btn btn-primary" />
+              	</form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
 </div>
