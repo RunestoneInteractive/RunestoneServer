@@ -65,7 +65,7 @@
 			    <li class="list-group-item">
 			    	{{if student:}}
 					<span class="badge">{{=row.grade}}</span>
-					<a href="{{=URL('assignments','detail')}}{{=page_args(student=student,acid=row.acid)}}">{{=row.acid}}</a>
+					<a class="gradable" data-acid="{{=row.acid}}" data-student-id="{{=student.id}}" href="{{=URL('assignments','detail')}}{{=page_args(student=student,acid=row.acid)}}">{{=row.acid}}</a>
 					<p>{{=row.comment}}</p>
 					{{else:}}
 					{{if acid==row.acid:}}

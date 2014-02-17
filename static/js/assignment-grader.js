@@ -1,3 +1,6 @@
 jQuery(document).ready(function(){
-	alert("ello world");
+	jQuery('.gradable').on('click',function(event){
+		event.preventDefault();
+		alert("get modal");
+	});
 });
