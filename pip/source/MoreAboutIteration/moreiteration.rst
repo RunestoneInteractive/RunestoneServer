@@ -1,4 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
+..  Copyright (C)  Paul Resnick, Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
     Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
@@ -13,6 +13,9 @@
 .. qnum::
    :prefix: itr-
    :start: 1
+   
+.. _while_loop:
+ 
 
 Iteration Revisited
 ===================
@@ -172,27 +175,17 @@ other cases, it is not so easy to tell.
 
 .. note::
 
-	Introduction of the while statement causes us to think about the types of iteration we have seen.  The ``for`` statement will always iterate through a sequence of values like the list of names for the party or the list of numbers created by ``range``.  Since we know that it will iterate once for each value in the collection, it is often said that a ``for`` loop creates a
-	**definite iteration** because we definitely know how many times we are going to iterate.  On the other
-	hand, the ``while`` statement is dependent on a condition that needs to evaluate to ``False`` in order
-	for the loop to terminate.  Since we do not necessarily know when this will happen, it creates what we
-	call **indefinite iteration**.  Indefinite iteration simply means that we don't know how many times we will repeat but eventually the condition controlling the iteration will fail and the iteration will stop. (Unless we have an infinite loop which is of course a problem)
+    Introduction of the while statement causes us to think about the types of iteration we have seen.  The ``for`` statement will always iterate through a sequence of values like the list of names for the party or the list of numbers created by ``range``.  Since we know that it will iterate once for each value in the collection, it is often said that a ``for`` loop creates a
+    **definite iteration** because we definitely know how many times we are going to iterate.  On the other
+    hand, the ``while`` statement is dependent on a condition that needs to evaluate to ``False`` in order
+    for the loop to terminate.  Since we do not necessarily know when this will happen, it creates what we
+    call **indefinite iteration**.  Indefinite iteration simply means that we don't know how many times we will repeat but eventually the condition controlling the iteration will fail and the iteration will stop. (Unless we have an infinite loop which is of course a problem)
 
 What you will notice here is that the ``while`` loop is more work for
 you --- the programmer --- than the equivalent ``for`` loop.  When using a ``while``
 loop you have to control the loop variable yourself.  You give it an initial value, test
 for completion, and then make sure you change something in the body so that the loop
 terminates.
-
-So why have two kinds of loop if ``for`` looks easier?  This next example shows an indefinite iteration where
-we need the extra power that we get from the ``while`` loop.
-
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_07_01
 
 
 **Check your understanding**
@@ -228,184 +221,6 @@ we need the extra power that we get from the ``while`` loop.
        n = n + 1
      print answer
 
-
-
-Randomly Walking Turtles
-------------------------
-
-Suppose we want to entertain ourselves by watching a turtle wander around
-randomly inside the screen.  When we run the program we want the turtle and
-program to behave in the following way:
-
-#. The turtle begins in the center of the screen.
-#. Flip a coin. If its heads then turn to the left 90 degrees. If its tails
-   then turn to the right 90 degrees.
-#. Take 50 steps forward.
-#. If the turtle has moved outside the screen then stop, otherwise go back to
-   step 2 and repeat.
-
-Notice that we cannot predict how many times the turtle will need to flip the
-coin before it wanders out of the screen, so we can't use a for loop in this
-case. In fact, although very unlikely, this program might never end,
-that is why we call this indefinite iteration.
-
-So based on the problem description above, we can outline a program as follows:
-
-.. sourcecode:: python
-
-    create a window and a turtle
-
-    while the turtle is still in the window:
-        generate a random number between 0 and 1
-        if the number == 0 (heads):
-            turn left
-        else:
-            turn right
-        move the turtle forward 50
-
-Now, probably the only thing that seems a bit confusing to you is the part
-about whether or not the turtle is still in the screen.  But this is the nice
-thing about programming, we can delay the tough stuff and get *something* in
-our program working right away.  The way we are going to do this is to
-delegate the work of deciding whether the turtle is still in the screen or
-not to a boolean function.  Lets call this boolean function ``isInScreen`` We
-can write a very simple version of this boolean function by having
-it always return ``True``, or by having it decide randomly,
-the point is to have it do something simple so that we can focus on the parts
-we already know how to do well and get them working.  Since having it always
-return true would not be a good idea we will write our version to decide
-randomly.  Lets say that there is a 90% chance the turtle is still in the
-window and 10% that the turtle has escaped.
-
-.. activecode:: iter_randwalk1
-
-    import random
-    import turtle
-
-
-    def isInScreen(w,t):
-        if random.random() > 0.1:
-            return True
-        else:
-            return False
-
-
-    t = turtle.Turtle()
-    wn = turtle.Screen()
-
-    t.shape('turtle')
-    while isInScreen(wn,t):
-        coin = random.randrange(0,2)
-        if coin == 0:              # heads
-            t.left(90)
-        else:                      # tails
-            t.right(90)
-
-        t.forward(50)
-
-    wn.exitonclick()
-
-
-Now we have a working program that draws a random walk of our turtle that has
-a 90% chance of staying on the screen.  We are in a good position,
-because a large part of our program is working and we can focus on the next
-bit of work -- deciding whether the turtle is inside the screen boundaries or
-not.
-
-We can find out the width and the height of the screen using the
-``window_width`` and ``window_height`` methods of the screen object.
-However, remember that the turtle starts at position 0,0 in the middle of the
-screen.  So we never want the turtle to go farther right than width/2 or
-farther left than negative width/2.  We never want the turtle to go further
-up than height/2 or further down than negative height/2.  Once we know what
-the boundaries are we can use some conditionals to check the turtle position
-against the boundaries and return ``False`` if the turtle is outside or
-``True`` if the turtle is inside.
-
-Once we have computed our boundaries we can get the current position of the
-turtle and then use conditionals to decide.  Here is one implementation:
-
-.. sourcecode:: python
-
-    def isInScreen(wn,t):
-        leftBound = -(wn.window_width()/2)
-        rightBound = wn.window_width()/2
-        topBound = wn.window_height()/2
-        bottomBound = -(wn.window_height()/2)
-
-        turtleX = t.xcor()
-        turtleY = t.ycor()
-
-        stillIn = True
-        if turtleX > rightBound or turtleX < leftBound:
-            stillIn = False
-        if turtleY > topBound or turtleY < bottomBound:
-            stillIn = False
-
-        return stillIn
-
-There are lots of ways that the conditional could be written.  In this case
-we have given ``stillIn`` the default value of ``True`` and use two ``if``
-statements
-to possibly set the value to ``False``.  You could rewrite this to use nested
-conditionals or ``elif`` statements and set ``stillIn`` to ``True`` in an else
-clause.
-
-Here is the full version of our random walk program.
-
-.. activecode:: iter_randwalk2
-
-    import random
-    import turtle
-
-    def isInScreen(w,t):
-        leftBound = - w.window_width()/2
-        rightBound = w.window_width()/2
-        topBound = w.window_height()/2
-        bottomBound = -w.window_height()/2
-
-        turtleX = t.xcor()
-        turtleY = t.ycor()
-
-        stillIn = True
-        if turtleX > rightBound or turtleX < leftBound:
-            stillIn = False
-        if turtleY > topBound or turtleY < bottomBound:
-            stillIn = False
-
-        return stillIn
-
-    t = turtle.Turtle()
-    wn = turtle.Screen()
-
-    t.shape('turtle')
-    while isInScreen(wn,t):
-        coin = random.randrange(0,2)
-        if coin == 0:
-            t.left(90)
-        else:
-            t.right(90)
-
-        t.forward(50)
-
-    wn.exitonclick()
-
-We could have written this program without using a boolean function.
-You might want to try to rewrite it using a complex condition on the while statement.
-However, using a boolean function makes the program much more readable and easier
-to understand.  It also gives us another tool to use if this was a
-larger program and we needed to have a check for whether the turtle
-was still in the screen in another part of the program.  Another advantage is
-that if you ever need to write a similar program, you can reuse this function
-with confidence the next time you need it.  Breaking up this
-program into a couple of parts is another example of functional decomposition.
-
-
-
-.. index:: 3n + 1 sequence
-
-**Check your understanding**
-
 .. mchoicemf:: test_question7_3_1
    :answer_a: a for-loop or a while-loop
    :answer_b: only a for-loop
@@ -417,18 +232,20 @@ program into a couple of parts is another example of functional decomposition.
 
    Which type of loop can be used to perform the following iteration: You choose a positive integer at random and then print the numbers from 1 up to and including the selected integer.
 
-.. mchoicemf:: test_question7_3_2
-   :answer_a: Returns True if the turtle is still on the screen and False if the turtle is no longer on the screen.
-   :answer_b: Uses a while loop to move the turtle randomly until it goes off the screen.
-   :answer_c: Turns the turtle right or left at random and moves the turtle forward 50.
-   :answer_d: Calculates and returns the position of the turtle in the window.
-   :correct: a
-   :feedback_a: The isInScreen function computes the boolean test of whether the turtle is still in the window.  It makes the condition of the while loop in the main part of the code simpler.
-   :feedback_b: The isInScreen function does not contain a while-loop.  That loop is outside the isInScreen function.
-   :feedback_c: The isInScreen function does not move the turtle.
-   :feedback_d: While the isInScreen function does use the size of the window and position of the turtle, it does not return the turtle position.
+So why have two kinds of loop if ``for`` looks easier?  
 
-   In the random walk program in this section, what does the isInScreen function do?
+In the problem sets involving the Hangman game, you have seen an example where guesses are made until
+either the word is guessed or health goes down to 0. Since the number of guesses 
+that would be needed can't be fixed in advance, a while loop was needed rather
+than a for loop.
+
+The next example shows another indefinite iteration where
+we need the extra power that we get from the ``while`` loop because we can't predict
+in advance how many repetitions of the code block will be needed (or even 
+whether an infinite number will be needed).
+
+
+.. index:: 3n + 1 sequence
 
 The 3n + 1 Sequence
 -------------------
@@ -457,8 +274,6 @@ This Python function captures that algorithm.  Try running this program several 
     seq3np1(3)
 
 
-
-
 The condition for this loop is ``n != 1``.  The loop will continue running until
 ``n == 1`` (which will make the condition false).
 
@@ -475,12 +290,6 @@ time through the loop until it reaches 1.
 
 You might like to have some fun and see if you can find a small starting
 number that needs more than a hundred steps before it terminates.
-
-
-.. admonition:: Lab
-
-    * `Experimenting with the 3n+1 Sequence <../Labs/sequencelab.html>`_ In this guided lab exercise we will try to learn more about this sequence.
-
 
 Particular values aside, the interesting question is whether we can prove that
 this sequence terminates for *all* values of ``n``. So far, no one has been able
@@ -519,9 +328,6 @@ be other cycles that we just haven't found.
 .. http://netserv.ict.ru.ac.za/python3_viz
 
 
-.. index::
-    single: Newton's method
-
 **Check your understanding**
 
 .. mchoicemf:: test_question7_4_1
@@ -534,6 +340,10 @@ be other cycles that we just haven't found.
    :feedback_c: That this sequence terminates for all values of n has not been proven or disproven so no one knows whether the while loop will always terminate or not.
 
    Consider the code that prints the 3n+1 sequence in ActiveCode box 6.  Will the while loop in this code always terminate for any value of n?
+
+
+.. index::
+    single: Newton's method
 
 
 Newton's Method
@@ -595,8 +405,8 @@ uses a ``while`` condition to execute until the approximation is no longer chang
 
 .. note::
 
-	The ``while`` statement shown above uses comparison of two floating point numbers in the condition.  Since floating point numbers are themselves approximation of real numbers in mathematics, it is often
-	better to compare for a result that is within some small threshold of the value you are looking for.
+    The ``while`` statement shown above uses comparison of two floating point numbers in the condition.  Since floating point numbers are themselves approximation of real numbers in mathematics, it is often
+    better to compare for a result that is within some small threshold of the value you are looking for.
 
 .. index:: algorithm
 
@@ -637,510 +447,6 @@ explain *how* we do it, at least not in the form of a step-by-step mechanical
 algorithm.
 
 
-
-
-.. index:: table, logarithm, Intel, Pentium, escape sequence, tab, newline,
-           cursor
-
-
-.. note::
-
-  This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-  .. activecode:: scratch_07_03
-
-
-
-
-Simple Tables
--------------
-
-One of the things loops are good for is generating tabular data.  Before
-computers were readily available, people had to calculate logarithms, sines and
-cosines, and other mathematical functions by hand. To make that easier,
-mathematics books contained long tables listing the values of these functions.
-Creating the tables was slow and boring, and they tended to be full of errors.
-
-When computers appeared on the scene, one of the initial reactions was, *"This is
-great! We can use the computers to generate the tables, so there will be no
-errors."* That turned out to be true (mostly) but shortsighted. Soon thereafter,
-computers and calculators were so pervasive that the tables became obsolete.
-
-Well, almost. For some operations, computers use tables of values to get an
-approximate answer and then perform computations to improve the approximation.
-In some cases, there have been errors in the underlying tables, most famously
-in the table the Intel Pentium processor chip used to perform floating-point division.
-
-Although a power of 2 table is not as useful as it once was, it still makes a good
-example of iteration. The following program outputs a sequence of values in the
-left column and 2 raised to the power of that value in the right column:
-
-.. activecode:: ch07_table1
-
-    print("n",'\t',"2**n")     #table column headings
-    print("---",'\t',"-----")
-
-    for x in range(13):        # generate values for columns
-        print(x, '\t', 2**x)
-
-The string ``'\t'`` represents a **tab character**. The backslash character in
-``'\t'`` indicates the beginning of an **escape sequence**.  Escape sequences
-are used to represent invisible characters like tabs and newlines. The sequence
-``\n`` represents a **newline**.
-
-An escape sequence can appear anywhere in a string.  In this example, the tab
-escape sequence is the only thing in the string. How do you think you represent
-a backslash in a string?
-
-As characters and strings are displayed on the screen, an invisible marker
-called the **cursor** keeps track of where the next character will go. After a
-``print`` function is executed, the cursor normally goes to the beginning of the next
-line.
-
-The tab character shifts the cursor to the right until it reaches one of the
-tab stops. Tabs are useful for making columns of text line up, as in the output
-of the previous program.
-Because of the tab characters between the columns, the position of the second
-column does not depend on the number of digits in the first column.
-
-
-
-
-.. index::
-    single: local variable
-    single: variable; local
-
-**Check your understanding**
-
-.. mchoicemf:: test_question7_7_1
-  :answer_a: A tab will line up items in a second column, regardless of how many characters were in the first column, while spaces will not.
-  :answer_b: There is no difference
-  :answer_c: A tab is wider than a sequence of spaces
-  :answer_d: You must use tabs for creating tables.  You cannot use spaces.
-  :correct: a
-  :feedback_a: Assuming the size of the first column is less than the size of the tab width.
-  :feedback_b: Tabs and spaces will sometimes make output appear visually different.
-  :feedback_c: A tab has a pre-defined width that is equal to a given number of spaces.
-  :feedback_d: You may use spaces to create tables.  The columns might look jagged, or they might not, depending on the width of the items in each column.
-
-  What is the difference between a tab (\t) and a sequence of spaces?
-
-2-Dimensional Iteration: Image Processing
------------------------------------------
-
-Two dimensional tables have both rows and columns.  You have probably seen many tables like this if you have used a
-spreadsheet program.  Another object that is organized in rows and columns is a digital image.  In this section we will
-explore how iteration allows us to manipulate these images.
-
-A **digital image** is a finite collection of small, discrete picture elements called **pixels**.  These pixels are organized in a two-dimensional grid.  Each pixel represents the smallest amount of picture information that is
-available.  Sometimes these pixels appear as small "dots".
-
-Each image (grid of pixels) has its own width and its own height.  The width is the number of columns and the height is the number of rows.  We can name the pixels in the grid by using the column number and row number.  However, it is very important to remember
-that computer scientists like to start counting with 0!  This means that if there are 20 rows, they will be named 0,1,2, and so on thru 19.  This will be very useful later when we iterate using range.
-
-
-In the figure below, the pixel of interest is found at column **c** and row **r**.
-
-.. image:: Figures/image.png
-
-The RGB Color Model
-^^^^^^^^^^^^^^^^^^^
-
-Each pixel of the image will represent a single color.  The specific color depends on a formula that mixes various amounts
-of three basic colors: red, green, and blue.  This technique for creating color is known as the **RGB Color Model**.
-The amount of each color, sometimes called the **intensity** of the color, allows us to have very fine control over the
-resulting color.
-
-The minimum intensity value for a basic color is 0.  For example if the red intensity is 0, then there is no red in the pixel.  The maximum
-intensity is 255.  This means that there are actually 256 different amounts of intensity for each basic color.  Since there
-are three basic colors, that means that you can create 256\ :sup:`3` distinct colors using the RGB Color Model.
-
-
-Here are the red, green and blue intensities for some common colors.  Note that "Black" is represented by a pixel having
-no basic color.  On the other hand, "White" has maximum values for all three basic color components.
-
-	=======  =======  =======  =======
-	Color    Red      Green    Blue
-	=======  =======  =======  =======
-	Red      255      0        0
-	Green    0        255      0
-	Blue     0        0        255
-	White    255      255      255
-	Black    0        0        0
-	Yellow   255      255      0
-	Magenta  255      0        255
-	=======  =======  =======  =======
-
-In order to manipulate an image, we need to be able to access individual pixels.  This capability is provided by
-a module called **image**.  The image module defines two classes: ``Image`` and ``Pixel``.
-
-Each Pixel object has three attributes: the red intensity, the green intensity, and the blue intensity.  A pixel provides three methods
-that allow us to ask for the intensity values.  They are called ``getRed``, ``getGreen``, and ``getBlue``.  In addition, we can ask a
-pixel to change an intensity value using its ``setRed``, ``setGreen``, and ``setBlue`` methods.
-
-
-    ============  ================            ===============================================
-    Method Name   Example                     Explanation
-    ============  ================            ===============================================
-    Pixel(r,g,b)  Pixel(20,100,50)            Create a new pixel with 20 red, 100 green, and 50 blue.
-    getRed()      r = p.getRed()              Return the red component intensity.
-    getGreen()    r = p.getGreen()            Return the green component intensity.
-    getBlue()     r = p.getBlue()             Return the blue component intensity.
-    setRed()      p.setRed(100)               Set the red component intensity to 100.
-    setGreen()    p.setGreen(45)              Set the green component intensity to 45.
-    setBlue()     p.setBlue(156)              Set the blue component intensity to 156.
-    ============  ================            ===============================================
-
-In the example below, we first create a pixel with 45 units of red, 76 units of green, and 200 units of blue.
-We then print the current amount of red, change the amount of red, and finally, set the amount of blue to be
-the same as the current amount of green.
-
-.. activecode::  pixelex1a
-
-    import image
-
-    p = image.Pixel(45,76,200)
-    print(p.getRed())
-    p.setRed(66)
-    print(p.getRed())
-    p.setBlue(p.getGreen())
-    print(p.getGreen(), p.getBlue())
-
-**Check your understanding**
-
-.. mchoicemf:: test_question7_8_1_1
-   :answer_a: Dark red
-   :answer_b: Light red
-   :answer_c: Dark green
-   :answer_d: Light green
-   :correct: a
-   :feedback_a: Because all three values are close to 0, the color will be dark.  But because the red value is higher than the other two, the color will appear red.
-   :feedback_b: The closer the values are to 0, the darker the color will appear.
-   :feedback_c: The first value in RGB is the red value.  The second is the green.  This color has no green in it.
-   :feedback_d: The first value in RGB is the red value.  The second is the green.  This color has no green in it.
-
-   If you have a pixel whose RGB value is (50, 0, 0), what color will this pixel appear to be?
-
-Image Objects
-^^^^^^^^^^^^^
-
-
-To access the pixels in a real image, we need to first create an ``Image`` object.  Image objects can be created in two
-ways.  First, an Image object can be made from the
-files that store digital images.  The image object has an attribute corresponding to the width, the height, and the
-collection of pixels in the image.
-
-It is also possible to create an Image object that is "empty".  An ``EmptyImage`` has a width and a height.  However, the
-pixel collection consists of only "White" pixels.
-
-We can ask an image object to return its size using the ``getWidth`` and ``getHeight`` methods.  We can also get a pixel from a particular location in the image using ``getPixel`` and change the pixel at
-a particular location using ``setPixel``.
-
-
-The Image class is shown below.  Note that the first two entries show how to create image objects.  The parameters are
-different depending on whether you are using an image file or creating an empty image.
-
-    =================== =============================== ==================================================
-    Method Name         Example                         Explanation
-    =================== =============================== ==================================================
-    Image(filename)     img = image.Image("cy.png")     Create an Image object from the file cy.png.
-    EmptyImage()        img = image.EmptyImage(100,200) Create an Image object that has all "White" pixels
-    getWidth()          w = img.getWidth()              Return the width of the image in pixels.
-    getHeight()         h = img.getHeight()             Return the height of the image in pixels.
-    getPixel(col,row)   p = img.getPixel(35,86)         Return the pixel at column 35, row 86d.
-    setPixel(col,row,p) img.setPixel(100,50,mp)         Set the pixel at column 100, row 50 to be mp.
-    =================== =============================== ==================================================
-
-Consider the image shown below.  Assume that the image is stored in a file called "luther.jpg".  Line 2 opens the
-file and uses the contents to create an image object that is referred to by ``img``.  Once we have an image object,
-we can use the methods described above to access information about the image or to get a specific pixel and check
-on its basic color intensities.
-
-
-
-
-
-.. raw:: html
-
-    <img src="../_static/LutherBellPic.jpg" id="luther.jpg">
-
-
-
-.. activecode::  pixelex1
-
-    import image
-    img = image.Image("luther.jpg")
-
-    print(img.getWidth())
-    print(img.getHeight())
-
-    p = img.getPixel(45,55)
-    print(p.getRed(), p.getGreen(), p.getBlue())
-
-
-When you run the program you can see that the image has a width of 400 pixels and a height of 244 pixels.  Also, the
-pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few other pixel locations by changing the ``getPixel`` arguments and rerunning the program.
-
-**Check your understanding**
-
-.. mchoicemf:: test_question7_8_2_1
-   :answer_a: 149 132 122
-   :answer_b: 183 179 170
-   :answer_c: 165 161 158
-   :answer_d: 201 104 115
-   :correct: b
-   :feedback_a: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
-   :feedback_b: Yes, the RGB values are 183 179 170 at row 100 and column 30.
-   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(30,100).
-   :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(30,100).
-
-   In the previous ActiveCode example, what are the RGB values of the pixel at row 100, column 30?
-
-
-Image Processing and Nested Iteration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Image processing** refers to the ability to manipulate the individual pixels in a digital image.  In order to process
-all of the pixels, we need to be able to systematically visit all of the rows and columns in the image.  The best way
-to do this is to use **nested iteration**.
-
-Nested iteration simply means that we will place one iteration construct inside of another.  We will call these two
-iterations the **outer iteration** and the **inner iteration**.
-To see how this works, consider the iteration below.
-
-.. sourcecode:: python
-
-    for i in range(5):
-       print(i)
-
-We have seen this enough times to know that the value of ``i`` will be 0, then 1, then 2, and so on up to 4.
-The ``print`` will be performed once for each pass.
-However, the body of the loop can contain any statements including another iteration (another ``for`` statement).  For example,
-
-.. sourcecode:: python
-
-    for i in range(5):
-       for j in range(3):
-            print(i,j)
-
-The ``for i`` iteration is the `outer iteration` and the ``for j`` iteration is the `inner iteration`.  Each pass thru
-the outer iteration will result in the complete processing of the inner iteration from beginning to end.  This means that
-the output from this nested iteration will show that for each value of ``i``, all values of ``j`` will occur.
-
-Here is the same example in activecode.  Try it.  Note that the value of ``i`` stays the same while the value of ``j`` changes.  The inner iteration, in effect, is moving faster than the outer iteration.
-
-.. activecode:: nested1
-
-    for i in range(5):
-       for j in range(3):
-            print(i,j)
-
-Another way to see this in more detail is to examine the behavior with codelens.  Step thru the iterations to see the
-flow of control as it occurs with the nested iteration.  Again, for every value of ``i``, all of the values of ``j`` will occur.  You can see that the inner iteration completes before going on to the next pass of the outer iteration.
-
-.. codelens:: nested2
-
-    for i in range(5):
-       for j in range(3):
-            print(i,j)
-
-Our goal with image processing is to visit each pixel.  We will use an iteration to process each `row`.  Within that iteration, we will use a nested iteration to process each `column`.  The result is a nested iteration, similar to the one
-seen above, where the outer ``for`` loop processes the rows, from 0 up to but not including the height of the image.
-The inner ``for`` loop will process each column of a row, again from 0 up to but not including the width of the image.
-
-The resulting code will look like the following.  We are now free to do anything we wish to each pixel in the image.
-
-.. sourcecode:: python
-
-	for row in range(img.getHeight()):
-	    for col in range(img.getWidth()):
-	        #do something with the pixel at position (col,row)
-
-One of the easiest image processing algorithms will create what is known as a **negative** image.  A negative image simply means that
-each pixel will be the `opposite` of what it was originally.  But what does opposite mean?
-
-In the RGB color model, we can consider the opposite of the red component as the difference between the original red
-and 255.  For example, if the original red component was 50, then the opposite, or negative red value would be
-``255-50`` or 205.  In other words, pixels with alot of red will have negatives with little red and pixels with little red will have negatives with alot.  We do the same for the blue and green as well.
-
-The program below implements this algorithm using the previous image.  Run it to see the resulting negative image.  Note that there is alot of processing taking place and this may take a few seconds to complete.  In addition, here are two other images that you can use.  Change the name of the file in the ``image.Image()`` call to see how these images look as negatives.  Also, note that there is an ``exitonclick`` method call at the very end which will close the window when you click on it.  This will allow you to "clear the screen" before drawing the next negative.
-
-.. raw:: html
-
-    <img src="../_static/cy.png" id="cy.png">
-    cy.png
-
-.. raw:: html
-
-    <img src="../_static/goldygopher.png" id="goldygopher.png">
-    goldygopher.png
-
-
-
-.. activecode::  acimg_1
-
-    import image
-
-    img = image.Image("luther.jpg")
-    newimg = image.EmptyImage(img.getWidth(),img.getHeight())
-    win = image.ImageWin()
-
-    for row in range(img.getHeight()):
-        for col in range(img.getWidth()):
-           p = img.getPixel(col,row)
-
-           newred = 255-p.getRed()
-           newgreen = 255-p.getGreen()
-           newblue = 255-p.getBlue()
-
-           newpixel = image.Pixel(newred,newgreen,newblue)
-
-           newimg.setPixel(col,row,newpixel)
-
-    newimg.draw(win)
-    win.exitonclick()
-
-Lets take a closer look at the code.  After importing the image module, we create two image objects.  The first, ``img``, represents a typical digital photo.  The second, ``newimg``, is an empty image that will be "filled in" as we process the original pixel by pixel.  Note that the width and height of the empty image is set to be the same as the width and height of the original.
-
-Lines 7 and 8 create the nested iteration that we discussed earlier.  This allows us to process each pixel in the image.
-Line 9 gets an individual pixel.
-
-Lines 11-13 create the negative intensity values by extracting the original intensity from the pixel and subtracting it
-from 255.  Once we have the ``newred``, ``newgreen``, and ``newblue`` values, we can create a new pixel (Line 15).
-
-Finally, we need to insert the new pixel into the empty image in the same location as the original pixel that it came from in the digital photo.
-
-
-.. admonition:: Other pixel manipulation
-
-	There are a number of different image processing algorithms that follow the same pattern as shown above.  Namely, take the original pixel, extract the red, green, and blue intensities, and then create a new pixel from them.  The new pixel is inserted into an empty image at the same location as the original.
-
-	For example, you can create a **gray scale** pixel by averaging the red, green and blue intensities and then using that value for all intensities.
-
-	From the gray scale you can create **black white** by setting a threshold and selecting to either insert a white pixel or a black pixel into the empty image.
-
-	You can also do some complex arithmetic and create interesting effects, such as
-	`Sepia Tone <http://en.wikipedia.org/wiki/Sepia_tone#Sepia_toning>`_
-
-
-
-
-
-
-You have just passed a very important point in your study of Python programming.  Even though there is much more that we will do, you have learned all of the basic building blocks that are necessary to solve many interesting problems.  From an algorithm point of view, you can now implement selection and iteration.  You can also solve problems by breaking them down into smaller parts, writing functions for those parts, and then calling the functions to complete the implementation.
-What remains is to focus on ways that we can better represent our problems in terms of the data that we manipulate.  We will now turn our attention to studying the main data collections provided by Python.
-
-**Check your understanding**
-
-.. mchoicemf:: test_question7_8_3_1
-   :answer_a: Output a
-   :answer_b: Output b
-   :answer_c: Output c
-   :answer_d: Output d
-   :correct: a
-   :feedback_a: i will start with a value of 0 and then j will iterate from 0 to 1.  Next, i will be 1 and j will iterate from 0 to 1.  Finally, i will be 2 and j will iterate from 0 to 1.
-   :feedback_b: The inner for-loop controls the second digit (j).  The inner for-loop must complete before the outer for-loop advances.
-   :feedback_c: The inner for-loop controls the second digit (j).  Notice that the inner for-loop is over the list [0, 1].
-   :feedback_d: The outer for-loop runs 3 times (0, 1, 2) and the inner for-loop runs twice for each time the outer for-loop runs, so this code prints exactly 6 lines.
-
-   What will the following nested for-loop print?  (Note, if you are having trouble with this question, review CodeLens 3).
-
-   .. code-block:: python
-
-      for i in range(3):
-        for j in range(2):
-          print(i,j)
-
-   ::
-
-      a.
-
-      0	0
-      0	1
-      1	0
-      1	1
-      2	0
-      2	1
-
-      b.
-
-      0   0
-      1   0
-      2   0
-      0   1
-      1   1
-      2   1
-
-      c.
-
-      0   0
-      0   1
-      0   2
-      1   0
-      1   1
-      1   2
-
-      d.
-
-      0   1
-      0   1
-      0   1
-
-
-
-.. mchoicemf:: test_question7_8_3_2
-   :answer_a: It would look like a red-washed version of the bell image
-   :answer_b: It would be a solid red rectangle the same size as the original image
-   :answer_c: It would look the same as the original image
-   :answer_d: It would look the same as the negative image in the example code
-   :correct: a
-   :feedback_a: Because we are removing the green and the blue values, but keeping the variation of the red the same, you will get the same image, but it will look like it has been bathed in red.
-   :feedback_b: Because the red value varies from pixel to pixel, this will not look like a solid red rectangle.  For it to look like a solid red rectangle each pixel would have to have exactly the same red value.
-   :feedback_c: If you remove the blue and green values from the pixels, the image will look different, even though there does not appear to be any blue or green in the original image (remember that other colors are made of combinations of red, green and blue).
-   :feedback_d: Because we have changed the value of the pixels from what they were in the original ActiveCode box code, the image will not be the same.
-
-   What would the image produced from ActiveCode box 16 look like if you replaced the lines:
-
-   .. code-block:: python
-
-      newred = 255-p.getRed()
-      newgreen = 255-p.getGreen()
-      newblue = 255-p.getBlue()
-
-   with the lines:
-
-   .. code-block:: python
-
-      newred = p.getRed()
-      newgreen = 0
-      newblue = 0
-
-
-
-Image Processing on Your Own
-----------------------------
-
-If you want to try some image processing on your own, outside of the textbook you can do so using the cImage module.  You can download ``cImage.py`` from `The github page <https://github.com/bnmnetp/cImage>`_ .   If you put ``cImage.py`` in the same folder as your program you can then do the following to be fully compatible with the code in this book.
-
-.. sourcecode:: python
-
-   import cImage as image
-   img = image.Image("myfile.gif")
-
-.. admonition:: Note
-
-   One important caveat about using ``cImage.py`` is that it will only work with GIF files unless you also install the Python Image Library.  The easiest version to install is called ``Pillow``.  If you have the ``pip`` command installed on your computer this is really easy to install, with ``pip install pillow`` otherwise you will need to follow the instructions on the `Python Package Index <https://pypi.python.org/pypi/Pillow/>`_ page.  With Pillow installed you will be able to use almost any kind of image that you download.
-
-
-
-
-.. note::
-
-  This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-  .. activecode:: scratch_07_05
-
-
 Glossary
 --------
 
@@ -1158,21 +464,11 @@ Glossary
         A variable used to count something, usually initialized to zero and
         incremented in the body of a loop.
 
-    cursor
-        An invisible marker that keeps track of where the next character will
-        be printed.
-
 
     definite iteration
         A loop where we have an upper bound on the number of times the
         body will be executed.  Definite iteration is usually best coded
         as a ``for`` loop.
-
-
-
-    escape sequence
-        An escape character, \\, followed by one or more printable characters
-        used to designate a nonprintable character.
 
     generalize
         To replace something unnecessarily specific (like a constant value)
@@ -1199,18 +495,10 @@ Glossary
         terminating condition is satisfied.
 
     loop variable
-        A variable used as part of the terminating condition of a loop.
-
-
-    
+        A variable used as part of the terminating condition of a loop.    
 
     nested loop
         A loop inside the body of another loop.
-
-    newline
-        A special character that causes the cursor to move to the beginning of
-        the next line.
-
 
     reassignment
         Making more than one assignment to the same variable during the
@@ -1242,6 +530,16 @@ Exercises
         
            .. actex:: ex_7_7
         
+                def newtonSqrt(n):
+                    approx = 0.5 * n
+                    better = 0.5 * (approx + n/approx)
+                    while  better !=  approx:
+                        approx = better
+                        better = 0.5 * (approx + n/approx)
+                    return approx
+
+
+                print ("Final approx:", newtonSqrt(25))
 
         .. tab:: Answer
             
@@ -1259,531 +557,47 @@ Exercises
 
                 print ("Final approx:", newtonSqrt(25))
 
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_5784e08291ba43199d43fdab277849f5
-
-
-#. Write a function ``print_triangular_numbers(n)`` that prints out the first
-   n triangular numbers. A call to ``print_triangular_numbers(5)`` would
-   produce the following output::
-
-       1       1
-       2       3
-       3       6
-       4       10
-       5       15
-
-   (*hint: use a web search to find out what a triangular number is.*)
-
-   .. actex:: ex_7_8
-
 
 #.
 
-    .. tabbed:: q3
+    .. tabbed:: q2
 
         .. tab:: Question
 
-           Write a function, ``is_prime``, that takes a single integer argument
-           and returns ``True`` when the argument is a *prime number* and ``False``
-           otherwise.
+           A note above suggests that when testing whether two floating point
+           numbers are equal, it's better to check if they are almost equal, because
+           of rounding errors in the representation of floating point numbers internally
+           in computers. 
+           
+           Rewrite  Newton's ``sqrt`` function to take an extra parameter, the tolerance,
+           and have the iteration stop when better and approx are almost equal, the difference
+           being no greater than the tolerance. Try invoking it with a tolerance of .01, .0001, and .000001.
         
-           .. actex:: ex_7_9
+           .. actex:: ex_7_7a
         
-        
+                def newtonSqrt(n):
+                    approx = 0.5 * n
+                    better = 0.5 * (approx + n/approx)
+                    while  better !=  approx:
+                        approx = better
+                        better = 0.5 * (approx + n/approx)
+                        print (" Approx:", better)
+                    return approx
+
 
         .. tab:: Answer
             
-            .. activecode:: q3_answer
-
-                def is_prime(n):
-                    for i in range(2, n):
-                        if n % i == 0:
-                            return False
-                    return True
-
-                print (is_prime(25))
-                print (is_prime(7))
-                print (is_prime(251))
-                print (is_prime(20))
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_418de05233374e76b3b66aeb96b55656
-
-
-
-
-#. Modify the walking turtle program so that rather than a 90 degree left or right turn the
-   angle of the turn is determined randomly at each step.
-
-    .. actex:: ex_7_14
-    
-    
-    
-
-#.
-
-    .. tabbed:: q5
-
-        .. tab:: Question
-
-           Modify the turtle walk program so that you have two turtles each with a
-           random starting location.  Keep the turtles moving until one of them leaves the screen.
-
-           .. actex:: ex_7_13
-
-        .. tab:: Answer
-
-            .. activecode:: q5_answer
-
-                import random
-                import turtle
-
-                def moveRandom(wn, t):
-                    coin = random.randrange(0,2)
-                    if coin == 0:
-                        t.left(90)
-                    else:
-                        t.right(90)
-
-                    t.forward(50)
-
-                def areColliding(t1, t2):
-                    if t1.distance(t2) < 2:
-                        return True
-                    else:
-                        return False
-
-                def isInScreen(w,t):
-                    leftBound = - w.window_width()/2
-                    rightBound = w.window_width()/2
-                    topBound = w.window_height()/2
-                    bottomBound = -w.window_height()/2
-
-                    turtleX = t.xcor()
-                    turtleY = t.ycor()
-
-                    stillIn = True
-                    if turtleX > rightBound or turtleX < leftBound:
-                        stillIn = False
-                    if turtleY > topBound or turtleY < bottomBound:
-                        stillIn = False
-                    return stillIn
-
-                t1 = turtle.Turtle()
-                t2 = turtle.Turtle()
-                wn = turtle.Screen()
-
-                t1.shape('turtle')
-                t2.shape('circle')
-
-                leftBound = -wn.window_width()/2
-                rightBound = wn.window_width()/2
-                topBound = wn.window_height()/2
-                bottomBound = -wn.window_height()/2
-
-                t1.up()
-                t1.goto(random.randrange(leftBound,rightBound),random.randrange(bottomBound,topBound))
-                t1.setheading(random.randrange(0,360))
-                t1.down()
-
-                t2.up()
-                t2.goto(random.randrange(leftBound,rightBound),random.randrange(bottomBound,topBound))
-                t2.setheading(random.randrange(0,360))
-                t2.down()
-
-
-                while isInScreen(wn,t1) and isInScreen(wn,t2):
-                    moveRandom(wn, t1)
-                    moveRandom(wn, t2)
-
-                wn.exitonclick()
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0cd01637a1814f86b11f576c37a46437
-
-
-
-#. Modify the previous turtle walk program so that the turtle turns around
-   when it hits the wall or when one turtle collides with another turtle.
-
-   .. actex:: ex_7_12
-   
-   
-
-#.
-
-    .. tabbed:: q7
-
-        .. tab:: Question
-
-           Write a function to remove all the red from an image.
-        
-           .. actex:: ex_7_15
-
-        .. tab:: Answer
-            
-            .. activecode:: q7_answer
-
-                import image
-
-                img = image.Image("luther.jpg")
-                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
-                win = image.ImageWin()
-
-                for col in range(img.getWidth()):
-                    for row in range(img.getHeight()):
-                       p = img.getPixel(col, row)
-
-                       newred = 0
-                       green = p.getGreen()
-                       blue = p.getBlue()
-
-                       newpixel = image.Pixel(newred, green, blue)
-
-                       newimg.setPixel(col, row, newpixel)
-
-                newimg.draw(win)
-                win.exitonclick()
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_777006b154ca4af7ab8bd11cc25c208a
-
-
-#. Write a function to convert the image to grayscale.
-
-    .. actex:: ex_7_16
-
-#.
-
-    .. tabbed:: q9
-
-        .. tab:: Question
-
-           Write a function to convert an image to black and white.
-        
-           .. actex:: ex_7_17
-
-        .. tab:: Answer
-            
-            .. activecode:: q9_answer
-
-                import image
-
-                def convertBlackWhite(input_image):
-                    grayscale_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
-
-                    for col in range(input_image.getWidth()):
-                        for row in range(input_image.getHeight()):
-                            p = input_image.getPixel(col, row)
-
-                            red = p.getRed()
-                            green = p.getGreen()
-                            blue = p.getBlue()
-
-                            avg = (red + green + blue) / 3.0
-
-                            newpixel = image.Pixel(avg, avg, avg)
-                            grayscale_image.setPixel(col, row, newpixel)
-
-                    blackwhite_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
-                    for col in range(input_image.getWidth()):
-                        for row in range(input_image.getHeight()):
-                            p = grayscale_image.getPixel(col, row)
-                            red = p.getRed()
-                            if red > 140:
-                                val = 255
-                            else:
-                                val = 0
-
-                            newpixel = image.Pixel(val, val, val)
-                            blackwhite_image.setPixel(col, row, newpixel)
-                    return blackwhite_image
-
-
-                win = image.ImageWin()
-                img = image.Image("luther.jpg")
-
-                bw_img = convertBlackWhite(img)
-                bw_img.draw(win)
-
-                win.exitonclick()
-
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_0f0fb41d607743998a86962a11eed53d
-
-
-#. Sepia Tone images are those brownish colored images that may remind you of
-   times past.  The formula for creating a sepia tone is as follows:
-
-   .. sourcecode:: python
-
-        newR = (R × 0.393 + G × 0.769 + B × 0.189)
-        newG = (R × 0.349 + G × 0.686 + B × 0.168)
-        newB = (R × 0.272 + G × 0.534 + B × 0.131)
-
-   Write a function to convert an image to sepia tone. *Hint:*
-   Remember that rgb values must be integers between 0 and 255.
-
-    .. actex:: ex_7_18
-
-#.
-
-    .. tabbed:: q11
-
-        .. tab:: Question
-
-           Write a function to uniformly enlarge an image by a factor of 2 (double the size).
-        
-        
-           .. actex:: ex_7_19
-
-        .. tab:: Answer
-            
-            .. activecode:: answer_7_11
-            
-               import image
+            .. activecode:: q2_answer
+
+                def newtonSqrt(n, tolerance = .01):
+                    approx = 0.5 * n
+                    better = 0.5 * (approx + n/approx)
+                    while  abs(better - approx) > tolerance:
+                        approx = better
+                        better = 0.5 * (approx + n/approx)
+                    return approx
                 
-               def double(oldimage):
-                   oldw = oldimage.getWidth()
-                   oldh = oldimage.getHeight()
-                   
-                   newim = EmptyImage(oldw*2, oldh*2)
-                   for row in range(oldh):
-                       for col in range(oldw):
-                           oldpixel = oldimage.getPixel(col,row)
-                           
-                           newim.setPixel(2*col,2*row, oldpixel)
-                           newim.setPixel(2*col+1, 2*row, oldpixel)
-                           newim.setPixel(2*col, 2*row+1, oldpixel)
-                           newim.setPixel(2*col+1, 2*row+1), oldpixel)
-                           
-                   return newim
-                   
-               win = image.ImageWin()
-               img = image.Image("luther.jpg")
-
-               bigimg = double(img)
-               bigimg.draw(win)
-
-               win.exitonclick()                
-                
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_9ca319187b4a4c2399402de0d99c0b1d
-
-
-#.   After you have scaled an image too much it looks blocky.  One way of
-     reducing the blockiness of the image is to replace each pixel with the
-     average values of the pixels around it.  This has the effect of smoothing
-     out the changes in color.  Write a function that takes an image as a
-     parameter and smooths the image.  Your function should return a new image
-     that is the same as the old but smoothed.
-
-       .. actex:: ex_7_20
-
-#.
-
-    .. tabbed:: q13
-
-        .. tab:: Question
-
-           Write a general pixel mapper function that will take an image and a pixel mapping function as
-           parameters.  The pixel mapping function should perform a manipulation on a single pixel and return
-           a new pixel.
-        
-           .. actex:: ex_7_21
-
-        .. tab:: Answer
-            
-            .. activecode:: q13_answer
-            
-                import image
-                
-                def pixelMapper(oldimage, rgbFunction):
-                    width = oldimage.getWidth()
-                    height = oldimage.getHeight()
-                    newim = image.EmptyImage(width,height)
-                
-                    for row in range(height):
-                        for col in range(width):
-                            originalpixel = oldimage.getPixel(col,row)
-                            newpixel = rgbFunction(originalpixel)
-                            newim.setPixel(col,row,newpixel)
-                            
-                    return newim
-                        
-                def graypixel(oldpixel):
-                    intensitysum = oldpixel.getRed() + oldpixel.getGreen() + oldpixel.getBlue()
-                    aveRGB = intensitysum//3
-                    newPixel = image.Pixel(aveRGB,aveRGB,aveRGB)
-                    return newPixel
-                
-                win = image.ImageWin()
-                img = image.Image("luther.jpg")
-
-                newim = pixelMapper(img,graypixel)
-                newim.draw(win)
-
-                win.exitonclick()          
-                
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_eb9f71a62de24efaa61f64b5a7e5d9c9
-
-
-#. When you scan in images using a scanner they may have lots of noise due to
-   dust particles on the image itself or the scanner itself,
-   or the images may even be damaged.  One way of eliminating this noise is
-   to replace each pixel by the median value of the pixels surrounding it.
-
-    .. actex:: ex_7_22
-
-#.
-
-    .. tabbed:: q15
-
-        .. tab:: Question
-
-           Research the Sobel edge detection algorithm and implement it.
-        
-           .. actex:: ex_7_23
-        
-
-        .. tab:: Answer
-            
-            .. activecode:: q15_answer
-
-                import image
-                import math
-                import sys
-
-                # Code adapted from http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/image-processing/edge_detection.html
-                # Licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
-
-                # this algorithm takes some time for larger images - this increases the amount of time
-                # the program is allowed to run before it times out
-                sys.setExecutionLimit(20000)
-
-                img = image.Image("luther.jpg")
-                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
-                win = image.ImageWin()
-
-                for x in range(1, img.getWidth()-1):  # ignore the edge pixels for simplicity (1 to width-1)
-                    for y in range(1, img.getHeight()-1): # ignore edge pixels for simplicity (1 to height-1)
-
-                        # initialise Gx to 0 and Gy to 0 for every pixel
-                        Gx = 0
-                        Gy = 0
-
-                        # top left pixel
-                        p = img.getPixel(x-1, y-1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        # intensity ranges from 0 to 765 (255 * 3)
-                        intensity = r + g + b
-
-                        # accumulate the value into Gx, and Gy
-                        Gx += -intensity
-                        Gy += -intensity
-
-                        # remaining left column
-                        p = img.getPixel(x-1, y)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gx += -2 * (r + g + b)
-
-                        p = img.getPixel(x-1, y+1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gx += -(r + g + b)
-                        Gy += (r + g + b)
-
-                        # middle pixels
-                        p = img.getPixel(x, y-1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gy += -2 * (r + g + b)
-
-                        p = img.getPixel(x, y+1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gy += 2 * (r + g + b)
-
-                        # right column
-                        p = img.getPixel(x+1, y-1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gx += (r + g + b)
-                        Gy += -(r + g + b)
-
-                        p = img.getPixel(x+1, y)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gx += 2 * (r + g + b)
-
-                        p = img.getPixel(x+1, y+1)
-                        r = p.getRed()
-                        g = p.getGreen()
-                        b = p.getBlue()
-
-                        Gx += (r + g + b)
-                        Gy += (r + g + b)
-
-                        # calculate the length of the gradient (Pythagorean theorem)
-                        length = math.sqrt((Gx * Gx) + (Gy * Gy))
-
-                        # normalise the length of gradient to the range 0 to 255
-                        length = length / 4328 * 255
-
-                        length = int(length)
-
-                        # draw the length in the edge image
-                        newpixel = image.Pixel(length, length, length)
-                        newimg.setPixel(x, y, newpixel)
-
-                newimg.draw(win)
-                win.exitonclick()
-
-        .. tab:: Discussion 
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_dd2d9ca5ea744aafbf7cdc2a4ad5e974
-
+                for x in [.01,.0001, .0000001]:
+                    y = newtonSqrt(10, x)
+                    print (newtonSqrt(10, x), y*y)
 

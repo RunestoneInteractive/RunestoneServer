@@ -117,7 +117,7 @@ Try practicing some operations to get or set values in a list of dictionaries.
    
    #add a fourth dictionary add the end of the list; print something to check your work.
    
-   #change the value associated with 'c' in the third dictionary from "yes" tio "no"; print something to check your work
+   #change the value associated with 'c' in the third dictionary from "yes" to "no"; print something to check your work
    
    
 You can even have a list of functions (!). 
