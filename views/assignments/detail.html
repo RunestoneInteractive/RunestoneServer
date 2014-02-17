@@ -47,8 +47,14 @@
 					{{=row.first_name}} {{=row.last_name}}
 				</a>
 				{{ else: }}
+				{{ if acid: }}
+				<span class="badge grade">{{=row.grade}}</span>
+				<a class="gradable" data-acid="{{=acid}}" data-student-id="{{=row.id}}"  href="{{=URL('assignments','detail')}}{{=page_args(student=row)}}">{{=row.first_name}} {{=row.last_name}}</a>
+				<p class="comment">{{=row.comment}}</p>
+				{{ else: }}
 				<span class="badge">{{=row.grade}}</span>
 				<a href="{{=URL('assignments','detail')}}{{=page_args(student=row)}}">{{=row.first_name}} {{=row.last_name}}</a>
+				{{ pass }}
 				{{ pass }}
 			</li>
 			{{pass}}
