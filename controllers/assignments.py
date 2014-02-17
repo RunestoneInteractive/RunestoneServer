@@ -246,7 +246,7 @@ def problem():
 	return json.dumps({
 		'id':"%s-%d" % (q.code.acid, q.auth_user.id),
 		'acid':q.code.acid,
-		'sid':q.auth_user.id,
+		'sid':q.auth_user.username,
 		'name':"%s %s" % (q.auth_user.first_name, q.auth_user.last_name),
 		'code':q.code.code,
 		'grade':q.code.grade,
