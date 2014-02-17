@@ -38,7 +38,6 @@ function getGradingModal(element, acid, studentId){
 		});
 	}
 
-
 	function show(data){
 		// get rid of any other modals -- incase they are just hanging out.
 		jQuery('.modal.modal-grader:not(#modal-template .modal)').remove();
@@ -53,6 +52,14 @@ function getGradingModal(element, acid, studentId){
 
 		createActiveCode(data.id,data.code);
 		jQuery('form',modal).submit(save);
+		jQuery('.next',modal).click(function(event){
+			event.preventDefault();
+			modal.on('hidden.bs.modal', function (e) {
+				next_element = element.next();
+				jQuery('.gradable',next_element).click();
+			});
+			modal.modal('hide');
+		});
 		modal.modal('show');
 		jQuery('#'+data.id).focus();
 	}
