@@ -46,6 +46,51 @@ def assignment_set_grade(assignment, user):
 	return points
 db.assignments.grade = Field.Method(lambda row, user: assignment_set_grade(row.assignments, user))
 
+def assignment_get_grades(assignment, section_id=None, problem=None):
+	""" Return a list of users with grades for assignment (or problem) """
+	if problem:
+		return assignment_get_problem_grades(problem, section_id)
+
+	if section_id:
+		section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+		users = section_users(db.auth_user.course_id == assignment.course)
+		users = users(db.sections.id == section_id)
+	else:
+		users = db(db.auth_user.course_id == assignment.course)
+	users = users.select(
+		db.auth_user.ALL,
+		orderby = db.auth_user.last_name,
+		)
+	grades = db(db.grades.assignment == assignment.id)
+	grades = grades.select(db.grades.ALL)
+	for u in users:
+		u.grade = None
+		u.comment = ""
+		for g in grades:
+			if g.auth_user.id == u.id:
+				u.grade = g.score
+	return users
+def assignment_get_problem_grades(problem, section_id=None):
+	code = db(db.code.sid == db.auth_user.username)
+	if section_id:
+		code = code((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+		code = code(db.sections.id == section_id)
+	code = code(db.code.acid == problem)
+	code = code.select(
+		db.code.ALL,
+		db.auth_user.ALL,
+		orderby = db.code.sid|db.auth_user.last_name,
+		distinct = db.code.sid,
+		)
+	users = []
+	for c in code:
+		u = c.auth_user
+		u.grade = c.code.grade
+		u.comment = c.code.comment
+		users.append(u)
+	return users
+db.assignments.grades_get = Field.Method(lambda row, section=None, problem=None: assignment_get_grades(row.assignments, section, problem))
+
 db.define_table('grades',
 	Field('auth_user', db.auth_user),
 	Field('assignment', db.assignments),
