@@ -237,6 +237,12 @@ def problem():
 		).first()
 	if not q:
 		return json.dumps({'success':False})
+	if 'grade' in request.vars:
+		q.code.grade = float(request.vars.grade)
+	if 'comment' in request.vars:
+		q.code.comment = request.vars.comment
+	if 'grade' in request.vars or 'comment' in request.vars:
+		q.code.update_record()
 	return json.dumps({
 		'id':"%s-%d" % (q.code.acid, q.auth_user.id),
 		'acid':q.code.acid,
