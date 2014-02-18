@@ -132,7 +132,7 @@ problem set.
     
     # the correct answer is 10
 
-3. (2 points) Invoke game using alternative guessers
+3. (1 points) Invoke game using alternative guessers
 
 .. activecode:: ps_6_3
   
@@ -240,7 +240,7 @@ problem set.
     #(Note: if it's running too slow, try invoking it with the
     #feedback parameter set to False.)
 
-. (2 points) write guess_after_q to guess u if previous letter was q
+. (1 points) write guess_after_q to guess u if previous letter was q
 
 .. activecode:: ps_6_4
   
@@ -357,7 +357,7 @@ problem set.
     # once you pass the tests, make calls to guess to see many fewer guesses
     # are needed with u_after_q than with guess_by_frequency
 
-5. Try guessing capitals first for a new sentence
+5. (1 point) Try guessing capitals first for a new sentence
 
 .. activecode:: ps_6_5
   
@@ -478,7 +478,7 @@ problem set.
     # once you pass the tests, make calls to guess to see many fewer guesses
     # are needed with new_sentence_cap than with guess_by_frequency
 
-6. Generalize the previous two functions
+6. (2 points) Generalize the previous two functions
 
 .. activecode:: ps_6_6
   
@@ -609,7 +609,7 @@ problem set.
     # running guess() again with heuristic_guesser, to see how much improvement 
     # the extra dictionary entries give you.
    
-7. Add heuristics to the dictionary
+7. (2 points) Add heuristics to the dictionary
 
 .. activecode:: ps_6_7
   
@@ -740,7 +740,7 @@ problem set.
 
     # try running guess again to see how much improvement you get.
 
-8. Adding heuristics for the most common words
+8. (1 point) Adding heuristics for the most common words
 
 .. activecode:: ps_6_8
   
