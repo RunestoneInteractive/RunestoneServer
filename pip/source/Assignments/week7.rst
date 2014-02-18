@@ -236,7 +236,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
@@ -344,7 +344,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
@@ -461,7 +461,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
@@ -582,7 +582,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
@@ -722,7 +722,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
@@ -851,7 +851,7 @@ guess, in order, e, then a, g, d, r, and n.
         if c in overall_freqs:
             caps_freqs[c] = overall_freqs[c]
     sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
     txt1 = "Question. Everything."
     txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
