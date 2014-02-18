@@ -249,7 +249,7 @@ guess, in order, e, then a, g, d, r, and n.
     #(Note: if it's running too slow, try invoking it with the
     #feedback parameter set to False.)
 
-. (1 points) write guess_after_q to guess u if previous letter was q
+4. (1 points) write guess_after_q to guess u if previous letter was q
 
 .. activecode:: ps_6_4
   
