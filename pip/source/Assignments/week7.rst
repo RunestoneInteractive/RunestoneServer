@@ -36,6 +36,9 @@ For this week you have the following graded activities:
 
    * :ref:`Problem Set 6 <problem_set_6>`
 
+#. Supplemental exercises:
+
+   * :ref:`In-class exercises Tuesday <session_12>`
 
 .. _response_6:
 
@@ -131,6 +134,12 @@ problem set.
     # write code to count the number of consonants
     
     # the correct answer is 10
+    
+Later on you will be using a dictionary like the one you've just been working with, to make guesses in the Shannon game.
+The idea is that if the most recent letter in a text was 'a', then you should guess for the next letter, in order,
+b, c, d, n, p, and s. If none of those is right, you would fall back on some other guessing method to generate
+more guesses. Similarly, if the most recent two letters were 'ti', then for the next letter you would
+guess, in order, e, then a, g, d, r, and n.
 
 3. (1 points) Invoke game using alternative guessers
 
@@ -613,114 +622,11 @@ problem set.
 
 .. activecode:: ps_6_7
   
-    ####Don't change this code; add and change code at the bottom #####
-    import random
-    
-    def letter_frequencies(txt):
-        d = {}
-        for c in txt:
-            if c not in d:
-                d[c] = 1
-            elif c in alphabet:
-                d[c] = d[c] + 1
-            # don't bother tracking letters that aren't in our alphabet
-        return d
-    
-    def guess(prev_txt, guessed_already):
-        # guess a letter randomly
-        idx = random.randrange(0, len(alphabet))
-        return alphabet[idx]    
-    
-    
-    def guess_no_dup(prev_txt, guessed_already):
-        # guess a letter randomly until you find one that hasn't been guessed yet
-        while True:
-            idx = random.randrange(0, len(alphabet))
-            candidate =  alphabet[idx]
-            if candidate not in guessed_already:
-                return candidate     
-    
-    def keys_sorted_by_value(d):
-        in_order = sorted(d.items(), None, lambda x: x[1], True)
-        res = []
-        for (k, v) in in_order:
-            res.append(k)
-        return res
-    
-    def guess_by_frequency(prev_txt, guessed_already):
-        # return the best one that hasn't been guessed yet
-        for let in keys_sorted_by_value(overall_freqs):
-            if let not in guessed_already:
-                return let
-        return None # No unguessed letters left; shouldn't happen!   
-        
-    def game(txt, feedback=True, guesser = guess):
-        """Plays one game"""
-        
-        # accumulate the text that's been revealed
-        revealed_text = ""
-        
-        # accumulate the total guess count
-        total_guesses = 0
-        # accumulate the total characters to be guessed
-        total_chars = 0
-        
-        # Loop through the letters in the text, making a guess for each
-        for c in txt:
-            if c in alphabet: # skip letters not in our alphabet; don't have to guess them
-                total_chars = total_chars + 1
-                # accumulate the guesses made for this letter
-                guesses = ""
-                guessed = False
-                if feedback:
-                    print "guessing " + c,
-                while not guessed:
-                    # guess until you get it right
-                    g = guesser(revealed_text, guesses)
-                    guesses = guesses + g
-                    if g == c:
-                        guessed = True
-                    if feedback:
-                        print g, 
-                
-                total_guesses = total_guesses + len(guesses)
-                revealed_text = revealed_text + c
-                if feedback:
-                    print(str(len(guesses)) + " guesses ")
-    
-        return total_chars, total_guesses
-    
-        
-    # note, the last two characters are the single quote and double quote. They are
-    # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
-    # and newlines, \n.
-    alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
-    caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    f = open('train.txt', 'r')
-    overall_freqs = letter_frequencies(f.read())
-    caps_freqs = {}
-    for c in caps:
-        if c in overall_freqs:
-            caps_freqs[c] = overall_freqs[c]
-    sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':["uu", 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
-    txt1 = "Question. Everything."
-    txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
    
-    #### Don't change any code above this line #####  
-    
-    # copy your heuristic_guesser function definition here
-    # run guess on txt2, using heuristic_guesser.
-    # With this longer txt, you may have to run it with
-    # feedback set to false, or your browser might timeout during execution
-    
     # Add to the heuristics dictionary entries for all the 
     # prefixes of the word 'time' (i.e., after a t, guess i, after ti guess m,
     # after tim guess e, and after time guess space or period
     
-    # Now run guess on txt2 again. How much improvement did you get?
-
     # Now generalize what you did with 'time' to automatically add all
     # the prefixes for any word, with the next letter of the word as
     # the only guess. Set the priority for that heuristic to the value
@@ -738,7 +644,6 @@ problem set.
     #for w in ['guess', 'next', 'letter', 'short']:
     #    add_word(w)
 
-    # try running guess again to see how much improvement you get.
 
 8. (1 point) Adding heuristics for the most common words
 
@@ -1281,3 +1186,112 @@ problem set.
     address.
 
 
+.. _session_12:
+
+Tuesday In-class Exercises: Sorting
+-----------------------------------
+
+
+.. tabbed:: q1
+
+    .. tab:: Question
+   
+        Sort this list in descending order by value
+        
+        .. actex:: session_12_1
+            
+            L = [0, 1, 6, 7, 3, 6, 8, 4, 4]
+    
+    .. tab:: Answer
+        
+        .. hidden
+        
+            .. actex:: session_12_1a
+            
+                 L = [8, 7, 6, 6, 4, 4, 3, 1, 0]
+                 sorted(L, None, True)
+
+.. tabbed:: q2
+
+    .. tab:: Question
+   
+        Sort this list in descending order by absolute value
+        
+        .. actex:: session_12_2
+            
+            L = [0, -1, -6, 7, 3, 6, 8, 4, 4]
+    
+    .. tab:: Answer
+        
+        .. hidden
+        
+            .. actex:: session_12_2a
+            
+                 L = [8, 7, 6, 6, 4, 4, 3, 1, 0]
+                 sorted(L, lambda x: abs(x), True)
+
+.. tabbed:: q3
+
+    .. tab:: Question
+   
+        Sort the top-level list in ascending order by the number of items in the sublists.
+        
+        .. actex:: session_12_3
+            
+            L = [[1, 2, 3], [4], [5, 6], [7, 8, 9, 10]]
+    
+    .. tab:: Answer
+        
+        .. hidden
+        
+            .. actex:: session_12_3a
+            
+                L = [[1, 2, 3], [4], [5, 6], [7, 8, 9, 10]]
+                sorted(L, None, lambda x: len(x), True)
+
+.. tabbed:: q4
+
+    .. tab:: Question
+   
+        Sort the top-level list in ascending order by the value of the first item in each sublist.
+        
+        .. actex:: session_12_4
+            
+            L = [[5, 2, 3], [4], [9, 6], [1, 8, 9, 10]]
+    
+    .. tab:: Answer
+        
+        .. hidden
+        
+            .. actex:: session_12_4a
+            
+                L = [[5, 2, 3], [4], [9, 6], [1, 8, 9, 10]]
+                sorted(L, None, lambda x: x[1], True)
+                
+.. tabbed:: q5
+
+    .. tab:: Question
+   
+        Write a function that takes a dictionary as input and returns a list
+        of its keys, sorted based on their associated values.
+        
+        .. actex:: session_12_5
+            
+     
+    .. tab:: Answer
+        
+        .. hidden
+        
+            .. actex:: session_12_5a
+            
+                def keys_sorted_by_value(d):
+                    in_order = sorted(d.items(), None, lambda x: x[1], True)
+                    res = []
+                    for (k, v) in in_order:
+                        res.append(k)
+                    return res
+                    
+                
+
+
+             
