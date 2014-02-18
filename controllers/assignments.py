@@ -165,25 +165,90 @@ def grade():
 		return redirect(request.env.HTTP_REFERER)
 	return redirect("%s?id=%d" % (URL('assignments','detail'), assignment.id))
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def detail():
 	course = db(db.courses.id == auth.user.course_id).select().first()
 	assignment = db(db.assignments.id == request.vars.id)(db.assignments.course == course.id).select().first()
 	if not assignment:
 		return redirect(URL("assignments","index"))
 
-	grades = db(db.assignments.id == db.grades.assignment)(db.grades.auth_user == db.auth_user.id)
-	grades = grades(db.assignments.id == assignment.id)
-	grades = grades.select()
-	problems = []
+	sections = db(db.sections.course_id == course.id).select(db.sections.ALL)
+	selected_section = None
+	if "section_id" in request.vars:
+		selected_section = int(request.vars.section_id)
+	acid = None
+	if "acid" in request.vars:
+		acid = request.vars.acid
+
+	students = assignment.grades_get(section=selected_section, problem=acid)
+	
 	student = None
 	if 'sid' in request.vars:
 		student_id = request.vars.sid
 		student = db(db.auth_user.id == student_id).select().first()
 		problems = assignment.problems(student)
+	else:
+	    q = db(db.code.course_id == auth.user.course_id)
+	    q = q(db.code.acid.like(assignment.query+"%"))
+	    problems = q.select(
+	    	db.code.acid,
+	    	db.code.course_id,
+	    	orderby = db.code.acid,
+	    	distinct = db.code.acid,
+	    	)
+
+	# Used as a convinence function for navigating within the page template
+	def page_args(id=assignment.id, section_id=selected_section, student=student, acid=acid):
+		arg_str = "?id=%d" % (id)
+		if section_id:
+			arg_str += "&section_id=%d" % section_id
+		if student:
+			arg_str += "&sid=%d" % student.id
+		if acid:
+			arg_str += "&acid=%s" % acid
+		return arg_str
 
 	return dict(
 		assignment = assignment,
 		problems = problems,
-		grades = grades,
+		students = students,
 		student = student,
+		sections = sections,
+		selected_section = selected_section,
+		page_args = page_args,
+		acid = acid,
+		course_id = auth.user.course_name,
+		gradingUrl = URL('assignments', 'problem'),
 		)
+
+import json
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def problem():
+	if 'acid' not in request.vars or 'sid' not in request.vars:
+		return json.dumps({'success':False})
+	q = db(db.code.sid == db.auth_user.username)
+	q = q(db.code.acid == request.vars.acid)
+	q = q(db.auth_user.id == request.vars.sid)
+	q = q.select(
+		db.auth_user.ALL,
+		db.code.ALL,
+		orderby = db.code.acid|db.code.timestamp,
+		distinct = db.code.acid,
+		).first()
+	if not q:
+		return json.dumps({'success':False})
+	if 'grade' in request.vars:
+		q.code.grade = float(request.vars.grade)
+	if 'comment' in request.vars:
+		q.code.comment = request.vars.comment
+	if 'grade' in request.vars or 'comment' in request.vars:
+		q.code.update_record()
+	return json.dumps({
+		'id':"%s-%d" % (q.code.acid, q.auth_user.id),
+		'acid':q.code.acid,
+		'sid':q.auth_user.username,
+		'name':"%s %s" % (q.auth_user.first_name, q.auth_user.last_name),
+		'code':q.code.code,
+		'grade':q.code.grade,
+		'comment':q.code.comment,
+		})
