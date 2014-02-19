@@ -509,7 +509,7 @@ calls to the function game.)
 
         .. tab:: Solution
 
-            .. actex:: ps5_2
+            .. actex:: ps5_2s
 
                 #### Don't change any of this provided code ######
                 
@@ -841,7 +841,7 @@ messages.
 
         .. tab:: Solution
 
-            .. actex:: ps5_4
+            .. actex:: ps5_4a
 
                 #### Don't change any of this provided code ######
                 
