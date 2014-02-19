@@ -112,130 +112,262 @@ In the code windows below, there is a big chunk of code that is provided to you 
 
 1. (1 point) Change the invocation of the function game at the bottom of the code below, so that the maximum number of wrong guesses is 3. 
 
-.. actex:: ps5_1
-    
-    #### Don't change any of this provided code ######
-    
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
+    .. tabbed:: ps5q1
+
+        .. tab:: Problem
+
+            .. actex:: ps5_1
+                
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
                     else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
-        
-    import sys 
-    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-    
-    ###### Don't change code above this line; just read and understand it #####
-    
-    # Run this. Then change this call so that a game is played with a maximum of 3 wrong guesses 
-    # before the game ends.
-    game()
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                # Run this. Then change this call so that a game is played with a maximum of 3 wrong guesses 
+                # before the game ends.
+                game()
+
+        .. tab:: Solution
+
+            .. actex:: ps5_1_a
+                
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
+                    else:
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                # Run this. Then change this call so that a game is played with a maximum of 3 wrong guesses 
+                # before the game ends.
+                game(True, False, 3) # run with False so it's not manual
+                # and the third parameter is 3 so the game is played with a max of 3 wrong guesses (max health is 3, when it's gone, no more guesses!)
 
 2. (2 points) Compute the average performance over many plays of the game.
 
@@ -248,128 +380,264 @@ the better your guesser.
 (Hint: you will go crazy clicking OK forever unless you set the manual parameter to False in your
 calls to the function game.)
     
-.. actex:: ps5_2
+    .. tabbed:: ps5q2
 
-    #### Don't change any of this provided code ######
-    
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
+        .. tab:: Problem
+
+            .. actex:: ps5_2
+
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
                     else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
-        
-    import sys 
-    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-    
-    ###### Don't change code above this line; just read and understand it #####
-    
-    # write code to call game 50 times and compute the average performance
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                # write code to call game 50 times and compute the average performance
+
+        .. tab:: Solution
+
+            .. actex:: ps5_2
+
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
+                    else:
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                # write code to call game 50 times and compute the average performance
+
+                atot,btot = 0,0
+                for x in range(50):
+                    a,b = game(False)
+                    atot = atot + a
+                    btot = btot + b
+                print float(atot)/btot
 
 3. (1 point) Compute letter frequencies.
 
@@ -387,169 +655,347 @@ We have included some hidden code that runs unit tests on your function. If your
 function is not producing the right outputs, it will give you some diagnostic
 messages.
 
+    .. tabbed:: ps5q3
 
-.. actex:: ps5_3
+        .. tab:: Problem
 
-    def letter_frequencies(...fill this in...
-    
-    
-    #####some tests 
-    import test    
-    test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
-    r = letter_frequencies(test_words)
-    # letter_frequencies should return a dictionary
-    test.testEqual(type(r), type({}))
-    test.testEqual(r['C'], 1)
-    test.testEqual(r['O'], 4)    
+            .. actex:: ps5_3
+
+                def letter_frequencies(...fill this in...
+                
+                
+                #####some tests 
+                import test    
+                test_words = ["HELLO", "GOODBYE", "LOVE", "PEACE"]
+                r = letter_frequencies(test_words)
+                # letter_frequencies should return a dictionary
+                test.testEqual(type(r), type({}))
+                test.testEqual(r['C'], 1)
+                test.testEqual(r['O'], 4)  
+
+        .. tab:: Solution
+
+            .. actex:: ps5_3_a
+
+                def letter_frequencies(words_list):
+                    charfreqs = {}
+                    for w in words_list:
+                        for ch in w:
+                            if ch in charfreqs:
+                                charfreqs[ch] = charfreqs[ch] + 1
+                            else:
+                                charfreqs[ch] = 1
+                    return charfreqs
     
 
 4. (2 points) Use letter_frequencies to make better guesses. Fill in details of the better_guess function as indicated in the comments.
 
+    .. tabbed:: ps5q4
 
-.. actex:: ps5_4
+        .. tab:: Problem
 
-        #### Don't change any of this provided code ######
-    
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
+            .. actex:: ps5_4
+
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
                     else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
-        
-    import sys 
-    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-    
-    ###### Don't change code above this line; just read and understand it #####
-        
-    # copy your letter_frequencies function here
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                    
+                # copy your letter_frequencies function here
 
-    def possible_words(blanked_word, guessed_already, possible_ws = all_words):
-        return possible_ws
+                def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+                    return possible_ws
 
-    def better_guess(blanked, guessed_already, manual = False):
-        freqs = letter_frequencies(possible_words(blanked, guessed_already))
-        counts = freqs.items()
-        # sort the pairs in counts so that the letter with the highest 
-        # count appears first
-        
-        # return the letter that has the highest count that is not in guessed_already
-        # (and print it out if manual is True)       
+                def better_guess(blanked, guessed_already, manual = False):
+                    freqs = letter_frequencies(possible_words(blanked, guessed_already))
+                    counts = freqs.items()
+                    # sort the pairs in counts so that the letter with the highest 
+                    # count appears first
+                    
+                    # return the letter that has the highest count that is not in guessed_already
+                    # (and print it out if manual is True)       
 
-   
-    ###some test cases###
-    import test
-    res = better_guess("H___O", "HOWQA")
-    # should return a string
-    test.testEqual(type(res), type(""))
-    test.testEqual(len(res), 1)
-    res = better_guess("HE__O", "HOWQAEN")
-    test.testEqual(res, "S")
+               
+                ###some test cases###
+                import test
+                res = better_guess("H___O", "HOWQA")
+                # should return a string
+                test.testEqual(type(res), type(""))
+                test.testEqual(len(res), 1)
+                res = better_guess("HE__O", "HOWQAEN")
+                test.testEqual(res, "S")
+
+        .. tab:: Solution
+
+            .. actex:: ps5_4
+
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
+                    else:
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                    
+                def letter_frequencies(words_list):
+                    charfreqs = {}
+                    for w in words_list:
+                        for ch in w:
+                            if ch in charfreqs:
+                                charfreqs[ch] = charfreqs[ch] + 1
+                            else:
+                                charfreqs[ch] = 1
+                    return charfreqs
+
+                def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+                    return possible_ws
+
+                def better_guess(blanked, guessed_already, manual = False):
+                    freqs = letter_frequencies(possible_words(blanked, guessed_already))
+                    counts = freqs.items()
+                    # sort the pairs in counts so that the letter with the highest
+                    # count appears first
+                    cts = sorted(counts, None, lambda x: x[1], True)
+                    # return the letter that has the highest count that is not in guessed_already
+                    # (and print it out if manual is True)
+                    for x,y in cts:
+                        if x not in guessed_already:
+                            return x       
+
+               
+                ###some test cases###
+                import test
+                res = better_guess("H___O", "HOWQA")
+                # should return a string
+                test.testEqual(type(res), type(""))
+                test.testEqual(len(res), 1)
+                res = better_guess("HE__O", "HOWQAEN")
+                test.testEqual(res, "S")
 
 5. (3 points) Make a better version of possible words
 
@@ -566,282 +1012,653 @@ There are some hidden test cases that will give you feedback on how well you're 
 If you don't manage to get exactly the number we got, you can still go on and 
 let the graders figure it out, but most likely you've got an error.
 
-.. actex:: ps5_5 
+    .. tabbed:: ps5q
 
-        #### Don't change any of this provided code ######
-    
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
+        .. tab:: Problem
+
+            .. actex:: ps5_5 
+
+                    #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
                     else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
-        
-    import sys 
-    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-    
-    ###### Don't change code above this line; just read and understand it #####
-    
-    def possible_words(blanked_word, guessed_already, possible_ws = all_words):
-        return possible_ws # replace this with something better
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+                    return possible_ws # replace this with something better
 
 
 
-    #### Some comments #####
-    import test
-    
-    res = possible_words("H___O", "HOWQA")
-    #should return a list of strings
-    test.testEqual(type(res), type([]))
-    test.testEqual(type(res[0]), type(""))
-    test.testEqual(len(res), 54)
-    
-    
+                #### Some comments #####
+                import test
+                
+                res = possible_words("H___O", "HOWQA")
+                #should return a list of strings
+                test.testEqual(type(res), type([]))
+                test.testEqual(type(res[0]), type(""))
+                test.testEqual(len(res), 54)
+                
+        .. tab:: Solution
+
+            .. actex:: ps5_5_a 
+
+                #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
+                    else:
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                # this is a helper function that I will use in possible_words
+                def check_word(word, blanked_word, guessed_already):
+                    for ch in word:
+                        if ch in guessed_already and ch not in blanked_word:
+                            return False
+                        for ch in blanked_word:
+                            if ch != "_" and ch not in word:
+                                return False
+                    return True
+
+                def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+                    #return possible_ws # replace this with something better
+                    possible = possible_ws
+                    new_poss = []
+                    for w in possible:
+                        if len(w) == len(blanked_word):
+                            if check_word(w, blanked_word, guessed_already):
+                                new_poss.append(w)
+                    return new_poss
+
+                def better_guess(blanked, guessed_already, manual = False):
+                    freqs = letter_frequencies(possible_words(blanked, guessed_already))
+                    counts = freqs.items()
+                    # sort the pairs in counts so that the letter with the highest
+                    # count appears first
+                    cts = sorted(counts, None, lambda x: x[1], True)
+                    # return the letter that has the highest count that is not in guessed_already
+                    # (and print it out if manual is True)
+                    for x,y in cts:
+                        if x not in guessed_already:
+                            return x
+
+                #### Some comments #####
+                import test
+                
+                res = possible_words("H___O", "HOWQA")
+                #should return a list of strings
+                test.testEqual(type(res), type([]))
+                test.testEqual(type(res[0]), type(""))
+                test.testEqual(len(res), 54)
+                
 
 
 6. (1 point) Put it all together
 
-.. actex:: ps5_6
+    .. tabbed:: ps5q6
 
-        #### Don't change any of this provided code ######
-    
-    def guess(blanked, guessed_already, manual = True):
-        """Return a single letter (upper case)"""
-        # Initial version picks a letter completely at random,
-        # without taking advantage of information from
-        # blanked or what was guessed already
-        alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
-        idx = random.randrange(0, 26)
-        if manual:
-            print("guess is " + alphabet[idx])
-        return alphabet[idx]
-        
-    all_words = []
-    f = open('words.txt', 'r')
-    for l in f:
-        all_words.append(l.strip().upper())
-    f.close()
-    
-    import random
-    
-    
-    def blanked(to_guess, revealed_letters):
-        """Teturns blanked version of to_guess, with only revealed_letters showing""" 
-        s = ""
-        for ch in to_guess:
-            if ch in revealed_letters:
-                s += ch
-            else:
-                s += "_"
-        return s
-    
-    def health_prompt(c_h, m_h):
-        """Text representation of current health"""
-        pos, rem = "+"*c_h, m_h - c_h
-        return pos + "-"*rem
-    
-    def show_results(word, guess_count):
-        """Results to show at end of game"""
-        print "You got it in " + str(guess_count) + " guesses."
-        if guess_count == len(set(list(word))):
-            print "Awesome job."
-        else:
-            print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
-    
-    def game_state_prompt(txt, h, m_h, word, guesses):
-        """Returns a string showing current status of the game"""
-        res = txt + "\n"
-        res = res + health_prompt(h, m_h) + "\n"
-        if guesses != "":
-            res = res + "Guesses so far: " + guesses.upper() + "\n"
-        else:
-            res = res + "No guesses so far" + "\n"
-        res = res + "Word: " + blanked(word, guesses) + "\n"
-        return(res)
-    
-    #### GAMEPLAY
-    
-          
-    def game(manual=True, better=False, max_health = 26):
-        """Plays one game"""
-        health = max_health
-        to_guess = random.choice(all_words)
-        to_guess = to_guess.upper() # everything in all capitals to avoid confusion
-        guesses_so_far = ""
-        game_over = False
-    
-        feedback = "let's get started"
-    
-        while not game_over:
-            if manual:
-                # give user a chance to see what happened on previous guess
-                prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
-                full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
-                command = raw_input(full_prompt)
-                if command != "":
-                    # user entered a character, so (s)he wants to stop the game
-                    return
-            # call your function guess to pick a next letter
-            if better:
-                # call better_guess, which you will have to implement
-                next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            else:
-                # call guess, which is provided
-                next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
-            # proceed as with last week to process the next_guess
-            feedback = ""
-            if len(next_guess) != 1:
-                feedback = "I only understand single letter guesses. Please try again."     
-            elif next_guess in guesses_so_far:
-                feedback = "You already guessed " + next_guess
-            else:
-                guesses_so_far = guesses_so_far + next_guess
-                if next_guess in to_guess:
-                    if blanked(to_guess, guesses_so_far) == to_guess:
-                        feedback = "Congratulations"
-                        game_over = True
+        .. tab:: Problem
+
+            .. actex:: ps5_6
+
+                    #### Don't change any of this provided code ######
+                
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+                    
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+                
+                import random
+                
+                
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing""" 
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+                
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+                
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
                     else:
-                        feedback = "Yes, " + next_guess + " is in the word"
-                else: # next_guess is not in the word to_guess
-                    feedback = "Sorry, " + next_guess + " is not in the word."
-                    health = health - 1
-                    if health <= 0:
-                        feedback = " Waah, waah, waah. Game over."
-                        game_over= True
-    
-        if manual:
-            # this is outside the for loop; executes once game_over is True
-            print(feedback)
-            print("The word was..." + to_guess)
-            show_results(to_guess, len(guesses_so_far))
-        
-        return len(guesses_so_far), len(set(list(to_guess)))
-        
-    import sys 
-    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-    
-    ###### Don't change code above this line; just read and understand it #####
-    
-        
-    # paste your letter_frequencies, better_guess, and possible_words functions here
-    
-    # paste two copies of your code for computing, over 50 games, the ratio of 
-    # guesses to min_guesses. 
-    # Modify one copy to invoke game() in a way that better_guess will be used
-    # instead of guess. 
-    #
-    # Note: a game using better_guess might take a while to
-    # run. To improve performance, we've given you a smaller dictionary of words
-    # for this exercise. You might want to try running it on just 1 or 5 of 10
-    # games before you run it on all 50, to make sure it's working.  
-    
-    # How much better did you do using better_guess?
-        
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+                
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+                
+                #### GAMEPLAY
+                
+                      
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+                
+                    feedback = "let's get started"
+                
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."     
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+                
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+                    
+                    return len(guesses_so_far), len(set(list(to_guess)))
+                    
+                import sys 
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+                
+                ###### Don't change code above this line; just read and understand it #####
+                
+                    
+                # paste your letter_frequencies, better_guess, and possible_words functions here
+                
+                # paste two copies of your code for computing, over 50 games, the ratio of 
+                # guesses to min_guesses. 
+                # Modify one copy to invoke game() in a way that better_guess will be used
+                # instead of guess. 
+                #
+                # Note: a game using better_guess might take a while to
+                # run. To improve performance, we've given you a smaller dictionary of words
+                # for this exercise. You might want to try running it on just 1 or 5 of 10
+                # games before you run it on all 50, to make sure it's working.  
+                
+                # How much better did you do using better_guess?
+            
+        .. tab:: Solution
+
+            .. actex:: ps5_q6_a
+
+                #### Don't change any of this provided code ######
+
+                def guess(blanked, guessed_already, manual = True):
+                    """Return a single letter (upper case)"""
+                    # Initial version picks a letter completely at random,
+                    # without taking advantage of information from
+                    # blanked or what was guessed already
+                    alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
+                    idx = random.randrange(0, 26)
+                    if manual:
+                        print("guess is " + alphabet[idx])
+                    return alphabet[idx]
+
+                all_words = []
+                f = open('words.txt', 'r')
+                for l in f:
+                    all_words.append(l.strip().upper())
+                f.close()
+
+                import random
+
+
+                def blanked(to_guess, revealed_letters):
+                    """Teturns blanked version of to_guess, with only revealed_letters showing"""
+                    s = ""
+                    for ch in to_guess:
+                        if ch in revealed_letters:
+                            s += ch
+                        else:
+                            s += "_"
+                    return s
+
+                def health_prompt(c_h, m_h):
+                    """Text representation of current health"""
+                    pos, rem = "+"*c_h, m_h - c_h
+                    return pos + "-"*rem
+
+                def show_results(word, guess_count):
+                    """Results to show at end of game"""
+                    print "You got it in " + str(guess_count) + " guesses."
+                    if guess_count == len(set(list(word))):
+                        print "Awesome job."
+                    else:
+                        print "You could have gotten it in " + str(len(set(list(word)))) + " guesses..."
+
+                def game_state_prompt(txt, h, m_h, word, guesses):
+                    """Returns a string showing current status of the game"""
+                    res = txt + "\n"
+                    res = res + health_prompt(h, m_h) + "\n"
+                    if guesses != "":
+                        res = res + "Guesses so far: " + guesses.upper() + "\n"
+                    else:
+                        res = res + "No guesses so far" + "\n"
+                    res = res + "Word: " + blanked(word, guesses) + "\n"
+                    return(res)
+
+                #### GAMEPLAY
+
+
+                def game(manual=True, better=False, max_health = 26):
+                    """Plays one game"""
+                    health = max_health
+                    to_guess = random.choice(all_words)
+                    to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+                    guesses_so_far = ""
+                    game_over = False
+
+                    feedback = "let's get started"
+
+                    while not game_over:
+                        if manual:
+                            # give user a chance to see what happened on previous guess
+                            prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+                            full_prompt = prompt + "Enter (OK) to make the program guess again; anything else to quit\n"
+                            command = raw_input(full_prompt)
+                            if command != "":
+                                # user entered a character, so (s)he wants to stop the game
+                                return
+                        # call your function guess to pick a next letter
+                        if better:
+                            # call better_guess, which you will have to implement
+                            next_guess = better_guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        else:
+                            # call guess, which is provided
+                            next_guess = guess(blanked(to_guess, guesses_so_far), guesses_so_far, manual)
+                        # proceed as with last week to process the next_guess
+                        feedback = ""
+                        if len(next_guess) != 1:
+                            feedback = "I only understand single letter guesses. Please try again."
+                        elif next_guess in guesses_so_far:
+                            feedback = "You already guessed " + next_guess
+                        else:
+                            guesses_so_far = guesses_so_far + next_guess
+                            if next_guess in to_guess:
+                                if blanked(to_guess, guesses_so_far) == to_guess:
+                                    feedback = "Congratulations"
+                                    game_over = True
+                                else:
+                                    feedback = "Yes, " + next_guess + " is in the word"
+                            else: # next_guess is not in the word to_guess
+                                feedback = "Sorry, " + next_guess + " is not in the word."
+                                health = health - 1
+                                if health <= 0:
+                                    feedback = " Waah, waah, waah. Game over."
+                                    game_over= True
+
+                    if manual:
+                        # this is outside the for loop; executes once game_over is True
+                        print(feedback)
+                        print("The word was..." + to_guess)
+                        show_results(to_guess, len(guesses_so_far))
+
+                    return len(guesses_so_far), len(set(list(to_guess)))
+
+                import sys
+                sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+
+                ###### Don't change code above this line; just read and understand it #####
+
+
+                # paste your letter_frequencies, better_guess, and possible_words functions here
+
+                # paste two copies of your code for computing, over 50 games, the ratio of
+                # guesses to min_guesses.
+                # Modify one copy to invoke game() in a way that better_guess will be used
+                # instead of guess.
+                #
+
+                def letter_frequencies(words_list):
+                    charfreqs = {}
+                    for w in words_list:
+                        for ch in w:
+                            if ch in charfreqs:
+                                charfreqs[ch] = charfreqs[ch] + 1
+                            else:
+                                charfreqs[ch] = 1
+                    return charfreqs
+
+                def check_word(word, blanked_word, guessed_already):
+                    for ch in word:
+                        if ch in guessed_already and ch not in blanked_word:
+                            return False
+                        for ch in blanked_word:
+                            if ch != "_" and ch not in word:
+                                return False
+                    return True
+
+                def possible_words(blanked_word, guessed_already, possible_ws = all_words):
+                    #return possible_ws # replace this with something better
+                    possible = possible_ws
+                    new_poss = []
+                    for w in possible:
+                        if len(w) == len(blanked_word):
+                            if check_word(w, blanked_word, guessed_already):
+                                new_poss.append(w)
+                    return new_poss
+
+                def better_guess(blanked, guessed_already, manual = False):
+                    freqs = letter_frequencies(possible_words(blanked, guessed_already))
+                    counts = freqs.items()
+                    # sort the pairs in counts so that the letter with the highest
+                    # count appears first
+                    cts = sorted(counts, None, lambda x: x[1], True)
+                    # return the letter that has the highest count that is not in guessed_already
+                    # (and print it out if manual is True)
+                    for x,y in cts:
+                        if x not in guessed_already:
+                            return x
+                    #return x
+
+                # Note: a game using better_guess might take a while to
+                # run. To improve performance, we've given you a smaller dictionary of words
+                # for this exercise. You might want to try running it on just 1 or 5 of 10
+                # games before you run it on all 50, to make sure it's working.
+
+                rng = 3
+                atot,btot = 0,0
+                for x in range(rng):
+                    a,b = game(False)
+                    atot = atot + a
+                    btot = btot + b
+                origratio = float(atot)/btot
+                print origratio
+
+                atot,btot = 0,0
+                for x in range(rng):
+                    a,b = game(False,True)
+                    atot = atot + a
+                    btot = btot + b
+                betterratio = float(atot)/btot
+                print betterratio
+                # How much better did you do using better_guess?
+                print "Difference: ", origratio - betterratio
+
+
+
 .. datafile::  words.txt
    :hide:
 
