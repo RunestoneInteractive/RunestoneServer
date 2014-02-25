@@ -85,55 +85,127 @@ problem set.
 
 1. (1 point) Follow the directions in the code to read and manipulate the nested data structure 'heuristics_dictionary'.
 
-.. activecode:: ps_6_1
+.. tabbed:: ps_6_1_tabs
 
-    heuristics_dictionary = {
-        'a':{
-            'priority':2,
-            'guesses':['b','c','d','n','p','s'],
-            },
-        'q':{
-            'priority':1,
-            'guesses':['uu','a'],
-            },
-        'ti':{
-            'priority':1,
-            'guesses':['e', 'a', 'g', 'd', 'r', 'n']   
-            }      
-    }
+    .. tab:: Problem
+
+        .. activecode:: ps_6_1
+
+            heuristics_dictionary = {
+                'a':{
+                    'priority':2,
+                    'guesses':['b','c','d','n','p','s'],
+                    },
+                'q':{
+                    'priority':1,
+                    'guesses':['uu','a'],
+                    },
+                'ti':{
+                    'priority':1,
+                    'guesses':['e', 'a', 'g', 'd', 'r', 'n']   
+                    }      
+            }
 
 
-    # In one line of code, print out the list 
-    #of guesses associated with the key 'q'
-    
-    # In one line of code, add the letter 'z' 
-    # to the guesses associated with 'q'.
-    
-    # Add a key 'tim' to the dictionary, where the value is a dictionary
-    # with the same structure that the others have.
+            # In one line of code, print out the list 
+            #of guesses associated with the key 'q'
+            
+            # In one line of code, add the letter 'z' 
+            # to the guesses associated with 'q'.
+            
+            # Add a key 'tim' to the dictionary, where the value is a dictionary
+            # with the same structure that the others have.
+
+    .. tab:: Solution
+
+        .. activecode:: ps_6_1_a
+
+            heuristics_dictionary = {
+                'a':{
+                    'priority':2,
+                    'guesses':['b','c','d','n','p','s'],
+                    },
+                'q':{
+                    'priority':1,
+                    'guesses':['uu','a'],
+                    },
+                'ti':{
+                    'priority':1,
+                    'guesses':['e', 'a', 'g', 'd', 'r', 'n']   
+                    }      
+            }
+
+
+            # In one line of code, print out the list 
+            #of guesses associated with the key 'q'
+            print heuristics_dictionary['q']['guesses']
+            
+            # In one line of code, add the letter 'z' 
+            # to the guesses associated with 'q'.
+            heuristics_dictionary['q']['guesses'].append('z')
+
+            # Add a key 'tim' to the dictionary, where the value is a dictionary
+            # with the same structure that the others have.
+            heuristics_dictionary['tim'] = {
+                'priority':2,
+                'guesses': ['e',' ']
+            }            
     
 2. (1 point) Count the number of consonants in the all the 'guesses' lists of the nested datastructure 'heuristics.'
 
-.. activecode:: ps_6_2
-  
-    heuristics_dictionary = {
-        'a':{
-            'priority':2,
-            'guesses':['b','c','d','n','p','s'],
-            },
-        'q':{
-            'priority':1,
-            'guesses':['uu','a'],
-            },
-        'ti':{
-            'priority':1,
-            'guesses':['e', 'a', 'g', 'd', 'r', 'n']
-            }        
-    }
+.. tabbed:: ps_6_2_tabs
 
-    # write code to count the number of consonants
-    
-    # the correct answer is 10
+    .. tab:: Problem
+
+        .. activecode:: ps_6_2
+          
+            heuristics_dictionary = {
+                'a':{
+                    'priority':2,
+                    'guesses':['b','c','d','n','p','s'],
+                    },
+                'q':{
+                    'priority':1,
+                    'guesses':['uu','a'],
+                    },
+                'ti':{
+                    'priority':1,
+                    'guesses':['e', 'a', 'g', 'd', 'r', 'n']
+                    }        
+            }
+
+            # write code to count the number of consonants
+            
+            # the correct answer is 10
+
+    .. tab:: Solution
+
+        .. activecode:: ps_6_2_a
+          
+            heuristics_dictionary = {
+                'a':{
+                    'priority':2,
+                    'guesses':['b','c','d','n','p','s'],
+                    },
+                'q':{
+                    'priority':1,
+                    'guesses':['uu','a'],
+                    },
+                'ti':{
+                    'priority':1,
+                    'guesses':['e', 'a', 'g', 'd', 'r', 'n']
+                    }        
+            }
+
+            # write code to count the number of consonants
+            count = 0
+            for key in heuristics_dictionary:
+                for l in heuristics_dictionary[key]['guesses']:
+                    if l not in 'aeiouu':
+                        count = count + 1
+            
+            # the correct answer is 10
+            print "There are "+str(count)+" consonants in heuristics_dictionary."
     
 Later on you will be using a dictionary like the one you've just been working with, to make guesses in the Shannon game.
 The idea is that if the most recent letter in a text was 'a', then you should guess for the next letter, in order,
