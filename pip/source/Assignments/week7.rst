@@ -327,7 +327,7 @@ guess, in order, e, then a, g, d, r, and n.
 
     .. tab:: Solution
 
-        .. activecode:: ps_6_3
+        .. activecode:: ps_6_3_a
           
             ####Don't change this code; add and change code at the bottom #####
             import random
