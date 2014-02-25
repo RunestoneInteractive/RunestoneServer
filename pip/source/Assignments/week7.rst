@@ -1509,262 +1509,300 @@ guess, in order, e, then a, g, d, r, and n.
             test.testEqual(heuristics['gue']['guesses'][0], 's')
             test.testEqual(heuristics['nex']['guesses'][0], 't')
 
-.. activecode:: ps_6_7
-   
-    ####Don't change this code; add and change code at the bottom #####
-    import random
-    
-    def letter_frequencies(txt):
-        d = {}
-        for c in txt:
-            if c not in d:
-                d[c] = 1
-            elif c in alphabet:
-                d[c] = d[c] + 1
-            # don't bother tracking letters that aren't in our alphabet
-        return d
-    
-    def guess(prev_txt, guessed_already):
-        # guess a letter randomly
-        idx = random.randrange(0, len(alphabet))
-        return alphabet[idx]    
-    
-    
-    def guess_no_dup(prev_txt, guessed_already):
-        # guess a letter randomly until you find one that hasn't been guessed yet
-        while True:
-            idx = random.randrange(0, len(alphabet))
-            candidate =  alphabet[idx]
-            if candidate not in guessed_already:
-                return candidate     
-    
-    def keys_sorted_by_value(d):
-        in_order = sorted(d.items(), None, lambda x: x[1], True)
-        res = []
-        for (k, v) in in_order:
-            res.append(k)
-        return res
-    
-    def guess_by_frequency(prev_txt, guessed_already):
-        # return the best one that hasn't been guessed yet
-        for let in keys_sorted_by_value(overall_freqs):
-            if let not in guessed_already:
-                return let
-        return None # No unguessed letters left; shouldn't happen!   
-        
-    def game(txt, feedback=True, guesser = guess):
-        """Plays one game"""
-        
-        # accumulate the text that's been revealed
-        revealed_text = ""
-        
-        # accumulate the total guess count
-        total_guesses = 0
-        # accumulate the total characters to be guessed
-        total_chars = 0
-        
-        # Loop through the letters in the text, making a guess for each
-        for c in txt:
-            if c in alphabet: # skip letters not in our alphabet; don't have to guess them
-                total_chars = total_chars + 1
-                # accumulate the guesses made for this letter
-                guesses = ""
-                guessed = False
-                if feedback:
-                    print "guessing " + c,
-                while not guessed:
-                    # guess until you get it right
-                    g = guesser(revealed_text, guesses)
-                    guesses = guesses + g
-                    if g == c:
-                        guessed = True
-                    if feedback:
-                        print g, 
-                
-                total_guesses = total_guesses + len(guesses)
-                revealed_text = revealed_text + c
-                if feedback:
-                    print(str(len(guesses)) + " guesses ")
-    
-        return total_chars, total_guesses
-    
-        
-    # note, the last two characters are the single quote and double quote. They are
-    # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
-    # and newlines, \n.
-    alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
-    caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    f = open('train.txt', 'r')
-    overall_freqs = letter_frequencies(f.read())
-    caps_freqs = {}
-    for c in caps:
-        if c in overall_freqs:
-            caps_freqs[c] = overall_freqs[c]
-    sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
-    txt1 = "Question. Everything."
-    txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
-   
-    #### Don't change any code above this line #####  
-    
-    # Add to the heuristics dictionary entries for all the 
-    # prefixes of the word 'time' (i.e., after a t, guess i, after ti guess m,
-    # after tim guess e, and after time guess space or period
-    
-    import test
-    test.testEqual(heuristics['ti']['guesses'][0], 'm')
-    
-    # We have provided a function, add_word, that generalizes what you
-    # just did with 'time'. It automatically adds all
-    # the prefixes for any word, with the next letter of the word as
-    # the only guess.
-    def add_word(w, pri = 2):
-        """Takes a word w as input and adds all its prefixes to the 
-        heuristics dictionary"""
-        for i in range(len(w)-1):
-            prefix = w[:i+1]
-            next_let = w[i+1]
-            heuristics[prefix] = {'priority' : pri, 'guesses':[next_let]}
-        heuristics[w] = {'priority' : pri, 'guesses':[' ', '.', ',']}
-    
-    # Invoke add_words as necessary to make the tests pass
-    
-    test.testEqual(heuristics['Ho']['priority'], 3)
-    test.testEqual(heuristics['Ho']['guesses'][0], 'l')
-    test.testEqual(heuristics['gue']['guesses'][0], 's')
-    test.testEqual(heuristics['nex']['guesses'][0], 't')
-
 
 8. (2 points) Adding heuristics for the most common words
 
-.. activecode:: ps_6_8
-  
-    ####Don't change this code; add and change code at the bottom #####
-    import random
-    
-    def letter_frequencies(txt):
-        d = {}
-        for c in txt:
-            if c not in d:
-                d[c] = 1
-            elif c in alphabet:
-                d[c] = d[c] + 1
-            # don't bother tracking letters that aren't in our alphabet
-        return d
-    
-    def guess(prev_txt, guessed_already):
-        # guess a letter randomly
-        idx = random.randrange(0, len(alphabet))
-        return alphabet[idx]    
-    
-    
-    def guess_no_dup(prev_txt, guessed_already):
-        # guess a letter randomly until you find one that hasn't been guessed yet
-        while True:
-            idx = random.randrange(0, len(alphabet))
-            candidate =  alphabet[idx]
-            if candidate not in guessed_already:
-                return candidate     
-    
-    def keys_sorted_by_value(d):
-        in_order = sorted(d.items(), None, lambda x: x[1], True)
-        res = []
-        for (k, v) in in_order:
-            res.append(k)
-        return res
-    
-    def guess_by_frequency(prev_txt, guessed_already):
-        # return the best one that hasn't been guessed yet
-        for let in keys_sorted_by_value(overall_freqs):
-            if let not in guessed_already:
-                return let
-        return None # No unguessed letters left; shouldn't happen!   
-        
-    def game(txt, feedback=True, guesser = guess):
-        """Plays one game"""
-        
-        # accumulate the text that's been revealed
-        revealed_text = ""
-        
-        # accumulate the total guess count
-        total_guesses = 0
-        # accumulate the total characters to be guessed
-        total_chars = 0
-        
-        # Loop through the letters in the text, making a guess for each
-        for c in txt:
-            if c in alphabet: # skip letters not in our alphabet; don't have to guess them
-                total_chars = total_chars + 1
-                # accumulate the guesses made for this letter
-                guesses = ""
-                guessed = False
-                if feedback:
-                    print "guessing " + c,
-                while not guessed:
-                    # guess until you get it right
-                    g = guesser(revealed_text, guesses)
-                    guesses = guesses + g
-                    if g == c:
-                        guessed = True
-                    if feedback:
-                        print g, 
-                
-                total_guesses = total_guesses + len(guesses)
-                revealed_text = revealed_text + c
-                if feedback:
-                    print(str(len(guesses)) + " guesses ")
-    
-        return total_chars, total_guesses
-    
-        
-    # note, the last two characters are the single quote and double quote. They are
-    # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
-    # and newlines, \n.
-    alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
-    caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    f = open('train.txt', 'r')
-    overall_freqs = letter_frequencies(f.read())
-    caps_freqs = {}
-    for c in caps:
-        if c in overall_freqs:
-            caps_freqs[c] = overall_freqs[c]
-    sorted_caps = keys_sorted_by_value(caps_freqs)
-    heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
-    txt1 = "Question. Everything."
-    txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
-   
-    #### Don't change any code above this line #####  
-    
-    # copy your heuristic_guesser function definition here
-    
-    def add_word(w, pri = 2):
-        """Takes a word w as input and adds all its prefixes to the 
-        heuristics dictionary"""
-        for i in range(len(w)-1):
-            prefix = w[:i+1]
-            next_let = w[i+1]
-            heuristics[prefix] = {'priority' : pri, 'guesses':[next_let]}
-        heuristics[w] = {'priority' : pri, 'guesses':[' ', '.', ',']}
+.. tabbed:: ps_6_8_tabs
 
-    f = open('train.txt', 'r')
-    train = f.read()
-    f.close()
-    
-    f= open('test.txt', 'r')
-    test = f.read()
-    f.close()
-    
-    # call game using heuristic_guesser on the text in the variable test.
-    # Your browser will probably timeout, so give it just the first few hundred
-    # characters of test (Hint: take a slice).
-    
-    # Now use the text in the variable train to calculate the most frequent
-    # words in that text. Only consider words that have more than 4 letters.
-    # Call the add_word function on each of the 20 most frequent words.
-    # Then see how much your heuristic_guesser has improved.
-    
+    .. tab:: Problem
+        
+        .. activecode:: ps_6_8
+          
+            ####Don't change this code; add and change code at the bottom #####
+            import random
+            
+            def letter_frequencies(txt):
+                d = {}
+                for c in txt:
+                    if c not in d:
+                        d[c] = 1
+                    elif c in alphabet:
+                        d[c] = d[c] + 1
+                    # don't bother tracking letters that aren't in our alphabet
+                return d
+            
+            def guess(prev_txt, guessed_already):
+                # guess a letter randomly
+                idx = random.randrange(0, len(alphabet))
+                return alphabet[idx]    
+            
+            
+            def guess_no_dup(prev_txt, guessed_already):
+                # guess a letter randomly until you find one that hasn't been guessed yet
+                while True:
+                    idx = random.randrange(0, len(alphabet))
+                    candidate =  alphabet[idx]
+                    if candidate not in guessed_already:
+                        return candidate     
+            
+            def keys_sorted_by_value(d):
+                in_order = sorted(d.items(), None, lambda x: x[1], True)
+                res = []
+                for (k, v) in in_order:
+                    res.append(k)
+                return res
+            
+            def guess_by_frequency(prev_txt, guessed_already):
+                # return the best one that hasn't been guessed yet
+                for let in keys_sorted_by_value(overall_freqs):
+                    if let not in guessed_already:
+                        return let
+                return None # No unguessed letters left; shouldn't happen!   
+                
+            def game(txt, feedback=True, guesser = guess):
+                """Plays one game"""
+                
+                # accumulate the text that's been revealed
+                revealed_text = ""
+                
+                # accumulate the total guess count
+                total_guesses = 0
+                # accumulate the total characters to be guessed
+                total_chars = 0
+                
+                # Loop through the letters in the text, making a guess for each
+                for c in txt:
+                    if c in alphabet: # skip letters not in our alphabet; don't have to guess them
+                        total_chars = total_chars + 1
+                        # accumulate the guesses made for this letter
+                        guesses = ""
+                        guessed = False
+                        if feedback:
+                            print "guessing " + c,
+                        while not guessed:
+                            # guess until you get it right
+                            g = guesser(revealed_text, guesses)
+                            guesses = guesses + g
+                            if g == c:
+                                guessed = True
+                            if feedback:
+                                print g, 
+                        
+                        total_guesses = total_guesses + len(guesses)
+                        revealed_text = revealed_text + c
+                        if feedback:
+                            print(str(len(guesses)) + " guesses ")
+            
+                return total_chars, total_guesses
+            
+                
+            # note, the last two characters are the single quote and double quote. They are
+            # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
+            # and newlines, \n.
+            alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+            caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            
+            f = open('train.txt', 'r')
+            overall_freqs = letter_frequencies(f.read())
+            caps_freqs = {}
+            for c in caps:
+                if c in overall_freqs:
+                    caps_freqs[c] = overall_freqs[c]
+            sorted_caps = keys_sorted_by_value(caps_freqs)
+            heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+            txt1 = "Question. Everything."
+            txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
+           
+            #### Don't change any code above this line #####  
+            
+            # copy your heuristic_guesser function definition here
+            
+            def add_word(w, pri = 2):
+                """Takes a word w as input and adds all its prefixes to the 
+                heuristics dictionary"""
+                for i in range(len(w)-1):
+                    prefix = w[:i+1]
+                    next_let = w[i+1]
+                    heuristics[prefix] = {'priority' : pri, 'guesses':[next_let]}
+                heuristics[w] = {'priority' : pri, 'guesses':[' ', '.', ',']}
+
+            f = open('train.txt', 'r')
+            train = f.read()
+            f.close()
+            
+            f= open('test.txt', 'r')
+            test = f.read()
+            f.close()
+            
+            # call game using heuristic_guesser on the text in the variable test.
+            # Your browser will probably timeout, so give it just the first few hundred
+            # characters of test (Hint: take a slice).
+            
+            # Now use the text in the variable train to calculate the most frequent
+            # words in that text. Only consider words that have more than 4 letters.
+            # Call the add_word function on each of the 20 most frequent words.
+            # Then see how much your heuristic_guesser has improved.
+
+    .. tab:: Solution
+        
+        .. activecode:: ps_6_8_a
+          
+            ####Don't change this code; add and change code at the bottom #####
+            import random
+            
+            def letter_frequencies(txt):
+                d = {}
+                for c in txt:
+                    if c not in d:
+                        d[c] = 1
+                    elif c in alphabet:
+                        d[c] = d[c] + 1
+                    # don't bother tracking letters that aren't in our alphabet
+                return d
+            
+            def guess(prev_txt, guessed_already):
+                # guess a letter randomly
+                idx = random.randrange(0, len(alphabet))
+                return alphabet[idx]    
+            
+            
+            def guess_no_dup(prev_txt, guessed_already):
+                # guess a letter randomly until you find one that hasn't been guessed yet
+                while True:
+                    idx = random.randrange(0, len(alphabet))
+                    candidate =  alphabet[idx]
+                    if candidate not in guessed_already:
+                        return candidate     
+            
+            def keys_sorted_by_value(d):
+                in_order = sorted(d.items(), None, lambda x: x[1], True)
+                res = []
+                for (k, v) in in_order:
+                    res.append(k)
+                return res
+            
+            def guess_by_frequency(prev_txt, guessed_already):
+                # return the best one that hasn't been guessed yet
+                for let in keys_sorted_by_value(overall_freqs):
+                    if let not in guessed_already:
+                        return let
+                return None # No unguessed letters left; shouldn't happen!   
+                
+            def game(txt, feedback=True, guesser = guess):
+                """Plays one game"""
+                
+                # accumulate the text that's been revealed
+                revealed_text = ""
+                
+                # accumulate the total guess count
+                total_guesses = 0
+                # accumulate the total characters to be guessed
+                total_chars = 0
+                
+                # Loop through the letters in the text, making a guess for each
+                for c in txt:
+                    if c in alphabet: # skip letters not in our alphabet; don't have to guess them
+                        total_chars = total_chars + 1
+                        # accumulate the guesses made for this letter
+                        guesses = ""
+                        guessed = False
+                        if feedback:
+                            print "guessing " + c,
+                        while not guessed:
+                            # guess until you get it right
+                            g = guesser(revealed_text, guesses)
+                            guesses = guesses + g
+                            if g == c:
+                                guessed = True
+                            if feedback:
+                                print g, 
+                        
+                        total_guesses = total_guesses + len(guesses)
+                        revealed_text = revealed_text + c
+                        if feedback:
+                            print(str(len(guesses)) + " guesses ")
+            
+                return total_chars, total_guesses
+            
+                
+            # note, the last two characters are the single quote and double quote. They are
+            # escaped, writen as \' and \", similar to how we have used escaping for tabs, \t,
+            # and newlines, \n.
+            alphabet = " !#$%&()*,-./0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz\'\""
+            caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            
+            f = open('train.txt', 'r')
+            overall_freqs = letter_frequencies(f.read())
+            caps_freqs = {}
+            for c in caps:
+                if c in overall_freqs:
+                    caps_freqs[c] = overall_freqs[c]
+            sorted_caps = keys_sorted_by_value(caps_freqs)
+            heuristics = {'q':{'priority': 1, 'guesses':['uu', 'a']}, '. ':{'priority': 2, 'guesses': sorted_caps}}
+            txt1 = "Question. Everything."
+            txt2 = "Try to guess as Holmes would what the next letter will be in this quite short text. Now is the time."
+           
+            #### Don't change any code above this line #####  
+            
+            def heuristic_guesser(prev_txt, guessed_already):
+                sorted_heuristics = sorted(heuristics.items(), None, lambda x: x[1]['priority'], False)
+
+                for key,value in sorted_heuristics:
+                    key_length = len(key)
+                    if len(prev_txt) >= key_length and prev_txt[-key_length:].lower() == key:
+                        for l in value['guesses']:
+                            if l not in guessed_already:
+                                return l
+                return guess_by_frequency(prev_txt, guessed_already)
+            
+            def add_word(w, pri = 2):
+                """Takes a word w as input and adds all its prefixes to the 
+                heuristics dictionary"""
+                for i in range(len(w)-1):
+                    prefix = w[:i+1]
+                    next_let = w[i+1]
+                    heuristics[prefix] = {'priority' : pri, 'guesses':[next_let]}
+                heuristics[w] = {'priority' : pri, 'guesses':[' ', '.', ',']}
+
+            f = open('train.txt', 'r')
+            train = f.read()
+            f.close()
+            
+            f= open('test.txt', 'r')
+            test = f.read()
+            f.close()
+            
+
+            # call game using heuristic_guesser on the text in the variable test.
+            # Your browser will probably timeout, so give it just the first few hundred
+            # characters of test (Hint: take a slice).
+            
+            small_test = test[:100] # Grab a slice from the middle
+            original_game = game(small_test, False, heuristic_guesser)
+
+            # Now use the text in the variable train to calculate the most frequent
+            # words in that text. Only consider words that have more than 4 letters.
+            # Call the add_word function on each of the 20 most frequent words.
+            # Then see how much your heuristic_guesser has improved.
+
+            words = {}
+            for w in train.split():
+                if w not in words:
+                    words[w] = 1
+                else:
+                    words[w] = words[w] + 1
+
+            sorted_words = sorted(words.items(), None, lambda x: x[1])
+
+            n = 0
+            while n <= 0 and n < len(sorted_words) :
+                add_word(sorted_words[n][0])
+                n = n + 1
+
+            improved_game = game(small_test, False, heuristic_guesser)
+
+            diff = original_game[1] - improved_game[1]
+            print "The improved game made "+str(diff)+" less guesses."
     
     
 .. datafile::  about_programming.txt
