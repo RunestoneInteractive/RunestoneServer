@@ -557,7 +557,7 @@ guess, in order, e, then a, g, d, r, and n.
 
     .. tab:: Solution
 
-        .. activecode:: ps_6_4
+        .. activecode:: ps_6_4_a
           
             ####Don't change this code; add and change code at the bottom #####
             import random
@@ -675,8 +675,8 @@ guess, in order, e, then a, g, d, r, and n.
             g1 = game(txt1, False, guess_by_frequency)
             g2 = game(txt1, False, u_after_q)
 
-            differance = g1[1] - g2[1]
-            print "There are "+str(difference)+" fewer guesses"
+            diff = g1[1] - g2[1]
+            print "There are "+str(diff)+" fewer guesses"
 
 5. (1 point) Try guessing capitals first for a new sentence
 
