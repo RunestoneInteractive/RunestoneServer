@@ -154,6 +154,14 @@ More About Iteration
 
    MoreAboutIteration/moreiteration.rst
 
+Installation
+::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Installation/installation.rst
+
 .. ignore these for now
     Recursion
     :::::::::
