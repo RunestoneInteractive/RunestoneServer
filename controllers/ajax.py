@@ -510,11 +510,13 @@ def getassignmentgrade():
 
 
 def getCodeDiffs():
+    sid = request.vars.sid
+    ex = request.vars.div_id
     q = '''select timestamp, sid, div_id, code, emessage
            from acerror_log 
            where sid = '%s' and div_id='%s'
            order by timestamp
-    '''  % ('opdajo01','ex_3_10')
+    '''  % (sid, ex)
 
     rows = db.executesql(q)
     
