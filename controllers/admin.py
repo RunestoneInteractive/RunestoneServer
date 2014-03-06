@@ -237,4 +237,6 @@ def buildmodulelist():
     redirect('/%s/admin'%request.application)
 
 
-
+def diffviewer():
+    return dict(course_id="overview")
+    
