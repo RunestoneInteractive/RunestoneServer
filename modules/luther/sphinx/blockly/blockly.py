@@ -75,7 +75,7 @@ CTRL_END = '''</xml>'''
 END = '''
 <script>
     Blockly.inject(document.getElementById('%(divid)s'),
-        {path: '/runestone/static/_static', toolbox: document.getElementById('toolbox')});
+        {path: '/runestone/static/_static/', toolbox: document.getElementById('toolbox')});
 
     function showCode() {
       // Generate JavaScript code and display it.
@@ -107,7 +107,14 @@ def visit_block_node(self,node):
     res = START % (node.ac_components)
     res += CTRL_START
     for ctrl in node.ac_components['controls']:
-        res += '<block type="%s"></block>\n' % (ctrl)
+        if ctrl == 'variables':
+            res += '<category name="Variables" custom="VARIABLE"></category>'
+        elif ctrl[0] == '*':
+            res += '<category name="%s">' % (ctrl[2:])
+        elif ctrl == '====':
+            res += '</category>'
+        else:
+            res += '<block type="%s"></block>\n' % (ctrl)
     res += CTRL_END
     res += END % (node.ac_components)
     self.body.append(res)

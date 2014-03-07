@@ -465,13 +465,22 @@ Blockly
 
 .. blockly:: blockly1
 
+   * controls
    controls_if
    controls_repeat_ext
+   ====
+   * logic
    logic_compare
+   ====
+   * math
    math_number
    math_arithmetic
+   ====
+   * text
    text
    text_print
+   ====
+   variables
 
 
 Drag around some blockly blocks.  Then generate or run code.
