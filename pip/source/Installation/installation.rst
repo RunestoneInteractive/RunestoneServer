@@ -15,32 +15,69 @@
    
 .. _installation_chap:
 
-Preparing Your Computer for the Rest of the Course
-==================================================
+Preparing for the Rest of the Course
+===========================
 
 It has been convenient to be able to execute python code right in the browser. To write and
 execute bigger programs, to use modules beyond the few that have been implemented for this
-environment, and to perform file and network operations, you will need to
-run python *natively* on your computer.
+environment (like the `` random `` module), and to perform file and network operations, you will need to
+run Python *natively* on your computer.
 
-We will walk you through the process of setting up your computer to do that. It will
+First, we'll provide an overview of how writing and running programs on your own computer works. Then we'll provide instructions for installing what you need and getting the new setup going.
+
+## Basically what's going on
+
+Up till now, we have written code in the active code windows and clicked "Run" to run it. We see results in the console, below the active code windows -- remember, print is for people.
+
+When you write code and run it *on your own computer*, what happens is this:
+
+You'll write a program and save it as a file. You need a text editor to do this (more about this below! Note that MS Word is *not* a text editor). 
+
+.. note:: Programs are files
+
+  All programs you write are files (or groups of files, but we'll get to that) that are saved in a certain way so the computer knows these are *Python programs*. 
+
+You will have _Python_, the programming language interpreter (go back to the first chapter if you don't remember the concepts of how this works!), installed on your computer. (Instructions for doing this are below.) 
+
+You'll use an interface we'll call the **command prompt** to essentially say "hey, Python, find this file that has my Python program, and run it." (If we say "the command line," that means the same thing. It'll look slightly different depending on your operating system, but it's the same thing.) In order to do so, you'll always have to know exactly where you saved your code on your computer. (Also more on this below.) Similar to how every single character matters when you write Python code, you have to tell the computer exactly where the program file you want to run is. 
+
+The command prompt is a way for you, a human programmer, to interface with the computer and tell it what to do: what programs to use or run or open, what files to access, stuff like that. 
+
+When you use `` print `` in Python and run a Python program through the command line, the stuff you print will appear in the command prompt window also (we'll still call that the **console**).
+
+So "There is a file that is *right in this place* and it's *called exactly this name*, and I want you to use the Python interpreter to understand the file and do what it says" is an English 'translation' of what you're doing when you use the command line to run a Python program.
+
+(Like we read files in our online environment, when you have all this set up on your computer, one new thing you can do is read files *and* write them -- make new files or change old ones, and save them to wherever you want to save them in your computer's file system.)
+
+.. note:: 
+
+  The bit after the dot on a file is called the *file extension*, which tells the computer what *kind* of file it is and helps you figure out what programs you can open it with. Just like when you save an Excel spreadsheet with the `` .xlsx `` extension, saving a file with a `` .txt `` extension means it is *plain text*, and saving a file with a `` .py `` extension means that it is a *Python file*, which you can run, similar to how we pressed "run" in our online environment.
+
+  As you write code, you'll want to keep track of what you change, as well as putting your homework somewhere for it to be graded. We'll use a **version control** system called **git** to do this, which you can read about later in this chapter.
+
+
+
+Preparing Your Computer for the Rest of the Course
+==================================================
+
+We will walk you through the process of setting up your computer to run Python natively. It will
 involve the following steps:
 
 1. Create a directory (folder) where your code for this course will live.
 
 #. Install and configure a text editor
 
-#. Install and configure python
+#. Install and configure Python
 
-#. Install and configure git on your computer
+#. Install and configure git on your computer 
 
 #. Fork and Clone the git repository for code samples and exercises
 
 
 The instructions diverge here for the first four steps, depending on whether you are on Windows or a Mac. (If you're on
 Linux, we presume that you know what you're doing already and can make appropriate
-improvisations from the instructions for Windows or Mac.) Once your basic environment
-is set up, you will Clone the git repository in the same way on either platform.
+improvisations from the instructions for Windows or Mac, but feel free to ask.) Once your basic environment
+is set up, you will Clone the Git repository in the same way, on either platform.
 
 * :ref:`Windows instructions <windows_install>`
 
@@ -57,25 +94,27 @@ Install and configure a text editor
 -----------------------------------
 
 You will need a text editor. There are many options for this. For example, serious
-programmers often use Eclipse. But we do not recommend it for beginniners. There's too much stuff to configure. Definitiely **do not** try using MS Word, because
-it doesn't save documents as plain text, and it doesn't do any syntax highlighting or
+programmers often use Eclipse or XCode. But we do not recommend it for beginniners. There's too much stuff to configure. Definitely **do not** use MS Word. Word
+doesn't save documents as plain text, which is necessary to write and run programs, and it doesn't do any syntax highlighting or
 other useful things. 
 
-The editor that we will help you to use is called NotePad++. Please download it from
-`this site <http://notepad-plus-plus.org/download/>`_. Download it and then run the installer to install NotePad++.
+The editor that we will help you to use is called **NotePad++**. Please download it from
+`this site <http://notepad-plus-plus.org/download/>`_. Download it and then run the installer to install NotePad++, like you would most programs you download.
 
 .. note::
 
    Important! Before you create your first program, you need to make one small change in the Preferences for NotePad++. This will save you lots of "Python indent errors" anguish later. 
-   Under Settings -> Preferences -> Language Menu/Tab Settings tick the check box for "Expand Tabs" leaving the value at "4" and 
+   Under *Settings -> Preferences -> Language Menu/Tab Settings*, tick the check box for "Expand Tabs", leaving the value at "4", and 
    press the "Close" button.
    
    .. image:: Figures/tabs.JPG
 
 
-Follow the instructions below. It will be 
-quite intuitive. The one thing to keep in mind is that NotedPad++ is an environment
-for creating python programs. It doesn't run them! You'll have to install a little
+Follow the instructions below. It should be 
+quite intuitive. The one thing to keep in mind is that NotePad++ is an environment
+for _creating_ python programs. It doesn't run them! 
+
+You'll have to install a little
 more stuff to make that work, as described in later sections.
 (If you'd like to see a demonstration of NotePad++, Dr. Chuck has a screen cast for the use of NotePad++. 
 You can either view this `on YouTube <http://www.youtube.com/watch?v=o0X-VHX6ls0>`_ or you can download the high-quality `QuickTime version <http://www-personal.umich.edu/~csev/courses/shared/podcasts/windows-python-notepad-plus.mov>`_ 
@@ -215,7 +254,45 @@ Congratulations. You are ready to write and execute python code natively on your
 Mac Instructions
 ================
 
-Jackie: can you try filling this in, in the same style as above? I expect it will be a *lot* shorter. You might want to use http://pythonlearn.com/software-mac.php as a resource. 
+Install and configure a text editor
+-----------------------------------
+
+You will need a text editor. There are many options for this. For example, serious
+programmers often use Eclipse or XCode. But we do not recommend those for beginniners. There's a lot stuff to configure that you don't need right now. (Many serious programmers don't use those either!) Definitely **do not** use MS Word. Word will not save files in the right format: it
+doesn't save documents as plain text, which is necessary to write and run programs, and it doesn't do any syntax highlighting or
+other useful things. 
+
+The editor that we will help you to use is called **TextWrangler**. (TextWrangler and Notepad++ are very similar, but one runs on Macs and one runs on Windows.) Please download it from
+`this site <http://www.barebones.com/products/TextWrangler/download.html>`_. Download it and then run the installer to install TextWrangler, like you would most programs you download.
+
+TextWrangler may ask you to register for something. You can hit Cancel -- you do not need to register for anything to use TextWrangler, and it will not expire.
+
+.. note::
+
+   Important! Before you create your first program, you need to make one small change in the Preferences for NotePad++. This will save you lots of "Python indent errors" anguish later. 
+   Under *Settings -> Preferences -> Language Menu/Tab Settings*, tick the check box for "Expand Tabs", leaving the value at "4", and 
+   press the "Close" button.
+   
+   .. image:: Figures/tabs.JPG
+
+
+Follow the instructions below. It should be 
+quite intuitive. Keep in mind the concepts from earlier -- TextWrangler is an environment (a piece of software)
+for _creating_ python programs. It's not for running them! (You actually can run programs via TextWrangler, but we won't be talking about that here.)
+
+Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. Enter your first Python program into NotePad++:
+
+.. image:: Figures/helloworld.JPG
+      :width: 300px
+    
+Save your program as firstprog.py. You can save it anywhere. In a little while we'll
+create a code folder in a convenient place on your machine and you can resave the file then. 
+You will notice that after you save the file, NotePad++ will color your code based on the Python syntax rules. 
+Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
+NotePad++ only knows that your file is a Python file after you save it with a ".py" suffix.
+
+.. image:: Figures/firstprog.JPG
+      :width: 300px
 
 .. _git_repos:
 
@@ -224,18 +301,26 @@ Fork and clone the git repository for code samples and exercises
 
 Finally, you will need to get set up for downloading code for in-class exercises and for problem sets, and for uploading your problem sets for grading.
 
-Concepts and Vocabulary
+git Concepts and Vocabulary
 -----------------------
 
 git is a tool for keeping track of collections of files, and tracking multiple versions of them. The whole collection of files is called a **repository**, or **repo** for short. A **commit** defines a snapshot of the state of all the files. You can work locally, in your **working directory** with files and then, when you have them all cleaned up, you create a new commit, with a commit message that is a comment describing what you have changed since the last commit. 
 
-You can **checkout** different commits the repository, and revert back to earlier versions, though we won't be teaching you how to do that (yet).
+.. note:: 
 
-You can also **merge** in changes to files that other people make. git does pretty well at automatically merging changes, but sometimes it isn't sure what was intended and you have to do that process manually. Next week we'll teach you how to do that. Hopefully, we will get through this week without needing to do any merges.
+  "Working directory" means the location on your computer where the stuff you're working on is. For example, if you went to your Documents folder, and created a new folder inside it called UmichStuff, and that's where you were saving all the stuff for a project you were working on, UmichStuff would be your working directory. But you have to specify exactly where it is to the computer (see the instructions), with the formal version of 'I want to look in the folder that's in my computer, in my Documents folder, in my UmichStuff folder'.
+
+You can **checkout** different commits from a repository, and revert back to earlier versions, though we won't be teaching you how to do that (yet). 
+
+.. note:: 
+
+  Every time you **commit** a new version of the state of all your files in a folder, that *instance of when you commit* has a unique identifier: that's ONE VERSION of your code. That's related to why it's called "version control"! We'll talk more about this later.
+
+You can also **merge** in changes to files that other people make. git does pretty well at automatically merging changes together, but sometimes it isn't sure what was intended and you have to do that process manually. Next week we'll teach you how to do that. Hopefully, we will get through this week without needing to do any merges.
 
 We say that one repository is a **fork** of another if it starts with the complete history of the other repository at some point in time. After the time of the fork, the two repositories may diverge. We have a main repository for the course code. You will make a fork of that repository and make changes to it, such as adding your problem set answers. You will also pull in any new code that gets added to the original repository of course code by setting up the original repository as an **upstream** repository.
 
-Repositories can be synchronized across computers. A common setup, and one that we will use in the course, is to keep a **remote** copy of a repository on an Internet-accessible server, and keep a local repository on your private computer. We will use a free service on the Internet called BitBucket to keep the remote copies of our repositories. To make an initial copy of a repository, we **clone** the repository. To synch any changes that other people might have made to the remote copy, we **pull** those changes from the remote. To synch any changes that we made, so that others can see them, we **push** those changes to the remote.
+Repositories can be synchronized across computers. A common setup, and one that we will use in the course, is to keep a **remote** copy of a repository on an Internet-accessible server, and keep a local repository on your private computer. We will use a free service on the Internet called BitBucket to keep the remote copies of our repositories. When we make an initial copy of a repository, we **clone** the repository. To synch any changes that other people might have made to the remote copy, we **pull** those changes from the remote. To synch any changes that we made, so that others can see them, we **push** those changes to the remote. Those words are all commands that you can use with Git in the command prompt. (Read on for more.)
 
 Make a personal fork of the class code repository on bitbucket
 --------------------------------------------------------------
@@ -334,9 +419,9 @@ Whenever you make a commit, we recommend that you push the code repository back 
 Summary of your regular workflow
 --------------------------------
 
-1. Each working session begins with a clean working directory. Check to make sure that you finished your last session, by typing ``git status``. If it shows changed files that still need to be commited, resolve that before getting started.
+1. Each working session begins with a *clean working directory*: there should be no loose ends in your class code folder, everything should be **saved** and **committed**. Check to make sure that you finished your last session, by typing ``git status``. If it shows changed files that still need to be commited, resolve that before getting started.
 
-2. Pull in any code updates from the instructors, by typing ``git pull upstream master``.
+2. Pull in any code updates from the instructors, by typing ``git pull upstream master`` in the command prompt.
 
 3. Edit your files.
 
