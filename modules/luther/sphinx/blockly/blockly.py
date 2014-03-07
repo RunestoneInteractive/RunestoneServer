@@ -35,6 +35,8 @@ def setup(app):
 
     app.add_javascript('blockly_compressed.js' )
     app.add_javascript('blocks_compressed.js' )
+    app.add_javascript('javascript_compressed.js' )    
+    app.add_javascript('python_compressed.js' )        
     app.add_javascript('msg/js/en.js')
 
     app.add_node(BlocklyNode, html=(visit_block_node, depart_block_node))
@@ -59,16 +61,44 @@ class BlocklyNode(nodes.General, nodes.Element):
         self.ac_components = content
 
 
-START = '''<div id="%(divid)s" style="height: 480px; width: 600px;"></div>
+START = '''
+<p>
+    <button onclick="showCode()">Show Code</button>
+    <button onclick="runCode()">Run</button>
+</p>
+<div id="%(divid)s" style="height: 480px; width: 600px;"></div>
 '''
 
 CTRL_START = '''<xml id="toolbox" style="display: none">'''
 CTRL_END = '''</xml>'''
 
-END = '''<script>
+END = '''
+<script>
     Blockly.inject(document.getElementById('%(divid)s'),
         {path: '/runestone/static/_static', toolbox: document.getElementById('toolbox')});
+
+    function showCode() {
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode();
+      alert(code);
+    }
+
+    function runCode() {
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if (--window.LoopTrap == 0) throw "Infinite loop.";\\n';
+      var code = Blockly.JavaScript.workspaceToCode();
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
+
   </script>
+  
 '''
 # self for these functions is an instance of the writer class.  For example
 # in html, self is sphinx.writers.html.SmartyPantsHTMLTranslator
@@ -77,7 +107,7 @@ def visit_block_node(self,node):
     res = START % (node.ac_components)
     res += CTRL_START
     for ctrl in node.ac_components['controls']:
-        res += '<block type="%s"></block>' % (ctrl)
+        res += '<block type="%s"></block>\n' % (ctrl)
     res += CTRL_END
     res += END % (node.ac_components)
     self.body.append(res)
