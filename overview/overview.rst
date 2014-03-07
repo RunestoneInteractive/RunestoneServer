@@ -44,6 +44,17 @@ on the video shown below, you will hear us talk about the tools that will be des
     http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
 
 
+
+YouTube
+-------
+
+.. youtube:: anwy2MPT5RE
+    :height: 315
+    :width: 560
+    :align: left
+
+
+
 ActiveCode Windows
 ------------------
 
