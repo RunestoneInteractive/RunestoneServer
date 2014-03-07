@@ -449,6 +449,23 @@ Although you don't run HTML, clicking the run button will case the HTML to be re
    </html>
 
 
+Blockly
+-------
+
+.. blockly:: blockly1
+
+   controls_if
+   controls_repeat_ext
+   logic_compare
+   math_number
+   math_arithmetic
+   text
+   text_print
+
+
+Drag around some blockly blocks.  Then generate or run code.
+
+
 What To Do Now
 --------------
 
