@@ -1,7 +1,68 @@
 {{extend 'layout.html'}}
 
+<!-- Need to have d3-timeline.js copied into static/_statics
+   Need to pip install diff_match_patch -->
+
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.js" type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/builtin.js" type="text/javascript"></script>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/runestone/static/_static/d3-timeline.js"></script>
+
+  <style type="text/css">
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+    .axis text {
+      font-family: sans-serif;
+      font-size: 10px;
+    }
+
+    .timeline-label {
+      font-family: sans-serif;
+      font-size: 12px;
+    }
+    
+    #timeline2 .axis {
+      transform: translate(0px,30px);
+      -ms-transform: translate(0px,30px); /* IE 9 */
+      -webkit-transform: translate(0px,30px); /* Safari and Chrome */
+      -o-transform: translate(0px,30px); /* Opera */
+      -moz-transform: translate(0px,30px); /* Firefox */
+    }
+
+    .coloredDiv {
+      height:20px; width:20px; float:left;
+    }
+  </style>
+
+
+  <script type="text/javascript">
+  
+   var width = 500;
+
+      function timelineRectColors(dataWithColors) {
+        
+        var colorScale = d3.scale.ordinal().range(['#6b0000','#ef9b0f','#ffee00'])
+            .domain(['apple','orange','lemon']);
+
+        var chart = d3.timeline()
+            .colors( colorScale )
+            .colorProperty('fruit')
+            .width(1500)
+            .click(function (d, i, datum) {
+               alert(datum.label);
+            });
+
+        var svg = d3.select("#timelineColors").append("svg").attr("width", width)
+          .datum(dataWithColors).call(chart);
+      }
+  </script>
 
 <script type="text/javascript" charset="utf-8">
 getDiffs = function() {
@@ -12,6 +73,7 @@ getDiffs = function() {
         diffdata = JSON.parse(data)
         diffcount = 0
         nextDiff();
+        timelineRectColors(diffdata.d3data)
     })
 }
 
@@ -172,10 +234,10 @@ errorText.NotImplementedErrorFix = "For now the only way to fix this is to not u
 
 </script>
 
-<h1>Hello World</h1>
+<h1>Hello Us</h1>
 
-<label for="studentid">StudentId</label><input type="text" name="studentid" value="opdajo01" id="studentid">
-<label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="ex_3_10" id="exerciseid">
+<label for="studentid">StudentId</label><input type="text" name="studentid" value="Paul Resnick" id="studentid">
+<label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="welcome" id="exerciseid">
 
 <button onclick="getDiffs()">Fetch</button>
 
@@ -193,3 +255,7 @@ errorText.NotImplementedErrorFix = "For now the only way to fix this is to not u
     <canvas id="runner_canvas" height="400px" width="400px"  style="border-style: solid; display: none;"></canvas>
     <p id="runner_errinfo"></p>
 </div>
+  <div>
+    <h3>Timeline of activities</h3>
+    <div id="timelineColors"></div>  
+  </div>

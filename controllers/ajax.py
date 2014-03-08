@@ -510,6 +510,7 @@ def getassignmentgrade():
 
 
 def getCodeDiffs():
+    print "1"
     sid = request.vars.sid
     ex = request.vars.div_id
     q = '''select timestamp, sid, div_id, code, emessage
@@ -535,5 +536,31 @@ def getCodeDiffs():
         diffcode.append(differ.diff_prettyHtml(diffs))
         messages.append(rows[i][4])
     
-    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages))
-    
+    import datetime
+    bigbang = datetime.datetime.utcfromtimestamp(0)    
+    acts = []
+    def timesincebb(ts):
+        return (ts-bigbang).total_seconds()*1000
+    for i in range(0,len(rows)-1):
+        row = rows[i]
+        next = rows[i+1]
+        acts.append({"starting_time": timesincebb(row[0]),
+                     "ending_time": min(timesincebb(next[0]), timesincebb(row[0])+10*1000)})
+    test = [{'label': "runs", 'fruit': 'orange', 'times': acts}]
+    print test
+       
+#    test = [{'label': "runs", 'fruit': 'orange', 'times': \
+#             [{"starting_time": (row[0]-bigbang).total_seconds()*1000, "ending_time": ((row[0]-bigbang).total_seconds()+5)*1000} for row in rows]
+#             }
+#            ]
+#   
+#    test = [
+#      {'label': "fruit 1", 'fruit': "orange", 'times': [
+#        {"starting_time": 1355759910000, "ending_time": 1355761900000}]},
+#      {'label': "fruit 2", 'fruit': "apple", 'times': [
+#        {"starting_time": 1355752800000, "ending_time": 1355759900000}, 
+#        {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
+#      ]
+        
+    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages, d3data=test))
+        
