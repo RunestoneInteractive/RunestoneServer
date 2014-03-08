@@ -148,6 +148,38 @@ NotePad++ only knows that your file is a Python file after you save it with a ".
       :width: 300px
 
 
+Install and configure git on your computer
+------------------------------------------
+
+git is a tool for working with other people on writing code and other documents. 
+It's really valuable to know
+how to use it, because it will let you start working easily with other people 
+you haven't worked with before, at hackathons, for example. We will be learning
+the very basics of git in this course, and using it to distribute code and problem sets and for you to turn in 
+your problem sets.
+
+Install `git for Windows <http://msysgit.github.io/>`_. (Click on Download. All of the options say preview and beta.
+Don't worry about that. It's stable enough for our use. Do choose a "featured" download, currently "Full installer for official Git for Windows 1.9.0".)
+
+.. note::
+   
+   Don't change any of the default configurations during the installation! Most importantly, leave the setting on "Checkout windows-style, commit unix-style line endings."
+   
+Once you have completed the installation, do the following steps:
+
+#. Launch the program Git Bash in the usual way that you launch Windows programs. A shortcut for Git Bash was created during installation.
+
+#. At the command prompt, paste this command ``export PATH="$PATH:/c/Python27"``. That will tell Windows where to find Python. (This assumes that you installed it in C:\Python27, as we told you to above.)
+
+#. Check to make sure that this worked correctly by entering the command ``python --version``.  It should say Python 2.7.6, as shown in the figure below.
+
+#. Assuming that worked correctly, you will want to set up git bash so that it always knows where to find python. To do that, enter the following command: ``echo 'export PATH="$PATH:/c/Python27"' > .bashrc``. That will save the command into a file called .bashrc. .bashrc is executed every time git bash launches.
+
+#. Check to make sure that worked by typing exit, relaunching git bash, and then typing ``python --version`` again.
+
+.. image:: Figures/environment.JPG
+
+
 Choosing the location for your code folder
 ------------------------------------------
 
