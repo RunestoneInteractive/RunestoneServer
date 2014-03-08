@@ -23,13 +23,16 @@ execute bigger programs, to use modules beyond the few that have been implemente
 environment (like the `` random `` module), and to perform file and network operations, you will need to
 run Python *natively* on your computer.
 
-First, we'll provide an overview of how writing and running programs on your own computer works. Then we'll provide instructions for installing what you need and getting the new setup going.
+First, we'll provide an overview of how writing and running programs on your own computer works. Then we'll provide instructions for installing what you need and getting the new setup going. 
 
-## Basically what's going on
+There are different instructions for Windows users and Mac users below. (If you use Linux, there are no instructions for you -- we assume in that case you know what you are doing here, but if you are confused, let us know.)
 
-Up till now, we have written code in the active code windows and clicked "Run" to run it. We see results in the console, below the active code windows -- remember, print is for people.
+Important Concepts
+------------------
 
-When you write code and run it *on your own computer*, what happens is this:
+Up till now, we have written code in the active code windows and clicked "Run" to run it. We see results in the console, below the active code windows -- remember, `` print `` is for people.
+
+When you write code and run it *on your own computer*, what happens is basically this:
 
 You'll write a program and save it as a file. You need a text editor to do this (more about this below! Note that MS Word is *not* a text editor). 
 
@@ -37,24 +40,34 @@ You'll write a program and save it as a file. You need a text editor to do this 
 
   All programs you write are files (or groups of files, but we'll get to that) that are saved in a certain way so the computer knows these are *Python programs*. 
 
-You will have _Python_, the programming language interpreter (go back to the first chapter if you don't remember the concepts of how this works!), installed on your computer. (Instructions for doing this are below.) 
+You will have _Python_, the programming language interpreter (go back to the first chapter if you don't remember the concepts of how this works!), installed on your computer. Read on to find out how to do that.
 
-You'll use an interface we'll call the **command prompt** to essentially say "hey, Python, find this file that has my Python program, and run it." (If we say "the command line," that means the same thing. It'll look slightly different depending on your operating system, but it's the same thing.) In order to do so, you'll always have to know exactly where you saved your code on your computer. (Also more on this below.) Similar to how every single character matters when you write Python code, you have to tell the computer exactly where the program file you want to run is. 
+You'll use an interface we call the **command line**, or **command prompt**, to essentially say "hey, Python, find this file that has my Python program, and interpret and then run it." 
 
-The command prompt is a way for you, a human programmer, to interface with the computer and tell it what to do: what programs to use or run or open, what files to access, stuff like that. 
+In order to do so, you'll always have to know exactly where you saved your code on your computer. (Also more on this below.) Similar to how every single character matters when you write Python code, you have to tell the computer exactly where the program file you want to run is. 
 
-When you use `` print `` in Python and run a Python program through the command line, the stuff you print will appear in the command prompt window also (we'll still call that the **console**).
+The biggest differences here are that you'll have multiple windows open when you write programs and run them, you get to name all the files you save, and it's very important how and where you save your program files.
 
-So "There is a file that is *right in this place* and it's *called exactly this name*, and I want you to use the Python interpreter to understand the file and do what it says" is an English 'translation' of what you're doing when you use the command line to run a Python program.
+
+Command Line and Files
+-----------------------
+
+The command prompt, or command line, is a way for you, a human programmer, to interface with the computer and tell it what to do: what programs to use or run or open, what files to access, stuff like that. 
+
+(If we say "the command line," that means the same thing as "command prompt". It'll look slightly different depending on your operating system, and it may work differently in a few small ways depending on your operating system, but it's all the same thing.) 
+
+This interface that you can use to tell the computer what to do has a special language of its own so you can find places (directories, or folders) in your computer without navigating through the images of folders and clicking on stuff. This is important because it allows you to find a place on your computer and basically write code that means *OK, I'm here where I saved this Python program, now interpret it the right way and run it*.
+
+When you use `` print `` in Python and run a Python program using the command line as described (at a high level) above, the stuff you print will appear in the command prompt window also. We'll still call that the **console**. Just like we saw in the online environment, printing stuff happens for the people who can see the screen, and the stuff that you make and do in a Python program will happen exactly as you specify. 
+
+"There is a file that is *right in this place* and it's *called exactly this name*, and I want you to use the Python interpreter to understand the file and do what it says" is an English 'translation' of what you're doing when you use the command line to run a Python program.
 
 (Like we read files in our online environment, when you have all this set up on your computer, one new thing you can do is read files *and* write them -- make new files or change old ones, and save them to wherever you want to save them in your computer's file system.)
 
 .. note:: 
-
   The bit after the dot on a file is called the *file extension*, which tells the computer what *kind* of file it is and helps you figure out what programs you can open it with. Just like when you save an Excel spreadsheet with the `` .xlsx `` extension, saving a file with a `` .txt `` extension means it is *plain text*, and saving a file with a `` .py `` extension means that it is a *Python file*, which you can run, similar to how we pressed "run" in our online environment.
 
-  As you write code, you'll want to keep track of what you change, as well as putting your homework somewhere for it to be graded. We'll use a **version control** system called **git** to do this, which you can read about later in this chapter.
-
+As you write code, you'll want to keep track of what you change, as well as putting your homework somewhere for it to be graded. We'll use a **version control** system called **git** to do this, which you can read about later in this chapter.
 
 
 Preparing Your Computer for the Rest of the Course
@@ -129,68 +142,11 @@ Save your program as firstprog.py. You can save it anywhere. In a little while w
 create a code folder in a convenient place on your machine and you can resave the file then. 
 You will notice that after you save the file, NotePad++ will color your code based on the Python syntax rules. 
 Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
-NotePad++ only knows that your file is a Python file after you save it with a ".py" suffix.
+NotePad++ only knows that your file is a Python file after you save it with a ".py" suffix, or file extension.
 
 .. image:: Figures/firstprog.JPG
       :width: 300px
 
-
-Install and configure python
-----------------------------
-
-Please download and install Python 2.7 from:
-
-http://python.org/download/releases/2.7.6/
-
-Download and install the file python-2.7.6.msi - when the install process asks you which directory to use - make sure to keep the default directory of C:\Python27\. If you are not sure if your Windows is 64-bit - install the 32-bit version of Python, the
-one that just says, "Windows x86 MSI Installer (2.7.6) (sig)".
-
-.. note::
-
-   Make sure that you install the latest version of Python 2.x - do not install Python 3.x. 
-   There are signficant differences between Python 2 and Python 3 and this book/site is based on Python 2.
-
-With just this installation, you can get an interactive python interpreter where
-you can type code one line at a time and have it executed. You may find some options
-on the Windows menu for this, such as Idle.
-
-With just this installation it is also possible to run python from the Windows command prompt. 
-But the Windows command prompt is tricky to deal with. To establish
-greater consistency with the environment in which Mac users will be working and 
-because it's just a better command prompt, we will wait until after installing git
-and use the git bash shell to invoke python. Coming right up in the next section.
-
-
-Install and configure git on your computer
-------------------------------------------
-
-git is a tool for working with other people on writing code and other documents. 
-It's really valuable to know
-how to use it, because it will let you start working easily with other people 
-you haven't worked with before, at hackathons, for example. We will be learning
-the very basics of git in this course, and using it to distribute code and problem sets and for you to turn in 
-your problem sets.
-
-Install `git for Windows <http://msysgit.github.io/>`_. (Click on Download. All of the options say preview and beta.
-Don't worry about that. It's stable enough for our use. Do choose a "featured" download, currently "Full installer for official Git for Windows 1.9.0".)
-
-.. note::
-   
-   Don't change any of the default configurations during the installation! Most importantly, leave the setting on "Checkout windows-style, commit unix-style line endings."
-   
-Once you have completed the installation, do the following steps:
-
-#. Launch the program Git Bash in the usual way that you launch Windows programs. A shortcut for Git Bash was created during installation.
-
-#. At the command prompt, paste this command ``export PATH="$PATH:/c/Python27"``. That will tell Windows where to find Python. (This assumes that you installed it in C:\Python27, as we told you to above.)
-
-#. Check to make sure that this worked correctly by entering the command ``python --version``.  It should say Python 2.7.6, as shown in the figure below.
-
-#. Assuming that worked correctly, you will want to set up git bash so that it always knows where to find python. To do that, enter the following command: ``echo 'export PATH="$PATH:/c/Python27"' > .bashrc``. That will save the command into a file called .bashrc. .bashrc is executed every time git bash launches.
-
-#. Check to make sure that worked by typing exit, relaunching git bash, and then typing ``python --version`` again.
-
-.. image:: Figures/environment.JPG
 
 Choosing the location for your code folder
 ------------------------------------------
@@ -267,32 +223,75 @@ The editor that we will help you to use is called **TextWrangler**. (TextWrangle
 
 TextWrangler may ask you to register for something. You can hit Cancel -- you do not need to register for anything to use TextWrangler, and it will not expire.
 
-.. note::
-
-   Important! Before you create your first program, you need to make one small change in the Preferences for NotePad++. This will save you lots of "Python indent errors" anguish later. 
-   Under *Settings -> Preferences -> Language Menu/Tab Settings*, tick the check box for "Expand Tabs", leaving the value at "4", and 
-   press the "Close" button.
-   
-   .. image:: Figures/tabs.JPG
-
-
 Follow the instructions below. It should be 
 quite intuitive. Keep in mind the concepts from earlier -- TextWrangler is an environment (a piece of software)
-for _creating_ python programs. It's not for running them! (You actually can run programs via TextWrangler, but we won't be talking about that here.)
+for _creating_ python programs. It's not intended (in this course) for running them!
 
 Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. Enter your first Python program into NotePad++:
 
-.. image:: Figures/helloworld.JPG
-      :width: 300px
+.. image:: Figures/helloworldmac.png
     
-Save your program as firstprog.py. You can save it anywhere. In a little while we'll
+Save your program as `` firstprog.py ``. You can save it anywhere. In a little while we'll
 create a code folder in a convenient place on your machine and you can resave the file then. 
-You will notice that after you save the file, NotePad++ will color your code based on the Python syntax rules. 
-Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
-NotePad++ only knows that your file is a Python file after you save it with a ".py" suffix.
+You will notice that after you save the file, TextWrangler will color your code based on the Python syntax rules. That's because you saved it with the `` .py `` file extension, which tells the computer this file is a Python program.
 
-.. image:: Figures/firstprog.JPG
+Syntax coloring is a very helpful feature, as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
+TextWrangler only knows that your file is a Python file after you save it with a ".py" suffix, or file extension.
+
+.. image:: Figures/firstprogram_tw.png
       :width: 300px
+
+
+Install and configure python
+----------------------------
+
+Because you have a mac, you're lucky in this case (though you can develop fine on any operating system) -- you already have Python! It comes pre-installed. However, we need to make sure you have the correct version of Python. We will be using version **2.7.**
+
+If you have Mac OS 10.7 (Lion) or later, you definitely have Python 2.7. If you have Mac OS 10.6 (Snow Leopard) or earlier, you may have a different version of Python. If so, let's get this straightened out early -- come see one of the instructors. (If this applies to many people, we will provide additional instructions for that installation!)
+
+To find out what version of Python you have, you'll first need to open a program on your mac called the **Terminal**. You can find it via Spotlight, or in your Applications folder. The icon looks like this:
+
+.. image:: Figures/terminalicon.png
+
+When you open it, you'll see a window that should look something like this:
+
+.. image:: Figures/emptyterminal.png
+
+Except the name of _your_ computer will be there. (That'll be whatever you called your hard drive -- probably your name, if you've chosen to keep the default!)
+
+Terminal is the way you use your **command line**. That blinking cursor when you first open the window -- when you type there, we might say you're typing at the command prompt. Before we talk about how you use this, you're going to use command that will tell us what version of python you have installed on your mac.
+
+Type: `` python -V ``, and press return. That process should look something like this:
+
+.. image:: Figures/typedpython.png
+        :width: 300px
+
+.. image:: Figures/returntypedpython.png
+        :width: 300px
+
+If you see a 2.7 (and the third number can be anything) on the screen, like in that image above, you're fine. If you get an error, please see one of the instructors!
+
+With this, you can run code in what we call a **Python interpreter**, where you can run one line of code at a time and it will be evaluated immediately, and the results will be shown in the console window. (This is different from running a program that you've saved on your computer -- it's like a good way of testing code to see what it does, like a more immediately responsive version of your Active Code Window from the online environment.)
+
+You're now all ready to run Python. We'll run that program you just wrote in TextWrangler shortly, in the next section!
+
+
+Install and configure git on your computer
+------------------------------------------
+
+git is a tool for working with other people on writing code and other documents. 
+It's really valuable to know
+how to use it, because it will let you start working easily with other people 
+you haven't worked with before, at hackathons, for example. We will be learning
+the very basics of git in this course, and using it to distribute code and problem sets and for you to turn in 
+your problem sets.
+
+The way you'll be using git is a bit different from people who use Windows. But much easier to set up. 
+
+Download the latest version of git for mac from [this site](http://git-scm.com/downloads). It is a **.dmg** file, like most software you download to install on a mac. Double click on it and install it the way you normally would any program. It will not create an icon or anything you can see.
+
+OK -- now it's time to start talking about git.
+
 
 .. _git_repos:
 
