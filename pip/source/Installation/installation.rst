@@ -147,6 +147,30 @@ NotePad++ only knows that your file is a Python file after you save it with a ".
 .. image:: Figures/firstprog.JPG
       :width: 300px
 
+Install and configure python
+----------------------------
+
+Please download and install Python 2.7 from:
+
+http://python.org/download/releases/2.7.6/
+
+Download and install the file python-2.7.6.msi - when the install process asks you which directory to use - make sure to keep the default directory of C:\Python27\. If you are not sure if your Windows is 64-bit - install the 32-bit version of Python, the
+one that just says, "Windows x86 MSI Installer (2.7.6) (sig)".
+
+.. note::
+
+   Make sure that you install the latest version of Python 2.x - do not install Python 3.x. 
+   There are signficant differences between Python 2 and Python 3 and this book/site is based on Python 2.
+
+With just this installation, you can get an interactive python interpreter where
+you can type code one line at a time and have it executed. You may find some options
+on the Windows menu for this, such as Idle.
+
+With just this installation it is also possible to run python from the Windows command prompt. 
+But the Windows command prompt is tricky to deal with. To establish
+greater consistency with the environment in which Mac users will be working and 
+because it's just a better command prompt, we will wait until after installing git
+and use the git bash shell to invoke python. Coming right up in the next section.
 
 Install and configure git on your computer
 ------------------------------------------
