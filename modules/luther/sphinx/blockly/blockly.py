@@ -63,7 +63,7 @@ class BlocklyNode(nodes.General, nodes.Element):
 
 START = '''
 <p>
-    <button onclick="showCode()">Show Code</button>
+    <button onclick="showCode()">Show Python</button>
     <button onclick="runCode()">Run</button>
 </p>
 <div id="%(divid)s" style="height: 480px; width: 600px;"></div>
@@ -79,8 +79,8 @@ END = '''
 
     function showCode() {
       // Generate JavaScript code and display it.
-      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-      var code = Blockly.JavaScript.workspaceToCode();
+      Blockly.Python.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.Python.workspaceToCode();
       alert(code);
     }
 
@@ -97,8 +97,21 @@ END = '''
       }
     }
 
+    Blockly.JavaScript['text_print'] = function(block) { 
+      // Print statement override. 
+      var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT', 
+          Blockly.JavaScript.ORDER_NONE) || '\\'\\''; 
+      return 'my_custom_print(' + argument0 + ', "%(divid)s" );\\n'; 
+    }; 
+
+    function my_custom_print(text,divid) { 
+      var p = document.getElementById(divid+"_pre");
+      p.innerHTML += text + "\\n"
+      }
+
   </script>
   
+  <pre id="%(divid)s_pre"></pre>
 '''
 # self for these functions is an instance of the writer class.  For example
 # in html, self is sphinx.writers.html.SmartyPantsHTMLTranslator
@@ -152,3 +165,18 @@ class Blockly(Directive):
 
 
 
+
+'''
+    Blockly.JavaScript['text_print'] = function(block) { 
+      // Print statement override. 
+      var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT', 
+          Blockly.JavaScript.ORDER_NONE) || '\'\''; 
+      return 'my_custom_print(' + argument0 + ');\n'; 
+    }; 
+
+    function my_custom_print(text) { 
+      var p = document.getElementById("blockly1_pre");
+      p.innerHTML += text
+      }
+
+'''
