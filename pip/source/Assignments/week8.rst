@@ -24,7 +24,8 @@ For this week you have the following graded activities:
    
    * Before Thursday's class:
       * :ref:`Keyword-based parameter passing <keyword_pararams_chap>`
-      * String interpolation (coming soon)
+      * :ref:`Printing and parentheses <print_tuples>`
+      * :ref:`String interpolation <interpolation_chap>`
 
 #. Turn in the reading response, by 8 PM the night before your registered section meets.
 

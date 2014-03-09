@@ -105,7 +105,7 @@ As you step through it, each time the function is invoked, make a prediction abo
    :correct: e
    :feedback_a: 2 is bound to x since it's the first value, but so is 5, based on keyword
    :feedback_b: 
-   :feedback_c: 5 is bound to x by keyword, but 2 is also bound to it by virtue of being the value and not having a keyword
+   :feedback_c: 5 is bound to x by keyword, but 2 is also bound to it by virtue of being the value and not having a keyword. In the online environment, it actually allows this, but not in a proper python interpreter.
    :feedback_d: 
    :feedback_e: 2 is bound to x since it's the first value, but so is 5, based on keyword
 
