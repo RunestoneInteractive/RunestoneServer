@@ -482,6 +482,17 @@ Blockly
    ====
    variables
 
+   preload::
+   <xml>  
+      <block type="variables_set" id="1" inline="true" x="25" y="9">    
+         <field name="VAR">X</field>    
+         <value name="VALUE">      
+            <block type="math_number" id="2">
+               <field name="NUM">10</field>
+            </block>    
+         </value>  
+      </block>
+   </xml>
 
 Drag around some blockly blocks.  Then generate or run code.
 

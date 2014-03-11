@@ -109,6 +109,9 @@ END = '''
       p.innerHTML += text + "\\n"
       }
 
+    var xmlText = '%(preload)s';
+    var xmlDom = Blockly.Xml.textToDom(xmlText);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
   </script>
   
   <pre id="%(divid)s_pre"></pre>
@@ -122,6 +125,8 @@ def visit_block_node(self,node):
     for ctrl in node.ac_components['controls']:
         if ctrl == 'variables':
             res += '<category name="Variables" custom="VARIABLE"></category>'
+        elif ctrl == '':
+            pass
         elif ctrl[0] == '*':
             res += '<category name="%s">' % (ctrl[2:])
         elif ctrl == '====':
@@ -158,8 +163,13 @@ class Blockly(Directive):
 
         self.options['divid'] = self.arguments[0]
 
+        plstart = len(self.content)
+        if 'preload::' in self.content:
+            plstart = self.content.index('preload::')
+            self.options['preload'] = " ".join(self.content[plstart+1:])
+
         if self.content:
-            self.options['controls'] = self.content
+            self.options['controls'] = self.content[:plstart]
         
         return [BlocklyNode(self.options)]
 
