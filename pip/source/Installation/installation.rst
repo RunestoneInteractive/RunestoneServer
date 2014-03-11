@@ -399,9 +399,13 @@ Clone your bitbucket repository to your local machine
 
 7. Now ``cd`` to the subdirectory that was created. Type ``ls`` and you should see some code there. 
 
-8. One more step, so that you will be able to pull in new code that we put into the original repository that you forked. Make sure you are in the subdirectory (i.e., make sure you did the previous step). Then copy and paste this command: ``git remote add upstream git@bitbucket.org:paul_resnick/umsi106w14.git``. Then type ``git remote -v``. You should see something like the output below, with an upstream defined.
+8. One more step, so that you will be able to pull in new code that we put into the original repository that you forked. Make sure you are in the subdirectory (i.e., make sure you did the previous step). Then copy and paste this command: ``git remote add upstream https://paul_resnick@bitbucket.org/paul_resnick/umsi106w14.git``. Then type ``git remote -v``. You should see something like the output below, with an upstream defined.
 
-.. image:: Figures/upstream.JPG
+.. note:: 
+
+   We previously provided instructions that said to use ``git@bitbucket.org:paul_resnick/umsi106w14.git`` instead of the https url. That was causing errors at a later step. If you followed the old instructions, please enter the command ``git remote remove upstream`` and then redo this step.
+
+.. image:: Figures/upstream2.JPG
    :width: 600px
 
 9. Check to make sure the upstream is all set up by typing ``git pull upstream master``. It should tell you that you already up-to-date, as in the output below.
