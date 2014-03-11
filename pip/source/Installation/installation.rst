@@ -198,6 +198,21 @@ Once you have completed the installation, do the following steps:
 
 .. image:: Figures/environment.JPG
 
+#. **This was added after class Tuesday.** Now, you need to set up git with your identity so it knows who you are when you go to pull stuff from, or push stuff to, a repository, and will allow you to do it easily. At your command prompt, type:
+
+``` git config --global user.name "Your Name Goes Here" ```
+
+hit enter/return, and then type, at the command prompt,
+
+``` git config --global user.email "your_email@example.com" ```
+
+The email you put in here should be the same email you use to sign up for a Bitbucket account (that comes later in the instructions).
+
+That should look like this, except with your name (whatever you want it to be) and your email (very important):
+
+.. image:: Figures/gitconfig.png
+
+Great. **If you continue to have problems after these adapted instructions, let the instructional team know.**
 
 Choosing the location for your code folder
 ------------------------------------------
@@ -323,11 +338,47 @@ you haven't worked with before, at hackathons, for example. We will be learning
 the very basics of git in this course, and using it to distribute code and problem sets and for you to turn in 
 your problem sets.
 
-The way you'll be using git is the same as for people who use Windows. But much easier to set up. 
+The way you'll be using git is the same as for people who use Windows. But easier to set up. 
 
 Download the latest version of git for mac from [this site](http://git-scm.com/downloads). It is a **.dmg** file, like most software you download to install on a mac. Double click on it and install it the way you normally would any program. It will not create an icon or anything you can see.
 
-OK -- now it's time to start talking about git.
+**This was added after class Tuesday. It should fix many of your problems.** 
+
+You also need to download the Apple Command Line Tools, because these contain some things that make git work 'behind the scenes'. To do this, go to this url: ``` https://developer.apple.com/downloads/index.action ```.
+
+It will direct you to a login page. If you do not have an Apple developer ID, you'll need to register one. (It just allows you to download free things like this stuff we're getting now, that will help you create and develop applications.) If you do, you can log in.
+
+You should then see a big list of things you can download, like this:
+
+.. image:: Figures/downloads.png
+
+You want to download the Command Line Tools for your operating system.
+
+If you have 10.9 (Mavericks), download the Command Line Tools for Mavericks.
+If you have 10.8 (Mountain Lion), download the Command Line Tools for Mountain Lion.
+If you have 10.7 (Lion), download the Command Line Tools for Lion. (These may be further down the list -- you can search for Lion in the search box, or keep scrolling through the pages till you find it.)
+
+*If you have 10.6 (Snow Leopard)*, download the **Command Line Tools - Late March 2012**. (We know, this is a bit unclear.) Unfortunately, you'll have to do a little more work. We'd like to actually do this with you to make sure it works OK and avoid frustration, since we haven't been able to test it yet. Bring your computer to discussion, office hours, or set up a time to do this quickly with one of the instructional team. If this gets unsustainable, again, we'll release more instructions for that process.
+
+
+Finally, you need to set up git with your identity so it knows who you are when you go to pull stuff from, or push stuff to, a repository, and will allow you to do it easily. At your command prompt, type:
+
+``` git config --global user.name "Your Name Goes Here" ```
+
+hit enter/return, and then type, at the command prompt,
+
+``` git config --global user.email "your_email@example.com" ```
+
+The email you put in here should be the same email you use to sign up for a Bitbucket account (that comes later in the instructions).
+
+That should look like this, except with your name (whatever you want it to be) and your email (very important):
+
+.. image:: Figures/gitconfig.png
+
+
+OK! Now it's time to start talking about git.
+
+**If you have completed these updated instructions and are still having problems, contact an instructor.**
 
 
 .. _git_repos:
