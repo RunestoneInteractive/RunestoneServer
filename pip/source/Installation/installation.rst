@@ -508,6 +508,9 @@ Here are a few commands that you'll be using all the time. Try experimenting wit
 #. ``cat <fname>`` will print out the contents of <fname>, assuming <fname> is a file in the current directory.
 
 
+
+.. _git_workflow:
+
 Summary of your regular workflow using git
 ------------------------------------------
 

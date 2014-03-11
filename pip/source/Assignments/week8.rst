@@ -75,9 +75,23 @@ Was there anything from this chapter you found confusing? If so, what?
 Problem Set 7
 -------------
 
-Most of the problem set instructions for this week are in the code file ps7/ps7.py.
+All of the problem set instructions for this week are in the code file ps7/ps7.py.
 
-A few browser-based exercises may go here.
+At your terminal window, cd to your code directory, then enter the following comands:
+
+* ``git status`` If your working directory is not "clean", make sure to save and commit all your work. 
+
+* ``git pull upstream master`` to get the latest code from us.
+
+* ``cd ps7``. That will connect you to the subdirectory ps7
+
+* ``ls``. You should see ps7.py, test.py, train.txt, and test.txt
+
+* In your text editor, edit ps7.py, which contains instructions on what changes you are supposed to make. In your command prompt, run the code file by typing ``python ps7.py``
+
+* Don't forget to finish the workflow by committing your work and pushing it to bitbucket. See :ref:`Git workflow <git_workflow>`
+
+
 
 
 
