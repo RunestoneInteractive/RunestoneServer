@@ -34,9 +34,7 @@ For this week you have the following graded activities:
 
 #. Do Problem Set 7:
 
-   * :ref:`Problem Set 7 online exercises <problem_set_7>` (coming soon)
-   * Turn in ps7/ps7.py by pushing it to bitbucket. Instructions will be embedded in the initial code file that you will download from bitbucket. (coming soon).
-
+   * :ref:`Problem Set 7  <problem_set_7>`
 
 .. _response_7:
 
