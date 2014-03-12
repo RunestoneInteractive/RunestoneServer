@@ -435,6 +435,10 @@ Clone your bitbucket repository to your local machine
 
 .. image:: Figures/pullupstream.JPG
    :width: 600px
+   
+.. note::
+   
+   Depending on your version of git, when you do ``git pull upstream master``, it may prompt you to make a commit message, using a very confusing editor called vi. It will say something like ``# Please enter a commit message to explain why this merge is necessary...``. If that happens to you, I suggest that you exit the vi editor by typing ``:q``. That will probably cancel (abort) the git pull. Try it again like this: ``git pull upstream master --no-edit``. 
 
 Congratulations, your local clone of the remote git repository is set up properly.
 
