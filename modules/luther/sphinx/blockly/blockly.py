@@ -72,6 +72,7 @@ START = '''
 CTRL_START = '''<xml id="toolbox" style="display: none">'''
 CTRL_END = '''</xml>'''
 
+# TODO need to figure out how to inject path to _static -- get from conf.py ??
 END = '''
 <script>
     Blockly.inject(document.getElementById('%(divid)s'),
