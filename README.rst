@@ -54,7 +54,7 @@ Within the ``web2py`` folder that was just extracted, go to the ``applications/`
 (instructions below). This will install the Runestone Tools as a web2py application automatically.
 
 Cloning The Runestone Project and its submodules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project consists of the main repository, plus *submodules* for codelens, parsons-problems, and skulpt.  In order to get all of the source you need you will need to do the following:
 
@@ -98,7 +98,7 @@ line and that will build the following targets:
 
 The books are built into ``runestone/static/thinkcspy``, ``runestone/static/pythonds`` and ``runestone/static/overview``  assuming that runestone is the name of the folder you cloned into.  When the build is done you can quickly check the build by opening the file ``static/thinkcspy/index.html`` in your browser.
 
-Now before you start web2py its convenient to make runestone the default application.  In the top level web2py directory copy routes.example.py to routes.py and Modify the three lines that contain the word runestone to look like this::
+Now before you start web2py its convenient to make runestone the default application.  From web2py/examples, copy routes.patterns.example.py to web2py/routes.py and Modify the three lines that contain the word runestone to look like this::
 
     default_application = 'runestone'    # ordinarily set in base routes.py
     default_controller = 'default'  # ordinarily set in app-specific routes.py
@@ -127,13 +127,14 @@ You will have to set a few configuration values in the file ``models/1.py``. Cop
 If you wish to use Janrain Engage to provide social network authentication integration, you will also have to set your
 Janrain API key and domain in 1.py.
 
-Note: If you do *not* wish to use Janrain, you must comment out these lines in ``models/0.db``::
+Note: If you do *not* wish to use Janrain, you must comment out these lines in ``models/db.py``::
 
     janrain_form = RPXAccount(request,
                               api_key=settings.janrain_api_key, # set in 1.py
                               domain=settings.janrain_domain, # set in 1.py
                               url=janrain_url)
     auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
+    request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
 
 and uncomment the line below. This will disable Janrain and only use Web2Py integrated authentication. ::
 
@@ -178,6 +179,7 @@ functionality of web2py:
 * Open ``http://127.0.0.1:8000/runestone/appadmin``. Login using the password you supplied when you ran web2py.
 * Click on ``insert new auth_membership``. Select your user account and the instructor group as the two values and click submit.  You are now an instructor.
 
+After you do that, once you're logged into the site, you can visit http://127.0.0.1:8000/runestone/admin to access instructor features
 
 How to Contribute
 -----------------
