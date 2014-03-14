@@ -41,28 +41,74 @@
     }
   </style>
 
+<script type="text/javascript" charset="utf-8">
+getLanes = function() {
+    var sid = document.getElementById("studentid").value
+    var url = "/runestone/ajax/getPageSessions?"+"sid="+sid
+    $.get(url, function(data) {
+        diffdata = JSON.parse(data)
+        timelineRectColors(diffdata)
+    })
+}
 
-  <script type="text/javascript">
-  
+getActivities = function(start, end){
+    var sid = document.getElementById("studentid").value
+    var url = "/runestone/ajax/getSessionActivities?"+"sid="+sid+ "&start="+start+"&end="+end
+    $.get(url, function(data) {
+        actdata = JSON.parse(data)
+        showDetailTimeline(actdata)
+    })  
+   
+}
+
    var width = 500;
 
-      function timelineRectColors(dataWithColors) {
-        
-        var colorScale = d3.scale.ordinal().range(['#6b0000','#ef9b0f','#ffee00'])
-            .domain(['apple','orange','lemon']);
+   window.onload = function(){
+      getLanes();      
+   }
+      
+  var colorScale = d3.scale.ordinal().range(['#6b0000','#ef9b0f','#ffee00', '#ff0000', '000000'])
+      .domain(['apple','orange','lemon', 'red', 'black']);
 
-        var chart = d3.timeline()
+  function timelineRectColors(data) {
+
+    var sessionTimeline = d3.timeline()
+        .colors( colorScale )
+        .stack()
+        .colorProperty('color') // change it when neccessary
+        .margin({left: 200, right:0, top: 0, bottom:0})
+        // .width(1500)
+        .click(function (d, i, datum) {
+           getActivities(d.starting_time, d.ending_time);
+        });
+
+    d3.select("#sessionTimeline").append("svg")
+        .attr("width", width)
+        .datum(data)
+        .call(sessionTimeline);
+
+  }
+
+  function showDetailTimeline(data) {
+
+        d3.select("#detailTimeline svg").remove();
+
+        var detailTimeline = d3.timeline()
             .colors( colorScale )
-            .colorProperty('fruit')
-            .width(1500)
-            .click(function (d, i, datum) {
-               alert(datum.label);
-            });
+            .colorProperty('color') // change it when neccessary
+            .margin({left: 100, right:0, top: 0, bottom:0});
 
-        var svg = d3.select("#timelineColors").append("svg").attr("width", width)
-          .datum(dataWithColors).call(chart);
-      }
+        var detailTimelineSvg = d3.select("#detailTimeline").append("svg")
+            .attr("width", width)
+            .datum(data);
+
+        detailTimelineSvg.call(detailTimeline);
+
+  }      
+      
   </script>
+
+
 
 <script type="text/javascript" charset="utf-8">
 getDiffs = function() {
@@ -234,12 +280,10 @@ errorText.NotImplementedErrorFix = "For now the only way to fix this is to not u
 
 </script>
 
-<h1>Hello Us</h1>
-
 <label for="studentid">StudentId</label><input type="text" name="studentid" value="Paul Resnick" id="studentid">
-<label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="welcome" id="exerciseid">
+<!-- <label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="welcome" id="exerciseid"> -->
 
-<button onclick="getDiffs()">Fetch</button>
+<!-- <button onclick="getDiffs()">Fetch</button>
 
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
@@ -254,8 +298,9 @@ errorText.NotImplementedErrorFix = "For now the only way to fix this is to not u
     <pre id="runner_pre"></pre>
     <canvas id="runner_canvas" height="400px" width="400px"  style="border-style: solid; display: none;"></canvas>
     <p id="runner_errinfo"></p>
-</div>
+</div> -->
   <div>
     <h3>Timeline of activities</h3>
-    <div id="timelineColors"></div>  
+    <div id="detailTimeline"></div> 
+    <div id="sessionTimeline"></div>
   </div>

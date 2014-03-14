@@ -529,7 +529,143 @@ def getassignmentgrade():
 
     return json.dumps([ret])
 
+# use local timezone for bigbang, not utc, because
+# timestamps in the db are generated from local timezone
+bigbang = datetime.datetime.fromtimestamp(0)    
+def timesincebb(ts):
+    if ts:
+        return (ts-bigbang).total_seconds()*1000
+    else:
+        return 0
 
+def getPageSessions():
+    sid = request.vars.sid
+    # need to add protection so they can only get data for own sid, or instructor can get anyone's
+    
+    q = '''select timestamp, event, div_id
+           from useinfo 
+           where sid = '%s'
+           order by timestamp
+    '''  % (sid)
+    rows = db.executesql(q)
+
+    import datetime
+    # first process to find starting and ending time of each page session
+    sessions = []
+    def chapter_url(full_url):
+        # return canonical url, without #anchors
+        if full_url.rfind('#') > 0:
+            full_url = full_url[:url.rfind('#')]
+        full_url = full_url.replace('/runestone/static/pip/', '')
+        return full_url
+    class Session(object):
+    
+        def __init__(self, url, start, end = None):
+            self.url = chapter_url(url)
+            self.start = start
+            self.end = end
+
+    # make initial sessions
+    if len(rows)>0:
+        sessions.append(Session(rows[0][2], timesincebb(rows[0][0])))
+        
+    for i in range(1,len(rows)):
+        prev = rows[i-1]
+        row = rows[i]
+        if (row[0] - prev[0]).total_seconds() > 300: #it's been too long
+            sessions[-1].end = sessions[-1].start + 300*1000   # set end time of last sesion; 5 minutes after it started           
+            if row[1] == 'page':
+                sessions.append(Session(row[2], timesincebb(row[0]))) # add new session, with new page as url
+            else:
+                sessions.append(Session(sessions[-1].url, timesincebb(row[0]))) # add new session, with old url as last page
+        elif row[1] == 'page': # new page but it hasn't been too long
+            sessions[-1].end = timesincebb(row[0])   # set end time of last sesion to be this activity's start time           
+            sessions.append(Session(row[2], timesincebb(row[0]))) # add new session with current page's url
+        else:
+            pass    # continuing the page session
+            
+        
+            
+    sessions[-1].end = sessions[-1].start + 300*1000   # set end time of last sesion
+    
+    # then group sessions to make data for swim lanes
+    lanes = {}
+    for s in sessions:
+        if s.url not in lanes:
+            lanes[s.url]=[]
+        lanes[s.url].append({'starting_time':s.start, 'ending_time':s.end})
+        
+    return json.dumps([{'label': k, 'times': lanes[k]} for k in lanes])    
+
+def getSessionActivities():
+    
+    def ts_from_epoch_ms(ms):
+        secs = int(ms/1000.0)
+        dt = datetime.datetime.fromtimestamp(secs)
+        return dt.strftime('%Y-%m-%d %H:%M:%S')
+    
+    # next two lines for testing purposes only
+#    request.vars.start = 1388684937000.0
+#    request.vars.end = 1488684938000.0
+        
+    sid = request.vars.sid
+    start = ts_from_epoch_ms(float(request.vars.start))
+    end = ts_from_epoch_ms(float(request.vars.end))
+    print start
+    print end
+    q = '''select timestamp, event, div_id
+           from useinfo 
+           where sid = '%s' and timestamp >= '%s' and timestamp <= '%s'
+           order by timestamp
+    '''  % (sid, start, end)
+        
+
+    class Activity(object):
+    
+        def __init__(self, divid, start, end = None):
+            self.divid = divid
+            self.start = start
+            self.end = end
+    #####
+    #    -- list of dictionaries, one for each color
+    #    -- label for each dictionary
+    #    -- label for each item: not sure of format for that yet
+    #    -- {'label': start | continue, 
+    #        times:[{'hover_text': xxx, 'starting_time': , 'ending_time': }, {}]}
+    rows = db.executesql(q)
+#    return json.dumps([start, end, q, len(rows)])
+
+    # two types: those that start a new activity and those that continue 
+    # go through rows and mark each as either starting or continuing.
+    
+    starts = []
+    continues = []
+    
+    if len(rows)>0:
+        last_activity = Activity(rows[0][2], timesincebb(rows[0][0]))
+        starts.append(last_activity)
+        
+    for i in range(1,len(rows)):
+        prev = rows[i-1]
+        row = rows[i]
+        start = timesincebb(row[0])
+        last_activity.end = min(start, last_activity.start + 1000*5*60)  # last activity ends now, or after 5 minutes, whichever comes sooner
+        current_act = Activity(row[2], start)
+        if current_act.divid == last_activity.divid:
+            continues.append(current_act)
+        else:
+            starts.append(current_act)
+        last_activity = current_act
+
+    last_activity.end = last_activity.start + 10*1000
+    
+    #return json.dumps([start, end, q, len(rows), len(starts), len(continues)])
+
+       
+    return json.dumps([{'label': 'start', 'color': 'red', 'times': [{'starting_time':s.start, 'ending_time':s.end, 'hover_text': s.divid} for s in starts]},
+                       {'label': 'continue', 'color': 'black', 'times': [{'starting_time':s.start, 'ending_time':s.end, 'hover_text': s.divid} for s in continues]}])    
+       
+       
 def getCodeDiffs():
     print "1"
     sid = request.vars.sid
@@ -560,15 +696,13 @@ def getCodeDiffs():
     import datetime
     bigbang = datetime.datetime.utcfromtimestamp(0)    
     acts = []
-    def timesincebb(ts):
-        return (ts-bigbang).total_seconds()*1000
     for i in range(0,len(rows)-1):
         row = rows[i]
         next = rows[i+1]
         acts.append({"starting_time": timesincebb(row[0]),
                      "ending_time": min(timesincebb(next[0]), timesincebb(row[0])+10*1000)})
-    test = [{'label': "runs", 'fruit': 'orange', 'times': acts}]
-    print test
+    test = [{'label': "runs", 'color': 'black', 'times': acts}]
+#    print test
        
 #    test = [{'label': "runs", 'fruit': 'orange', 'times': \
 #             [{"starting_time": (row[0]-bigbang).total_seconds()*1000, "ending_time": ((row[0]-bigbang).total_seconds()+5)*1000} for row in rows]
