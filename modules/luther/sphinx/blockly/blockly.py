@@ -76,7 +76,7 @@ CTRL_END = '''</xml>'''
 END = '''
 <script>
     Blockly.inject(document.getElementById('%(divid)s'),
-        {path: '/runestone/static/_static/', toolbox: document.getElementById('toolbox')});
+        {path: '%(blocklyHomePrefix)s_static/', toolbox: document.getElementById('toolbox')});
 
     function showCode() {
       // Generate JavaScript code and display it.
@@ -162,8 +162,14 @@ class Blockly(Directive):
 
     def run(self):
 
+        document = self.state.document
+        rel_filename, filename = document.settings.env.relfn2path(self.arguments[0])
+
         self.options['divid'] = self.arguments[0]
 
+        pathDepth = rel_filename.count("/")
+        self.options['blocklyHomePrefix'] = "../"*pathDepth
+        
         plstart = len(self.content)
         if 'preload::' in self.content:
             plstart = self.content.index('preload::')
