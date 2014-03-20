@@ -14,6 +14,8 @@ import datetime
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     db = DAL(settings.database_uri,fake_migrate_all=False)
+    session.connect(request, response, masterapp='runestone', db=db)
+
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore')
@@ -107,7 +109,6 @@ class IS_COURSE_ID:
             return (db(db.courses.course_name == value).select()[0].id, None)
         return (value, self.e)
 
-
 db.define_table('auth_user',
     Field('username', type='string',
           label=T('Username')),
@@ -136,7 +137,8 @@ db.define_table('auth_user',
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
-    format='%(username)s',
+#    format='%(username)s',
+    format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')
 
 
@@ -149,7 +151,7 @@ db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_emai
                                IS_NOT_IN_DB(db, db.auth_user.email))
 db.auth_user.course_id.requires = IS_COURSE_ID()
 
-auth.define_tables(migrate='runestone_')
+auth.define_tables(username=True, signature=False, migrate='runestone_')
 
 # create the instructor group if it doesn't already exist
 if not db(db.auth_group.role == 'instructor').select().first():
@@ -162,6 +164,7 @@ mail.settings.sender = 'you@gmail.com'
 mail.settings.login = 'username:password'
 
 ## configure auth policy
+auth.settings.actions_disabled.append('register')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
@@ -178,14 +181,14 @@ from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
                                                    request.application)
 
-janrain_form = RPXAccount(request,
-                          api_key=settings.janrain_api_key, # set in 1.py
-                          domain=settings.janrain_domain, # set in 1.py
-                          url=janrain_url)
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
-#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
+# janrain_form = RPXAccount(request,
+#                          api_key=settings.janrain_api_key, # set in 1.py
+#                          domain=settings.janrain_domain, # set in 1.py
+#                          url=janrain_url)
+# auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
+auth.settings.login_form = auth  # uncomment this to just use web2py integrated authentication
 
-request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
+# request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example

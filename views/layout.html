@@ -25,7 +25,7 @@
     <script type="text/javascript">
       var eBookConfig = {};
       var portPart = '';
-      eBookConfig.host = 'http://{{=request.env.http_host}}';
+      eBookConfig.host = "";
       eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
       eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
       eBookConfig.logLevel = 10;
@@ -119,8 +119,7 @@
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
             {{ if auth.user: }}
-              <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-              <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
+              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
               <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
@@ -158,7 +157,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Open Library<b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist</a></li>
+            <li><a href="/{{=request.application}}/static/pip/index.html">Programs, Information, and People</a></li>
             <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures</a></li>
             <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
             <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>            
@@ -178,7 +177,7 @@
 
         <li class="divider-vertical"></li>
 
-        <!-- students dropdown -->
+        <!-- students dropdown
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Students<b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu">
@@ -188,7 +187,8 @@
         </li>
 
         <li class="divider-vertical"></li>
-
+         end students dropdown --> 
+         
         <!-- instructors dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Instructors<b class="caret"></b></a>

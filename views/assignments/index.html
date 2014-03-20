@@ -1,0 +1,36 @@
+{{extend 'layout.html'}}
+<h1>{{=student.first_name}} {{=student.last_name}}</h1>
+<p class="grade"><strong>{{=student.points_total}} points</strong> of {{=student.points_possible}} points (or {{=student.points_percentage}}%)</p>
+<p class="last_action"><em>Last Action: {{=last_action.timestamp}}</em></p>
+<h2>Assignments</h2>
+<div class="panel-group" id="assignments">
+{{for row in assignments:}}
+    <div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" data-parent="#assignments" href="#assignment-{{=row.assignments.id}}">
+				{{=row.assignments.name}}
+			</a>
+			<div class="pull-right"><strong>{{=row.grades.score}} points</strong> of {{=row.assignments.points}} points</div>
+		</div>
+		<div id="assignment-{{=row.assignments.id}}" class="panel-collapse collapse">
+	      <div class="panel-body">
+	      	<ul class="list-group">
+	      	{{ problems = row.assignments.problems(student)}}
+	      	{{for problem in problems:}}
+	      		<li class="list-group-item">
+	      			<span class="badge">{{=problem.grade}}</span>
+	      			<h4>{{=problem.acid}}</h4>
+	      			{{if problem.comment:}}
+	      			<p>{{=problem.comment}}</p>
+	      			{{pass}}
+	      		</li>
+	      	{{pass}}
+	      	{{ if len(problems) < 1: }}
+	      		<div class="alert alert-info">No Problems Recorded</div>
+	      	{{pass}}
+	      	</ul>
+	      </div>
+		</div>
+	</div><!-- end .panel -->
+    {{pass}}
+</div>

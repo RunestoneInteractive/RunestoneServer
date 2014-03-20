@@ -150,8 +150,7 @@
             <li class="divider"></li>
             <li><a href='{{course_url}}/{{appname}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
-            <li><a href="{{course_url}}/{{appname}}/default/user/profile" id="profilelink">Edit Profile</a></li>
-            <li><a href="{{course_url}}/{{appname}}/default/user/change_password" id="passwordlink">Change Password</a></li>
+            <li><a href="{{course_url}}/{{appname}}/assignments/index" id="assignmentslink">Progress Page</a></li>
             <li><a href="{{course_url}}/{{appname}}/default/user/register" id="registerlink">Register</a></li>
             <li class='loginout'><a href='#'>Login</a></li> <!-- correct link populated by addNavbarLoginLink() -->
           </ul>
@@ -289,8 +288,8 @@ var _prum = [['id', '521dfcc4abe53d0749000000'],
     $(document).ready(addUserToFooter);
     $(document).ready(addNavbarLoginLink);
     $(document).ready(createEditors);
-    $(document).ready(getNumUsers);
-    $(document).ready(getOnlineUsers);
+    // $(document).ready(getNumUsers);
+    // $(document).ready(getOnlineUsers);
     $(document).ready(createScratchActivecode());
     $(document).ready(styleUnittestResults());
 </script>
