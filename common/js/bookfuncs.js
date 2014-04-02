@@ -275,7 +275,7 @@ function runit(myDiv, theButton, includes, suffix) {
     // configure Skulpt output function, and module reader
     Sk.configure({output: outf,
                      read: builtinRead,
-                     python3: false
+                     python3: true
                  });
     var lang = document.getElementById(myDiv).lang;
     try {

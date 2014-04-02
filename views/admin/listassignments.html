@@ -1,22 +1,8 @@
 {{extend 'layout.html'}}
 
-<div class="panel-group">
-	{{for section in sections.keys():}}
-	<div class="panel" id="sections">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="sections" href="#section-{{=section}}">{{=section}}</a>
-			</h4>
-		</div>
-		<div id="section-{{=section}}" class="panel-collapse collapse">
-			<div class="panel-body">
-				<ul>
-				{{for exercise in sections[section]:}}
-					<li><a href="gradeassignment?id={{=exercise}}">{{=exercise}}</a></li>
-				{{pass}}
-				</ul>
-			</div>
-		</div>
-	</div>
-	{{pass}}
-</div>
+<table>
+{{for actcode in exercises:}}
+	<tr><td><a href="/{{=request.application}}/admin/gradeassignment/?id={{=actcode.acid}}">{{=actcode.acid}}</a></td></tr>  
+    {{pass}}
+
+</table>	

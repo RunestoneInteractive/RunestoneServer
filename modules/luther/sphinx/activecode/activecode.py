@@ -281,8 +281,7 @@ class ActiveExercise(ActiveCode):
     has_content = True
 
     def run(self):
-# I prefer to have the code box shown by default for Active Exercise-- presnick
-#        self.options['hidecode'] = True
+        self.options['hidecode'] = True
         self.options['gradebutton'] = True
         return super(ActiveExercise,self).run()
 
