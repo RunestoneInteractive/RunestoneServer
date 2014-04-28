@@ -136,7 +136,8 @@ Here is the same program in codelens.  Step thru the function and watch the "run
 
    Rearrange the code statements so that the program will add up the first n odd numbers where n is provided by the user.
    -----
-   n = int(input('How many odd numbers would you like to add together?'))
+   n = int(input('How many odd numbers would
+   you like to add together?'))
    thesum = 0
    oddnumber = 1
    =====

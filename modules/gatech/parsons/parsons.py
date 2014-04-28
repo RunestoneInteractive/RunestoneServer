@@ -98,20 +98,32 @@ Example:
         template_values['divid'] = self.arguments[0]
 
         TEMPLATE = '''
-        <div class='parsons alert alert-warning'>
-        %(qnumber)s: %(instructions)s<br /><br />
+        <div class='parsons alert alert-warning' id="parsons-%(unique_id)s">
+        <div class="parsons-text">%(qnumber)s: %(instructions)s<br /><br /></div>
         <div style="clear:left;"></div>
         <div id="parsons-orig-%(unique_id)s" style="display:none;">%(code)s</div>
+        <div class="sortable-code-container">
         <div id="parsons-sortableTrash-%(unique_id)s" class="sortable-code"></div>
         <div id="parsons-sortableCode-%(unique_id)s" class="sortable-code"></div>
     	<div style="clear:left;"></div>
+        </div>
+        <div class="parsons-controls">
         <input type="button" class='btn btn-success' id="checkMe%(unique_id)s" value="Check Me"/>
         <input type="button" class='btn btn-default' id="reset%(unique_id)s" value="Reset"/>
         <div id="parsons-message-%(unique_id)s"></div>
         </div>
+        </div>
 
     <script>
         $pjQ(document).ready(function(){
+		
+			$("#parsons-%(unique_id)s").not(".sortable-code").not(".parsons-controls").on("click", function(){
+				 $('html, body').animate({
+					scrollTop: ($("#parsons-%(unique_id)s").offset().top - 50)
+				}, 700);
+			}).find(".sortable-code, .parsons-controls").click(function(e) {
+				return false;
+				});	
             var msgBox = $("#parsons-message-%(unique_id)s");
             msgBox.hide();
 	    var displayErrors = function (fb) {

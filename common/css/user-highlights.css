@@ -88,6 +88,9 @@ div.sphinxsidebar {
     letter-spacing: 0.015em;
     line-height: 120%;
     padding: 0.5em;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
 }
 #navigation-links{
 	background-color: #F8F8F8;

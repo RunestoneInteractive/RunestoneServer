@@ -34,3 +34,74 @@
 	top:1px;
 	right:0.5px;
 }
+
+
+.ac_actions{
+	text-align: center;
+}
+
+.ac_sep {
+	background: #000;
+	display: inline-block;
+	margin: -15px 10px;
+	width: 1px;
+	height: 35px;
+	padding: 0;
+	border: 0;
+}
+.ac_section{
+	position: relative;
+	clear:both;
+}
+.ac_section>* {
+	max-width: 500pt;
+	margin-left: auto;
+	margin-right: auto;
+	position:relative;
+}
+.ac_section .clearfix{
+	position: initial;
+}
+.ac_output{
+	display:none;
+	max-width: 450px;
+}
+
+@media (min-width: 768px){
+	.ac_code_div{
+		margin-left:auto;
+		margin-right:auto;
+	}
+}
+@media (min-width: 992px){
+	.ac_code_div{
+		max-width: 400pt;
+		float:left;
+		margin-left: 0;
+		margin-right:0;
+	}
+	.ac_output{
+		float: right;
+		right: 40px;
+	}
+	canvas{
+		width: 320px;
+	}	
+}
+@media (min-width: 1200px){
+	.ac_code_div{
+		max-width: 500pt;
+		width: 55%;
+		float:left;
+		margin-left: 0;
+		margin-right:0;
+	}
+	.ac_output{
+		float: right;
+		right: 40px;
+		width: 35%;
+	}
+	canvas{
+		width: auto;
+	}
+}

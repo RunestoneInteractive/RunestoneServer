@@ -15,14 +15,6 @@
 
 
 
-   SimplePythonData/intro-PythonBeyondtheBrowser.rst
-   SimplePythonData/ThePythonShell.rst
-   SimplePythonData/RunningaPythonProgram.rst
-   SimplePythonData/InstallingPythononWindows.rst
-   SimplePythonData/Glossary.rst
-
-
-
    SimplePythonData/intro-VariablesExpressionsandStatements.rst
    SimplePythonData/ValuesandDataTypes.rst
    SimplePythonData/Typeconversionfunctions.rst
@@ -49,7 +41,7 @@
 
    PythonTurtle/intro-HelloLittleTurtles.rst
    PythonTurtle/OurFirstTurtleProgram.rst
-   PythonTurtle/Instances---AHerdofTurtles.rst
+   PythonTurtle/InstancesAHerdofTurtles.rst
    PythonTurtle/TheforLoop.rst
    PythonTurtle/FlowofExecutionoftheforLoop.rst
    PythonTurtle/IterationSimplifiesourTurtleProgram.rst
@@ -112,11 +104,11 @@
    MoreAboutIteration/Theforlooprevisited.rst
    MoreAboutIteration/ThewhileStatement.rst
    MoreAboutIteration/RandomlyWalkingTurtles.rst
-   MoreAboutIteration/The3n+1Sequence.rst
+   MoreAboutIteration/The3n1Sequence.rst
    MoreAboutIteration/Newton'sMethod.rst
    MoreAboutIteration/AlgorithmsRevisited.rst
    MoreAboutIteration/SimpleTables.rst
-   MoreAboutIteration/2-DimensionalIterationImageProcessing.rst
+   MoreAboutIteration/2DimensionalIterationImageProcessing.rst
    MoreAboutIteration/ImageProcessingonYourOwn.rst
    MoreAboutIteration/Glossary.rst
    MoreAboutIteration/Exercises.rst
@@ -138,7 +130,7 @@
    Strings/TraversalandthewhileLoop.rst
    Strings/Theinandnotinoperators.rst
    Strings/TheAccumulatorPatternwithStrings.rst
-   Strings/TurtlesandStringsandL-Systems.rst
+   Strings/TurtlesandStringsandLSystems.rst
    Strings/Loopingandcounting.rst
    Strings/Afindfunction.rst
    Strings/Optionalparameters.rst
@@ -163,7 +155,7 @@
    Lists/CloningLists.rst
    Lists/RepetitionandReferences.rst
    Lists/ListMethods.rst
-   Lists/TheReturnofL-Systems.rst
+   Lists/TheReturnofLSystems.rst
    Lists/AppendversusConcatenate.rst
    Lists/Listsandforloops.rst
    Lists/UsingListsasParameters.rst
@@ -245,8 +237,8 @@
 
 
 
-   ClassesBasics/intro-ClassesandObjects-theBasics.rst
-   ClassesBasics/Object-orientedprogramming.rst
+   ClassesBasics/intro-ClassesandObjectstheBasics.rst
+   ClassesBasics/Objectorientedprogramming.rst
    ClassesBasics/Achangeofperspective.rst
    ClassesBasics/ObjectsRevisited.rst
    ClassesBasics/UserDefinedClasses.rst
@@ -260,7 +252,7 @@
 
 
 
-   ClassesDiggingDeeper/intro-ClassesandObjects-Diggingalittledeeper.rst
+   ClassesDiggingDeeper/intro-ClassesandObjectsDiggingalittledeeper.rst
    ClassesDiggingDeeper/Fractions.rst
    ClassesDiggingDeeper/ObjectsareMutable.rst
    ClassesDiggingDeeper/Sameness.rst

@@ -67,7 +67,7 @@ Python Turtle Graphics
 
    PythonTurtle/intro-HelloLittleTurtles.rst
    PythonTurtle/OurFirstTurtleProgram.rst
-   PythonTurtle/Instances---AHerdofTurtles.rst
+   PythonTurtle/InstancesAHerdofTurtles.rst
    PythonTurtle/TheforLoop.rst
    PythonTurtle/FlowofExecutionoftheforLoop.rst
    PythonTurtle/IterationSimplifiesourTurtleProgram.rst
@@ -135,7 +135,7 @@ More About Iteration
    MoreAboutIteration/Theforlooprevisited.rst
    MoreAboutIteration/ThewhileStatement.rst
    MoreAboutIteration/RandomlyWalkingTurtles.rst
-   MoreAboutIteration/The3n+1Sequence.rst
+   MoreAboutIteration/The3n1Sequence.rst
    MoreAboutIteration/Newton'sMethod.rst
    MoreAboutIteration/AlgorithmsRevisited.rst
    MoreAboutIteration/SimpleTables.rst

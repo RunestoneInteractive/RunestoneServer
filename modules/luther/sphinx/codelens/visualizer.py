@@ -36,8 +36,10 @@ def setup(app):
 
 
 VIS = '''
+<div class="alert alert-warning cd_section">
 <div id="%(divid)s"></div>
-<p class="cl_caption"><span class="cl_caption_text">%(caption)s (%(divid)s)</span> </p>'''
+<p class="cl_caption"><span class="cl_caption_text">%(caption)s (%(divid)s)</span> </p>
+</div>'''
 
 QUESTION = '''
 <div id="%(divid)s_modal" class="modal fade codelens-modal">
@@ -72,7 +74,7 @@ var %(divid)s_vis;
 $(document).ready(function() {
     %(divid)s_vis = new ExecutionVisualizer('%(divid)s',%(divid)s_trace,
                                 {embeddedMode: %(embedded)s,
-                                verticalStack: true,
+                                verticalStack: false,
                                 heightChangeCallback: redrawAllVisualizerArrows,
                                 codeDivWidth: 500
                                 });

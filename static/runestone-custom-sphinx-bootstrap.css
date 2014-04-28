@@ -6,7 +6,7 @@ body {
 }
 
 pre {
-    margin: 1em 0;
+    margin: 0 0 1em;
 }
 
 h5 {
@@ -41,14 +41,30 @@ div.container {
 }
 
 div.section {
-    max-width: 500pt;
     margin-left: auto;
     margin-right: auto;
 }
+.container{
+	padding-left:0;
+	padding-right:0;
+}
+ .container  .section >*:not(.section){
+	max-width: 500pt;
+	margin-left: auto;
+	margin-right: auto;
+}
 
+.container .section>img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container  .section .parsons, .container  .section .parsons .sortable-code-container, .container  .section .ac_section, .container  .section .cd_section{
+	max-width: none;
+}
 .navbar>.container .navbar-brand {
     margin-left: 0;
-
 }
 
 .navbar>.container  {
@@ -113,6 +129,7 @@ div.section {
 .CodeMirror {
     margin: 0 0 1em 0;
     background-color: #fff;
+	clear:both;
 }
 
 button.btn, btn.btn-sm,
@@ -359,15 +376,18 @@ div.flash {
 }
 
 .video-play-overlay {
-    position: absolute;
-    top: -35px;
-    left: 30%;
+	position: relative;
+	top: -150px;
+	left: 44%;
     height: 85px;
     width: 130px;
     background-position: center;
     background-repeat: no-repeat;
 }
-
+.video_popup video {
+	width: 500pt;
+	cursor:pointer;
+}
 .ui-sortable-helper {
     height: auto !important;
     width: auto !important;
@@ -446,3 +466,29 @@ div.flash {
 	padding-left: 15px;
 	padding-right: 50px;
 }
+
+.activehtml  {
+    width: 500px;
+    height: 400px;
+}
+.container  .section>div.sidebar {
+	margin: 0 0 0.5em 1em;
+	width: auto;
+	}
+	
+@media (min-width: 768px){
+	.container  .section>div.sidebar {
+		margin: 0 3em 0.5em 1em;
+	}
+}
+@media (min-width: 992px){
+	.container  .section>div.sidebar {
+		margin: 0 11em 0.5em 1em;
+	}
+}
+@media (min-width: 1200px){
+	.container  .section>div.sidebar {
+		margin: 0 18em 0.5em 1em;
+	}
+}
+

@@ -81,11 +81,11 @@ Benefits of this Interactive Textbook
 Next Steps
 ----------
 
-* Get an overview of the features in this book  `Click Here <http://interactivepython.org/runestone/static/overview/overview.html>`_
+* Get an overview of the features in this book  `Click Here </runestone/static/overview/overview.html>`_
 * To get help moving around the book:  :ref:`quick_help`
-* Check out a sample chapter :ref:`hello_turtles`
+* Check out a sample chapter `Hello, Little Turtles! </runestone/static/thinkcspy/PythonTurtle/intro-HelloLittleTurtles.html>`_
 * Check out the :ref:`t_o_c`
-* Take me to Chapter 1  :ref:`the_way_of_the_program`
+* Take me to Chapter 1  `The Way of the Program </runestone/static/thinkcspy/GeneralIntro/intro-TheWayoftheProgram.html>`_
 
 About this Project
 ------------------

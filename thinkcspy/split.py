@@ -24,7 +24,7 @@ def splitFiles(filename, directory):
                 startComments = ['..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris\n', '    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute\n', '    and/or modify this document under the terms of the GNU Free Documentation\n', '    License, Version 1.3 or any later version published by the Free Software\n', '    Foundation; with Invariant Sections being Forward, Prefaces, and\n', '    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of\n', '    the license is included in the section entitled "GNU Free Documentation\n', '    License".\n','\n']
                 for sub_idx, sub_val in enumerate(lines[0:(idx-1)]):
                     if sub_val.startswith('===='): #handle the introduction section of the chapter
-                        topicName = removeChars(lines[sub_idx-1].strip(), '\/:*?"`,!<>|')
+                        topicName = removeChars(lines[sub_idx-1].strip(), '\/:*?"-+`,!<>|')
                         newFile = newFilePath+'\\intro-'+topicName.replace(" ", "")+'.rst'
                         ocf.writelines("   "+directory+"/intro-"+topicName.replace(" ", "")+'.rst\n') #write new filename to file, for TOC
                         lines[sub_idx-1] = 'Introduction: '+lines[sub_idx-1]
@@ -34,7 +34,7 @@ def splitFiles(filename, directory):
                         o.writelines(introductionContent)
                         o.close()
                         break
-                topicName = removeChars(lines[idx-1].strip(), '\/:*?"`<>|')
+                topicName = removeChars(lines[idx-1].strip(), '\/:*?"-+`,!<>|')
                 startCommentsTraversed = True
                 sectionStart = idx-1
             else: #enters this for every other subsection apart from the first one
@@ -45,7 +45,7 @@ def splitFiles(filename, directory):
                 o.writelines(startComments)
                 o.writelines(subSection)
                 o.close()
-                topicName = removeChars(lines[idx-1].strip(), '\/:*?"`<>|')
+                topicName = removeChars(lines[idx-1].strip(), '\/:*?"-+`,!<>|')
                 sectionStart = idx-1
         elif idx == (len(lines) -1): #enters for the last line, to create last file 
             newFile = newFilePath+'\\'+topicName.replace(" ", "")+'.rst'
