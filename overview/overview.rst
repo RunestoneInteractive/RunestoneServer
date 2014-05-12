@@ -273,16 +273,16 @@ next line executed.
 Unit Tests for Code
 -------------------
 
-Its nice to be able to have students solve a particular problem by writing some code, its even better if you can give them some feedback and provide some tests for them.  Much of the ``unittest`` module from Python is available in the ``unittestgui`` module for activecode.  Take a look:
+Its nice to be able to have students solve a particular problem by writing some code, its even better if you can give them some feedback and provide some tests for them.  Much of the ``unittest`` module from Python is available in the ``unittest`` module for activecode.  Take a look:
 
 .. activecode:: units1
 
    def add(a,b):
       return 4
 
-   import unittestgui
+   from unittest.gui import TestCaseGui
 
-   class myTests(unittestgui.unittest):
+   class myTests(TestCaseGui):
 
        def testOne(self):
            self.assertEqual(add(2,2),4,"A feedback string when the test fails")
