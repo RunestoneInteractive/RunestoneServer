@@ -8,6 +8,9 @@ Build Status |buildstatus|
 
 Documentation
 -------------
+The database contains two tables ``chapters`` and ``sub_chapters`` which are populated using a script by scraping the ``toc.html`` page. In order to run the script, from the command line, navigate to ``runestone/thinkcspy`` and type the command ``python chapterNames.py``
+In order to populate the chapter tables for other courses, create a copy of ``chapterNames.py`` file and modify the line
+``os.chdir("..\\static\\thinkcspy")``
 
 Documentation for the project is on our official `documentation site <http://docs.runestoneinteractive.org>`_  
 

@@ -27,12 +27,8 @@ def setup(app):
     app.add_stylesheet('video.css')
 
 CODE = """\
-<a id="%(divid)s_thumb" style='position:relative;'>
-    <img src="%(thumb)s" />
-    <div class='video-play-overlay'></div>
-</a>
 <div id="%(divid)s" class="video_popup" >
-<video %(controls)s %(preload)s %(loop)s >
+<video %(controls)s %(preload)s %(loop)s poster="%(thumb)s">
     %(sources)s
     No supported video types
 </video>
@@ -40,6 +36,10 @@ CODE = """\
 """
 
 POPUP = """\
+<a id="%(divid)s_thumb" style='position:relative;'>
+    <img src="%(thumb)s" />
+    <div class='video-play-overlay'></div>
+</a>
 <script>
     jQuery(function ($) {
        $('#%(divid)s_thumb').click(function (e) {
@@ -60,6 +60,12 @@ INLINE = """\
          logBookEvent({'event':'video','act':'play','div_id': '%(divid)s'});
          // Log the run event
       });
+	  $('#%(divid)s video').one("click", function(){
+		this.play();
+	  });
+	  $('#%(divid)s video').one("play", function(){
+		logBookEvent({'event':'video','act':'play','div_id': '%(divid)s'});
+	  });
    });
 </script>
 """

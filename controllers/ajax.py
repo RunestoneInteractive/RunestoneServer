@@ -239,38 +239,73 @@ def gethighlights():
 #
 def updatelastpage():
     lastPageUrl = request.vars.lastPageUrl
-    lastPageHash = request.vars.lastPageHash
-    lastPageChapter = request.vars.lastPageChapter
-    lastPageSubchapter = request.vars.lastPageSubchapter
     lastPageScrollLocation = request.vars.lastPageScrollLocation
     course = request.vars.course
+    completionFlag = request.vars.completionFlag
+    lastPageChapter = lastPageUrl.split("/")[-2]
+    lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
     if auth.user:
-        res = db((db.user_state.user_id == auth.user.id) &
-                 (db.user_state.course_id == course))
-        res.update(last_page_url = lastPageUrl, last_page_hash = lastPageHash,
+        db((db.user_state.user_id == auth.user.id) &
+                 (db.user_state.course_id == course)).update(
+                   last_page_url = lastPageUrl,
                    last_page_chapter = lastPageChapter,
                    last_page_subchapter = lastPageSubchapter,
                    last_page_scroll_location = lastPageScrollLocation,
                    last_page_accessed_on = datetime.datetime.now())
+        db((db.user_sub_chapter_progress.user_id == auth.user.id) & (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                 (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
+                   status = completionFlag,
+                   end_date = datetime.datetime.now())
 
+def getCompletionStatus():
+    lastPageUrl = request.vars.lastPageUrl
+    lastPageChapter = lastPageUrl.split("/")[-2]
+    lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+    result = db((db.user_sub_chapter_progress.user_id == auth.user.id) & (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                 (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
+    rowarray_list = []
+    if result:
+        for row in result:
+            res = {'completionStatus': row.status}
+            rowarray_list.append(res)
+        return json.dumps(rowarray_list)
 
+def getAllCompletionStatus():
+    result = db((db.user_sub_chapter_progress.user_id == auth.user.id)).select(db.user_sub_chapter_progress.chapter_id, db.user_sub_chapter_progress.sub_chapter_id, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.end_date)
+    rowarray_list = []
+    if result:
+        for row in result:
+            if row.end_date == None:
+                endDate = 0
+            else:
+                endDate = row.end_date.strftime('%d %b, %Y')
+            res = {'chapterName': row.chapter_id,
+                   'subChapterName': row.sub_chapter_id,
+                   'completionStatus': row.status,
+                   'endDate': endDate}
+            rowarray_list.append(res)
+        return json.dumps(rowarray_list)
+ 
 def getlastpage():
     course = request.vars.course
     if auth.user:
         result = db((db.user_state.user_id == auth.user.id) &
-                    (db.user_state.course_id == course)
+                    (db.user_state.course_id == course) & 
+					(db.user_state.last_page_chapter == db.chapters.chapter_label) & 
+					(db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
                     ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
-                             db.user_state.last_page_chapter,
+                             db.chapters.chapter_name,
                              db.user_state.last_page_scroll_location,
-                             db.user_state.last_page_subchapter)
+                             db.sub_chapters.sub_chapter_name)
         rowarray_list = []
         if result:
             for row in result:
-                res = {'lastPageUrl': row.last_page_url,
-                       'lastPageHash': row.last_page_hash,
-                       'lastPageChapter': row.last_page_chapter,
-                       'lastPageSubchapter': row.last_page_subchapter,
-                       'lastPageScrollLocation': row.last_page_scroll_location}
+                print row
+                res = {'lastPageUrl': row.user_state.last_page_url,
+                       'lastPageHash': row.user_state.last_page_hash,
+                       'lastPageChapter': row.chapters.chapter_name,
+                       'lastPageSubchapter': row.sub_chapters.sub_chapter_name,
+                       'lastPageScrollLocation': row.user_state.last_page_scroll_location}
                 rowarray_list.append(res)
             return json.dumps(rowarray_list)
         else:

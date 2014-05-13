@@ -6,13 +6,10 @@ var highlightResponseText;
 var extendHighlightClass;
 var urlList;
 var extendType;
-
   
 function enableUserHighlights(){
-
 	//check if it's not the contents or index page. 
-	if ((window.location.href).toLowerCase().indexOf("index.html") == -1){
-		
+	if ((window.location.href).match( /(index.html|genindex.html|navhelp.html|toc.html)/ ) == null){
 		//checksum generator for each div.section and paragraph. Add that checksum as a class _[checksumValue]
 		$('body p, body .section').each(function(index) {
 			var s = $(this).text();
@@ -24,9 +21,30 @@ function enableUserHighlights(){
 			$(this).addClass("_"+chk);
 		});
 		
+		var currentPathname = window.location.pathname;
+		if (currentPathname.indexOf("?") !== -1)
+			currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
+		var data = {lastPageUrl:currentPathname};
+		jQuery.ajax({url: eBookConfig.ajaxURL+'getCompletionStatus',data: data, async: false}).done(function(data) {
+			if (data !="None"){
+				var completionData = $.parseJSON(data);
+				var completionClass, completionMsg;
+				if (completionData[0].completionStatus == 1){
+					completionClass= "buttonConfirmCompletion"; 
+					completionMsg= "<i class='glyphicon glyphicon-ok'></i> Completed. Well Done!";
+				}
+				else{
+					completionClass= "buttonAskCompletion"; 
+					completionMsg= "Mark as completed";
+				}
+				$("#main-content").append('<div style="text-align:center"><button class="btn btn-lg '+completionClass+'" id="completionButton">'+completionMsg+'</button></div>');
+			}
+		});
+		
+		
 		var lastPositionVal = $.getUrlVar('lastPosition');
 		if ( typeof lastPositionVal !== "undefined"){
-			$("body").append('<img src="../_static/last-point.png" style="position:absolute; padding-top:40px; left: 10px; top: '+parseInt(lastPositionVal)+'px;"/>');
+			$("body").append('<img src="../_static/last-point.png" style="position:absolute; padding-top:55px; left: 10px; top: '+parseInt(lastPositionVal)+'px;"/>');
 			$("html, body").animate({scrollTop: parseInt(lastPositionVal)}, 1000);
 		}
 		
@@ -36,15 +54,77 @@ function enableUserHighlights(){
 		//Add a container for highlights in the sidebar and populate
 		$(".sphinxsidebarwrapper").append('<div id="highlightbox"><h3>My Highlights</h3><ul></ul></div>');
 		updateHighlightBox();
+
+		 var navLinkBgRightHiddenPosition = -$("#navLinkBgRight").outerWidth()-5; 
+		  var navLinkBgRightHalfOpen;
+		  var navLinkBgRightFullOpen = 0;
+		  
+		  if ($("#completionButton").hasClass("buttonAskCompletion")){
+			navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70; 
+		  }
+		  else if ($("#completionButton").hasClass("buttonConfirmCompletion")){
+			navLinkBgRightHalfOpen = 0;
+		  }
+		  var relationsNextIconInitialPosition = $("#relations-next").css("right");
+		  var relationsNextIconNewPosition = -(navLinkBgRightHiddenPosition + 35);
+		  
+		  $("#navLinkBgRight").css("right", navLinkBgRightHiddenPosition).show();
+		  var navBgShown = false;
+		  $( window ).scroll(function() {
+			  if($(window).scrollTop() + $(window).height() == $(document).height()) {
+			   $("#navLinkBgRight").animate(
+					{"right":navLinkBgRightHalfOpen},200
+			   );
+				$("#navLinkBgLeft").animate(
+							{"left":"0px"},200
+					   );
+				if ($("#completionButton").hasClass("buttonConfirmCompletion")){
+					$("#relations-next").animate({"right":relationsNextIconNewPosition},200);
+				}
+			   navBgShown = true;
+		   }
+		   else if (navBgShown){
+				   $("#navLinkBgRight").animate(
+					{"right":navLinkBgRightHiddenPosition},200
+			   );
+				   $("#navLinkBgLeft").animate(
+					{"left":"-65px"},200
+			   );
+			   $("#relations-next").animate({"right":relationsNextIconInitialPosition});
+			   navBgShown = false;
+		   }
+		  });
 		
-        var sec = $("body .section");
-        sec.splice(0,1);
-        sec.each(function(index) {
-            $(this).waypoint(function(direction) {
-                processPageState($(this));
-            });
-        });
-	
+		  var completionFlag = 0 ;
+		  $("#completionButton").on("click", function(){
+			if ($(this).hasClass("buttonAskCompletion")){
+				$(this).removeClass("buttonAskCompletion")
+						.addClass("buttonConfirmCompletion")
+						.html("<i class='glyphicon glyphicon-ok'></i> Completed. Well Done!");
+				$("#navLinkBgRight").animate({"right":navLinkBgRightFullOpen});
+				$("#relations-next").animate({"right":relationsNextIconNewPosition});
+				navLinkBgRightHalfOpen = 0;
+				completionFlag = 1;
+			}
+			else if ($(this).hasClass("buttonConfirmCompletion")){
+				$(this).removeClass("buttonConfirmCompletion")
+						.addClass("buttonAskCompletion")
+						.html("Mark as completed");
+				navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70; 
+				$("#navLinkBgRight").animate({"right":navLinkBgRightHalfOpen});
+				$("#relations-next").animate({"right":relationsNextIconInitialPosition});
+				completionFlag = 0;
+			}
+				processPageState(completionFlag);
+		  });
+
+		  $(window).on('beforeunload', function(e){
+			if (completionFlag == 0){
+				processPageState(completionFlag);
+			}
+		});
+
+		
 		$("body").append('<ul class="dropdown-menu" id="highlight-option-box" style="display:none;"><li><a href="javascript:void(0);" id="option-highlight-text" style="display:block;">Highlight</a></li></ul>');
 		
 		$('body .section').on("mouseup", function(evt) {
@@ -149,13 +229,43 @@ function enableUserHighlights(){
 			}
 		});
 	}
-	else if ((window.location.href).toLowerCase().indexOf("/index.html") != -1){
-		var data = {course:eBookConfig.course};
+	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
+		jQuery.get(eBookConfig.ajaxURL+'getAllCompletionStatus', function(data) {
+			if (data !="None"){
+				subChapterList = $.parseJSON(data);
+
+				var allSubChapterURLs = $("#main-content div li a");
+				$.each( subChapterList, function(index, item){
+					for (var s = 0; s < allSubChapterURLs.length; s++){
+						if (allSubChapterURLs[s].href.indexOf(item.chapterName+"/"+item.subChapterName) != -1){
+							if (item.completionStatus == 1)
+								$(allSubChapterURLs[s].parentElement).addClass("completed").append('<span class="infoTextCompleted">- Completed this topic on '+item.endDate+"</span>").children().first().hover(
+									 function() {
+										$( this ).next(".infoTextCompleted").show();
+									  }, function() {
+										$( this ).next(".infoTextCompleted").hide()
+									  }
+								);
+							else if(item.completionStatus == 0)
+								$(allSubChapterURLs[s].parentElement).addClass("active").append('<span class="infoTextActive">Last read this topic on '+item.endDate+"</span>").children().first().hover(
+									 function() {
+										$( this ).next(".infoTextActive").show();
+									  }, function() {
+										$( this ).next(".infoTextActive").hide()
+									  }
+								);
+						}
+					}
+				});
+
+			}
+		});
+		data = {course:eBookConfig.course};		
 		jQuery.get(eBookConfig.ajaxURL+'getlastpage', data, function(data) {
 			if (data !="None"){
 				lastPageData = $.parseJSON(data);
 				if (lastPageData[0].lastPageChapter != null){
-                    $("body .section .section:first").before('<div id="jump-to-chapter" class="alert" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+lastPageData[0].lastPageHash+'" style="float:right; margin-right:20px;">Continue Reading</a></div>');
+                    $("#continue-reading").show().html('<div id="jump-to-chapter" class="alert alert-info" ><strong>You were Last Reading:</strong> '+lastPageData[0].lastPageChapter+ ((lastPageData[0].lastPageSubchapter) ? ' &gt; '+lastPageData[0].lastPageSubchapter : "")+' <a href="'+lastPageData[0].lastPageUrl+'?lastPosition='+lastPageData[0].lastPageScrollLocation+'">Continue Reading</a></div>');
 				}
 			}
 		});
@@ -288,63 +398,17 @@ function restoreSelection() {
 	});
 }
 
-function processPageState(subChapterSectionElement){
-	/*Get the chapter name and subchaptername from the Waypoints jQuery plugin. Store in the database for last visited page*/
-	
-	var chapterName, subChapterName;
-	chapterName = $("h1:first").text();
-	chapterName = chapterName.substring(0,chapterName.length -1); // strip out permalink character
-	
-    subChapterName = subChapterSectionElement.find("h2").text();
-    subChapterName = subChapterName.substring(0, subChapterName.length -1); // strip out permalink character
-
-	subChapterId = subChapterSectionElement.attr("id");
-	
-    var currentLink = subChapterId
-
+function processPageState(completionFlag){
 	/*Log last page visited*/
 	var currentPathname = window.location.pathname;
 	if (currentPathname.indexOf("?") !== -1)
 		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
-	var data = {lastPageUrl:currentPathname, lastPageHash: currentLink, lastPageChapter:chapterName, lastPageSubchapter:subChapterName, lastPageScrollLocation: $(window).scrollTop(), course:eBookConfig.course};
+	var data = {lastPageUrl:currentPathname, lastPageScrollLocation: $(window).scrollTop(), completionFlag:completionFlag, course:eBookConfig.course};
 	$(document).ajaxError( function(e,jqhxr,settings,exception) {
         console.log("Request Failed for "+settings.url)
     } );
-	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data});
+	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data,  async: false});
 }
-
-/*function processPageUnloadState(){
-	var chapterName, subChapterName;
-	var currentLink = "";
-	
-	chapterName = $("h1:first").text();
-	chapterName = chapterName.substring(0,chapterName.length -1);
-	
-	console.log("The current scrolled position is "+$(window).scrollTop());
-	$(urlList).each(function(index){
-		var currentID = $(urlList[index]).attr("href");
-		if ($(currentID).position()){
-			if ($(window).scrollTop() >= $(currentID).position().top && (index == (urlList.length - 1) || $(window).scrollTop() < $($(urlList[index+1]).attr("href")).position().top) ){
-				currentLink = $(this).attr("href");
-			}
-		}
-
-		if(currentID == currentLink){ //matches current opened subchapter
-			subChapterName = $(this).html();
-		}
-
-	});
-
-	/*Log last page visited*/
-/*	var currentPathname = window.location.pathname;
-	if (currentPathname.indexOf("?") !== -1)
-		currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
-	var data = {lastPageUrl:currentPathname, lastPageHash: currentLink, lastPageChapter:chapterName, lastPageSubchapter:subChapterName, lastPageScrollLocation: $(window).scrollTop(), course:eBookConfig.course};
-	$(document).ajaxError( function(e,jqhxr,settings,exception) {
-        alert("Request Failed for "+settings.url)
-    } );
-	jQuery.ajax({url: eBookConfig.ajaxURL+'updatelastpage',data: data, async: false});
-}*/
 
 $.extend({
   getUrlVars: function(){
