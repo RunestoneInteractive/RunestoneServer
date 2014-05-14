@@ -68,7 +68,7 @@ db.define_table('courses',
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
     db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))        
+    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
 
 
@@ -97,7 +97,7 @@ def verifyInstructorStatus(course, instructor):
             ).count() > 0
 
 class IS_COURSE_ID:
-    ''' used to validate that a course name entered (e.g. devcourse) corresponds to a 
+    ''' used to validate that a course name entered (e.g. devcourse) corresponds to a
         valid course ID (i.e. db.courses.id) '''
     def __init__(self, error_message='Unknown course name. Please see your instructor.'):
         self.e = error_message
