@@ -168,7 +168,7 @@ def getnumusers():
 
     query = """select count(*) from (select distinct(sid) from useinfo) as X """
     numusers = 'more than 850,000'
-    
+
     # try:
     #     numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
     # except:
@@ -245,6 +245,7 @@ def updatelastpage():
     lastPageChapter = lastPageUrl.split("/")[-2]
     lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
     if auth.user:
+        print("here: ", auth.user.id, " : ", db.user_state.user_id , course)
         db((db.user_state.user_id == auth.user.id) &
                  (db.user_state.course_id == course)).update(
                    last_page_url = lastPageUrl,
@@ -252,8 +253,10 @@ def updatelastpage():
                    last_page_subchapter = lastPageSubchapter,
                    last_page_scroll_location = lastPageScrollLocation,
                    last_page_accessed_on = datetime.datetime.now())
-        db((db.user_sub_chapter_progress.user_id == auth.user.id) & (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
-                 (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
+
+        db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+           (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+           (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
                    status = completionFlag,
                    end_date = datetime.datetime.now())
 
@@ -261,8 +264,9 @@ def getCompletionStatus():
     lastPageUrl = request.vars.lastPageUrl
     lastPageChapter = lastPageUrl.split("/")[-2]
     lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
-    result = db((db.user_sub_chapter_progress.user_id == auth.user.id) & (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
-                 (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
+    result = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
     rowarray_list = []
     if result:
         for row in result:
@@ -285,14 +289,14 @@ def getAllCompletionStatus():
                    'endDate': endDate}
             rowarray_list.append(res)
         return json.dumps(rowarray_list)
- 
+
 def getlastpage():
     course = request.vars.course
     if auth.user:
         result = db((db.user_state.user_id == auth.user.id) &
-                    (db.user_state.course_id == course) & 
-					(db.user_state.last_page_chapter == db.chapters.chapter_label) & 
-					(db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
+                    (db.user_state.course_id == course) &
+                    (db.user_state.last_page_chapter == db.chapters.chapter_label) &
+                    (db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
                     ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
                              db.chapters.chapter_name,
                              db.user_state.last_page_scroll_location,
@@ -309,6 +313,7 @@ def getlastpage():
                 rowarray_list.append(res)
             return json.dumps(rowarray_list)
         else:
+            print "inserting into user_state"
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 

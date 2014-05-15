@@ -6,9 +6,9 @@ var highlightResponseText;
 var extendHighlightClass;
 var urlList;
 var extendType;
-  
+
 function enableUserHighlights(){
-	//check if it's not the contents or index page. 
+	//check if it's not the contents or index page.
 	if ((window.location.href).match( /(index.html|genindex.html|navhelp.html|toc.html)/ ) == null){
 		//checksum generator for each div.section and paragraph. Add that checksum as a class _[checksumValue]
 		$('body p, body .section').each(function(index) {
@@ -20,7 +20,7 @@ function enableUserHighlights(){
 			}
 			$(this).addClass("_"+chk);
 		});
-		
+
 		var currentPathname = window.location.pathname;
 		if (currentPathname.indexOf("?") !== -1)
 			currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
@@ -30,24 +30,24 @@ function enableUserHighlights(){
 				var completionData = $.parseJSON(data);
 				var completionClass, completionMsg;
 				if (completionData[0].completionStatus == 1){
-					completionClass= "buttonConfirmCompletion"; 
+					completionClass= "buttonConfirmCompletion";
 					completionMsg= "<i class='glyphicon glyphicon-ok'></i> Completed. Well Done!";
 				}
 				else{
-					completionClass= "buttonAskCompletion"; 
+					completionClass= "buttonAskCompletion";
 					completionMsg= "Mark as completed";
 				}
 				$("#main-content").append('<div style="text-align:center"><button class="btn btn-lg '+completionClass+'" id="completionButton">'+completionMsg+'</button></div>');
 			}
 		});
-		
-		
+
+
 		var lastPositionVal = $.getUrlVar('lastPosition');
 		if ( typeof lastPositionVal !== "undefined"){
 			$("body").append('<img src="../_static/last-point.png" style="position:absolute; padding-top:55px; left: 10px; top: '+parseInt(lastPositionVal)+'px;"/>');
 			$("html, body").animate({scrollTop: parseInt(lastPositionVal)}, 1000);
 		}
-		
+
 		//Add the highlights on the page
 		restoreSelection();
 
@@ -55,19 +55,19 @@ function enableUserHighlights(){
 		$(".sphinxsidebarwrapper").append('<div id="highlightbox"><h3>My Highlights</h3><ul></ul></div>');
 		updateHighlightBox();
 
-		 var navLinkBgRightHiddenPosition = -$("#navLinkBgRight").outerWidth()-5; 
+		 var navLinkBgRightHiddenPosition = -$("#navLinkBgRight").outerWidth()-5;
 		  var navLinkBgRightHalfOpen;
 		  var navLinkBgRightFullOpen = 0;
-		  
+
 		  if ($("#completionButton").hasClass("buttonAskCompletion")){
-			navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70; 
+			navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70;
 		  }
 		  else if ($("#completionButton").hasClass("buttonConfirmCompletion")){
 			navLinkBgRightHalfOpen = 0;
 		  }
 		  var relationsNextIconInitialPosition = $("#relations-next").css("right");
 		  var relationsNextIconNewPosition = -(navLinkBgRightHiddenPosition + 35);
-		  
+
 		  $("#navLinkBgRight").css("right", navLinkBgRightHiddenPosition).show();
 		  var navBgShown = false;
 		  $( window ).scroll(function() {
@@ -94,7 +94,7 @@ function enableUserHighlights(){
 			   navBgShown = false;
 		   }
 		  });
-		
+
 		  var completionFlag = 0 ;
 		  $("#completionButton").on("click", function(){
 			if ($(this).hasClass("buttonAskCompletion")){
@@ -110,7 +110,7 @@ function enableUserHighlights(){
 				$(this).removeClass("buttonConfirmCompletion")
 						.addClass("buttonAskCompletion")
 						.html("Mark as completed");
-				navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70; 
+				navLinkBgRightHalfOpen = navLinkBgRightHiddenPosition + 70;
 				$("#navLinkBgRight").animate({"right":navLinkBgRightHalfOpen});
 				$("#relations-next").animate({"right":relationsNextIconInitialPosition});
 				completionFlag = 0;
@@ -124,9 +124,9 @@ function enableUserHighlights(){
 			}
 		});
 
-		
+
 		$("body").append('<ul class="dropdown-menu" id="highlight-option-box" style="display:none;"><li><a href="javascript:void(0);" id="option-highlight-text" style="display:block;">Highlight</a></li></ul>');
-		
+
 		$('body .section').on("mouseup", function(evt) {
 			sel = rangy.getSelection();
 			if (typeof sel !== "undefined" && sel.anchorNode != null && sel.focusNode != null){
@@ -170,7 +170,7 @@ function enableUserHighlights(){
 					highlightAction = "save";
 			}
 		});
-		
+
 		$("#option-highlight-text").on('click', function(){
 			$("#highlight-option-box").hide();
 			switch(highlightAction){
@@ -207,9 +207,9 @@ function enableUserHighlights(){
 					var existingHighlight = $(".hl"+extendHighlightClass);
 					var range = sel.getRangeAt(0);
 					//expand the selection to include the original highlight based on if it is extendEnd or extendBeginning
-					if (extendType == "extendEnd") 
+					if (extendType == "extendEnd")
 						range.setStartBefore(existingHighlight[0]);
-					else if (extendType == "extendBeginning") 
+					else if (extendType == "extendBeginning")
 						range.setEndAfter(existingHighlight[existingHighlight.length -1]);
 					sel.removeAllRanges(); //remove any existing ranges in selection
 					sel.addRange(range); //add the new expanded range to selection
@@ -229,7 +229,8 @@ function enableUserHighlights(){
 			}
 		});
 	}
-	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
+    // todo:  is this if even necessary anymore??
+	if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
 		jQuery.get(eBookConfig.ajaxURL+'getAllCompletionStatus', function(data) {
 			if (data !="None"){
 				subChapterList = $.parseJSON(data);
@@ -260,7 +261,7 @@ function enableUserHighlights(){
 
 			}
 		});
-		data = {course:eBookConfig.course};		
+		data = {course:eBookConfig.course};
 		jQuery.get(eBookConfig.ajaxURL+'getlastpage', data, function(data) {
 			if (data !="None"){
 				lastPageData = $.parseJSON(data);
@@ -288,7 +289,7 @@ function toggleHighlightOptionBox(event, highlightOptionName){
 	$("#highlight-option-box").show().offset({
 		top: event.pageY + 5,
 		left: event.pageX + 5
-	});	
+	});
 }
 
 //function to process the selection made by the user to identify the range and the parent selector. Calls function saveHighlight
@@ -298,7 +299,7 @@ function saveSelection(sel) {
 		while(!(($(parentNode).is("p") || $(parentNode).is("div")) && $(parentNode).attr('class'))){
 			parentNode = $(parentNode)[0].parentElement;
 		}
-		$.each($(parentNode).attr('class').split(' '), function(index, value) { 
+		$.each($(parentNode).attr('class').split(' '), function(index, value) {
 			if (value.indexOf("_") == 0){
 				parentSelectorClass = value;
 			}
@@ -308,10 +309,10 @@ function saveSelection(sel) {
 			currentRange[0].range.end = currentRange[currentRange.length -1].range.end;
 			var tempRange = currentRange.slice(0,1);
 			currentRange = tempRange;
-		}		
+		}
 		var serializedRange = JSON.stringify(currentRange);
 		return saveHighlight(parentSelectorClass,serializedRange,"self");
-}	
+}
 
 //function called to save a new highlight
 function saveHighlight(parentSelectorClass,serializedRange,saveMethod) {
@@ -342,7 +343,7 @@ function deleteHighlight(uniqueId) {
     if (eBookConfig.logLevel > 0){
         logBookEvent({'event':'highlight','act': 'delete', 'div_id':currPage}); // Log the run event
     }
-	
+
 }
 
 //add links to the highlights in sidebar on the right. Function called on page load and every edit of highlight
@@ -362,14 +363,14 @@ function updateHighlightBox() {
 			if ($(value)[0].firstChild)
 				highlightJumpText += $(value)[0].firstChild.textContent;
 			else
-				highlightJumpText +=$(value)[0].textContent; 
+				highlightJumpText +=$(value)[0].textContent;
 			processingHighlight = true;
 		}
 		else{
 			if ($(value)[0].firstChild)
 				highlightJumpText += $(value)[0].firstChild.textContent;
 			else
-				highlightJumpText +=$(value)[0].textContent; 
+				highlightJumpText +=$(value)[0].textContent;
 		}
 	});
 	if (processingHighlight){
@@ -394,7 +395,7 @@ function restoreSelection() {
 			myHighlightApplier.toggleSelection();
 			$("."+highlightClassName).first().attr("id",highlightClassName);
 			window.getSelection().removeAllRanges();
-		}); 
+		});
 	});
 }
 
