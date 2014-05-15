@@ -3,7 +3,7 @@ import lxml.html
 import urllib2
 import os
 import sqlite3
-import sys 
+import sys
 import psycopg2
 
 
@@ -43,7 +43,7 @@ for section in tds[1:-3]:
             res = cursor.execute("INSERT INTO chapters(chapter_name,course_id,chapter_label) VALUES(%(chapter)s, %(course_id)s, %(chapterLabel)s) returning id", {"chapter": chapter, "course_id": course_id, "chapterLabel": urlArray[0]})
             db.commit()
 #            currentRowId = cursor.lastrowid #get id of last inserted row
-            currentRowId += 1
+            currentRowId = cursor.fetchone()[0]
 
         res = cursor.execute("INSERT INTO sub_chapters(sub_chapter_name,chapter_id, sub_chapter_label) VALUES(%(subchaptername)s, %(currentRowId)s, %(subChapterLabel)s)", {"subchaptername":subchaptername , "currentRowId" : str(currentRowId), "subChapterLabel": subChapterLabel })
         db.commit()
