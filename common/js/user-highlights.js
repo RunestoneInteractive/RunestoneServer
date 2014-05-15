@@ -21,6 +21,7 @@ function enableUserHighlights(){
 			$(this).addClass("_"+chk);
 		});
 
+		// Get the completion status
 		var currentPathname = window.location.pathname;
 		if (currentPathname.indexOf("?") !== -1)
 			currentPathname = currentPathname.substring(0, currentPathname.lastIndexOf("?"));
@@ -229,8 +230,10 @@ function enableUserHighlights(){
 			}
 		});
 	}
-    // todo:  is this if even necessary anymore??
-	if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
+    // If this **is** the toc then we want to add a link to last known position.
+	// As well as add either an orange in progress bullet or a checkmark on
+	// in-progress or completed sections.
+	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
 		jQuery.get(eBookConfig.ajaxURL+'getAllCompletionStatus', function(data) {
 			if (data !="None"){
 				subChapterList = $.parseJSON(data);
