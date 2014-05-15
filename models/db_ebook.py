@@ -71,7 +71,7 @@ db.define_table('chapters',
   Field('chapter_name','string'),
   Field('course_id','reference courses'),
   Field('chapter_label','string'), #Approximate number of days, aggregated based on sub chapters
-  migrate=settings.migrate
+  migrate='runestone_chapters.table'
 )
 
 # table of sub chapters
@@ -80,7 +80,7 @@ db.define_table('sub_chapters',
   Field('chapter_id','reference chapters'),
   Field('sub_chapter_length','integer'),
   Field('sub_chapter_label','string'), #Average Time it takes people to complete this subchapter, maybe calculated using a weekly batchjob
-  migrate=settings.migrate
+  migrate='runestone_sub_chapters.table'
 )
 
 db.define_table('user_sub_chapter_progress',
@@ -90,8 +90,19 @@ db.define_table('user_sub_chapter_progress',
   Field('start_date','datetime', default=request.now),
   Field('end_date','datetime'),
   Field('status','integer'), #-1  - not started. 0 - active. 1 - completed
-  migrate=settings.migrate
+  migrate='runestone_user_sub_chapter_progress.table'
 )
 
-db.executesql('DROP TRIGGER IF EXISTS create_subchapter_entries ON auth_user;')
-db.executesql('CREATE TRIGGER  create_subchapter_entries AFTER INSERT ON auth_user INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status) SELECT new.id, chapters.chapter_label, sub_chapters.sub_chapter_label, -1 FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id;')
+#
+# When a new user is registered we need to add a bunch of rows to the
+# user_sub_chapter_progress table.  One for each section/subsection
+# This is like a trigger, but will work across all databases.
+#
+def make_progress_entries(field_dict,id_of_insert):
+    db.executesql('''
+       INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
+           SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+           FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id;
+    ''' % id_of_insert)
+
+db.auth_user._after_insert.append(make_progress_entries)
