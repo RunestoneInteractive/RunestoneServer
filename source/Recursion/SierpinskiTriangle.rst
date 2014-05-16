@@ -133,4 +133,3 @@ The ``sierpinski`` function relies heavily on the ``getMid`` function.
 halfway between them. In addition, :ref:`ActiveCode 4 <lst_st>` has a function that
 draws a filled triangle using the ``begin_fill`` and ``end_fill`` turtle
 methods. This means that each degree of the Sierpinski triangle is drawn
-in a different color.

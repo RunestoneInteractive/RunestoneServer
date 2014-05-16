@@ -18,4 +18,3 @@ solve using an iterative programming style but are very elegant and easy
 to solve using recursion. We will finish up by looking at a deceptive
 problem that at first looks like it has an elegant recursive solution
 but in fact does not.
-

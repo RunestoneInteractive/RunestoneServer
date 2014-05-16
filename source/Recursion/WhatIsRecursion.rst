@@ -16,4 +16,3 @@ small enough problem that it can be solved trivially. Usually recursion
 involves a function calling itself. While it may not seem like much on
 the surface, recursion allows us to write elegant solutions to problems
 that may otherwise be very difficult to program.
-

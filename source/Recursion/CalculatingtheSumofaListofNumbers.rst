@@ -130,4 +130,3 @@ problem, we have the solution to the whole problem.
    :alt: image
 
    Figure2: Series of Recursive Returns from Adding a List of Numbers
-

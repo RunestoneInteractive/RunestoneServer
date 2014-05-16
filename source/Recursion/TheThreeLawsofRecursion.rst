@@ -79,4 +79,3 @@ problem by using the three laws of recursion.
       :feedback_d: Good, this is the most efficient, and even keeps your program from crashing if you try to compute the factorial of a negative number.
 
       Suppose you are going to write a recusive function to calculate the factorial of a number.  fact(n) returns n * n-1 * n-2 * ... Where the factorial of zero is definded to be 1.  What would be the most appropriate base case?
-

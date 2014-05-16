@@ -82,4 +82,3 @@ function. Even though we are calling the same function over and over,
 each call creates a new scope for the variables that are local to the
 function.
 
-If you keep this idea of the stack in your head, you will find it much

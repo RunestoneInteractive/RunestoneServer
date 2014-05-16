@@ -19,4 +19,3 @@ Discussion Questions
 #. Using the dynamic programming algorithm for making change, find the
    smallest number of coins that you can use to make 33 cents in change.
    In addition to the usual coins assume that you have an 8 cent coin.
-

@@ -149,4 +149,3 @@ keeps track of what disks are on what poles. Here is a hint: if you were
 going to explicitly keep track of the disks, you would probably use
 three ``Stack`` objects, one for each pole. The answer is that Python
 provides the stacks that we need implicitly through the call stack.
-

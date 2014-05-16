@@ -95,4 +95,3 @@ and then make modifications to the lists to add deeper nesting.  You might even 
 
   .. actex:: recursion_scratch_1
 
-

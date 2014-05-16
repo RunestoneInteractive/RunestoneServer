@@ -123,4 +123,3 @@ Programming Exercises
    algorithm that gives you the smallest edit distance between any two
    words.
 
-

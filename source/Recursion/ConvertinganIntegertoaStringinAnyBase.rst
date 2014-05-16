@@ -154,4 +154,3 @@ discussion of stacks back in the previous chapter.
       testEqual(isPal(removeWhite("hannah")),True)      
       testEqual(isPal(removeWhite("madam i'm adam")),True)
 
-

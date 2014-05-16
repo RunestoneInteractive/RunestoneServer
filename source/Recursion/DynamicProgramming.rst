@@ -336,4 +336,3 @@ array also contains 21, giving us the three 21 cent pieces.
 
 
 
-

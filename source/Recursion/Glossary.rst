@@ -66,4 +66,3 @@ Glossary
         assignment statement. Tuple assignment occurs in parallel rather than
         in sequence, making it useful for swapping values.
 
-
