@@ -8,7 +8,7 @@ import psycopg2
 
 
 os.chdir("../static/pythonds")
-course_id = '3';
+course_id = '3'
 file_url = "file:///"+os.getcwd()+"/index.html"
 
 teste =  urllib2.urlopen(file_url).read()
