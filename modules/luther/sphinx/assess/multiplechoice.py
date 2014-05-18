@@ -51,14 +51,14 @@ def depart_mc_node(self,node):
     okeys = node.mc_options.keys()
     okeys.sort()
     for k in okeys:
-        if 'answer_' in k:  
-            x,label = k.split('_') 
-            node.mc_options['alabel'] = label 
+        if 'answer_' in k:
+            x,label = k.split('_')
+            node.mc_options['alabel'] = label
             node.mc_options['atext'] = node.mc_options[k]
             res += node.template_option % node.mc_options
             currFeedback = "feedback_" + label
             feedbackStr = feedbackStr + "'" + escapejs(node.mc_options[currFeedback]) + "', "
-    
+
     # store the feedback array with key feedback minus last comma
     node.mc_options['feedback'] = feedbackStr[0:-2] + "]"
 
@@ -72,14 +72,14 @@ def depart_mc_node(self,node):
 #####################
 # multiple choice question with multiple feedback
 # author - Barb Ericson
-# author - Anusha 
+# author - Anusha
 class MChoiceMF(Assessment):
     required_arguments = 1
     optional_arguments = 1
     final_argument_whitespace = True
     has_content = True
     option_spec = {'answer_a':directives.unchanged,
-        'answer_b':directives.unchanged,    
+        'answer_b':directives.unchanged,
         'answer_c':directives.unchanged,
         'answer_d':directives.unchanged,
         'answer_e':directives.unchanged,
@@ -91,7 +91,7 @@ class MChoiceMF(Assessment):
         'feedback_e':directives.unchanged,
         'iscode':directives.flag
     }
-    
+
     def run(self):
         """
             process the multiplechoice directive and generate html for output.
@@ -101,27 +101,27 @@ class MChoiceMF(Assessment):
             :iscode: boolean
             :answer_a: possible answer  -- what follows _ is label
             :answer_b: possible answer
-            ...  
-            :answer_e: possible answer                      
+            ...
+            :answer_e: possible answer
             :correct: leter of correct answer
             :feedback_a: displayed if a is picked
             :feedback_b: displayed if b is picked
             :feedback_c: displayed if c is picked
             :feedback_d: displayed if d is picked
             :feedback_e: displayed if e is picked
-            
+
             Question text
             ...
             """
         TEMPLATE_START = '''
             <div id="%(divid)s" class="alert alert-warning">
             '''
-        
+
         OPTION = '''
             <input type="radio" name="group1" value="%(alabel)s" id="%(divid)s_opt_%(alabel)s" />
             <label for= "%(divid)s_opt_%(alabel)s">  %(alabel)s) %(atext)s</label><br />
             '''
-        
+
         TEMPLATE_END = '''
 
             <script>
@@ -133,11 +133,11 @@ class MChoiceMF(Assessment):
             <div id="%(divid)s_feedback">
             </div>
             </div>
-            '''   
+            '''
         super(MChoiceMF,self).run()
 
 
-        
+
 
         mcNode = MChoiceNode(self.options)
         mcNode.template_start = TEMPLATE_START
@@ -160,7 +160,7 @@ class MChoiceMA(Assessment):
     final_argument_whitespace = True
     has_content = True
     option_spec = {'answer_a':directives.unchanged,
-        'answer_b':directives.unchanged,    
+        'answer_b':directives.unchanged,
         'answer_c':directives.unchanged,
         'answer_d':directives.unchanged,
         'answer_e':directives.unchanged,
@@ -172,7 +172,7 @@ class MChoiceMA(Assessment):
         'feedback_e':directives.unchanged,
             'iscode':directives.flag
     }
-    
+
     def run(self):
         """
             process the multiplechoice directive and generate html for output.
@@ -182,27 +182,27 @@ class MChoiceMA(Assessment):
             :iscode: boolean
             :answer_a: possible answer  -- what follows _ is label
             :answer_b: possible answer
-            ...  
-            :answer_e: possible answer                      
+            ...
+            :answer_e: possible answer
             :correct: comma seperated list of correct values a, b, c
             :feedback_a: displayed if a is picked
             :feedback_b: displayed if b is picked
             :feedback_c: displayed if c is picked
             :feedback_d: displayed if d is picked
             :feedback_e: displayed if e is picked
-            
+
             Question text
             ...
             """
         TEMPLATE_START = '''
             <div id="%(divid)s" class="alert alert-warning">
             '''
-        
+
         OPTION = '''
             <input type="checkbox" name="group1" value="%(alabel)s" id="%(divid)s_opt_%(alabel)s" />
             <label for= "%(divid)s_opt_%(alabel)s">  %(alabel)s) %(atext)s</label><br />
             '''
-        
+
         TEMPLATE_END = '''
             <script>
             $(document).ready(function(){checkMultipleSelect('%(divid)s');});
@@ -213,8 +213,8 @@ class MChoiceMA(Assessment):
             <div id="%(divid)s_feedback">
             </div>
             </div>
-            '''   
-        
+            '''
+
 
         super(MChoiceMA,self).run()
 
@@ -241,7 +241,7 @@ class MChoiceRandomMF(Assessment):
     final_argument_whitespace = True
     has_content = True
     option_spec = {'answer_a':directives.unchanged,
-        'answer_b':directives.unchanged,    
+        'answer_b':directives.unchanged,
         'answer_c':directives.unchanged,
         'answer_d':directives.unchanged,
         'answer_e':directives.unchanged,
@@ -253,7 +253,7 @@ class MChoiceRandomMF(Assessment):
         'feedback_e':directives.unchanged,
             'iscode':directives.flag
     }
-    
+
     def run(self):
         """
             process the multiplechoice directive and generate html for output.
@@ -263,15 +263,15 @@ class MChoiceRandomMF(Assessment):
             :iscode: boolean
             :answer_a: possible answer  -- what follows _ is label
             :answer_b: possible answer
-            ...  
-            :answer_e: possible answer                      
+            ...
+            :answer_e: possible answer
             :correct: leter of correct answer
             :feedback_a: displayed if a is picked
             :feedback_b: displayed if b is picked
             :feedback_c: displayed if c is picked
             :feedback_d: displayed if d is picked
             :feedback_e: displayed if e is picked
-            
+
             Question text
             ...
             """
@@ -280,25 +280,25 @@ class MChoiceRandomMF(Assessment):
             <p>%(qnumber)s: %(bodytext)s</p>
             <form name="%(divid)s_form" method="get" action="" onsubmit="return true;">
             '''
-        
+
         OPTION = '''
             <div id="%(divid)s_op%(opi)s"></div>
             '''
-        
-        TEMPLATE_END = '''      
+
+        TEMPLATE_END = '''
             <div id="%(divid)s_bt"></div>
-            
+
             </form>
             <div id="%(divid)s_feedback">
             </div>
-            
+
             <script>
             $(document).ready(function(){createHTML_MCMFRandom("%(divid)s","%(a)s","%(f)s","%(corr)s");});
             </script>
             </div>
-            '''   
-        
-        
+            '''
+
+
         super(MChoiceRandomMF,self).run()
 
         res = ""
@@ -308,28 +308,28 @@ class MChoiceRandomMF(Assessment):
         # Add all of the possible answers
         okeys = self.options.keys()
         okeys.sort()
-        
-        
+
+
         answ=""
         feed=""
         ansArr=[]
         feedArray=[]
         for k in okeys:
-            if 'answer_' in k:  
+            if 'answer_' in k:
                 ansArr.append(k)
         for f in ansArr:
             t,flabel=f.split("_")
             feedArray.append(flabel)
-        
+
         i=0
         for k in okeys:
-            if 'answer_' in k: 
+            if 'answer_' in k:
                 answ=answ+self.options[ansArr[i]]+"*separator*"
                 feed=feed+self.options["feedback_"+feedArray[i]]+"*separator*"
                 self.options['opi']=i+1
                 res += OPTION % self.options
             i=i+1
-        
+
         # Store the Answer and Feedback arrays
         self.options['a']=answ
         self.options['f']=feed
@@ -347,6 +347,6 @@ class MChoiceRandomMF(Assessment):
         elif(op=='e'):
             index=4
         self.options['corr']=self.options[ansArr[index]]
-        
+
         res += TEMPLATE_END % self.options
         return [nodes.raw('',res , format='html')]

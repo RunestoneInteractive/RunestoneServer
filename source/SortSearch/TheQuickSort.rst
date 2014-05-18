@@ -11,7 +11,7 @@ The Quick Sort
 ~~~~~~~~~~~~~~
 
 The **quick sort** uses divide and conquer to gain the same advantages
-as the merge sort, while not using additional storage. As a trade-off,
+as the merge sort, while not using additional storage. As a trade-ÁÁ off,
 however, it is possible that the list may not be divided in half. When
 this happens, we will see that performance is diminished.
 
@@ -135,7 +135,7 @@ implements the process described earlier.
 
 
        return rightmark
-       
+
     alist = [54,26,93,17,77,31,44,55,20]
     quickSort(alist)
     print(alist)
@@ -149,7 +149,7 @@ implements the process described earlier.
    :viewer: BarViewer
 
 
-For more detail, CodeLens 7 lets you step thru the algorithm. 
+For more detail, CodeLens 7 lets you step thru the algorithm.
 
 .. codelens:: quicktrace
     :caption: Tracing the Quick Sort
@@ -196,7 +196,7 @@ For more detail, CodeLens 7 lets you step thru the algorithm.
 
 
        return rightmark
-       
+
     alist = [54,26,93,17,77,31,44,55,20]
     quickSort(alist)
     print(alist)
@@ -250,21 +250,24 @@ pivot value selection as an exercise.
        :answer_b: 9
        :answer_c: 16
        :answer_d: 19
-       :feedback_a: The three numbers used in selecting the pivot are 1, 9, 19.  1 is not the median, and would be a very bad choice for the pivot since it is the smallest number in the list. 
+       :feedback_a: The three numbers used in selecting the pivot are 1, 9, 19.  1 is not the median, and would be a very bad choice for the pivot since it is the smallest number in the list.
        :feedback_b:  Good job.
        :feedback_c: although 16 would be the median of 1, 16, 19 the middle is at len(list) // 2.
        :feedback_d: the three numbers used in selecting the pivot are 1, 9, 19.  9 is the median.  19 would be a bad choice since it is almost the largest.
 
        Given the following list of numbers [1, 20, 11, 5, 2, 9, 16, 14, 13, 19] what would be the first pivot value using the median of 3 method?
 
-   .. mchoicema:: question_sort_9
-      :correct: c
-      :answer_a: Shell Sort
-      :answer_b: Quick Sort
-      :answer_c: Merge Sort
-      :answer_d: Insertion Sort
-      :feedback_a: Shell sort is about n^1.5
-      :feedback_b: Quick sort can be O(n log n), but if the pivot points are not well chosen and the list is just so, it can be O(n^2)
-      :feedback_c: Merge Sort is the only guaranteed O(n log n) even in the worst case.  The cost is that merge sort uses more memory.
-      :feedback_d: Insertion sort in O(n^2)
 
+
+   .. mchoicema:: question_sort_9
+       :answer_a: Shell Sort
+       :answer_b: Quick Sort
+       :answer_c: Merge Sort
+       :answer_d: Insertion Sort
+       :correct: c
+       :feedback_a: Shell sort is about ``n^1.5``
+       :feedback_b: Quick sort can be O(n log n), but if the pivot points are not well chosen and the list is just so, it can be O(n^2).
+       :feedback_c: Merge Sort is the only guaranteed O(n log n) even in the worst case.  The cost is that merge sort uses more memory.
+       :feedback_d: Insertion sort is ``O(n^2)``
+
+       Which of the following sort algorithms are guaranteed to be O(n log n) even in the worst case?

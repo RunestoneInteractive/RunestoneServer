@@ -233,7 +233,8 @@ function enableUserHighlights(){
     // If this **is** the toc then we want to add a link to last known position.
 	// As well as add either an orange in progress bullet or a checkmark on
 	// in-progress or completed sections.
-	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1){
+	else if ((window.location.href).toLowerCase().indexOf("toc.html") != -1 ||
+             (window.location.href).toLowerCase().indexOf("index.html") != -1) {
 		jQuery.get(eBookConfig.ajaxURL+'getAllCompletionStatus', function(data) {
 			if (data !="None"){
 				subChapterList = $.parseJSON(data);

@@ -20,16 +20,15 @@ db = sqlite3.connect('storage.sqlite')
 uname = os.environ['USER']
 db = psycopg2.connect(database="runestone",user=uname)
 cursor=db.cursor()
-
 cursor.execute("DELETE from chapters where course_id=%s" % course_id)
-cursor.execute("SELECT setval('chapters_id_seq', 1);")
+#cursor.execute("SELECT setval('chapters_id_seq', 1);")
 #cursor.execute("DELETE from sqlite_sequence where name='chapters'")
-#cursor.execute("DELETE from sub_chapters where course_i" % course_id)
-cursor.execute("SELECT setval('sub_chapters_id_seq', 1);")
+#cursor.execute("DELETE from sub_chapters where course_id" % course_id)
+#cursor.execute("SELECT setval('sub_chapters_id_seq', 1);")
 #cursor.execute("DELETE from sqlite_sequence where name='sub_chapters'")
 db.commit()
 
-for section in tds[1:-3]:
+for section in tds[:-2]:
 
     checkFlag = 0
     currentRowId = 1
@@ -41,11 +40,12 @@ for section in tds[1:-3]:
         if checkFlag == 0:
             checkFlag = 1
             chapter = section.xpath('h1')[0].text
+            print "Chapter = ", chapter, urlArray[0]
             res = cursor.execute("INSERT INTO chapters(chapter_name,course_id,chapter_label) VALUES(%(chapter)s, %(course_id)s, %(chapterLabel)s) returning id", {"chapter": chapter, "course_id": course_id, "chapterLabel": urlArray[0]})
             db.commit()
 #            currentRowId = cursor.lastrowid #get id of last inserted row
             currentRowId = cursor.fetchone()[0]
-
+        print subchaptername, subChapterLabel
         res = cursor.execute("INSERT INTO sub_chapters(sub_chapter_name,chapter_id, sub_chapter_label) VALUES(%(subchaptername)s, %(currentRowId)s, %(subChapterLabel)s)", {"subchaptername":subchaptername , "currentRowId" : str(currentRowId), "subChapterLabel": subChapterLabel })
         db.commit()
     checkFlag = 0

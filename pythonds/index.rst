@@ -21,7 +21,7 @@ Introduction
 ::::::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 3
 
     Introduction/intro-Introduction.rst
     Introduction/Objectives.rst
@@ -46,7 +46,7 @@ Analysis
 ::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
     AlgorithmAnalysis/Objectives.rst
     AlgorithmAnalysis/WhatIsAlgorithmAnalysis.rst
@@ -64,58 +64,71 @@ Basic Data Structures
 :::::::::::::::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-     BasicDS/intro-BasicDataStructures.rst
-     BasicDS/Objectives.rst
-     BasicDS/WhatAreLinearStructures.rst
-     BasicDS/Stacks.rst
-     BasicDS/WhatisaStack.rst
-     BasicDS/TheStackAbstractDataType.rst
-     BasicDS/ImplementingaStackinPython.rst
-     BasicDS/SimpleBalancedParentheses.rst
-     BasicDS/BalancedSymbols(AGeneralCase).rst
-     BasicDS/ConvertingDecimalNumberstoBinaryNumbers.rst
-     BasicDS/InfixPrefixandPostfixExpressions.rst
-     BasicDS/Queues.rst
-     BasicDS/WhatIsaQueue.rst
-     BasicDS/TheQueueAbstractDataType.rst
-     BasicDS/ImplementingaQueueinPython.rst
-     BasicDS/SimulationHotPotato.rst
-     BasicDS/SimulationPrintingTasks.rst
-     BasicDS/Deques.rst
-     BasicDS/WhatIsaDeque.rst
-     BasicDS/TheDequeAbstractDataType.rst
-     BasicDS/ImplementingaDequeinPython.rst
-     BasicDS/PalindromeChecker.rst
-     BasicDS/Lists.rst
-     BasicDS/TheUnorderedListAbstractDataType.rst
-     BasicDS/ImplementinganUnorderedListLinkedLists.rst
-     BasicDS/TheOrderedListAbstractDataType.rst
-     BasicDS/ImplementinganOrderedList.rst
-     BasicDS/Summary.rst
-     BasicDS/KeyTerms.rst
-     BasicDS/DiscussionQuestions.rst
-     BasicDS/ProgrammingExercises.rst
+    BasicDS/intro-BasicDataStructures.rst
+    BasicDS/Objectives.rst
+    BasicDS/WhatAreLinearStructures.rst
+    BasicDS/Stacks.rst
+    BasicDS/WhatisaStack.rst
+    BasicDS/TheStackAbstractDataType.rst
+    BasicDS/ImplementingaStackinPython.rst
+    BasicDS/SimpleBalancedParentheses.rst
+    BasicDS/BalancedSymbols(AGeneralCase).rst
+    BasicDS/ConvertingDecimalNumberstoBinaryNumbers.rst
+    BasicDS/InfixPrefixandPostfixExpressions.rst
+    BasicDS/Queues.rst
+    BasicDS/WhatIsaQueue.rst
+    BasicDS/TheQueueAbstractDataType.rst
+    BasicDS/ImplementingaQueueinPython.rst
+    BasicDS/SimulationHotPotato.rst
+    BasicDS/SimulationPrintingTasks.rst
+    BasicDS/Deques.rst
+    BasicDS/WhatIsaDeque.rst
+    BasicDS/TheDequeAbstractDataType.rst
+    BasicDS/ImplementingaDequeinPython.rst
+    BasicDS/PalindromeChecker.rst
+    BasicDS/Lists.rst
+    BasicDS/TheUnorderedListAbstractDataType.rst
+    BasicDS/ImplementinganUnorderedListLinkedLists.rst
+    BasicDS/TheOrderedListAbstractDataType.rst
+    BasicDS/ImplementinganOrderedList.rst
+    BasicDS/Summary.rst
+    BasicDS/KeyTerms.rst
+    BasicDS/DiscussionQuestions.rst
+    BasicDS/ProgrammingExercises.rst
 
 
 Recursion
 :::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   Recursion/recursionsimple.rst
-   Recursion/graphical.rst
-   Recursion/recursioncomplex.rst
-   Recursion/recursionexercises.rst
+    Recursion/Objectives.rst
+    Recursion/WhatIsRecursion.rst
+    Recursion/CalculatingtheSumofaListofNumbers.rst
+    Recursion/TheThreeLawsofRecursion.rst
+    Recursion/ConvertinganIntegertoaStringinAnyBase.rst
+    Recursion/StackFramesImplementingRecursion.rst
+    Recursion/intro-VisualizingRecursion.rst
+    Recursion/SierpinskiTriangle.rst
+    Recursion/ComplexRecursiveProblems.rst
+    Recursion/TowerofHanoi.rst
+    Recursion/ExploringaMaze.rst
+    Recursion/DynamicProgramming.rst
+    Recursion/Summary.rst
+    Recursion/KeyTerms.rst
+    Recursion/DiscussionQuestions.rst
+    Recursion/Glossary.rst
+    Recursion/ProgrammingExercises.rst
 
 
 Sorting and Searching
 :::::::::::::::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
     SortSearch/intro-SearchingandSorting.rst
     SortSearch/intro-SortingandSearching.rst
@@ -142,7 +155,7 @@ Trees and Tree Agorithms
 ::::::::::::::::::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
     Trees/intro-Trees.rst
     Trees/Objectives.rst
@@ -176,7 +189,7 @@ Graphs and Graph Algorithms
 :::::::::::::::::::::::::::
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
     Graphs/intro-Graphs.rst
     Graphs/Objectives.rst
