@@ -1,0 +1,13 @@
+Jinja2==2.7.2
+MarkupSafe==0.21
+Paver==1.2.2
+Pygments==1.6
+Sphinx==1.2.2
+cogapp==2.3
+diff-match-patch==20110725.1
+docutils==0.11
+lxml==3.3.5
+pg8000==1.9.8
+psycopg2==2.5.2
+sphinxcontrib-paverutils==1.6
+wsgiref==0.1.2
