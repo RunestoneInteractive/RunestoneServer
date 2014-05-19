@@ -245,7 +245,6 @@ def updatelastpage():
     lastPageChapter = lastPageUrl.split("/")[-2]
     lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
     if auth.user:
-        print("here: ", auth.user.id, " : ", db.user_state.user_id , course)
         db((db.user_state.user_id == auth.user.id) &
                  (db.user_state.course_id == course)).update(
                    last_page_url = lastPageUrl,
@@ -304,7 +303,6 @@ def getlastpage():
         rowarray_list = []
         if result:
             for row in result:
-                print row
                 res = {'lastPageUrl': row.user_state.last_page_url,
                        'lastPageHash': row.user_state.last_page_hash,
                        'lastPageChapter': row.chapters.chapter_name,
@@ -313,7 +311,6 @@ def getlastpage():
                 rowarray_list.append(res)
             return json.dumps(rowarray_list)
         else:
-            print "inserting into user_state"
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
