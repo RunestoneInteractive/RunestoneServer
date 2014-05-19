@@ -27,6 +27,8 @@ def findChaptersSubChapters(tocfile):
         for j in range(start,stop):
             if ".rst" in ftext[j]:
                 chapter,subchapter = ftext[j][:-5].split('/')
+                chapter = chapter.strip()
+                subchapter = subchapter.strip()
                 if chapter not in chdict:
                     chdict[chapter] = []
                     ft = findFullTitle(ftext,start)
