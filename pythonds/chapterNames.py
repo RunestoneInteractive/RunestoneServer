@@ -12,6 +12,10 @@ def findFullTitle(ftext, start):
         start -= 1
     return ""
 
+def unCamel(x): return reduce(lambda a,b: a + ((b.upper() == b and
+                                (len(a) and a[-1].upper() != a[-1])) and
+                                (' ' + b) or b), x, '')
+
 
 def findChaptersSubChapters(tocfile):
     ftext = open(tocfile,'r').readlines()
@@ -51,15 +55,18 @@ def addChapterInfoToDB(subChapD, chapTitles, course_id):
         db.commit()
         currentRowId = cursor.fetchone()[0]
         for subchaptername in subChapD[chapter]:
-            # todo: Need to get full subchapter name
             res = cursor.execute('''INSERT INTO sub_chapters(sub_chapter_name,chapter_id, sub_chapter_label)
                                     VALUES(%(subchaptername)s, %(currentRowId)s, %(subChapterLabel)s)''',
-                                 {"subchaptername":subchaptername , "currentRowId" : str(currentRowId), "subChapterLabel": subchaptername })
+                                 {"subchaptername": unCamel(subchaptername) ,
+                                  "currentRowId": str(currentRowId), "subChapterLabel": subchaptername })
         db.commit()
 
 
 
+def populateChapterInfo(project_name, index_file):
+    scd, ct = findChaptersSubChapters(index_file)
+    addChapterInfoToDB(scd, ct, project_name)
+
 if __name__ == '__main__':
     # todo:  get file, and course_id from environment
-    scd,ct = findChaptersSubChapters('index.rst')
-    addChapterInfoToDB(scd,ct,'pythonds')
+    populateChapterInfo('pythonds','index.rst')
