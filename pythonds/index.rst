@@ -21,9 +21,8 @@ Introduction
 ::::::::::::
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
-    Introduction/intro-Introduction.rst
     Introduction/Objectives.rst
     Introduction/GettingStarted.rst
     Introduction/WhatIsComputerScience.rst
@@ -66,10 +65,8 @@ Basic Data Structures
 .. toctree::
     :maxdepth: 2
 
-    BasicDS/intro-BasicDataStructures.rst
     BasicDS/Objectives.rst
     BasicDS/WhatAreLinearStructures.rst
-    BasicDS/Stacks.rst
     BasicDS/WhatisaStack.rst
     BasicDS/TheStackAbstractDataType.rst
     BasicDS/ImplementingaStackinPython.rst
@@ -77,13 +74,11 @@ Basic Data Structures
     BasicDS/BalancedSymbols(AGeneralCase).rst
     BasicDS/ConvertingDecimalNumberstoBinaryNumbers.rst
     BasicDS/InfixPrefixandPostfixExpressions.rst
-    BasicDS/Queues.rst
     BasicDS/WhatIsaQueue.rst
     BasicDS/TheQueueAbstractDataType.rst
     BasicDS/ImplementingaQueueinPython.rst
     BasicDS/SimulationHotPotato.rst
     BasicDS/SimulationPrintingTasks.rst
-    BasicDS/Deques.rst
     BasicDS/WhatIsaDeque.rst
     BasicDS/TheDequeAbstractDataType.rst
     BasicDS/ImplementingaDequeinPython.rst
@@ -130,14 +125,10 @@ Sorting and Searching
 .. toctree::
     :maxdepth: 2
 
-    SortSearch/intro-SearchingandSorting.rst
-    SortSearch/intro-SortingandSearching.rst
     SortSearch/Objectives.rst
-    SortSearch/Searching.rst
     SortSearch/TheSequentialSearch.rst
     SortSearch/TheBinarySearch.rst
     SortSearch/Hashing.rst
-    SortSearch/Sorting.rst
     SortSearch/TheBubbleSort.rst
     SortSearch/TheSelectionSort.rst
     SortSearch/TheInsertionSort.rst
@@ -157,11 +148,9 @@ Trees and Tree Agorithms
 .. toctree::
     :maxdepth: 2
 
-    Trees/intro-Trees.rst
     Trees/Objectives.rst
     Trees/ExamplesofTrees.rst
     Trees/VocabularyandDefinitions.rst
-    Trees/Implementation.rst
     Trees/ListofListsRepresentation.rst
     Trees/NodesandReferences.rst
     Trees/BinaryTreeApplications.rst
@@ -191,7 +180,6 @@ Graphs and Graph Algorithms
 .. toctree::
     :maxdepth: 2
 
-    Graphs/intro-Graphs.rst
     Graphs/Objectives.rst
     Graphs/VocabularyandDefinitions.rst
     Graphs/TheGraphAbstractDataType.rst

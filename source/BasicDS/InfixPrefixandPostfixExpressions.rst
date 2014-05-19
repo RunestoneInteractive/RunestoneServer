@@ -344,3 +344,174 @@ shown in :ref:`ActiveCode 8 <lst_intopost>`.
 
    print(infixToPostfix("A * B + C * D"))
    print(infixToPostfix("( A + B ) * C - ( D - E ) * ( F + G )"))
+
+--------------
+
+A few more examples of execution in the Python shell are shown below.
+
+::
+
+    >>> infixtopostfix("( A + B ) * ( C + D )")
+    'A B + C D + *'
+    >>> infixtopostfix("( A + B ) * C")
+    'A B + C *'
+    >>> infixtopostfix("A + B * C")
+    'A B C * +'
+    >>>
+
+Postfix Evaluation
+^^^^^^^^^^^^^^^^^^
+
+As a final stack example, we will consider the evaluation of an
+expression that is already in postfix notation. In this case, a stack is
+again the data structure of choice. However, as you scan the postfix
+expression, it is the operands that must wait, not the operators as in
+the conversion algorithm above. Another way to think about the solution
+is that whenever an operator is seen on the input, the two most recent
+operands will be used in the evaluation.
+
+To see this in more detail, consider the postfix expression
+``4 5 6 * +``. As you scan the expression from left to right, you first
+encounter the operands 4 and 5. At this point, you are still unsure what
+to do with them until you see the next symbol. Placing each on the stack
+ensures that they are available if an operator comes next.
+
+In this case, the next symbol is another operand. So, as before, push it
+and check the next symbol. Now we see an operator, \*. This means that
+the two most recent operands need to be used in a multiplication
+operation. By popping the stack twice, we can get the proper operands
+and then perform the multiplication (in this case getting the result
+30).
+
+We can now handle this result by placing it back on the stack so that it
+can be used as an operand for the later operators in the expression.
+When the final operator is processed, there will be only one value left
+on the stack. Pop and return it as the result of the expression.
+:ref:`Figure 10 <fig_evalpost1>` shows the stack contents as this entire example
+expression is being processed.
+
+.. _fig_evalpost1:
+
+.. figure:: Figures/evalpostfix1.png
+   :align: center
+
+   Figure 10: Stack Contents During Evaluation
+
+
+:ref:`Figure 11 <fig_evalpost2>` shows a slightly more complex example, 7 8 + 3 2
++ /. There are two things to note in this example. First, the stack size
+grows, shrinks, and then grows again as the subexpressions are
+evaluated. Second, the division operation needs to be handled carefully.
+Recall that the operands in the postfix expression are in their original
+order since postfix changes only the placement of operators. When the
+operands for the division are popped from the stack, they are reversed.
+Since division is *not* a commutative operator, in other words
+:math:`15/5` is not the same as :math:`5/15`, we must be sure that
+the order of the operands is not switched.
+
+.. _fig_evalpost2:
+
+.. figure:: Figures/evalpostfix2.png
+   :align: center
+
+   Figure 11: A More Complex Example of Evaluation
+
+
+Assume the postfix expression is a string of tokens delimited by spaces.
+The operators are \*, /, +, and - and the operands are assumed to be
+single-digit integer values. The output will be an integer result.
+
+#. Create an empty stack called ``operandStack``.
+
+#. Convert the string to a list by using the string method ``split``.
+
+#. Scan the token list from left to right.
+
+   -  If the token is an operand, convert it from a string to an integer
+      and push the value onto the ``operandStack``.
+
+   -  If the token is an operator, \*, /, +, or -, it will need two
+      operands. Pop the ``operandStack`` twice. The first pop is the
+      second operand and the second pop is the first operand. Perform
+      the arithmetic operation. Push the result back on the
+      ``operandStack``.
+
+#. When the input expression has been completely processed, the result
+   is on the stack. Pop the ``operandStack`` and return the value.
+
+The complete function for the evaluation of postfix expressions is shown
+in :ref:`ActiveCode 9 <lst_postfixeval>`. To assist with the arithmetic, a helper
+function ``doMath`` is defined that will take two operands and an
+operator and then perform the proper arithmetic operation.
+
+.. _lst_postfixeval:
+
+.. activecode:: postfixeval
+   :caption: Postfix Evaluation
+
+   from pythonds.basic.stack import Stack
+
+   def postfixEval(postfixExpr):
+       operandStack = Stack()
+       tokenList = postfixExpr.split()
+
+       for token in tokenList:
+           if token in "0123456789":
+               operandStack.push(int(token))
+           else:
+               operand2 = operandStack.pop()
+               operand1 = operandStack.pop()
+               result = doMath(token,operand1,operand2)
+               operandStack.push(result)
+       return operandStack.pop()
+
+   def doMath(op, op1, op2):
+       if op == "*":
+           return op1 * op2
+       elif op == "/":
+           return op1 / op2
+       elif op == "+":
+           return op1 + op2
+       else:
+           return op1 - op2
+
+   print(postfixEval('7 8 + 3 2 + /'))
+
+It is important to note that in both the postfix conversion and the
+postfix evaluation programs we assumed that there were no errors in the
+input expression. Using these programs as a starting point, you can
+easily see how error detection and reporting can be included. We leave
+this as an exercise at the end of the chapter.
+
+.. admonition:: Self Check
+
+   .. fillintheblank:: postfix1
+      :casei:
+      :correct: \\b10\\s+3\\s+5\\s*\\*\\s*16\\s+4\\s*-\\s*/\\s*\\+
+      :feedback1:  ('10.*3.*5.*16.*4', 'The numbers appear to be in the correct order check your operators')
+      :feedback2: ('.*', 'Remember the numbers will be in the same order as the original equation')
+      :blankid: pfblank1
+
+      Without using the activecode infixToPostfix function, convert the following expression to postfix  ``10 + 3 * 5 / (16 - 4)`` :textfield:`pfblank1::xlarge`
+
+   .. fillintheblank:: postfix2
+      :correct: \\b9\\b
+      :feedback1: ('.*', "Remember to push each intermediate result back on the stack" )
+      :blankid: pfblank2
+
+      ``17 10 + 3 * 9 / ==`` :textfield:`pfblank2::mini`
+
+   .. fillintheblank:: postfix3
+      :correct: 5\\s+3\\s+4\\s+2\\s*-\\s*\\^\\s*\\*
+      :feedback1: ('.*', 'Hint: You only need to add one line to the function!!')
+      :blankid: pfblank3
+
+      Modify the infixToPostfix function so that it can convert the following expression:  ``5 * 3 ^ (4 - 2)``   Paste the answer here: :textfield:`pfblank3::large`
+
+
+.. video:: video_Stack3
+    :controls:
+    :thumb: ../_static/activecodethumb.png
+
+    http://media.interactivepython.org/pythondsVideos/Stack3.mov
+    http://media.interactivepython.org/pythondsVideos/Stack3.webm
