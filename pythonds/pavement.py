@@ -7,6 +7,9 @@ import os, sys
 from sphinxcontrib import paverutils
 
 sys.path.append(os.getcwd())
+sys.path.append('../modules')
+
+from chapternames import populateChapterInfo
 
 ######## CHANGE THIS ##########
 project_name = "pythonds"
@@ -64,5 +67,7 @@ def build(options):
         options.build.template_args['appname'] = options.build.masterapp
 
     print 'Building into ', options.build.outdir    
-    paverutils.run_sphinx(options,'build')
+    paverutils.run_sphinx(options, 'build')
 
+    print 'Creating Chapter Information'
+    populateChapterInfo(project_name, "%s/index.rst" % options.build.confdir)
