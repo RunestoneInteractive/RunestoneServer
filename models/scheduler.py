@@ -186,6 +186,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     tags = []
 
     sys.path.insert(0,path.join(folder,'modules'))
+    from chapternames import populateChapterInfo
 
     force_all = True
     filenames = []
@@ -197,5 +198,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
 
     shutil.rmtree(sourcedir)
 
+    populateChapterInfo(rvars['projectName'], path.join(sourcedir, "index.rst"))
 
 scheduler = Scheduler(db)
