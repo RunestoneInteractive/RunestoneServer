@@ -1,8 +1,7 @@
 import os
 import psycopg2
 from collections import OrderedDict
-
-
+import sys
 
 def findFullTitle(ftext, start):
     found = False
@@ -62,10 +61,33 @@ def addChapterInfoToDB(subChapD, chapTitles, course_id):
         db.commit()
 
 
+def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
+    sys.path.insert(0, '../../../')
+    from gluon.dal import DAL, Field
+
+    module_path = os.path.abspath(os.path.dirname(__file__))
+    dbpath = module_path + '/../databases/'
+
+    print "dbpath = ", dbpath
+    #db = DAL('sqlite://storage.sqlite', folder=dbpath)
+
+    db = DAL('postgres:psycopg2://bmiller@localhost/runestone', folder=dbpath, auto_import=False)
+    execfile('../models/db_ebook_chapters.py')
+    print "Adding Chapter Info to DB"
+    for chapter in subChapD:
+        print chapter
+        currentRowId = db.chapters.insert(chapter_name=chapTitles[chapter],course_id=course_id,chapter_label=chapter)
+        for subchaptername in subChapD[chapter]:
+            db.sub_chapters.insert(sub_chapter_name=unCamel(subchaptername),
+                                   chapter_id=currentRowId,
+                                   sub_chapter_label=subchaptername)
+        db.commit()
+
 
 def populateChapterInfo(project_name, index_file):
     scd, ct = findChaptersSubChapters(index_file)
-    addChapterInfoToDB(scd, ct, project_name)
+    #addChapterInfoToDB(scd, ct, project_name)
+    addChapterInfoUsingDAL(scd, ct, project_name)
 
 if __name__ == '__main__':
     # todo:  get file, and course_id from environment

@@ -7,6 +7,12 @@ import os, sys
 from sphinxcontrib import paverutils
 
 sys.path.append(os.getcwd())
+sys.path.append('../modules')
+
+from chapternames import populateChapterInfo
+
+
+
 
 ######## CHANGE THIS ##########
 project_name = "thinkcspy"
@@ -65,3 +71,5 @@ def build(options):
     print 'Building into ', options.build.outdir    
     paverutils.run_sphinx(options,'build')
 
+    print 'Creating Chapter Information'
+    populateChapterInfo(project_name, "%s/toc.rst" % options.build.sourcedir)
