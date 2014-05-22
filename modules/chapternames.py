@@ -68,11 +68,19 @@ def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
     module_path = os.path.abspath(os.path.dirname(__file__))
     dbpath = module_path + '/../databases/'
 
-    print "dbpath = ", dbpath
-    #db = DAL('sqlite://storage.sqlite', folder=dbpath)
+    sys.path.insert(0,'../models/')
+    _temp = __import__('0',globals(),locals())
+    settings = _temp.settings
+    execfile('../models/1.py',globals(),locals())
 
-    db = DAL('postgres:psycopg2://bmiller@localhost/runestone', folder=dbpath, auto_import=False)
+    print "using Database: ", settings.database_uri
+
+    db = DAL(settings.database_uri, folder=dbpath, auto_import=False)
     execfile('../models/db_ebook_chapters.py')
+
+    myset = db(db.chapters.course_id == course_id)
+    myset.delete()
+    db.commit()
     print "Adding Chapter Info to DB"
     for chapter in subChapD:
         print chapter
