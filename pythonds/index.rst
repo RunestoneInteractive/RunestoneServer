@@ -142,8 +142,8 @@ Sorting and Searching
 
 
 
-Trees and Tree Agorithms
-::::::::::::::::::::::::
+Trees and Tree Algorithms
+:::::::::::::::::::::::::
 
 .. toctree::
     :maxdepth: 2
@@ -192,18 +192,18 @@ Graphs and Graph Algorithms
     Graphs/ImplementingBreadthFirstSearch.rst
     Graphs/BreadthFirstSearchAnalysis.rst
     Graphs/DepthFirstSearch.rst
-    Graphs/TheKnight’sTourProblem.rst
-    Graphs/BuildingtheKnight’sTourGraph.rst
-    Graphs/ImplementingKnight’sTour.rst
-    Graphs/Knight’sTourAnalysis.rst
+    Graphs/TheKnightsTourProblem.rst
+    Graphs/BuildingtheKnightsTourGraph.rst
+    Graphs/ImplementingKnightsTour.rst
+    Graphs/KnightsTourAnalysis.rst
     Graphs/GeneralDepthFirstSearch.rst
     Graphs/DepthFirstSearchAnalysis.rst
     Graphs/TopologicalSorting.rst
     Graphs/StronglyConnectedComponents.rst
     Graphs/ShortestPathProblems.rst
-    Graphs/Dijkstra’sAlgorithm.rst
-    Graphs/AnalysisofDijkstra’sAlgorithm.rst
-    Graphs/Prim’sSpanningTreeAlgorithm.rst
+    Graphs/DijkstrasAlgorithm.rst
+    Graphs/AnalysisofDijkstrasAlgorithm.rst
+    Graphs/PrimsSpanningTreeAlgorithm.rst
     Graphs/Summary.rst
     Graphs/KeyTerms.rst
     Graphs/DiscussionQuestions.rst
