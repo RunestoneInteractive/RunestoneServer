@@ -186,7 +186,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     tags = []
 
     sys.path.insert(0,path.join(folder,'modules'))
-    from chapternames import populateChapterInfo
+    from chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
 
     force_all = True
     filenames = []
@@ -196,8 +196,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
                 warningiserror, tags)
     app.build(force_all, filenames)
 
+
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, "index.rst"))
+    addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
+
     shutil.rmtree(sourcedir)
 
-    populateChapterInfo(rvars['projectName'], path.join(sourcedir, "index.rst"))
 
 scheduler = Scheduler(db)

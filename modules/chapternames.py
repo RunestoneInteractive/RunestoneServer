@@ -78,6 +78,11 @@ def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
     db = DAL(settings.database_uri, folder=dbpath, auto_import=False)
     execfile(os.path.join('..', 'models', 'db_ebook_chapters.py'))
 
+    addChapterInfoFromScheduler(subChapD, chapTitles, course_id, db)
+
+
+def addChapterInfoFromScheduler(subChapD, chapTitles, course_id, db):
+
     myset = db(db.chapters.course_id == course_id)
     myset.delete()
     db.commit()
@@ -90,7 +95,6 @@ def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
                                    chapter_id=currentRowId,
                                    sub_chapter_label=subchaptername)
         db.commit()
-
 
 def populateChapterInfo(project_name, index_file):
     scd, ct = findChaptersSubChapters(index_file)
