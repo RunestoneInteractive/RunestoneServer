@@ -196,8 +196,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
                 warningiserror, tags)
     app.build(force_all, filenames)
 
-
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, "index.rst"))
+    if rvars['coursetype'] == 'thinkcspy':
+        idxname = 'toc.rst'
+    else:
+        idxname = 'index.rst'
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, idxname))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     shutil.rmtree(sourcedir)
