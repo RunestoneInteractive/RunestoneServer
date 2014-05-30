@@ -58,7 +58,13 @@ def build():
             date = request.vars.startdate.split('/')
             request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
 
-        cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=request.vars.startdate)
+        if not request.vars.institution:
+            institution = "Not Provided"
+        else:
+            institution = request.vars.institution
+        cid = db.courses.update_or_insert(course_name=request.vars.projectname,
+                                          term_start_date=request.vars.startdate,
+                                          institution=institution)
 
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
