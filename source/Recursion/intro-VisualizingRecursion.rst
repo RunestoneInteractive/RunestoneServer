@@ -88,8 +88,8 @@ going off to the left. If you think of this definition recursively it
 means that we will apply the recursive definition of a tree to both of
 the smaller left and right trees.
 
-Lets translate this idea to some Python code. :ref:`Listing 1 <lst_fractree>`
-shows how we can use our turtle to generate a fractal tree. Lets look at
+Let's translate this idea to some Python code. :ref:`Listing 1 <lst_fractree>`
+shows how we can use our turtle to generate a fractal tree. Let's look at
 the code a bit more closely. You will see that on lines 5 and 7 we are
 making a recursive call. On line 5 we make the recursive call right
 after the turtle turns to the right by 20 degrees; this is the right

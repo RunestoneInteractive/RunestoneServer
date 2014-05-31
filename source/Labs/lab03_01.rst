@@ -19,7 +19,7 @@ Random Numbers
 
 Before we begin writing code for this lab, we need to introduce one more
 Python module.  The ``random`` module allows us to generate random numbers.
-Its easy to use:
+It's easy to use:
 
 .. activecode:: lab01_1
    :nocanvas:
@@ -46,8 +46,8 @@ them race across the screen from left to right. The turtle that goes the
 farthest is the winner.
 
 There are several different, and equally plausible, solutions to this problem.
-Lets look at what needs to be done, and then look at some of the options for
-the solution.  To start, lets think about a solution to the simplest form
+Let's look at what needs to be done, and then look at some of the options for
+the solution.  To start, let's think about a solution to the simplest form
 of the problem, a race between two turtles. We'll look at more complex races
 later.  
 

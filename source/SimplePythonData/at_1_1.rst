@@ -52,7 +52,7 @@ using the functions and expressions introduced in this chapter.
 .. image:: Figures/shell_expressions.png
 
 
-Its a good idea to get in the habit of using the shell.  Very often if you
+It's a good idea to get in the habit of using the shell.  Very often if you
 have a question about how something works you can answer the question for
 yourself by simply trying it in the shell.  If you need a really extensable
 calculator you can simply start up your Python shell and use it to calculate
@@ -63,7 +63,7 @@ Running a Python Program
 ------------------------
 
 Of course the problem with the Python shell is that you can't save anything,
-so you always have to retype whatever you want to do over again.  Its also
+so you always have to retype whatever you want to do over again.  It's also
 difficult to do anything more than a few lines long because if you make a
 typo you end up retying everything.  Fortunately there is a solution for that
 as well.  Python allows you to write a program, and save it as a text file
@@ -77,7 +77,7 @@ Here is a simple example of a Python program.
     print('Hello World')
     print('2 + 3 = ', 2+3)
 
-Lets assume that you have typed in the lines above in Notepad or TextEdit or
+Let's assume that you have typed in the lines above in Notepad or TextEdit or
 some similar editor, if you already know emacs or vi you are a awesome!  Now
 save the file as `testprog1.py` and then head back to the terminal.  Now at
 the command line of the terminal type `python testprog1.py` and you will see
@@ -130,7 +130,7 @@ Glossary
 
     command line
         The command line is often synonymous with terminal in that when you
-        are using the terminal you are also using the command line.  Its
+        are using the terminal you are also using the command line.  It's
         where you type in commands, and then the computer interprets those
         commands and responds to you with results.
 

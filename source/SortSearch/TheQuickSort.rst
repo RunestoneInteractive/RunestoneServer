@@ -237,7 +237,7 @@ pivot value selection as an exercise.
       :answer_b: [9, 3, 10, 13, 12, 14]
       :answer_c: [9, 3, 10, 13, 12, 14, 17, 16, 15, 19]
       :answer_d: [9, 3, 10, 13, 12, 14, 19, 16, 15, 17]
-      :feedback_a: Its important to remember that quicksort works on the entire list and sorts it in place.
+      :feedback_a: It's important to remember that quicksort works on the entire list and sorts it in place.
       :feedback_b: Remember quicksort works on the entire list and sorts it in place.
       :feedback_c: The first partitioning works on the entire list, and the second partitioning works on the left partition not the right.
       :feedback_d: The first partitioning works on the entire list, and the second partitioning works on the left partition.

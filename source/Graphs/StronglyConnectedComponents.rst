@@ -124,7 +124,7 @@ components for a graph.
    component. Output the vertex ids for each vertex in each tree in the
    forest to identify the component.
 
-Lets trace the operation of the steps described above on the example
+Let's trace the operation of the steps described above on the example
 graph in :ref:`Figure 31 <fig_scc1>`. :ref:`Figure 35 <fig_sccalga>` shows the starting and
 finishing times computed for the original graph by the DFS algorithm.
 :ref:`Figure 36 <fig_sccalgb>` shows the starting and finishing times computed by

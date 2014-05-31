@@ -13,7 +13,7 @@
 Lessons from a Triangle
 =======================
 
-OK, lets look at what we have learned from writing a ``drawTriangle`` and
+OK, let's look at what we have learned from writing a ``drawTriangle`` and
 ``drawOctagon`` function.  The first thing you had to figure out was that you
 needed to modify the parameter to the ``range`` function based on the number
 of sides in the polygon.  The next thing, and this may have been the most
@@ -74,10 +74,10 @@ but rather we specify a circle by its radius.
 
 So, here is our next problem solving challenge.  Given a radius,
 how can we transform the radius into the parameters  we need for the
-``drawPolygon`` function?   Lets figure this out in two steps.  First what
+``drawPolygon`` function?   Let's figure this out in two steps.  First what
 should we use as the number of sides?  Second, what should we use as the side
 length?  To simplify the problem we can make a simple assumption about the
-number of sides.  Lets just assume that 360 sides is going to be good enough
+number of sides.  Let's just assume that 360 sides is going to be good enough
 for any circle.  Plus, it just makes sense that a circle has 360 degrees,
 one side for each degree should give us a nice round circle.
 

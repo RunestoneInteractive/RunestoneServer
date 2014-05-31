@@ -123,7 +123,7 @@ order so that all properties of a Binary Search Tree are preserved.
 Furthermore we need to make sure to update all of the parent pointers
 appropriately.
 
-Lets look at a slightly more complicated tree to illustrate the right
+Let's look at a slightly more complicated tree to illustrate the right
 rotation. The left side of :ref:`Figure 4 <fig_rightrot1>` shows a tree that is
 left-heavy and with a balance factor of 2 at the root. To perform a
 right rotation we essentially do the following:

@@ -1165,7 +1165,7 @@ Try it yourself using ActiveCode 14.
 
 .. .. admonition:: Self  Check Challenge
 
-..    One of the fundamental building blocks of a computer is somethnig called a flip flop.  Its not something that computer science professors wear on their feet, but rather a kind of circut that is stable and stores the last piece of data that was put on it.  A simple flip-flop can be made from two NOR gates that are tied together as in the following diagram.
+..    One of the fundamental building blocks of a computer is something called a flip flop.  It's not something that computer science professors wear on their feet, but rather a kind of circuit that is stable and stores the last piece of data that was put on it.  A simple flip-flop can be made from two NOR gates that are tied together as in the following diagram.
 
 ..    .. image:: Figures/flipflop.png
 

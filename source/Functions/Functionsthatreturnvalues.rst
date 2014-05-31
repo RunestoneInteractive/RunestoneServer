@@ -78,7 +78,7 @@ piece of data that is returned from the function.
 .. image:: Figures/blackboxfun.png
 
 
-How do we write our own fruitful function?  Lets start by creating a very simple
+How do we write our own fruitful function?  Let's start by creating a very simple
 mathematical function that we will call ``square``.  The square function will take one number
 as a parameter and return the result of squaring that number.  Here is the
 black-box diagram with the Python code following.

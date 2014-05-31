@@ -10,7 +10,7 @@
 AVL Tree Performance
 ~~~~~~~~~~~~~~~~~~~~
 
-Before we proceed any further lets look at the result of enforcing this
+Before we proceed any further let's look at the result of enforcing this
 new balance factor requirement. Our claim is that by ensuring that a
 tree always has a balance factor of -1, 0, or 1 we can get better Big-O
 performance of key operations. Let us start by thinking about how this
