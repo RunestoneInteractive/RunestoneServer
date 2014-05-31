@@ -24,7 +24,7 @@ we are limited by the turtle functions we already know about, for example,
 left, right, forward.  There is not a method for drawing a curved line with a
 turtle (well, actually there is, but we're not going to use it).
 
-One of the first strategies we will employ is called *simplification*.  Lets
+One of the first strategies we will employ is called *simplification*.  Let's
 look at something simpler than drawing a circle and see what we can learn,
 as we look at some simpler examples we'll try to *generalize* what we learn
 to help us build a more complex function.

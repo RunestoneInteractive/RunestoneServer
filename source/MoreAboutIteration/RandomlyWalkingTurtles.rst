@@ -45,13 +45,13 @@ about whether or not the turtle is still in the screen.  But this is the nice
 thing about programming, we can delay the tough stuff and get *something* in
 our program working right away.  The way we are going to do this is to
 delegate the work of deciding whether the turtle is still in the screen or
-not to a boolean function.  Lets call this boolean function ``isInScreen`` We
+not to a boolean function.  Let's call this boolean function ``isInScreen`` We
 can write a very simple version of this boolean function by having
 it always return ``True``, or by having it decide randomly,
 the point is to have it do something simple so that we can focus on the parts
 we already know how to do well and get them working.  Since having it always
 return true would not be a good idea we will write our version to decide
-randomly.  Lets say that there is a 90% chance the turtle is still in the
+randomly.  Let's say that there is a 90% chance the turtle is still in the
 window and 10% that the turtle has escaped.
 
 .. activecode:: iter_randwalk1

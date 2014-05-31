@@ -35,7 +35,7 @@ size of the list that is being concatenated. This is important for you
 to know because it can help you make your own programs more efficient by
 choosing the right tool for the job.
 
-Lets look at four different ways we might generate a list of ``n``
+Let's look at four different ways we might generate a list of ``n``
 numbers starting with 0. First we’ll try a ``for`` loop and create the
 list by concatenation, then we’ll use append rather than concatenation.
 Next, we’ll try creating the list using list comprehension and finally,

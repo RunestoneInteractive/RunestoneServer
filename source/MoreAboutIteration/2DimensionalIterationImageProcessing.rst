@@ -282,7 +282,7 @@ The program below implements this algorithm using the previous image.  Run it to
     newimg.draw(win)
     win.exitonclick()
 
-Lets take a closer look at the code.  After importing the image module, we create two image objects.  The first, ``img``, represents a typical digital photo.  The second, ``newimg``, is an empty image that will be "filled in" as we process the original pixel by pixel.  Note that the width and height of the empty image is set to be the same as the width and height of the original.
+Let's take a closer look at the code.  After importing the image module, we create two image objects.  The first, ``img``, represents a typical digital photo.  The second, ``newimg``, is an empty image that will be "filled in" as we process the original pixel by pixel.  Note that the width and height of the empty image is set to be the same as the width and height of the original.
 
 Lines 7 and 8 create the nested iteration that we discussed earlier.  This allows us to process each pixel in the image.
 Line 9 gets an individual pixel.

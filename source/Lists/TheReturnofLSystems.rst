@@ -10,7 +10,7 @@
 The Return of L-Systems
 -----------------------
 
-Lets return the the L-systems we introduced in the previous chapter and
+Let's return the the L-systems we introduced in the previous chapter and
 introduce a very interesting new feature that requires the use of lists.
 
 Suppose we have the following grammar::
@@ -37,7 +37,7 @@ the turtle has been where the most recently saved location will always be at
 the end of the list.  When we find a ']' in the string we use the pop
 function to remove the the most recently appended information.
 
-Lets modify our ``drawLsystem`` function to begin to implement this new
+Let's modify our ``drawLsystem`` function to begin to implement this new
 behavior.
 
 .. activecode:: list_lsys1
