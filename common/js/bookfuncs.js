@@ -844,7 +844,7 @@ function createScratchActivecode() {
         '      <div class="modal-body">' +
         '        <div id="' + divid + '" lang="python">' +
         '          <div id="' + divid + '_code_div" style="display: block">' +
-        '            <textarea cols="50" rows="12" id="' + divid + '_code" class="active_code">\n\n\n\n\n</textarea>' +
+        '            <textarea cols="50" rows="12" lang="python" id="' + divid + '_code" class="active_code">\n\n\n\n\n</textarea>' +
         '          </div>' +
         '          <p class="ac_caption"><span class="ac_caption_text">Scratch Editor</span> </p>' +
 
