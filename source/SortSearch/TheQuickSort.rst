@@ -149,7 +149,7 @@ implements the process described earlier.
    :viewer: BarViewer
 
 
-For more detail, CodeLens 7 lets you step thru the algorithm.
+For more detail, CodeLens 7 lets you step through the algorithm.
 
 .. codelens:: quicktrace
     :caption: Tracing the Quick Sort

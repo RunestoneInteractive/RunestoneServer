@@ -140,7 +140,7 @@ in the list, namely F (:ref:`Figure 20 <fig_gdfsg>`).
 
 Vertex F has only one adjacent vertex, C, but since C is colored black
 there is nothing else to explore, and the algorithm has reached the end
-of another branch. From here on, you will see in :ref:`Figure 21 <fig_gdfsh>` thru
+of another branch. From here on, you will see in :ref:`Figure 21 <fig_gdfsh>` through
 :ref:`Figure 25 <fig_gdfsl>`  that the algorithm works its way back to the first node,
 setting finish times and coloring vertices black.
      

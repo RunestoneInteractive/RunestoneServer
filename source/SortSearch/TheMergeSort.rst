@@ -117,7 +117,7 @@ list that can be immediately merged with other sorted lists.
    :viewer: BarViewer
   
   
-For more detail, CodeLens 6 allows you to step thru the algorithm.
+For more detail, CodeLens 6 allows you to step through the algorithm.
 
 
 .. codelens:: mergetrace

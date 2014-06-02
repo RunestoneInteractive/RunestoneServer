@@ -131,7 +131,7 @@ to the growing graph.
                   nextVert.setDistance(newCost)
                   pq.decreaseKey(nextVert,newCost)
 
-The following sequence of figures (:ref:`Figure 11 <fig_mst1>` thru :ref:`Figure 17 <fig_mst1>`) shows the algorithm in operation on our sample
+The following sequence of figures (:ref:`Figure 11 <fig_mst1>` through :ref:`Figure 17 <fig_mst1>`) shows the algorithm in operation on our sample
 tree. We begin with the starting vertex as A. The distances to all the
 other vertices are initialized to infinity. Looking at the neighbors of
 A we can update distances to two of the additional vertices B and C

@@ -50,7 +50,7 @@ In other words, by repeatedly applying this formula until the better approximati
 enough to the previous one, we can write a function for computing the square root that uses the number of iterations necessary and no more.
 
 This implementation, shown in codelens,
-uses a ``while`` condition to execute until the approximation is no longer changing.  Each time thru the loop we compute a "better" approximation using the formula described earlier.  As long as the "better" is different, we try again.  Step thru the program and watch the approximations get closer and closer.
+uses a ``while`` condition to execute until the approximation is no longer changing.  Each time through the loop we compute a "better" approximation using the formula described earlier.  As long as the "better" is different, we try again.  Step through the program and watch the approximations get closer and closer.
 
 .. codelens:: chp07_newtonswhile
 

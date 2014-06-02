@@ -75,7 +75,7 @@ Exercises
            your favorite paragraph of text - perhaps a poem, a speech, instructions
            to bake a cake, some inspirational verses, etc.
         
-           Write a function that counts the number of alphabetic characters (a thru z, or A thru Z) in your text and then keeps track of how many are the letter 'e'.  Your function should print an analysis of the text like this::
+           Write a function that counts the number of alphabetic characters (a through z, or A through Z) in your text and then keeps track of how many are the letter 'e'.  Your function should print an analysis of the text like this::
         
                Your text contains 243 alphabetic characters, of which 109 (44.8%) are 'e'.      
         

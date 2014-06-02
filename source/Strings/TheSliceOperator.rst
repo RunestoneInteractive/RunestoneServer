@@ -69,7 +69,7 @@ What do you think ``fruit[:]`` means?
    :answer_c: rocksrocksrocks
    :answer_d: Error, you cannot use repetition with slicing.
    :correct: a
-   :feedback_a: Yes, rock starts at 7 and goes thru 10.  Repeat it 3 times.
+   :feedback_a: Yes, rock starts at 7 and goes through 10.  Repeat it 3 times.
    :feedback_b: Repetition does not add a space.
    :feedback_c: Slicing will not include the character at index 11.  Just up to it (10 in this case).
    :feedback_d: The slice will happen first, then the repetition.  So it is ok.

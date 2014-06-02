@@ -18,7 +18,7 @@ A **digital image** is a finite collection of small, discrete picture elements c
 available.  Sometimes these pixels appear as small "dots".
 
 Each image (grid of pixels) has its own width and its own height.  The width is the number of columns and the height is the number of rows.  We can name the pixels in the grid by using the column number and row number.  However, it is very important to remember
-that computer scientists like to start counting with 0!  This means that if there are 20 rows, they will be named 0,1,2, and so on thru 19.  This will be very useful later when we iterate using range.
+that computer scientists like to start counting with 0!  This means that if there are 20 rows, they will be named 0,1,2, and so on through 19.  This will be very useful later when we iterate using range.
 
 
 In the figure below, the pixel of interest is found at column **c** and row **r**.
@@ -205,7 +205,7 @@ However, the body of the loop can contain any statements including another itera
        for j in range(3):
             print(i,j)
 
-The ``for i`` iteration is the `outer iteration` and the ``for j`` iteration is the `inner iteration`.  Each pass thru
+The ``for i`` iteration is the `outer iteration` and the ``for j`` iteration is the `inner iteration`.  Each pass through
 the outer iteration will result in the complete processing of the inner iteration from beginning to end.  This means that
 the output from this nested iteration will show that for each value of ``i``, all values of ``j`` will occur.
 
@@ -217,7 +217,7 @@ Here is the same example in activecode.  Try it.  Note that the value of ``i`` s
        for j in range(3):
             print(i,j)
 
-Another way to see this in more detail is to examine the behavior with codelens.  Step thru the iterations to see the
+Another way to see this in more detail is to examine the behavior with codelens.  Step through the iterations to see the
 flow of control as it occurs with the nested iteration.  Again, for every value of ``i``, all of the values of ``j`` will occur.  You can see that the inner iteration completes before going on to the next pass of the outer iteration.
 
 .. codelens:: nested2

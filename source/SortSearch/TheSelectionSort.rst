@@ -62,7 +62,7 @@ places 55, and so on. The function is shown in
    :viewer: BarViewer
    
 
-For more detail, CodeLens 3 allows you to step thru the algorithm.
+For more detail, CodeLens 3 allows you to step through the algorithm.
    
    
 .. codelens:: selectionsortcodetrace
