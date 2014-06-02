@@ -1,7 +1,7 @@
 # Online Python Tutor
 # https://github.com/pgbovine/OnlinePythonTutor/
 #
-# Copyright (C) 2010-2012 Philip J. Guo (philip@pgbovine.net)
+# Copyright (C) 2010-2013 Philip J. Guo (philip@pgbovine.net)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the
@@ -35,7 +35,18 @@
 # Format:
 #   Primitives:
 #   * None, int, long, float, str, bool - unchanged
-#     (json.dumps encodes these fine verbatim)
+#     (json.dumps encodes these fine verbatim, except for inf, -inf, and nan)
+#
+#   exceptions: float('inf')  -> ['SPECIAL_FLOAT', 'Infinity']
+#               float('-inf') -> ['SPECIAL_FLOAT', '-Infinity']
+#               float('nan')  -> ['SPECIAL_FLOAT', 'NaN']
+#               x == int(x)   -> ['SPECIAL_FLOAT', '%.1f' % x]
+#               (this way, 3.0 prints as '3.0' and not as 3, which looks like an int)
+#
+#   If render_heap_primitives is True, then primitive values are rendered
+#   on the heap as ['HEAP_PRIMITIVE', <type name>, <value>]
+#
+#   (for SPECIAL_FLOAT values, <value> is a list like ['SPECIAL_FLOAT', 'Infinity'])
 #
 #   Compound objects:
 #   * list     - ['LIST', elt1, elt2, elt3, ..., eltN]
@@ -43,6 +54,7 @@
 #   * set      - ['SET', elt1, elt2, elt3, ..., eltN]
 #   * dict     - ['DICT', [key1, value1], [key2, value2], ..., [keyN, valueN]]
 #   * instance - ['INSTANCE', class name, [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
+#   * instance with __str__ defined - ['INSTANCE_PPRINT', class name, <__str__ value>]
 #   * class    - ['CLASS', class name, [list of superclass names], [attr1, value1], [attr2, value2], ..., [attrN, valueN]]
 #   * function - ['FUNCTION', function name, parent frame ID (for nested functions)]
 #   * module   - ['module', module name]
@@ -58,14 +70,18 @@ FLOAT_PRECISION = 4
 
 import re, types
 import sys
+import math
 typeRE = re.compile("<type '(.*)'>")
 classRE = re.compile("<class '(.*)'>")
 
 import inspect
 
+# TODO: maybe use the 'six' library to smooth over Py2 and Py3 incompatibilities?
 is_python3 = (sys.version_info[0] == 3)
 if is_python3:
-  long = None # Avoid NameError when evaluating "long"
+  # avoid name errors (GROSS!)
+  long = int
+  unicode = str
 
 
 def is_class(dat):
@@ -79,7 +95,9 @@ def is_class(dat):
 def is_instance(dat):
   """Return whether dat is an instance of a class."""
   if is_python3:
-    return isinstance(type(dat), type) and not isinstance(dat, type)
+    return type(dat) not in PRIMITIVE_TYPES and \
+           isinstance(type(dat), type) and \
+           not isinstance(dat, type)
   else:
     # ugh, classRE match is a bit of a hack :(
     return type(dat) == types.InstanceType or classRE.match(str(type(dat)))
@@ -90,14 +108,43 @@ def get_name(obj):
   return obj.__name__ if hasattr(obj, '__name__') else get_name(type(obj))
 
 
+PRIMITIVE_TYPES = (int, long, float, str, unicode, bool, type(None))
+
+def encode_primitive(dat):
+  t = type(dat)
+  if t is float:
+    if math.isinf(dat):
+      if dat > 0:
+        return ['SPECIAL_FLOAT', 'Infinity']
+      else:
+        return ['SPECIAL_FLOAT', '-Infinity']
+    elif math.isnan(dat):
+      return ['SPECIAL_FLOAT', 'NaN']
+    else:
+      # render floats like 3.0 as '3.0' and not as 3
+      if dat == int(dat):
+        return ['SPECIAL_FLOAT', '%.1f' % dat]
+      else:
+        return round(dat, FLOAT_PRECISION)
+  elif t is str and (not is_python3):
+    # hack only for Python 2 strings ... always turn into unicode
+    # and display '?' when it's not valid unicode
+    return dat.decode('utf-8', 'replace')
+  else:
+    # return all other primitives verbatim
+    return dat
+
+
 # Note that this might BLOAT MEMORY CONSUMPTION since we're holding on
 # to every reference ever created by the program without ever releasing
 # anything!
 class ObjectEncoder:
-  def __init__(self):
+  def __init__(self, render_heap_primitives):
     # Key: canonicalized small ID
     # Value: encoded (compound) heap object
     self.encoded_heap_objects = {}
+
+    self.render_heap_primitives = render_heap_primitives
 
     self.id_to_small_IDs = {}
     self.cur_small_ID = 1
@@ -125,12 +172,8 @@ class ObjectEncoder:
   def encode(self, dat, get_parent):
     """Encode a data value DAT using the GET_PARENT function for parent ids."""
     # primitive type
-    if type(dat) in (int, long, float, str, bool, type(None)):
-      if type(dat) is float:
-        return round(dat, FLOAT_PRECISION)
-      else:
-        return dat
-
+    if not self.render_heap_primitives and type(dat) in PRIMITIVE_TYPES:
+      return encode_primitive(dat)
     # compound type - return an object reference and update encoded_heap_objects
     else:
       my_id = id(dat)
@@ -195,7 +238,16 @@ class ObjectEncoder:
             printed_args.append('**' + argspec.keywords)
 
         func_name = get_name(dat)
-        pretty_name = func_name + '(' + ', '.join(printed_args) + ')'
+
+        pretty_name = func_name
+
+        # sometimes might fail for, say, <genexpr>, so just ignore
+        # failures for now ...
+        try:
+          pretty_name += '(' + ', '.join(printed_args) + ')'
+        except TypeError:
+          pass
+
         encoded_val = ['FUNCTION', pretty_name, None]
         if get_parent:
           enclosing_frame_id = get_parent(dat)
@@ -208,6 +260,9 @@ class ObjectEncoder:
         self.encode_class_or_instance(dat, new_obj)
       elif typ is types.ModuleType:
         new_obj.extend(['module', dat.__name__])
+      elif typ in PRIMITIVE_TYPES:
+        assert self.render_heap_primitives
+        new_obj.extend(['HEAP_PRIMITIVE', type(dat).__name__, encode_primitive(dat)])
       else:
         typeStr = str(typ)
         m = typeRE.match(typeStr)
@@ -234,18 +289,30 @@ class ObjectEncoder:
         # http://docs.python.org/release/3.1.5/c-api/capsule.html
         class_name = get_name(type(dat))
 
-      new_obj.extend(['INSTANCE', class_name])
-      # don't traverse inside modules, or else risk EXPLODING the visualization
-      if class_name == 'module':
-        return
+      if hasattr(dat, '__str__') and \
+         (not dat.__class__.__str__ is object.__str__): # make sure it's not the lame default __str__
+        # N.B.: when objects are being constructed, this call
+        # might fail since not all fields have yet been populated
+        try:
+          pprint_str = str(dat)
+        except:
+          pprint_str = '<incomplete object>'
+
+        new_obj.extend(['INSTANCE_PPRINT', class_name, pprint_str])
+        return # bail early
+      else:
+        new_obj.extend(['INSTANCE', class_name])
+        # don't traverse inside modules, or else risk EXPLODING the visualization
+        if class_name == 'module':
+          return
     else:
       superclass_names = [e.__name__ for e in dat.__bases__ if e is not object]
       new_obj.extend(['CLASS', get_name(dat), superclass_names])
 
     # traverse inside of its __dict__ to grab attributes
-    # (filter out useless-seeming ones):
+    # (filter out useless-seeming ones, based on anecdotal observation):
     hidden = ('__doc__', '__module__', '__return__', '__dict__',
-        '__locals__', '__weakref__')
+        '__locals__', '__weakref__', '__qualname__')
     if hasattr(dat, '__dict__'):
       user_attrs = sorted([e for e in dat.__dict__ if e not in hidden])
     else:
