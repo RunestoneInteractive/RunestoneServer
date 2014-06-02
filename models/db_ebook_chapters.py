@@ -33,9 +33,7 @@ db.define_table('user_sub_chapter_progress',
 # This is like a trigger, but will work across all databases.
 #
 def make_progress_entries(field_dict,id_of_insert):
-    print('course = ',field_dict['course_id'])
     cname = db(db.courses.id == field_dict['course_id']).select(db.courses.course_name).first()['course_name']
-    print("cname = ",cname," id = ", id_of_insert)
     db.executesql('''
        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
            SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
