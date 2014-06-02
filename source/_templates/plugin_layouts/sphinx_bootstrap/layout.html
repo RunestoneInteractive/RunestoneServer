@@ -12,7 +12,8 @@
     '_static'+'/user-highlights.js',
     '_static'+'/jquery.idle-timer.js',
     '_static'+'/processing-1.4.1.min.js',
-    '_static'+'/jquery.hotkey.js'
+    '_static'+'/jquery.hotkey.js',
+    '_static'+'/inlineDisqussions.js'
   ]
 %}
 
@@ -28,6 +29,7 @@
     '_static'+'/bootstrap-sphinx.css',
     '_static'+'/user-highlights.css',
     '_static/runestone-custom-sphinx-bootstrap.css',
+    '_static/inlineDisqussions.css'
   ]
 %}
 
@@ -298,6 +300,10 @@ var _prum = [['id', '521dfcc4abe53d0749000000'],
     $(document).ready(getOnlineUsers);
     $(document).ready(createScratchActivecode());
     $(document).ready(styleUnittestResults());
+    disqus_shortname = 'interactivepython';
+    jQuery(document).ready(function() {
+      jQuery("p").inlineDisqussions();
+    });
 </script>
 
 <script type="text/javascript">
