@@ -80,7 +80,7 @@ function createEditors() {
     for (var i = 0; i < edList.length; i++) {
         newEdId = edList[i].id;
         var includes = edList[i].getAttribute('prefixcode');
-        var lang = edList[i].getAttribute('lang');
+        var lang = edList[i].getAttribute('lang') || "python";
         var first_line = 1;
         if (includes !== "undefined") {
             includes = eval(includes)
@@ -842,7 +842,7 @@ function createScratchActivecode() {
         '        <h4 class="modal-title">Scratch ActiveCode</h4>' +
         '      </div> ' +
         '      <div class="modal-body">' +
-        '        <div id="' + divid + '">' +
+        '        <div id="' + divid + '" lang="python">' +
         '          <div id="' + divid + '_code_div" style="display: block">' +
         '            <textarea cols="50" rows="12" id="' + divid + '_code" class="active_code">\n\n\n\n\n</textarea>' +
         '          </div>' +
