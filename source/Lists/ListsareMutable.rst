@@ -28,7 +28,7 @@ An
 assignment to an element of a list is called **item assignment**. Item
 assignment does not work for strings.  Recall that strings are immutable.
 
-Here is the same example in codelens so that you can step thru the statements and see the changes to the list elements.
+Here is the same example in codelens so that you can step through the statements and see the changes to the list elements.
 
 .. codelens:: item_assign
     

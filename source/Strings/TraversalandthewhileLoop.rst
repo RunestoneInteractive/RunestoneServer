@@ -52,7 +52,7 @@ Here is the same example in codelens so that you can trace the values of the var
    :answer_b: 1
    :answer_c: 2
    :correct: a
-   :feedback_a: Yes, idx goes thru the odd numbers starting at 1.  o is at position 4 and 8.
+   :feedback_a: Yes, idx goes through the odd numbers starting at 1.  o is at position 4 and 8.
    :feedback_b: o is at positions 4 and 8.  idx starts at 1, not 0.
    :feedback_c: There are 2 o characters but idx does not take on the correct index values.
 

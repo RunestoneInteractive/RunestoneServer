@@ -94,7 +94,7 @@ studies, insertion sort will show very good performance.
    :viewer: BarViewer
 
 
-For more detail, CodeLens 4 allows you to step thru the algorithm.
+For more detail, CodeLens 4 allows you to step through the algorithm.
 
 .. codelens:: insertionsortcodetrace
     :caption: Tracing the Insertion Sort

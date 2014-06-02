@@ -99,7 +99,7 @@ The following animation shows ``bubbleSort`` in action.
    :model: BubbleSortModel
    :viewer: BarViewer
 
-For more detail, CodeLens 1 allows you to step thru the algorithm.
+For more detail, CodeLens 1 allows you to step through the algorithm.
 
 .. codelens:: bubbletrace
     :caption: Tracing the Bubble Sort

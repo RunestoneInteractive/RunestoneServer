@@ -64,7 +64,7 @@ you can use empty glue or multi-character strings as glue.
    :correct: c
    :feedback_a: Three characters but not the right ones.  namelist is the list of names.
    :feedback_b: Too many characters in this case.  There should be a single letter from each name.
-   :feedback_c: Yes, split creates a list of the three names.  The for loop iterates thru the names and creates a string from the first characters.
+   :feedback_c: Yes, split creates a list of the three names.  The for loop iterates through the names and creates a string from the first characters.
    :feedback_d: That does not make any sense.
    
    What is printed by the following statements?

@@ -121,7 +121,7 @@ an insertion sort with an increment of one.
    
    
    
-For more detail, CodeLens 5 allows you to step thru the algorithm.
+For more detail, CodeLens 5 allows you to step through the algorithm.
 
 
 .. codelens:: shellSorttrace

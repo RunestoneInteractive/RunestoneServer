@@ -73,7 +73,7 @@ Once inside the iteration, it is required that you update the accumulator.
 
 
 
-Here is the same program in codelens.  Step thru the function and watch the "running total" accumulate the result.
+Here is the same program in codelens.  Step through the function and watch the "running total" accumulate the result.
 
 .. codelens:: sq_accum3
 

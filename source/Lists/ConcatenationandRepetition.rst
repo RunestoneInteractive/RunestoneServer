@@ -25,7 +25,7 @@ Similarly, the ``*`` operator repeats the items in a list a given number of time
 
 It is important to see that these operators create new lists from the elements of the operand lists.  If you concatenate a list with 2 items and a list with 4 items, you will get a new list with 6 items (not a list with two sublists).  Similarly, repetition of a list of 2 items 4 times will give a list with 8 items.
 
-One way for us to make this more clear is to run a part of this example in codelens.  As you step thru the code, you will see the variables being created and the lists that they refer to.  Pay particular attention to the fact that when ``newlist`` is created by the statement ``newlist = fruit + numlist``, it refers to a completely new list formed by making copies of the items from ``fruit`` and ``numlist``.  You can see this very clearly in the codelens object diagram.  The objects are different.
+One way for us to make this more clear is to run a part of this example in codelens.  As you step through the code, you will see the variables being created and the lists that they refer to.  Pay particular attention to the fact that when ``newlist`` is created by the statement ``newlist = fruit + numlist``, it refers to a completely new list formed by making copies of the items from ``fruit`` and ``numlist``.  You can see this very clearly in the codelens object diagram.  The objects are different.
 
 
 

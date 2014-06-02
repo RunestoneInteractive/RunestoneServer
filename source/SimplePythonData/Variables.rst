@@ -85,7 +85,7 @@ To see this in even more detail, we can run the program using codelens.
     print(n)
     print(pi)
 
-Now, as you step thru the statements, you can see
+Now, as you step through the statements, you can see
 the variables and the values they reference as those references are
 created.
 
