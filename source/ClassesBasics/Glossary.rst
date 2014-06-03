@@ -27,7 +27,7 @@ Glossary
             
     initializer method
         A special method in Python (called ``__init__``) 
-        that is invoked automatically to set a newly created object's
+        that is invoked automatically to set a newly-created object's
         attributes to their initial (factory-default) state.
         
     instance

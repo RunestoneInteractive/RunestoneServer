@@ -86,7 +86,7 @@ the end of the file.
                                                       returned.
 ======================== =========================== =====================================
 
-Now let's look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
+Now let's look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading files but they do support the pattern we'll show you here.
 
 .. activecode:: files_while
 

@@ -42,7 +42,7 @@ One way for us to make this more clear is to run a part of this example in codel
 
 
 
-In Python, every object has a unique identification tab.  Likewise, there is a built-in function that can be called on any object to return its unique id.  The function is appropriately called ``id`` and takes a single parameter, the object that you are interested in knowing about.  You can see in the example below that a real id is usually a very large integer value (corresponding to an address in memory).
+In Python, every object has a unique identification tag.  Likewise, there is a built-in function that can be called on any object to return its unique id.  The function is appropriately called ``id`` and takes a single parameter, the object that you are interested in knowing about.  You can see in the example below that a real id is usually a very large integer value (corresponding to an address in memory).
 
 .. sourcecode:: python
 

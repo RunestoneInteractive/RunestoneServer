@@ -19,7 +19,7 @@ you say, Chris and I have the same mother, you mean that his mother and yours
 are the same person.
 
 When you talk about objects, there is a similar ambiguity. For example, if two
-``Fractions``\ s are the same, does that mean they contain the same data
+``Fraction``\ s are the same, does that mean they contain the same data
 (same numerator and denominator) or that they are actually the same object?
 
 We've already seen the ``is`` operator in the chapter on lists, where we

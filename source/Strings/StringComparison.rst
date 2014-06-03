@@ -51,7 +51,7 @@ Are they the same?
 
 It turns out, as you recall from our discussion of variable names, that uppercase and lowercase letters are considered to be different from one another.  The way the computer knows they are different is that
 each character is assigned a unique integer value.  "A" is 65, "B" is 66, and "5" is 53.  The way you can
-find out the so called **ordinal value** for a given character is to use a character function called ``ord``.
+find out the so-called **ordinal value** for a given character is to use a character function called ``ord``.
 
 .. activecode:: ch08_ord2
 

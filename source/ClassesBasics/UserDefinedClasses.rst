@@ -69,7 +69,7 @@ instance of ``Point`` is created.  It gives the programmer the opportunity
 to set up the attributes required within the new instance by giving them 
 their initial state values.  The ``self`` parameter (you could choose any
 other name, but nobody ever does!) is automatically set to reference
-the newly created object that needs to be initialized.   
+the newly-created object that needs to be initialized.   
 
 So let's use our new Point class now.
 
@@ -143,7 +143,7 @@ The class itself isn't an instance of a point, but it contains the machinery
 to make point instances.   Every time you call the constructor, you're asking
 the factory to make you a new object.  As the object comes off the 
 production line, its initialization method is executed to 
-get the object properly set up with it's factory default settings.
+get the object properly set up with its factory default settings.
 
 The combined process of "make me a new object" and "get its settings initialized
 to the factory default settings" is called **instantiation**.  
