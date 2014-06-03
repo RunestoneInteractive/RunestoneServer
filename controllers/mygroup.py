@@ -2,6 +2,7 @@ import string
 import random
 import pprint
 import json
+import collections
 
 def schedule():
     if auth.user == None:
@@ -20,7 +21,6 @@ def schedule():
                 total=0
                 for progress in allProgress:
                     if int(progress.user_sub_chapter_progress.user_id)==user.id and progress.chapters.id==plan.chapters.id: 
-                        pprint.pprint("inside if")
                         if(progress.user_sub_chapter_progress.status>0):
                             count+=1
                         total+=1
@@ -87,26 +87,19 @@ def initiateGroup():
                 db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='active')
         return dict(allPlans = allPlans, allProgress = allProgress, allUsers = allUsers, allComments = allComments, requestArgs = request.args(0))
 def manageGroup():
-    #if pprint.pprint(auth.user)
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
-        allProgress = db((db.user_sub_chapter_progress.chapter_id==db.chapters.chapter_label)&(db.user_sub_chapter_progress.user_id==db.auth_user.id)).select(db.user_sub_chapter_progress.ALL, db.chapters.ALL, db.auth_user.ALL)
-        allUsers = db(db.auth_user.cohort_id==auth.user.cohort_id).select(db.auth_user.ALL)
-        allComments = db(db.user_comments.cohort_id==auth.user.cohort_id).select(orderby=~db.user_comments.id|db.user_comments.ALL)
-        allPlans = db((db.cohort_plan.chapter_id==db.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status , db.cohort_plan.start_date , db.cohort_plan.end_date, db.cohort_plan.actual_end_date, db.cohort_plan.note, db.cohort_plan.created_by, db.cohort_plan.cohort_id, db.cohort_plan.id)
-        for plan in allPlans:
-            if plan.cohort_plan.status=='new' and plan.cohort_plan.start_date<datetime.datetime.now():
-                plan.cohort_plan.status='active'
-                db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='active')
-        return dict(allPlans = allPlans, allProgress = allProgress, allUsers = allUsers, allComments = allComments, requestArgs = request.args(0))
+        cohortIdResult = db(db.auth_user.id==auth.user.id).select(db.auth_user.cohort_id) 
+        currentGroup = db(db.cohort_master.id==cohortIdResult[0].cohort_id).select(db.cohort_master.id, db.cohort_master.cohort_name, db.cohort_master.invitation_id, db.cohort_master.is_active)
+        allGroupMembers = db(db.auth_user.cohort_id==currentGroup[0].id).select(db.auth_user.first_name, db.auth_user.last_name)
+        return dict(currentGroup=currentGroup[0], allGroupMembers=allGroupMembers)
+
 def createNewGroup():
-    pprint.pprint(auth.user)
     invitationId = "".join([random.choice(string.ascii_letters + string.digits) for n in xrange(5)])
     newGroupId = db.cohort_master.insert(cohort_name = request.vars.groupName, created_on=datetime.datetime.now(), is_active=1, invitation_id=invitationId)
     db.executesql("INSERT INTO cohort_plan(cohort_id, chapter_id, status) SELECT "+str(newGroupId)+", id, 'notStarted' FROM chapters WHERE course_id = '"+auth.user.course_name+"';")    
     auth.user.cohort_id = newGroupId
-    pprint.pprint(auth.user)
     joinGroupParameterized(invitationId)
     return invitationId
 def joinGroup():
@@ -132,5 +125,17 @@ def lookupGroup():
         res = {'joinStatus':-1, 'groupName':currentGroup[0].cohort_name}
     else:
         allGroupMembers = db(db.auth_user.cohort_id==currentGroup[0].id).select(db.auth_user.first_name, db.auth_user.last_name)
-        res = {'joinStatus':-1, 'groupName':currentGroup[0].cohort_name, "member_firstName":allGroupMembers[0].first_name, "member_lastName":allGroupMembers[0].last_name}
+        res = {'joinStatus':-1, 'groupName':currentGroup[0].cohort_name}
+        allMembersArray = []
+        for member in allGroupMembers:
+            d = collections.OrderedDict()
+            d['first_name'] = member.first_name
+            d['last_name'] = member.last_name
+            allMembersArray.append(d)
+        res['members'] = json.dumps(allMembersArray)
     return json.dumps(res)
+
+def leaveGroup():
+    db(db.auth_user.id==auth.user.id).update(cohort_id='')
+    auth.user.cohort_id = ""
+    return 'success'

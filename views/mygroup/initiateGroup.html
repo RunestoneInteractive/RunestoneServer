@@ -57,7 +57,6 @@ response.include_files()
 		var newGroupOptionsHTML = $("#newGroupOptions").html();
 		var invitationId;
 		$("#newGroupBtn").on("click", function(){
-			console.log("newGroupBtn clicked");
 			var data = {groupName: $("#newGroupName").val()};
 			jQuery.get(eBookConfig.app+'/mygroup/createNewGroup', data, function(data) {
 				$("#newGroupOptions").html('\
@@ -66,7 +65,6 @@ response.include_files()
 					<p><strong>Group Name: </strong>'+$("#newGroupName").val()+'</p>\
 					<h4 class="subheading">Invite people to joing this group</h4>\
 					<p><strong>Invitation Id: </strong>'+data+'</p>\
-					<p><strong>Invitation URL: </strong><a href="'+eBookConfig.app+'/mygroup/joinSharedGroup?invitationid='+data+'">'+eBookConfig.app+'/mygroup/joinSharedGroup?invitationid='+data+'</a></p>\
 					</div>');
 			});
 		});
@@ -75,19 +73,20 @@ response.include_files()
 			var data = {invitationId:invitationId};
 			$.ajax({url: eBookConfig.app+'/mygroup/lookupGroup', data: data}).done(function(data) {
 				jsonData = JSON.parse(data);
-				console.log(jsonData);
 				$("#newGroupOptions").html('\
 				<div class="bs-callout bs-callout-info col-md-12">\
 					<h4 class="subheading">You requested to join the group </h4>\
 					<p><strong>Group Name: </strong>'+jsonData.groupName+'</p>\
-					<h4 class="subheading">Current Members</h4>\
-					<p>'+jsonData.member_firstName+' '+jsonData.member_lastName+'</p>\
+					<p id="current-members"><strong>Current Members</strong></p>\
 					<button class="btn btn-default" id="joinGroupBtn">Join Group</button>\
 					<a href="manageGroup.html">Lookup a different group</a>\
 					</div>');
+				var currentMemberList = JSON.parse(jsonData.members);
+				$.each(currentMemberList, function( index, value ) {
+					$("#current-members").append("<p>"+(index+1)+". "+value.first_name+" "+value.last_name+"</p>")
+				});
 
 					$("#newGroupOptions #joinGroupBtn").on("click", function(){
-						console.log("joinGroup button clucked")
 						var data = {invitationId:invitationId};
 						$.ajax({url: eBookConfig.app+'/mygroup/joinGroup', data: data}).done(function(data) {
 							jsonData = JSON.parse(data);

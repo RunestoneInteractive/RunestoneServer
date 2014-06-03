@@ -11,37 +11,17 @@ response.files.insert(3,URL('static','css/custom.css'))
 			Be part of a group, plan deadlines and motivate each other to finish a chapter, on a <strong>deadline you all set together.</strong> </p>
 		</div>
 	</div>
-	<div class="row-fluid" id="newGroupOptions">
-		<div class="col-md-5">
-			<h4 class="subheading">Join an Exising Group?</h4>	
-			<table>
-				<tr>
-					<td style="padding-right:20px"><strong>Invitation Id:</strong></td>
-					<td><input class="string form-control groupText" type="text" id="joinGroupInvitation" class="add-comment span12"> </td>
-					<td rowspan="2" id="joinGroupConfirmation">&nbsp;</td>
-				</tr>
-				<tr style="padding-top:20px;">
-					<td>&nbsp;</td>
-					<td ><button class="btn" id="lookupGroupBtn">Lookup Group</button></td>
-				</tr>
-			</table>
-		</div>
-		<div class="col-md-2">
-			<img src="{{=URL('static', 'images/seperator.png')}}"/>
-		</div>
-		<div class="col-md-5">
-			<h4 class="subheading">Create a new Study Group</h4>	
-			<table>
-				<tr>
-					<td style="padding-right:20px"><strong>Group Name:</strong></td>
-					<td><input class="string form-control groupText" type="text" id="newGroupName"> </td>
-					<td rowspan="2" id="newGroupConfirmation">&nbsp;</td>
-				</tr>
-				<tr style="padding-top:20px;">
-					<td>&nbsp;</td>
-					<td ><button class="btn" id="newGroupBtn">Create New Group</button></td>
-				</tr>
-			</table>
+	<br/>
+	<div class="row-fluid" id="manageGroupOptions">
+		<div class="col-md-12">
+			<h4 class="subheading">Your Group: {{=currentGroup.cohort_name}}</h4>
+			<p id="current-members"><strong>Current Members</strong></p>
+			{{for member in allGroupMembers:}}
+				<p style="margin-left: 15px;">{{=member.first_name}} {{=member.first_name}}</p>
+			{{pass}}
+			<p><strong>Use the following invite code to invite others to your group: </strong>{{=currentGroup.invitation_id}}</p>
+			<br/>
+			<p><button class="btn" id="leaveGroupBtn">Leave Group</button></p>
 		</div>
 	</div>
 </div>
@@ -54,64 +34,13 @@ response.include_files()
 }}
 <script>
 	$(document).ready(function(){
-		var newGroupOptionsHTML = $("#newGroupOptions").html();
-		var invitationId;
-		$("#newGroupBtn").on("click", function(){
-			console.log("newGroupBtn clicked");
-			var data = {groupName: $("#newGroupName").val()};
-			jQuery.get(eBookConfig.app+'/mygroup/createNewGroup', data, function(data) {
-				$("#newGroupOptions").html('\
-				<div class="bs-callout bs-callout-info col-md-12">\
-					<h4 class="subheading">Congrats! You have created a new Study Group.</h4>\
-					<p><strong>Group Name: </strong>'+$("#newGroupName").val()+'</p>\
-					<h4 class="subheading">Invite people to joing this group <sub><em>Max 4 people allowed per group</em></sub></h4>\
-					<p><strong>Invitation Id: </strong>'+data+'</p>\
-					<p><strong>Invitation URL: </strong><a href="'+eBookConfig.app+'/mygroup/joinSharedGroup?invitationid='+data+'">'+eBookConfig.app+'/mygroup/joinSharedGroup?invitationid='+data+'</a></p>\
-					<strong>Invite via email : </strong> <br/>\
-					<input class="string form-control groupText emailInvitation" type="text"><br/><br/>\
-					<input class="string form-control groupText emailInvitation" type="text"><br/><br/>\
-					<input class="string form-control groupText emailInvitation" type="text"><br/><br/>\
-					<button class="btn btn-default" id="sendEmailInvites">Invite</button>\
-					</div>');
-			});
-		});
-		$("#lookupGroupBtn").on("click", function(){
-			invitationId =  $("#joinGroupInvitation").val();
-			var data = {invitationId:invitationId};
-			$.ajax({url: eBookConfig.app+'/mygroup/lookupGroup', data: data}).done(function(data) {
-				jsonData = JSON.parse(data);
-				console.log(jsonData);
-				$("#newGroupOptions").html('\
-				<div class="bs-callout bs-callout-info col-md-12">\
-					<h4 class="subheading">You requested to join the group </h4>\
-					<p><strong>Group Name: </strong>'+jsonData.groupName+'</p>\
-					<h4 class="subheading">Current Members</h4>\
-					<p>'+jsonData.member_firstName+' '+jsonData.member_lastName+'</p>\
-					<button class="btn btn-default" id="joinGroupBtn">Join Group</button>\
-					<a href="manageGroup.html">Lookup a different group</a>\
-					</div>');
 
-					$("#newGroupOptions #joinGroupBtn").on("click", function(){
-						console.log("joinGroup button clucked")
-						var data = {invitationId:invitationId};
-						$.ajax({url: eBookConfig.app+'/mygroup/joinGroup', data: data}).done(function(data) {
-							jsonData = JSON.parse(data);
-							if (jsonData.joinStatus == 1){
-								$("#newGroupOptions").html('\
-								<div class="bs-callout bs-callout-info col-md-12">\
-								<p>You successfully joined the group '+jsonData.groupName+'</p>\
-								</div>');
-							}
-							else{
-								$("#newGroupOptions").html('\
-								<div class="bs-callout bs-callout-info col-md-12">\
-								<p>Something went wrong. We were unable to join you to the group. Please try again.</p>\
-								</div>');
-							}
-
-						});
-					});
-			});
+		$("#leaveGroupBtn").on("click", function(){
+			if (confirm("Are you sure you want to leave the group?") == true) {
+				$.ajax({url: eBookConfig.app+'/mygroup/leaveGroup'}).done(function(data) {
+					$("#manageGroupOptions div").html("<p>You successfully left the group</p><p><a href='initiateGroup'>Join a new Study group</a></p>")
+				});
+			}
 		});
 
 	});

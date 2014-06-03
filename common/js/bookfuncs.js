@@ -596,7 +596,7 @@ function addUserToFooter() {
 
 function addNavbarLoginLink() {
     if (isLoggedIn()) {
-		if (eBookConfig.cohortId == null){
+		if (eBookConfig.cohortId == null || eBookConfig.cohortId ==""){
 			$('#joinGroupLink').show();
 			$('#groupScheduleLink').hide();
 			$('#newChapterLink').hide();
