@@ -77,7 +77,8 @@ def initiateGroup():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
-        allProgress = db((db.user_sub_chapter_progress.chapter_id==db.chapters.chapter_label)&(db.user_sub_chapter_progress.user_id==db.auth_user.id)).select(db.user_sub_chapter_progress.ALL, db.chapters.ALL, db.auth_user.ALL)
+        allProgress = db((db.user_sub_chapter_progress.chapter_id==db.chapters.chapter_label)
+                         &(db.user_sub_chapter_progress.user_id==db.auth_user.id)).select(db.user_sub_chapter_progress.ALL, db.chapters.ALL, db.auth_user.ALL)
         allUsers = db(db.auth_user.cohort_id==auth.user.cohort_id).select(db.auth_user.ALL)
         allComments = db(db.user_comments.cohort_id==auth.user.cohort_id).select(orderby=~db.user_comments.id|db.user_comments.ALL)
         allPlans = db((db.cohort_plan.chapter_id==db.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status , db.cohort_plan.start_date , db.cohort_plan.end_date, db.cohort_plan.actual_end_date, db.cohort_plan.note, db.cohort_plan.created_by, db.cohort_plan.cohort_id, db.cohort_plan.id)

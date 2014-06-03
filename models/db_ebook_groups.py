@@ -9,7 +9,7 @@ db.define_table('cohort_plan',
   Field('created_on','datetime'),
   Field('created_by','reference auth_user'),
   Field('is_active','integer', default=1), #0 - deleted / inactive. 1 - active
-  migrate=settings.migrate
+  migrate='runestone_cohort_plan.table'
 )
 
 db.define_table('cohort_plan_revisions',
@@ -25,7 +25,7 @@ db.define_table('cohort_plan_revisions',
   Field('created_on','datetime', default=request.now),
   Field('created_by','reference auth_user'),
   Field('is_active','integer', default=1),
-  migrate=settings.migrate
+  migrate='runestone_cohort_plan_revisions.table'
 )
 
 db.define_table('cohort_plan_responses',
@@ -33,7 +33,7 @@ db.define_table('cohort_plan_responses',
   Field('response','integer'), #-1 - awaitnig response. 0 - rejected. 1 - accepted           
   Field('response_by','reference auth_user'),           
   Field('response_on','datetime', default=request.now),
-  migrate=settings.migrate
+  migrate='runestone_cohort_plan_responses.table'
 )
 
 db.define_table('user_comments',
@@ -43,5 +43,5 @@ db.define_table('user_comments',
   Field('comment_by','reference auth_user'),
   Field('comment_parent','reference user_comments'), #a comment as a reply to an existing comment
   Field('comment_on','datetime', default=request.now),
-  migrate=settings.migrate
+  migrate='runestone_user_comments.table'
 )
