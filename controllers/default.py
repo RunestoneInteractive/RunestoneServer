@@ -83,6 +83,8 @@ def index():
     else:
         redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
 
+    cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
+
 def error():
     return dict()
 

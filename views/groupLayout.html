@@ -116,9 +116,13 @@
               <li><span class='loggedinuser'>Not logged in</span></li>
             {{ pass }}
             <li class="divider"></li>
-            <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
-            <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
-            <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li>
+			{{if auth.user.cohort_id==None: }}
+				<li><a href='/{{=request.application}}/mygroup/initiateGroup' id="joinGroupLink">Join a Study Group</a></li>
+			{{else:}}
+				<li><a href='/{{=request.application}}/mygroup/schedule' id="groupScheduleLink">Group Schedule</a></li>
+				<li><a href='/{{=request.application}}/mygroup/newschedule' id="newChapterLink">Schedule New Chapter</a></li>
+				<li><a href='/{{=request.application}}/mygroup/manageGroup' id="manageGroupLink">Manage Group</a></li>
+			{{pass}}
             <li class="divider"></li>
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
@@ -142,7 +146,6 @@
             <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
           </a>
           <ul class="dropdown-menu user-menu">
-
             <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li> 
             <li class="divider"></li>            
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
@@ -154,68 +157,6 @@
 
       </ul>
 
-      <ul class="nav navbar-nav">
-
-        <li class="divider-vertical"></li>
-
-        <!-- open library dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Open Library<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist</a></li>
-            <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures</a></li>
-            <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
-            <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>            
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-        <!-- more info dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">More Info<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/default/about">About Us</a></li>
-            <li><a href="/{{=request.application}}/default/ack">Acknowledgements</a></li>
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-        <!-- students dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Students<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/default/user/register">Register</a></li>
-            <li><a href="https://github.com/bnmnetp/runestone/issues/new">Report A Problem</a></li>
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-        <!-- instructors dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Instructors<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/admin/index">Instructor's Dashboard</a></li>
-            <li><a href="https://github.com/bnmnetp/runestone/issues/new">Submit an Exercise</a></li>
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-        <!-- authors and developers dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Authors & Developers<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="http://runestoneinteractive.org">Source for everything</a></li>
-            <li><a href="http://docs.runestoneinteractive.org/build/html/index.html">Documentation</a></li>
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-      </ul>
 
     </div>
   </div>

@@ -537,6 +537,7 @@ function gotUser(data, status, whatever) {
         if (!caughtErr) {
             mess = d.email;
             eBookConfig.isLoggedIn = true;
+			eBookConfig.cohortId = d.cohortId;
             addNavbarLoginLink(); // will change navbar login link to say 'Log Out'
             enableUserHighlights();
             timedRefresh();
@@ -595,6 +596,18 @@ function addUserToFooter() {
 
 function addNavbarLoginLink() {
     if (isLoggedIn()) {
+		if (eBookConfig.cohortId == null){
+			$('#joinGroupLink').show();
+			$('#groupScheduleLink').hide();
+			$('#newChapterLink').hide();
+			$('#manageGroupLink').hide();
+		}
+		else{
+			$('#joinGroupLink').hide();
+			$('#groupScheduleLink').show();
+			$('#newChapterLink').show();
+			$('#manageGroupLink').show();
+		}
         $('#profilelink').show();
         $('#passwordlink').show();
         $('#registerlink').hide();

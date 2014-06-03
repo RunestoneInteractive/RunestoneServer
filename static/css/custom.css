@@ -1,0 +1,272 @@
+/*Standard CSS Mods*/
+
+.content-holder {
+	min-height: 800px;
+	padding: 20px 25px 28px;
+}
+hr {
+	margin:2px 0 20px;
+}
+.modal-backdrop, .modal-backdrop.fade.in {
+    opacity: 0.9;
+}
+.modal-backdrop {
+    background-color: #FFFFFF;
+}
+#scheduleNewChapter{
+	text-align:center;
+}
+.form-horizontal .controls {
+    margin-left: 0;
+}
+.datepicker{
+	z-index:1100;
+}
+.acceptProposal-checkbox span{
+	vertical-align:middle;
+	margin-left:10px;
+}
+.modal-body {
+	padding-bottom:0;
+}
+.plan-help-link{
+	text-align: right; 
+	padding-left: 175px;
+	padding-top:2px;
+}
+a.accordion-toggle{
+	text-decoration: none;
+	color: #000000;
+}
+.panel-collapse{
+	background-color:#FCFCFC;
+	-webkit-box-shadow: inset 0px 2px 8px -3px rgba(50, 50, 50, 0.5);
+	-moz-box-shadow:    inset 0px 2px 8px -3px rgba(50, 50, 50, 0.5);
+	box-shadow:         inset 0px 2px 8px -3px rgba(50, 50, 50, 0.5);
+}
+.sc-status-completed{
+	float:right;
+	color:#0AB50A;
+}
+.sc-status-active{
+	float:right;
+	color:#FFAB35;
+}
+.sc-status-new{
+	float:right;
+	color:#FFAB35;
+}
+.sc-status-modified{
+	float:right;
+	color:#FFAB35;
+}
+.sc-status-notStarted{
+	float:right;
+	color:#FF0000;
+}
+.accordion-notstarted {
+    display: block;
+    padding: 8px 15px;
+	cursor: default;
+}
+.aligned-right{
+	text-align:right;
+}
+.sc-chapter-title{
+	font-weight:bold;
+}
+.plan-propose-link{
+	text-decoration:underline;
+}
+a{
+	cursor:pointer;
+}
+.progress{
+	width:100%;
+	margin-bottom: 20px;
+}
+.progress-completed{
+	width:40%;
+}
+.sc-member-name{
+	margin-right:10px;
+	clear:both;
+	width:100px;
+}
+.sc-percent-complete{
+	margin-left:10px;
+}
+#new-plan-section{
+	padding-bottom:30px;
+	margin-bottom:30px;
+	border-bottom: 1px solid #EEEEEE;
+}
+a.pl-chapter-details{
+	text-decoration:underline;
+	margin:7px 0px 15px 10px;
+	display: inline-block;
+}
+.discussion-panel{
+    border: 1px solid #E5E5E5;
+	background-color: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    outline: medium none;
+    position: relative;
+	margin-bottom:10px;
+	padding:0 10px 10px;
+	font-size:12px;
+}
+.media{
+	border-bottom: 1px solid #E5E5E5;
+	width:100%;
+}
+.media-child{
+	border-bottom: none;
+}
+
+.plan-left-section {
+    background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+    outline: medium none;
+    position: relative;
+	margin-bottom:10px;
+	
+}
+.progress-section{
+	padding:10px;
+}
+.progress-section .message-container{
+	clear: both;
+}
+.new-plan-heading{
+	margin:0px 15px;
+	display:inline-block;
+}
+.new-plan-discussion{
+	margin:10px 15px 0px;
+	display:inline-block;
+}
+.active-heading{
+	margin:10px 15px 0px;
+	display:inline-block;
+}
+.new-plan-controls{
+	margin: 7px 15px;
+	opacity: 1;
+}
+.plan-left-section:hover .new-plan-controls{
+	opacity: 1;
+}
+.glyphicon-pencil, .glyphicon-remove{
+	cursor:pointer;
+}
+.new-plan-details{
+	text-align:center;
+}
+.accept-plan{
+
+}
+.decline-plan{
+	color:#CD443D;
+	display: block;
+	padding-top: 10px;
+	text-decoration:underline;
+}
+.underlined{
+	text-decoration:underline;
+}
+.decline-plan:hover{
+	color:#A51D18;
+}
+.edit-plan-response{
+	color:#999999;
+	display: block;
+	padding-top: 10px;
+}
+.edit-plan-response:hover{
+	color:#666666;
+}
+.new-plan-responses{
+	margin-top:15px;
+	margin-bottom:0;
+	border-top: 1px solid #E5E5E5;
+}
+.new-plan-responses thead{
+	background-color: #F5F5F5;
+}
+.new-plan-responses tbody{
+	background-color: #FAFAFA;
+}
+.new-plan-responses th{
+	text-align:center;
+}
+.new-plan-responses tbody td{
+	padding-left:15px;
+	padding-right:15px;
+}
+.new-plan-responses tbody td:nth-child(2){
+	text-align:right;
+}
+.new-plan-accepted{
+	color:#0AB50A;
+}
+.new-plan-rejected{
+	color:#FF0000;
+}
+.new-plan-awaiting{
+	color:#999999;
+}
+.groupText{
+	display:inline-block;
+	width: 250px;
+	margin-right: 10px;
+}
+.subheading{
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.bs-callout-info {
+	background-color: #f4f8fa;
+	border-color: #bce8f1;
+}
+.bs-callout {
+	margin: 20px 0;
+	padding: 20px;
+	border-left: 3px solid #eee;
+}
+.col-md* {
+	margin:10px;
+}
+.scrollable-section {
+	overflow-y: scroll;
+	height: 80%;
+}
+
+.new-plan-details {
+	margin: 35px 0;
+}
+
+.panel-default>.panel-heading {
+	background-color: #F8F8F8;
+}
+.panel-group {
+	margin-bottom: 15px;
+}
+.form-horizontal .control-label {
+	padding-bottom: 5px;
+}
+/*Responsive CSS Mods*/
+@media (max-width: 979px) {
+	.navbar-fixed-top,
+	.navbar-fixed-bottom {
+		position: absolute;
+  }
+}
+@media (max-width: 767px) {
+	.navbar-fixed-top{
+		margin-right: 0;
+		margin-left: 0;
+	}
+}

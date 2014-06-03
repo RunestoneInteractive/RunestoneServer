@@ -17,8 +17,17 @@ db.define_table('sub_chapters',
   migrate='runestone_sub_chapters.table'
 )
 
+db.define_table('user_chapter_progress',
+  Field('user_id'),
+  Field('chapter_id','string'),
+  Field('start_date','datetime', default=datetime.datetime.now()),
+  Field('end_date','datetime'),
+  Field('status','integer'), #-1  - not started. 0 - active. 1 - completed
+  migrate=settings.migrate
+)
+
 db.define_table('user_sub_chapter_progress',
-  Field('user_id','reference auth_user'),
+  Field('user_id'),
   Field('chapter_id','string'),
   Field('sub_chapter_id','string'),
   Field('start_date','datetime', default=datetime.datetime.now()),
@@ -34,6 +43,11 @@ db.define_table('user_sub_chapter_progress',
 #
 def make_progress_entries(field_dict,id_of_insert):
     cname = db(db.courses.id == field_dict['course_id']).select(db.courses.course_name).first()['course_name']
+    db.executesql('''
+       INSERT INTO user_chapter_progress(user_id, chapter_id, status)
+           SELECT %s, chapters.chapter_label, -1
+           FROM chapters where chapters.course_id = '%s';
+    ''' % (id_of_insert,cname))
     db.executesql('''
        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
            SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
