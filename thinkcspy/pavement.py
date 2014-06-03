@@ -9,9 +9,11 @@ from sphinxcontrib import paverutils
 sys.path.append(os.getcwd())
 sys.path.append('../modules')
 
-from chapternames import populateChapterInfo
-
-
+updateProgressTables = True
+try:
+    from chapternames import populateChapterInfo
+except:
+    updateProgressTables = False
 
 
 ######## CHANGE THIS ##########
@@ -71,5 +73,6 @@ def build(options):
     print 'Building into ', options.build.outdir    
     paverutils.run_sphinx(options,'build')
 
-    print 'Creating Chapter Information'
-    populateChapterInfo(project_name, "%s/toc.rst" % options.build.sourcedir)
+    if updateProgressTables:
+        print 'Creating Chapter Information'
+        populateChapterInfo(project_name, "%s/toc.rst" % options.build.sourcedir)
