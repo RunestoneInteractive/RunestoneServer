@@ -58,7 +58,7 @@ def thinkcspy(options):
     os.chdir("..")
 
     if minify_js:
-        sh('./minifyjs.py %s' % "static/thinkcspy")
+        sh('./scripts/minifyjs.py %s' % "static/thinkcspy")
 
 @task
 @cmdopts([('all','a','rebuild everything')])
@@ -75,7 +75,7 @@ def pythonds(options):
     os.chdir("..")
 
     if minify_js:
-        sh('./minifyjs.py %s' % "static/pythonds")
+        sh('./scripts/minifyjs.py %s' % "static/pythonds")
 
 @task
 @cmdopts([('all','a','rebuild everything')])
@@ -92,7 +92,7 @@ def overview(options):
     os.chdir("..")
 
     if minify_js:
-        sh('./minifyjs.py %s' % "static/overview")
+        sh('./scripts/minifyjs.py %s' % "static/overview")
 
 @task
 @cmdopts([('all','a','rebuild everything')])
@@ -109,7 +109,7 @@ def devcourse(options):
     os.chdir("..")
 
     if minify_js:
-        sh('./minifyjs.py %s' % "static/devcourse")
+        sh('./scripts/minifyjs.py %s' % "static/devcourse")
 
 @task
 @cmdopts([('all','a','rebuild everything')])

@@ -184,12 +184,14 @@ class Codelens(Directive):
 
 
         if 'question' in self.options:
-            curTrace = exec_script_str_local(source, CUMULATIVE_MODE, raw_dict)
+            curTrace = exec_script_str_local(source, None, CUMULATIVE_MODE, None, raw_dict)
             self.inject_questions(curTrace)
             json_output = json.dumps(curTrace, indent=None)
             self.options['tracedata'] = "var %s = %s;" % (self.JS_VARNAME, json_output)
         else:
-            self.options['tracedata'] = exec_script_str_local(source, CUMULATIVE_MODE, js_var_finalizer)
+            self.options['tracedata'] = exec_script_str_local(source, None,
+                                                              CUMULATIVE_MODE,
+                                                              None, js_var_finalizer)
 
         res = VIS
         if 'caption' not in self.options:

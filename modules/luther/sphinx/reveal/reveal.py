@@ -6,15 +6,15 @@ from docutils.parsers.rst import Directive
 
 def setup(app):
     app.add_directive('reveal', RevealDirective)
-    
+
     app.add_node(RevealNode, html=(visit_reveal_node, depart_reveal_node))
 
 
 BEGIN = """
-    <button type='button' id='%(divid)s_show' class='btn btn-default' style='margin-bottom:10px;' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">
+    <button type='button' id='%(divid)s_show' class='btn btn-default reveal_button' style='margin-bottom:10px;' onclick="$(this).hide();$('#%(divid)s').show();$('#%(divid)s_hide').show();$('#%(divid)s').find('.CodeMirror').each(function(i, el){el.CodeMirror.refresh();});">
         %(showtitle)s
     </button>
-    <button type='button' id='%(divid)s_hide' class='btn btn-default' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>%(hidetitle)s</button>
+    <button type='button' id='%(divid)s_hide' class='btn btn-default reveal_button' onclick="$(this).hide();$('#%(divid)s').hide();$('#%(divid)s_show').show();" style='display:none'>%(hidetitle)s</button>
     <div id='%(divid)s' style='display:none'>
 """
 
@@ -61,4 +61,3 @@ class RevealDirective(Directive):
         self.state.nested_parse(self.content, self.content_offset, reveal_node)
 
         return [reveal_node]
-

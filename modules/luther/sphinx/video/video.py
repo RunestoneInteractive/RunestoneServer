@@ -23,7 +23,7 @@ from docutils.parsers.rst import Directive
 def setup(app):
     app.add_directive('video',Video)
     app.add_directive('youtube', Youtube)
-    app.add_directive('vimeo', Vimeo)    
+    app.add_directive('vimeo', Vimeo)
     app.add_stylesheet('video.css')
 
 CODE = """\
@@ -104,7 +104,7 @@ class Video(Directive):
             self.options['preload'] = 'preload="auto"'
         else:
             self.options['preload'] = 'preload="none"'
-            
+
         self.options['sources'] = "\n    ".join(sources)
         res = CODE % self.options
         if 'popup' in self.options:
@@ -167,14 +167,14 @@ class Youtube(IframeVideo):
     html = '<iframe src="http://www.youtube.com/embed/%(video_id)s" \
     width="%(width)u" height="%(height)u" frameborder="0" \
     webkitAllowFullScreen mozallowfullscreen allowfullscreen \
-    class="align-%(align)s"></iframe>'
+    class="align-%(align)s" seamless ></iframe>'
 
 
 class Vimeo(IframeVideo):
     html = '<iframe src="http://player.vimeo.com/video/%(video_id)s" \
     width="%(width)u" height="%(height)u" frameborder="0" \
     webkitAllowFullScreen mozallowfullscreen allowFullScreen \
-    class="align-%(align)s"></iframe>'
+    class="align-%(align)s" seamless ></iframe>'
 
 
 

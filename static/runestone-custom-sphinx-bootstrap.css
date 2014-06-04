@@ -475,7 +475,20 @@ div.flash {
 	margin: 0 0 0.5em 1em;
 	width: auto;
 	}
-	
+
+a.disqus_thread_link {
+    display: block;
+}
+
+.reveal_button {
+    display: block;
+    margin-left: 0;
+}
+
+iframe[seamless] {
+    display: block;
+}
+
 @media (min-width: 768px){
 	.container  .section>div.sidebar {
 		margin: 0 3em 0.5em 1em;
@@ -491,4 +504,3 @@ div.flash {
 		margin: 0 18em 0.5em 1em;
 	}
 }
-
