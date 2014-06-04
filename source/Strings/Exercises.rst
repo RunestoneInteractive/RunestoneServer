@@ -329,7 +329,7 @@ Exercises
                 from test import testEqual
 
                 def remove(substr,theStr):
-                    index = theStr.index(substr)
+                    index = theStr.find(substr)
                     if index < 0: # substr doesn't exist in theStr
                         return theStr
                     return_str = theStr[:index] + theStr[index+len(substr):]

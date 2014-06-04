@@ -308,7 +308,7 @@ Exercises
         .. tab:: Question
             
             A sprite is a simple spider shaped thing with n legs coming out from a center 
-            point. The angle between each leg is 360/n degrees.
+            point. The angle between each leg is 360 / n degrees.
 
             Write a program to draw a sprite where the number of legs is provided by the user.
                    

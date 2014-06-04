@@ -158,7 +158,7 @@ we need the extra power that we get from the ``while`` loop.
      while n > 0:
          answer = answer + n
          n = n + 1
-     print answer
+     print(answer)
 
 
 

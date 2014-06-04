@@ -61,8 +61,8 @@ greatest common divisor.  It will then modify itself by dividing its ``num`` and
 
         def __init__(self, top, bottom):
 
-            self.num = top        #the numerator is on top
-            self.den = bottom     #the denominator is on the bottom
+            self.num = top        # the numerator is on top
+            self.den = bottom     # the denominator is on the bottom
 
         def __str__(self):
             return str(self.num) + "/" + str(self.den)

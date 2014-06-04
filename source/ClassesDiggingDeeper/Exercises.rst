@@ -19,7 +19,7 @@ Exercises
           Create a class definition for a Rectangle class using this idea.  To create a Rectangle object at location (4,5) with width 6
           and height 5, we would do the following::
           
-              r = Rectangle(Point(4,5), 6, 5)
+              r = Rectangle(Point(4, 5), 6, 5)
               
         .. tab:: Answer
         

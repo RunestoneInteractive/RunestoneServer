@@ -14,7 +14,7 @@ Many problems in your program will lead to an error message.  For example as I w
 
 .. sourcecode:: python
 
-   current_time_str = input("what is the current time (in hours 0-23)?")
+   current_time_str = input("What is the current time (in hours 0-23)?")
    wait_time_str = input("How many hours do you want to wait")
 
    current_time_int = int(current_time_str)
@@ -29,7 +29,7 @@ Let's try the program again, but this time in an activecode:
 
 .. activecode:: db_ex3_5
 
-   current_time_str = input("what is the current time (in hours 0-23)?")
+   current_time_str = input("What is the current time (in hours 0-23)?")
    wait_time_str = input("How many hours do you want to wait")
 
    current_time_int = int(current_time_str)
@@ -96,7 +96,7 @@ Here are a couple examples of Parse errors in the example program we have been u
 
         .. activecode:: db_ex3_6
 
-           current_time_str = input("what is the current time (in hours 0-23)?")
+           current_time_str = input("What is the current time (in hours 0-23)?")
            wait_time_str = input("How many hours do you want to wait"
 
            current_time_int = int(current_time_str)
@@ -109,7 +109,7 @@ Here are a couple examples of Parse errors in the example program we have been u
 
         .. sourcecode:: python
 
-           current_time_str = input("what is the current time (in hours 0-23)?")
+           current_time_str = input("What is the current time (in hours 0-23)?")
            wait_time_str = input("How many hours do you want to wait"
 
            current_time_int = int(current_time_str)
@@ -132,7 +132,7 @@ Here are a couple examples of Parse errors in the example program we have been u
 
         .. activecode:: db_ex3_7
 
-           current_time_str = input("what is the "current time" (in hours 0-23)?")
+           current_time_str = input("What is the "current time" (in hours 0-23)?")
            wait_time_str = input("How many hours do you want to wait")
 
            current_time_int = int(current_time_str)
@@ -145,7 +145,7 @@ Here are a couple examples of Parse errors in the example program we have been u
 
         .. sourcecode:: python
 
-           current_time_str = input("what is the "current time" (in hours 0-23)?")
+           current_time_str = input("What is the "current time" (in hours 0-23)?")
            wait_time_str = input("How many hours do you want to wait")
 
            current_time_int = int(current_time_str)
@@ -154,11 +154,11 @@ Here are a couple examples of Parse errors in the example program we have been u
            final_time_int = current_time_int + wait_time_int
            print(final_time_int)
 
-        The error message points you to line 1 and in this case that is exactly where the error occurs. In this case your biggest clue is to notice the difference in  highlighting on the line.  Notice that the words "current time" are a different color than those around them.  Why is this?  Because "current time" is in double quotes inside another pair of double quotes Python things that you are finishing off one string, then you have some other names and findally another string.  But you haven't separated these names or strings by commas, and you haven't added them together with the concatenation operator (+).  So, there are several corrections you could make.  First you could make the argument to input be as follows:  ``"what is the 'current time' (in hours 0-23)"``  Notice that here we have correctly used single quotes inside double quotes.   Another option is to simply remove the extra double quotes.  Why were you quoting "current time" anyway?  ``"what is the current time (in hours 0-23)"``
+        The error message points you to line 1 and in this case that is exactly where the error occurs. In this case your biggest clue is to notice the difference in  highlighting on the line.  Notice that the words "current time" are a different color than those around them.  Why is this?  Because "current time" is in double quotes inside another pair of double quotes Python things that you are finishing off one string, then you have some other names and findally another string.  But you haven't separated these names or strings by commas, and you haven't added them together with the concatenation operator (+).  So, there are several corrections you could make.  First you could make the argument to input be as follows:  ``"What is the 'current time' (in hours 0-23)"``  Notice that here we have correctly used single quotes inside double quotes.   Another option is to simply remove the extra double quotes.  Why were you quoting "current time" anyway?  ``"What is the current time (in hours 0-23)"``
 
 **Finding Clues**  If you follow the same advice as for the last problem, comment out line one, you will immediately get a different error message.  Here's where you need to be very careful and not panic.  The error message you get now is: ``NameError: name 'current_time_str' is not defined on line 4``.  You might be very tempted to think that this is somehow related to the earlier problem and immediately conclude that there is something wrong with the variable name ``current_time_str`` but if you reflect for a minute  You will see that by commenting out line one you have caused a new and unrelated error.  That is you have commented out the creation of the name ``current_time_str``.  So of course when you want to convert it to an ``int`` you will get the NameError.  Yes, this can be confusing, but it will become much easier with experience.  It's also important to keep calm, and evaluate each new clue carefully so you don't waste time chasing problems that are not really there.  
 
-Uncomment line 1 and you are back to the ParseError.  Another track is to eliminate a possible source of error.  Rather than commenting out the entire line you might just try to assign ``current_time_str`` to a constant value.  For example you might make line one look like this:  ``current_time_str = "10"  #input("what is the "current time" (in hours 0-23)?")``.  Now you have assigned ``current_time_str`` to the string 10, and commented out the input statement.  And now the program works!  So you conclude that the problem must have something to do with the input function.
+Uncomment line 1 and you are back to the ParseError.  Another track is to eliminate a possible source of error.  Rather than commenting out the entire line you might just try to assign ``current_time_str`` to a constant value.  For example you might make line one look like this:  ``current_time_str = "10"  #input("What is the "current time" (in hours 0-23)?")``.  Now you have assigned ``current_time_str`` to the string 10, and commented out the input statement.  And now the program works!  So you conclude that the problem must have something to do with the input function.
 
 
 TypeError
@@ -209,13 +209,13 @@ Name errors almost always mean that you have used a variable before it has a val
 
 .. activecode:: db_ex3_9
 
-    str_time=input("what time is it now?")
-    str_wait_time=input("what is the number of nours to wait?")
-    time=int(str_time)
-    wai_time=int(str_wait_time)
+    str_time = input("What time is it now?")
+    str_wait_time = input("What is the number of nours to wait?")
+    time = int(str_time)
+    wai_time = int(str_wait_time)
 
-    time_when_alarm_go_off=time+wait_time
-    print time_when_alarm_go_off
+    time_when_alarm_go_off = time + wait_time
+    print(time_when_alarm_go_off)
 
 .. reveal:: db_ex39_reveal
     :showtitle: Show me the Solution
@@ -255,18 +255,18 @@ And one last bit of code to fix.
 
 .. activecode:: db_ex3_11
 
-    present_time = input("enter the present timein hours:")
-    set_alarm = input("set the hours for alarm:")
-    int (present_time,set_time,alarm_time)
+    present_time = input("Enter the present timein hours:")
+    set_alarm = input("Set the hours for alarm:")
+    int (present_time, set_time, alarm_time)
     alarm_time = present_time + set_alarm
-    print (alarm_time)
+    print(alarm_time)
 
 .. reveal:: db_ex311_reveal
     :showtitle: Show me the Solution
 
     .. admonition:: Solution
 
-        In this example the error message is about ``set_time`` not defined on line 3.  In this case the undefined name is not used in an assignment statement, but is used as a parameter (incorrectly) to a function call.   A search on ``set_time`` reveals that in fact it is only used once in the program.  Did the author mean ``set_alarm``?  If we make that assumption we immediately get another error ``NameError: name 'alarm_time' is not defined on line: 3``.  The variable ``alarm_time`` is defined on line 4, but that does not help us on line 3.  Furthermore we now have to ask the question is this function call ``int(present_time,set_alarm,alarm_time)`` even the correct use of the ``int`` function?  The answer to that is a resounding no.  Let's list all of the things wrong with line 3:
+        In this example the error message is about ``set_time`` not defined on line 3.  In this case the undefined name is not used in an assignment statement, but is used as a parameter (incorrectly) to a function call.   A search on ``set_time`` reveals that in fact it is only used once in the program.  Did the author mean ``set_alarm``?  If we make that assumption we immediately get another error ``NameError: name 'alarm_time' is not defined on line: 3``.  The variable ``alarm_time`` is defined on line 4, but that does not help us on line 3.  Furthermore we now have to ask the question is this function call ``int(present_time, set_alarm, alarm_time)`` even the correct use of the ``int`` function?  The answer to that is a resounding no.  Let's list all of the things wrong with line 3:
 
         1.  ``set_time`` is not defined and never used, the author probably meant ``set_alarm``.
         2.  ``alarm_time`` cannot be used as a parameter before it is defined, even on the next line!
@@ -276,15 +276,15 @@ And one last bit of code to fix.
 
 .. advanced topic!
 
-.. present_time = int(input("enter the present time(hhmm):"))
+.. present_time = int(input("Enter the present time(hhmm):"))
 .. print type(present_time)
 
 .. min = _ * 60 
-.. tot_min = min + [2,4]
-.. print (tot_min)
-.. set_hrs = int(input("enter the hours (hhmm):"))
+.. tot_min = min + [2, 4]
+.. print(tot_min)
+.. set_hrs = int(input("Enter the hours (hhmm):"))
 .. alarm_time = present_time + set_hrs
-.. print (alarm_time)
+.. print(alarm_time)
 
 
 ValueError
@@ -294,7 +294,7 @@ Value errors occur when you pass a parameter to a function and the function is e
 
 .. activecode:: db_ex3_12
 
-   current_time_str = input("what is the current time (in hours 0-23)?")
+   current_time_str = input("What is the current time (in hours 0-23)?")
    current_time_int = int(current_time_str)
 
    wait_time_str = input("How many hours do you want to wait")

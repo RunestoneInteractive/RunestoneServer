@@ -36,7 +36,7 @@ left column and 2 raised to the power of that value in the right column:
     print("---", '\t', "-----")
 
     for x in range(13):        # generate values for columns
-        print(x, '\t', 2**x)
+        print(x, '\t', 2 ** x)
 
 The string ``'\t'`` represents a **tab character**. The backslash character in
 ``'\t'`` indicates the beginning of an **escape sequence**.  Escape sequences

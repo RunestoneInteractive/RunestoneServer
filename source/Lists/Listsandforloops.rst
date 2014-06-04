@@ -94,7 +94,7 @@ list, so that we can assign a new value to it.
      alist = [4, 2, 8, 6, 5]
      blist = [ ]
      for item in alist:
-        blist.append(item+5)
+         blist.append(item+5)
      print(blist)
 
 

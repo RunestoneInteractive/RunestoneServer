@@ -20,7 +20,7 @@ Perhaps the most important lesson in debugging is that it is **largely avoidable
 This notion of **Get something working and keep it working** is a mantra that you can repeat throughout your career as a programmer.  It's a great way to avoid the frustrations mentioned above.  Think of it this way.  Every time you have a little success, your brain releases a tiny bit of chemical that makes you happy.  So, you can keep yourself happy and make programming more enjoyable by creating lots of small victories for yourself.
 
 
-Ok, let's look at an example.  Let's solve the problem posed in question 3 at the end of the Simple Python Data chapter.  Ask the user for the time now (in hours 0 -- 23), and ask for the number of hours to wait. Your program should output what the time will be on the clock when the alarm goes off.
+Ok, let's look at an example.  Let's solve the problem posed in question 3 at the end of the Simple Python Data chapter.  Ask the user for the time now (in hours 0 - 23), and ask for the number of hours to wait. Your program should output what the time will be on the clock when the alarm goes off.
 
 So, where to start?  The problem requires two pieces of input from the user, so let's start there and make sure we can get the data we need.
 
@@ -37,7 +37,7 @@ So far so good.  Now let's take the next step.  We need to figure out what the t
 
 .. activecode:: db_ex3_2
 
-   current_time = input("what is the current time (in hours 0--23)?")
+   current_time = input("What is the current time (in hours 0 - 23)?")
    wait_time = input("How many hours do you want to wait")
 
    print(current_time)
@@ -64,7 +64,7 @@ This error was probably pretty simple to spot, because we printed out the value 
 
 .. activecode:: db_ex3_3
 
-   current_time_str = input("what is the current time (in hours 0-23)?")
+   current_time_str = input("What is the current time (in hours 0-23)?")
    wait_time_str = input("How many hours do you want to wait")
 
    current_time_int = int(current_time_str)
@@ -82,7 +82,7 @@ So finally we need to account for those numbers that are bigger than 23.  For th
 
 .. activecode:: db_ex3_4
 
-   current_time_str = input("what is the current time (in hours 0-23)?")
+   current_time_str = input("What is the current time (in hours 0-23)?")
    wait_time_str = input("How many hours do you want to wait")
 
    current_time_int = int(current_time_str)

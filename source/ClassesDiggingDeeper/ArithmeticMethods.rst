@@ -53,8 +53,8 @@ You can try the addition method and then modify the fractions and retry.
 
         def __init__(self, top, bottom):
 
-            self.num = top        #the numerator is on top
-            self.den = bottom     #the denominator is on the bottom
+            self.num = top        # the numerator is on top
+            self.den = bottom     # the denominator is on the bottom
 
         def __str__(self):
             return str(self.num) + "/" + str(self.den)

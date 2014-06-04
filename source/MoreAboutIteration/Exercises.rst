@@ -87,10 +87,10 @@ Exercises
                             return False
                     return True
 
-                print (is_prime(25))
-                print (is_prime(7))
-                print (is_prime(251))
-                print (is_prime(20))
+                print(is_prime(25))
+                print(is_prime(7))
+                print(is_prime(251))
+                print(is_prime(20))
 
         .. tab:: Discussion 
 
@@ -142,7 +142,7 @@ Exercises
                     else:
                         return False
 
-                def isInScreen(w,t):
+                def isInScreen(w, t):
                     leftBound = - w.window_width() / 2
                     rightBound = w.window_width() / 2
                     topBound = w.window_height() / 2
@@ -355,7 +355,7 @@ Exercises
                            newim.setPixel(2*col, 2 * row, oldpixel)
                            newim.setPixel(2*col+1, 2 * row, oldpixel)
                            newim.setPixel(2*col, 2*row+1, oldpixel)
-                           newim.setPixel(2*col+1, 2*row+1), oldpixel)
+                           newim.setPixel(2*col+1, 2*row+1, oldpixel)
                            
                    return newim
                    
@@ -405,7 +405,7 @@ Exercises
                 def pixelMapper(oldimage, rgbFunction):
                     width = oldimage.getWidth()
                     height = oldimage.getHeight()
-                    newim = image.EmptyImage(width,height)
+                    newim = image.EmptyImage(width, height)
                 
                     for row in range(height):
                         for col in range(width):

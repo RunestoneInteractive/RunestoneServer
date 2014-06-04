@@ -131,20 +131,20 @@ Exercises
                     import turtle
 
                     def drawBar(t, height):
-                      """ Get turtle t to draw one bar, of height. """
-                      t.begin_fill()               # start filling this shape
-                      if height < 0:
-                          t.write(str(height))
-                      t.left(90)
-                      t.forward(height)
-                      if height >= 0:
-                          t.write(str(height))
-                      t.right(90)
-                      t.forward(40)
-                      t.right(90)
-                      t.forward(height)
-                      t.left(90)
-                      t.end_fill()                 # stop filling this shape
+                        """ Get turtle t to draw one bar, of height. """
+                        t.begin_fill()               # start filling this shape
+                        if height < 0:
+                            t.write(str(height))
+                        t.left(90)
+                        t.forward(height)
+                        if height >= 0:
+                            t.write(str(height))
+                        t.right(90)
+                        t.forward(40)
+                        t.right(90)
+                        t.forward(height)
+                        t.left(90)
+                        t.end_fill()                 # stop filling this shape
 
 
 

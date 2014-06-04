@@ -25,8 +25,8 @@ Exercises
             
                howmany = 10
                for counter in range(howmany):
-                  arandom = random.random()
-                  print(arandom)
+                   arandom = random.random()
+                   print(arandom)
 
         .. tab:: Discussion
 
