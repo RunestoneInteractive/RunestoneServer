@@ -50,7 +50,7 @@ response.files.insert(1,URL('static','css/datepicker.css'))
 									<textarea rows="3" class="form-control" id="noteToFriends"></textarea>
 							</div>
 							<div class="form-group">
-								<button type="button" name ="cancel_button" class="btn btn-default" onclick = "window.location={{=URL('mygroup', 'schedule')}}">Cancel</button>
+								<button type="button" name ="cancel_button" class="btn btn-default" onclick = "window.location='{{=URL('mygroup', 'schedule')}}'">Cancel</button>
 								<button type="button" name ="propose_button" class="btn btn-default" id="p_button">Propose Plan</button>
 							</div>
 						</form>
@@ -70,9 +70,9 @@ response.files.insert(1,URL('static','css/datepicker.css'))
 		<script>
 			$(document).ready(function(){
                 var s ="{{=request.vars.start}}";
-                var st = new Date(s);
+                var st = new Date(s.substring(0,s.indexOf(' '))||s);
 				var e ="{{=request.vars.end}}";
-                var et = new Date(e);
+                var et = new Date(e.substring(0,e.indexOf(' '))||e);
 				var diffDates = 0, startDate = st, endDate  =et;
 				$('#totalDays').val(Math.round((endDate  - startDate)/(1000*60*60*24))+1);
 				var sDate = new Date(startDate.getTime());

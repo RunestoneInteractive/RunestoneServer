@@ -27,7 +27,7 @@ db.define_table('user_chapter_progress',
 )
 
 db.define_table('user_sub_chapter_progress',
-  Field('user_id','reference auth_user'),
+  Field('user_id', 'reference auth_user'),
   Field('chapter_id','string'),
   Field('sub_chapter_id','string'),
   Field('start_date','datetime', default=datetime.datetime.now()),

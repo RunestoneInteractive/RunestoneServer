@@ -39,18 +39,23 @@ def schedule():
         allUserProgress = db(db.user_chapter_progress.id>0).select(db.user_chapter_progress.ALL)
         cohortName = db(db.cohort_master.id == auth.user.cohort_id).select(db.cohort_master.cohort_name)
         return dict(allPlans = allPlans, allProgress = allProgress, allUsers = allUsers, allComments = allComments, allUserProgress = allUserProgress, cohortName = cohortName)
+
 def newschedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
         chapters = db(db.chapters.id==db.cohort_plan.chapter_id).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status, db.cohort_plan.cohort_id)
         return dict(chapters = chapters)
+
+
 def modifiedschedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
         chapters = db(db.chapters.id==db.cohort_plan.chapter_id).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status,db.cohort_plan.start_date , db.cohort_plan.end_date)
-        return dict(chapters = chapters)
+        return dict(chapters=chapters)
+
+
 def modify():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='new')
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(start_date=request.vars.startDate)
@@ -59,19 +64,26 @@ def modify():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_by=auth.user)
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_on=datetime.datetime.now())
     plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
-    db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
-    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=request.vars.chapter)
+    plan_fields = db.cohort_plan._filter_fields(plan)
+    plan_fields['plan_id'] = plan.id
+    db.cohort_plan_revisions.insert(**plan_fields)
+
+
 def delete():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='notStarted')
     plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
     db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
     db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=request.vars.plan)
     db((db.user_comments.cohort_id==auth.user.cohort_id) & (db.user_comments.chapter_id==request.vars.chapter)).delete()
+
 def complete():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed')
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())
+
 def comment():
 	db.user_comments.insert(cohort_id=auth.user.cohort_id,chapter_id=request.vars.chapter,comment=request.vars.text,comment_by=auth.user)
+
+
 def initiateGroup():
     #if pprint.pprint(auth.user)
     if auth.user == None:
@@ -87,6 +99,7 @@ def initiateGroup():
                 plan.cohort_plan.status='active'
                 db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='active')
         return dict(allPlans = allPlans, allProgress = allProgress, allUsers = allUsers, allComments = allComments, requestArgs = request.args(0))
+
 def manageGroup():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
@@ -103,6 +116,8 @@ def createNewGroup():
     auth.user.cohort_id = newGroupId
     joinGroupParameterized(invitationId)
     return invitationId
+
+
 def joinGroup():
     invitationId = request.vars.invitationId
     currentGroup = db(db.cohort_master.invitation_id==invitationId).select(db.cohort_master.id, db.cohort_master.cohort_name, db.cohort_master.is_active)
