@@ -29,7 +29,7 @@ variable.  A function to compute this sum is shown below.
 
     def sumTo(aBound):
         theSum = 0
-        for aNumber in range(1, aBound+1):
+        for aNumber in range(1, aBound + 1):
             theSum = theSum + aNumber
 
         return theSum
@@ -38,7 +38,7 @@ variable.  A function to compute this sum is shown below.
 
     print(sumTo(1000))
 
-To review, the variable ``theSum`` is called the accumulator.  It is initialized to zero before we start the loop.  The loop variable, ``aNumber`` will take on the values produced by the ``range(1,aBound+1)`` function call.  Note that this produces all the integers from 1 up to the value of ``aBound``.  If we had not added 1 to ``aBound``, the range would have stopped one value short since ``range`` does not include the upper bound.
+To review, the variable ``theSum`` is called the accumulator.  It is initialized to zero before we start the loop.  The loop variable, ``aNumber`` will take on the values produced by the ``range(1, aBound + 1)`` function call.  Note that this produces all the integers from 1 up to the value of ``aBound``.  If we had not added 1 to ``aBound``, the range would have stopped one value short since ``range`` does not include the upper bound.
 
 The assignment statement, ``theSum = theSum + aNumber``, updates ``theSum`` each time through the loop.  This accumulates the running total.  Finally, we return the value of the accumulator.
 

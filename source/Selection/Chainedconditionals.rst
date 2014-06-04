@@ -97,7 +97,7 @@ Here is the same program using ``elif``.
      
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
-     else (x > 0):
+     else x > 0:
          print(x, " is a positive number")
      else:
          print(x, " is 0")
@@ -109,7 +109,7 @@ Here is the same program using ``elif``.
      
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
-     elif (x > 0):
+     elif x > 0:
          print(x, " is a positive number")
      else:
          print(x, " is 0")
@@ -120,7 +120,7 @@ Here is the same program using ``elif``.
      
      if x < 0:
          print("The negative number ",  x, " is not valid here.")
-     if (x > 0):
+     if x > 0:
          print(x, " is a positive number")
      else:
          print(x, " is 0")
@@ -140,11 +140,11 @@ Here is the same program using ``elif``.
    .. code-block:: python
 
      if x < y and x < z:
-         print ("a")
+         print("a")
      elif y < x and y < z:
-         print ("b")
+         print("b")
      else:
-         print ("c")
+         print("c")
 
 
 

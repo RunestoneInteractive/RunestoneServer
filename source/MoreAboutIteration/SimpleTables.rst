@@ -32,8 +32,8 @@ left column and 2 raised to the power of that value in the right column:
 
 .. activecode:: ch07_table1
 
-    print("n",'\t',"2**n")     #table column headings
-    print("---",'\t',"-----")
+    print("n", '\t', "2**n")     #table column headings
+    print("---", '\t', "-----")
 
     for x in range(13):        # generate values for columns
         print(x, '\t', 2**x)
@@ -78,5 +78,5 @@ column does not depend on the number of digits in the first column.
   :feedback_c: A tab has a pre-defined width that is equal to a given number of spaces.
   :feedback_d: You may use spaces to create tables.  The columns might look jagged, or they might not, depending on the width of the items in each column.
 
-  What is the difference between a tab (\t) and a sequence of spaces?
+  What is the difference between a tab (``'\t'``) and a sequence of spaces?
 

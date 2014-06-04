@@ -26,7 +26,7 @@ distance between two points.
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self, initX, initY):
- 
+            """ Create a new point at the given coordinates. """ 
             self.x = initX
             self.y = initY
 
@@ -40,15 +40,15 @@ distance between two points.
             return ((self.x ** 2) + (self.y ** 2)) ** 0.5
 
     def distance(point1, point2):
-        xdiff = point2.getX()-point1.getX()
-        ydiff = point2.getY()-point1.getY()
+        xdiff = point2.getX() - point1.getX()
+        ydiff = point2.getY() - point1.getY()
 
         dist = math.sqrt(xdiff**2 + ydiff**2)
         return dist
     
-    p = Point(4,3)
-    q = Point(0,0)
-    print(distance(p,q))
+    p = Point(4, 3)
+    q = Point(0, 0)
+    print(distance(p, q))
 
 
 ``distance`` takes two points and returns the distance between them.  Note that ``distance`` is **not** a method of the Point class.  You can see this by looking at the indentation pattern.  It is not inside the class definition.  The other way we

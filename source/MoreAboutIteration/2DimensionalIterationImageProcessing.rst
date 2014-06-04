@@ -81,7 +81,7 @@ the same as the current amount of green.
 
     import image
 
-    p = image.Pixel(45,76,200)
+    p = image.Pixel(45, 76, 200)
     print(p.getRed())
     p.setRed(66)
     print(p.getRed())
@@ -156,7 +156,7 @@ on its basic color intensities.
     print(img.getWidth())
     print(img.getHeight())
 
-    p = img.getPixel(45,55)
+    p = img.getPixel(45, 55)
     print(p.getRed(), p.getGreen(), p.getBlue())
 
 
@@ -171,10 +171,10 @@ pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few othe
    :answer_c: 165 161 158
    :answer_d: 201 104 115
    :correct: b
-   :feedback_a: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100,30).
+   :feedback_a: These are the values for the pixel at row 30, column 100.  Get the values for row 100 and column 30 with p = img.getPixel(100, 30).
    :feedback_b: Yes, the RGB values are 183 179 170 at row 100 and column 30.
-   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(30,100).
-   :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(30,100).
+   :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(30, 100).
+   :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(30, 100).
 
    In the previous ActiveCode example, what are the RGB values of the pixel at row 100, column 30?
 
@@ -193,7 +193,7 @@ To see how this works, consider the iteration below.
 .. sourcecode:: python
 
     for i in range(5):
-       print(i)
+        print(i)
 
 We have seen this enough times to know that the value of ``i`` will be 0, then 1, then 2, and so on up to 4.
 The ``print`` will be performed once for each pass.
@@ -202,8 +202,8 @@ However, the body of the loop can contain any statements including another itera
 .. sourcecode:: python
 
     for i in range(5):
-       for j in range(3):
-            print(i,j)
+        for j in range(3):
+            print(i, j)
 
 The ``for i`` iteration is the `outer iteration` and the ``for j`` iteration is the `inner iteration`.  Each pass through
 the outer iteration will result in the complete processing of the inner iteration from beginning to end.  This means that
@@ -214,8 +214,8 @@ Here is the same example in activecode.  Try it.  Note that the value of ``i`` s
 .. activecode:: nested1
 
     for i in range(5):
-       for j in range(3):
-            print(i,j)
+        for j in range(3):
+            print(i, j)
 
 Another way to see this in more detail is to examine the behavior with codelens.  Step through the iterations to see the
 flow of control as it occurs with the nested iteration.  Again, for every value of ``i``, all of the values of ``j`` will occur.  You can see that the inner iteration completes before going on to the next pass of the outer iteration.
@@ -223,8 +223,8 @@ flow of control as it occurs with the nested iteration.  Again, for every value 
 .. codelens:: nested2
 
     for i in range(5):
-       for j in range(3):
-            print(i,j)
+        for j in range(3):
+            print(i, j)
 
 Our goal with image processing is to visit each pixel.  We will use an iteration to process each `row`.  Within that iteration, we will use a nested iteration to process each `column`.  The result is a nested iteration, similar to the one
 seen above, where the outer ``for`` loop processes the rows, from 0 up to but not including the height of the image.
@@ -236,7 +236,7 @@ The resulting code will look like the following.  We are now free to do anything
 
 	for row in range(img.getHeight()):
 	    for col in range(img.getWidth()):
-	        #do something with the pixel at position (col,row)
+	        # do something with the pixel at position (col,row)
 
 One of the easiest image processing algorithms will create what is known as a **negative** image.  A negative image simply means that
 each pixel will be the `opposite` of what it was originally.  But what does opposite mean?
@@ -264,20 +264,20 @@ The program below implements this algorithm using the previous image.  Run it to
     import image
 
     img = image.Image("luther.jpg")
-    newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+    newimg = image.EmptyImage(img.getWidth(), img.getHeight())
     win = image.ImageWin()
 
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
-           p = img.getPixel(col,row)
+            p = img.getPixel(col, row)
 
-           newred = 255-p.getRed()
-           newgreen = 255-p.getGreen()
-           newblue = 255-p.getBlue()
+            newred = 255 - p.getRed()
+            newgreen = 255 - p.getGreen()
+            newblue = 255 - p.getBlue()
 
-           newpixel = image.Pixel(newred,newgreen,newblue)
+            newpixel = image.Pixel(newred, newgreen, newblue)
 
-           newimg.setPixel(col,row,newpixel)
+            newimg.setPixel(col, row, newpixel)
 
     newimg.draw(win)
     win.exitonclick()
@@ -330,8 +330,8 @@ What remains is to focus on ways that we can better represent our problems in te
    .. code-block:: python
 
       for i in range(3):
-        for j in range(2):
-          print(i,j)
+          for j in range(2):
+              print(i, j)
 
    ::
 
@@ -385,9 +385,9 @@ What remains is to focus on ways that we can better represent our problems in te
 
    .. code-block:: python
 
-      newred = 255-p.getRed()
-      newgreen = 255-p.getGreen()
-      newblue = 255-p.getBlue()
+      newred = 255 - p.getRed()
+      newgreen = 255 - p.getGreen()
+      newblue = 255 - p.getBlue()
 
    with the lines:
 

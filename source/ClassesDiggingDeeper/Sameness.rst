@@ -31,7 +31,7 @@ It allows us to find out if two references refer to the same object.
 
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
             self.num = top        #the numerator is on top
             self.den = bottom     #the denominator is on the bottom
@@ -40,8 +40,8 @@ It allows us to find out if two references refer to the same object.
             return str(self.num) + "/" + str(self.den)
 
 
-    myfraction = Fraction(3,4)
-    yourfraction = Fraction(3,4)
+    myfraction = Fraction(3, 4)
+    yourfraction = Fraction(3, 4)
     print(myfraction is yourfraction)
 
     ourfraction = myfraction
@@ -69,19 +69,19 @@ denominator.  For example, here is a boolean function that performs this check.
 
 .. sourcecode:: python
 
-    def sameFraction(f1,f2):
+    def sameFraction(f1, f2):
         return (f1.getNum() == f2.getNum()) and (f1.getDen() == f2.getDen())
 
 This type of equality is known as **deep equality** since it compares the values "deep" in the object, not just the reference to the object. 
   
 .. activecode:: fractions_eq1
 
-    def sameFraction(f1,f2):
+    def sameFraction(f1, f2):
         return (f1.getNum() == f2.getNum()) and (f1.getDen() == f2.getDen())
  
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
             self.num = top        #the numerator is on top
             self.den = bottom     #the denominator is on the bottom
@@ -96,8 +96,8 @@ This type of equality is known as **deep equality** since it compares the values
             return self.den
 
 
-    myfraction = Fraction(3,4)
-    yourfraction = Fraction(3,4)
+    myfraction = Fraction(3, 4)
+    yourfraction = Fraction(3, 4)
     print(myfraction is yourfraction)
     print(sameFraction(myfraction,yourfraction))
 
@@ -121,8 +121,8 @@ shallow and deep equality.
         s = Point(4, 2)
         print("== on Points returns", p == s)  # by default, == does a shallow equality test here
 
-        a = [2,3]
-        b = [2,3]
+        a = [2, 3]
+        b = [2, 3]
         print("== on lists returns",  a == b)  # by default, == does a deep equality test on lists
 
     This outputs::

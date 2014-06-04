@@ -39,19 +39,19 @@ You can try the addition method and then modify the fractions and retry.
 
 .. activecode:: fractions_add1
 
-    def gcd(m,n):
-        while m%n != 0:
+    def gcd(m, n):
+        while m % n != 0:
             oldm = m
             oldn = n
 
             m = oldn
-            n = oldm%oldn
+            n = oldm % oldn
 
         return n
 
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
             self.num = top        #the numerator is on top
             self.den = bottom     #the denominator is on the bottom
@@ -70,12 +70,12 @@ You can try the addition method and then modify the fractions and retry.
             newnum = self.num*otherfraction.den + self.den*otherfraction.num
             newden = self.den * otherfraction.den
 
-            common = gcd(newnum,newden)
+            common = gcd(newnum, newden)
 
-            return Fraction(newnum//common,newden//common)
+            return Fraction(newnum // common, newden // common)
 
-    f1 = Fraction(1,2)
-    f2 = Fraction(1,4)
+    f1 = Fraction(1, 2)
+    f2 = Fraction(1, 4)
 
     f3 = f1.add(f2)
     print(f3)
@@ -87,31 +87,24 @@ The details of the method are the same.
 
 .. sourcecode:: python
 
-	def __add__(self,otherfraction):
+	def __add__(self, otherfraction):
 
 	    newnum = self.num*otherfraction.den + self.den*otherfraction.num
 	    newden = self.den * otherfraction.den
 
-	    common = gcd(newnum,newden)
+	    common = gcd(newnum, newden)
 
-	    return Fraction(newnum//common,newden//common)
+	    return Fraction(newnum // common, newden // common)
 
 However, now we can perform addition in the same manner that we are used to with other numeric data.
 
 .. sourcecode:: python
 
-	f1 = Fraction(1,2)
-	f2 = Fraction(1,4)
+	f1 = Fraction(1, 2)
+	f2 = Fraction(1, 4)
 
 	f3 = f1 + f2    # calls the __add__ method of f1
 	print(f3)
-
-.. admonition:: + operator versus __add__ method
-
-	It turns out that addition is a method that exists for integers as well.  4+5 can be written as (4).__add__(5).
-	We are asking 4 to invoke its add method, passing 5 as the other value.
-	
-
 
 .. note::
 

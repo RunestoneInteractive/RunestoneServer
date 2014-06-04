@@ -75,7 +75,7 @@ Here is a simple example of a Python program.
 .. sourcecode::  python
 
     print('Hello World')
-    print('2 + 3 = ', 2+3)
+    print('2 + 3 = ', 2 + 3)
 
 Let's assume that you have typed in the lines above in Notepad or TextEdit or
 some similar editor, if you already know emacs or vi you are a awesome!  Now

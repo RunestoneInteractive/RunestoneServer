@@ -77,7 +77,7 @@ There is also a similar function called ``chr`` that converts integers into thei
     print(chr(49))
     print(chr(53))
 
-    print("The character for 32 is",chr(32),"!!!")
+    print("The character for 32 is", chr(32), "!!!")
     print(ord(" "))
 
 One thing to note in the last two examples is the fact that the space character has an ordinal value (32).  Even though you don't see it, it is an actual character.  We sometimes call it a *nonprinting* character.

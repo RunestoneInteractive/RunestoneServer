@@ -60,7 +60,7 @@ window and 10% that the turtle has escaped.
     import turtle
 
 
-    def isInScreen(w,t):
+    def isInScreen(w, t):
         if random.random() > 0.1:
             return True
         else:
@@ -71,8 +71,8 @@ window and 10% that the turtle has escaped.
     wn = turtle.Screen()
 
     t.shape('turtle')
-    while isInScreen(wn,t):
-        coin = random.randrange(0,2)
+    while isInScreen(wn, t):
+        coin = random.randrange(0, 2)
         if coin == 0:              # heads
             t.left(90)
         else:                      # tails
@@ -105,10 +105,10 @@ turtle and then use conditionals to decide.  Here is one implementation:
 .. sourcecode:: python
 
     def isInScreen(wn,t):
-        leftBound = -(wn.window_width()/2)
-        rightBound = wn.window_width()/2
-        topBound = wn.window_height()/2
-        bottomBound = -(wn.window_height()/2)
+        leftBound = -(wn.window_width() / 2)
+        rightBound = wn.window_width() / 2
+        topBound = wn.window_height() / 2
+        bottomBound = -(wn.window_height() / 2)
 
         turtleX = t.xcor()
         turtleY = t.ycor()
@@ -136,10 +136,10 @@ Here is the full version of our random walk program.
     import turtle
 
     def isInScreen(w,t):
-        leftBound = - w.window_width()/2
-        rightBound = w.window_width()/2
-        topBound = w.window_height()/2
-        bottomBound = -w.window_height()/2
+        leftBound = - w.window_width() / 2
+        rightBound = w.window_width() / 2
+        topBound = w.window_height() / 2
+        bottomBound = -w.window_height() / 2
 
         turtleX = t.xcor()
         turtleY = t.ycor()
@@ -157,7 +157,7 @@ Here is the full version of our random walk program.
 
     t.shape('turtle')
     while isInScreen(wn,t):
-        coin = random.randrange(0,2)
+        coin = random.randrange(0, 2)
         if coin == 0:
             t.left(90)
         else:

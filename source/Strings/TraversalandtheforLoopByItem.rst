@@ -66,7 +66,7 @@ Note that it is only possible to process the characters one at a time from left 
 
       s = "python rocks"
       for ch in s:
-         print("HELLO")
+          print("HELLO")
 
    
    
@@ -89,6 +89,6 @@ Note that it is only possible to process the characters one at a time from left 
 
       s = "python rocks"
       for ch in s[3:8]:
-         print("HELLO")
+          print("HELLO")
 
 

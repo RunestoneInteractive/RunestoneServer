@@ -34,7 +34,7 @@ Exercises
 
             .. activecode:: ch02_ex1
 
-               print(5**2)
+               print(5 ** 2)
 
         .. tab:: Answer
 

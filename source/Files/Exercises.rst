@@ -45,7 +45,7 @@ Exercises
 
             .. activecode:: ch_files_q1answer
 
-                f = open("studentdata.txt","r")
+                f = open("studentdata.txt", "r")
 
                 for aline in f:
                     items = aline.split()
@@ -88,11 +88,11 @@ Exercises
 
             .. activecode:: ch_files_q3answer
 
-                f = open("studentdata.txt","r")
+                f = open("studentdata.txt", "r")
 
                 for aline in f:
-                   items = aline.split()
-                   print(items[0],"max is", max(items[1:]), "min is", min(items[1:]))
+                    items = aline.split()
+                    print(items[0], "max is", max(items[1:]), "min is", min(items[1:]))
 
                 f.close()
 
@@ -187,9 +187,9 @@ Exercises
 
                 t = turtle.Turtle()
                 wn = turtle.Screen()
-                wn.setworldcoordinates(-300,-300,300,300)
+                wn.setworldcoordinates(-300, -300, 300, 300)
 
-                f = open("mystery.txt","r")
+                f = open("mystery.txt", "r")
 
                 for aline in f:
                     items = aline.split()
@@ -199,8 +199,8 @@ Exercises
                         if items[0] == "DOWN":
                             t.down()
                         else:
-                            #must be coords
-                            t.goto(int(items[0]),int(items[1]))
+                            # must be coords
+                            t.goto(int(items[0]), int(items[1]))
 
                 f.close()
                 wn.exitonclick()

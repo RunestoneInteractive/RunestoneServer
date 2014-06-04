@@ -68,9 +68,9 @@ change the original.  You can also consult the `Python documentation for strings
     els = ss.count("l")
     print(els)
 
-    print("***"+ss.strip()+"***")
-    print("***"+ss.lstrip()+"***")
-    print("***"+ss.rstrip()+"***")
+    print("***" + ss.strip() + "***")
+    print("***" + ss.lstrip() + "***")
+    print("***" + ss.rstrip() + "***")
 
     news = ss.replace("o", "***")
     print(news)
@@ -82,9 +82,9 @@ change the original.  You can also consult the `Python documentation for strings
     food = "banana bread"
     print(food.capitalize())
 
-    print("*"+food.center(25)+"*")
-    print("*"+food.ljust(25)+"*")     #stars added to show bounds
-    print("*" +food.rjust(25)+"*")
+    print("*" + food.center(25) + "*")
+    print("*" + food.ljust(25) + "*")     # stars added to show bounds
+    print("*" + food.rjust(25) + "*")
 
     print(food.find("e"))
     print(food.find("na"))
@@ -136,7 +136,7 @@ change the original.  You can also consult the `Python documentation for strings
    .. code-block:: python
    
       s = "python rocks"
-      print(s[1]*s.index("n"))
+      print(s[1] * s.index("n"))
 
 
 .. index::

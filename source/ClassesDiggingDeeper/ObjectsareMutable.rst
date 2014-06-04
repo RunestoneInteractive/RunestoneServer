@@ -26,17 +26,17 @@ function on a number of different examples.
 
 .. activecode:: fractions_gcd
 
-	def gcd(m,n):
-	    while m%n != 0:
+	def gcd(m, n):
+	    while m % n != 0:
 	        oldm = m
 	        oldn = n
 
 	        m = oldn
-	        n = oldm%oldn
+	        n = oldm % oldn
             
 	    return n
 
-	print(gcd(12,16))
+	print(gcd(12, 16))
 
 
 Now that we have a function that can help us with finding the greatest common divisor, we can use that to implement
@@ -47,19 +47,19 @@ greatest common divisor.  It will then modify itself by dividing its ``num`` and
 
 .. activecode:: fractions_simplify
 
-    def gcd(m,n):
-        while m%n != 0:
+    def gcd(m, n):
+        while m % n != 0:
             oldm = m
             oldn = n
 
             m = oldn
-            n = oldm%oldn
+            n = oldm % oldn
 
         return n
 
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
             self.num = top        #the numerator is on top
             self.den = bottom     #the denominator is on the bottom
@@ -73,7 +73,7 @@ greatest common divisor.  It will then modify itself by dividing its ``num`` and
             self.num = self.num // common
             self.den = self.den // common
 
-    myfraction = Fraction(12,16)
+    myfraction = Fraction(12, 16)
 
     print(myfraction)
     myfraction.simplify()

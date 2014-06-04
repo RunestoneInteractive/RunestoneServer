@@ -15,12 +15,12 @@ Similarly, the ``*`` operator repeats the items in a list a given number of time
 
 .. activecode:: chp09_5
 
-    fruit = ["apple","orange","banana","cherry"]
-    print([1,2] + [3,4])
-    print(fruit+[6,7,8,9])
+    fruit = ["apple", "orange", "banana", "cherry"]
+    print([1, 2] + [3, 4])
+    print(fruit + [6, 7, 8, 9])
 
     print([0] * 4)
-    print([1,2,["hello","goodbye"]]*2)
+    print([1, 2, ["hello", "goodbye"]] * 2)
 
 
 It is important to see that these operators create new lists from the elements of the operand lists.  If you concatenate a list with 2 items and a list with 4 items, you will get a new list with 6 items (not a list with two sublists).  Similarly, repetition of a list of 2 items 4 times will give a list with 8 items.
@@ -31,8 +31,8 @@ One way for us to make this more clear is to run a part of this example in codel
 
 .. codelens:: chp09_concatid
 
-    fruit = ["apple","orange","banana","cherry"]
-    numlist = [6,7]
+    fruit = ["apple", "orange", "banana", "cherry"]
+    numlist = [6, 7]
 
     newlist = fruit + numlist
 
@@ -46,7 +46,7 @@ In Python, every object has a unique identification tag.  Likewise, there is a b
 
 .. sourcecode:: python
 
-    >>> alist = [4,5,6]
+    >>> alist = [4, 5, 6]
     >>> id(alist)
     4300840544
     >>> 
@@ -55,9 +55,9 @@ In Python, every object has a unique identification tag.  Likewise, there is a b
 
 .. mchoicemf:: test_question9_5_1
    :answer_a: 6
-   :answer_b: [1,2,3,4,5,6]
-   :answer_c: [1,3,5,2,4,6]
-   :answer_d: [3,7,11]
+   :answer_b: [1, 2, 3, 4, 5, 6]
+   :answer_c: [1, 3, 5, 2, 4, 6]
+   :answer_d: [3, 7, 11]
    :correct: c
    :feedback_a: Concatenation does not add the lengths of the lists.
    :feedback_b: Concatenation does not reorder the items. 
@@ -68,17 +68,17 @@ In Python, every object has a unique identification tag.  Likewise, there is a b
    
    .. code-block:: python
 
-     alist = [1,3,5]
-     blist = [2,4,6]
+     alist = [1, 3, 5]
+     blist = [2, 4, 6]
      print(alist + blist)
 
    
    
 .. mchoicemf:: test_question9_5_2
    :answer_a: 9
-   :answer_b: [1,1,1,3,3,3,5,5,5]
-   :answer_c: [1,3,5,1,3,5,1,3,5]
-   :answer_d: [3,9,15]
+   :answer_b: [1, 1, 1, 3, 3, 3, 5, 5, 5]
+   :answer_c: [1, 3, 5, 1, 3, 5, 1, 3, 5]
+   :answer_d: [3, 9, 15]
    :correct: c
    :feedback_a: Repetition does not multiply the lengths of the lists.  It repeats the items.
    :feedback_b: Repetition does not repeat each item individually.
@@ -89,7 +89,7 @@ In Python, every object has a unique identification tag.  Likewise, there is a b
    
    .. code-block:: python
 
-     alist = [1,3,5]
+     alist = [1, 3, 5]
      print(alist * 3)
 
    

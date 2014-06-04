@@ -32,14 +32,14 @@ Exercises
                 def newtonSqrt(n):
                     approx = 0.5 * n
                     better = 0.5 * (approx + n/approx)
-                    while  better !=  approx:
+                    while better != approx:
                         approx = better
                         better = 0.5 * (approx + n/approx)
-                        print (" Approx:", better)
+                        print("Approx:", better)
                     return approx
 
 
-                print ("Final approx:", newtonSqrt(25))
+                print("Final approx:", newtonSqrt(25))
 
         .. tab:: Discussion 
 
@@ -143,10 +143,10 @@ Exercises
                         return False
 
                 def isInScreen(w,t):
-                    leftBound = - w.window_width()/2
-                    rightBound = w.window_width()/2
-                    topBound = w.window_height()/2
-                    bottomBound = -w.window_height()/2
+                    leftBound = - w.window_width() / 2
+                    rightBound = w.window_width() / 2
+                    topBound = w.window_height() / 2
+                    bottomBound = -w.window_height() / 2
 
                     turtleX = t.xcor()
                     turtleY = t.ycor()
@@ -165,23 +165,25 @@ Exercises
                 t1.shape('turtle')
                 t2.shape('circle')
 
-                leftBound = -wn.window_width()/2
-                rightBound = wn.window_width()/2
-                topBound = wn.window_height()/2
-                bottomBound = -wn.window_height()/2
+                leftBound = -wn.window_width() / 2
+                rightBound = wn.window_width() / 2
+                topBound = wn.window_height() / 2
+                bottomBound = -wn.window_height() / 2
 
                 t1.up()
-                t1.goto(random.randrange(leftBound,rightBound),random.randrange(bottomBound,topBound))
-                t1.setheading(random.randrange(0,360))
+                t1.goto(random.randrange(leftBound, rightBound),
+                        random.randrange(bottomBound, topBound))
+                t1.setheading(random.randrange(0, 360))
                 t1.down()
 
                 t2.up()
-                t2.goto(random.randrange(leftBound,rightBound),random.randrange(bottomBound,topBound))
-                t2.setheading(random.randrange(0,360))
+                t2.goto(random.randrange(leftBound, rightBound),
+                        random.randrange(bottomBound, topBound))
+                t2.setheading(random.randrange(0, 360))
                 t2.down()
 
 
-                while isInScreen(wn,t1) and isInScreen(wn,t2):
+                while isInScreen(wn, t1) and isInScreen(wn, t2):
                     moveRandom(wn, t1)
                     moveRandom(wn, t2)
 
@@ -219,20 +221,20 @@ Exercises
                 import image
 
                 img = image.Image("luther.jpg")
-                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+                newimg = image.EmptyImage(img.getWidth(), img.getHeight())
                 win = image.ImageWin()
 
                 for col in range(img.getWidth()):
                     for row in range(img.getHeight()):
-                       p = img.getPixel(col, row)
+                        p = img.getPixel(col, row)
 
-                       newred = 0
-                       green = p.getGreen()
-                       blue = p.getBlue()
+                        newred = 0
+                        green = p.getGreen()
+                        blue = p.getBlue()
 
-                       newpixel = image.Pixel(newred, green, blue)
+                        newpixel = image.Pixel(newred, green, blue)
 
-                       newimg.setPixel(col, row, newpixel)
+                        newimg.setPixel(col, row, newpixel)
 
                 newimg.draw(win)
                 win.exitonclick()
@@ -265,7 +267,7 @@ Exercises
                 import image
 
                 def convertBlackWhite(input_image):
-                    grayscale_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+                    grayscale_image = image.EmptyImage(input_image.getWidth(), input_image.getHeight())
 
                     for col in range(input_image.getWidth()):
                         for row in range(input_image.getHeight()):
@@ -280,7 +282,7 @@ Exercises
                             newpixel = image.Pixel(avg, avg, avg)
                             grayscale_image.setPixel(col, row, newpixel)
 
-                    blackwhite_image = image.EmptyImage(input_image.getWidth(),input_image.getHeight())
+                    blackwhite_image = image.EmptyImage(input_image.getWidth(), input_image.getHeight())
                     for col in range(input_image.getWidth()):
                         for row in range(input_image.getHeight()):
                             p = grayscale_image.getPixel(col, row)
@@ -345,13 +347,13 @@ Exercises
                    oldw = oldimage.getWidth()
                    oldh = oldimage.getHeight()
                    
-                   newim = EmptyImage(oldw*2, oldh*2)
+                   newim = EmptyImage(oldw * 2, oldh * 2)
                    for row in range(oldh):
                        for col in range(oldw):
-                           oldpixel = oldimage.getPixel(col,row)
+                           oldpixel = oldimage.getPixel(col, row)
                            
-                           newim.setPixel(2*col,2*row, oldpixel)
-                           newim.setPixel(2*col+1, 2*row, oldpixel)
+                           newim.setPixel(2*col, 2 * row, oldpixel)
+                           newim.setPixel(2*col+1, 2 * row, oldpixel)
                            newim.setPixel(2*col, 2*row+1, oldpixel)
                            newim.setPixel(2*col+1, 2*row+1), oldpixel)
                            
@@ -407,22 +409,22 @@ Exercises
                 
                     for row in range(height):
                         for col in range(width):
-                            originalpixel = oldimage.getPixel(col,row)
+                            originalpixel = oldimage.getPixel(col, row)
                             newpixel = rgbFunction(originalpixel)
-                            newim.setPixel(col,row,newpixel)
+                            newim.setPixel(col, row, newpixel)
                             
                     return newim
                         
                 def graypixel(oldpixel):
                     intensitysum = oldpixel.getRed() + oldpixel.getGreen() + oldpixel.getBlue()
-                    aveRGB = intensitysum//3
-                    newPixel = image.Pixel(aveRGB,aveRGB,aveRGB)
+                    aveRGB = intensitysum // 3
+                    newPixel = image.Pixel(aveRGB, aveRGB, aveRGB)
                     return newPixel
                 
                 win = image.ImageWin()
                 img = image.Image("luther.jpg")
 
-                newim = pixelMapper(img,graypixel)
+                newim = pixelMapper(img, graypixel)
                 newim.draw(win)
 
                 win.exitonclick()          
@@ -469,7 +471,7 @@ Exercises
                 sys.setExecutionLimit(20000)
 
                 img = image.Image("luther.jpg")
-                newimg = image.EmptyImage(img.getWidth(),img.getHeight())
+                newimg = image.EmptyImage(img.getWidth(), img.getHeight())
                 win = image.ImageWin()
 
                 for x in range(1, img.getWidth()-1):  # ignore the edge pixels for simplicity (1 to width-1)

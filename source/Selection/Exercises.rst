@@ -137,7 +137,7 @@ Exercises
                           t.write(str(height))
                       t.left(90)
                       t.forward(height)
-                      if height >=0:
+                      if height >= 0:
                           t.write(str(height))
                       t.right(90)
                       t.forward(40)
@@ -148,7 +148,7 @@ Exercises
 
 
 
-                    xs = [48,-50,200,240,160,260,220]  # here is the data
+                    xs = [48, -50, 200, 240, 160, 260, 220]  # here is the data
                     maxheight = max(xs)
                     minheight = min(xs)
                     numbars = len(xs)
@@ -161,16 +161,16 @@ Exercises
 
                     wn = turtle.Screen()             # Set up the window and its attributes
                     wn.bgcolor("lightgreen")
-                    if minheight >0:
+                    if minheight > 0:
                         lly = 0
                     else:
-                        lly = minheight-border
+                        lly = minheight - border
     
-                    wn.setworldcoordinates(0-border,lly,40*numbars+border,maxheight+border)
+                    wn.setworldcoordinates(0-border, lly, 40*numbars+border, maxheight+border)
 
 
                     for a in xs:
-                      drawBar(tess, a)
+                        drawBar(tess, a)
 
                     wn.exitonclick()
 
@@ -193,10 +193,10 @@ Exercises
         def findHypot(a,b):
             # your code here
 
-        testEqual(findHypot(12.0,5.0), 13.0)
-        testEqual(findHypot(14.0,48.0), 50.0)
-        testEqual(findHypot(21.0,72.0), 75.0)
-        testEqual(findHypot(1,1.73205), 1.999999)
+        testEqual(findHypot(12.0, 5.0), 13.0)
+        testEqual(findHypot(14.0, 48.0), 50.0)
+        testEqual(findHypot(21.0, 72.0), 75.0)
+        testEqual(findHypot(1, 1.73205), 1.999999)
 
 #.
 
@@ -323,7 +323,7 @@ Exercises
 
     .. sourcecode:: python
 
-      if  abs(x-y) < 0.001:      # if x is approximately equal to y
+      if  abs(x - y) < 0.001:      # if x is approximately equal to y
           ...
 
 
@@ -331,15 +331,15 @@ Exercises
 
         from test import testEqual
 
-        def is_rightangled(a,b,c):
+        def is_rightangled(a, b, c):
             # your code here
 
-        testEqual(is_rightangled(1.5,2.0,2.5), True)
-        testEqual(is_rightangled(4.0,8.0,16.0), False)
-        testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
-        testEqual(is_rightangled(4.1,8.2,9.16787), True)
-        testEqual(is_rightangled(4.1,8.2,9.168), False)
-        testEqual(is_rightangled(0.5,0.4,0.64031), True)
+        testEqual(is_rightangled(1.5, 2.0, 2.5), True)
+        testEqual(is_rightangled(4.0, 8.0, 16.0), False)
+        testEqual(is_rightangled(4.1, 8.2, 9.1678787077), True)
+        testEqual(is_rightangled(4.1, 8.2, 9.16787), True)
+        testEqual(is_rightangled(4.1, 8.2, 9.168), False)
+        testEqual(is_rightangled(0.5, 0.4, 0.64031), True)
 
 #.
 
@@ -353,15 +353,15 @@ Exercises
         
                 from test import testEqual
         
-                def is_rightangled(a,b,c):
+                def is_rightangled(a, b, c):
                     # your code here
         
-                testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(16.0,4.0,8.0), False)
-                testEqual(is_rightangled(4.1,9.1678787077,8.2), True)
-                testEqual(is_rightangled(9.16787,4.1,8.2), True)
-                testEqual(is_rightangled(4.1,8.2,9.168), False)
-                testEqual(is_rightangled(0.5,0.64031,0.4), True)
+                testEqual(is_rightangled(1.5, 2.0, 2.5), True)
+                testEqual(is_rightangled(16.0, 4.0, 8.0), False)
+                testEqual(is_rightangled(4.1, 9.1678787077, 8.2), True)
+                testEqual(is_rightangled(9.16787, 4.1, 8.2), True)
+                testEqual(is_rightangled(4.1, 8.2, 9.168), False)
+                testEqual(is_rightangled(0.5, 0.64031, 0.4), True)
 
         .. tab:: Answer
             
@@ -369,7 +369,7 @@ Exercises
 
                 from test import testEqual
 
-                def is_rightangled(a,b,c):
+                def is_rightangled(a, b, c):
                     is_rightangled = False
 
                     largest = a
@@ -388,12 +388,12 @@ Exercises
 
                     return is_rightangled
 
-                testEqual(is_rightangled(1.5,2.0,2.5), True)
-                testEqual(is_rightangled(4.0,8.0,16.0), False)
-                testEqual(is_rightangled(4.1,8.2,9.1678787077), True)
-                testEqual(is_rightangled(4.1,8.2,9.16787), True)
-                testEqual(is_rightangled(4.1,8.2,9.168), False)
-                testEqual(is_rightangled(0.5,0.4,0.64031), True)
+                testEqual(is_rightangled(1.5, 2.0, 2.5), True)
+                testEqual(is_rightangled(4.0, 8.0, 16.0), False)
+                testEqual(is_rightangled(4.1, 8.2, 9.1678787077), True)
+                testEqual(is_rightangled(4.1, 8.2, 9.16787), True)
+                testEqual(is_rightangled(4.1, 8.2, 9.168), False)
+                testEqual(is_rightangled(0.5, 0.4, 0.64031), True)
 
         .. tab:: Discussion 
 

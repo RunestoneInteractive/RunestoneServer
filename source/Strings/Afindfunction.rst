@@ -16,8 +16,8 @@ Here is an implementation for the ``find`` method.
     
     def find(astring, achar):
         """
-          Find and return the index of achar in astring.  
-          Return -1 if achar does not occur in astring.
+        Find and return the index of achar in astring.  
+        Return -1 if achar does not occur in astring.
         """
         ix = 0
         found = False

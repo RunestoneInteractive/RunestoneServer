@@ -69,8 +69,8 @@ desired location.
 **Check your understanding**
 
 .. mchoicemf:: test_question9_7_1
-   :answer_a: [4,2,True,8,6,5]
-   :answer_b: [4,2,True,6,5]
+   :answer_a: [4, 2, True, 8, 6, 5]
+   :answer_b: [4, 2, True, 6, 5]
    :answer_c: Error, it is illegal to assign
    :correct: b
    :feedback_a: Item assignment does not insert the new item into the list.
@@ -81,7 +81,7 @@ desired location.
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      alist[2] = True
      print(alist)
 

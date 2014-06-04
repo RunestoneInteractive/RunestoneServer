@@ -24,7 +24,7 @@ functions can return boolean values.  This turns out to be a very convenient way
 
         return result
 
-    print(isDivisible(10,5))
+    print(isDivisible(10, 5))
 
 The name of this function is ``isDivisible``. It is common to give **boolean
 functions** names that sound like yes/no questions.  ``isDivisible`` returns
@@ -66,7 +66,7 @@ with a few other actual parameters to see what is printed.
 
         return result
 
-    if isDivisible(10,5):
+    if isDivisible(10, 5):
         print("That works")
     else:
         print("Those values are no good")
@@ -85,7 +85,7 @@ the boolean expression causes a call to the ``isDivisible`` function.  This is v
 
         return result
 
-    if isDivisible(10,5):
+    if isDivisible(10, 5):
         print("That works")
     else:
         print("Those values are no good")

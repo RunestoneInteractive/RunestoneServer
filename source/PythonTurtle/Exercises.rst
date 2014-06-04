@@ -326,7 +326,7 @@ Exercises
                 babbage.shape("triangle")
 
                 n = int(input("How many legs should this sprite have? "))
-                angle = 360/n
+                angle = 360 / n
 
                 for i in range(n):
                     # draw the leg

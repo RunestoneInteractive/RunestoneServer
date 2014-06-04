@@ -85,7 +85,7 @@ rules for its mathematical operators that mathematics does.
    :answer_d: 13.667
    :correct: a
    :feedback_a: Using parentheses, the expression is evaluated as (2*5) first, then (10 // 3), then (16-3), and then (13+1).
-   :feedback_b: Remember that * has precedence over  -.
+   :feedback_b: Remember that * has precedence over -.
    :feedback_c: Remember that // has precedence over -.
    :feedback_d: Remember that // does integer division.
 

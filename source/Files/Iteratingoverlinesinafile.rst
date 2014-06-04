@@ -46,7 +46,7 @@ construct a simple sentence.
 
 .. activecode:: files_for
 
-    qbfile = open("qbdata.txt","r")
+    qbfile = open("qbdata.txt", "r")
 
     for aline in qbfile:
         values = aline.split()

@@ -52,7 +52,7 @@ Exercises
                         self.width = initW
                         self.height = initH
                         
-                loc = Point(4,5)
+                loc = Point(4, 5)
                 r = Rectangle(loc, 6, 5)
                 print(r)
                     
@@ -255,7 +255,7 @@ Exercises
                         
                     def diagonal(self):
                     
-                        d = (self.width**2 + self.height**2)**0.5
+                        d = (self.width**2 + self.height**2) ** 0.5
                         return d
 
         .. tab:: Discussion 

@@ -67,10 +67,10 @@ into lists or iterated over directly.  Note that the items are shown as tuples c
     print(list(inventory.items()))
 
     for (k,v) in inventory.items():
-        print("Got",k,"that maps to",v)
+        print("Got", k, "that maps to", v)
 
     for k in inventory:
-        print("Got",k,"that maps to",inventory[k])
+        print("Got", k, "that maps to", inventory[k])
     
 Note that tuples are often useful for getting both the key and the value at the same
 time while you are looping.  The two loops do the same thing.
@@ -105,7 +105,7 @@ in the case where the key is not present.  This can be seen in the final example
     print(inventory.get("apples"))
     print(inventory.get("cherries"))
 
-    print(inventory.get("cherries",0))
+    print(inventory.get("cherries", 0))
 
 
 
@@ -159,7 +159,7 @@ in the case where the key is not present.  This can be seen in the final example
    .. sourcecode:: python
 
      mydict = {"cat":12, "dog":6, "elephant":23, "bear":20}
-     answer = mydict.get("cat")//mydict.get("dog")
+     answer = mydict.get("cat") // mydict.get("dog")
      print(answer)
 
    

@@ -18,8 +18,8 @@ starting position in the search string:
     
     def find2(astring, achar, start):
         """
-          Find and return the index of achar in astring.  
-          Return -1 if achar does not occur in astring.
+        Find and return the index of achar in astring.  
+        Return -1 if achar does not occur in astring.
         """
         ix = start
         found = False
@@ -48,8 +48,8 @@ Better still, we can combine ``find`` and ``find2`` using an
     
 	def find3(astring, achar, start=0):
 	    """
-	      Find and return the index of achar in astring.  
-	      Return -1 if achar does not occur in astring.
+	    Find and return the index of achar in astring.  
+	    Return -1 if achar does not occur in astring.
 	    """
 	    ix = start
 	    found = False

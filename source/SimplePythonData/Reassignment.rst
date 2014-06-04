@@ -50,9 +50,9 @@ they don't have to stay that way:
 
     a = 5
     b = a    # after executing this line, a and b are now equal
-    print(a,b)
+    print(a, b)
     a = 3    # after executing this line, a and b are no longer equal
-    print(a,b)
+    print(a, b)
 
 Line 4 changes the value of ``a`` but does not change the value of
 ``b``, so they are no longer equal. We will have much more to say about equality in a later chapter.

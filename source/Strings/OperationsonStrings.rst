@@ -43,7 +43,7 @@ other has to be an integer.
 .. activecode:: ch08_mult
     :nocanvas:
 
-    print("Go"*6)
+    print("Go" * 6)
 
     name = "Packers"
     print(name * 3)
@@ -80,7 +80,7 @@ done first, you will need to use parenthesis.
 
       s = "python"
       t = "rocks"
-      print(s+t)
+      print(s + t)
 
 
 

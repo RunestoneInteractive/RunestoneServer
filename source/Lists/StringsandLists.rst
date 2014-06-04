@@ -75,7 +75,7 @@ you can use empty glue or multi-character strings as glue.
      namelist = myname.split()
      init = ""
      for aname in namelist:
-        init = init + aname[0]
+         init = init + aname[0]
      print(init)
 
 

@@ -30,7 +30,7 @@ Exercises
                     """ Point class for representing and manipulating x,y coordinates. """
 
                     def __init__(self, initX, initY):
-
+                        """ Create a new point at the given coordinates. """
                         self.x = initX
                         self.y = initY
 
@@ -44,12 +44,12 @@ Exercises
                         return ((self.x ** 2) + (self.y ** 2)) ** 0.5
                         
                     def distanceFromPoint(self, otherP):
-                        dx = (otherP.getX()-self.x)
-                        dy = (otherP.getY()-self.y)
+                        dx = (otherP.getX() - self.x)
+                        dy = (otherP.getY() - self.y)
                         return math.sqrt(dy**2 + dx**2)
 
-                p = Point(3,3)
-                q = Point(6,7)
+                p = Point(3, 3)
+                q = Point(6, 7)
                 print(p.distanceFromPoint(q))
                 
 
@@ -88,7 +88,7 @@ Exercises
                     """ Point class for representing and manipulating x,y coordinates. """
 
                     def __init__(self, initX, initY):
-
+                        """ Create a new point at the given coordinates. """
                         self.x = initX
                         self.y = initY
 
@@ -105,10 +105,10 @@ Exercises
                         if self.x == 0:
                            return None
                         else:
-                           return self.y/self.x
+                           return self.y / self.x
 
 
-                p = Point(4,10)
+                p = Point(4, 10)
                 print(p.slope_from_origin())
                 
 
@@ -152,7 +152,7 @@ Exercises
                     """ Point class for representing and manipulating x,y coordinates. """
 
                     def __init__(self, initX, initY):
-
+                        """ Create a new point at the given coordinates. """
                         self.x = initX
                         self.y = initY
 
@@ -170,12 +170,12 @@ Exercises
                         self.y = self.y + dy
                         
                     def __str__(self):
-                        return str(self.x)+","+str(self.y)
+                        return str(self.x) + "," + str(self.y)
 
 
-                p = Point(7,6)
+                p = Point(7, 6)
                 print(p)
-                p.move(5,10)
+                p.move(5, 10)
                 print(p)
  
 

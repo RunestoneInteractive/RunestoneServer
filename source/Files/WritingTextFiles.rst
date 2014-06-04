@@ -25,7 +25,7 @@ The program below solves part of the problem.  Notice that it reads the data and
 
 .. activecode:: files_write01
 
-    infile = open("qbdata.txt","r")
+    infile = open("qbdata.txt", "r")
     aline = infile.readline()
     while aline:
         items = aline.split()
@@ -43,8 +43,8 @@ The complete program is shown below.
 
 .. sourcecode:: python
 
-    infile = open("qbdata.txt","r")
-    outfile = open("qbnames.txt","w")
+    infile = open("qbdata.txt", "r")
+    outfile = open("qbnames.txt", "w")
 
     aline = infile.readline()
     while aline:

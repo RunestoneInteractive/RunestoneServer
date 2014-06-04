@@ -74,9 +74,9 @@ Let's do an example that shows off some of these new features.
    tess.color("blue")
    tess.shape("turtle")
 
-   print(range(5,60,2))
-   tess.up()                    # this is new
-   for size in range(5,60,2):      # start with size = 5 and grow by 2
+   print(range(5, 60, 2))
+   tess.up()                     # this is new
+   for size in range(5, 60, 2):    # start with size = 5 and grow by 2
        tess.stamp()                # leave an impression on the canvas
        tess.forward(size)          # move tess along
        tess.right(24)              # and turn her

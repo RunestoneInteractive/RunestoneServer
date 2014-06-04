@@ -89,7 +89,7 @@ at 10 and going up to 20 (including 20).
     :nocanvas:
 
     print(range(4))
-    print(range(1,5))
+    print(range(1, 5))
 
 
 Codelens will help us to further understand the way range works.  In this case, the variable ``i`` will take on values
@@ -115,15 +115,15 @@ starts big and gets smaller by using a negative value for the step parameter.
 .. activecode:: ch03_6
     :nocanvas:
 
-    print(range(0,19,2))
-    print(range(0,20,2))
-    print(range(10,0,-1))
+    print(range(0, 19, 2))
+    print(range(0, 20, 2))
+    print(range(10, 0, -1))
 
 Try it in codelens.
 
 .. codelens:: rangeme2
 
-    for i in range(0,20,2):
+    for i in range(0, 20, 2):
        print(i)
 
 **Check your understanding**

@@ -15,7 +15,7 @@ used them previously with strings and they also work here.
 
 .. activecode:: chp09_4
     
-    fruit = ["apple","orange","banana","cherry"]
+    fruit = ["apple", "orange", "banana", "cherry"]
 
     print("apple" in fruit)
     print("pear" in fruit)

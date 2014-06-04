@@ -129,7 +129,7 @@ compute the correct values.
 
    .. code-block:: python
 
-      print (18 / 4)
+      print(18 / 4)
 
 
 
@@ -139,7 +139,7 @@ compute the correct values.
    :answer_c: 4
    :answer_d: 2
    :correct: c
-   :feedback_a: -  The // operator does integer division and returns an integer result
+   :feedback_a: - The // operator does integer division and returns an integer result
    :feedback_b: - The // operator does integer division and returns an integer result, but it truncates the result of the division.  It does not round.
    :feedback_c: - The // operator does integer division and returns the truncated integer result.
    :feedback_d: - The // operator does integer division and returns the result of the division on an integer (not the remainder).
@@ -148,7 +148,7 @@ compute the correct values.
 
    .. code-block:: python
 
-      print (18 // 4)
+      print(18 // 4)
 
 
 .. mchoicemf:: test_question2_6_3
@@ -166,7 +166,7 @@ compute the correct values.
 
    .. code-block:: python
 
-      print (18 % 4)
+      print(18 % 4)
 
 
 .. index:: input, input dialog

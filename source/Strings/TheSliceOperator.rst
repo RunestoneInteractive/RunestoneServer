@@ -80,7 +80,7 @@ What do you think ``fruit[:]`` means?
    .. code-block:: python
 
       s = "python rocks"
-      print(s[7:11]*3)
+      print(s[7:11] * 3)
 
 
 

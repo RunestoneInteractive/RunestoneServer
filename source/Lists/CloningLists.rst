@@ -22,7 +22,7 @@ consist of the whole list.
 .. codelens:: chp09_is4
     :showoutput:
     
-    a = [81,82,83]
+    a = [81, 82, 83]
 
     b = a[:]       # make a clone using slice
     print(a == b)

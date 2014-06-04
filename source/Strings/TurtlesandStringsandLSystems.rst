@@ -93,7 +93,7 @@ above.
 
         return endString
 
-    print(createLSystem(4,"A"))
+    print(createLSystem(4, "A"))
 
 Try running the example above with different values for the ``numIters``
 parameter.  You should see that for values 1, 2, 3, and 4, the strings generated follow the
@@ -209,7 +209,7 @@ L-system string and then it creates a turtle and passes it and the string to the
 
         return newstr
 
-    def drawLsystem(aTurtle,instructions,angle,distance):
+    def drawLsystem(aTurtle, instructions, angle, distance):
         for cmd in instructions:
             if cmd == 'F':
                 aTurtle.forward(distance)
@@ -223,17 +223,17 @@ L-system string and then it creates a turtle and passes it and the string to the
                 print('Error:', cmd, 'is an unknown command')
 
     def main():
-        inst = createLSystem(4,"F")   #create the string
+        inst = createLSystem(4, "F")   # create the string
         print(inst)
-        t = turtle.Turtle()           #create the turtle
+        t = turtle.Turtle()            # create the turtle
         wn = turtle.Screen()
         
         t.up()
         t.back(200)
         t.down()
         t.speed(9)
-        drawLsystem(t,inst,60,5)      #draw the picture
-                                      #angle 60, segment length 5
+        drawLsystem(t, inst, 60, 5)   # draw the picture
+                                      # angle 60, segment length 5
         wn.exitonclick()
 
     main()
