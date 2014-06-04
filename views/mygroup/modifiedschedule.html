@@ -1,0 +1,155 @@
+{{import datetime}}
+
+{{extend 'groupLayout.html'}}
+<!-- Le styles -->
+{{
+response.files.insert(0,URL('static','css/custom.css'))
+response.files.insert(1,URL('static','css/datepicker.css'))
+}}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="content-holder">
+				<div class="row">
+					<div class="col-md-12">
+						<h4 class="muted">Modify This Plan</h4>
+						<hr/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<form class="form-horizontal" method="post">
+							<div class="form-group">
+								<label class="control-label" for="selectChapter">Chapter: </label>
+								<div class="controls">
+									<select id="selectChapter" class="form-control">
+										{{for chapter in chapters:}}
+											{{if chapter.chapters.id == request.vars.chapter:}}
+												{{break}}
+											<option value="{{=chapter.chapters.id}}">{{=chapter.chapters.chapter_name}}</option>  
+											{{pass}}            
+										{{pass}}
+									</select>
+								</div>						
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="startDate">Start Date: </label>
+									<input type="text" class="form-control" data-date-format="mm-dd-yyyy" id="startDate">
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="endDate">End Date: </label>
+									<input type="text" class="form-control" data-date-format="mm-dd-yyyy" id="endDate">
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="totalDays">Total Days: </label>
+									<input type="text" class="form-control" id="totalDays" value="0" disabled="">
+							</div>
+							<div class="form-group">
+								<label class="control-label"  for="noteToFriends">Note to Friends: </label>
+									<textarea rows="3" class="form-control" id="noteToFriends"></textarea>
+							</div>
+							<div class="form-group">
+								<button type="button" name ="cancel_button" class="btn btn-default" onclick = "window.location='{{=URL('mygroup', 'schedule')}}'">Cancel</button>
+								<button type="button" name ="propose_button" class="btn btn-default" id="p_button">Propose Plan</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+		{{
+		response.files.insert(6,URL('static','js/bootstrap-datepicker.js'))
+		response.include_files()
+		}}
+		<script>
+			$(document).ready(function(){
+                var s ="{{=request.vars.start}}";
+                var st = new Date(s.substring(0,s.indexOf(' '))||s);
+				var e ="{{=request.vars.end}}";
+                var et = new Date(e.substring(0,e.indexOf(' '))||e);
+				var diffDates = 0, startDate = st, endDate  =et;
+				$('#totalDays').val(Math.round((endDate  - startDate)/(1000*60*60*24))+1);
+				var sDate = new Date(startDate.getTime());
+				var eDate = new Date(endDate.getTime());
+				var sDateString = sDate.getUTCFullYear()+"-"+(parseInt(sDate.getUTCMonth())+1)+"-"+(parseInt(sDate.getUTCDate())-1)+" "+sDate.getHours()+":"+sDate.getMinutes()+":"+sDate.getSeconds();
+				var eDateString = eDate.getUTCFullYear()+"-"+(parseInt(eDate.getUTCMonth())+1)+"-"+(parseInt(eDate.getUTCDate())-1)+" "+eDate.getHours()+":"+eDate.getMinutes()+":"+eDate.getSeconds();
+                $('#startDate').datepicker('setDate', st).on('changeDate', function(ev){
+					startDate =  ev.date.valueOf();
+					sDate = new Date(ev.date);
+                    sDateString = sDate.getUTCFullYear()+"-"+(parseInt(sDate.getUTCMonth())+1)+"-"+sDate.getUTCDate()+" "+sDate.getHours()+":"+sDate.getMinutes()+":"+sDate.getSeconds();	
+					diffDates = endDate  - startDate;
+					$('#totalDays').val(Math.round(diffDates/(1000*60*60*24))+1);					
+					$('#startDate').datepicker('hide');
+				});	
+				$('#endDate').datepicker('setDate', et).on('changeDate', function(ev){
+					endDate =  ev.date.valueOf();
+					eDate = new Date(ev.date);
+                    eDateString = eDate.getUTCFullYear()+"-"+(parseInt(eDate.getUTCMonth())+1)+"-"+eDate.getUTCDate()+" "+eDate.getHours()+":"+eDate.getMinutes()+":"+eDate.getSeconds();
+					diffDates = endDate  - startDate.valueOf();
+					if (diffDates < 0){
+						alert("Hey, the end date cannot be before the start date!");
+						$('#endDate').datepicker('setValue', new Date());
+					}
+					else{
+						$('#endDate').datepicker('hide');
+						$('#noteToFriends').focus();
+						$('#totalDays').val(Math.round(diffDates/(1000*60*60*24))+1);
+					}				
+				});
+				var chapter ={{=request.vars.chapter}};
+				$( "#selectChapter" ).attr('disabled', 'disabled');			
+				$( "#p_button" ).click(function() {
+                    var note = $('#noteToFriends').val();
+                    var data = {chapter: chapter, startDate: sDateString, endDate: eDateString, note: note};
+                    	$.ajax({url: eBookConfig.app+'/mygroup/modify',data: data}).done(function() {
+                			document.location.href=eBookConfig.app+"/mygroup/schedule";
+						});
+                });
+				$('.accordion-group').on('show',function() {
+					$(this).find('.span1').html('<i class="icon-chevron-down"></i>');
+				}).on('hide',function() {
+					$(this).find('.span1').html('<i class="icon-chevron-right"></i>');
+				});
+				$('#option-1 .icon-pencil').tooltip();
+				$('#option-1 .icon-remove-sign').tooltip();
+				$(".discussion-panel").each(function(index,value){
+					$(value).outerHeight($(value).siblings('.plan-left-section').outerHeight());
+				});
+				var originalNewCommentState = $(".new-comment-section").html();
+				$(document).on("focus", ".add-comment", 
+					function(){
+						var currentCommentSection = $(this).parent(".new-comment-section");
+						$(currentCommentSection).html('<textarea rows="3" class="comment-textarea input-xlarge span12" placeholder="Type your comment here"></textarea><div class="pull-right"><button class="btn" type="submit" class="save-comment">Post Comment</button></div>')
+						.find("textarea").focus();
+						updateScrollbar();
+				});
+				$(document).on("click", ".save-comment", 
+					function(){
+						$(this).parent(".new-comment-section").html(originalNewCommentState);	
+				});	
+				$('.scrollable-section').each(function(index,value){
+					$(value).html('<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div><div class="viewport"><div class="overview">'+$(value).html()+'</div></div>');
+				});
+				updateScrollbar();
+                newChapterPlan({{=request.vars.chapter}});
+			});
+			function updateScrollbar(){
+				$('.scrollable-section').each(function(index,value){
+					$(value).tinyscrollbar();
+				});
+			}
+			function changeURL(sel) {
+    			var value = sel.options[sel.selectedIndex].value;
+    			document.location.href="newschedule.html?chapter="+value;
+			}
+			function newChapterPlan(chapterId){
+				$('#scheduleNewChapter').modal('show');
+				$('#selectChapter').val(chapterId).attr('selected', true);
+			}
+		</script>

@@ -143,7 +143,7 @@ def getuser():
     response.headers['content-type'] = 'application/json'
 
     if  auth.user:
-        res = {'email':auth.user.email,'nick':auth.user.username}
+        res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
     logging.debug("returning login info: %s",res)

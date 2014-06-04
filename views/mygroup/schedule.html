@@ -1,0 +1,565 @@
+{{import datetime}}
+{{import time}}
+{{now=datetime.datetime.today()}}
+
+{{extend 'groupLayout.html'}}
+<!-- Le styles -->
+{{
+response.files.insert(0,URL('static','css/custom.css'))
+response.files.insert(1,URL('static','css/datepicker.css'))
+}}
+
+
+{{
+def getStatus(input_status):
+    if input_status == 'active':
+        return 'Active'
+    elif input_status == 'notStarted':
+        return 'Not Started'
+    elif input_status == 'completed':
+        return 'Completed'
+    elif input_status == 'new' or input_status == 'modified':
+        return 'Schedule being planned'
+    else:
+        return input_status
+    pass
+}}
+{{
+def days_between(d1, d2):
+    d1 = datetime.strptime(d1, "%Y-%m-%d")
+    d2 = datetime.strptime(d2, "%Y-%m-%d")
+    return abs((d2 - d1).days)
+}}
+
+{{
+newPlanCount = 0
+activePlanCount = 0
+completedPlanCount = 0
+for plan in allPlans:
+    if plan.cohort_plan.status == 'new':
+        newPlanCount = newPlanCount + 1 
+    elif plan.cohort_plan.status == 'active':
+        activePlanCount = activePlanCount + 1 
+    elif plan.cohort_plan.status == 'completed':
+        completedPlanCount = completedPlanCount + 1 
+    pass
+pass
+}}
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="content-holder">
+						{{ if newPlanCount != 0:}}
+						<div class="row" id="new-plan-section">
+							<div class="col-md-12">
+								<h4 class="muted">New Proposed Plan</h4>
+								<hr/>																
+								{{for plan in allPlans:}}
+								<div id="group-schedule-{{=plan.chapters.id}}" class="panel-group">	
+									{{if plan.cohort_plan.status == 'new' and plan.cohort_plan.cohort_id == auth.user.cohort_id:}}
+									<div class="panel panel-default">
+									  	<div class="panel-heading">
+										<a href="#collapseTwo-{{=plan.chapters.id}}" data-parent="#group-schedule-{{=plan.chapters.id}}" data-toggle="collapse" data-parent="#group-schedule-{{=plan.chapters.id}}" class="accordion-toggle">
+										 <div class="row">
+											 <div class="col-md-6 sc-chapter-title">{{=plan.chapters.chapter_name}}</div>
+											 
+											 <div class="col-md-5 aligned-right">
+												<span class="sc-status-{{=plan.cohort_plan.status}}">
+													{{=getStatus(plan.cohort_plan.status)}}
+												</span><br/>
+											 </div>
+											 <div class="col-md-1 aligned-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
+										 </div>
+										</a>
+									  </div>
+									  <div class="panel-collapse collapse" id="collapseTwo-{{=plan.chapters.id}}">
+										<div class="panel-body">
+											<div class=" row">
+												<div class="col-md-3">
+												  <div class="plan-left-section progress-section">
+													<h5 class="new-plan-heading">Proposed Plan:</h5>
+													<div class="pull-right new-plan-controls">
+														<i class="glyphicon glyphicon-pencil" data-placement="top" data-toggle="tooltip" onclick = 'window.location="modifiedschedule.html?chapter={{=plan.chapters.id}}&start={{=plan.cohort_plan.start_date}}&end={{=plan.cohort_plan.end_date}}"' data-original-title="Modify Plan"></i>
+														<i class="glyphicon glyphicon-remove" data-placement="top" data-toggle="tooltip" onclick = 'deletePlan({{=plan.chapters.id}},{{=plan.cohort_plan.id}})' data-original-title="Delete Plan"></i>
+													</div>
+													<hr/>
+													<div class="new-plan-details">
+														<p><strong>Start: </strong>{{=plan.cohort_plan.start_date.strftime('%d %B, %Y')}}</p>
+														<p><strong>End: </strong>{{=plan.cohort_plan.end_date.strftime('%d %B, %Y')}}</p>
+														<h2>{{=abs((plan.cohort_plan.end_date - plan.cohort_plan.start_date).days) + 1}} days</h2><br/>
+													</div>
+													<div class="initialNote alert alert-warning">
+														<p><strong>Note from {{=plan.cohort_plan.created_by.first_name}}:</strong></p>
+														<p>{{=plan.cohort_plan.note}}</p>
+													</div>
+												  </div>
+												</div>
+												<div class="col-md-9">
+												  <div class="discussion-panel">
+													<h5 class="new-plan-discussion">Discuss this plan:</h5>
+													<hr/>
+													<div class="scrollable-section">
+                                                        <div class="new-comment-section form-group">
+                                                            <input type="text" class="add-comment form-control" onclick = 'getComment({{=plan.chapters.id}})' placeholder="Type your comment here">
+														</div>
+                                                        {{for comment in allComments:}}
+                                                        {{if comment.chapter_id==plan.chapters.id:}}
+														<div class="media">
+														  <a href="#" class="pull-left">
+															{{=IMG(_src=URL('static/images','anon.jpg'),_style="width: 32px; height: 32px;")}}
+														  </a>
+														  <div class="media-body">
+                                                              <h5 class="media-heading">
+                                                              {{=comment.comment_by.first_name}} {{=comment.comment_by.last_name}}
+                                                              </h5>
+                                                              <div>{{=comment.comment}}</div>
+														  </div>
+														</div>
+                                                        
+                                                        {{pass}}
+                                                        {{pass}}
+													</div>
+												  </div>
+												</div>
+											</div>
+										</div>
+									  </div>
+									</div>
+                                    {{pass}}								  
+								  </div>
+								  {{pass}}
+	  						 </div>
+						</div>
+						{{pass}}
+						{{ if activePlanCount != 0:}}
+						<div class="row" id="schedule-section">
+							<div class="col-md-12">
+							{{for cohort in cohortName:}}
+								<h4 style="display:inline-block;" class="muted">{{=cohort.cohort_name}}'s schedule</h4>
+							{{pass}}
+                                {{for plan in allPlans:}}
+									{{if plan.cohort_plan.status == 'notStarted':}}
+                                	{{request.vars.chapter=plan.chapters.id}}
+                                	{{break}}
+                                    {{pass}}
+                                {{pass}}
+                                <a style="" href="newschedule.html" class="btn btn-default pull-right btn-sm"><i class="glyphicon glyphicon-plus"></i> Schedule New Chapter</a>
+								<hr/>		
+														
+								{{for plan in allPlans:}}	
+									{{if plan.cohort_plan.status == 'active' and plan.cohort_plan.cohort_id == auth.user.cohort_id:}}
+									<div id="group-schedule-{{=plan.chapters.id}}" class="panel-group">	
+                                    <div class="panel panel-default">
+									  <div class="pull-right new-plan-controls">
+                                          <i class="glyphicon glyphicon-pencil" onclick = 'window.location="modifiedschedule.html?chapter={{=plan.chapters.id}}&start={{=plan.cohort_plan.start_date}}&end={{=plan.cohort_plan.end_date}}"' data-placement="top" data-toggle="tooltip" data-original-title="Modify Plan"></i>
+										<i class="glyphicon glyphicon-remove" onclick = 'deletePlan({{=plan.chapters.id}},{{=plan.cohort_plan.id}})' data-placement="top" data-toggle="tooltip" data-original-title="Delete Plan"></i>
+									</div>
+									  <div class="panel-heading">
+										<a href="#collapseTwo-{{=plan.chapters.id}}" data-parent="#group-schedule-{{=plan.chapters.id}}" data-toggle="collapse" class="accordion-toggle">
+										 <div class="row">
+											 <div class="col-md-3 sc-chapter-title">{{=plan.chapters.chapter_name}}</div>
+											 <div class="col-md-4 aligned-right">
+												<span class="text-muted">
+													Start Date:
+												</span> 
+												<span class="sc-start-date">
+													{{=plan.cohort_plan.start_date.strftime('%d %B, %Y')}}
+												</span>
+												<br/>
+												<span class="text-muted">
+													Proposed Deadline:
+												</span> 
+												<span class="sc-proposed-deadline">
+													{{=plan.cohort_plan.end_date.strftime('%d %B, %Y')}}
+												</span>
+											 </div>
+											 <div class="col-md-4 aligned-right">												
+												{{if plan.cohort_plan.end_date<datetime.datetime.today():}}
+														<span>
+															This plan has passed the deadline!
+														</span>															
+														<button onclick='complete({{=plan.cohort_plan.id}},{{=plan.chapters.id}});' class="btn btn-default btn-xs">Mark as completed</button>
+														
+												{{else:}}
+												<span class="sc-status-{{=plan.cohort_plan.status}}">
+													{{=getStatus(plan.cohort_plan.status)}}
+												</span><br/>
+												<span class="muted">
+													Days Left: 
+												</span> 
+												<span class="sc-days-left">
+													{{=abs((plan.cohort_plan.end_date - datetime.datetime.today()).days)}}
+												</span>
+												{{pass}}
+											 </div>
+											 <div class="col-md-1 aligned-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
+										 </div>
+										</a>
+									  </div>
+									  <div class="panel-collapse collapse" id="collapseTwo-{{=plan.chapters.id}}">
+										<div class="panel-body">
+											<div class=" row">
+												<div class="col-md-3">
+												  <div class="plan-left-section progress-section">
+													<h5 class="new-plan-heading">Your Progress:</h5>
+													<hr/>
+												
+													{{for user in allUsers:}}
+                                                    <span class="pull-left sc-member-name">
+                                                    {{if user.id==auth.user.id:}}
+                                                    	You
+                                                    {{else:}}
+                                                        {{=user.first_name}}
+                                                    {{pass}}
+                                                    </span>
+													<div class="progress">
+														<div id="progress-{{=plan.chapters.id}}-{{=user.username}}"class="progress-bar pull-left" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+															15%
+														</div>			
+													</div>                                                    
+                                                    <script>
+                                                            var count=0;
+                                                            var total=0;
+                                                            {{for progress in allProgress:}}
+																console.log("progress.user_sub_chapter_progress.user_id "+ typeof {{=progress.user_sub_chapter_progress.user_id}})
+																console.log("user.id "+typeof {{=user.id}})
+                                                                {{if int(progress.user_sub_chapter_progress.user_id)==user.id and progress.chapters.id==plan.chapters.id:}} 
+																	console.log("inside if")
+                                                                    {{if(progress.user_sub_chapter_progress.status>0):}}
+                                                                        count++;
+                                                                    {{pass}}
+                                                                    total++;
+                                                                {{pass}}
+                                                            {{pass}}
+                                                          
+                                                            var result= Math.round(count*100/total);
+															console.log(count)
+															console.log(total)
+                                                            var progress = $('#progress-{{=plan.chapters.id}}-{{=user.username}}');
+															$(progress).css("width", result+"%");
+															$(progress).text(result+"%");
+                                                            if(result>50)
+																$(progress).addClass("progress-bar-success");
+                                                            else if (result > 20)
+																$(progress).addClass("progress-bar-warning");
+                                                            else                                                         
+                                                                $(progress).addClass("progress-bar-danger");
+																
+                                                     </script>
+													 {{pass}}
+
+													<div class="message-container">
+														<div class="alert alert-warning">{{=plan.cohort_plan.created_by.first_name}},<br/>
+                                                        {{=plan.cohort_plan.note}}<br/><a href="#" style="text-decoration:underline;">Continue Studying</a>
+														</div>
+													</div>
+													<script>
+														$("#collapseTwo-{{=plan.chapters.id}} .message-container a").attr("href",eBookConfig.app+"/static/thinkcspy/toc.html#"+'{{=plan.chapters.chapter_label}}'.replace(/([A-Z])/g, '-$1').toLowerCase().substring(1));
+													</script>
+												  </div>
+												</div>
+												<div class="col-md-9">
+												  <div class="discussion-panel">
+													<h5 class="new-plan-discussion">Discuss this plan:</h5>
+													<hr/>
+													<div class="scrollable-section">
+                                                        <div class="new-comment-section form-group">
+                                                            <input type="text" class="add-comment form-control" onclick = 'getComment({{=plan.chapters.id}})' placeholder="Type your comment here">
+														</div>
+                                                        {{for comment in allComments:}}
+                                                        {{if comment.chapter_id==plan.chapters.id:}}
+														<div class="media">
+														  <a href="#" class="pull-left">
+															{{=IMG(_src=URL('static/images','anon.jpg'),_style="width: 32px; height: 32px;")}}
+														  </a>
+														  <div class="media-body">
+                                                              <h5 class="media-heading">
+                                                              {{=comment.comment_by.first_name}} {{=comment.comment_by.last_name}}
+                                                              </h5>
+                                                              <div>{{=comment.comment}}</div>
+														  </div>
+														</div>
+                                                        
+                                                        {{pass}}
+                                                        {{pass}}														
+
+													</div>
+												  </div>
+												</div>
+											</div>
+										</div>
+									  </div>
+									</div>
+								  </div>								  
+                                  {{pass}}
+								  {{pass}}
+								  {{ if completedPlanCount != 0:}}
+								  <h4 class="muted">Previous completed chapters</h4>
+								  <hr/>								  
+								  {{for plan in allPlans:}}
+								  <div id="group-schedule-completed-{{=plan.chapters.id}}" class="panel-group">
+								  {{if plan.cohort_plan.status == 'completed' and plan.cohort_plan.cohort_id == auth.user.cohort_id:}}
+									<div class="panel panel-default">
+									  <div class="panel-heading">
+										<a href="#collapseTwo-{{=plan.chapters.id}}" data-parent="#group-schedule-completed-{{=plan.chapters.id}}" data-toggle="collapse" class="accordion-toggle">
+										 <div class="row">
+											 <div class="col-md-3 sc-chapter-title">{{=plan.chapters.chapter_name}}</div>
+											 <div class="col-md-4 aligned-right">
+												<span class="muted">
+													Start Date:
+												</span> 
+												<span class="sc-start-date">
+													{{=plan.cohort_plan.start_date.strftime('%d %B, %Y')}}
+												</span>
+												<br/>
+												<span class="muted">
+													Proposed Deadline:
+												</span> 
+												<span class="sc-proposed-deadline">
+													{{=plan.cohort_plan.end_date.strftime('%d %B, %Y')}}
+												</span>
+											 </div>
+											 <div class="col-md-4 aligned-right">
+												<span class="sc-status-{{=plan.cohort_plan.status}}">
+													{{=getStatus(plan.cohort_plan.status)}}
+												</span><br/>
+												<span class="muted">
+													Actual Completion Date:
+												</span> 
+												<span class="sc-actual-completion">
+													{{=plan.cohort_plan.actual_end_date.strftime('%d %B, %Y')}}
+												</span>
+											 </div>
+											 <div class="col-md-1 aligned-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
+										 </div>
+										</a>
+									  </div>
+									  <div class="panel-collapse collapse" id="collapseTwo-{{=plan.chapters.id}}">
+										<div class="panel-body">
+											<div class=" row">
+												<div class="col-md-3">
+												  <div class="plan-left-section progress-section">
+													<h5 class="new-plan-heading">Your Progress:</h5>
+													<hr/>
+												
+													{{for user in allUsers:}}
+                                                    <span class="pull-left sc-member-name">
+                                                    {{if user.id==auth.user.id:}}
+                                                    	You
+                                                    {{else:}}
+                                                        {{=user.first_name}}
+                                                    {{pass}}
+                                                    </span>
+													<div class="progress">
+														<div id="progress-{{=plan.chapters.id}}-{{=user.username}}"class="progress-bar progress-bar-success pull-left" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+															15%
+														</div>			
+													</div>                                                    
+                                                    <script>
+                                                            var count=0;
+                                                            var total=0;
+                                                            {{for progress in allProgress:}}
+                                                                {{if progress.user_sub_chapter_progress.user_id==user.id and progress.chapters.id==plan.chapters.id:}} 
+                                                                    {{if(progress.user_sub_chapter_progress.status>0):}}
+                                                                        count++;
+                                                                    {{pass}}
+                                                                    total++;
+                                                                {{pass}}
+                                                            {{pass}}
+                                                          
+                                                            var result= Math.round(count*100/total);
+                                                            var progress = $('#progress-{{=plan.chapters.id}}-{{=user.username}}');
+															$(progress).css("width", result+"%");
+															$(progress).text(result+"%");
+                                                            if(result>50)
+																$(progress).addClass("progress-bar-success");
+                                                            else if (result > 20)
+																$(progress).addClass("progress-bar-warning");
+                                                            else                                                         
+                                                                $(progress).addClass("progress-bar-danger");
+																
+                                                     </script>
+													 {{pass}}
+
+													<div class="message-container">
+														<div class="alert alert-warning">{{=plan.cohort_plan.created_by.first_name}},<br/>
+                                                        {{=plan.cohort_plan.note}}<br/><a href="#" style="text-decoration:underline;">Continue Studying</a>
+														</div>
+													</div>
+													<script>
+														$("#collapseTwo-{{=plan.chapters.id}} .message-container a").attr("href",eBookConfig.app+"/static/thinkcspy/toc.html#"+'{{=plan.chapters.chapter_label}}'.replace(/([A-Z])/g, '-$1').toLowerCase().substring(1));
+													</script>
+												  </div>
+												</div>
+												<div class="col-md-9">
+												  <div class="discussion-panel">
+													<h5 class="new-plan-discussion">Discuss this plan:</h5>
+													<hr/>
+													<div class="scrollable-section">
+                                                        <div class="new-comment-section form-group">
+                                                            <input type="text" class="add-comment form-control" onclick = 'getComment({{=plan.chapters.id}})' placeholder="Type your comment here">
+														</div>
+                                                        {{for comment in allComments:}}
+                                                        {{if comment.chapter_id==plan.chapters.id:}}
+														<div class="media">
+														  <a href="#" class="pull-left">
+															{{=IMG(_src=URL('static/images','anon.jpg'),_style="width: 32px; height: 32px;")}}
+														  </a>
+														  <div class="media-body">
+                                                              <h5 class="media-heading">
+                                                              {{=comment.comment_by.first_name}} {{=comment.comment_by.last_name}}
+                                                              </h5>
+                                                              <div>{{=comment.comment}}</div>
+														  </div>
+														</div>
+                                                        
+                                                        {{pass}}
+                                                        {{pass}}														
+
+													</div>
+												  </div>
+												</div>
+											</div>
+										</div>
+									  </div>
+									</div>
+									{{pass}}
+								</div>
+								{{pass}}
+							{{pass}}
+						</div>
+				</div>
+				{{pass}}
+			</div>
+		</div>
+	</div>
+	</div>
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+		{{
+		response.files.insert(6,URL('static','js/bootstrap-datepicker.js'))
+		response.include_files()
+		}}
+		<script>
+			$(document).ready(function(){
+				var diffDates = 0, startDate = new Date(), endDate  =new Date() ;
+				$('#startDate').datepicker('setValue', new Date()).on('changeDate', function(ev){
+					startDate =  ev.date.valueOf();
+					diffDates = endDate  - startDate;
+					$('#totalDays').val(Math.round(diffDates/(1000*60*60*24)));					
+					$('#startDate').datepicker('hide');
+					$('#endDate').datepicker('show');	
+				});				
+				$('#endDate').datepicker('setValue', new Date()).on('changeDate', function(ev){
+					endDate =  ev.date.valueOf();
+					diffDates = endDate  - startDate;
+					if (diffDates < 0){
+						alert("Hey, the end date cannot be before the start date!");
+						$('#endDate').datepicker('setValue', new Date());
+					}
+					else{
+						$('#endDate').datepicker('hide');
+						$('#noteToFriends').focus();
+						$('#totalDays').val(Math.round(diffDates/(1000*60*60*24)));
+					}
+				});			
+				$('.panel').on('show.bs.collapse',function() {
+					$(this).find('.glyphicon-chevron-right').removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
+				}).on('hide.bs.collapse',function() {
+					$(this).find('.glyphicon-chevron-down').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
+				});
+				$('.glyphicon.glyphicon-pencil').tooltip();
+				$('.glyphicon.glyphicon-remove').tooltip();
+
+				$('.panel').on('shown.bs.collapse', function (e) {
+					if ($(this).find(".progress-section").outerHeight() > 400)
+						$(this).find(".discussion-panel").outerHeight($(this).find(".progress-section").outerHeight());
+					else
+						$(this).find(".discussion-panel").outerHeight(400);
+				});
+				
+				//decide which schedule block to open
+				var schedule;
+				//check if a schedule id is passed in the request variables, if yes, open that by default
+				{{if request.vars.schedule != None:}}
+					if ($("#schedule-section .panel-group").length > 0 || $("#new-plan-section .panel-group").length > 0)
+						$("#collapseTwo-"+{{=request.vars.schedule}}).collapse('show');
+					schedule  = {{=request.vars.schedule}};
+				{{else:}}
+					if ($("#new-plan-section .panel-group").length != 0)
+						$("#new-plan-section .panel-collapse").first().collapse('show');
+					else if ($("#schedule-section .panel-group").length != 0)
+						$("#schedule-section .panel-collapse").first().collapse('show');
+                {{pass}}
+				
+
+			});
+			function getCh(){
+				var e = document.getElementById("selectChapter");
+				var ch = e.options[e.selectedIndex].value;
+				plan.chapters.id=ch;
+			}
+            function deletePlan(chapterId, planId){
+                var r=confirm("Are you sure you want to delete this plan?");
+                if (r==true)
+                  {
+                  	var chapter = chapterId;
+                    var plan = planId;		
+                      var data = {chapter: chapter, plan: plan};
+                    	$.ajax({url: eBookConfig.app+'/mygroup/delete',data: data}).done(function() {
+                			document.location.href=eBookConfig.app+"/mygroup/schedule";
+						});
+                  }
+                else
+                  {
+					window.location="{{=URL('mygroup', 'schedule')}}";
+                  }
+            }
+            function updateProgress(percentage){
+                document.getElementById('yourBar').style.width=percentage+"%";
+			}
+			function complete(planId,chapterId){
+                var r=confirm("Are you sure you want to force this plan to complete?");
+                if (r==true)
+                  {
+                  	var chapter = chapterId;
+                    var plan = planId;		
+                      var data = {chapter: chapter, plan: plan};
+                    	$.ajax({url: eBookConfig.app+'/mygroup/complete',data: data}).done(function() {
+                			document.location.href=eBookConfig.app+"/mygroup/schedule";
+						});
+                  }
+                else
+                  {
+					window.location="{{=URL('mygroup', 'schedule')}}";
+                  }
+			}
+			function getComment(chapterId){
+				var originalNewCommentState = $("#collapseTwo-"+chapterId+" .new-comment-section").html();
+				$("#collapseTwo-"+chapterId+" .new-comment-section").html('<textarea name="textarea" rows="3" class="comment-textarea input-xlarge form-control" placeholder="Type your comment here"></textarea><div class="pull-right"><button class="btn btn-default save-comment" type="submit" >Post Comment</button></div>').find("textarea").focus();
+				$(document).on("click", ".save-comment", 
+					function(){
+						var textAreaVal = $("#collapseTwo-"+chapterId+" .comment-textarea").val();
+                        if($.trim(textAreaVal)!=""){
+                            var data = {chapter: chapterId, text: textAreaVal};
+                            $.ajax({url: eBookConfig.app+'/mygroup/comment',data: data}).done(function(returnData) {
+								$("#collapseTwo-"+chapterId+" .new-comment-section").after('<div class="media">\
+								  <a href="#" class="pull-left">\
+									{{=IMG(_src=URL("static/images","anon.jpg"),_style="width: 32px; height: 32px;")}}\
+								  </a>\
+								  <div class="media-body">\
+									  <h5 class="media-heading">\
+									  {{=auth.user.first_name}} {{=auth.user.last_name}}\
+									  </h5>\
+									  <div>'+textAreaVal+'</div>\
+								  </div>\
+								</div>')
+                            });
+                        }
+						$(this).parent().parent().html(originalNewCommentState);
+				});
+            }
+		</script>
+</html>
