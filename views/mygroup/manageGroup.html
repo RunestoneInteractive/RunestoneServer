@@ -1,0 +1,48 @@
+{{extend 'groupLayout.html'}}
+<!-- Le styles -->
+{{
+response.files.insert(3,URL('static','css/custom.css'))
+}}
+<div class="container" style="padding-bottom:20px;">
+	<div class="row-fluid">
+		<div class="col-md-12">
+			<h2>Manage Group.</h2>
+			<p>Its hard to keep yourself motivated to study. <br/>
+			Be part of a group, plan deadlines and motivate each other to finish a chapter, on a <strong>deadline you all set together.</strong> </p>
+		</div>
+	</div>
+	<br/>
+	<div class="row-fluid" id="manageGroupOptions">
+		<div class="col-md-12">
+			<h4 class="subheading">Your Group: {{=currentGroup.cohort_name}}</h4>
+			<p id="current-members"><strong>Current Members</strong></p>
+			{{for member in allGroupMembers:}}
+				<p style="margin-left: 15px;">{{=member.first_name}} {{=member.first_name}}</p>
+			{{pass}}
+			<p><strong>Use the following invite code to invite others to your group: </strong>{{=currentGroup.invitation_id}}</p>
+			<br/>
+			<p><button class="btn" id="leaveGroupBtn">Leave Group</button></p>
+		</div>
+	</div>
+</div>
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+{{
+response.include_meta()
+response.include_files()
+}}
+<script>
+	$(document).ready(function(){
+
+		$("#leaveGroupBtn").on("click", function(){
+			if (confirm("Are you sure you want to leave the group?") == true) {
+				$.ajax({url: eBookConfig.app+'/mygroup/leaveGroup'}).done(function(data) {
+					$("#manageGroupOptions div").html("<p>You successfully left the group</p><p><a href='initiateGroup'>Join a new Study group</a></p>")
+				});
+			}
+		});
+
+	});
+
+</script>
