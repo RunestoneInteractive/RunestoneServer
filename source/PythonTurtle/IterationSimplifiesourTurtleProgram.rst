@@ -16,11 +16,11 @@ each value in the list.
 
 .. activecode:: ch03_for1
 
-   import turtle            #set up alex
+   import turtle            # set up alex
    wn = turtle.Screen()
    alex = turtle.Turtle()
 
-   for i in [0,1,2,3]:      #repeat four times
+   for i in [0, 1, 2, 3]:      # repeat four times
        alex.forward(50)
        alex.left(90)
 
@@ -40,11 +40,11 @@ We could have used any four values.  For example, consider the following program
 
 .. activecode:: ch03_forcolor
 
-   import turtle            #set up alex
+   import turtle            # set up alex
    wn = turtle.Screen()
    alex = turtle.Turtle()
 
-   for aColor in ["yellow", "red", "purple", "blue"]:      #repeat four times
+   for aColor in ["yellow", "red", "purple", "blue"]:      # repeat four times
        alex.forward(50)
        alex.left(90)
 
@@ -56,7 +56,7 @@ of the computation.
 
 .. activecode:: colorlist
 
-    import turtle            #set up alex
+    import turtle            # set up alex
     wn = turtle.Screen()
     alex = turtle.Turtle()
 

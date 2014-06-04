@@ -32,12 +32,12 @@ the end of the file.
 
 ::
 
-    >>> infile = open("qbdata.txt","r")
+    >>> infile = open("qbdata.txt", "r")
     >>> aline = infile.readline()
     >>> aline
     'Colt McCoy QB, CLE\t135\t222\t1576\t6\t9\t60.8%\t74.5\n'
     >>>
-    >>> infile = open("qbdata.txt","r")
+    >>> infile = open("qbdata.txt", "r")
     >>> linelist = infile.readlines()
     >>> print(len(linelist))
     34
@@ -47,7 +47,7 @@ the end of the file.
      'Michael Vick QB PHI\t233\t372\t3018\t21\t6\t62.6%\t100.2\n',
      'Matt Schaub QB HOU\t365\t574\t4370\t24\t12\t63.6%\t92.0\n']
     >>>
-    >>> infile = open("qbdata.txt","r")
+    >>> infile = open("qbdata.txt", "r")
     >>> filestring = infile.read()
     >>> print(len(filestring))
     1708
@@ -86,11 +86,11 @@ the end of the file.
                                                       returned.
 ======================== =========================== =====================================
 
-Now let's look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading file but they do support the pattern we'll show you here.
+Now let's look at another method of reading our file using a ``while`` loop.  This is important because many other programming languages do not support the ``for`` loop style for reading files but they do support the pattern we'll show you here.
 
 .. activecode:: files_while
 
-    infile = open("qbdata.txt","r")
+    infile = open("qbdata.txt", "r")
     line = infile.readline()
     while line:
         values = line.split()

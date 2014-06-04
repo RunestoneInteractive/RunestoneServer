@@ -32,7 +32,7 @@ to write functions that return values.  One thing to notice is that even though 
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self, initX, initY):
- 
+            """ Create a new point at the given coordinates. """ 
             self.x = initX
             self.y = initY
 
@@ -43,7 +43,7 @@ to write functions that return values.  One thing to notice is that even though 
             return self.y
 
     
-    p = Point(7,6)
+    p = Point(7, 6)
     print(p.getX())
     print(p.getY())
 
@@ -60,7 +60,7 @@ It will perform a more complex task.
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self, initX, initY):
- 
+            """ Create a new point at the given coordinates. """ 
             self.x = initX
             self.y = initY
 
@@ -74,7 +74,7 @@ It will perform a more complex task.
             return ((self.x ** 2) + (self.y ** 2)) ** 0.5
 
     
-    p = Point(7,6)
+    p = Point(7, 6)
     print(p.distanceFromOrigin())
 
 

@@ -15,7 +15,7 @@ We have already seen the repetition operator working on strings as well as lists
 .. activecode:: repref1
 
     origlist = [45, 76, 34, 55]
-    print(origlist*3)
+    print(origlist * 3)
 
 With a list, the repetition operator creates copies of the references.  Although this may seem simple enough, when we allow a list to refer to another list, a subtle problem can arise.
 
@@ -24,7 +24,7 @@ Consider the following extension on the previous example.
 .. activecode:: repref2
 
     origlist = [45, 76, 34, 55]
-    print(origlist*3)
+    print(origlist * 3)
 
     newlist = [origlist] * 3
 
@@ -78,9 +78,9 @@ Here is the same example in codelens.  Step through the code until paying partic
 **Check your understanding**
 
 .. mchoicemf:: test_question9_12_1
-   :answer_a: [4,2,8,999,5,4,2,8,6,5]
-   :answer_b: [4,2,8,999,5]
-   :answer_c: [4,2,8,6,5]
+   :answer_a: [4, 2, 8, 999, 5, 4, 2, 8, 6, 5]
+   :answer_b: [4, 2, 8, 999, 5]
+   :answer_c: [4, 2, 8, 6, 5]
    :correct: c
    :feedback_a: print(alist) not print(blist)
    :feedback_b: blist is changed, not alist.
@@ -90,17 +90,17 @@ Here is the same example in codelens.  Step through the code until paying partic
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      blist = alist * 2
      blist[3] = 999
      print(alist)
 
 
 .. mchoicemf:: test_question9_12_2
-   :answer_a: [4,2,8,999,5,4,2,8,999,5]
-   :answer_b: [[4,2,8,999,5],[4,2,8,999,5]]
-   :answer_c: [4,2,8,6,5]
-   :answer_d: [[4,2,8,999,5],[4,2,8,6,5]]
+   :answer_a: [4, 2, 8, 999, 5, 4, 2, 8, 999, 5]
+   :answer_b: [[4, 2, 8, 999, 5], [4, 2, 8, 999, 5]]
+   :answer_c: [4, 2, 8, 6, 5]
+   :answer_d: [[4, 2, 8, 999, 5], [4, 2, 8, 6, 5]]
    :correct: b
    :feedback_a: [alist] * 2 creates a list containing alist repeated 2 times
    :feedback_b: Yes, blist contains two references, both to alist.
@@ -111,7 +111,7 @@ Here is the same example in codelens.  Step through the code until paying partic
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      blist = [alist] * 2
      alist[3] = 999
      print(blist)

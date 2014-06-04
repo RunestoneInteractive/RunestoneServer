@@ -80,13 +80,13 @@ codelens example:
 
 .. codelens::  cl_powerof_bad
 
-    def powerof(x,p):
+    def powerof(x, p):
         power = p   # Another dumb mistake
         y = x ** power
         return y
 
     power = 3
-    result = powerof(10,2)
+    result = powerof(10, 2)
     print(result)
 
 Now step through the code.  What do you notice about the values of variable ``power``

@@ -106,7 +106,7 @@ There is no limit on the number of statements that can appear under the two clau
 
    .. code-block:: python
 
-     if (4 + 5 == 10):
+     if 4 + 5 == 10:
          print("TRUE")
      else:
          print("FALSE")
@@ -127,7 +127,7 @@ There is no limit on the number of statements that can appear under the two clau
 
    .. code-block:: python
 
-     if (4 + 5 == 10):
+     if 4 + 5 == 10:
          print("TRUE")
      else:
          print("FALSE")

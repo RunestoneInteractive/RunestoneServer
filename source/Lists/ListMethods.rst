@@ -95,9 +95,9 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
 **Check your understanding**
 
 .. mchoicemf:: test_question9_13_1
-   :answer_a: [4,2,8,6,5,False,True]
-   :answer_b: [4,2,8,6,5,True,False]
-   :answer_c: [True,False,4,2,8,6,5]
+   :answer_a: [4, 2, 8, 6, 5, False, True]
+   :answer_b: [4, 2, 8, 6, 5, True, False]
+   :answer_c: [True, False, 4, 2, 8, 6, 5]
    :correct: b
    :feedback_a: True was added first, then False was added last.
    :feedback_b: Yes, each item is added to the end of the list.
@@ -107,7 +107,7 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      alist.append(True)
      alist.append(False)
      print(alist)
@@ -115,9 +115,9 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
 
 
 .. mchoicemf:: test_question9_13_2
-   :answer_a: [False,4,2,True,8,6,5]
-   :answer_b: [4,False,True,2,8,6,5]
-   :answer_c: [False,2,True,6,5]
+   :answer_a: [False, 4, 2, True, 8, 6, 5]
+   :answer_b: [4, False, True, 2, 8, 6, 5]
+   :answer_c: [False, 2, True, 6, 5]
    :correct: a
    :feedback_a: Yes, first True was added at index 2, then False was added at index 0.
    :feedback_b: insert will place items at the index position specified and move everything down to the right.
@@ -127,16 +127,16 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
-     alist.insert(2,True)
-     alist.insert(0,False)
+     alist = [4, 2, 8, 6, 5]
+     alist.insert(2, True)
+     alist.insert(0, False)
      print(alist)
 
 
 .. mchoicemf:: test_question9_13_3
-   :answer_a: [4,8,6]
-   :answer_b: [2,6,5]
-   :answer_c: [4,2,6]
+   :answer_a: [4, 8, 6]
+   :answer_b: [2, 6, 5]
+   :answer_c: [4, 2, 6]
    :correct: c
    :feedback_a: pop(2) removes the item at index 2, not the 2 itself.
    :feedback_b: pop() removes the last item, not the first.
@@ -146,7 +146,7 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      temp = alist.pop(2)
      temp = alist.pop()
      print(alist)
@@ -154,8 +154,8 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    
 .. mchoicemf:: test_question9_13_4
-   :answer_a: [2,8,6,5]
-   :answer_b: [4,2,8,6,5]
+   :answer_a: [2, 8, 6, 5]
+   :answer_b: [4, 2, 8, 6, 5]
    :answer_c: 4
    :answer_d: None
    :correct: c
@@ -168,7 +168,7 @@ and ``reverse`` all return ``None``.  This means that re-assigning ``mylist`` to
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      alist = alist.pop(0)
      print(alist)
 

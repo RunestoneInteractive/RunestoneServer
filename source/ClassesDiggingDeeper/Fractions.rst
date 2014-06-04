@@ -30,10 +30,10 @@ method which will allow the user to provide a numerator and a denominator for th
 
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
-            self.num = top        #the numerator is on top
-            self.den = bottom     #the denominator is on the bottom
+            self.num = top        # the numerator is on top
+            self.den = bottom     # the denominator is on the bottom
 
         def __str__(self):
             return str(self.num) + "/" + str(self.den)
@@ -44,7 +44,7 @@ method which will allow the user to provide a numerator and a denominator for th
         def getDen(self):
             return self.den
 
-    myfraction = Fraction(3,4)
+    myfraction = Fraction(3, 4)
     print(myfraction)
 
     print(myfraction.getNum())

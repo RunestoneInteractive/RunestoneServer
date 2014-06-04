@@ -47,7 +47,7 @@ Exercises
 
                 x = input("Enter a sentence")
 
-                x = x.lower() # convert to all lowercase
+                x = x.lower()   # convert to all lowercase
 
                 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -174,10 +174,10 @@ Exercises
                     for word in line.split():
 
                         # remove punctuation
-                        word = word.replace('_','').replace('"','').replace(',','').replace('.','')
-                        word = word.replace('-','').replace('?','').replace('!','').replace("'","")
-                        word = word.replace('(','').replace(')','').replace(':','').replace('[','')
-                        word = word.replace(']','').replace(';','')
+                        word = word.replace('_', '').replace('"', '').replace(',', '').replace('.', '')
+                        word = word.replace('-', '').replace('?', '').replace('!', '').replace("'", "")
+                        word = word.replace('(', '').replace(')', '').replace(':', '').replace('[', '')
+                        word = word.replace(']', '').replace(';', '')
 
                         # ignore case
                         word = word.lower()
@@ -259,7 +259,7 @@ Exercises
                 pirate['student'] = 'swabbie'
                 pirate['boy'] = 'matey'
                 pirate['restaurant'] = 'galley'
-                #and so on
+                # and so on
             
                 sentence = input("Please enter a sentence in English")
             
@@ -271,7 +271,7 @@ Exercises
                     else:
                         psentence.append(aword)
                     
-                print(" ").join(psentence)
+                print(" ".join(psentence))
             
 
         .. tab:: Discussion 

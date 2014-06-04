@@ -20,7 +20,7 @@ Consider the example below.
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self, initX, initY):
- 
+            """ Create a new point at the given coordinates. """ 
             self.x = initX
             self.y = initY
 
@@ -34,7 +34,7 @@ Consider the example below.
             return ((self.x ** 2) + (self.y ** 2)) ** 0.5
 
     
-    p = Point(7,6)
+    p = Point(7, 6)
     print(p)
 
 The ``print`` function shown above produces a string representation of the Point ``p``.  The default functionality provided by
@@ -54,7 +54,7 @@ is required that the ``__str__`` method create and *return* a string.
         """ Point class for representing and manipulating x,y coordinates. """
 
         def __init__(self, initX, initY):
-
+            """ Create a new point at the given coordinates. """
             self.x = initX
             self.y = initY
 
@@ -70,7 +70,7 @@ is required that the ``__str__`` method create and *return* a string.
         def __str__(self):
             return "x=" + str(self.x) + ", y=" + str(self.y)
 
-    p = Point(7,6)
+    p = Point(7, 6)
     print(p)
 
 

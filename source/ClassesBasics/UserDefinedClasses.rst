@@ -69,7 +69,7 @@ instance of ``Point`` is created.  It gives the programmer the opportunity
 to set up the attributes required within the new instance by giving them 
 their initial state values.  The ``self`` parameter (you could choose any
 other name, but nobody ever does!) is automatically set to reference
-the newly created object that needs to be initialized.   
+the newly-created object that needs to be initialized.   
 
 So let's use our new Point class now.
 
@@ -79,7 +79,7 @@ So let's use our new Point class now.
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self):
- 
+            """ Create a new point at the origin """
             self.x = 0
             self.y = 0
     
@@ -87,8 +87,7 @@ So let's use our new Point class now.
     q = Point()         # and make a second point
 
     print("Nothing seems to have happened with the points")
-    
-   
+
 During the initialization of the objects, we created two
 attributes called `x` and `y` for each, and gave them both the value 0.  You will note that when you run the
 program, nothing happens.  It turns out that this is not quite the case.  In fact, two ``Points`` have been created, each
@@ -98,6 +97,22 @@ having an x and y coordinate with value 0.  However, because we have not asked t
 .. image:: Figures/objectpic4.png
    :alt: Simple object has state and methods
 
+You can see this for yourself, via codelens:
+
+.. codelens:: chp13_points
+
+    class Point:
+        """ Point class for representing and manipulating x,y coordinates. """
+        
+        def __init__(self):
+            """ Create a new point at the origin """
+            self.x = 0
+            self.y = 0
+    
+    p = Point()         # Instantiate an object of type Point
+    q = Point()         # and make a second point
+
+    print("Nothing seems to have happened with the points")
 
 
 The following program adds a few print statements. You can see that the output suggests that each one is a ``Point object``.
@@ -109,7 +124,7 @@ However, notice that the ``is`` operator returns ``False`` meaning that they are
         """ Point class for representing and manipulating x,y coordinates. """
         
         def __init__(self):
- 
+            """ Create a new point at the origin """ 
             self.x = 0
             self.y = 0
     
@@ -143,7 +158,7 @@ The class itself isn't an instance of a point, but it contains the machinery
 to make point instances.   Every time you call the constructor, you're asking
 the factory to make you a new object.  As the object comes off the 
 production line, its initialization method is executed to 
-get the object properly set up with it's factory default settings.
+get the object properly set up with its factory default settings.
 
 The combined process of "make me a new object" and "get its settings initialized
 to the factory default settings" is called **instantiation**.  

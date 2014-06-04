@@ -91,7 +91,7 @@ we have stored the data values in a list and used a few list functions.  We will
 
 
 
-  xs = [48,117,200,240,160,260,220]  # here is the data
+  xs = [48, 117, 200, 240, 160, 260, 220]  # here is the data
   maxheight = max(xs)
   numbars = len(xs)
   border = 10
@@ -103,7 +103,7 @@ we have stored the data values in a list and used a few list functions.  We will
 
   wn = turtle.Screen()             # Set up the window and its attributes
   wn.bgcolor("lightgreen")
-  wn.setworldcoordinates(0-border,0-border,40*numbars+border,maxheight+border)
+  wn.setworldcoordinates(0-border, 0-border, 40*numbars+border, maxheight+border)
 
 
   for a in xs:

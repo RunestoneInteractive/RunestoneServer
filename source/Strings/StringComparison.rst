@@ -51,7 +51,7 @@ Are they the same?
 
 It turns out, as you recall from our discussion of variable names, that uppercase and lowercase letters are considered to be different from one another.  The way the computer knows they are different is that
 each character is assigned a unique integer value.  "A" is 65, "B" is 66, and "5" is 53.  The way you can
-find out the so called **ordinal value** for a given character is to use a character function called ``ord``.
+find out the so-called **ordinal value** for a given character is to use a character function called ``ord``.
 
 .. activecode:: ch08_ord2
 
@@ -77,7 +77,7 @@ There is also a similar function called ``chr`` that converts integers into thei
     print(chr(49))
     print(chr(53))
 
-    print("The character for 32 is",chr(32),"!!!")
+    print("The character for 32 is", chr(32), "!!!")
     print(ord(" "))
 
 One thing to note in the last two examples is the fact that the space character has an ordinal value (32).  Even though you don't see it, it is an actual character.  We sometimes call it a *nonprinting* character.

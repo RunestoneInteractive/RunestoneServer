@@ -20,7 +20,7 @@ Exercises
         .. tab:: Question
 
             The following sample file called ``studentdata.txt`` contains one line for each student in an imaginary class.  The 
-            students name is the first thing on each line, followed by some exam scores.  
+            student's name is the first thing on each line, followed by some exam scores.  
             The number of scores might be different for each student.
 
             .. raw:: html
@@ -45,12 +45,12 @@ Exercises
 
             .. activecode:: ch_files_q1answer
 
-                f = open("studentdata.txt","r")
+                f = open("studentdata.txt", "r")
 
                 for aline in f:
-                   items = aline.split()
-                   if len(items[1:]) > 6:
-                      print(items[0])
+                    items = aline.split()
+                    if len(items[1:]) > 6:
+                        print(items[0])
 
                 f.close()
 
@@ -88,11 +88,11 @@ Exercises
 
             .. activecode:: ch_files_q3answer
 
-                f = open("studentdata.txt","r")
+                f = open("studentdata.txt", "r")
 
                 for aline in f:
-                   items = aline.split()
-                   print(items[0],"max is", max(items[1:]), "min is", min(items[1:]))
+                    items = aline.split()
+                    print(items[0], "max is", max(items[1:]), "min is", min(items[1:]))
 
                 f.close()
 
@@ -171,7 +171,7 @@ Exercises
 
             At the end of this chapter is a very long file called ``mystery.txt`` The lines of this
             file contain either the word UP or DOWN or a pair of numbers.  UP and DOWN are instructions
-            for a turtle to lift up or put down its tail.  The pair of numbers are some x,y coordinates.
+            for a turtle to lift up or put down its tail.  The pairs of numbers are some x,y coordinates.
             Write a program that reads the file ``mystery.txt`` and uses the turtle to draw the picture
             described by the commands and the set of points.
 
@@ -187,9 +187,9 @@ Exercises
 
                 t = turtle.Turtle()
                 wn = turtle.Screen()
-                wn.setworldcoordinates(-300,-300,300,300)
+                wn.setworldcoordinates(-300, -300, 300, 300)
 
-                f = open("mystery.txt","r")
+                f = open("mystery.txt", "r")
 
                 for aline in f:
                     items = aline.split()
@@ -199,8 +199,8 @@ Exercises
                         if items[0] == "DOWN":
                             t.down()
                         else:
-                            #must be coords
-                            t.goto(int(items[0]),int(items[1]))
+                            # must be coords
+                            t.goto(int(items[0]), int(items[1]))
 
                 f.close()
                 wn.exitonclick()

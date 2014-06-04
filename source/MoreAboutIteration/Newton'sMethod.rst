@@ -40,9 +40,9 @@ calculation yielding a better result.
             approx = betterapprox
         return betterapprox
 
-    print(newtonSqrt(10,3))
-    print(newtonSqrt(10,5))
-    print(newtonSqrt(10,10))
+    print(newtonSqrt(10, 3))
+    print(newtonSqrt(10, 5))
+    print(newtonSqrt(10, 10))
 
 
 You may have noticed that the second and third calls to ``newtonSqrt`` in the previous example both returned the same value for the square root of 10.  Using 10 iterations instead of 5 did not improve the the value.  In general, Newton's algorithm will eventually reach a point where the new approximation is no better than the previous.  At that point, we could simply stop.
@@ -57,7 +57,7 @@ uses a ``while`` condition to execute until the approximation is no longer chang
     def newtonSqrt(n):
         approx = 0.5 * n
         better = 0.5 * (approx + n/approx)
-        while  better !=  approx:
+        while better != approx:
             approx = better
             better = 0.5 * (approx + n/approx)
         return approx

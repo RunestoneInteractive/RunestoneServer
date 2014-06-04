@@ -16,7 +16,7 @@ Consider the following example.  The original list has 3 integers.  We want to a
 
 .. codelens:: appcon1
 
-    origlist = [45,32,88]
+    origlist = [45, 32, 88]
 
     origlist.append("cat")
 
@@ -30,7 +30,7 @@ Note that the word "cat" needs to be placed in a list since the concatenation op
 
 .. codelens:: appcon2
 
-    origlist = [45,32,88]
+    origlist = [45, 32, 88]
 
     origlist = origlist + ["cat"]
 
@@ -42,7 +42,7 @@ accumulator pattern.
 
 .. codelens:: appcon3
 
-    origlist = [45,32,88]
+    origlist = [45, 32, 88]
 
     newlist = origlist + ["cat"]
 
@@ -50,7 +50,7 @@ accumulator pattern.
 **Check you understanding**
 
 .. mchoicemf:: test_question9_15_1
-   :answer_a: [4,2,8,6,5,999]
+   :answer_a: [4, 2, 8, 6, 5, 999]
    :answer_b: Error, you cannot concatenate a list with an integer.
    :correct: b
    :feedback_a: You cannot concatenate a list with an integer.
@@ -60,7 +60,7 @@ accumulator pattern.
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      alist = alist + 999
      print(alist)
 

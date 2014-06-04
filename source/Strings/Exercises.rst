@@ -53,11 +53,11 @@ Exercises
 
    .. sourcecode:: python
 
-       prefixes = "JKLMNOPQ"
-	   suffix = "ack"
+        prefixes = "JKLMNOPQ"
+        suffix = "ack"
 
-	   for p in prefixes:
-	       print(p + suffix)
+	for p in prefixes:
+	    print(p + suffix)
 
 
    Of course, that's not quite right because Ouack and Quack are misspelled.
@@ -86,8 +86,8 @@ Exercises
             .. activecode:: q3_answer
 
                 def count(p):
-                    lows="abcdefghijklmnopqrstuvwxyz"
-                    ups="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    lows = "abcdefghijklmnopqrstuvwxyz"
+                    ups =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     
                     numberOfe = 0
                     totalChars = 0
@@ -97,8 +97,7 @@ Exercises
                             if achar == 'e':
                                 numberOfe = numberOfe + 1
 
-                   
-                    percent_with_e = (numberOfe/totalChars) * 100
+                    percent_with_e = (numberOfe / totalChars) * 100
                     print("Your text contains", totalChars, "alphabetic characters of which", numberOfe, "(", percent_with_e, "%)", "are 'e'.")
 
 
@@ -143,9 +142,9 @@ Exercises
                     return len(n_str)
 
 
-                print (findNumDigits(50))
-                print (findNumDigits(20000))
-                print (findNumDigits(1))
+                print(findNumDigits(50))
+                print(findNumDigits(20000))
+                print(findNumDigits(1))
 
         .. tab:: Discussion 
 
@@ -165,7 +164,7 @@ Exercises
 
       testEqual(reverse("happy"), "yppah")
       testEqual(reverse("Python"), "nohtyP")
-      testEqual(reverse(""),"")
+      testEqual(reverse(""), "")
 
 #.
 
@@ -182,10 +181,10 @@ Exercises
               def mirror(mystr):
                   # your code here
         
-              testEqual(mirror('good'),'gooddoog')
-              testEqual(mirror('Python'),'PythonnohtyP')
+              testEqual(mirror('good'), 'gooddoog')
+              testEqual(mirror('Python'), 'PythonnohtyP')
               testEqual(mirror(''), '')
-              testEqual(mirror('a'),'aa')
+              testEqual(mirror('a'), 'aa')
         
         
 
@@ -204,10 +203,10 @@ Exercises
                 def mirror(mystr):
                     return mystr + reverse(mystr)
 
-                testEqual(mirror('good'),'gooddoog')
-                testEqual(mirror('Python'),'PythonnohtyP')
+                testEqual(mirror('good'), 'gooddoog')
+                testEqual(mirror('Python'), 'PythonnohtyP')
                 testEqual(mirror(''), '')
-                testEqual(mirror('a'),'aa')
+                testEqual(mirror('a'), 'aa')
 
         .. tab:: Discussion
 
@@ -225,9 +224,9 @@ Exercises
       def remove_letter(theLetter, theString):
           # your code here
 
-      testEqual(remove_letter('a', 'apple'),'pple')
-      testEqual(remove_letter('a', 'banana'),'bnn')
-      testEqual(remove_letter('z', 'banana'),'banana')
+      testEqual(remove_letter('a', 'apple'), 'pple')
+      testEqual(remove_letter('a', 'banana'), 'bnn')
+      testEqual(remove_letter('z', 'banana'), 'banana')
 
 
 
@@ -246,11 +245,11 @@ Exercises
               def is_palindrome(myStr):
                   # your code here
         
-              testEqual(is_palindrome('abba'),True)
-              testEqual(is_palindrome('abab'),False)
-              testEqual(is_palindrome('straw warts'),True)
+              testEqual(is_palindrome('abba'), True)
+              testEqual(is_palindrome('abab'), False)
+              testEqual(is_palindrome('straw warts'), True)
               testEqual(is_palindrome('a'), True)
-              testEqual(is_palindrome(''),True)
+              testEqual(is_palindrome(''), True)
         
 
         .. tab:: Answer
@@ -271,11 +270,11 @@ Exercises
                     else:
                         return False
 
-                testEqual(is_palindrome('abba'),True)
-                testEqual(is_palindrome('abab'),False)
-                testEqual(is_palindrome('straw warts'),True)
+                testEqual(is_palindrome('abba'), True)
+                testEqual(is_palindrome('abab'), False)
+                testEqual(is_palindrome('straw warts'), True)
                 testEqual(is_palindrome('a'), True)
-                testEqual(is_palindrome(''),True)
+                testEqual(is_palindrome(''), True)
 
         .. tab:: Discussion 
 
@@ -296,9 +295,9 @@ Exercises
       testEqual(count('is', 'Mississippi'), 2)
       testEqual(count('an', 'banana'), 2)
       testEqual(count('ana', 'banana'), 2)
-      testEqual(count('nana', 'banana'),  1)
-      testEqual(count('nanan', 'banana'),  0)
-      testEqual(count('aaa', 'aaaaaa'),  4)
+      testEqual(count('nana', 'banana'), 1)
+      testEqual(count('nanan', 'banana'), 0)
+      testEqual(count('aaa', 'aaaaaa'), 4)
 
 
 #.
@@ -316,7 +315,7 @@ Exercises
               def remove(substr,theStr):
                   # your code here
         
-              testEqual(remove('an', 'banana'),'bana')
+              testEqual(remove('an', 'banana'), 'bana')
               testEqual(remove('cyc', 'bicycle'), 'bile')
               testEqual(remove('iss', 'Mississippi'), 'Missippi')
               testEqual(remove('egg', 'bicycle'), 'bicycle')
@@ -330,13 +329,13 @@ Exercises
                 from test import testEqual
 
                 def remove(substr,theStr):
-                    index = theStr.index(substr)
+                    index = theStr.find(substr)
                     if index < 0: # substr doesn't exist in theStr
                         return theStr
                     return_str = theStr[:index] + theStr[index+len(substr):]
                     return return_str
 
-                testEqual(remove('an', 'banana'),'bana')
+                testEqual(remove('an', 'banana'), 'bana')
                 testEqual(remove('cyc', 'bicycle'), 'bile')
                 testEqual(remove('iss', 'Mississippi'), 'Missippi')
                 testEqual(remove('egg', 'bicycle'), 'bicycle')
@@ -383,7 +382,7 @@ Exercises
 
                 import turtle
 
-                def createLSystem(numIters,axiom):
+                def createLSystem(numIters, axiom):
                     startString = axiom
                     endString = ""
                     for i in range(numIters):
@@ -410,7 +409,7 @@ Exercises
 
                     return newstr
 
-                def drawLsystem(aTurtle,instructions,angle,distance):
+                def drawLsystem(aTurtle, instructions, angle, distance):
                     for cmd in instructions:
                         if cmd == 'F':
                             aTurtle.forward(distance)
@@ -424,17 +423,17 @@ Exercises
                             print('Error:', cmd, 'is an unknown command')
 
                 def main():
-                    inst = createLSystem(4,"L")   #create the string
+                    inst = createLSystem(4, "L")  # create the string
                     print(inst)
-                    t = turtle.Turtle()           #create the turtle
+                    t = turtle.Turtle()           # create the turtle
                     wn = turtle.Screen()
 
                     t.up()
                     t.back(200)
                     t.down()
                     t.speed(9)
-                    drawLsystem(t,inst,90,5)      #draw the picture
-                                                  #angle 90, segment length 5
+                    drawLsystem(t, inst, 90, 5)   # draw the picture
+                                                  # angle 90, segment length 5
                     wn.exitonclick()
 
                 main()
@@ -475,7 +474,7 @@ Exercises
 
                 import turtle
 
-                def createLSystem(numIters,axiom):
+                def createLSystem(numIters, axiom):
                     startString = axiom
                     endString = ""
                     for i in range(numIters):
@@ -502,7 +501,7 @@ Exercises
 
                     return newstr
 
-                def drawLsystem(aTurtle,instructions,angle,distance):
+                def drawLsystem(aTurtle, instructions, angle, distance):
                     for cmd in instructions:
                         if cmd == 'F':
                             aTurtle.forward(distance)
@@ -517,14 +516,14 @@ Exercises
                             pass
 
                 def main():
-                    inst = createLSystem(5,"YF")   #create the string
+                    inst = createLSystem(5, "YF")  # create the string
                     print(inst)
-                    t = turtle.Turtle()           #create the turtle
+                    t = turtle.Turtle()            # create the turtle
                     wn = turtle.Screen()
 
                     t.speed(9)
-                    drawLsystem(t,inst,60,5)      #draw the picture
-                                                  #angle 90, segment length 5
+                    drawLsystem(t, inst, 60, 5)    # draw the picture
+                                                   # angle 90, segment length 5
                     wn.exitonclick()
 
                 main()
@@ -565,7 +564,7 @@ Exercises
 
                 import turtle
 
-                def createLSystem(numIters,axiom):
+                def createLSystem(numIters, axiom):
                     startString = axiom
                     endString = ""
                     for i in range(numIters):
@@ -592,7 +591,7 @@ Exercises
 
                     return newstr
 
-                def drawLsystem(aTurtle,instructions,angle,distance):
+                def drawLsystem(aTurtle, instructions, angle, distance):
                     for cmd in instructions:
                         if cmd == 'F':
                             aTurtle.forward(distance)
@@ -607,9 +606,9 @@ Exercises
                             pass
 
                 def main():
-                    inst = createLSystem(5,"FXF--FF--FF")   #create the string
+                    inst = createLSystem(5, "FXF--FF--FF")   # create the string
                     print(inst)
-                    t = turtle.Turtle()           #create the turtle
+                    t = turtle.Turtle()           # create the turtle
                     wn = turtle.Screen()
                     t.up()
                     t.back(200)
@@ -619,8 +618,8 @@ Exercises
                     t.down()
                     t.speed(9)
 
-                    drawLsystem(t,inst,60,5)      #draw the picture
-                                                  #angle 90, segment length 5
+                    drawLsystem(t, inst, 60, 5)   # draw the picture
+                                                  # angle 90, segment length 5
                     wn.exitonclick()
 
                 main()

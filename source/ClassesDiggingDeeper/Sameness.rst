@@ -19,7 +19,7 @@ you say, Chris and I have the same mother, you mean that his mother and yours
 are the same person.
 
 When you talk about objects, there is a similar ambiguity. For example, if two
-``Fractions``\ s are the same, does that mean they contain the same data
+``Fraction``\ s are the same, does that mean they contain the same data
 (same numerator and denominator) or that they are actually the same object?
 
 We've already seen the ``is`` operator in the chapter on lists, where we
@@ -31,25 +31,24 @@ It allows us to find out if two references refer to the same object.
 
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
-            self.num = top        #the numerator is on top
-            self.den = bottom     #the denominator is on the bottom
+            self.num = top        # the numerator is on top
+            self.den = bottom     # the denominator is on the bottom
 
         def __str__(self):
             return str(self.num) + "/" + str(self.den)
 
 
-    myfraction = Fraction(3,4)
-    yourfraction = Fraction(3,4)
+    myfraction = Fraction(3, 4)
+    yourfraction = Fraction(3, 4)
     print(myfraction is yourfraction)
 
     ourfraction = myfraction
     print(myfraction is ourfraction)
 
 
-Even though ``myfraction`` and ``yourfraction`` contain the same numerator and denominator, they are not the
-same object. 
+Even though ``myfraction`` and ``yourfraction`` contain the same numerator and denominator, they are not the same object. 
 
 .. image:: Figures/fractionpic2.png
 
@@ -69,22 +68,22 @@ denominator.  For example, here is a boolean function that performs this check.
 
 .. sourcecode:: python
 
-    def sameFraction(f1,f2):
+    def sameFraction(f1, f2):
         return (f1.getNum() == f2.getNum()) and (f1.getDen() == f2.getDen())
 
 This type of equality is known as **deep equality** since it compares the values "deep" in the object, not just the reference to the object. 
   
 .. activecode:: fractions_eq1
 
-    def sameFraction(f1,f2):
+    def sameFraction(f1, f2):
         return (f1.getNum() == f2.getNum()) and (f1.getDen() == f2.getDen())
  
     class Fraction:
 
-        def __init__(self,top,bottom):
+        def __init__(self, top, bottom):
 
-            self.num = top        #the numerator is on top
-            self.den = bottom     #the denominator is on the bottom
+            self.num = top        # the numerator is on top
+            self.den = bottom     # the denominator is on the bottom
 
         def __str__(self):
             return str(self.num) + "/" + str(self.den)
@@ -96,10 +95,10 @@ This type of equality is known as **deep equality** since it compares the values
             return self.den
 
 
-    myfraction = Fraction(3,4)
-    yourfraction = Fraction(3,4)
+    myfraction = Fraction(3, 4)
+    yourfraction = Fraction(3, 4)
     print(myfraction is yourfraction)
-    print(sameFraction(myfraction,yourfraction))
+    print(sameFraction(myfraction, yourfraction))
 
 
 Of course, if the two variables refer to the same object, they have both
@@ -121,8 +120,8 @@ shallow and deep equality.
         s = Point(4, 2)
         print("== on Points returns", p == s)  # by default, == does a shallow equality test here
 
-        a = [2,3]
-        b = [2,3]
+        a = [2, 3]
+        b = [2, 3]
         print("== on lists returns",  a == b)  # by default, == does a deep equality test on lists
 
     This outputs::

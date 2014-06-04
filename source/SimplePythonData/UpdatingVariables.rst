@@ -85,7 +85,7 @@ a variable, which means the same as incrementing it by 1.
 
      x = 12
      x = x - 1
-     print (x)
+     print(x)
 
 .. mchoicemf:: test_question2_10_2
    :answer_a: 12
@@ -107,7 +107,7 @@ a variable, which means the same as incrementing it by 1.
      x = x - 3
      x = x + 5
      x = x + 1
-     print (x)
+     print(x)
 
 .. parsonsprob:: question2_10_3
 

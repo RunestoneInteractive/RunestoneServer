@@ -54,8 +54,8 @@ This is not the case with lists.  Consider the following example.  Here, ``a`` a
 
 .. activecode:: chp09_is2
     
-    a = [81,82,83]
-    b = [81,82,83]
+    a = [81, 82, 83]
+    b = [81, 82, 83]
 
     print(a is b)
 
@@ -75,8 +75,8 @@ Here is the example in codelens.  Pay particular attention to the `id` values.
 .. codelens:: chp09_istrace
     :showoutput:
     
-    a = [81,82,83]
-    b = [81,82,83]
+    a = [81, 82, 83]
+    b = [81, 82, 83]
 
     print(a is b)
     print(a == b)

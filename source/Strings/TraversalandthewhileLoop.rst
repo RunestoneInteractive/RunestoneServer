@@ -64,8 +64,8 @@ Here is the same example in codelens so that you can trace the values of the var
       s = "python rocks"
       idx = 1
       while idx < len(s):
-         print(s[idx])
-         idx = idx + 2
+          print(s[idx])
+          idx = idx + 2
       
 
 .. note::

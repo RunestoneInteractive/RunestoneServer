@@ -19,7 +19,7 @@ Exercises
           Create a class definition for a Rectangle class using this idea.  To create a Rectangle object at location (4,5) with width 6
           and height 5, we would do the following::
           
-              r = Rectangle(Point(4,5), 6, 5)
+              r = Rectangle(Point(4, 5), 6, 5)
               
         .. tab:: Answer
         
@@ -52,7 +52,7 @@ Exercises
                         self.width = initW
                         self.height = initH
                         
-                loc = Point(4,5)
+                loc = Point(4, 5)
                 r = Rectangle(loc, 6, 5)
                 print(r)
                     
@@ -255,7 +255,7 @@ Exercises
                         
                     def diagonal(self):
                     
-                        d = (self.width**2 + self.height**2)**0.5
+                        d = (self.width**2 + self.height**2) ** 0.5
                         return d
 
         .. tab:: Discussion 

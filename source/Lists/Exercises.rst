@@ -151,7 +151,7 @@ Exercises
                 def countOdd(lst):
                     odd = 0
                     for e in lst:
-                        if not e % 2 == 0:
+                        if e % 2 != 0:
                             odd = odd + 1
                     return odd
 
@@ -232,7 +232,7 @@ Exercises
                 def sum(lst):
                     sum = 0
                     index = 0
-                    while not lst[index] % 2 == 0 and not index >= len(lst):
+                    while lst[index] % 2 != 0 and index < len(lst):
                         sum = sum + lst[index]
                         index = index + 1
                     return sum
@@ -309,7 +309,7 @@ Exercises
                         newlst.append(lst[i])
                     return newlst
 
-                lst = [0,1,1,2,2,3,4,5,6,7,8,9]
+                lst = [0, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 9]
                 print(count(1, lst))
                 print(is_in(4, lst))
                 print(reverse(lst))
@@ -365,7 +365,7 @@ Exercises
 
                 import turtle
 
-                def createLSystem(numIters,axiom):
+                def createLSystem(numIters, axiom):
                     startString = axiom
                     endString = ""
                     for i in range(numIters):
@@ -392,7 +392,7 @@ Exercises
 
                     return newstr
 
-                def drawLsystem(aTurtle,instructions,angle,distance):
+                def drawLsystem(aTurtle, instructions, angle, distance):
                     savedInfoList = []
                     for cmd in instructions:
                         if cmd == 'F':
@@ -404,27 +404,27 @@ Exercises
                         elif cmd == '-':
                             aTurtle.left(angle)
                         elif cmd == '[':
-                            savedInfoList.append([aTurtle.heading(),aTurtle.xcor(),aTurtle.ycor()])
+                            savedInfoList.append([aTurtle.heading(), aTurtle.xcor(), aTurtle.ycor()])
                             #print(savedInfoList)
                         elif cmd == ']':
                             newInfo = savedInfoList.pop()
                             aTurtle.setheading(newInfo[0])
-                            aTurtle.setposition(newInfo[1],newInfo[2])
+                            aTurtle.setposition(newInfo[1], newInfo[2])
                         else:
-                            #print('Error:', cmd, 'is an unknown command')
+                            # print('Error:', cmd, 'is an unknown command')
                             pass
                 
 
                 def main():
-                    inst = createLSystem(4,"H")   #create the string
+                    inst = createLSystem(4, "H")   # create the string
                     print(inst)
-                    t = turtle.Turtle()           #create the turtle
+                    t = turtle.Turtle()            # create the turtle
                     wn = turtle.Screen()
                     t.up()
                     t.back(200)
                     t.down()
                     t.speed(9)
-                    drawLsystem(t,inst,27.5,5)      #draw the picture
+                    drawLsystem(t, inst, 27.5, 5)  # draw the picture
 
                     wn.exitonclick()
 

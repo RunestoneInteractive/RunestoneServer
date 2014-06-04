@@ -67,7 +67,7 @@ use ``fileref`` will result in an error.
 
     ::
 
-            >>>fileref = open("qbdata.txt","r")
+            >>>fileref = open("qbdata.txt", "r")
             >>>
             >>>fileref.close()
             >>>

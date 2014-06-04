@@ -25,7 +25,7 @@ the target.
     class Point:
 
         def __init__(self, initX, initY):
-
+            """ Create a new point at the given coordinates. """
             self.x = initX
             self.y = initY
 
@@ -42,12 +42,12 @@ the target.
             return "x=" + str(self.x) + ", y=" + str(self.y)
 
         def halfway(self, target): 
-             mx = (self.x + target.x)/2
-             my = (self.y + target.y)/2
+             mx = (self.x + target.x) / 2
+             my = (self.y + target.y) / 2
              return Point(mx, my)
 
-    p = Point(3,4)
-    q = Point(5,12)
+    p = Point(3, 4)
+    q = Point(5, 12)
     mid = p.halfway(q)
 
     print(mid)

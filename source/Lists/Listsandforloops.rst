@@ -15,7 +15,7 @@ It is also possible to perform **list traversal** using iteration by item as wel
 
 .. activecode:: chp09_03a
 
-    fruits = ["apple","orange","banana","cherry"]
+    fruits = ["apple", "orange", "banana", "cherry"]
 
     for afruit in fruits:     # by item
         print(afruit)
@@ -27,7 +27,7 @@ We can also use the indices to access the items in an iterative fashion.
 
 .. activecode:: chp09_03b
 
-    fruits = ["apple","orange","banana","cherry"]
+    fruits = ["apple", "orange", "banana", "cherry"]
 
     for position in range(len(fruits)):     # by index
         print(fruits[position])
@@ -61,7 +61,7 @@ each of its elements as you go. The following code squares all the numbers from 
     print(numbers)
 
     for i in range(len(numbers)):
-        numbers[i] = numbers[i]**2
+        numbers[i] = numbers[i] ** 2
 
     print(numbers)
 
@@ -77,9 +77,9 @@ list, so that we can assign a new value to it.
 **Check your understanding**
 
 .. mchoicemf:: test_question9_16_1
-   :answer_a: [4,2,8,6,5]
-   :answer_b: [4,2,8,6,5,5]
-   :answer_c: [9,7,13,11,10]
+   :answer_a: [4, 2, 8, 6, 5]
+   :answer_b: [4, 2, 8, 6, 5, 5]
+   :answer_c: [9, 7, 13, 11, 10]
    :answer_d: Error, you cannot concatenate inside an append.
    :correct: c
    :feedback_a: 5 is added to each item before the append is peformed.
@@ -91,10 +91,10 @@ list, so that we can assign a new value to it.
    
    .. code-block:: python
 
-     alist = [4,2,8,6,5]
+     alist = [4, 2, 8, 6, 5]
      blist = [ ]
      for item in alist:
-        blist.append(item+5)
+         blist.append(item+5)
      print(blist)
 
 
