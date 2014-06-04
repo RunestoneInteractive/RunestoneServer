@@ -96,7 +96,11 @@ response.files.insert(1,URL('static','css/datepicker.css'))
 						$('#totalDays').val(Math.round(diffDates/(1000*60*60*24)) + 1);
 					}				
 				});
-				var chapter = $("#selectChapter option")[0].value;
+				if ( "{{=request.vars.chapter}}" == "None")
+					var chapter = $("#selectChapter option")[0].value;
+				else
+					var chapter = {{=request.vars.chapter}};
+				
 				$( "#p_button" ).click(function() {	
                 var note = $('#noteToFriends').val();
                 var data = {chapter: chapter, startDate: sDateString, endDate: eDateString, note: note};
@@ -130,7 +134,7 @@ response.files.insert(1,URL('static','css/datepicker.css'))
 					$(value).html('<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div><div class="viewport"><div class="overview">'+$(value).html()+'</div></div>');
 				});
 				updateScrollbar();
-                newChapterPlan($("#selectChapter option")[0].value);
+                newChapterPlan(chapter);
 			});
 			function updateScrollbar(){
 				$('.scrollable-section').each(function(index,value){

@@ -52,24 +52,21 @@ def modifiedschedule():
         chapters = db(db.chapters.id==db.cohort_plan.chapter_id).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status,db.cohort_plan.start_date , db.cohort_plan.end_date)
         return dict(chapters = chapters)
 def modify():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='new')
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(start_date=request.vars.startDate)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(end_date=request.vars.endDate)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(note=request.vars.note)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_by=auth.user)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_on=datetime.datetime.now())
+    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='new', start_date=request.vars.startDate, end_date=request.vars.endDate, note=request.vars.note, created_by=auth.user, created_on=datetime.datetime.now())
+
     plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
     db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
-    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=request.vars.chapter)
+    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=plan.id)
+    pprint.pprint(plan) 
+    pprint.pprint(plan.id) 
 def delete():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='notStarted')
     plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
     db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
-    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=request.vars.plan)
+    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=plan.id)
     db((db.user_comments.cohort_id==auth.user.cohort_id) & (db.user_comments.chapter_id==request.vars.chapter)).delete()
 def complete():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed')
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())
+    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed', actual_end_date=datetime.datetime.now())
 def comment():
 	db.user_comments.insert(cohort_id=auth.user.cohort_id,chapter_id=request.vars.chapter,comment=request.vars.text,comment_by=auth.user)
 def initiateGroup():
