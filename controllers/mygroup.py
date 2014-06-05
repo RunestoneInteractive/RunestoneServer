@@ -73,11 +73,11 @@ def delete():
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='notStarted')
     plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
     db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
-    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=request.vars.plan)
+    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=plan.id)
     db((db.user_comments.cohort_id==auth.user.cohort_id) & (db.user_comments.chapter_id==request.vars.chapter)).delete()
 
 def complete():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed')
+    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed', actual_end_date=datetime.datetime.now())
     db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())
 
 def comment():
