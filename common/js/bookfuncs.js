@@ -92,9 +92,10 @@ function createEditors() {
             first_line = 1;
         }
         cm_editors[newEdId] = CodeMirror.fromTextArea(edList[i], {
-                                                          mode: {name: lang,
-                                                              version: 2,
-                                                              singleLineStringErrors: false},
+                                                          mode: { name: lang,
+                                                                  version: 2,
+                                                                  singleLineStringErrors: false
+                                                                },
                                                           lineNumbers: true,
                                                           firstLineNumber: first_line,
                                                           indentUnit: 4,
@@ -104,6 +105,13 @@ function createEditors() {
                                                           onKeyEvent: handleEdKeys
                                                       }
         );
+        $('.CodeMirror').resizable({ 
+            resize: function() {
+                $('.CodeMirror')[0].CodeMirror.setSize($(this).width(), $(this).height());
+                $('.CodeMirror')[0].CodeMirror.refresh();
+            }
+        });
+        
         cm_editors[newEdId].parentDiv = edList[i].parentNode.parentNode.id;
         //requestCode(edList[i].parentNode.id) // populate with user's code
     }
