@@ -132,6 +132,10 @@ div.section {
 	clear:both;
 }
 
+.CodeMirror-scroll {
+    max-height: none;
+}
+
 button.btn, btn.btn-sm,
 input[type="submit"].btn.btn-sm,
 input[type="button"].btn.btn-sm {

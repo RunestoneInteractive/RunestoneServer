@@ -105,21 +105,20 @@ function createEditors() {
                                                           onKeyEvent: handleEdKeys
                                                       }
         );
-        $('.CodeMirror').resizable({ 
-            resize: function() {
-                // get this codemirror
-                var currCm = $(edList[i]).CodeMirror;
-                console.log(currCm.getSize());
-                //var currentWidth = 
-                $('.CodeMirror')[0].CodeMirror.setSize($(this).width(), $(this).height());
-                $('.CodeMirror')[0].CodeMirror.refresh();
-            }
-        });
         
         cm_editors[newEdId].parentDiv = edList[i].parentNode.parentNode.id;
         //requestCode(edList[i].parentNode.id) // populate with user's code
     }
 
+    // allow ActiveCode editors to be resized
+    $('.CodeMirror').each(function (ind, cmNode) {
+        $(cmNode).resizable({
+            resize: function() {
+                cmNode.CodeMirror.setSize($(this).width(), $(this).height());
+                cmNode.CodeMirror.refresh();
+            }
+        });
+    });
 }
 
 function builtinRead(x) {
