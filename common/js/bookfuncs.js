@@ -110,8 +110,8 @@ function createEditors() {
         //requestCode(edList[i].parentNode.id) // populate with user's code
     }
 
-    // allow ActiveCode editors to be resized
-    $('.CodeMirror').each(function (ind, cmNode) {
+    // allow ActiveCode editors to be dynamically resized by user
+    $('.CodeMirror').each(function (_, cmNode) {
         $(cmNode).resizable({
             resize: function() {
                 cmNode.CodeMirror.setSize($(this).width(), $(this).height());
