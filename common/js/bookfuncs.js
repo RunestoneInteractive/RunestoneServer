@@ -107,6 +107,10 @@ function createEditors() {
         );
         $('.CodeMirror').resizable({ 
             resize: function() {
+                // get this codemirror
+                var currCm = $(edList[i]).CodeMirror;
+                console.log(currCm.getSize());
+                //var currentWidth = 
                 $('.CodeMirror')[0].CodeMirror.setSize($(this).width(), $(this).height());
                 $('.CodeMirror')[0].CodeMirror.refresh();
             }
