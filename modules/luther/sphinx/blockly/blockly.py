@@ -65,6 +65,17 @@ START = '''
     <script src='javascript_compressed.js' type="text/javascript"> </script>
     <script src='python_compressed.js' type="text/javascript"> </script>
     <script src='msg/js/en.js' type="text/javascript"> </script>
+    <style>
+      html, body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+      }
+      .blocklySvg {
+        height: 100%%;
+        width: 100%%;
+      }
+    </style>
 </head>
 <body>
 <p>
@@ -77,7 +88,7 @@ START = '''
 CTRL_START = '''<xml id="toolbox" style="display: none">'''
 CTRL_END = '''</xml>'''
 
-# TODO need to figure out how to inject path to _static -- get from conf.py ??
+
 END = '''
 <script>
     Blockly.inject(document.getElementById('%(divid)s'),
@@ -144,7 +155,7 @@ def visit_block_node(self,node):
     res += CTRL_END
     res += END % (node.ac_components)
     path = os.path.join(node.ac_components['blocklyHomePrefix'],'_static',node.ac_components['divid']+'.html')
-    final = '<iframe src="%s" width="500" height="400"></iframe>' % path
+    final = '<iframe src="%s" width="600" height="600"></iframe>' % path
     f = open(path, 'w')
     f.write(res)
     f.close()
@@ -176,7 +187,6 @@ class Blockly(Directive):
 
         document = self.state.document
         rel_filename, filename = document.settings.env.relfn2path(self.arguments[0])
-        print "rel, full ", rel_filename, filename
         self.options['divid'] = self.arguments[0]
 
         pathDepth = rel_filename.count("/")
