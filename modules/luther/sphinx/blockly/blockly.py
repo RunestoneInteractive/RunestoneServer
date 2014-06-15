@@ -33,11 +33,7 @@ import os
 def setup(app):
     app.add_directive('blockly',Blockly)
 
-    app.add_javascript('blockly_compressed.js' )
-    app.add_javascript('blocks_compressed.js' )
-    app.add_javascript('javascript_compressed.js' )    
-    app.add_javascript('python_compressed.js' )        
-    app.add_javascript('msg/js/en.js')
+
 
     app.add_node(BlocklyNode, html=(visit_block_node, depart_block_node))
 
@@ -62,6 +58,15 @@ class BlocklyNode(nodes.General, nodes.Element):
 
 
 START = '''
+<html>
+<head>
+    <script src='blockly_compressed.js' type="text/javascript"> </script>
+    <script src='blocks_compressed.js' type="text/javascript"> </script>
+    <script src='javascript_compressed.js' type="text/javascript"> </script>
+    <script src='python_compressed.js' type="text/javascript"> </script>
+    <script src='msg/js/en.js' type="text/javascript"> </script>
+</head>
+<body>
 <p>
     <button onclick="showCode()">Show Python</button>
     <button onclick="runCode()">Run</button>
@@ -76,7 +81,7 @@ CTRL_END = '''</xml>'''
 END = '''
 <script>
     Blockly.inject(document.getElementById('%(divid)s'),
-        {path: '%(blocklyHomePrefix)s_static/', toolbox: document.getElementById('toolbox')});
+        {path: './', toolbox: document.getElementById('toolbox')});
 
     function showCode() {
       // Generate JavaScript code and display it.
@@ -116,6 +121,8 @@ END = '''
   </script>
   
   <pre id="%(divid)s_pre"></pre>
+  </body>
+  </html>
 '''
 # self for these functions is an instance of the writer class.  For example
 # in html, self is sphinx.writers.html.SmartyPantsHTMLTranslator
@@ -136,7 +143,12 @@ def visit_block_node(self,node):
             res += '<block type="%s"></block>\n' % (ctrl)
     res += CTRL_END
     res += END % (node.ac_components)
-    self.body.append(res)
+    path = os.path.join(node.ac_components['blocklyHomePrefix'],'_static',node.ac_components['divid']+'.html')
+    final = '<iframe src="%s" width="500" height="400"></iframe>' % path
+    f = open(path, 'w')
+    f.write(res)
+    f.close()
+    self.body.append(final)
 
 def depart_block_node(self,node):
     ''' This is called at the start of processing an activecode node.  If activecode had recursive nodes
@@ -164,7 +176,7 @@ class Blockly(Directive):
 
         document = self.state.document
         rel_filename, filename = document.settings.env.relfn2path(self.arguments[0])
-
+        print "rel, full ", rel_filename, filename
         self.options['divid'] = self.arguments[0]
 
         pathDepth = rel_filename.count("/")

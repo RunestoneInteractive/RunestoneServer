@@ -497,6 +497,44 @@ Blockly
 Drag around some blockly blocks.  Then generate or run code.
 
 
+Blockly
+-------
+
+.. blockly:: blockly2
+
+   * controls
+   controls_if
+   controls_repeat_ext
+   ====
+   * logic
+   logic_compare
+   ====
+   * math
+   math_number
+   math_arithmetic
+   ====
+   * text
+   text
+   text_print
+   ====
+   variables
+
+   preload::
+   <xml>
+      <block type="variables_set" id="1" inline="true" x="25" y="9">
+         <field name="VAR">Y</field>
+         <value name="VALUE">
+            <block type="math_number" id="2">
+               <field name="NUM">69</field>
+            </block>
+         </value>
+      </block>
+   </xml>
+
+Drag around some blockly blocks.  Then generate or run code.
+
+
+
 What To Do Now
 --------------
 
