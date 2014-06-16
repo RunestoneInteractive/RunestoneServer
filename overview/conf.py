@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.abspath('../modules'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.reveal','luther.sphinx.poll','luther.sphinx.tabbedStuff','luther.sphinx.disqus','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons']
+extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.reveal','luther.sphinx.poll','luther.sphinx.tabbedStuff','luther.sphinx.disqus','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons', 'luther.sphinx.blockly']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../source/_templates']
@@ -172,7 +172,7 @@ html_short_title ='Runestone Interactive Overview'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static', '../common/js', '../common/css', '../common/ext/skulpt/dist', 
-                    '../common/ext/js-parsons', '../common/ext/codelens/v3', '../common/bootstrap', '../common/images']
+                    '../common/ext/js-parsons', '../common/ext/codelens/v3', '../common/bootstrap', '../common/images', '../common/ext/blockly']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
