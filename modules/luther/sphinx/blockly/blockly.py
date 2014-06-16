@@ -65,6 +65,8 @@ START = '''
     <script src='javascript_compressed.js' type="text/javascript"> </script>
     <script src='python_compressed.js' type="text/javascript"> </script>
     <script src='msg/js/en.js' type="text/javascript"> </script>
+    <link rel="stylesheet" href="bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="video.css" type="text/css" />
     <style>
       html, body {
         background-color: #fff;
@@ -75,12 +77,17 @@ START = '''
         height: 100%%;
         width: 100%%;
       }
+      .active_out {
+        margin-top: 5px;
+        margin-left: 10px;
+        margin-right: 5px;
+      }
     </style>
 </head>
 <body>
 <p>
-    <button onclick="showCode()">Show Python</button>
-    <button onclick="runCode()">Run</button>
+    <button class="btn btn-default" onclick="showCode()">Show Python</button>
+    <button class="btn btn-success" onclick="runCode()">Run</button>
 </p>
 <div id="%(divid)s" style="height: 480px; width: 600px;"></div>
 '''
@@ -129,9 +136,10 @@ END = '''
     var xmlText = '%(preload)s';
     var xmlDom = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+
   </script>
   
-  <pre id="%(divid)s_pre"></pre>
+  <pre class="active_out" id="%(divid)s_pre"></pre>
   </body>
   </html>
 '''
@@ -155,7 +163,8 @@ def visit_block_node(self,node):
     res += CTRL_END
     res += END % (node.ac_components)
     path = os.path.join(node.ac_components['blocklyHomePrefix'],'_static',node.ac_components['divid']+'.html')
-    final = '<iframe src="%s" width="600" height="600"></iframe>' % path
+    final = '<iframe class="blk-iframe" seamless src="%s" width="600" ' \
+            'height="600"></iframe>' % path
     f = open(path, 'w')
     f.write(res)
     f.close()
