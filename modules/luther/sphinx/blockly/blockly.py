@@ -67,6 +67,14 @@ START = '''
     <script src='msg/js/en.js' type="text/javascript"> </script>
     <link rel="stylesheet" href="bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="video.css" type="text/css" />
+    <script type="text/javascript">
+    // Get the objects we need to do logging from the parent frame.
+    // This seems better than reloading all of jQuery and bookfuncs into the frame. But
+    // Makes this a bit more dependent on the Runestone Environment.
+    eBookConfig = parent.eBookConfig
+    logBookEvent = parent.logBookEvent
+    jQuery = parent.jQuery
+    </script>
     <style>
       html, body {
         background-color: #fff;
@@ -114,6 +122,11 @@ END = '''
       Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if (--window.LoopTrap == 0) throw "Infinite loop.";\\n';
       var code = Blockly.JavaScript.workspaceToCode();
       Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      if(logBookEvent) {
+          logBookEvent({'event': 'blockly', 'act': 'run', 'div_id': '%(divid)s'});
+      } else {
+          console.log('logBookEvent is not defined.  This should be defined in the parent frame')
+      }
       try {
         eval(code);
       } catch (e) {
