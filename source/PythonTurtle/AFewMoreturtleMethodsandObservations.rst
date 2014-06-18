@@ -12,7 +12,7 @@ A Few More turtle Methods and Observations
 
 Here are a few more things that you might find useful as you write programs that use turtles.
 
-* Turtle methods can use negative angles or distances.  So ``tess.foward(-100)``
+* Turtle methods can use negative angles or distances.  So ``tess.forward(-100)``
   will move tess backwards, and ``tess.left(-30)`` turns her to the right.
   Additionally, because there are 360 degrees in a circle, turning 30 to the
   left will leave you facing in the same direction as turning 330 to the right!
