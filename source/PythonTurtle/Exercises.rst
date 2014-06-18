@@ -186,7 +186,7 @@ Exercises
                wn = turtle.Screen()
                lovelace = turtle.Turtle()
 
-               # move the turtle foward a little so that the whole path fits on the screen
+               # move the turtle forward a little so that the whole path fits on the screen
                lovelace.penup()
                lovelace.forward(60)
 
