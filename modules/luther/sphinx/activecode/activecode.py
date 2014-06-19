@@ -95,6 +95,8 @@ EDIT2 = '''
 <button class="ac_opt btn btn-default" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
 '''
 
+VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens('%(divid)s');">Show in Codelens</button>
+'''
 SCRIPT = '''
 <script>
 if ('%(hidecode)s' == 'none') {
@@ -159,6 +161,11 @@ PRE = '''<pre id="%(divid)s_pre" class="active_out">
 '''
 OUTPUT_END = '''</div>'''
 
+VIZ = '''<div id="%(divid)s_codelens_div" style="display:none">
+</div>
+'''
+# <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
+# </iframe>
 
 END = '''
 </div>
@@ -176,7 +183,6 @@ $(document).ready(function() {
 </script>
 '''
 
-#'
 class ActivcodeNode(nodes.General, nodes.Element):
     def __init__(self,content):
         """
@@ -200,6 +206,8 @@ def visit_ac_node(self,node):
         res += EDIT2
     else:
         res += EDIT2 + AUDIO
+    if node.ac_components['codelens']:
+        res += VIZB
     if 'hidecode' not in node.ac_components:
         node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
@@ -218,6 +226,8 @@ def visit_ac_node(self,node):
     if 'autorun' in node.ac_components:
         res += AUTO
     res += OUTPUT_END
+    if node.ac_components['codelens']:
+        res += VIZ
     res += CAPTION
     res += SCRIPT
     res += END
@@ -259,7 +269,8 @@ class ActiveCode(Directive):
         'tour_2':directives.unchanged,
         'tour_3':directives.unchanged,
         'tour_4':directives.unchanged,
-        'tour_5':directives.unchanged
+        'tour_5':directives.unchanged,
+        'nocodelens':directives.flag
     }
 
     def run(self):
@@ -322,6 +333,11 @@ class ActiveCode(Directive):
 
         if 'language' not in self.options:
             self.options['language'] = 'python'
+
+        if 'nocodelens' in self.options:
+            self.options['codelens'] = False
+        else:
+            self.options['codelens'] = True
 
         return [ActivcodeNode(self.options)]
 

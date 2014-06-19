@@ -957,3 +957,43 @@ function createGradeSummary(div_id) {
     jQuery.get(eBookConfig.ajaxURL + 'getassignmentgrade', data, showGradeSummary);
 
 }
+
+
+function injectCodelens(div_id) {
+    var div = document.getElementById(div_id+'_codelens_div')
+    div.style.display='block'
+    var cl = document.getElementById(div_id+'_codelens')
+    if (cl ) {
+        div.removeChild(cl)
+    }
+    var editor = cm_editors[div_id + "_code"]
+    var code = editor.getValue()
+    var myVars = {}
+    myVars.code = code
+    myVars.origin = "opt-frontend.js"
+    myVars.cumulative = false
+    myVars.heapPrimitives = false
+    myVars.drawParentPointers=false
+    myVars.textReferences = false
+    myVars.showOnlyOutputs=false
+    myVars.rawInputLstJSON = JSON.stringify([])
+    myVars.py = 2
+    myVars.curInstr = 0
+    myVars.codeDivWidth = 350
+    myVars.codeDivHeight = 400
+    var srcURL = 'http://pythontutor.com/iframe-embed.html'
+    var embedUrlStr = $.param.fragment(srcURL, myVars, 2 /* clobber all */)
+    console.log(embedUrlStr)
+    var myIframe = document.createElement('iframe')
+    myIframe.setAttribute("id",div_id+'_codelens')
+    myIframe.setAttribute("width","800")
+    myIframe.setAttribute("height","500")
+    myIframe.setAttribute("style","display:block")
+    myIframe.style.background = '#fff'
+    //myIframe.setAttribute("src",srcURL)
+    myIframe.src = embedUrlStr
+    div.appendChild(myIframe)
+}
+
+// <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
+// </iframe>
