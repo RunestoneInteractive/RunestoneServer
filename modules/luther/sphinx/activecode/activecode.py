@@ -62,7 +62,7 @@ EDIT1 = '''
 </div>
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s" class="ac_code_div">
-<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code", prefixcode="%(include)s" lang="%(language)s">
+<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code" prefixcode="%(include)s" lang="%(language)s">
 %(initialcode)s
 </textarea>
 </div>
@@ -144,7 +144,8 @@ else{
 }
 </script>
 '''
-OUTPUT_START = '''<div class="ac_output">'''
+OUTPUT_START = '''
+<div class="ac_output">'''
 
 CANVAS = '''
 <div style="text-align: center">
@@ -154,16 +155,13 @@ CANVAS = '''
 
 SUFF = '''<pre id="%(divid)s_suffix" style="display:none">%(suffix)s</pre>'''
 
-PRE = '''<pre id="%(divid)s_pre" class="active_out">
-
-</pre>
-
+PRE = '''<pre id="%(divid)s_pre" class="active_out"></pre>
 '''
-OUTPUT_END = '''</div>'''
+OUTPUT_END = '''
+</div> <!-- end output -->'''
 
-VIZ = '''<div id="%(divid)s_codelens_div" style="display:none">
-</div>
-'''
+VIZ = '''<div id="%(divid)s_codelens_div" style="display:none"></div>'''
+
 # <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
 # </iframe>
 
@@ -226,9 +224,11 @@ def visit_ac_node(self,node):
     if 'autorun' in node.ac_components:
         res += AUTO
     res += OUTPUT_END
+    res += CAPTION
+
     if node.ac_components['codelens']:
         res += VIZ
-    res += CAPTION
+
     res += SCRIPT
     res += END
     res = res % node.ac_components
