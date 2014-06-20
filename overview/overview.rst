@@ -68,8 +68,12 @@ Take a look at the activecode interpreter in action.  If we take a simple Python
 
 .. activecode:: codeexample1
 
-   print("My first program adds two numbers, 2 and 3:")
-   print(2 + 3)
+   print("My first program adds a list of numbers")
+   myList = [2, 4, 6, 8, 10]
+   total = 0
+   for num in myList:
+       total = total + num
+   print(total)
 
 
 Now try modifying the activecode program shown above.  First, modify the string in the first print statement
