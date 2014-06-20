@@ -18,7 +18,7 @@ addition, it is likely that there could be data from more quarterbacks and
 other years. The format of the data file is as follows
 ::
 
-    First Name, Last Name, Position, Team, Completions, Attempts, Yards, TDs Ints, Comp%, Rating
+    First Name, Last Name, Position, Team, Completions, Attempts, Yards, TDs, Ints, Comp%, Rating
 
 .. raw:: html
 
