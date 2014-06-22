@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+<a href="{{=URL('sections','index')}}">All Sections</a>
+<h1>Section: {{=section.name}}</h1>
+<h3>Users in Section</h3>
+<ul>
+	{{for user in users:}}
+	<li>{{=user.first_name}} {{=user.last_name}} <a href="mailto:{{=user.email}}">{{=user.email}}</a></li>
+	{{pass}}
+</ul>
+<h2>Update Users in Section</h2>
+{{=bulk_email_form}}
+<h2>Delete Section</h2>
+<a href="{{=URL('sections','delete')}}?id={{=section.id}}">Delete {{=section.name}}, click here.</a>

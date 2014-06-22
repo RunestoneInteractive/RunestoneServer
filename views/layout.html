@@ -25,7 +25,7 @@
     <script type="text/javascript">
       var eBookConfig = {};
       var portPart = '';
-      eBookConfig.host = 'http://{{=request.env.http_host}}';
+      eBookConfig.host = "";
       eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
       eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
       eBookConfig.logLevel = 10;
@@ -125,7 +125,7 @@
             {{ if auth.user: }}
               <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
               <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>              <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
               <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
               <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
