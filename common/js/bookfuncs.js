@@ -117,7 +117,7 @@ function builtinRead(x) {
 }
 
 function createActiveCode(divid,suppliedSource,sid) {
-    var eNode;
+    var edNode;
     var acblockid;
     if (sid !== undefined) {
         acblockid = divid + "_" + sid;
@@ -126,6 +126,7 @@ function createActiveCode(divid,suppliedSource,sid) {
     }
 
     edNode = document.getElementById(acblockid);
+    edNode.lang = edNode.lang || 'python'
     if (edNode.children.length == 0 ) {
         //edNode.style.display = 'none';
         edNode.style.backgroundColor = "white";
