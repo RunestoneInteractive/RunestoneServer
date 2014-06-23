@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+<h1>Sections for {{=course.course_name}}</h1>
+<ul>
+{{for section in sections:}}
+<li><a href="{{=URL('sections','update')}}?id={{=section.id}}">{{=section.name}}</a></li>
+{{pass}}
+</ul>
+<a href="{{=URL('sections','create')}}">Create a New Section</a>

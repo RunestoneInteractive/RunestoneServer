@@ -1,0 +1,37 @@
+{{
+###
+# Stream a CSV
+# for this to work the controller must return
+#
+#   dict(filename=...,csvdata=...,field_names=...)
+#
+# filename is the suggested name to save the file as
+# csvdata is the list to output
+# field_names is a list of column headers
+###
+try:
+   thefile = filename
+except:
+   thefile = 'export.csv'
+pass
+# the try block is commented out because it obscures errors that 
+# may be interesting while debugging
+#try:
+   import cStringIO
+   import csv
+   stream=cStringIO.StringIO()
+   #field_names = ('Order Nbr','Invoice','Location','Payment ID','Date1','Date2','Amount1','Amount2')
+  
+   csv_writer = csv.DictWriter(stream, field_names, extrasaction='ignore')
+   csv_writer.writeheader()
+   #csv_writer.writerow(field_names)
+   for row in csvdata:
+      csv_writer.writerow(row)
+      pass
+   
+   response.headers['Content-Type']='application/vnd.ms-excel'
+   response.headers['Content-disposition']='attachment; filename=' +thefile
+   response.write(stream.getvalue(), escape=False)
+#except:
+#   raise HTTP(405,'no css')
+}}
