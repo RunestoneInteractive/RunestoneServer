@@ -33,10 +33,16 @@ def user():
 
     form = auth()
 
+    if 'profile' in request.args(0):
+        my_extra_element = TR(LABEL('Section Name'),
+                           INPUT(_name='section', value='default', _type='text'))
+        form[0].insert(-1, my_extra_element)
+
     if 'register' in request.args(0) and request.janrain_form:
         # add the Janrain login form
         form[0][5][2] = ''
         form = (DIV(form, request.janrain_form.login_form()))
+
 
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
@@ -51,7 +57,12 @@ def user():
                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
                 ''' % (auth.user.id, auth.user.course_name))
-
+            # Add user to default section for course.
+            sect = db((db.sections.course_id == auth.user.course_id) & (db.sections.name == form.vars.section)).select(db.sections.id).first()
+            if sect:
+                x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
+            # select from sections where course_id = auth_user.course_id and section.name = 'default'
+            # add a row to section_users for this user with the section selected.
             redirect(URL('default', 'index'))
 
     if 'login' in request.args(0):
