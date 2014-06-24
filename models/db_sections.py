@@ -46,3 +46,20 @@ db.define_table('pipactex_deadline',
 
 db.pipactex_deadline.section.requires = IS_IN_DB(db, 'sections.id', '%(name)s',
                                  zero=T('choose one'))
+
+#
+# when a user registers for a course, add them to the default section.
+#
+def make_section_entries(field_dict,id_of_insert):
+    # Add user to default section for course.
+    sect = db((db.sections.course_id == field_dict['course_id']) & (db.sections.name == 'default')).select(
+        db.sections.id).first()
+    print "sect = ", sect
+    x = db.section_users.update_or_insert(auth_user=id_of_insert, section=sect)
+    print "inserted a row in section_users, id = ", x
+    # select from sections where course_id = auth_user.course_id and section.name = 'default'
+    # add a row to section_users for this user with the section selected.
+
+if 'auth_user' in db:
+    db.auth_user._after_insert.append(make_section_entries)
+
