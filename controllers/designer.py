@@ -72,6 +72,10 @@ def build():
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
 
+        # Create a default section for this course and add the instructor.
+        sectid = db.sections.update_or_insert(name='default',course_id=cid)
+        db.section_users.update_or_insert(auth_user=auth.user.id,section=sectid)
+
         course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
 
         return(dict(success=False,
