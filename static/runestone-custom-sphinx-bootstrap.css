@@ -132,6 +132,14 @@ div.section {
 	clear:both;
 }
 
+.CodeMirror-scroll {
+    /* this allows CM elements to be resized to (almost) any 
+     * height while still relying on max-height (which keeps 
+     * the CM editors to no more than the size needed 
+     * unless resized) */
+    max-height: 9999;
+}
+
 button.btn, btn.btn-sm,
 input[type="submit"].btn.btn-sm,
 input[type="button"].btn.btn-sm {
