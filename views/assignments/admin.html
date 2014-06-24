@@ -38,9 +38,10 @@
 			<ul class="list-group">
 			{{for row in assignments:}}
 			    <li class="list-group-item">
-					<a href="{{=URL('assignments','detail')}}?id={{=row.id}}">{{=row.name}}</a>
-					<a href="{{=URL('assignments','update')}}?id={{=row.id}}">Edit</a>
-					<a href="{{=URL('assignments','grade')}}?id={{=row.id}}">Grade</a>
+                    {{ =row.name }}
+					<a class="btn btn-primary" href="{{=URL('assignments','detail')}}?id={{=row.id}}" role="button">View</a>
+					<a class="btn btn-primary" href="{{=URL('assignments','update')}}?id={{=row.id}}" role="button">Edit</a>
+					<a class="btn btn-primary" href="{{=URL('assignments','grade')}}?id={{=row.id}}" role="button">Compute Totals</a>
 				</li>  
 			    {{pass}}
 			</ul>
