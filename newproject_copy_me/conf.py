@@ -99,14 +99,16 @@ html_short_title ='<INSERT YOUR PROJECT NAME OR OTHER SHORT TITLE HERE>'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
+
+module_paths = [x.replace('.','/') for x in extensions]
+module_static_js = ['../modules/%s/js' % x for x in module_paths if os.path.exists('../modules/%s/js' % x)]
+module_static_css = ['../modules/%s/css' % x for x in module_paths if os.path.exists('../modules/%s/css' % x)]
+
 html_static_path = ['_static',
                     '../common/js',
                     '../common/css',
-                    '../common/ext/skulpt/dist',
-                    '../common/ext/js-parsons',
-                    '../common/ext/codelens/v3',
                     '../common/bootstrap',
-                    '../common/images']
+                    '../common/images'] + module_static_js + module_static_css
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
