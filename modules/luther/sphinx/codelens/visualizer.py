@@ -24,14 +24,13 @@ import json
 
 def setup(app):
     app.add_directive('codelens',Codelens)
-    app.add_stylesheet('css/pytutor.css')
-    app.add_stylesheet('css/basic.css')
+    app.add_stylesheet('pytutor.css')
+    app.add_stylesheet('modal-basic.css')
 
-    app.add_javascript('js/d3.v2.min.js')
-    app.add_javascript('jquery-migrate-1.2.1.min.js') # needed so that ba-bbq can use the latest jQuery that we've included
-    app.add_javascript('js/jquery.ba-bbq.min.js')
-    app.add_javascript('js/jquery.jsPlumb-1.3.10-all-min.js')
-    app.add_javascript('js/pytutor.js')
+    app.add_javascript('d3.v2.min.js')
+#    app.add_javascript('jquery.ba-bbq.min.js')
+    app.add_javascript('jquery.jsPlumb-1.3.10-all-min.js')
+    app.add_javascript('pytutor.js')
 
 
 

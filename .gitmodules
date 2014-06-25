@@ -1,12 +1,3 @@
-[submodule "common/ext/js-parsons"]
-	path = common/ext/js-parsons
-	url = https://github.com/bnmnetp/js-parsons
-[submodule "common/ext/codelens"]
-	path = common/ext/codelens
-	url = https://github.com/bnmnetp/OnlinePythonTutor
-[submodule "common/ext/skulpt"]
-	path = common/ext/skulpt
-	url = https://github.com/bnmnetp/skulpt
 [submodule "Java4Python"]
 	path = Java4Python
 	url = https://github.com/bnmnetp/Java4Python

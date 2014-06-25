@@ -1,0 +1,129 @@
+/** Stylesheet for the puzzles */
+
+.sortable-code {
+    padding-left: 0px;
+    margin-left: 2%;
+    display:inline-block;
+	text-align: left;
+	vertical-align: top;
+}
+#sortableTrash { width: 38%; }
+#sortable { width: 56%; }
+.sortable-code ul {
+    font-size: 120%;
+    font-family: monospace;
+    list-style: none;
+    background-color: #efefff;
+    padding-bottom: 10px;
+    padding-left: 0;
+    margin-left: 0;
+    border: 1px solid #efefff;;
+}
+ul.output {
+    background-color: #FFA;
+}
+.sortable-code li {
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius: 10px;
+    background-color:#EFEFEF;
+    border:1px solid lightgray;
+    padding:10px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: move;
+}
+.sortable-code li:hover {
+    overflow: visible;
+}
+
+ul.incorrect {
+    border: 1px solid red;
+    background-color: #ffefef;
+}
+
+ul.correct {
+    background-color: #efffef;
+    background-color: #DFF2BF;
+}
+
+li.incorrectIndent {
+    border: 1px solid red;
+    border-left: 10px solid red;
+}
+
+li.correctIndent {
+    border: 1px solid green;
+    border-left: 10px solid green;
+}
+
+li.incorrectPosition, .testcase.fail, .testcase.error {
+    background-color: #FFBABA;
+    border:1px solid red;
+}
+
+li.correctPosition, .testcase.pass {
+    background-color: #DFF2BF;
+    border:1px solid green;
+}
+
+.testcase { padding: 10px; margin-bottom: 10px;}
+.testcase .msg { font-weight: bold; }
+.testcase .error { color: red;}
+.testcase .feedback { font-weight: bolder;}
+.testcase.fail .expected, .testcase.fail .actual { 
+    color: red; 
+    font-weight: bolder;
+}
+.testcase .output { 
+    display: block; 
+    white-space: pre; 
+    background-color: #555555;
+    color: white;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 5px;
+    padding: 5px;
+}
+/** For styling the toggleable elements */
+.jsparson-toggle {
+    padding: 0 15px;
+    display: inline-block;
+    border: 1px dashed black;
+    z-index: 500;
+    cursor: pointer;
+    min-width: 10px;
+    min-height: 15px;
+}
+.jsparson-toggle:empty {
+    border-color: red;
+}
+.jsparson-toggle:empty:before {
+    content: "??";
+    display: block;
+    color: red;
+}
+.parsons{
+	/*background-color: #fbfcfd;
+	border-color: #e6e6e6;
+	box-shadow: inset 0px 0px 6px -1px rgba(50, 50, 50, 0.75);*/
+	border-left:0;
+	border-right:0;
+	border-radius:0;
+	margin: 10px 0;
+}
+.parsons-text {
+	max-width: 500pt;
+	margin-left: auto;
+	margin-right: auto;
+}
+.sortable-code-container{
+	text-align:center;
+}
+.parsons-controls{
+	max-width: 500pt;
+	margin-left: auto;
+	margin-right: auto;
+	text-align:center;
+}
