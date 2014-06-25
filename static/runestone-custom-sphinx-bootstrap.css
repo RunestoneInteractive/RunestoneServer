@@ -512,3 +512,11 @@ iframe[seamless] {
 		margin: 0 18em 0.5em 1em;
 	}
 }
+
+
+div.ExecutionVisualizer table.visualizer {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+}
