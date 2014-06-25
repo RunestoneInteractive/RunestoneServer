@@ -214,7 +214,7 @@ printer.
 
 **Listing 4**
 
-::
+.. code-block:: python
 
    from pythonds.basic.queue import Queue
 
