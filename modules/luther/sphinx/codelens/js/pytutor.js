@@ -110,6 +110,7 @@ var curVisualizerID = 1; // global to uniquely identify each ExecutionVisualizer
 //   highlightLines - highlight current and previously executed lines (default: false)
 //   arrowLines     - draw arrows pointing to current and previously executed lines (default: true)
 //   compactFuncLabels - render functions with a 'func' prefix and no type label
+//   showAllFrameLabels - display frame and parent frame labels for all functions (default: false)
 //   pyCrazyMode    - run with Py2crazy, which provides expression-level
 //                    granularity instead of line-level granularity (HIGHLY EXPERIMENTAL!)
 //   hideCode - hide the code display and show only the data structure viz
@@ -192,8 +193,7 @@ function ExecutionVisualizer(domRootID, dat, params) {
   this.textualMemoryLabels = (this.params.textualMemoryLabels == true);
   this.showOnlyOutputs = (this.params.showOnlyOutputs == true);
   this.tabularView = (this.params.tabularView == true);
-
-  //this.tabularView = true; // for testing only
+  this.showAllFrameLabels = (this.params.showAllFrameLabels == true);
 
   this.executeCodeWithRawInputFunc = this.params.executeCodeWithRawInputFunc;
 
@@ -471,7 +471,7 @@ ExecutionVisualizer.prototype.render = function() {
 
     // add an extra label to link back to the main site, so that viewers
     // on the embedded page know that they're seeing an OPT visualization
-    this.domRoot.find('#codeDisplayDiv').append('<div style="font-size: 8pt; margin-bottom: 20px;">Code visualized   with <a href="http://pythontutor.com" target="_blank">Online Python Tutor</a></div>');
+    this.domRoot.find('#codeDisplayDiv').append('<div style="font-size: 8pt; margin-bottom: 20px;">Code visualized with <a href="http://pythontutor.com" target="_blank" style="color: #3D58A2;">Online Python Tutor</a></div>');
   }
 
   myViz.editAnnotationMode = false;
@@ -511,16 +511,20 @@ ExecutionVisualizer.prototype.render = function() {
 
   if (this.params.codeDivWidth) {
     // set width once
-    this.domRoot.find('#codeDisplayDiv').width(
-      this.params.codeDivWidth);
+    this.domRoot.find('#codeDisplayDiv').width(this.params.codeDivWidth);
     // it will propagate to the slider
+
+    this.domRoot.find("#pyStdout").css("width", this.params.codeDivWidth - 20 /* wee tweaks */);
   }
 
   // enable left-right draggable pane resizer (originally from David Pritchard)
   this.domRoot.find('#codeDisplayDiv').resizable({
     handles: "e", 
     minWidth: 100, //otherwise looks really goofy
-    resize: function(event, ui){ // old name: syncStdoutWidth, now not appropriate
+    resize: function(event, ui) { // old name: syncStdoutWidth, now not appropriate
+      // resize stdout box in unison
+      myViz.domRoot.find("#pyStdout").css("width", $(this).width() - 20 /* wee tweaks */);
+
       myViz.domRoot.find("#codeDisplayDiv").css("height", "auto"); // redetermine height if necessary
       if (myViz.params.updateOutputCallback) // report size change
         myViz.params.updateOutputCallback(this);
@@ -2533,8 +2537,8 @@ ExecutionVisualizer.prototype.renderDataStructures = function(curEntry, curTople
 
       var headerLabel = funcName;
 
-      // only display if you're someone's parent
-      if (frame.is_parent) {
+      // only display if you're someone's parent (unless showAllFrameLabels)
+      if (frame.is_parent || myViz.showAllFrameLabels) {
         headerLabel = 'f' + frame.frame_id + ': ' + headerLabel;
       }
 
@@ -2542,6 +2546,9 @@ ExecutionVisualizer.prototype.renderDataStructures = function(curEntry, curTople
       if (frame.parent_frame_id_list.length > 0) {
         var parentFrameID = frame.parent_frame_id_list[0];
         headerLabel = headerLabel + ' [parent=f' + parentFrameID + ']';
+      }
+      else if (myViz.showAllFrameLabels) {
+        headerLabel = headerLabel + ' [parent=Global]';
       }
 
       return headerLabel;
@@ -3388,6 +3395,9 @@ function(objID, stepNum, d3DomElement, isTopLevel) {
     if (parentFrameID) {
       d3DomElement.append('<div class="funcObj">' + funcPrefix + ' ' + funcName + ' [parent=f'+ parentFrameID + ']</div>');
     }
+    else if (myViz.showAllFrameLabels) {
+      d3DomElement.append('<div class="funcObj">' + funcPrefix + ' ' + funcName + ' [parent=Global]</div>');
+    }
     else {
       d3DomElement.append('<div class="funcObj">' + funcPrefix + ' ' + funcName + '</div>');
     }
@@ -3508,11 +3518,15 @@ String.prototype.rtrim = function() {
 //
 // also some variable names are like '.0' (for generator expressions),
 // and '.' seems to be illegal.
+//
+// also spaces are illegal, so convert to '_'
 // TODO: what other characters are illegal???
 var lbRE = new RegExp('\\[|{|\\(|<', 'g');
 var rbRE = new RegExp('\\]|}|\\)|>', 'g');
 function varnameToCssID(varname) {
-  return varname.replace(lbRE, 'LeftB_').replace(rbRE, '_RightB').replace('.', '_DOT_');
+  // make sure to REPLACE ALL (using the 'g' option)
+  // rather than just replacing the first entry
+  return varname.replace(lbRE, 'LeftB_').replace(rbRE, '_RightB').replace(/[.]/g, '_DOT_').replace(/ /g, '_');
 }
 
 
