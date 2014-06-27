@@ -359,3 +359,6 @@ def sections_update():
         users = section.get_users(),
         bulk_email_form = bulk_email_form,
         )
+
+def diffviewer():
+    return dict(course_id="overview")

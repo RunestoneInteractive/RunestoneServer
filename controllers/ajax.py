@@ -3,6 +3,7 @@ import datetime
 import logging
 import time
 from collections import Counter
+from diff_match_patch import *
 
 logger = logging.getLogger("web2py.app.eds")
 logger.setLevel(logging.DEBUG)
@@ -545,3 +546,31 @@ def getassignmentgrade():
         ret['count'] = rows[0][1]
 
     return json.dumps([ret])
+
+
+def getCodeDiffs():
+    q = '''select timestamp, sid, div_id, code, emessage
+           from acerror_log 
+           where sid = '%s' and div_id='%s'
+           order by timestamp
+    '''  % ('opdajo01','ex_3_10')
+
+    rows = db.executesql(q)
+    
+    differ = diff_match_patch()
+    ts = []
+    newcode = []
+    diffcode = []
+    messages = []
+    
+
+
+    for i in range(1,len(rows)):
+        diffs = differ.diff_main(rows[i-1][3],rows[i][3])
+        ts.append(str(rows[i][0]))
+        newcode.append(rows[i][3])
+        diffcode.append(differ.diff_prettyHtml(diffs))
+        messages.append(rows[i][4])
+    
+    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages))
+    
