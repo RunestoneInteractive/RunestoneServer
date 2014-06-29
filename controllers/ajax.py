@@ -73,11 +73,35 @@ def runlog():    # Log errors and runs with code
 #
 
 def saveprog():
+    user = auth.user
+    if not user:
+        return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
     acid = request.vars.acid
     code = request.vars.code
 
-    response.headers['content-type'] = 'application/json'
+    now = datetime.datetime.now()
 
+    response.headers['content-type'] = 'application/json'
+    def strip_suffix(id):
+        idx = id.rfind('-') - 1
+        return id[:idx]
+    assignment = db(db.assignments.id == db.problems.assignment)(db.problems.acid == acid).select(db.assignments.ALL).first()
+    
+    section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+    section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).first()
+        
+    if assignment:
+        q = db(db.deadlines.assignment == assignment.id)
+        if section:
+            q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
+        else:
+            q = q(db.deadlines.section==None)
+        dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        if dl:
+            if dl.deadline < now:
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
     try:
         db.code.insert(sid=auth.user.username,
             acid=acid,code=code,
