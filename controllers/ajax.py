@@ -569,7 +569,7 @@ def getCodeDiffs():
         diffs = differ.diff_main(rows[i-1][3],rows[i][3])
         ts.append(str(rows[i][0]))
         newcode.append(rows[i][3])
-        diffcode.append(differ.diff_prettyHtml(diffs))
+        diffcode.append(differ.diff_prettyHtml(diffs).replace('&para',''))
         messages.append(rows[i][4])
     
     return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages))
