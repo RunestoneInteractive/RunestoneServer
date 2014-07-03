@@ -17,8 +17,14 @@ getDiffs = function() {
 nextDiff = function() {
     var myDiv = document.getElementById("codeviewer");
     
-    myDiv.innerHTML = diffdata.diffs[diffcount];
+    $("#codeviewer").html(diffdata.diffs[diffcount]);
+    $("#codeviewer").width("300px");
+    $("#codeviewer").height("400px");
+    $("#codeviewer").css("float","left");
+    $("#codeviewer").css("float","left");
     $("#tstamp").html(diffdata.timestamps[diffcount]);
+    $("#messviewer").html(diffdata.mess[diffcount]);
+
 
     diffcount = diffcount + 1;
     
@@ -30,7 +36,9 @@ prevDiff = function() {
 
     diffcount = diffcount - 1;    
     myDiv.innerHTML = diffdata.diffs[diffcount]
-    $("#tstamp").html(diffdata.timestamps[diffcount]);    
+    $("#tstamp").html(diffdata.timestamps[diffcount]);
+    $("#messviewer").html(diffdata.mess[diffcount]);
+
 }
 
 function outf(text) {
@@ -113,7 +121,7 @@ function diffRunner(myDiv, theButton, prog) {
 
 </script>
 
-<h1>Hello World</h1>
+<h1>Coding Coach</h1>
 
 <label for="studentid">StudentId</label><input type="text" name="studentid" value="opdajo01" id="studentid">
 <label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="ex_3_10" id="exerciseid">
@@ -122,12 +130,15 @@ function diffRunner(myDiv, theButton, prog) {
 
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
-<pre id="codeviewer">    
-</pre>
+    <pre id="codeviewer">
+    </pre>
+    <div id="messviewer"></div>
 </div>
-<button onclick="prevDiff()">Previous</button>
-<button onclick="nextDiff()">Next</button>
-<button onclick="diffRunner('runner',self,diffdata.code[diffcount]);">Run</button>
+<div id="btn-controls" style="clear: both;">
+<button class="btn" onclick="prevDiff()">Previous</button>
+<button class="btn" onclick="nextDiff()">Next</button>
+<button class="btn" onclick="diffRunner('runner',self,diffdata.code[diffcount]);">Run</button>
+</div>
 
 <div id="runner">
     <pre id="runner_pre"></pre>
