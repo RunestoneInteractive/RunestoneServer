@@ -7,12 +7,15 @@
 
 <script type="text/javascript" charset="utf-8">
 getDiffs = function() {
-    $.get("/runestone/ajax/getCodeDiffs", function(data) {
-        diffdata = JSON.parse(data)
-        diffcount = 0
+    var params = {}
+    params.divid = $("#exerciseid").val();
+    params.sid = $("#studentid").val();
+    $.get("/runestone/ajax/getCodeDiffs", params, function(data) {
+        diffdata = JSON.parse(data);
+        diffcount = 0;
         nextDiff();
     })
-}
+};
 
 nextDiff = function() {
     var myDiv = document.getElementById("codeviewer");
@@ -23,8 +26,8 @@ nextDiff = function() {
     $("#codeviewer").css("float","left");
     $("#codeviewer").css("float","left");
     $("#tstamp").html(diffdata.timestamps[diffcount]);
-    $("#messviewer").html(diffdata.mess[diffcount]);
-
+    $("#messviewer").html(diffdata.mess[diffcount]+'<br>'+diffdata.chints[diffcount]);
+    $("#messviewer").css("float","right");
 
     diffcount = diffcount + 1;
     
@@ -130,8 +133,7 @@ function diffRunner(myDiv, theButton, prog) {
 
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
-    <pre id="codeviewer">
-    </pre>
+    <pre id="codeviewer"></pre>
     <div id="messviewer"></div>
 </div>
 <div id="btn-controls" style="clear: both;">

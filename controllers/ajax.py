@@ -549,11 +549,13 @@ def getassignmentgrade():
 
 
 def getCodeDiffs():
-    q = '''select timestamp, sid, div_id, code, emessage
+    sid = request.vars['sid']
+    divid = request.vars['divid']
+    q = '''select timestamp, sid, div_id, code, emessage, id
            from acerror_log 
            where sid = '%s' and div_id='%s'
            order by timestamp
-    '''  % ('opdajo01','ex_3_10')
+    ''' % (sid, divid)
 
     rows = db.executesql(q)
     
@@ -562,7 +564,7 @@ def getCodeDiffs():
     newcode = []
     diffcode = []
     messages = []
-    
+    coachHints = []
 
 
     for i in range(1,len(rows)):
@@ -570,7 +572,21 @@ def getCodeDiffs():
         ts.append(str(rows[i][0]))
         newcode.append(rows[i][3])
         diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
-        messages.append(rows[i][4])
-    
-    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages))
-    
+        messages.append(rows[i][4].replace("success", ""))
+        coachHints.append(getCoachingHints(int(rows[i][5])))
+    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages,chints=coachHints))
+
+
+def getCoachingHints(ecId):
+    catToTitle = {"C": "Coding Conventions", "R": "Good Practice", "W": "Minor Programming Issues",
+                  "E": "Serious Programming Error", "F": "Fatal Errors"}
+
+    rows = db.executesql("select category,symbol,line,msg from coach_hints where source=%d order by category, line" % ecId)
+    res = ''
+    cat = ''
+    for row in rows:
+        if row[0] != cat:
+            res += '<h2>%s</h2>' % catToTitle[row[0]]
+            cat = row[0]
+        res += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
+    return res
