@@ -6,6 +6,8 @@
         type="text/javascript"></script>
 
 <script type="text/javascript" charset="utf-8">
+var diffdata, diffcount;
+
 getDiffs = function() {
     var params = {}
     params.divid = $("#exerciseid").val();
@@ -13,36 +15,50 @@ getDiffs = function() {
     $.get("/runestone/ajax/getCodeDiffs", params, function(data) {
         diffdata = JSON.parse(data);
         diffcount = 0;
-        nextDiff();
+        displayCoachData();
+        checkButtonStatus();
     })
 };
 
+function checkButtonStatus () {
+    if (diffcount === diffdata.timestamps.length) {
+        $("#nextb").attr("disabled","disabled");
+    } else {
+        $("#nextb").removeAttr("disabled");
+    }
+    if (diffcount === 0) {
+        $("#prevb").attr("disabled","disabled");
+    } else {
+        $("#prevb").removeAttr("disabled");
+    }
+}
+function displayCoachData () {
+    $("#codeviewer").html(diffdata.diffs[diffcount]);
+    $("#codeviewer").width("350px");
+    $("#codeviewer").height("400px");
+    $("#codeviewer").css("overflow", "scroll");
+    $("#tstamp").html(diffdata.timestamps[diffcount]);
+    $("#messviewer").html(diffdata.mess[diffcount] + '<br>' + diffdata.chints[diffcount]);
+}
 nextDiff = function() {
     var myDiv = document.getElementById("codeviewer");
-    
-    $("#codeviewer").html(diffdata.diffs[diffcount]);
-    $("#codeviewer").width("300px");
-    $("#codeviewer").height("400px");
-    $("#codeviewer").css("float","left");
-    $("#codeviewer").css("float","left");
-    $("#tstamp").html(diffdata.timestamps[diffcount]);
-    $("#messviewer").html(diffdata.mess[diffcount]+'<br>'+diffdata.chints[diffcount]);
-    $("#messviewer").css("float","right");
-
-    diffcount = diffcount + 1;
-    
-
-}
+    if (diffcount < diffdata.timestamps.length ) {
+        displayCoachData();
+        diffcount = diffcount + 1;
+    }
+    checkButtonStatus();
+};
 
 prevDiff = function() {
     var myDiv = document.getElementById("codeviewer");
 
-    diffcount = diffcount - 1;    
-    myDiv.innerHTML = diffdata.diffs[diffcount]
-    $("#tstamp").html(diffdata.timestamps[diffcount]);
-    $("#messviewer").html(diffdata.mess[diffcount]);
+    if (diffcount > 0) {
+        diffcount = diffcount - 1;
+        displayCoachData();
+    }
+    checkButtonStatus();
 
-}
+};
 
 function outf(text) {
     var mypre = document.getElementById(Sk.pre);
@@ -133,12 +149,14 @@ function diffRunner(myDiv, theButton, prog) {
 
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
-    <pre id="codeviewer"></pre>
-    <div id="messviewer"></div>
+    <table>
+    <tr><td><pre id="codeviewer"></pre></td>
+    <td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
+    </table>
 </div>
 <div id="btn-controls" style="clear: both;">
-<button class="btn" onclick="prevDiff()">Previous</button>
-<button class="btn" onclick="nextDiff()">Next</button>
+<button id="prevb" class="btn" onclick="prevDiff()">Previous</button>
+<button id="nextb" class="btn" onclick="nextDiff()">Next</button>
 <button class="btn" onclick="diffRunner('runner',self,diffdata.code[diffcount]);">Run</button>
 </div>
 
