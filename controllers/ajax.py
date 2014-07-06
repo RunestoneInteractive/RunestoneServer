@@ -4,6 +4,10 @@ import logging
 import time
 from collections import Counter
 from diff_match_patch import *
+import os, sys
+# kind of a hacky approach to import coach functions
+sys.path.insert(0,os.path.dirname(__file__))
+from coach import get_lint
 
 logger = logging.getLogger("web2py.app.eds")
 logger.setLevel(logging.DEBUG)
@@ -58,8 +62,9 @@ def runlog():    # Log errors and runs with code
     else:
         act = 'run'
         event = 'activecode'
-    db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+    dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    lintAfterSave(dbid, code, div_id, sid)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -590,3 +595,17 @@ def getCoachingHints(ecId):
             cat = row[0]
         res += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
     return res
+
+def lintAfterSave(dbid, code, div_id, sid):
+    #dbid = request.args.id
+    #entry = db(db.acerror_log.id == dbid).select().first()
+    print dbid, code, div_id, sid
+    pylint_stdout = get_lint(code, div_id, sid)
+
+    for line in pylint_stdout:
+        g = re.match(r"^([RCWEF]):\s(.*?):\s([RCWEF]\d+):\s+(\d+),(\d+):(.*?):\s(.*)$", line)
+        if g:
+            db.coach_hints.insert(category=g.group(1), symbol=g.group(2), msg_id=g.group(3),
+                                  line=g.group(4), col=g.group(5), obj=g.group(6),
+                                  msg=g.group(7).replace("'", ""), source=dbid)
+
