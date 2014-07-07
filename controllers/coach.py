@@ -1,7 +1,7 @@
 __author__ = 'bmiller'
 
 import psycopg2
-import os.path
+import os
 import re
 from pylint import epylint as lint
 
@@ -11,9 +11,10 @@ def get_lint(code, divid, sid):
     tfile = open(fn, 'w')
     tfile.write(code)
     tfile.close()
+
     pyl_opts = ' --msg-template="{C}: {symbol}: {msg_id}:{line:3d},{column}: {obj}: {msg}" '
     pyl_opts += ' --reports=n '
-    pyl_opts += ' --rcfile=applications/runestone/pylintrc'
+    pyl_opts += ' --rcfile='+os.path.join(os.getcwd(), "applications/runestone/pylintrc")
     (pylint_stdout, pylint_stderr) = lint.py_run(fn + pyl_opts, True, script='pylint')
 
     os.unlink(fn)
@@ -25,7 +26,6 @@ def lint_one(code, conn, curs, divid, row, sid):
     for line in pylint_stdout:
         g = re.match(r"^([RCWEF]):\s(.*?):\s([RCWEF]\d+):\s+(\d+),(\d+):(.*?):\s(.*)$", line)
         if g:
-            print g.groups()
             ins = '''insert into coach_hints (category,symbol,msg_id,line,col,obj,msg,source)
                  values('%s','%s','%s',%s,%s,'%s','%s',%d)''' % (
             g.groups()[:-1] + (g.group(7).replace("'", ''), row[0],))
