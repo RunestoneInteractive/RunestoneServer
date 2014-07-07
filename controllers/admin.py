@@ -361,4 +361,8 @@ def sections_update():
         )
 
 def diffviewer():
-    return dict(course_id="overview")
+    sid = ""
+    div_id = request.vars.divid
+    if auth.user:
+        sid = auth.user.username
+    return dict(course_id="overview", sid=sid, divid=div_id)
