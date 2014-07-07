@@ -599,7 +599,6 @@ def getCoachingHints(ecId):
 def lintAfterSave(dbid, code, div_id, sid):
     #dbid = request.args.id
     #entry = db(db.acerror_log.id == dbid).select().first()
-    print dbid, code, div_id, sid
     pylint_stdout = get_lint(code, div_id, sid)
 
     for line in pylint_stdout:
