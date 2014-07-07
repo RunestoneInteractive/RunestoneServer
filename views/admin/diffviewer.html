@@ -1,0 +1,198 @@
+{{extend 'layout.html'}}
+
+        {{ block navbar }}
+        {{ end }}
+
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js"
+        type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js"
+        type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8">
+var diffdata, diffcount;
+
+getDiffs = function(sid, divid) {
+    var params = {}
+
+    params.divid = divid || $("#exerciseid").val();
+    params.sid = sid || $("#studentid").val();
+    $.get("/runestone/ajax/getCodeDiffs", params, function(data) {
+        diffdata = JSON.parse(data);
+        diffcount = 0;
+        displayCoachData();
+        checkButtonStatus();
+    })
+};
+
+function checkButtonStatus () {
+    if (diffcount === diffdata.timestamps.length) {
+        $("#nextb").attr("disabled","disabled");
+    } else {
+        $("#nextb").removeAttr("disabled");
+    }
+    if (diffcount === 0) {
+        $("#prevb").attr("disabled","disabled");
+    } else {
+        $("#prevb").removeAttr("disabled");
+    }
+}
+
+function displayCoachData () {
+    $("#codeviewer").html(diffdata.diffs[diffcount]);
+    $("#codeviewer").width("350px");
+    $("#codeviewer").height("400px");
+    $("#codeviewer").css("overflow", "scroll");
+    $("#codeviewer").css("margin-left","20px");
+    $("#tstamp").html(diffdata.timestamps[diffcount]);
+    $("#messviewer").html(diffdata.mess[diffcount] + '<br>' + diffdata.chints[diffcount]);
+    $("#messviewer").css("margin-left","20px");
+}
+nextDiff = function() {
+    var myDiv = document.getElementById("codeviewer");
+    if (diffcount < diffdata.timestamps.length ) {
+        displayCoachData();
+        diffcount = diffcount + 1;
+    }
+    checkButtonStatus();
+};
+
+prevDiff = function() {
+    var myDiv = document.getElementById("codeviewer");
+
+    if (diffcount > 0) {
+        diffcount = diffcount - 1;
+        displayCoachData();
+    }
+    checkButtonStatus();
+
+};
+
+lastDiff = function() {
+    diffcount = diffdata.timestamps.length - 1;
+    displayCoachData();
+    diffcount += 1;
+    checkButtonStatus();
+}
+
+firstDiff = function() {
+    diffcount = 0
+    displayCoachData();
+    diffcount += 1;
+    checkButtonStatus();
+}
+
+function outf(text) {
+    var mypre = document.getElementById(Sk.pre);
+    // bnm python 3
+    x = text;
+    if (x.charAt(0) == '(') {
+        x = x.slice(1, -1);
+        x = '[' + x + ']';
+        try {
+            var xl = eval(x);
+            xl = xl.map(pyStr);
+            x = xl.join(' ');
+        } catch (err) {
+        }
+    }
+    text = x;
+    text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br/>");
+    mypre.innerHTML = mypre.innerHTML + text;
+}
+
+function builtinRead(x) {
+    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+        throw "File not found: '" + x + "'";
+    return Sk.builtinFiles["files"][x];
+}
+
+
+function diffRunner(myDiv, theButton, prog) {
+    //var prog = document.getElementById(myDiv + "_code").value;
+
+    Sk.divid = myDiv;
+    $(theButton).attr('disabled', 'disabled');
+    Sk.isTurtleProgram = false;
+    if (theButton !== undefined) {
+        Sk.runButton = theButton;
+    }
+    $("#" + myDiv + "_errinfo").remove();
+
+    var mypre = document.getElementById(myDiv + "_pre");
+    if (mypre) mypre.innerHTML = '';
+    Sk.canvas = myDiv + "_canvas";
+    Sk.pre = myDiv + "_pre";
+    var can = document.getElementById(Sk.canvas);
+    // The following lines reset the canvas so that each time the run button
+    // is pressed the turtle(s) get a clean canvas.
+    if (can) {
+        can.width = can.width;
+        if (Sk.tg) {
+            Sk.tg.canvasInit = false;
+            Sk.tg.turtleList = [];
+        }
+    }
+    // set execLimit in milliseconds  -- for student projects set this to
+    // 25 seconds -- just less than Chrome's own timer.
+    Sk.execLimit = 25000;
+    // configure Skulpt output function, and module reader
+    Sk.configure({output: outf,
+                     read: builtinRead,
+                     python3: true
+                 });
+
+    try {
+        Sk.importMainWithBody("<stdin>", false, prog);
+    } catch (e) {
+        logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': e.toString()}); // Log the run event
+        //alert(e);
+        addErrorMessage(e, myDiv)
+    }
+    if (!Sk.isTurtleProgram) {
+        $(theButton).removeAttr('disabled');
+    }
+    if (typeof(allVisualizers) != "undefined") {
+        $.each(allVisualizers, function (i, e) {
+            e.redrawConnectors();
+        });
+    }
+}
+
+
+</script>
+
+<h1>Coding Coach</h1>
+{{ if not divid:  }}
+<label for="studentid">StudentId</label><input type="text" name="studentid" value="{{ =sid }}" id="studentid">
+<label for="exerciseid">exerciseId</label><input type="text" name="exerciseid" value="{{ =divid }}" id="exerciseid">
+<button onclick="getDiffs()">Fetch</button>
+{{ pass }}
+
+
+<h3 id="tstamp"></h3>
+<div id="codeviewer_div">
+    <table>
+    <tr><td><pre id="codeviewer"></pre></td>
+    <td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
+    </table>
+</div>
+<div id="btn-controls" style="clear: both;">
+    <button id="firstb" class="btn" onclick="firstDiff()">First</button>
+    <button id="prevb" class="btn" onclick="prevDiff()">Previous</button>
+    <button id="nextb" class="btn" onclick="nextDiff()">Next</button>
+    <button id="lastb" class="btn" onclick="lastDiff()">Last</button>
+    <button class="btn" onclick="diffRunner('runner',self,diffdata.code[diffcount]);">Run</button>
+</div>
+
+<div id="runner">
+    <pre id="runner_pre"></pre>
+    <canvas id="runner_canvas" height="400px" width="400px"></canvas>
+    <p id="runner_errinfo"></p>
+</div>
+
+<script>
+    $(document).ready(function () {getDiffs("{{ =sid }}", "{{ =divid }}"); })
+</script>
+
+{{ block footer }}
+{{end }}

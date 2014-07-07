@@ -359,3 +359,10 @@ def sections_update():
         users = section.get_users(),
         bulk_email_form = bulk_email_form,
         )
+
+def diffviewer():
+    sid = ""
+    div_id = request.vars.divid
+    if auth.user:
+        sid = auth.user.username
+    return dict(course_id="overview", sid=sid, divid=div_id)
