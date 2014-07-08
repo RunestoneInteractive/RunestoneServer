@@ -97,6 +97,10 @@ EDIT2 = '''
 
 VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens('%(divid)s');">Show in Codelens</button>
 '''
+
+COACHB = '''<button class='btn btn-default' id="%(divid)s_coach_b" onclick="injectCodeCoach('%(divid)s');">Code Coach</button>
+'''
+
 SCRIPT = '''
 <script>
 if ('%(hidecode)s' == 'none') {
@@ -165,6 +169,8 @@ VIZ = '''<div id="%(divid)s_codelens_div" style="display:none"></div>'''
 # <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
 # </iframe>
 
+COACH = '''<div id="%(divid)s_coach_div" style="display:none;"></div>'''
+
 END = '''
 </div>
 
@@ -206,6 +212,10 @@ def visit_ac_node(self,node):
         res += EDIT2 + AUDIO
     if node.ac_components['codelens']:
         res += VIZB
+
+    if 'coach' in node.ac_components:
+        res += COACHB
+
     if 'hidecode' not in node.ac_components:
         node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
@@ -228,6 +238,9 @@ def visit_ac_node(self,node):
 
     if node.ac_components['codelens']:
         res += VIZ
+
+    if 'coach' in node.ac_components:
+        res += COACH
 
     res += SCRIPT
     res += END
@@ -270,7 +283,8 @@ class ActiveCode(Directive):
         'tour_3':directives.unchanged,
         'tour_4':directives.unchanged,
         'tour_5':directives.unchanged,
-        'nocodelens':directives.flag
+        'nocodelens':directives.flag,
+        'coach':directives.flag
     }
 
     def run(self):
