@@ -577,6 +577,29 @@ def getassignmentgrade():
     return json.dumps([ret])
 
 
+def diff_prettyHtml(self, diffs):
+    """Convert a diff array into a pretty HTML report.
+
+    Args:
+      diffs: Array of diff tuples.
+
+    Returns:
+      HTML representation.
+    """
+    html = []
+    ct = 1
+    for (op, data) in diffs:
+        text = (data.replace("&", "&amp;").replace("<", "&lt;")
+                .replace(">", "&gt;").replace("\n", "<br>"))
+        if op == self.DIFF_INSERT:
+            html.append("<ins style=\"background:#e6ffe6;\">%s</ins>" % text)
+        elif op == self.DIFF_DELETE:
+            html.append("<del style=\"background:#ffe6e6;\">%s</del>" % text)
+        elif op == self.DIFF_EQUAL:
+            html.append("<span>%s</span>" % text)
+    return "".join(html)
+
+
 def getCodeDiffs():
     sid = request.vars['sid']
     divid = request.vars['divid']
@@ -595,7 +618,7 @@ def getCodeDiffs():
     messages = []
     coachHints = []
 
-    diffs = differ.diff_main(rows[0][3],rows[0][3])
+    diffs = differ.diff_lineMode(rows[0][3], rows[0][3], True)
     diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
     newcode.append(rows[0][3])
     ts.append(str(rows[0][0]))
@@ -603,10 +626,11 @@ def getCodeDiffs():
     messages.append(rows[0][4].replace("success",""))
 
     for i in range(1,len(rows)):
-        diffs = differ.diff_main(rows[i-1][3],rows[i][3])
+        diffs = differ.diff_lineMode(rows[i-1][3], rows[i][3],True)
+        print "DIFFS = ", diffs
         ts.append(str(rows[i][0]))
         newcode.append(rows[i][3])
-        diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
+        diffcode.append(diff_prettyHtml(differ,diffs).replace('&para;', ''))
         messages.append(rows[i][4].replace("success", ""))
         coachHints.append(getCoachingHints(int(rows[i][5])))
     return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages,chints=coachHints))
