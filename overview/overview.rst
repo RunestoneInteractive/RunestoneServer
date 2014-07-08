@@ -67,6 +67,7 @@ environment for learning a programming language like Python since you can experi
 Take a look at the activecode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below.
 
 .. activecode:: codeexample1
+   :coach:
 
    print("My first program adds a list of numbers")
    myList = [2, 4, 6, 8, 10]
@@ -100,7 +101,7 @@ are learning to program.
 
 
 .. activecode:: codeexample2
-   :nocodelens:
+    :nocodelens:
 
     import turtle
 
