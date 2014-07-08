@@ -595,6 +595,12 @@ def getCodeDiffs():
     messages = []
     coachHints = []
 
+    diffs = differ.diff_main(rows[0][3],rows[0][3])
+    diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
+    newcode.append(rows[0][3])
+    ts.append(str(rows[0][0]))
+    coachHints.append(getCoachingHints(int(rows[0][5])))
+    messages.append(rows[0][4].replace("success",""))
 
     for i in range(1,len(rows)):
         diffs = differ.diff_main(rows[i-1][3],rows[i][3])
