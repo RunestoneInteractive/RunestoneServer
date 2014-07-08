@@ -27,7 +27,7 @@ getDiffs = function(sid, divid) {
 };
 
 function checkButtonStatus () {
-    if (diffcount === diffdata.timestamps.length) {
+    if (diffcount === diffdata.code.length-1) {
         $("#nextb").attr("disabled","disabled");
     } else {
         $("#nextb").removeAttr("disabled");
@@ -45,22 +45,21 @@ function displayCoachData () {
     $("#codeviewer").height("350px");
     $("#codeviewer").css("overflow", "scroll");
     $("#codeviewer").css("margin-left","20px");
+
     $("#tstamp").html(diffdata.timestamps[diffcount]);
+
     $("#messviewer").html(diffdata.mess[diffcount] + '<br>' + diffdata.chints[diffcount]);
     $("#messviewer").css("margin-left","20px");
 }
 nextDiff = function() {
-    var myDiv = document.getElementById("codeviewer");
-    if (diffcount < diffdata.timestamps.length ) {
-        displayCoachData();
+    if (diffcount < diffdata.timestamps.length-1 ) {
         diffcount = diffcount + 1;
+        displayCoachData();
     }
     checkButtonStatus();
 };
 
 prevDiff = function() {
-    var myDiv = document.getElementById("codeviewer");
-
     if (diffcount > 0) {
         diffcount = diffcount - 1;
         displayCoachData();
@@ -72,14 +71,12 @@ prevDiff = function() {
 lastDiff = function() {
     diffcount = diffdata.timestamps.length - 1;
     displayCoachData();
-    diffcount += 1;
     checkButtonStatus();
 }
 
 firstDiff = function() {
     diffcount = 0
     displayCoachData();
-    diffcount += 1;
     checkButtonStatus();
 }
 
