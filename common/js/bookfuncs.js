@@ -997,3 +997,28 @@ function injectCodelens(div_id) {
 
 // <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
 // </iframe>
+
+
+function injectCodeCoach(div_id) {
+    var myIframe;
+    var srcURL;
+    var cl;
+    var div = document.getElementById(div_id+'_coach_div')
+    div.style.display='block'
+    cl = document.getElementById(div_id+'_coach')
+    if (cl ) {
+        div.removeChild(cl)
+    }
+
+    srcURL = eBookConfig.app + '/admin/diffviewer?divid='+div_id;
+    myIframe = document.createElement('iframe');
+    myIframe.setAttribute("id",div_id+'_coach');
+    myIframe.setAttribute("width","800px");
+    myIframe.setAttribute("height","500px");
+    myIframe.setAttribute("style","display:block");
+    myIframe.style.background = '#fff';
+    myIframe.style.width = "100%"
+    //myIframe.setAttribute("src",srcURL)
+    myIframe.src = srcURL;
+    div.appendChild(myIframe);
+}
