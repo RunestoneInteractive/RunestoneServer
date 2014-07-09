@@ -7,17 +7,28 @@ from pylint import epylint as lint
 
 
 def get_lint(code, divid, sid):
-    fn = os.path.join('/tmp', sid + divid + '.py')
-    tfile = open(fn, 'w')
-    tfile.write(code)
-    tfile.close()
+    try:
+        fn = os.path.join('/tmp', sid + divid + '.py')
+        tfile = open(fn, 'w')
+        tfile.write(code)
+        tfile.close()
+    except:
+        print "failed to open/write file ", sid, divid
 
     pyl_opts = ' --msg-template="{C}: {symbol}: {msg_id}:{line:3d},{column}: {obj}: {msg}" '
     pyl_opts += ' --reports=n '
     pyl_opts += ' --rcfile='+os.path.join(os.getcwd(), "applications/runestone/pylintrc")
-    (pylint_stdout, pylint_stderr) = lint.py_run(fn + pyl_opts, True, script='pylint')
+    #pyl_opts += ' --rcfile=' + os.path.join(os.getcwd(), "../pylintrc")
+    try:
+        (pylint_stdout, pylint_stderr) = lint.py_run(fn + pyl_opts, True, script='pylint')
+    except:
+        print "lint failed"
+        pylint_stdout = ""
 
-    os.unlink(fn)
+    try:
+        os.unlink(fn)
+    except:
+        pass
     return pylint_stdout
 
 
@@ -36,14 +47,11 @@ def lint_one(code, conn, curs, divid, row, sid):
 
 
 def lintMany():
-    sid = 'opdajo01'
-    divid = 'ex_3_10'
 
     q = '''select id, timestamp, sid, div_id, code, emessage
            from acerror_log
-           where sid = '%s' and div_id='%s'
            order by timestamp
-    ''' % (sid, divid)
+    '''
 
     conn = psycopg2.connect(database='runestone', user='bmiller', host='localhost')
     curs = conn.cursor()
@@ -53,8 +61,11 @@ def lintMany():
 
     for row in rows:
         code = row[4]
+        divid = row[3]
+        sid = row[2]
         lint_one(code, conn, curs, divid, row, sid)
 
 
-
+if __name__ == '__main__':
+    lintMany()
 
