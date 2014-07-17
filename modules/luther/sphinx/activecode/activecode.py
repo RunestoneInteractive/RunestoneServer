@@ -62,7 +62,7 @@ EDIT1 = '''
 </div>
 <br/>
 <div id="%(divid)s_code_div" style="display: %(hidecode)s" class="ac_code_div">
-<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code", prefixcode="%(include)s" lang="%(language)s">
+<textarea cols="50" rows="12" id="%(divid)s_code" class="active_code" prefixcode="%(include)s" lang="%(language)s">
 %(initialcode)s
 </textarea>
 </div>
@@ -93,6 +93,12 @@ EDIT2 = '''
 <button class='btn btn-success' id="%(divid)s_runb">Run</button>
 <button class="ac_opt btn btn-default" style="display: inline-block" id="%(divid)s_saveb" onclick="saveEditor('%(divid)s');">Save</button>
 <button class="ac_opt btn btn-default" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
+'''
+
+VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens('%(divid)s');">Show in Codelens</button>
+'''
+
+COACHB = '''<button class='btn btn-default' id="%(divid)s_coach_b" onclick="injectCodeCoach('%(divid)s');">Code Coach</button>
 '''
 
 SCRIPT = '''
@@ -142,7 +148,8 @@ else{
 }
 </script>
 '''
-OUTPUT_START = '''<div class="ac_output">'''
+OUTPUT_START = '''
+<div class="ac_output">'''
 
 CANVAS = '''
 <div style="text-align: center">
@@ -152,13 +159,17 @@ CANVAS = '''
 
 SUFF = '''<pre id="%(divid)s_suffix" style="display:none">%(suffix)s</pre>'''
 
-PRE = '''<pre id="%(divid)s_pre" class="active_out">
-
-</pre>
-
+PRE = '''<pre id="%(divid)s_pre" class="active_out"></pre>
 '''
-OUTPUT_END = '''</div>'''
+OUTPUT_END = '''
+</div> <!-- end output -->'''
 
+VIZ = '''<div id="%(divid)s_codelens_div" style="display:none"></div>'''
+
+# <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
+# </iframe>
+
+COACH = '''<div id="%(divid)s_coach_div" style="display:none;"></div>'''
 
 END = '''
 </div>
@@ -176,7 +187,6 @@ $(document).ready(function() {
 </script>
 '''
 
-#'
 class ActivcodeNode(nodes.General, nodes.Element):
     def __init__(self,content):
         """
@@ -200,6 +210,12 @@ def visit_ac_node(self,node):
         res += EDIT2
     else:
         res += EDIT2 + AUDIO
+    if node.ac_components['codelens']:
+        res += VIZB
+
+    if 'coach' in node.ac_components:
+        res += COACHB
+
     if 'hidecode' not in node.ac_components:
         node.ac_components['hidecode'] = 'block'
     if node.ac_components['hidecode'] == 'none':
@@ -219,6 +235,13 @@ def visit_ac_node(self,node):
         res += AUTO
     res += OUTPUT_END
     res += CAPTION
+
+    if node.ac_components['codelens']:
+        res += VIZ
+
+    if 'coach' in node.ac_components:
+        res += COACH
+
     res += SCRIPT
     res += END
     res = res % node.ac_components
@@ -259,7 +282,9 @@ class ActiveCode(Directive):
         'tour_2':directives.unchanged,
         'tour_3':directives.unchanged,
         'tour_4':directives.unchanged,
-        'tour_5':directives.unchanged
+        'tour_5':directives.unchanged,
+        'nocodelens':directives.flag,
+        'coach':directives.flag
     }
 
     def run(self):
@@ -322,6 +347,11 @@ class ActiveCode(Directive):
 
         if 'language' not in self.options:
             self.options['language'] = 'python'
+
+        if 'nocodelens' in self.options:
+            self.options['codelens'] = False
+        else:
+            self.options['codelens'] = True
 
         return [ActivcodeNode(self.options)]
 

@@ -67,9 +67,14 @@ environment for learning a programming language like Python since you can experi
 Take a look at the activecode interpreter in action.  If we take a simple Python program and make it active, you will see that it can be executed directly by pressing the *run* button.   Try pressing the *run* button below.
 
 .. activecode:: codeexample1
+   :coach:
 
-   print("My first program adds two numbers, 2 and 3:")
-   print(2 + 3)
+   print("My first program adds a list of numbers")
+   myList = [2, 4, 6, 8, 10]
+   total = 0
+   for num in myList:
+       total = total + num
+   print(total)
 
 
 Now try modifying the activecode program shown above.  First, modify the string in the first print statement
@@ -96,6 +101,7 @@ are learning to program.
 
 
 .. activecode:: codeexample2
+    :nocodelens:
 
     import turtle
 
@@ -276,6 +282,7 @@ Unit Tests for Code
 Its nice to be able to have students solve a particular problem by writing some code, its even better if you can give them some feedback and provide some tests for them.  Much of the ``unittest`` module from Python is available in the ``unittest`` module for activecode.  Take a look:
 
 .. activecode:: units1
+   :nocodelens:
 
    def add(a,b):
       return 4
@@ -300,9 +307,9 @@ Before you go on, fix the add function in the activecode box.  The full compleme
           return 4
 
        ====
-       import unittestgui
+       from unittest.gui import TestCaseGui
 
-       class myTests(unittestgui.unittest):
+       class myTests(TestCaseGui):
 
            def testOne(self):
                self.assertEqual(add(2,2),4,"A feedback string when the test fails")
@@ -315,14 +322,15 @@ Before you go on, fix the add function in the activecode box.  The full compleme
 Fix the following code so that it always correctly adds two numbers.
 
 .. activecode:: units2
+   :nocodelens:
 
    def add(a,b):
       return 4
 
    ====
-   import unittestgui
+   from unittest.gui import TestCaseGui
 
-   class myTests(unittestgui.unittest):
+   class myTests(TestCaseGui):
 
        def testOne(self):
            self.assertEqual(add(2,2),4,"A feedback string when the test fails")
@@ -401,6 +409,7 @@ allows access to basic elements of the web page, including the new text entry bo
 the value in the text entry box and run it again.
 
 .. activecode:: tftest1
+   :nocodelens:
 
    import document
 
@@ -417,6 +426,7 @@ as Python.  Here is a simple example:
 
 .. activecode:: jstest1
    :language: javascript
+   :nocodelens:
 
    var x = 10;
    var y = 11;
@@ -443,6 +453,7 @@ Although you don't run HTML, clicking the run button will case the HTML to be re
 
 .. activecode:: html1
    :language: html
+   :nocodelens:
 
    <html>
    <body>

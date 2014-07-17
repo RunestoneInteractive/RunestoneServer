@@ -33,7 +33,7 @@
     </script>
   </head>
 <body>
-
+{{ block navbar }}
 <!-- needed for Facebook button -->
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
@@ -223,7 +223,7 @@
 
 </div>
 <!-- End navbar -->
-
+{{ end }}
 
 <!-- begin body content -->
   <div class="container">
@@ -231,6 +231,7 @@
   </div>
 <!-- end body content -->
 
+{{ block footer }}
 <!-- begin footer -->
   <footer class="footer" style="margin-top:20px;">
     <div class="container">
@@ -247,6 +248,7 @@
     </div>
   </footer>
 <!-- end footer -->
+{{ end }}
 
 </body>
 <script type='text/javascript'>
