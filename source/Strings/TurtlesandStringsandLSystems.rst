@@ -36,7 +36,7 @@ Each rule set contains an axiom which represents the starting point in the trans
 
         left hand side -> right hand side
         
-where the left and side is a single symbol and the right had side is a sequence of symbols.  You can think of both sides as being simple strings.
+where the left hand side is a single symbol and the right had side is a sequence of symbols.  You can think of both sides as being simple strings.
 The way the rules are used is to replace occurrences of the left hand side with the corresponding right hand side.
 
 Now let's look at these simple rules in action, starting with the string A::
@@ -151,7 +151,7 @@ The last step is to take the final string and turn it into a picture.  Let's
 assume that we are always going to go forward or backward by 5 units.  In
 addition we will also assume that when the turtle turns left or right we'll
 turn by 60 degrees.  Now look at the string ``F-F++F-F``.  You might try to
-us the explanation above to show the resulting picture that this simple string represents.  At this point its not a very exciting
+use the explanation above to show the resulting picture that this simple string represents.  At this point its not a very exciting
 drawing, but once we expand it a few times it will get a lot more interesting.
 
 To create a Python function to draw a string we will write a function called

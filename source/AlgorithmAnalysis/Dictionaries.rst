@@ -131,7 +131,7 @@ the Python wiki has a nice time complexity page that can be found at the
        :feedback_d: Indexing a list is a constant operation
        :feedback_e: There is one operation that requires all other list elements to be moved.
 
-       Which of the above list operations is not O(1)?
+       Which of the list operations shown below is not O(1)?
 
     .. mchoicemf:: mcpydictperf
       :answer_a: 'x' in mydict
@@ -146,7 +146,7 @@ the Python wiki has a nice time complexity page that can be found at the
       :feedback_d: Re-assignment to a dictionary key is constant but there is a better answer.
       :feedback_e: The only dictionary operations that are not O(1) are those that require iteration.                  
 
-      Which of the above dictionary operations is O(1)?
+      Which of the dictionary operations shown below is O(1)?
 
 .. video::  pythonopsperf
    :controls:

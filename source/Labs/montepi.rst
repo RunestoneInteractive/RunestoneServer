@@ -29,7 +29,7 @@ The game that we will use for this simulation is "darts".  We will "randomly" th
 .. image:: Figures/dartboards.png
 
 But how will this help us to approximate pi?  Consider the area of the circular dartboard.  It has a radius of one so 
-its area is pi.  The area of the square piece of wood is 4 (2 x 2).  The ratio of the area of the circle to the area of the square is pi/4.  If we throw a whole bunch of darts and let them randomly land on the square piece of wook, some will also land on the dartboard.  The number of darts that land on the dartboard, divided by the number that we throw total, will be in the ratio described above (pi/4).  Multiply by 4 and we have pi.
+its area is pi.  The area of the square piece of wood is 4 (2 x 2).  The ratio of the area of the circle to the area of the square is pi/4.  If we throw a whole bunch of darts and let them randomly land on the square piece of wood, some will also land on the dartboard.  The number of darts that land on the dartboard, divided by the number that we throw total, will be in the ratio described above (pi/4).  Multiply by 4 and we have pi.
 
 Throwing Darts
 --------------

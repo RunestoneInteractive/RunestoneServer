@@ -15,12 +15,12 @@ Exercises
 
         .. tab:: Question
 
-           Write a program that reads in a string on the command line and returns a
+           Write a program that allows the user to enter a string.  It then prints a
            table of the letters of the alphabet in alphabetical order which occur in
            the string together with the number of times each letter occurs. Case should 
-           be ignored. A sample run of the program would look this this::
+           be ignored. A sample run of the program might look this this::
         
-               $ python letter_counts.py "ThiS is String with Upper and lower case Letters."
+               Please enter a sentence: ThiS is String with Upper and lower case Letters.
                a  2
                c  1
                d  1
@@ -118,18 +118,18 @@ Exercises
    Be sure you understand why you get each result. Then apply what you
    have learned to fill in the body of the function below:
 
-   .. sourcecode:: python
+   .. activecode:: q2_dict_answer
     
        def add_fruit(inventory, fruit, quantity=0): 
             pass
        
        # make these tests work...
-       new_inventory = {}
-       add_fruit(new_inventory, 'strawberries', 10)
-       test('strawberries' in new_inventory, True)
-       test(new_inventory['strawberries'], 10)
-       add_fruit(new_inventory, 'strawberries', 25)
-       test(new_inventory['strawberries'] , 35)      
+       # new_inventory = {}
+       # add_fruit(new_inventory, 'strawberries', 10)
+       # test('strawberries' in new_inventory, True)
+       # test(new_inventory['strawberries'], 10)
+       # add_fruit(new_inventory, 'strawberries', 25)
+       # test(new_inventory['strawberries'] , 35)      
 
 #.
 

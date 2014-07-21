@@ -60,7 +60,7 @@ Now, what happens if we modify a value in ``origlist``.
 .. image:: Figures/refrep2.png
    :alt: Same reference
 
-Here is the same example in codelens.  Step through the code until paying particular attention to the result of executing the assignment statement ``origlist[1] = 99``.
+Here is the same example in codelens.  Step through the code paying particular attention to the result of executing the assignment statement ``origlist[1] = 99``.
 
 .. codelens:: reprefstep
     :showoutput:

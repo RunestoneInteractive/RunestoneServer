@@ -139,7 +139,7 @@ More About Iteration
    MoreAboutIteration/Newton'sMethod.rst
    MoreAboutIteration/AlgorithmsRevisited.rst
    MoreAboutIteration/SimpleTables.rst
-   MoreAboutIteration/2-DimensionalIterationImageProcessing.rst
+   MoreAboutIteration/2DimensionalIterationImageProcessing.rst
    MoreAboutIteration/ImageProcessingonYourOwn.rst
    MoreAboutIteration/Glossary.rst
    MoreAboutIteration/Exercises.rst
