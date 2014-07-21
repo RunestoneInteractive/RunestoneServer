@@ -7,6 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
 Exercises
 ---------
 
@@ -202,7 +203,8 @@ Exercises
 
    .. actex:: ex_7_12
    
-   
+
+
 
 #.
 
@@ -211,6 +213,13 @@ Exercises
         .. tab:: Question
 
            Write a function to remove all the red from an image.
+		   
+		   For this and the following exercises, use the luther.jpg photo
+   
+		   .. raw:: html
+
+		       <img src="../_static/LutherBellPic.jpg" id="luther.jpg">
+		   
         
            .. actex:: ex_7_15
 
@@ -352,8 +361,8 @@ Exercises
                        for col in range(oldw):
                            oldpixel = oldimage.getPixel(col, row)
                            
-                           newim.setPixel(2*col, 2 * row, oldpixel)
-                           newim.setPixel(2*col+1, 2 * row, oldpixel)
+                           newim.setPixel(2*col, 2*row, oldpixel)
+                           newim.setPixel(2*col+1, 2*row, oldpixel)
                            newim.setPixel(2*col, 2*row+1, oldpixel)
                            newim.setPixel(2*col+1, 2*row+1, oldpixel)
                            

@@ -10,7 +10,7 @@
 The Return of L-Systems
 -----------------------
 
-Let's return the the L-systems we introduced in the previous chapter and
+Let's return to the L-systems we introduced in the previous chapter and
 introduce a very interesting new feature that requires the use of lists.
 
 Suppose we have the following grammar::

@@ -10,12 +10,7 @@
 Glossary
 --------
 
-.. glossary::
-       
-    call graph 
-        A graph consisting of nodes which represent function frames (or invocations), 
-        and directed edges (lines with arrows) showing which frames gave
-        rise to other frames.       
+.. glossary::    
         
     dictionary
         A collection of key-value pairs that maps from keys to values. The keys
@@ -36,7 +31,6 @@ Glossary
         `associative array <http://en.wikipedia.org/wiki/Associative_array>`__
         abstract data type.
 
-    memo
-        Temporary storage of precomputed values to avoid duplicating the same computation.
+
 
 

@@ -16,8 +16,9 @@ of are C++, PHP, and Java.
 
 As you might infer from the name high-level language, there are also
 **low-level languages**, sometimes referred to as machine languages or assembly
-languages. Loosely speaking, computers can only execute programs written in
-low-level languages. Thus, programs written in a high-level language have to be
+languages. Machine language is the encoding of instructions in binary so that they can be directly executed by the computer.  Assembly language uses a slightly easier format to refer to the low level instructions.
+Loosely speaking, computers can only execute programs written in
+low-level languages.  To be exact, computers can actually only execute programs written in machine language. Thus, programs written in a high-level language (and even those in assembly language) have to be
 processed before they can run. This extra processing takes some time, which is
 a small disadvantage of high-level languages.
 However, the advantages to high-level languages are enormous.

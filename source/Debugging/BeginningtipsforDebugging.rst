@@ -16,7 +16,7 @@ Debugging a program is a different way of thinking than writing a program.  The 
 
 #. Find clues.  This is the biggest job of the detective and right now there are two important kinds of clues for you to understand.
 
-    #. Error Messages
+   * Error Messages
 
-    #. Print Statements
+   * Print Statements
 

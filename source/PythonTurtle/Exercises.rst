@@ -35,10 +35,8 @@ Exercises
                 :identifier: f858d02024e54ae1b6b50ed8c65a01e6
 
 
-#. Give three attributes of your cellphone object.  Give three methods of your
-   cellphone.
+#. Turtle objects have methods and attributes. For example, a turtle has a position and when you move the turtle forward, the position changes.  Think about the other methods shown in the summary above.  Which attibutes, if any, does each method relate to?  Does the method change the attribute?
 
-   .. actex:: ex_3_2
 
 #.
 

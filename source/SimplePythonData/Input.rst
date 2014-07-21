@@ -19,7 +19,7 @@ Input
 
 
 The program in the previous section works fine but is very limited in that it only works with one value for ``total_secs``.  What if we wanted to rewrite the program so that it was more general.  One thing we could
-do is allow the use to enter any value they wish for the number of seconds.  The program could then print the
+do is allow the user to enter any value they wish for the number of seconds.  The program could then print the
 proper result for that starting value.
 
 In order to do this, we need a way to get **input** from the user.  Luckily, in Python

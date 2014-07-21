@@ -81,7 +81,7 @@ number of sides.  Let's just assume that 360 sides is going to be good enough
 for any circle.  Plus, it just makes sense that a circle has 360 degrees,
 one side for each degree should give us a nice round circle.
 
-Now that we have the number of sides figured out we can use a bit of math to
+Now that we have the number of sides figured out, we can use a bit of math to
 figure out the length of each of those sides. Since we are given the radius
 we know how large the circumference of the circle is.  Right?  You may
 remember from math class that the circumference of a circle is 2 * pi *
