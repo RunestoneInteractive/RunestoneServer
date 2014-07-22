@@ -8,7 +8,7 @@
     License".
 
 Introduction: Dictionaries
-============
+==========================
 
 
 .. index:: dictionary, mapping type, key, value, key-value pair

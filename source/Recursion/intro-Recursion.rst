@@ -8,7 +8,7 @@
     License".
 
 Introduction: Recursion
-=========
+=======================
 
 .. index:: mutable, immutable, tuple
 

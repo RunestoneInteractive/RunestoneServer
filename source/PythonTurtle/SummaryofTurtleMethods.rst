@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+..  _turtle_methods:
+
 Summary of Turtle Methods
 -------------------------
 

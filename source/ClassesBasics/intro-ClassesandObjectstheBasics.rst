@@ -8,7 +8,7 @@
     License".
 
 Introduction: Classes and Objects - the Basics
-================================
+==============================================
 
 
 .. index:: object-oriented programming

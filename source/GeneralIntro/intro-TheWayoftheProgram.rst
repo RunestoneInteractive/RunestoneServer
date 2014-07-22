@@ -8,7 +8,7 @@
     License".
 
 Introduction: The Way of the Program
-======================
+====================================
 
 The goal of this book is to teach you to think like a computer scientist. This
 way of thinking combines some of the best features of mathematics, engineering,

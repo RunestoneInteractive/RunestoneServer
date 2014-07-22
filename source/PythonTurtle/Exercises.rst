@@ -269,7 +269,7 @@ Exercises
         .. tab:: Question
 
            Write a program to draw some kind of picture.  Be creative and experiment
-           with the turtle methods provided in summary_of_turtle_methods_.
+           with the turtle methods provided in :ref:`turtle_methods`.
         
            .. actex:: ex_3_11
 

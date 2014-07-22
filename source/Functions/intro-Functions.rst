@@ -8,7 +8,7 @@
     License".
 
 Introduction: Functions
-=========
+=======================
 
 .. index::
     single: function

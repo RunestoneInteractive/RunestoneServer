@@ -8,7 +8,7 @@
     License".
 
 Introduction: Classes and Objects - Digging a little deeper
-=============================================
+===========================================================
 
 .. index:: rectangle
 
