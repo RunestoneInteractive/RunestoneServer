@@ -601,7 +601,10 @@ def diff_prettyHtml(self, diffs):
 
 
 def getCodeDiffs():
-    sid = request.vars['sid']
+    if auth.user:
+        sid = auth.user.username
+    else:
+        sid = request.vars['sid']
     divid = request.vars['divid']
     q = '''select timestamp, sid, div_id, code, emessage, id
            from acerror_log 
@@ -610,7 +613,12 @@ def getCodeDiffs():
     ''' % (sid, divid)
 
     rows = db.executesql(q)
-    
+    if len(rows) < 1:
+        return json.dumps(dict(timestamps=[0], code=[''],
+                               diffs=[''],
+                               mess=['No Coaching hints yet.  You need to run the example at least once.'],
+                               chints=['']))
+
     differ = diff_match_patch()
     ts = []
     newcode = []
