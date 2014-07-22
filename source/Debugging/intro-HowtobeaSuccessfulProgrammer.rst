@@ -8,7 +8,7 @@
     License".
 
 Introduction: How to be a Successful Programmer
-=================================
+===============================================
 
 One of the most important skills you need to aquire to complete this book successfully is the ability to debug your programs.  Debugging might be the most under-appreciated, and under-taught, skill in introductory computer science.  For that reason we are introducing a series of "debugging interludes."  Debugging is a skill that you need to master over time, and some of the tips and tricks are specific to different aspects of Python programming.  So look for additional debugging interludes throughout the rest of this book.
 

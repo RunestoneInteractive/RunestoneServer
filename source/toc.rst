@@ -84,7 +84,7 @@ Python Modules
 .. toctree::
    :maxdepth: 2
 
-   PythonModules/Modules.rst
+   PythonModules/modules.rst
    PythonModules/MoreAboutUsingModules.rst
    PythonModules/Themathmodule.rst
    PythonModules/Therandommodule.rst
@@ -97,7 +97,7 @@ Functions
 .. toctree::
    :maxdepth: 2
 
-   Functions/Functions.rst
+   Functions/functions.rst
    Functions/Functionsthatreturnvalues.rst
    Functions/Variablesandparametersarelocal.rst
    Functions/TheAccumulatorPattern.rst
@@ -165,7 +165,7 @@ Strings
    Strings/TraversalandthewhileLoop.rst
    Strings/Theinandnotinoperators.rst
    Strings/TheAccumulatorPatternwithStrings.rst
-   Strings/TurtlesandStringsandL-Systems.rst
+   Strings/TurtlesandStringsandLSystems.rst
    Strings/Loopingandcounting.rst
    Strings/Afindfunction.rst
    Strings/Optionalparameters.rst
@@ -194,7 +194,7 @@ Lists
    Lists/CloningLists.rst
    Lists/RepetitionandReferences.rst
    Lists/ListMethods.rst
-   Lists/TheReturnofL-Systems.rst
+   Lists/TheReturnofLSystems.rst
    Lists/AppendversusConcatenate.rst
    Lists/Listsandforloops.rst
    Lists/UsingListsasParameters.rst
@@ -261,12 +261,13 @@ Recursion
 
 
 Classes and Objects - the Basics
-::::::::::::::::
+::::::::::::::::::::::::::::::::
 
 .. toctree::
    :maxdepth: 2
 
-   ClassesBasics/Object-orientedprogramming.rst
+   ClassesBasics/intro-ClassesandObjectstheBasics.rst
+   ClassesBasics/Objectorientedprogramming.rst
    ClassesBasics/Achangeofperspective.rst
    ClassesBasics/ObjectsRevisited.rst
    ClassesBasics/UserDefinedClasses.rst
@@ -280,11 +281,12 @@ Classes and Objects - the Basics
 
 
 Classes and Objects - Digging a little deeper
-::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::
 
 .. toctree::
    :maxdepth: 2
 
+   ClassesDiggingDeeper/intro-ClassesandObjectsDiggingalittledeeper.rst
    ClassesDiggingDeeper/Fractions.rst
    ClassesDiggingDeeper/ObjectsareMutable.rst
    ClassesDiggingDeeper/Sameness.rst

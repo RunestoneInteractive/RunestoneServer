@@ -8,7 +8,7 @@
     License".
 
 Introduction: Decisions and Selection
-=======================
+=====================================
 
 .. index::
     single: modulus operator

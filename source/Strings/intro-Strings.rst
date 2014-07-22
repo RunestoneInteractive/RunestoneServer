@@ -8,7 +8,7 @@
     License".
 
 Introduction: Strings
-=======
+=====================
 
 .. index:: compound data type, character, subscript operator, index
 

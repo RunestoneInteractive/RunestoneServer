@@ -8,7 +8,7 @@
     License".
 
 Introduction: Functions Revisited
-===================
+=================================
 
 .. index:: return statement, return value, temporary variable,
            dead code, None, unreachable code

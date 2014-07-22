@@ -8,7 +8,7 @@
     License".
 
 Introduction: Iteration Revisited
-===================
+=================================
 
 .. index:: iteration, assignment, assignment statement, reassignment
 
