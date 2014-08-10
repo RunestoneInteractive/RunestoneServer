@@ -65,7 +65,7 @@ def listassignments():
         prefixes[acid_prefix].append(acid)
     return dict(sections=prefixes,course_id=course.course_name)
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+@auth.requires_login()
 def listassessments():
     course = db(db.courses.id == auth.user.course_id).select().first()
 
