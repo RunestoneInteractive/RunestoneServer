@@ -1,10 +1,10 @@
 db.define_table('cohort_plan',
   Field('cohort_id','reference cohort_master'), #The cohort this plan belongs to
   Field('chapter_id','reference chapters'),
-  Field('start_date','datetime'),                
-  Field('end_date','datetime'),  
+  Field('start_date','date'),
+  Field('end_date','date'),
   Field('note','string'),                
-  Field('actual_end_date','datetime'), #actual date when everyone completed the chapter
+  Field('actual_end_date','date'), #actual date when everyone completed the chapter
   Field('status','string'), #notStarted / new / modified / active / completed
   Field('created_on','datetime'),
   Field('created_by','reference auth_user'),
