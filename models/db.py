@@ -86,6 +86,7 @@ db.define_table('cohort_master',
   writable=False,readable=False),
   Field('is_active','integer', #0 - deleted / inactive. 1 - active
   writable=False,readable=False),
+  Field('course_name', 'string'),
   migrate='runestone_cohort_master.table'
   )
 if db(db.cohort_master.id > 0).isempty():
