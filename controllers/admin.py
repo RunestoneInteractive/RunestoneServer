@@ -366,3 +366,20 @@ def diffviewer():
     if auth.user:
         sid = auth.user.username
     return dict(course_id="overview", sid=sid, divid=div_id)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def cohortprogress():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    cohort = db(db.cohort_master.course_name == course.course_name).select(db.cohort_master.cohort_name)
+    cohort_plan = db( (db.cohort_plan.cohort_id == db.cohort_master.id) &
+                      (db.cohort_plan.chapter_id == db.chapters.id)).select(db.cohort_master.cohort_name,
+                                                                             db.chapters.chapter_name,
+                                                                             db.cohort_plan.start_date,
+                                                                             db.cohort_plan.end_date,
+                                                                             db.cohort_plan.actual_end_date,
+                                                                             db.cohort_plan.status,
+                                                                             orderby=db.cohort_master.cohort_name|db.cohort_plan.start_date)
+
+    return dict(grid=cohort_plan, course_id=course.course_name)

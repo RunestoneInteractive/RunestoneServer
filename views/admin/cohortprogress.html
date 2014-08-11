@@ -1,0 +1,9 @@
+{{extend 'layout.html'}}
+
+<h2>Cohort Progress</h2>
+{{=SQLTABLE(grid,headers={'cohort_master.cohort_name':'Group Name','chapters.chapter_name':'Chapter',
+                          'cohort_plan.start_date':'Start Date',
+                          'cohort_plan.end_date':'Planned Finish',
+                          'cohort_plan.actual_end_date':'Actual',
+                          'cohort_plan.status':'Status'})}}
+
