@@ -110,8 +110,10 @@ def manageGroup():
         return dict(currentGroup=currentGroup[0], allGroupMembers=allGroupMembers)
 
 def createNewGroup():
+    if auth.user == None:
+        redirect(URL('default', 'user/login'))
     invitationId = "".join([random.choice(string.ascii_letters + string.digits) for n in xrange(5)])
-    newGroupId = db.cohort_master.insert(cohort_name = request.vars.groupName, created_on=datetime.datetime.now(), is_active=1, invitation_id=invitationId)
+    newGroupId = db.cohort_master.insert(cohort_name = request.vars.groupName, created_on=datetime.datetime.now(), is_active=1, invitation_id=invitationId, course_name=auth.user.course_name)
     db.executesql("INSERT INTO cohort_plan(cohort_id, chapter_id, status) SELECT "+str(newGroupId)+", id, 'notStarted' FROM chapters WHERE course_id = '"+auth.user.course_name+"';")    
     auth.user.cohort_id = newGroupId
     joinGroupParameterized(invitationId)
