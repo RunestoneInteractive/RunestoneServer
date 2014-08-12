@@ -31,8 +31,8 @@ import os
 #     staticserver = 'runestonestatic.appspot.com'
 
 def setup(app):
-    app.add_directive('activecode',ActiveCode)
-    app.add_directive('actex',ActiveExercise)
+    app.add_directive('activecode', ActiveCode)
+    app.add_directive('actex', ActiveExercise)
     app.add_stylesheet('codemirror.css')
     app.add_stylesheet('activecode.css')
 
@@ -364,7 +364,8 @@ class ActiveExercise(ActiveCode):
     def run(self):
         self.options['hidecode'] = True
         self.options['gradebutton'] = True
-        return super(ActiveExercise,self).run()
+        self.options['coach'] = True
+        return super(ActiveExercise, self).run()
 
 
 if __name__ == '__main__':
