@@ -24,6 +24,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
 
     # confdir holds the conf and index files
     confdir = path.join(workingdir, 'custom_courses', rvars['projectname'])
+    custom_dir = confdir
     if not os.path.exists(confdir):
         os.mkdir(confdir)
 
@@ -204,6 +205,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     shutil.rmtree(sourcedir)
+
+    donefile = open(os.path.join(custom_dir, 'done'), 'w')
+    donefile.write('success')
+    donefile.close()
+
 
 
 scheduler = Scheduler(db)

@@ -524,6 +524,14 @@ def getSphinxBuildStatus():
     task_name = request.vars.task_name
     course_url = request.vars.course_url
 
+    courseid = course_url.replace('/'+request.application+'/static/','')
+    courseid = courseid.replace('/index.html', '')
+    confdir = os.path.join(os.getcwd(), 'applications', request.application, 'custom_courses', courseid, 'done')
+
+    if os.path.exists(confdir):
+        os.remove(confdir)
+        return dict(status='true', course_url=course_url)
+
     row = scheduler.task_status(task_name)
     st= row['status']
 
