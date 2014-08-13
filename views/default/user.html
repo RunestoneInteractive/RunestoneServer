@@ -88,7 +88,7 @@
 <div class='col-md-6'>
   <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
   <div id="loginexp">
-    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please register and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
+    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
   </div>
 
   <div id="web2py_user_form">
@@ -108,7 +108,12 @@
 
 </div>
 
-
+<script language="javascript">
+    $('#auth_user_course_id').val('thinkcspy, pythonds, pip or other')
+    $("#auth_user_course_id").on("click", function () {
+       $(this).select();
+    });
+</script>
 
 <div class='col-md-6'>
   <h2>More Information</h2>
@@ -156,29 +161,4 @@
     If you have questions about this please feel free to <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
 </div>
 
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", init, false);
 
-    function init(){
-      var video = document.getElementById("runestonevid");
-      video.addEventListener("play", videoPlay, false);
-      video.addEventListener("pause", videoPause, false);
-      video.addEventListener("ended", videoEnd, false);
-    }
-
-    function videoPlay(event) {
-      trackEvent('Play', 'My Video');
-    }
-
-    function videoPause(event) {
-      trackEvent('Pause', 'My Video');
-    }
-
-    function videoEnd(event) {
-      trackEvent('Ended', 'My Video');
-    }
-
-    function trackEvent(action, title) {
-      _gaq.push(['_trackEvent', 'Videos', action, title]);
-    }
-</script>
