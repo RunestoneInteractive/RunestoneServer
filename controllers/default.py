@@ -7,6 +7,9 @@ def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
 
+    if 'everyday' in request.env.http_host:
+        redirect('http://interactivepython.org/runestone/everyday')
+
     if not request.args(0):
         redirect(URL('default', 'user/login'))
 
