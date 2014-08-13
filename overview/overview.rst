@@ -40,8 +40,8 @@ on the video shown below, you will hear us talk about the tools that will be des
     :controls:
     :thumb: _static/activecodethumb.png
 
-    http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
-    http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
+    http://media.interactivepython.org/runestone.mov
+    http://media.interactivepython.org/runestone.webm
 
 
 
