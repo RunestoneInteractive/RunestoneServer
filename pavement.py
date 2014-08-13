@@ -96,15 +96,15 @@ def overview(options):
 
 @task
 @cmdopts([('all','a','rebuild everything')])
-def devcourse(options):
+def pip(options):
     # project-specific pavements have defaults set but we can override here
     params = ["paver", "build", # task name
               "--masterapp", master_app,
               "--masterurl", master_url]
-    if 'all' in options.devcourse:
+    if 'all' in options.pip:
         params.append("-a")
 
-    os.chdir("devcourse")
+    os.chdir("pip")
     subprocess.call(params)
     os.chdir("..")
 
@@ -135,8 +135,9 @@ def allbooks(options):
     options.thinkcspy = opts
     options.pythonds = opts
     options.overview = opts
+    options.pip = opts
 
     thinkcspy(options)
     pythonds(options)
     overview(options)
-
+    pip(options)
