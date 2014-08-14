@@ -14,10 +14,16 @@ logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
+
+def compareAndUpdateCookieData(sid):
+    if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
+        db.useinfo(db.useinfo.sid == request.cookies['ipuser'].value).update(sid=sid)
+
 def hsblog():    # Human Subjects Board Log
     setCookie = False
     if auth.user:
         sid = auth.user.username
+        compareAndUpdateCookieData(sid)
         setCookie = True    # we set our own cookie anyway to eliminate many of the extraneous anonymous
                             # log entries that come from auth timing out even but the user hasn't reloaded
                             # the page.
@@ -47,6 +53,7 @@ def runlog():    # Log errors and runs with code
     setCookie = False
     if auth.user:
         sid = auth.user.username
+        setCookie = True
     else:
         if request.cookies.has_key('ipuser'):
             sid = request.cookies['ipuser'].value
