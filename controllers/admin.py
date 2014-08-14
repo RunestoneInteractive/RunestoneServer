@@ -403,3 +403,31 @@ def cohortprogress():
                                                                              orderby=db.cohort_master.cohort_name|db.cohort_plan.start_date)
 
     return dict(grid=cohort_plan, course_id=course.course_name)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def editAssignments():
+    course_name = auth.user.course_name
+    assignfile = open(path.join('applications', request.application,
+                                'custom_courses', course_name, 'assignments.rst'), 'r')
+
+    form = FORM(TEXTAREA(_id='text', _name='text', value=assignfile.read()),
+                INPUT(_type='submit', _value='submit'))
+
+
+    assignfile.close()
+
+    if form.process().accepted:
+        session.flash = 'Assignments Updated'
+        assignfile = open(path.join('applications', request.application,
+                                    'custom_courses', course_name, 'assignments.rst'), 'w')
+        assignfile.write(request.vars.text)
+        assignfile.close()
+        redirect(URL('index'))
+    elif form.errors:
+        response.flash = 'Assignments has errors'
+    else:
+        response.flash = 'please fill the form'
+
+    return dict(form=form)
+
