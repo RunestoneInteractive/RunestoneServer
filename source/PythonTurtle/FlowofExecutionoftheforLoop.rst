@@ -25,7 +25,7 @@ This flowchart shows the exact steps and logic of how the ``for`` statement exec
 
 .. image:: Figures/new_flowchart_for.png
       :width: 300px
-
+      :align: center
 
 
 A codelens demonstration is a good way to help you visualize exactly how the flow of control

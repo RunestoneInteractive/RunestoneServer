@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Functions can call other functions
+Functions can Call Other Functions
 ----------------------------------
 
 It is important to understand that each of the functions we write can be used

@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Functions that return values
+Functions that Return Values
 ----------------------------
 
 Most functions require arguments, values that control how the function does its

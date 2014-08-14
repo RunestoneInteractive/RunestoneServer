@@ -12,7 +12,11 @@ Programming Exercises
 
 #. Write a recursive function to compute the factorial of a number.
 
+        .. actex:: ex_rec_1
+
 #. Write a recursive function to reverse a list.
+
+        .. actex:: ex_rec_2
 
 #. Modify the recursive tree program using one or all of the following
    ideas:
@@ -34,31 +38,47 @@ Programming Exercises
 
    If you implement all of the above ideas you will have a very
    realistic looking tree.
+   
+           .. actex:: ex_rec_3
 
 #. Find or invent an algorithm for drawing a fractal mountain. Hint: One
    approach to this uses triangles again.
+   
+           .. actex:: ex_rec_4
 
 #. Write a recursive function to compute the Fibonacci sequence. How
    does the performance of the recursive function compare to that of an
    iterative version?
+   
+           .. actex:: ex_rec_5
 
 #. Implement a solution to the Tower of Hanoi using three stacks to keep
    track of the disks.
+   
+           .. actex:: ex_rec_6
 
 #. Using the turtle graphics module, write a recursive program to
    display a Hilbert curve.
+   
+           .. actex:: ex_rec_7
 
 #. Using the turtle graphics module, write a recursive program to
    display a Koch snowflake.
+   
+           .. actex:: ex_rec_8
 
 #. Write a program to solve the following problem: You have two jugs: a
    4-gallon jug and a 3-gallon jug. Neither of the jugs have markings on
    them. There is a pump that can be used to fill the jugs with water.
    How can you get exactly two gallons of water in the 4-gallon jug?
 
+        .. actex:: ex_rec_9
+
 #. Generalize the problem above so that the parameters to your solution
    include the sizes of each jug and the final amount of water to be
    left in the larger jug.
+   
+           .. actex:: ex_rec_10
 
 #. Write a program that solves the following problem: Three missionaries
    and three cannibals come to a river and find a boat that holds two
@@ -67,10 +87,14 @@ Programming Exercises
    either bank, the missionaries will be eaten. Find a series of
    crossings that will get everyone safely to the other side of the
    river.
+   
+           .. actex:: ex_rec_11
 
 #. Modify the Tower of Hanoi program using turtle graphics to animate
    the movement of the disks. Hint: You can make multiple turtles and
    have them shaped like rectangles.
+
+        .. actex:: ex_rec_12
 
 #. Pascal’s triangle is a number triangle with numbers arranged in
    staggered rows such that 
@@ -94,6 +118,8 @@ Programming Exercises
    Write a program that prints out Pascal’s triangle. Your program
    should accept a parameter that tells how many rows of the triangle to
    print.
+   
+       .. actex:: ex_rec_13
 
 #. Suppose you are a computer scientist/art thief who has broken into a
    major art gallery. All you have with you to haul out your stolen art
@@ -111,6 +137,10 @@ Programming Exercises
           3        4           8
           4        5           8
           5        9          10
+		  
+		  
+		  
+   .. actex:: ex_rec_14
 
 #. This problem is called the string edit distance problem, and is quite
    useful in many areas of research. Suppose that you want to transform
@@ -122,4 +152,6 @@ Programming Exercises
    to one another. Use dynamic programming techniques to develop an
    algorithm that gives you the smallest edit distance between any two
    words.
+   
+           .. actex:: ex_rec_15
 

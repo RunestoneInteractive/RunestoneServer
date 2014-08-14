@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Modules
--------
+Modules and Getting Help
+------------------------
 
 .. video:: inputvid
     :controls:

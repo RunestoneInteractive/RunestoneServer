@@ -103,6 +103,8 @@ Functions
    Functions/TheAccumulatorPattern.rst
    Functions/Functionscancallotherfunctions.rst
    Functions/FlowofExecutionSummary.rst
+   Functions/ProgramDevelopment.rst
+   Functions/Composition.rst
    Functions/ATurtleBarChart.rst
    Functions/Glossary.rst
    Functions/Exercises.rst
@@ -248,12 +250,10 @@ Recursion
 .. toctree::
    :maxdepth: 2
 
-   Recursion/Objectives.rst
    Recursion/WhatIsRecursion.rst
    Recursion/CalculatingtheSumofaListofNumbers.rst
    Recursion/TheThreeLawsofRecursion.rst
    Recursion/ConvertinganIntegertoaStringinAnyBase.rst
-   Recursion/StackFramesImplementingRecursion.rst
    Recursion/intro-VisualizingRecursion.rst
    Recursion/SierpinskiTriangle.rst
    Recursion/Glossary.rst
@@ -266,7 +266,6 @@ Classes and Objects - the Basics
 .. toctree::
    :maxdepth: 2
 
-   ClassesBasics/intro-ClassesandObjectstheBasics.rst
    ClassesBasics/Objectorientedprogramming.rst
    ClassesBasics/Achangeofperspective.rst
    ClassesBasics/ObjectsRevisited.rst
@@ -280,13 +279,12 @@ Classes and Objects - the Basics
    ClassesBasics/Exercises.rst
 
 
-Classes and Objects - Digging a little deeper
+Classes and Objects - Digging a Little Deeper
 :::::::::::::::::::::::::::::::::::::::::::::
 
 .. toctree::
    :maxdepth: 2
 
-   ClassesDiggingDeeper/intro-ClassesandObjectsDiggingalittledeeper.rst
    ClassesDiggingDeeper/Fractions.rst
    ClassesDiggingDeeper/ObjectsareMutable.rst
    ClassesDiggingDeeper/Sameness.rst

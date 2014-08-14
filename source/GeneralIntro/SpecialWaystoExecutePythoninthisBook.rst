@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Special Ways to Execute Python in this Book
--------------------------------------------
+Executing Python in this Book
+-----------------------------
 
 .. video:: codelensvid
     :controls:
@@ -17,7 +17,7 @@ Special Ways to Execute Python in this Book
     http://media.interactivepython.org/thinkcsVideos/activecodelens.mov
     http://media.interactivepython.org/thinkcsVideos/activecodelens.webm
 
-This book provides two additional ways to execute Python programs.  Both techniques are designed to assist you as you
+This book provides two special ways to execute Python programs.  Both techniques are designed to assist you as you
 learn the Python programming language.  They will help you increase your understanding of how Python programs work.
 
 

@@ -39,7 +39,7 @@ In fact, these lists are so popular that Python gives us special built-in
 that can deliver a sequence of values to
 the ``for`` loop.  The sequence provided by ``range`` always starts with 0.  If you ask for ``range(4)``, then you will get 4 values starting with 0.  In other words, 0, 1, 2, and finally 3.  Notice that 4 is not included since we started with 0.  Likewise, ``range(10)`` provides 10 values, 0 through 9.
 
-  .. sourcecode:: python
+.. sourcecode:: python
 
       for i in range(4):
           # Executes the body with i = 0, then 1, then 2, then 3

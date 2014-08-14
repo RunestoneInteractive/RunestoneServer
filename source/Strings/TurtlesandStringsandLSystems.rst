@@ -174,8 +174,6 @@ To create a Python function to draw a string we will write a function called
                 aTurtle.right(angle)
             elif cmd == '-':
                 aTurtle.left(angle)
-            else:
-                print('Error:', cmd, 'is an unknown command')
 
 Here is the complete program in activecode.  The ``main`` function first creates the
 L-system string and then it creates a turtle and passes it and the string to the drawing function.
@@ -219,8 +217,6 @@ L-system string and then it creates a turtle and passes it and the string to the
                 aTurtle.right(angle)
             elif cmd == '-':
                 aTurtle.left(angle)
-            else:
-                print('Error:', cmd, 'is an unknown command')
 
     def main():
         inst = createLSystem(4, "F")   # create the string

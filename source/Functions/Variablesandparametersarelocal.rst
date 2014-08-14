@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Variables and parameters are local
+Variables and Parameters are Local
 ----------------------------------
 
 An assignment statement in a function creates a **local variable** for the

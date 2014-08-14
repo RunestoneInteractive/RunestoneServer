@@ -7,6 +7,13 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. index::
+    single: function
+    single: function definition
+    single: definition; function
+	
+
 Functions
 ---------
 

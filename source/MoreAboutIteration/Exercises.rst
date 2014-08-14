@@ -213,13 +213,12 @@ Exercises
         .. tab:: Question
 
            Write a function to remove all the red from an image.
-		   
-		   For this and the following exercises, use the luther.jpg photo
    
 		   .. raw:: html
 
 		       <img src="../_static/LutherBellPic.jpg" id="luther.jpg">
-		   
+		       <h4 style="text-align: left;">For this and the following exercises, use the
+			   luther.jpg photo.</h4>
         
            .. actex:: ex_7_15
 
@@ -356,7 +355,7 @@ Exercises
                    oldw = oldimage.getWidth()
                    oldh = oldimage.getHeight()
                    
-                   newim = EmptyImage(oldw * 2, oldh * 2)
+                   newim = image.EmptyImage(oldw * 2, oldh * 2)
                    for row in range(oldh):
                        for col in range(oldw):
                            oldpixel = oldimage.getPixel(col, row)

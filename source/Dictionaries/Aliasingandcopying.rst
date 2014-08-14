@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Aliasing and copying
+Aliasing and Copying
 --------------------
 
 Because dictionaries are mutable, you need to be aware of aliasing (as we saw with lists).  Whenever

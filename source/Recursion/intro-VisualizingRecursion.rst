@@ -7,66 +7,20 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Visualizing Recursion
-===================================
+Visualizing Recursion
+=====================
 
 
-In the previous section we looked at some problems that were easy to
+Some problems are easy to
 solve using recursion; however, it can still be difficult to find a
 mental model or a way of visualizing what is happening in a recursive
 function. This can make recursion difficult for people to grasp. In this
-section we will look at a couple of examples of using recursion to draw
+section we will look at using recursion to draw
 some interesting pictures. As you watch these pictures take shape you
 will get some new insight into the recursive process that may be helpful
 in cementing your understanding of recursion.
 
-The tool we will use for our illustrations is Python’s turtle graphics
-module called ``turtle``. The ``turtle`` module is standard with all
-versions of Python and is very easy to use. The metaphor is quite
-simple. You can create a turtle and the turtle can move forward,
-backward, turn left, turn right, etc. The turtle can have its tail up or
-down. When the turtle’s tail is down and the turtle moves it draws a
-line as it moves. To increase the artistic value of the turtle you can
-change the width of the tail as well as the color of the ink the tail is
-dipped in.
-
-Here is a simple example to illustrate some turtle graphics basics. We
-will use the turtle module to draw a spiral recursively.
-:ref:`ActiveCode 1 <lst_turt1>` shows how it is done. After importing the ``turtle``
-module we create a turtle. When the turtle is created it also creates a
-window for itself to draw in. Next we define the drawSpiral function.
-The base case for this simple function is when the length of the line we
-want to draw, as given by the ``len`` parameter, is reduced to zero or
-less. If the length of the line is longer than zero we instruct the
-turtle to go forward by ``len`` units and then turn right 90 degrees.
-The recursive step is when we call drawSpiral again with a reduced
-length. At the end of :ref:`ActiveCode 1 <lst_turt1>` you will notice that we call
-the function ``myWin.exitonclick()``, this is a handy little method of
-the window that puts the turtle into a wait mode until you click inside
-the window, after which the program cleans up and exits.
-
-.. _lst_turt1:
-
-.. activecode:: lst_turt1
-    :caption: Drawing a Recursive Spriral using turtle
-
-
-    import turtle
-
-    myTurtle = turtle.Turtle()
-    myWin = turtle.Screen()
-
-    def drawSpiral(myTurtle, lineLen):
-        if lineLen > 0:
-            myTurtle.forward(lineLen)
-            myTurtle.right(90)
-            drawSpiral(myTurtle,lineLen-5)
-
-    drawSpiral(myTurtle,100)
-    myWin.exitonclick()
-
-That is really about all the turtle graphics you need to know in order
-to make some pretty impressive drawings. For our next program we are
+For our next program we are
 going to draw a fractal tree. Fractals come from a branch of
 mathematics, and have much in common with recursion. The definition of a
 fractal is that when you look at it the fractal has the same basic shape
@@ -127,7 +81,7 @@ getting too small.
 .. highlight:: python
     :linenothreshold: 500
 
-The complete program for this tree example is shown in :ref:`ActiveCode 2 <lst_complete_tree>`.  Before you run
+The complete program for this tree example is shown below.  Before you run
 the code think about how you expect to see the tree take shape. Look at
 the recursive calls and think about how this tree will unfold. Will it
 be drawn symmetrically with the right and left halves of the tree taking
@@ -192,8 +146,7 @@ to the smallest twig on the left.
 
 This simple tree program is just a starting point for you, and you will
 notice that the tree does not look particularly realistic because nature
-is just not as symmetric as a computer program. The exercises at the end
-of the chapter will give you some ideas for how to explore some
+is just not as symmetric as a computer program. Here are a few ideas for how to explore some
 interesting options to make your tree look more realistic.
 
 .. admonition:: Self Check
