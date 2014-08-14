@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-The **for** Loop
+The ``for`` Loop
 ----------------
 
 .. video:: forloopvid

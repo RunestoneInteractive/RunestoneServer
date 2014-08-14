@@ -13,9 +13,9 @@ Converting an Integer to a String in Any Base
 Suppose you want to convert an integer to a string in some base between
 binary and hexadecimal. For example, convert the integer 10 to its
 string representation in decimal as ``"10"``, or to its string
-representation in binary as ``"1010"``. While there are many algorithms
-to solve this problem, including the algorithm discussed in the stack
-section, the recursive formulation of the problem is very
+representation in binary as ``"1010"``. While there are many approaches one
+can take
+to solve this problem, the recursive formulation of the problem is very
 elegant.
 
 Let’s look at a concrete example using base 10 and the number 769.
@@ -67,7 +67,7 @@ right side of the diagram.
 
    Figure 3: Converting an Integer to a String in Base 10
 
-:ref:`ActiveCode 3 <lst_rectostr>` shows the Python code that implements the algorithm
+The activecode below shows the Python code that implements the algorithm
 outlined above for any base between 2 and 16.
 
 .. _lst_rectostr:
@@ -109,8 +109,7 @@ correctly because we make the recursive call first on line
 If we reversed returning the ``convertString`` lookup and returning the
 ``toStr`` call, the resulting string would be backward! But by delaying
 the concatenation operation until after the recursive call has returned,
-we get the result in the proper order. This should remind you of our
-discussion of stacks back in the previous chapter.
+we get the result in the proper order.
 
 .. admonition:: Self Check
 

@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Lists
-===================
+Lists
+=====
 
 A **list** is a sequential collection of Python data values, where each value is identified by an
 index. The values that make up a list are called its **elements**. Lists are

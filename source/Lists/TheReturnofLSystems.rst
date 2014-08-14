@@ -62,8 +62,6 @@ behavior.
                 newInfo = savedInfoList.pop()
                 print(newInfo)
                 print(savedInfoList)
-            else:
-                print('Error:', cmd, 'is an unknown command')
 
     t = turtle.Turtle()
     inst = "FF[-F[-X]+X]+F[-X]+X"
@@ -98,8 +96,6 @@ so you get an idea of what the kind of drawing the L-System can really make.
                 newInfo = savedInfoList.pop()
                 aTurtle.setheading(newInfo[0])
                 aTurtle.setposition(newInfo[1], newInfo[2])
-            else:
-                print('Error:', cmd, 'is an unknown command')
 
     t = turtle.Turtle()
     inst = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF[-FFFFFFFFFFFFFFFF[-FFFFFFFF[-FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFFFFFF[-FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFFFFFFFFFFFFFF[-FFFFFFFF[-FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFFFFFF[-FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X]+FFFF[-FF[-F[-X]+X]+F[-X]+X]+FF[-F[-X]+X]+F[-X]+X"

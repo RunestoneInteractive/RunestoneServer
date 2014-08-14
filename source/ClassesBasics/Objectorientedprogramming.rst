@@ -7,6 +7,11 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+
+.. index:: object-oriented programming
+
+
 Object-oriented programming
 ---------------------------
 

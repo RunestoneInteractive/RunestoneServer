@@ -14,7 +14,7 @@ We will begin our investigation with a simple problem that you already
 know how to solve without using recursion. Suppose that you want to
 calculate the sum of a list of numbers such as:
 :math:`[1, 3, 5, 7, 9]`. An iterative function that computes the sum
-is shown in :ref:`ActiveCode 1 <lst_itsum>`. The function uses an accumulator variable
+is shown below. The function uses an accumulator variable
 (``theSum``) to compute a running total of all the numbers in the list
 by starting with :math:`0` and adding each number in the list.
 
@@ -78,8 +78,7 @@ list (``numList[1:]``). To state it in a functional form:
 
 In this equation :math:`first(numList)` returns the first element of
 the list and :math:`rest(numList)` returns a list of everything but
-the first element. This is easily expressed in Python as shown in
-:ref:`ActiveCode 2 <lst_recsum>`.
+the first element. This is easily expressed in Python.
 
 .. _lst_recsum:
 

@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Classes and Objects - the Basics
+Classes and Objects - the Basics
 ==============================================
 
 

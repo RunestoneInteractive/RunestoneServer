@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Hello, Little Turtles!
-====================================
+Hello Little Turtles!
+=====================
 
 .. index::
     single: module

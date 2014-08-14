@@ -18,10 +18,12 @@ impose some order on them); they evolved naturally.
 applications. For example, the notation that mathematicians use is a formal
 language that is particularly good at denoting relationships among numbers and
 symbols. Chemists use a formal language to represent the chemical structure of
-molecules. And most importantly:
+molecules. And most importantly::
 
-    *Programming languages are formal languages that have been designed to
-    express computations.*
+
+     Programming languages are formal languages that have been designed to 
+	 express computations.
+	 
 
 Formal languages tend to have strict rules about syntax. For example, ``3+3=6``
 is a syntactically correct mathematical statement, but ``3=+6$`` is not.

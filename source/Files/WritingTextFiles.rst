@@ -23,7 +23,7 @@ lines, break each line into its parts, choose the parts that we need, and then o
 
 The program below solves part of the problem.  Notice that it reads the data and creates a string consisting of last name followed by a comma followed by the first name.  In this example, we simply print the lines as they are created.
 
-.. activecode:: files_write01
+.. sourcecode:: python
 
     infile = open("qbdata.txt", "r")
     aline = infile.readline()

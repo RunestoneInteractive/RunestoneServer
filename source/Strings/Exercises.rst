@@ -419,8 +419,6 @@ Exercises
                             aTurtle.right(angle)
                         elif cmd == '-':
                             aTurtle.left(angle)
-                        else:
-                            print('Error:', cmd, 'is an unknown command')
 
                 def main():
                     inst = createLSystem(4, "L")  # create the string
@@ -511,9 +509,6 @@ Exercises
                             aTurtle.right(angle)
                         elif cmd == '-':
                             aTurtle.left(angle)
-                        else:
-                            # unknown command, ignore it.
-                            pass
 
                 def main():
                     inst = createLSystem(5, "YF")  # create the string
@@ -601,9 +596,6 @@ Exercises
                             aTurtle.right(angle)
                         elif cmd == '-':
                             aTurtle.left(angle)
-                        else:
-                            # unknown command, ignore it.
-                            pass
 
                 def main():
                     inst = createLSystem(5, "FXF--FF--FF")   # create the string

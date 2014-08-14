@@ -372,20 +372,12 @@ Exercises
                 def is_rightangled(a, b, c):
                     is_rightangled = False
 
-                    largest = a
-                    if b > largest:
-                        # largest = b
-                        if abs((a**2) + (c**2) - (b**2)) < 0.001:
-                            is_rightangled = True
-                    if c > largest:
-                        # largest = c
-                        if abs((a**2) + (b**2) - (c**2)) < 0.001:
-                            is_rightangled = True
+                    if a > b and a > c:
+                        is_rightangled = abs(b**2 + c**2 - a**2) < 0.001
+                    elif b > a and b > c:
+                        is_rightangled = abs(a**2 + c**2 - b**2) < 0.001
                     else:
-                        # largest = a
-                        if abs((c**2) + (b**2) - (a**2)) < 0.001:
-                            is_rightangled = True
-
+                        is_rightangled = abs(a**2 + b**2 - c**2) < 0.001
                     return is_rightangled
 
                 testEqual(is_rightangled(1.5, 2.0, 2.5), True)

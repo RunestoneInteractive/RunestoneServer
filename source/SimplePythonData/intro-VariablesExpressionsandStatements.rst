@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Variables, Expressions and Statements
-===================================================
+Variables, Expressions and Statements
+=====================================
 
 
 .. index:: value, data type, string, integer, int, float, class

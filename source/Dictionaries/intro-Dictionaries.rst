@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Dictionaries
-==========================
+Dictionaries
+============
 
 
 .. index:: dictionary, mapping type, key, value, key-value pair
