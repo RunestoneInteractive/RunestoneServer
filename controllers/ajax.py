@@ -18,6 +18,9 @@ def hsblog():    # Human Subjects Board Log
     setCookie = False
     if auth.user:
         sid = auth.user.username
+        setCookie = True    # we set our own cookie anyway to eliminate many of the extraneous anonymous
+                            # log entries that come from auth timing out even but the user hasn't reloaded
+                            # the page.
     else:
         if request.cookies.has_key('ipuser'):
             sid = request.cookies['ipuser'].value
