@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Looping and counting
+Looping and Counting
 --------------------
 
 We will finish this chapter with a few more examples that show variations on the theme of iteration through the characters of a string.  We will implement a few of the methods that we described earlier to show how they can be done.

@@ -11,7 +11,7 @@ Composition
 -----------
 
 As we have already seen, you can call one function from within another.
-This ability is called **composition**.
+This ability to build functions by using other functions is called **composition**.
 
 As an example, we'll write a function that takes two points, the center of the
 circle and a point on the perimeter, and computes the area of the circle.

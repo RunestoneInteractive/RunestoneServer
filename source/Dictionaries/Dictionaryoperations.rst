@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Dictionary operations
+Dictionary Operations
 ---------------------
 
 The ``del`` statement removes a key-value pair from a dictionary. For example,

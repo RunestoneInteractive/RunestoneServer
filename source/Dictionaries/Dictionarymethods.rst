@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Dictionary methods
+Dictionary Methods
 ------------------
 
 Dictionaries have a number of useful built-in methods.

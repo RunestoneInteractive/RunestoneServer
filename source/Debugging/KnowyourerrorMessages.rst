@@ -7,7 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Know your error Messages
+Know Your Error Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Many problems in your program will lead to an error message.  For example as I was writing and testing this chapter of the book I wrote the following version of the example program in the previous section.

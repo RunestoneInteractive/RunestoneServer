@@ -7,8 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Iteration Revisited
-=================================
+Iteration Revisited
+===================
 
 .. index:: iteration, assignment, assignment statement, reassignment
 
