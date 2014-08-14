@@ -1,8 +1,9 @@
 from os import path
 import os
-import shutil
-import sys
-from sphinx.application import Sphinx
+import pygal
+from datetime import date, timedelta
+
+
 
 # this is for admin links
 # use auth.requires_membership('manager')
@@ -16,7 +17,7 @@ from sphinx.application import Sphinx
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+@auth.requires_login()
 def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
     # get current build info
@@ -43,7 +44,26 @@ def index():
         if my_vers != mst_vers:
             response.flash = "Updates available, consider rebuilding"
 
-    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers, mst_vers=mst_vers )
+    # Now build the activity bar chart
+    bar_chart = pygal.Bar(disable_xml_declaration=True, explicit_size=True,
+                          show_legend=False, height=400, width=400,
+                          style=pygal.style.TurquoiseStyle)
+    bar_chart.title = 'Class Activities'
+    bar_chart.x_labels = []
+    counts = []
+
+    d = date.today() - timedelta(days=10)
+    query = '''select date(timestamp) xday, count(*)  ycount from useinfo where timestamp > '%s' and course_id = '%s' group by date(timestamp) order by xday''' % (d, row.course_name)
+    rows = db.executesql(query)
+    for row in rows:
+        bar_chart.x_labels.append(str(row[0]))
+        counts.append(row[1])
+
+    bar_chart.add('Class', counts)
+    chart = bar_chart.render()
+
+
+    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers, mst_vers=mst_vers, bchart=chart)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassignments():
@@ -65,7 +85,7 @@ def listassignments():
         prefixes[acid_prefix].append(acid)
     return dict(sections=prefixes,course_id=course.course_name)
 
-@auth.requires_login()
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassessments():
     course = db(db.courses.id == auth.user.course_id).select().first()
 

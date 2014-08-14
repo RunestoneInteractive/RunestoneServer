@@ -1,8 +1,14 @@
 {{extend 'layout.html'}}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 
 <h1>Instructor's Dashboard</h1>
-
-
+<div class="col-md-6">
+        <figure>
+            {{ =XML(bchart) }}
+        </figure>
+</div>
+<div class="col-md-6">
 <h3>Build Your Own Course</h3>
 <ul>
 	<li>
@@ -57,7 +63,7 @@
 	</li>
 </ul>
 
-
+</div>
 
 <h3>Contribute to the Project</h3>
 <ul>
