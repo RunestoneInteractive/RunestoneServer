@@ -406,28 +406,27 @@ def cohortprogress():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def editAssignments():
+def editcustom():
     course_name = auth.user.course_name
+    custom_file = request.args[0]
     assignfile = open(path.join('applications', request.application,
-                                'custom_courses', course_name, 'assignments.rst'), 'r')
+                                'custom_courses', course_name, custom_file+'.rst'), 'r')
 
     form = FORM(TEXTAREA(_id='text', _name='text', value=assignfile.read()),
                 INPUT(_type='submit', _value='submit'))
 
-
     assignfile.close()
 
     if form.process().accepted:
-        session.flash = 'Assignments Updated'
+        session.flash = 'File Updated'
         assignfile = open(path.join('applications', request.application,
-                                    'custom_courses', course_name, 'assignments.rst'), 'w')
+                                    'custom_courses', course_name, custom_file+'.rst'), 'w')
         assignfile.write(request.vars.text)
         assignfile.close()
         redirect(URL('index'))
     elif form.errors:
         response.flash = 'Assignments has errors'
-    else:
-        response.flash = 'please fill the form'
+
 
     return dict(form=form)
 
