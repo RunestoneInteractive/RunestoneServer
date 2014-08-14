@@ -992,6 +992,12 @@ function injectCodelens(div_id) {
     //myIframe.setAttribute("src",srcURL)
     myIframe.src = embedUrlStr
     div.appendChild(myIframe)
+    logBookEvent({
+                     'event': 'codelens',
+                     'act': 'view',
+                     'div_id': div_id
+                 });
+
 }
 
 // <iframe id="%(divid)s_codelens" width="800" height="500" style="display:block"src="#">
@@ -1020,4 +1026,9 @@ function injectCodeCoach(div_id) {
     //myIframe.setAttribute("src",srcURL)
     myIframe.src = srcURL;
     div.appendChild(myIframe);
+    logBookEvent({
+                     'event': 'coach',
+                     'act': 'view',
+                     'div_id': div_id
+                 });
 }
