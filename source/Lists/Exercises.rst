@@ -358,10 +358,12 @@ Exercises
         
         
            .. actex:: ex_9_14
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q15_answer
+                :nocodelens:
 
                 import turtle
 
@@ -410,9 +412,6 @@ Exercises
                             newInfo = savedInfoList.pop()
                             aTurtle.setheading(newInfo[0])
                             aTurtle.setposition(newInfo[1], newInfo[2])
-                        else:
-                            # print('Error:', cmd, 'is an unknown command')
-                            pass
                 
 
                 def main():
@@ -438,8 +437,12 @@ Exercises
                 :identifier: disqus_10a1fdd1fadb401b8e733afd9d105052
 
 
-#. Here is another L-System.  Use an Angle of 25::
-
+#. Here is another L-System.  Use an Angle of 25.
+    
+   ::
+    
        F
        F --> F[-F]F[+F]F
 
+   .. actex:: ex_9_16
+      :nocodelens:

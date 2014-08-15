@@ -78,6 +78,7 @@ We then print the current amount of red, change the amount of red, and finally, 
 the same as the current amount of green.
 
 .. activecode::  pixelex1a
+    :nocodelens:
 
     import image
 
@@ -149,6 +150,7 @@ on its basic color intensities.
 
 
 .. activecode::  pixelex1
+    :nocodelens:
 
     import image
     img = image.Image("luther.jpg")
@@ -263,6 +265,7 @@ Change the name of the file in the ``image.Image()`` call to see how these image
 
 
 .. activecode::  acimg_1
+    :nocodelens:
 
     import image
 

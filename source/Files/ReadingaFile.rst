@@ -65,7 +65,7 @@ To open this file, we would call the ``open`` function. The variable,
 the ``close`` method. After the file is closed any further attempts to
 use ``fileref`` will result in an error.
 
-    ::
+::
 
             >>>fileref = open("qbdata.txt", "r")
             >>>

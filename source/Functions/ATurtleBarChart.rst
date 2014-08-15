@@ -73,6 +73,7 @@ Here is the complete program.  Try it and then change the data to see that it ca
 we have stored the data values in a list and used a few list functions.  We will have much more to say about lists in a later chapter.
 
 .. activecode:: ch05_barchart
+  :nocodelens:
 
   import turtle
 

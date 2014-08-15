@@ -110,6 +110,7 @@ Exercises
     and bars representing values less than 100 are filled green.
 
     .. actex:: ex_6_4
+       :nocodelens:
 
 #.
 
@@ -123,10 +124,12 @@ Exercises
             the text above the base of the bar (on the 0 axis).
         
             .. actex:: ex_6_5
+               :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: answer_ex_6_5
+                    :nocodelens:
 
                     import turtle
 
@@ -187,6 +190,7 @@ Exercises
     the length of the hypotenuse.  (Hint:  ``x ** 0.5`` will return the square root, or use ``sqrt`` from the math module)
 
     .. actex:: ex_6_6
+        :nocodelens:
 
         from test import testEqual
 
@@ -209,6 +213,7 @@ Exercises
            it is **odd**.
         
            .. actex:: ex_6_7
+               :nocodelens:
         
                from test import testEqual
         
@@ -223,6 +228,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q7_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -248,6 +254,7 @@ Exercises
    and ``False`` otherwise.
 
    .. actex:: ex_6_8
+       :nocodelens:
 
        from test import testEqual
 
@@ -269,6 +276,7 @@ Exercises
            argument is an odd integer.
         
            .. actex:: ex_6_9
+               :nocodelens:
         
                from test import testEqual
         
@@ -284,6 +292,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q9_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -328,6 +337,7 @@ Exercises
 
 
     .. actex:: ex_6_10
+        :nocodelens:
 
         from test import testEqual
 
@@ -350,6 +360,7 @@ Exercises
             Extend the above program so that the sides can be given to the function in any order.
         
             .. actex:: ex_6_11
+                :nocodelens:
         
                 from test import testEqual
         
@@ -366,6 +377,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q11_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -398,6 +410,7 @@ Exercises
     Write a function that takes a year as a parameter and returns ``True`` if the year is a leap year, ``False`` otherwise.
 
     .. actex:: ex_6_12
+        :nocodelens:
 
         from test import testEqual
 

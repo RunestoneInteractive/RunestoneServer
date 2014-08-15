@@ -25,3 +25,7 @@ times each letter occurs.  Make sure it is in alphabetical order from left to ri
 #. Iterate through the keys, in alphabetical order, getting the associated value (count).
 
 #. Make a histogram bar for each.
+
+
+.. actex:: histlab
+   :nocodelens:

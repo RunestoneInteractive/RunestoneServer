@@ -89,6 +89,7 @@ construct a simple sentence.
 
 
 .. activecode:: files_for
+    :nocodelens:
 
     qbfile = open("qbdata.txt", "r")
 

@@ -47,6 +47,7 @@ Here's the starting point for the drawPolygon function,
 see if you can fill in the details on your own.
 
 .. activecode:: lab0401a
+    :nocodelens:
 
     import turtle
 
@@ -92,6 +93,7 @@ circumference.  circumference / 360.
 Here's the final solution:
 
 .. activecode:: lab0401aa
+    :nocodelens:
 
     import turtle
 

@@ -70,6 +70,7 @@ Here is a possible sequence of steps that we will need to accomplish:
 Here is the Python code for the first 4 steps above
 
 .. activecode:: lab01_2
+   :nocodelens:
 
    import turtle              # 1.  import the modules
    import random

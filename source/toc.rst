@@ -107,7 +107,7 @@ Functions
    Functions/Composition.rst
    Functions/ATurtleBarChart.rst
    Functions/Glossary.rst
-   Functions/Exercises.rst
+   Functions/thinkcspyExercises.rst
 
 Selection
 :::::::::

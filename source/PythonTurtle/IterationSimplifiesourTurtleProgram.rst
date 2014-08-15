@@ -15,6 +15,7 @@ square.  This next program does exactly the same thing but, with the help of the
 each value in the list.
 
 .. activecode:: ch03_for1
+   :nocodelens:
 
    import turtle            # set up alex
    wn = turtle.Screen()
@@ -39,6 +40,7 @@ We could have used any four values.  For example, consider the following program
 
 
 .. activecode:: ch03_forcolor
+   :nocodelens:
 
    import turtle            # set up alex
    wn = turtle.Screen()
@@ -55,6 +57,7 @@ take on each color in the list.  We can even take this one step further and use 
 of the computation.
 
 .. activecode:: colorlist
+    :nocodelens:
 
     import turtle            # set up alex
     wn = turtle.Screen()

@@ -102,12 +102,12 @@ Recursion
 
     Recursion/Objectives.rst
     Recursion/WhatIsRecursion.rst
-    Recursion/CalculatingtheSumofaListofNumbers.rst
+    Recursion/pythondsCalculatingtheSumofaListofNumbers.rst
     Recursion/TheThreeLawsofRecursion.rst
-    Recursion/ConvertinganIntegertoaStringinAnyBase.rst
+    Recursion/pythondsConvertinganIntegertoaStringinAnyBase.rst
     Recursion/StackFramesImplementingRecursion.rst
-    Recursion/intro-VisualizingRecursion.rst
-    Recursion/SierpinskiTriangle.rst
+    Recursion/pythondsintro-VisualizingRecursion.rst
+    Recursion/pythondsSierpinskiTriangle.rst
     Recursion/ComplexRecursiveProblems.rst
     Recursion/TowerofHanoi.rst
     Recursion/ExploringaMaze.rst
@@ -116,7 +116,7 @@ Recursion
     Recursion/KeyTerms.rst
     Recursion/DiscussionQuestions.rst
     Recursion/Glossary.rst
-    Recursion/ProgrammingExercises.rst
+    Recursion/pythondsProgrammingExercises.rst
 
 
 Sorting and Searching
