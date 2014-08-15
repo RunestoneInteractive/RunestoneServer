@@ -118,14 +118,23 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
         try:
             # copy all the sources into the temporary sourcedir
             shutil.copytree(path.join(workingdir,'source'),sourcedir)
+        except:
+            raise OSError("source directory already exists")
 
+        try:
             # copy the index and conf files to the sourcedir
             shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
             shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
+
+            # copy the assignments.rst file from confidir as it may contain assignments written
+            # by the instructor
+            shutil.copy(path.join(confdir, 'assignments.rst'),
+                        path.join(sourcedir, 'assignments.rst'))
+
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
-            raise OSError
+            raise OSError("missing conf, index, or assignments file")
 
 
 
@@ -138,18 +147,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
 
         # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
         # and we also copy it to the sourcedir (which will be used for this build and then deleted.
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
-                    path.join(confdir,'conf.py'))
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'conf.py'),
-                    path.join(sourcedir,'conf.py'))
-
-        # copy the index file. Save in confdir (to allow rebuilding the course at a later date),
-        # and copy to sourcedir for this build.
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
-                    path.join(confdir,'index.rst'))
-        shutil.copy(path.join(workingdir,rvars['coursetype'],'index.rst'),
-                    path.join(sourcedir,'index.rst'))
-
+        for template_file in ['conf.py', 'index.rst', 'assignments.rst']:
+            shutil.copy(path.join(workingdir, rvars['coursetype'], template_file),
+                        path.join(confdir, template_file))
+            shutil.copy(path.join(workingdir, rvars['coursetype'], template_file),
+                        path.join(sourcedir, template_file))
 
 
     ###########

@@ -3,6 +3,12 @@
 Table of Contents
 :::::::::::::::::
 
+Assignments
+:::::::::::
+
+.. toctree::
+
+   assignments.rst
 
 General Introduction
 ::::::::::::::::::::

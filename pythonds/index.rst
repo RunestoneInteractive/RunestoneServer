@@ -16,6 +16,12 @@
 
 By Brad Miller and David Ranum, Luther College
 
+Assignments
+:::::::::::
+
+.. toctree::
+
+   assignments.rst
 
 Introduction
 ::::::::::::
