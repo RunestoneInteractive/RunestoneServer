@@ -39,11 +39,13 @@ Exercises
 
 
             .. actex:: ex_6_1
+               :nocodelens:
 
 
         .. tab:: Answer
 
             .. activecode:: ch_files_q1answer
+                :nocodelens:
 
                 f = open("studentdata.txt", "r")
 
@@ -66,6 +68,7 @@ Exercises
    for each student, and print out the student's name along with their average grade.
 
    .. actex:: ex_10_2
+      :nocodelens:
 
 
 
@@ -82,11 +85,13 @@ Exercises
 
 
             .. actex:: ex_6_3
+               :nocodelens:
 
 
         .. tab:: Answer
 
             .. activecode:: ch_files_q3answer
+                :nocodelens:
 
                 f = open("studentdata.txt", "r")
 
@@ -160,6 +165,7 @@ Exercises
 
 
     .. actex:: ex_10_4
+       :nocodelens:
 
 
 #.  
@@ -176,12 +182,14 @@ Exercises
             described by the commands and the set of points.
 
             .. actex:: ex_10_5
+               :nocodelens:
 
 
 
         .. tab:: Answer
 
             .. activecode:: ch_files_q5answer
+                :nocodelens:
 
                 import turtle
 

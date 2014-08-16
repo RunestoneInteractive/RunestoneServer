@@ -31,6 +31,7 @@ example of iteration. The following program outputs a sequence of values in the
 left column and 2 raised to the power of that value in the right column:
 
 .. activecode:: ch07_table1
+    :nocodelens:
 
     print("n", '\t', "2**n")     #table column headings
     print("---", '\t', "-----")

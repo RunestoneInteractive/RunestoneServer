@@ -179,6 +179,7 @@ Here is the complete program in activecode.  The ``main`` function first creates
 L-system string and then it creates a turtle and passes it and the string to the drawing function.
 
 .. activecode:: strings_lys2
+    :nocodelens:
 
     import turtle
     

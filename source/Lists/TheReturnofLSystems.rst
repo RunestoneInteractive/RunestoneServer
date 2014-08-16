@@ -41,6 +41,7 @@ Let's modify our ``drawLsystem`` function to begin to implement this new
 behavior.
 
 .. activecode:: list_lsys1
+    :nocodelens:
 
     import turtle
 
@@ -75,6 +76,7 @@ turtle's position and heading when needed.  We'll use a longer example here
 so you get an idea of what the kind of drawing the L-System can really make.
 
 .. activecode:: list_lsys2
+    :nocodelens:
 
     import turtle
 

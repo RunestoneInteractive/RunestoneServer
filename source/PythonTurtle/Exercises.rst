@@ -89,6 +89,7 @@ Exercises
            * An octagon (eight sides)
         
            .. actex:: ex_3_5
+              :nocodelens:
 
         .. tab:: Answer
             
@@ -164,6 +165,7 @@ Exercises
    
 
     .. actex:: ex_3_6
+       :nocodelens:
 
 
 #. 
@@ -174,10 +176,12 @@ Exercises
             A drunk pirate makes a random turn and then takes 100 steps forward, makes another random turn, takes another 100 steps, turns another random amount, etc.  A social science student records the angle of each turn before the next 100 steps are taken.  Her experimental data is ``160, -43, 270, -97, -43, 200, -940, 17, -86``. (Positive angles are counter-clockwise.)  Use a turtle to draw the path taken by our drunk friend.  After the pirate is done walking, print the current heading.
 
             .. actex:: ex_3_7
+               :nocodelens:
 
        .. tab:: Answer
 
            .. activecode:: q7_answer
+               :nocodelens:
 
                import turtle
 
@@ -213,6 +217,7 @@ Exercises
    and check your answer.
 
    .. actex:: ex_3_8
+       :nocodelens:
 
        import turtle
        wn = turtle.Screen()
@@ -236,10 +241,12 @@ Exercises
            .. image:: Figures/star.png
         
            .. actex:: ex_3_9
+              :nocodelens:
 
         .. tab:: Answer
 
             .. activecode:: q9_answer
+                :nocodelens:
                 
                 import turtle
 
@@ -261,6 +268,7 @@ Exercises
    .. image:: Figures/tess_clock1.png
 
    .. actex:: ex_3_10
+      :nocodelens:
 
 #.
 
@@ -272,10 +280,12 @@ Exercises
            with the turtle methods provided in :ref:`turtle_methods`.
         
            .. actex:: ex_3_11
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q11_answer
+                :nocodelens:
 
                 import turtle
 
@@ -298,6 +308,7 @@ Exercises
 #. Create a turtle and assign it to a variable.  When you print its type, what do you get?
 
    .. actex:: ex_3_12
+      :nocodelens:
 
 #.
 
@@ -311,10 +322,12 @@ Exercises
             Write a program to draw a sprite where the number of legs is provided by the user.
                    
             .. actex:: ex_3_13
+               :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q13_answer
+                :nocodelens:
                 
                 import turtle
 

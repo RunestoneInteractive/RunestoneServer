@@ -25,6 +25,7 @@ that are defined inside.
 
 
 .. activecode:: chmod_01
+    :nocodelens:
 
     import turtle            # allows us to use the turtles library
 

@@ -21,6 +21,8 @@ Exercises
           
               r = Rectangle(Point(4, 5), 6, 5)
               
+          .. actex:: classes_deeper_q1
+              
         .. tab:: Answer
         
             .. activecode:: ch_cl2_answer1
@@ -68,7 +70,7 @@ Exercises
                  
 #. Add the following accessor methods to the Rectangle class: ``getWidth``, ``getHeight``, ``__str__``.
 
-   .. activecode:: ch_cl2_q2  
+   .. actex:: ch_cl2_q2  
    
    
                     
@@ -83,6 +85,8 @@ Exercises
         
               r = Rectangle(Point(0, 0), 10, 5)
               test(r.area(), 50)
+
+           .. actex:: classes_q3
 
         .. tab:: Answer
         
@@ -134,7 +138,7 @@ Exercises
       test(r.perimeter(), 30)
       
 
-   .. activecode:: ch_cl2_q4
+   .. actex:: ch_cl2_q4
 
 #.
 
@@ -151,6 +155,8 @@ Exercises
               r.transpose()
               test(r.width, 5)
               test(r.height, 10)
+
+           .. actex:: classes_q5
 
         .. tab:: Answer
             
@@ -211,6 +217,9 @@ Exercises
       test(r.contains(Point(3, 4.99999)), True)
       test(r.contains(Point(-3, -3)), False)
    
+   .. actex:: classes_q6
+      :nocodelens:
+   
 #.
 
     .. tabbed:: q7
@@ -220,7 +229,7 @@ Exercises
            Write a new method called ``diagonal`` that will return the length of the diagonal that runs
            from the lower left corner to the opposite corner.
         
-             
+           .. actex:: classes_q7
 
         .. tab:: Answer
             
@@ -273,5 +282,5 @@ Exercises
     this might be quite a tough exercise!  Think carefully about all the
     cases before you code.*
     
-    .. activecode:: ch_cl2_q8
+    .. actex:: ch_cl2_q8
     

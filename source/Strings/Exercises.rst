@@ -156,6 +156,7 @@ Exercises
 #. Write a function that reverses its string argument.
 
    .. actex:: ex_8_5
+      :nocodelens:
 
       from test import testEqual
 
@@ -175,6 +176,7 @@ Exercises
            Write a function that mirrors its argument.
         
            .. actex:: ex_8_6
+              :nocodelens:
         
               from test import testEqual
         
@@ -191,6 +193,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q7_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -218,6 +221,7 @@ Exercises
 #. Write a function that removes all occurrences of a given letter from a string.
 
    .. actex:: ex_8_7
+      :nocodelens:
 
       from test import testEqual
 
@@ -239,6 +243,7 @@ Exercises
            Write a function that recognizes palindromes. (Hint: use your ``reverse`` function to make this easy!).
         
            .. actex:: ex_8_8
+              :nocodelens:
         
               from test import testEqual
         
@@ -255,6 +260,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q9_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -286,6 +292,7 @@ Exercises
 #. Write a function that counts how many times a substring occurs in a string.
 
    .. actex:: ex_8_9
+      :nocodelens:
 
       from test import testEqual
 
@@ -309,6 +316,7 @@ Exercises
            Write a function that removes the first occurrence of a string from another string.
         
            .. actex:: ex_8_10
+              :nocodelens:
         
               from test import testEqual
         
@@ -325,6 +333,7 @@ Exercises
         .. tab:: Answer
             
             .. activecode:: q11_answer
+                :nocodelens:
 
                 from test import testEqual
 
@@ -375,10 +384,12 @@ Exercises
                R -> -LF+RFR+FL-
         
            .. actex:: ex_8_12
+              :nocodelens:
 
         .. tab:: Answer
 
             .. activecode:: q13_answer
+                :nocodelens:
 
                 import turtle
 
@@ -451,6 +462,7 @@ Exercises
        Y -> -FX-Y
 
    .. actex:: ex_8_13
+      :nocodelens:
 
 #.
 
@@ -465,10 +477,12 @@ Exercises
                Y -> XF-YF-X
         
            .. actex:: ex_8_14
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q15_answer
+                :nocodelens:
 
                 import turtle
 
@@ -538,6 +552,7 @@ Exercises
        Y -> -FX+YFYF++YF+FX--FX-Y
 
    .. actex:: ex_8_15
+      :nocodelens:
 
 #.
 
@@ -552,10 +567,12 @@ Exercises
                X -> --FXF++FXF++FXF--
         
            .. actex:: ex_8_16
+              :nocodelens:
 
         .. tab:: Answer
 
             .. activecode:: q17_answer
+                :nocodelens:
 
                 import turtle
 

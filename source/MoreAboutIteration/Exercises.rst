@@ -106,6 +106,7 @@ Exercises
    angle of the turn is determined randomly at each step.
 
     .. actex:: ex_7_14
+       :nocodelens:
     
     
     
@@ -120,10 +121,12 @@ Exercises
            random starting location.  Keep the turtles moving until one of them leaves the screen.
 
            .. actex:: ex_7_13
+              :nocodelens:
 
         .. tab:: Answer
 
             .. activecode:: q5_answer
+                :nocodelens:
 
                 import random
                 import turtle
@@ -202,6 +205,7 @@ Exercises
    when it hits the wall or when one turtle collides with another turtle.
 
    .. actex:: ex_7_12
+      :nocodelens:
    
 
 
@@ -221,10 +225,12 @@ Exercises
 			   luther.jpg photo.</h4>
         
            .. actex:: ex_7_15
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q7_answer
+                :nocodelens:
 
                 import image
 
@@ -257,6 +263,7 @@ Exercises
 #. Write a function to convert the image to grayscale.
 
     .. actex:: ex_7_16
+       :nocodelens:
 
 #.
 
@@ -267,10 +274,12 @@ Exercises
            Write a function to convert an image to black and white.
         
            .. actex:: ex_7_17
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q9_answer
+                :nocodelens:
 
                 import image
 
@@ -333,6 +342,7 @@ Exercises
    Remember that rgb values must be integers between 0 and 255.
 
     .. actex:: ex_7_18
+       :nocodelens:
 
 #.
 
@@ -344,10 +354,12 @@ Exercises
         
         
            .. actex:: ex_7_19
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: answer_7_11
+               :nocodelens:
             
                import image
                 
@@ -391,6 +403,7 @@ Exercises
      that is the same as the old but smoothed.
 
        .. actex:: ex_7_20
+          :nocodelens:
 
 #.
 
@@ -403,10 +416,12 @@ Exercises
            a new pixel.
         
            .. actex:: ex_7_21
+              :nocodelens:
 
         .. tab:: Answer
             
             .. activecode:: q13_answer
+                :nocodelens:
             
                 import image
                 
@@ -451,6 +466,7 @@ Exercises
    to replace each pixel by the median value of the pixels surrounding it.
 
     .. actex:: ex_7_22
+       :nocodelens:
 
 #.
 
@@ -461,11 +477,13 @@ Exercises
            Research the Sobel edge detection algorithm and implement it.
         
            .. actex:: ex_7_23
+              :nocodelens:
         
 
         .. tab:: Answer
             
             .. activecode:: q15_answer
+                :nocodelens:
 
                 import image
                 import math
