@@ -251,7 +251,7 @@ def rebuildcourse():
         course.update_record(term_start_date=date)
         
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=60, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        application=request.application,
                                                                        http_host=request.env.http_host))
