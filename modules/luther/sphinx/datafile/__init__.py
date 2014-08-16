@@ -24,8 +24,8 @@ from docutils.parsers.rst import Directive
 def setup(app):
     app.add_directive('datafile',DataFile)
     app.add_javascript('bookfuncs.js')
-    app.add_javascript('skulpt/dist/skulpt.js')
-    app.add_javascript('skulpt/dist/builtin.js')
+    app.add_javascript('skulpt.min.js')
+    app.add_javascript('skulpt-stdlib.js')
 
     app.add_node(DataFileNode, html=(visit_df_node, depart_df_node))
 
