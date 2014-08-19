@@ -957,11 +957,23 @@ function createGradeSummary(div_id) {
     jQuery.get(eBookConfig.ajaxURL + 'getassignmentgrade', data, showGradeSummary);
 
 }
-
-
-function injectCodelens(div_id) {
+function hideCodelens(button, div_id) {
     var div = document.getElementById(div_id+'_codelens_div')
-    div.style.display='block'
+    div.style.display='none'
+
+}
+
+function injectCodelens(button, div_id) {
+    var div = document.getElementById(div_id+'_codelens_div')
+    if (div.style.display == 'none') {
+        div.style.display = 'block';
+        button.innerText = "Hide Codelens";
+    } else {
+        div.style.display = "none";
+        button.innerText = "Show in Codelens";
+        return;
+    }
+
     var cl = document.getElementById(div_id+'_codelens')
     if (cl ) {
         div.removeChild(cl)
