@@ -48,6 +48,7 @@ def build():
         # run_sphinx is defined in models/scheduler.py
         row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
+                                                                       base_course=request.vars.coursetype,
                                                                        application=request.application,
                                                                        http_host=request.env.http_host))
         uuid = row['uuid']
