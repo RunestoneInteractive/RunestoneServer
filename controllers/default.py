@@ -73,7 +73,6 @@ def user():
         sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
         form[0][0].insert(0, sign_in_text)
 
-
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     try:
         form.element(_id='submit_record__row')[1][0]['_class']='btn btn-default'
@@ -89,12 +88,30 @@ def call(): return service()
 @auth.requires_login()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-    
+
     if 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
+        try:
+            chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
+            if db(db.user.sub_chapter_progress.user_id == auth.user.id).count() == 0:
+                if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
+                            db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
+                    db.executesql('''
+                       INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
+                       SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+                       FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
+                    ''' % (auth.user.id, auth.user.course_name))
+                # Add user to default section for course.
+                sect = db((db.sections.course_id == auth.user.course_id) & (db.sections.name == form.vars.section)).select(
+                    db.sections.id).first()
+                if sect:
+                    x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
+        except:
+            session.flash = "Your course is not set up to track your progress"
+
         redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
