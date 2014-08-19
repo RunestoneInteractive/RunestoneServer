@@ -64,7 +64,8 @@ def build():
             institution = request.vars.institution
         cid = db.courses.update_or_insert(course_name=request.vars.projectname,
                                           term_start_date=request.vars.startdate,
-                                          institution=institution)
+                                          institution=institution,
+                                          base_course=request.vars.coursetype)
 
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)

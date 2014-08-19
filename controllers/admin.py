@@ -253,6 +253,7 @@ def rebuildcourse():
         # run_sphinx in defined in models/scheduler.py
         row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
+                                                                       base_course=course.base_course,
                                                                        application=request.application,
                                                                        http_host=request.env.http_host))
         uuid = row['uuid']

@@ -6,15 +6,17 @@ import sys
 import re
 from paver.easy import sh
 from sphinx.application import Sphinx
+import logging
+
 
 ################
 ## This task will run as a scheduled task using the web2py scheduler.
 ## It's dispached from build() and build_custom() in controllers/designer.py
 ################
-def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
+def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_course=None):
     # workingdir is the application folder
     workingdir = folder
-
+    mylog = logging.getLogger('web2py.root')
     # sourcedir holds the all sources temporarily
     sourcedir = path.join(workingdir,rvars['projectname'])
 
@@ -32,6 +34,12 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     # We're building a custom course.
     # Generate an index.rst and copy conf.py from devcourse.
     ########
+
+    ### check for base_course  if base_course == None
+    ### read conf.py and look for How to Think to determine coursetype
+
+
+
     if rvars['coursetype'] == 'custom':
         row = db(db.projects.projectcode==rvars['projectname']).select()
         title = row[0].description
@@ -117,9 +125,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
     elif rvars['coursetype'] == 'rebuildcourse':
         try:
             # copy all the sources into the temporary sourcedir
-            shutil.copytree(path.join(workingdir,'source'),sourcedir)
+            if os.path.exists(sourcedir):
+                shutil.rmtree(sourcedir)
+            shutil.copytree(path.join(workingdir, 'source'), sourcedir)
         except:
-            raise OSError("source directory already exists")
+            raise OSError("Problems with source directory!")
 
         try:
             # copy the index and conf files to the sourcedir
@@ -135,6 +145,23 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
             raise OSError("missing conf, index, or assignments file")
+
+        # for old legacy courses that may not have a base_course value
+        # read conf.py and look for 'How to Think'
+        if base_course == None:
+            conf_file = open(path.join(confdir, 'conf.py'), 'r')
+            conf_text = conf_file.read()
+            if 'How to Think' in conf_text:
+                base_course = 'thinkcspy'
+            elif 'Programs, Information' in conf_text:
+                base_course = 'pip'
+            else:
+                base_course = 'pythonds'
+            # do we care about a totally custom course?
+
+            # now update the database so we don't have to do this again
+            db(db.courses.course_name == rvars['projectname']).update(base_course=base_course)
+
 
 
 
@@ -199,14 +226,21 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None):
                 warningiserror, tags)
     app.build(force_all, filenames)
 
-    if rvars['coursetype'] == 'thinkcspy':
+
+
+    if base_course == 'thinkcspy':
         idxname = 'toc.rst'
     else:
         idxname = 'index.rst'
+    mylog.debug("parsing %s in %s for chapter information " % (idxname,sourcedir))
     scd, ct = findChaptersSubChapters(path.join(sourcedir, idxname))
+    mylog.debug("scd = %s " % str(scd))
+    mylog.debug("ct = %s " % str(ct))
+
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     shutil.rmtree(sourcedir)
+
 
     donefile = open(os.path.join(custom_dir, 'done'), 'w')
     donefile.write('success')

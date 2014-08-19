@@ -66,6 +66,7 @@ db.define_table('courses',
   Field('course_name', 'string', unique=True),
   Field('term_start_date', 'date'),
   Field('institution', 'string'),
+  Field('base_course', 'string'),
   migrate='runestone_courses.table'
 )
 if db(db.courses.id > 0).isempty():
