@@ -95,7 +95,7 @@ EDIT2 = '''
 <button class="ac_opt btn btn-default" style="display: inline-block" id="%(divid)s_loadb" onclick="requestCode('%(divid)s');">Load</button>
 '''
 
-VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens('%(divid)s');">Show in Codelens</button>
+VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens(this,'%(divid)s');">Show in Codelens</button>
 '''
 
 COACHB = '''<button class='btn btn-default' id="%(divid)s_coach_b" onclick="injectCodeCoach('%(divid)s');">Code Coach</button>
