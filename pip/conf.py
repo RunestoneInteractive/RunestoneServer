@@ -32,7 +32,7 @@ mathjax_path = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?co
 
 # Add any paths that contain templates here, relative to this directory.
 #templates_path = ['../source/_templates']
-templates_path = ['_templates']
+templates_path = ['./source/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -149,7 +149,7 @@ html_theme_options = {
 #html_style = "style.css"
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ["_templates/plugin_layouts"]
+html_theme_path = ["./source/_templates/plugin_layouts"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -175,7 +175,7 @@ module_paths = [x.replace('.','/') for x in extensions]
 module_static_js = ['../modules/%s/js' % x for x in module_paths if os.path.exists('../modules/%s/js' % x)]
 module_static_css = ['../modules/%s/css' % x for x in module_paths if os.path.exists('../modules/%s/css' % x)]
 
-html_static_path = ['_static', '../common/js', '../common/css',
+html_static_path = ['./source/_static', '../common/js', '../common/css',
                     '../common/bootstrap', '../common/images'] + module_static_js + module_static_css
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
