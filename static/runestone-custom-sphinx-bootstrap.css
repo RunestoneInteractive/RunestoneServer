@@ -48,7 +48,7 @@ div.section {
 	padding-left:0;
 	padding-right:0;
 }
- .container  .section >*:not(.section,#exercises ol){
+ .container  .section >*:not(.section) {
 	max-width: 500pt;
 	margin-left: auto;
 	margin-right: auto;
