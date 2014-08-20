@@ -11,7 +11,7 @@
 Overview of Runestone Interactive Tools
 =======================================
 
-.. image:: ../source/_static/python-logo.png
+.. image:: _static/python-logo.png
     :scale: 75%
     :alt: ThinkCSPy Logo
 

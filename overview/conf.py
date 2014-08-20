@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath('../modules'))
 extensions = ['sphinx.ext.mathjax','luther.sphinx.video','luther.sphinx.reveal','luther.sphinx.poll','luther.sphinx.tabbedStuff','luther.sphinx.disqus','luther.sphinx.codelens','luther.sphinx.activecode', 'luther.sphinx.assess', 'luther.sphinx.animation','luther.sphinx.meta', 'gatech.parsons', 'luther.sphinx.blockly']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../source/_templates']
+templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -148,7 +148,7 @@ html_theme_options = {
 #html_style = "style.css"
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ["../source/_templates/plugin_layouts"]
+html_theme_path = ["_templates/plugin_layouts"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
