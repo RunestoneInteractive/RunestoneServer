@@ -11,14 +11,21 @@
   <h5>{{=descr}}</h5>
   <script type="text/javascript">
   function validateForm() {
-    var x = document.forms["mainform"]["projectname"].value
-    if (x == null | x.indexOf(" ") !== -1) {
-      alert('Error:  Your Project Name may not contain spaces')
-      return false
-    } else {
-      unhide_img('spinner'); 
-      return true
+    var x = document.forms["mainform"]["projectname"].value;
+    var basecourse = document.forms["mainform"]["coursetype"].value;
+
+    if (x == "" || x.indexOf(" ") !== -1) {
+        alert('Error:  Your Project Name may not contain spaces')
+        return false;
     }
+
+    if (basecourse == "") {
+        alert('Error: You must select a book for your course')
+        return false;
+    }
+
+    unhide_img('spinner');
+    return true
   }
   </script>
   <div class='col-md-7'>
@@ -49,7 +56,7 @@
 
       <div class='form-group'>
         <label>
-          Choose whether to use a copy of one of our ready-made books or to create a custom course:
+          Choose one of our ready-made books or to create a custom course:
         </label>
         <div class="radio">
           <label>
