@@ -63,7 +63,8 @@ def index():
     chart = bar_chart.render()
 
 
-    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers, mst_vers=mst_vers, bchart=chart)
+    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers,
+                mst_vers=mst_vers, bchart=chart, course_name=auth.user.course_name)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def listassignments():
