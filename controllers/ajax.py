@@ -633,9 +633,9 @@ def getCodeDiffs():
     divid = request.vars['divid']
     q = '''select timestamp, sid, div_id, code, emessage, id
            from acerror_log 
-           where sid = '%s' and div_id='%s'
+           where sid = '%s' and course_id = '%s' and div_id='%s'
            order by timestamp
-    ''' % (sid, divid)
+    ''' % (sid, auth.user.course_name, divid)
 
     rows = db.executesql(q)
     if len(rows) < 1:
