@@ -109,6 +109,7 @@ Functions
    Functions/TheAccumulatorPattern.rst
    Functions/Functionscancallotherfunctions.rst
    Functions/FlowofExecutionSummary.rst
+   Functions/mainfunction.rst
    Functions/ProgramDevelopment.rst
    Functions/Composition.rst
    Functions/ATurtleBarChart.rst
