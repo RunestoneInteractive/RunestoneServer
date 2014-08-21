@@ -245,6 +245,8 @@ function runit(myDiv, theButton, includes, suffix) {
         Sk.runButton = theButton;
     }
     $("#" + myDiv + "_errinfo").remove();
+    $("#" + myDiv + "_coach_div").hide();
+
     var editor = cm_editors[myDiv + "_code"];
     if (editor.acEditEvent) {
         logBookEvent({'event': 'activecode', 'act': 'edit', 'div_id': myDiv}); // Log the edit event
