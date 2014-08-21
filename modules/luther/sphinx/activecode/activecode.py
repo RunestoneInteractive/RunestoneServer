@@ -138,11 +138,9 @@ if ($("#%(divid)s_code_div").parents(".admonition").length == 0 && $("#%(divid)s
 	});
 }
 else{
-	console.log("inside new if")
 	$("#%(divid)s_code_div").css({float : "none", marginLeft : "auto", marginRight : "auto"});
 	$("#%(divid)s_runb").parent().siblings(".ac_output").show().css({float : "none", right : "0px"});
 	$("#%(divid)s_runb").on("click", function(){
-		console.log("button clicked");
 		runit('%(divid)s',this, undefined);
 	});
 }
