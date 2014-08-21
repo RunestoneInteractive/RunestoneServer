@@ -29,3 +29,5 @@ const-rgx=(([a-zA-Z_][a-zA-Z0-9_]*)|(__.*__))$
 
 disable=C0103,C0111,C0325
 
+[General]
+init-hook='import sys; sys.path.append("site-packages")'
