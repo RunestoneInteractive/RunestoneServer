@@ -41,6 +41,8 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             base_course = 'pip'
         else:
             base_course = 'pythonds'
+        conf_file.close()
+        db(db.courses.course_name == rvars['projectname']).update(base_course=base_course)
 
     #########
     # We're rebuilding a course
@@ -74,7 +76,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             # do we care about a totally custom course?
 
             # now update the database so we don't have to do this again
-            db(db.courses.course_name == rvars['projectname']).update(base_course=base_course)
+
 
 
 
