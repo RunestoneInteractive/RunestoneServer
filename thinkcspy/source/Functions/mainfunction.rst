@@ -76,3 +76,33 @@ Now our program structure is as follows.  First, import any modules that will be
 
      In Python there is nothing special about the name ``main``.  We could have called this function anything we wanted.  We chose ``main`` just to be consistent with some of the other languages.
      
+
+**Advanced Topic**
+
+Before the Python interpreter executes your program, it defines a few special variables.  One of those variables is called ``__name__`` and it is automatically set to the string value ``"__main__"`` when the program is being executed by itself in a standalone fashion.  On the other hand, if the program is being imported by another program, then the ``__name__`` variable is set to the name of that module.  This means that we can know whether the program is being run by itself or whether it is being used by another program and based on that observation, we may or may not choose to execute some of the code that we have written.
+
+For example, assume that we have written a collection of functions to do some simple math.  We can include a ``main`` function to invoke these math functions.  It is much more likely, however, that these functions will be imported by another program for some other purpose.  In that case, we would not want to execute our main function.
+
+The activecode below defines two simple functions and a main. 
+
+.. activecode:: ch04_adv
+
+    def squareit(n):
+        return n * n
+        
+    def tripleit(n):
+        return n*n*n
+        
+    def main():
+        anum = int(input("Please enter a number"))
+        print(squareit(anum))
+        print(tripleit(anum))
+        
+    if __name__ == "__main__":
+        main()
+        
+Line 12 uses an ``if`` statement to ask about the value of the ``__name__`` variable.  If the value is ``"__main__"``, then the ``main`` function will be called.  Otherwise, it can be assumed that the program is being imported into another program and we do not want to call ``main`` because that program will invoke the functions as needed.  This ability to conditionally execute our main function can be extremely useful when we are writing code that will potentially be used by others.  It allows us to include functionality that the user of the code will not need, most often as part of a testing process to be sure that the functions are working correctly.
+
+.. note::
+
+    In order to conditionally execute the ``main`` function, we used a structure called an ``if`` statement to create what is known as selection.  This topic will be studied in much more detail later.
