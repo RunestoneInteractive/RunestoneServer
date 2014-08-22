@@ -30,14 +30,17 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     if not os.path.exists(confdir):
         os.mkdir(confdir)
 
-    ########
-    # We're building a custom course.
-    # Generate an index.rst and copy conf.py from devcourse.
-    ########
-
-    ### check for base_course  if base_course == None
+    # ## check for base_course  if base_course == None
     ### read conf.py and look for How to Think to determine coursetype
-
+    if base_course == None:
+        conf_file = open(path.join(confdir, 'conf.py'), 'r')
+        conf_text = conf_file.read()
+        if 'How to Think' in conf_text:
+            base_course = 'thinkcspy'
+        elif 'Programs, Information' in conf_text:
+            base_course = 'pip'
+        else:
+            base_course = 'pythonds'
 
     #########
     # We're rebuilding a course
@@ -49,7 +52,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
                 shutil.rmtree(sourcedir)
             shutil.copytree(path.join(workingdir, base_course, 'source'), sourcedir)
         except:
-            raise OSError("Problems with source directory!")
+            raise OSError("Problems with source directory: workingdir = %s, sourcedir = %s base_course = %s" % (workingdir, sourcedir, base_course))
 
         try:
             # copy the index and conf files to the sourcedir
@@ -68,15 +71,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
         # for old legacy courses that may not have a base_course value
         # read conf.py and look for 'How to Think'
-        if base_course == None:
-            conf_file = open(path.join(confdir, 'conf.py'), 'r')
-            conf_text = conf_file.read()
-            if 'How to Think' in conf_text:
-                base_course = 'thinkcspy'
-            elif 'Programs, Information' in conf_text:
-                base_course = 'pip'
-            else:
-                base_course = 'pythonds'
             # do we care about a totally custom course?
 
             # now update the database so we don't have to do this again
