@@ -660,7 +660,6 @@ def getCodeDiffs():
 
     for i in range(1,len(rows)):
         diffs = differ.diff_lineMode(rows[i-1][3], rows[i][3],True)
-        print "DIFFS = ", diffs
         ts.append(str(rows[i][0]))
         newcode.append(rows[i][3])
         diffcode.append(diff_prettyHtml(differ,diffs).replace('&para;', ''))
@@ -682,6 +681,7 @@ def getCoachingHints(ecId):
             cat = row[0]
         res += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
     return res
+
 
 def lintAfterSave(dbid, code, div_id, sid):
     #dbid = request.args.id
