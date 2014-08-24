@@ -8,13 +8,30 @@ def schedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
-        allProgress = db((db.user_sub_chapter_progress.chapter_id==db.chapters.chapter_label) &
-                         (db.user_sub_chapter_progress.user_id==db.auth_user.id)).select(db.user_sub_chapter_progress.ALL, db.chapters.ALL, db.auth_user.ALL)
-        allUsers = db(db.auth_user.cohort_id==auth.user.cohort_id).select(db.auth_user.ALL)
-        allComments = db(db.user_comments.cohort_id==auth.user.cohort_id).select(orderby=~db.user_comments.id|db.user_comments.ALL)
-        allPlans = db((db.cohort_plan.chapter_id==db.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.chapters.id, db.chapters.chapter_label, db.chapters.chapter_name, db.cohort_plan.status , db.cohort_plan.start_date , db.cohort_plan.end_date, db.cohort_plan.actual_end_date, db.cohort_plan.note, db.cohort_plan.created_by, db.cohort_plan.cohort_id, db.cohort_plan.id)
+        allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
+                         (db.user_sub_chapter_progress.user_id == db.auth_user.id) &
+                         (db.auth_user.cohort_id == auth.user.cohort_id)).select(db.user_sub_chapter_progress.ALL,
+                                                                                db.chapters.ALL,
+                                                                                db.auth_user.ALL)
+
+        allUsers = db(db.auth_user.cohort_id == auth.user.cohort_id).select(db.auth_user.ALL)
+
+        allComments = db(db.user_comments.cohort_id == auth.user.cohort_id).select(orderby=~db.user_comments.id|db.user_comments.ALL)
+
+        allPlans = db((db.cohort_plan.chapter_id == db.chapters.id) &
+                      (db.cohort_plan.cohort_id == auth.user.cohort_id)).select(db.chapters.id,
+                                                                                db.chapters.chapter_label,
+                                                                                db.chapters.chapter_name,
+                                                                                db.cohort_plan.status ,
+                                                                                db.cohort_plan.start_date ,
+                                                                                db.cohort_plan.end_date,
+                                                                                db.cohort_plan.actual_end_date,
+                                                                                db.cohort_plan.note,
+                                                                                db.cohort_plan.created_by,
+                                                                                db.cohort_plan.cohort_id,
+                                                                                db.cohort_plan.id)
         for plan in allPlans:
-            if plan.cohort_plan.status=='new' and plan.cohort_plan.start_date<datetime.datetime.now():
+            if plan.cohort_plan.status=='new' and plan.cohort_plan.start_date < datetime.datetime.now().date():
                 plan.cohort_plan.status='active'
                 db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='active')
             for user in allUsers:
