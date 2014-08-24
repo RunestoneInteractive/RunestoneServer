@@ -94,6 +94,7 @@ response.include_files()
 								$("#newGroupOptions").html('\
 								<div class="bs-callout bs-callout-info col-md-12">\
 								<p>You successfully joined the group '+jsonData.groupName+'</p>\
+								<ul><li><a href="{{=URL('default','index')}}">Back to the book</a></li><li><a href="{{ =URL('mygroup','schedule')}}">Group Schedule</a></li></ul>\
 								</div>');
 							}
 							else{
