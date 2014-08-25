@@ -21,12 +21,10 @@ Programming Exercises
 #. Devise an experiment that compares the performance of the ``del``
    operator on lists and dictionaries.
 
-#. Given a list of numbers in random order write a linear time algorithm
-   to find the kth smallest number in the list. Explain why your
-   algorithm is linear.
+#. Given a list of numbers in random order, write an algorithm that works in :math:`O(n\log(n))`
+   to find the kth smallest number in the list.
 
-#. Can you improve the algorithm from the previous problem to be
-   :math:`O(n\log(n))`?
+#. Can you improve the algorithm from the previous problem to be linear? Explain.
 
 
 
