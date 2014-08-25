@@ -4,6 +4,7 @@ import pprint
 import json
 import collections
 
+
 def schedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
@@ -39,24 +40,23 @@ def schedule():
                 total=0
                 for progress in allProgress:
                     if int(progress.user_sub_chapter_progress.user_id)==user.id and progress.chapters.id==plan.chapters.id: 
-                        if(progress.user_sub_chapter_progress.status>0):
-                            count+=1
-                        total+=1
-                result= round(count*100/total)
+                        if progress.user_sub_chapter_progress.status > 0:
+                            count += 1
+                        total += 1
+                result = round(count*100/total)
                 db((db.user_chapter_progress.user_id==user.id) & (db.user_chapter_progress.chapter_id==plan.chapters.id)).update(status=result)
+
             userProgress = db(db.user_chapter_progress.chapter_id==plan.chapters.id).select(db.user_chapter_progress.status)
             completed = True
+
             for progress in userProgress:
                 if progress.status<100:
                     completed=False
-            '''if completed == True:
-                plan.cohort_plan.status='completed'
-                plan.cohort_plan.actual_end_date=datetime.datetime.now()
-                db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed')
-                db((db.cohort_plan.chapter_id==plan.chapters.id) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())'''
-        allUserProgress = db(db.user_chapter_progress.id>0).select(db.user_chapter_progress.ALL)
+
         cohortName = db(db.cohort_master.id == auth.user.cohort_id).select(db.cohort_master.cohort_name)
-        return dict(allPlans = allPlans, allProgress = allProgress, allUsers = allUsers, allComments = allComments, allUserProgress = allUserProgress, cohortName = cohortName)
+        return dict(allPlans=allPlans, allProgress=allProgress, allUsers=allUsers,
+                    allComments=allComments, cohortName=cohortName)
+
 
 def newschedule():
     if auth.user == None:
