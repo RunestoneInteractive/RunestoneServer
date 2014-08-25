@@ -97,6 +97,11 @@ function enableUserHighlights(){
 		  });
 
 		  var completionFlag = 0 ;
+          if ($("#completionButton").hasClass("buttonAskCompletion") ) {
+              completionFlag = 0;
+          } else {
+              completionFlag = 1;
+          }
 		  $("#completionButton").on("click", function(){
 			if ($(this).hasClass("buttonAskCompletion")){
 				$(this).removeClass("buttonAskCompletion")
@@ -116,7 +121,7 @@ function enableUserHighlights(){
 				$("#relations-next").animate({"right":relationsNextIconInitialPosition});
 				completionFlag = 0;
 			}
-				processPageState(completionFlag);
+			processPageState(completionFlag);
 		  });
 
 		  $(window).on('beforeunload', function(e){
