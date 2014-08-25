@@ -2,12 +2,22 @@
 
         {{ block navbar }}
         {{ end }}
+<link rel=stylesheet href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css">
+<link rel=stylesheet href="/{{=request.application}}/static/{{=course_id}}/_static/merge.css">
 
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js"
         type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js"
         type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/bookfuncs.js"
+        type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js"
+        type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/diff_match_patch.js"
+        type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/merge.js"
+        type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"
         type="text/javascript"></script>
 
 <script type="text/javascript" charset="utf-8">
@@ -40,11 +50,23 @@ function checkButtonStatus () {
 }
 
 function displayCoachData () {
-    $("#codeviewer").html(diffdata.diffs[diffcount]);
-    $("#codeviewer").width("350px");
-    $("#codeviewer").height("350px");
-    $("#codeviewer").css("overflow", "scroll");
-    $("#codeviewer").css("margin-left","20px");
+    var value, orig1, orig2, dv, hilight= true;
+    var target = document.getElementById("diffviewer");
+    orig1 = diffdata.code[diffcount-1];
+    value = orig1;
+    orig2 = diffdata.code[diffcount];
+    panes = 2;
+    target.innerHTML = "";
+      dv = CodeMirror.MergeView(target, {
+        value: value,
+        origLeft: panes == 2 ? orig1 : null,
+        orig: orig2,
+        lineNumbers: true,
+        mode: "python",
+        highlightDifferences: hilight
+      });
+
+
 
     $("#tstamp").html(diffdata.timestamps[diffcount]);
 
@@ -182,8 +204,8 @@ function diffRunner(myDiv, theButton, prog) {
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
     <table>
-    <tr><td><pre id="codeviewer"></pre></td>
-    <td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
+    <tr><td><div id="diffviewer"></div></td></tr>
+    <tr><td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
     </table>
 </div>
 <div id="btn-controls" style="clear: both;">
@@ -202,6 +224,7 @@ function diffRunner(myDiv, theButton, prog) {
 
 <script>
     $(document).ready(function () {getDiffs("{{ =sid }}", "{{ =divid }}"); })
+
 </script>
 
 {{ block footer }}
