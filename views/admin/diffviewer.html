@@ -59,7 +59,7 @@ function displayCoachData () {
     target.innerHTML = "";
       dv = CodeMirror.MergeView(target, {
         value: value,
-        origLeft: panes == 2 ? orig1 : null,
+        origLeft: panes == 3 ? orig1 : null,
         orig: orig2,
         lineNumbers: true,
         mode: "python",
@@ -203,8 +203,9 @@ function diffRunner(myDiv, theButton, prog) {
 
 <h3 id="tstamp"></h3>
 <div id="codeviewer_div">
+    <div id="diffviewer"></div>
     <table>
-    <tr><td><div id="diffviewer"></div></td></tr>
+    <tr><td></td></tr>
     <tr><td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
     </table>
 </div>
