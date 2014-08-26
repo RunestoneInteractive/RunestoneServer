@@ -54,7 +54,7 @@ appropriate data structure for solving the problem.
    Figure 5: Decimal-to-Binary Conversion
 
 
-The Python code in :ref:`ActiveCode 6 <lst_binconverter>` implements the Divide by 2
+The Python code in :ref:`ActiveCode 1 <lst_binconverter>` implements the Divide by 2
 algorithm. The function ``divideBy2`` takes an argument that is a
 decimal number and repeatedly divides it by 2. Line 7 uses the built-in
 modulo operator, %, to extract the remainder and line 8 then pushes it
@@ -67,6 +67,7 @@ right-hand end of the string. The binary string is then returned.
 
 .. activecode:: divby2
    :caption: Converting from Decimal to Binary
+   :nocodelens:
 
    from pythonds.basic.stack import Stack
    
@@ -104,7 +105,7 @@ and
 The function ``divideBy2`` can be modified to accept not only a decimal
 value but also a base for the intended conversion. The “Divide by 2”
 idea is simply replaced with a more general “Divide by base.” A new
-function called ``baseConverter``, shown in :ref:`ActiveCode 7 <lst_baseconverter>`,
+function called ``baseConverter``, shown in :ref:`ActiveCode 2 <lst_baseconverter>`,
 takes a decimal number and any base between 2 and 16 as parameters. The
 remainders are still pushed onto the stack until the value being
 converted becomes 0. The same left-to-right string construction
@@ -120,6 +121,7 @@ beyond 9.
 
 .. activecode:: baseconvert
     :caption: Converting from Decimal to any Base
+    :nocodelens:
 
     from pythonds.basic.stack import Stack
     

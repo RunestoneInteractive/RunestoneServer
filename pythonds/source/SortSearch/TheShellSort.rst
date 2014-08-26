@@ -67,7 +67,7 @@ this case, we need only four more shifts to complete the process.
 
 
 We said earlier that the way in which the increments are chosen is the
-unique feature of the shell sort. The function shown in :ref:`ActiveCode 5 <lst_shell>`
+unique feature of the shell sort. The function shown in :ref:`ActiveCode 1 <lst_shell>`
 uses a different set of increments. In this case, we begin with
 :math:`\frac {n}{2}` sublists. On the next pass,
 :math:`\frac {n}{4}` sublists are sorted. Eventually, a single list is
@@ -121,39 +121,39 @@ an insertion sort with an increment of one.
    
    
    
-For more detail, CodeLens 5 allows you to step through the algorithm.
-
-
-.. codelens:: shellSorttrace
-    :caption: Tracing the Shell Sort
-
-    def shellSort(alist):
-        sublistcount = len(alist)//2
-        while sublistcount > 0:
-
-          for startposition in range(sublistcount):
-            gapInsertionSort(alist,startposition,sublistcount)
-
-          print("After increments of size",sublistcount,
-                                       "The list is",alist)
-
-          sublistcount = sublistcount // 2
-
-    def gapInsertionSort(alist,start,gap):
-        for i in range(start+gap,len(alist),gap):
-
-            currentvalue = alist[i]
-            position = i
-
-            while position>=gap and alist[position-gap]>currentvalue:
-                alist[position]=alist[position-gap] 
-                position = position-gap
-
-            alist[position]=currentvalue
-            
-    alist = [54,26,93,17,77,31,44,55,20]
-    shellSort(alist)
-    print(alist)
+.. For more detail, CodeLens 5 allows you to step through the algorithm.
+..
+..
+.. .. codelens:: shellSorttrace
+..     :caption: Tracing the Shell Sort
+..
+..     def shellSort(alist):
+..         sublistcount = len(alist)//2
+..         while sublistcount > 0:
+..
+..           for startposition in range(sublistcount):
+..             gapInsertionSort(alist,startposition,sublistcount)
+..
+..           print("After increments of size",sublistcount,
+..                                        "The list is",alist)
+..
+..           sublistcount = sublistcount // 2
+..
+..     def gapInsertionSort(alist,start,gap):
+..         for i in range(start+gap,len(alist),gap):
+..
+..             currentvalue = alist[i]
+..             position = i
+..
+..             while position>=gap and alist[position-gap]>currentvalue:
+..                 alist[position]=alist[position-gap]
+..                 position = position-gap
+..
+..             alist[position]=currentvalue
+..
+..     alist = [54,26,93,17,77,31,44,55,20]
+..     shellSort(alist)
+..     print(alist)
 
 
 

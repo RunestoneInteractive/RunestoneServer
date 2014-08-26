@@ -67,7 +67,7 @@ right side of the diagram.
 
    Figure 3: Converting an Integer to a String in Base 10
 
-:ref:`ActiveCode 3 <lst_rectostr>` shows the Python code that implements the algorithm
+:ref:`ActiveCode 1 <lst_rectostr>` shows the Python code that implements the algorithm
 outlined above for any base between 2 and 16.
 
 .. _lst_rectostr:
@@ -117,6 +117,7 @@ discussion of stacks back in the previous chapter.
    Write a function that takes a string as a parameter and returns a new string that is the reverse of the old string.
 
    .. actex:: recursion_sc_1
+      :nocodelens:
 
       from test import testEqual
       def reverse(s):
@@ -127,7 +128,7 @@ discussion of stacks back in the previous chapter.
       testEqual(reverse("follow"),"wollof")
       testEqual(reverse(""),"")
 
-   Write a function that takes a string as a parameter and returns True if the string is a palindrome, False otherwise.  Remember that a string is a palindrome if it is spelled the same both forward and backward.  for example:  radar is a palindrome.  for bonus points palindromes can also be phrases, but you need to remove the spaces and punctuation before checking.  for example:  madam i'm adam  is a palindrome.  Other fun palindromes include:
+   Write a function that takes a string as a parameter and returns True if the string is a palindrome, False otherwise.  Remember that a string is a palindrome if it is spelled the same both forward and backward.  For example:  radar is a palindrome.  for bonus points palindromes can also be phrases, but you need to remove the spaces and punctuation before checking.  for example:  madam i'm adam  is a palindrome.  Other fun palindromes include:
    
    * kayak
    * aibohphobia
@@ -139,6 +140,7 @@ discussion of stacks back in the previous chapter.
    * Wassamassaw -- a town in South Dakota
 
    .. actex:: recursion_sc_2
+      :nocodelens:
 
       from test import testEqual
       def removeWhite(s):

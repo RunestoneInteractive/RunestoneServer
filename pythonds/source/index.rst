@@ -159,7 +159,6 @@ Trees and Tree Algorithms
     Trees/VocabularyandDefinitions.rst
     Trees/ListofListsRepresentation.rst
     Trees/NodesandReferences.rst
-    Trees/BinaryTreeApplications.rst
     Trees/ParseTree.rst
     Trees/TreeTraversals.rst
     Trees/PriorityQueueswithBinaryHeaps.rst
@@ -192,12 +191,10 @@ Graphs and Graph Algorithms
     Graphs/AnAdjacencyMatrix.rst
     Graphs/AnAdjacencyList.rst
     Graphs/Implementation.rst
-    Graphs/BreadthFirstSearch.rst
     Graphs/TheWordLadderProblem.rst
     Graphs/BuildingtheWordLadderGraph.rst
     Graphs/ImplementingBreadthFirstSearch.rst
     Graphs/BreadthFirstSearchAnalysis.rst
-    Graphs/DepthFirstSearch.rst
     Graphs/TheKnightsTourProblem.rst
     Graphs/BuildingtheKnightsTourGraph.rst
     Graphs/ImplementingKnightsTour.rst

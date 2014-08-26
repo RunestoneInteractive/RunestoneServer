@@ -160,3 +160,4 @@ we leave writing this program as an exercise.
 .. figure:: Figures/sccforest.png
    :align: center
    
+   Figure 37: Strongly Connected Components

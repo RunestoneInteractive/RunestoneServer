@@ -209,6 +209,7 @@ in :ref:`ActiveCode 1 <lst_buildparse>`.
 
 .. activecode::  parsebuild
     :caption: Building a Parse Tree
+    :nocodelens:
 
     from pythonds.basic.stack import Stack
     from pythonds.trees.binaryTree import BinaryTree
@@ -300,17 +301,14 @@ equivalent to ``operator.add(2,2)``.
 
 **Listing 1**
 
-.. highlight:: python
-    :linenothreshold: 5
-
-::
+.. sourcecode:: python
 
     def evaluate(parseTree):
         opers = {'+':operator.add, '-':operator.sub, '*':operator.mul, '/':operator.truediv}
-             
+         
         leftC = parseTree.getLeftChild()
         rightC = parseTree.getRightChild()
-        
+    
         if leftC and rightC:
             fn = opers[parseTree.getRootVal()]
             return fn(evaluate(leftC),evaluate(rightC))

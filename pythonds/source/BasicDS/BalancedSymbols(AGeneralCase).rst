@@ -51,7 +51,7 @@ the two symbols do not match, the string is not balanced. Once again, if
 the entire string is processed and nothing is left on the stack, the
 string is correctly balanced.
 
-The Python program to implement this is shown in :ref:`ActiveCode 5 <lst_parcheck2>`.
+The Python program to implement this is shown in :ref:`ActiveCode 1 <lst_parcheck2>`.
 The only change appears in line 16 where we call a helper function, ``matches``, to
 assist with symbol-matching. Each symbol that is removed from the stack
 must be checked to see that it matches the current closing symbol. If a
@@ -61,6 +61,7 @@ mismatch occurs, the boolean variable ``balanced`` is set to ``False``.
 
 .. activecode :: parcheck2
    :caption: Solving the General Balanced Symbol Problem
+   :nocodelens:
 
    from pythonds.basic.stack import Stack
    

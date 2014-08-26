@@ -134,7 +134,7 @@ the root values.
 
 Now that we have all the pieces to create and manipulate a binary tree,
 let’s use them to check on the structure a bit more. Let’s make a simple
-tree with node a as the root, and add nodes b and c as children. :ref:`ActiveCode 4 <lst_comptest>` creates the tree and looks at the some of the
+tree with node a as the root, and add nodes b and c as children. :ref:`ActiveCode 1 <lst_comptest>` creates the tree and looks at the some of the
 values stored in ``key``, ``left``, and ``right``. Notice that both the
 left and right children of the root are themselves distinct instances of
 the ``BinaryTree`` class. As we said in our original recursive

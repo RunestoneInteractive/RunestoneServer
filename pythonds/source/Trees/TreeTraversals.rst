@@ -158,9 +158,6 @@ closely on the ``postorder`` code in :ref:`Listing 4 <lst_postorder1>` (see :ref
 
 **Listing 5**
 
-.. highlight:: python
-    :linenothreshold: 5
-
 ::
 
     def postordereval(tree):

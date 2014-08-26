@@ -350,7 +350,7 @@ or the far right column or the bottom row.
             return self.mazelist[idx]
 
 
-The complete program is shown in ActiveCode 2.  This program uses the data file ``maze2.txt`` shown below.
+The complete program is shown in ActiveCode 1.  This program uses the data file ``maze2.txt`` shown below.
 Note that it is a much more simple example file in that the exit is very close to the starting position of the turtle.
 
 .. raw:: html
@@ -371,6 +371,7 @@ Note that it is a much more simple example file in that the exit is very close t
 
 .. activecode:: completemaze
     :caption: Complete Maze Solver
+    :nocodelens:
 
     import turtle
 

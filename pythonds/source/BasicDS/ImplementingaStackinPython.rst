@@ -40,6 +40,7 @@ of the list. ``pop`` operations will manipulate that same end.
 
 .. activecode:: stack_1ac
    :caption: Implementing a Stack class using Python lists
+   :nocodelens:
 
    class Stack:
         def __init__(self):
@@ -68,6 +69,7 @@ action as we perform the sequence of operations from
 
 .. activecode:: stack_ex_1
    :include:  stack_1ac
+   :nocodelens:
 
    s=Stack()
    
@@ -187,6 +189,7 @@ benchmark testing.
    characters in a string.
 
    .. actex:: stack_stringrev
+      :nocodelens:
 
       from test import testEqual
       from pythonds.basic.stack import Stack
