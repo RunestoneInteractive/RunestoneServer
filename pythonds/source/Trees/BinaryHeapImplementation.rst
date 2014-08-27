@@ -291,7 +291,7 @@ list representation of this series of swaps as shown in
           i = 0  [0, 2, 3, 6, 5, 9]
           
 
-The complete binary heap implementation can be seen in ActiveCode 2.
+The complete binary heap implementation can be seen in ActiveCode 1.
 
 
 

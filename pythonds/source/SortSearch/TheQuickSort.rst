@@ -81,7 +81,7 @@ can be invoked recursively on the two halves.
    Figure 14: Completing the Partition Process to Find the Split Point for 54
 
 
-The ``quickSort`` function shown in :ref:`CodeLens 7 <lst_quick>` invokes a recursive
+The ``quickSort`` function shown in :ref:`ActiveCode 1 <lst_quick>` invokes a recursive
 function, ``quickSortHelper``. ``quickSortHelper`` begins with the same
 base case as the merge sort. If the length of the list is less than or
 equal to one, it is already sorted. If it is greater, then it can be
@@ -149,57 +149,57 @@ implements the process described earlier.
    :viewer: BarViewer
 
 
-For more detail, CodeLens 7 lets you step through the algorithm.
-
-.. codelens:: quicktrace
-    :caption: Tracing the Quick Sort
-
-    def quickSort(alist):
-       quickSortHelper(alist,0,len(alist)-1)
-
-    def quickSortHelper(alist,first,last):
-       if first<last:
-
-           splitpoint = partition(alist,first,last)
-
-           quickSortHelper(alist,first,splitpoint-1)
-           quickSortHelper(alist,splitpoint+1,last)
-
-
-    def partition(alist,first,last):
-       pivotvalue = alist[first]
-
-       leftmark = first+1
-       rightmark = last
-
-       done = False
-       while not done:
-
-           while leftmark <= rightmark and \
-                   alist[leftmark] <= pivotvalue:
-               leftmark = leftmark + 1
-
-           while alist[rightmark] >= pivotvalue and \
-                   rightmark >= leftmark:
-               rightmark = rightmark -1
-
-           if rightmark < leftmark:
-               done = True
-           else:
-               temp = alist[leftmark]
-               alist[leftmark] = alist[rightmark]
-               alist[rightmark] = temp
-
-       temp = alist[first]
-       alist[first] = alist[rightmark]
-       alist[rightmark] = temp
-
-
-       return rightmark
-
-    alist = [54,26,93,17,77,31,44,55,20]
-    quickSort(alist)
-    print(alist)
+.. For more detail, CodeLens 7 lets you step through the algorithm.
+..
+.. .. codelens:: quicktrace
+..     :caption: Tracing the Quick Sort
+..
+..     def quickSort(alist):
+..        quickSortHelper(alist,0,len(alist)-1)
+..
+..     def quickSortHelper(alist,first,last):
+..        if first<last:
+..
+..            splitpoint = partition(alist,first,last)
+..
+..            quickSortHelper(alist,first,splitpoint-1)
+..            quickSortHelper(alist,splitpoint+1,last)
+..
+..
+..     def partition(alist,first,last):
+..        pivotvalue = alist[first]
+..
+..        leftmark = first+1
+..        rightmark = last
+..
+..        done = False
+..        while not done:
+..
+..            while leftmark <= rightmark and \
+..                    alist[leftmark] <= pivotvalue:
+..                leftmark = leftmark + 1
+..
+..            while alist[rightmark] >= pivotvalue and \
+..                    rightmark >= leftmark:
+..                rightmark = rightmark -1
+..
+..            if rightmark < leftmark:
+..                done = True
+..            else:
+..                temp = alist[leftmark]
+..                alist[leftmark] = alist[rightmark]
+..                alist[rightmark] = temp
+..
+..        temp = alist[first]
+..        alist[first] = alist[rightmark]
+..        alist[rightmark] = temp
+..
+..
+..        return rightmark
+..
+..     alist = [54,26,93,17,77,31,44,55,20]
+..     quickSort(alist)
+..     print(alist)
 
 To analyze the ``quickSort`` function, note that for a list of length
 *n*, if the partition always occurs in the middle of the list, there

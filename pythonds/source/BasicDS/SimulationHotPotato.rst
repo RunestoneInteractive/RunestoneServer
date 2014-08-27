@@ -70,6 +70,7 @@ The program is shown in :ref:`ActiveCode 1 <lst_josephussim>`. A call to the
 
 .. activecode:: qujosephussim
    :caption: Hot Potato Simulation
+   :nocodelens:
 
    from pythonds.basic.queue import Queue
    

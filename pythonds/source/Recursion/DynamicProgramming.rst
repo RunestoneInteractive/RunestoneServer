@@ -145,13 +145,14 @@ A simple solution is to store the results for the minimum number of
 coins in a table when we find them. Then before we compute a new
 minimum, we first check the table to see if a result is already known.
 If there is already a result in the table, we use the value from the
-table rather than recomputing. :ref:`ActiveCode 3 <lst_change2>` shows a modified
+table rather than recomputing. :ref:`ActiveCode 1 <lst_change2>` shows a modified
 algorithm to incorporate our table lookup scheme.
 
 .. _lst_change2:
 
 .. activecode:: lst_change2
     :caption: Recursively Counting Coins with Table Lookup
+    :nocodelens:
 
     def recDC(coinValueList,change,knownResults):
        minCoins = change
@@ -276,7 +277,7 @@ entry in the table that tells us the last coin we added to make that
 amount. We can keep tracing back through the table until we get to the
 beginning. 
 
-:ref:`ActiveCode 4 <lst_dpremember>` shows the ``dpMakeChange`` algorithm
+:ref:`ActiveCode 2 <lst_dpremember>` shows the ``dpMakeChange`` algorithm
 modified to keep track of the coins used, along with a function
 ``printCoins`` that walks backward through the table to print out the
 value of each coin used.
@@ -298,6 +299,7 @@ array also contains 21, giving us the three 21 cent pieces.
 
 .. activecode:: lst_dpremember
     :caption: Complete Solution to the Change Problem
+    :nocodelens:
 
     def dpMakeChange(coinValueList,change,minCoins,coinsUsed):
        for cents in range(change+1):

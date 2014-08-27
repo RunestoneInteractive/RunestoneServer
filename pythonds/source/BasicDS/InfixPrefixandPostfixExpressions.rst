@@ -302,12 +302,13 @@ lowest value possible. This way any operator that is compared against it
 will have higher precedence and will be placed on top of it. 
 Line 15 defines the operands to be any upper-case character or digit.
 The complete conversion function is
-shown in :ref:`ActiveCode 8 <lst_intopost>`.
+shown in :ref:`ActiveCode 1 <lst_intopost>`.
 
 .. _lst_intopost:
 
 .. activecode:: intopost
    :caption: Converting Infix Expressions to Postfix Expressions
+   :nocodelens:
 
    from pythonds.basic.stack import Stack
 
@@ -440,7 +441,7 @@ single-digit integer values. The output will be an integer result.
    is on the stack. Pop the ``operandStack`` and return the value.
 
 The complete function for the evaluation of postfix expressions is shown
-in :ref:`ActiveCode 9 <lst_postfixeval>`. To assist with the arithmetic, a helper
+in :ref:`ActiveCode 2 <lst_postfixeval>`. To assist with the arithmetic, a helper
 function ``doMath`` is defined that will take two operands and an
 operator and then perform the proper arithmetic operation.
 
@@ -448,6 +449,7 @@ operator and then perform the proper arithmetic operation.
 
 .. activecode:: postfixeval
    :caption: Postfix Evaluation
+   :nocodelens:
 
    from pythonds.basic.stack import Stack
 

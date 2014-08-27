@@ -49,6 +49,7 @@ the window, after which the program cleans up and exits.
 
 .. activecode:: lst_turt1
     :caption: Drawing a Recursive Spriral using turtle
+    :nocodelens:
 
 
     import turtle
@@ -137,6 +138,7 @@ shape simultaneously? Will it be drawn right side first then left side?
 
 .. activecode:: lst_complete_tree
     :caption: Recursively Drawing a Tree
+    :nocodelens:
 
     import turtle
     
@@ -217,5 +219,6 @@ interesting options to make your tree look more realistic.
       range.
 
    .. actex:: recursion_sc_3
+      :nocodelens:
 
 

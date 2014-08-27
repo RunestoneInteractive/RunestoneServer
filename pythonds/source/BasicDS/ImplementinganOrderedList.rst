@@ -176,7 +176,7 @@ beginning of the linked list or some place in the middle. Again,
             previous.setNext(temp)
             
 The ``OrderedList`` class with methods discussed thus far can be found
-in ActiveCode 4.
+in ActiveCode 1.
 We leave the remaining methods as exercises. You should carefully
 consider whether the unordered implementations will work given that the
 list is now ordered.
@@ -184,6 +184,7 @@ list is now ordered.
 .. activecode:: orderedlistclass
    :caption: OrderedList Class Thus Far
    :hidecode:
+   :nocodelens:
    
    class Node:
        def __init__(self,initdata):

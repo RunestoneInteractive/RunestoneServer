@@ -48,7 +48,7 @@ have a sorted sublist of six items.
    Figure 5: ``insertionSort``: Fifth Pass of the Sort
 
 
-The implementation of ``insertionSort`` (:ref:`ActiveCode 4 <lst_insertion>`) shows that
+The implementation of ``insertionSort`` (:ref:`ActiveCode 1 <lst_insertion>`) shows that
 there are again :math:`n-1` passes to sort *n* items. The iteration
 starts at position 1 and moves through position :math:`n-1`, as these
 are the items that need to be inserted back into the sorted sublists.
@@ -94,26 +94,26 @@ studies, insertion sort will show very good performance.
    :viewer: BarViewer
 
 
-For more detail, CodeLens 4 allows you to step through the algorithm.
-
-.. codelens:: insertionsortcodetrace
-    :caption: Tracing the Insertion Sort
-
-    def insertionSort(alist):
-       for index in range(1,len(alist)):
-
-         currentvalue = alist[index]
-         position = index
-
-         while position>0 and alist[position-1]>currentvalue:
-             alist[position]=alist[position-1]
-             position = position-1
-
-         alist[position]=currentvalue
-
-    alist = [54,26,93,17,77,31,44,55,20]
-    insertionSort(alist)
-    print(alist)
+.. For more detail, CodeLens 4 allows you to step through the algorithm.
+..
+.. .. codelens:: insertionsortcodetrace
+..     :caption: Tracing the Insertion Sort
+..
+..     def insertionSort(alist):
+..        for index in range(1,len(alist)):
+..
+..          currentvalue = alist[index]
+..          position = index
+..
+..          while position>0 and alist[position-1]>currentvalue:
+..              alist[position]=alist[position-1]
+..              position = position-1
+..
+..          alist[position]=currentvalue
+..
+..     alist = [54,26,93,17,77,31,44,55,20]
+..     insertionSort(alist)
+..     print(alist)
 
 .. admonition:: Self Check
 

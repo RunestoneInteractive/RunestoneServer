@@ -69,16 +69,15 @@ action as we perform the sequence of operations from
            return len(self.items)
 
    q=Queue()
-   q.isEmpty()
-   
-   q.enqueue('dog')
-   q.enqueue(4)
-   q=Queue()
-   q.isEmpty()
    
    q.enqueue(4)
    q.enqueue('dog')
    q.enqueue(True)
+   print(q.size())
+
+
+Further manipulation of this queue would give the following results:
+
 
 ::
 

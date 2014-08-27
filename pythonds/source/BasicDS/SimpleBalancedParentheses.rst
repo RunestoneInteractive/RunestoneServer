@@ -85,12 +85,13 @@ closing symbol, the parentheses remain balanced. If at any time there is
 no opening symbol on the stack to match a closing symbol, the string is
 not balanced properly. At the end of the string, when all symbols have
 been processed, the stack should be empty. The Python code to implement
-this algorithm is shown in :ref:`ActiveCode 4 <lst_parcheck1>`.
+this algorithm is shown in :ref:`ActiveCode 1 <lst_parcheck1>`.
 
 .. _lst_parcheck1:
 
 .. activecode:: parcheck1
     :caption: Solving the Balanced Parentheses Problem
+    :nocodelens:
 
     from pythonds.basic.stack import Stack
 

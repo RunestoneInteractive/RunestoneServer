@@ -31,7 +31,7 @@ with the special Python value ``None``. However, since strings in Python
 are immutable, the first step in the process will be to convert the
 second string to a list. Each character from the first string can be
 checked against the characters in the list and if found, checked off by
-replacement. :ref:`ActiveCode 4 <lst_anagramSolution>` shows this function.
+replacement. :ref:`ActiveCode 1 <lst_anagramSolution>` shows this function.
 
 .. _lst_anagramSolution:
 
@@ -87,7 +87,7 @@ Another solution to the anagram problem will make use of the fact that
 even though ``s1`` and ``s2`` are different, they are anagrams only if
 they consist of exactly the same characters. So, if we begin by sorting
 each string alphabetically, from a to z, we will end up with the same
-string if the original two strings are anagrams. :ref:`ActiveCode 5 <lst_ana2>` shows
+string if the original two strings are anagrams. :ref:`ActiveCode 2 <lst_ana2>` shows
 this solution. Again, in Python we can use the built-in ``sort`` method
 on lists by simply converting each string to a list at the start.
 
@@ -158,7 +158,7 @@ character occurs. Since there are 26 possible characters, we can use a
 list of 26 counters, one for each possible character. Each time we see a
 particular character, we will increment the counter at that position. In
 the end, if the two lists of counters are identical, the strings must be
-anagrams. :ref:`ActiveCode 6 <lst_ana4>` shows this solution.
+anagrams. :ref:`ActiveCode 3 <lst_ana4>` shows this solution.
 
 .. _lst_ana4:
 

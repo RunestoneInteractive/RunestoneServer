@@ -515,6 +515,7 @@ You can try out the ``UnorderedList`` class in ActiveCode 1.
 .. activecode:: unorderedlistcomplete
    :caption: The Complete UnorderedList Class
    :hidecode:
+   :nocodelens:
    
    class Node:
        def __init__(self,initdata):
@@ -620,6 +621,7 @@ starting with 0.
    Part I:  Implement the append method for UnorderedList.  What is the time complexity of the method you created?
 
    .. actex:: self_check_list1
+       :nocodelens:
    
        class Node:
            def __init__(self,initdata):
@@ -692,9 +694,10 @@ starting with 0.
    
    
 
-   Part I:  You most likely created an append method that was :math:`O(n)`  If you add an instance variable to the UnorderedList class you can create an append method that is :math:`O(1)`.  Modify your append method to be :math:`O(1)`  Be Careful!  To really do this correctly you will need to consider a couple of special cases that may require you to make a modification to the add method as well.
+   Part II:  In the previous problem, you most likely created an append method that was :math:`O(n)`  If you add an instance variable to the UnorderedList class you can create an append method that is :math:`O(1)`.  Modify your append method to be :math:`O(1)`  Be Careful!  To really do this correctly you will need to consider a couple of special cases that may require you to make a modification to the add method as well.
 
    .. actex:: self_check_list2
+       :nocodelens:
    
        class Node:
            def __init__(self,initdata):
