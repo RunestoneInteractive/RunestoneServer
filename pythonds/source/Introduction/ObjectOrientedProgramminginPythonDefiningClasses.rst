@@ -295,7 +295,7 @@ divides :math:`m` evenly. However, if :math:`n` does not divide
 :math:`m` evenly, then the answer is the greatest common divisor of
 :math:`n` and the remainder of :math:`m` divided by :math:`n`. We
 will simply provide an iterative implementation here (see
-:ref:`ActiveCode 11 <lst_gcd>`). Note that this implementation of the GCD algorithm only
+:ref:`ActiveCode 1 <lst_gcd>`). Note that this implementation of the GCD algorithm only
 works when the denominator is positive. This is acceptable for our
 fraction class because we have said that a negative fraction will be
 represented by a negative numerator.
@@ -397,7 +397,7 @@ are other relational operators that can be overridden. For example, the
             return firstnum == secondnum
 
 The complete ``Fraction`` class, up to this point, is shown in
-:ref:`ActiveCode 12 <lst_fractioncode>`. We leave the remaining arithmetic and relational
+:ref:`ActiveCode 2 <lst_fractioncode>`. We leave the remaining arithmetic and relational
 methods as exercises.
 
 .. _lst_fractioncode:
@@ -881,7 +881,7 @@ circuit. For example:
     Pin B input for gate G2-->1
     0
 
-Try it yourself using ActiveCode 14.
+Try it yourself using ActiveCode 4.
 
 .. activecode:: complete_cuircuit
     :caption: The Complete Circuit Program.

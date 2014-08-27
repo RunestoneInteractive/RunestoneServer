@@ -23,7 +23,7 @@ final item must be in place after the :math:`(n-1)` st pass.
 the largest remaining item is selected and then placed in its proper
 location. The first pass places 93, the second pass places 77, the third
 places 55, and so on. The function is shown in
-:ref:`ActiveCode 3 <lst_selectionsortcode>`.
+:ref:`ActiveCode 1 <lst_selectionsortcode>`.
 
 .. _fig_selectionsort:
 
@@ -62,26 +62,26 @@ places 55, and so on. The function is shown in
    :viewer: BarViewer
    
 
-For more detail, CodeLens 3 allows you to step through the algorithm.
-   
-   
-.. codelens:: selectionsortcodetrace
-    :caption: Tracing the Selection Sort
-
-    def selectionSort(alist):
-       for fillslot in range(len(alist)-1,0,-1):
-           positionOfMax=0
-           for location in range(1,fillslot+1):
-               if alist[location]>alist[positionOfMax]:
-                   positionOfMax = location
-
-           temp = alist[fillslot]
-           alist[fillslot] = alist[positionOfMax]
-           alist[positionOfMax] = temp
-
-    alist = [54,26,93,17,77,31,44,55,20]
-    selectionSort(alist)
-    print(alist)
+.. For more detail, CodeLens 3 allows you to step through the algorithm.
+..
+..
+.. .. codelens:: selectionsortcodetrace
+..     :caption: Tracing the Selection Sort
+..
+..     def selectionSort(alist):
+..        for fillslot in range(len(alist)-1,0,-1):
+..            positionOfMax=0
+..            for location in range(1,fillslot+1):
+..                if alist[location]>alist[positionOfMax]:
+..                    positionOfMax = location
+..
+..            temp = alist[fillslot]
+..            alist[fillslot] = alist[positionOfMax]
+..            alist[positionOfMax] = temp
+..
+..     alist = [54,26,93,17,77,31,44,55,20]
+..     selectionSort(alist)
+..     print(alist)
 
 You may see that the selection sort makes the same number of comparisons
 as the bubble sort and is therefore also :math:`O(n^{2})`. However,

@@ -41,7 +41,7 @@ the simple lists, now sorted, as they are merged back together.
 
 
 
-The ``mergeSort`` function shown in :ref:`ActiveCode 6 <lst_merge>` begins by asking the
+The ``mergeSort`` function shown in :ref:`ActiveCode 1 <lst_merge>` begins by asking the
 base case question. If the length of the list is less than or equal to
 one, then we already have a sorted list and no more processing is
 necessary. If, on the other hand, the length is greater than one, then
@@ -117,48 +117,48 @@ list that can be immediately merged with other sorted lists.
    :viewer: BarViewer
   
   
-For more detail, CodeLens 6 allows you to step through the algorithm.
-
-
-.. codelens:: mergetrace
-    :caption: Tracing the Merge Sort
-
-    def mergeSort(alist):
-        print("Splitting ",alist)
-        if len(alist)>1:
-            mid = len(alist)//2
-            lefthalf = alist[:mid]
-            righthalf = alist[mid:]
-
-            mergeSort(lefthalf)
-            mergeSort(righthalf)
-
-            i=0
-            j=0
-            k=0
-            while i<len(lefthalf) and j<len(righthalf):
-                if lefthalf[i]<righthalf[j]:
-                    alist[k]=lefthalf[i]
-                    i=i+1
-                else:
-                    alist[k]=righthalf[j]
-                    j=j+1
-                k=k+1
-
-            while i<len(lefthalf):
-                alist[k]=lefthalf[i]
-                i=i+1
-                k=k+1
-
-            while j<len(righthalf):
-                alist[k]=righthalf[j]
-                j=j+1
-                k=k+1
-        print("Merging ",alist)
-        
-    alist = [54,26,93,17,77,31,44,55,20]
-    mergeSort(alist)
-    print(alist)
+.. For more detail, CodeLens 6 allows you to step through the algorithm.
+..
+..
+.. .. codelens:: mergetrace
+..     :caption: Tracing the Merge Sort
+..
+..     def mergeSort(alist):
+..         print("Splitting ",alist)
+..         if len(alist)>1:
+..             mid = len(alist)//2
+..             lefthalf = alist[:mid]
+..             righthalf = alist[mid:]
+..
+..             mergeSort(lefthalf)
+..             mergeSort(righthalf)
+..
+..             i=0
+..             j=0
+..             k=0
+..             while i<len(lefthalf) and j<len(righthalf):
+..                 if lefthalf[i]<righthalf[j]:
+..                     alist[k]=lefthalf[i]
+..                     i=i+1
+..                 else:
+..                     alist[k]=righthalf[j]
+..                     j=j+1
+..                 k=k+1
+..
+..             while i<len(lefthalf):
+..                 alist[k]=lefthalf[i]
+..                 i=i+1
+..                 k=k+1
+..
+..             while j<len(righthalf):
+..                 alist[k]=righthalf[j]
+..                 j=j+1
+..                 k=k+1
+..         print("Merging ",alist)
+..
+..     alist = [54,26,93,17,77,31,44,55,20]
+..     mergeSort(alist)
+..     print(alist)
 
 
 In order to analyze the ``mergeSort`` function, we need to consider the
