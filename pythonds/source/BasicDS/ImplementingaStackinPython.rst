@@ -73,7 +73,6 @@ imported from the ``pythonds`` module.
     
 
 .. activecode:: stack_ex_1
-   :include:  stack_1ac
    :nocodelens:
 
    from pythonds.basic.stack import Stack
