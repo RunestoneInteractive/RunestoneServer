@@ -525,7 +525,15 @@ def download():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def newtype():
-    form = SQLFORM(db.assignment_types)
+    form = SQLFORM(db.assignment_types,
+                   fields=['name', 'grade_type', 'weight', 'points_possible','assignments_dropped'],)
+
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    form.vars.course = course.id
+
+    if form.process().accepted:
+        session.flash = 'assignment type added'
+        return redirect(URL('admin', 'index'))
 
     return dict(form=form)
 
