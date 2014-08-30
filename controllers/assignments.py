@@ -4,7 +4,7 @@ import shutil
 import sys
 from sphinx.application import Sphinx
 
-
+# controller for "Progress Page" as well as List/create assignments
 def index():
     if not auth.user:
         session.flash = "Please Login"
