@@ -26,23 +26,12 @@
  */
 
 
-function handleEdKeys(ed, e) {
-    if (e.keyCode === 13) {
-        if (e.ctrlKey) {
-            e.stop();
-            runit(ed.parentDiv);
-        }
-        else if (e.shiftKey) {
-            e.stop();
-            eval(Sk.importMainWithBody("<stdin>", false, ed.selection()));
-        }
-    } else {
-        if (ed.acEditEvent == false || ed.acEditEvent === undefined) {
-            $('#' + ed.parentDiv + ' .CodeMirror').css('border-top', '2px solid #b43232');
-            $('#' + ed.parentDiv + ' .CodeMirror').css('border-bottom', '2px solid #b43232');
-        }
-        ed.acEditEvent = true;
+function showChange(ed,b) {
+    if (ed.acEditEvent == false || ed.acEditEvent === undefined) {
+        $('#' + ed.parentDiv + ' .CodeMirror').css('border-top', '2px solid #b43232');
+        $('#' + ed.parentDiv + ' .CodeMirror').css('border-bottom', '2px solid #b43232');
     }
+    ed.acEditEvent = true;
 }
 
 cm_editors = {};
@@ -74,6 +63,16 @@ function outf(text) {
     mypre.innerHTML = mypre.innerHTML + text;
 }
 
+var keymap = {
+    "Ctrl-Enter" : function (editor) {
+        runit(editor.parentDiv);
+        $("#" + editor.parentDiv).children('.ac_output').show();
+    },
+    "Tab": "indentMore",
+    "Shift-Tab": "indentLess"
+}
+
+
 function createEditors() {
     var edList = new Array();
     edList = document.getElementsByClassName("active_code");
@@ -101,11 +100,11 @@ function createEditors() {
                                                           indentUnit: 4,
                                                           indentWithTabs: false,
                                                           matchBrackets: true,
-                                                          extraKeys: {"Tab": "indentMore", "Shift-Tab": "indentLess"},
-                                                          onKeyEvent: handleEdKeys
+                                                          autoMatchParens: true,
+                                                          extraKeys: keymap
                                                       }
         );
-        
+        cm_editors[newEdId].on('change',showChange);
         cm_editors[newEdId].parentDiv = edList[i].parentNode.parentNode.id;
         //requestCode(edList[i].parentNode.id) // populate with user's code
     }
@@ -150,7 +149,6 @@ function createActiveCode(divid,suppliedSource,sid) {
                     indentUnit: 4,
                     tabMode: "indent",
                     matchBrackets: true,
-                    onKeyEvent:handleEdKeys
                 });
 
 

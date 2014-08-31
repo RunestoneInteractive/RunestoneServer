@@ -3,7 +3,12 @@
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
-  height: 300px;
+  border-right: 2px solid #aaa;
+  border-top: 2px solid #aaa;
+  border-bottom: 2px solid #aaa;
+  border-left: 2px solid #aaa;
+
+  /*height: 300px;*/
 }
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */
@@ -138,7 +143,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
    the editor. You probably shouldn't touch them. */
 
 .CodeMirror {
-  line-height: 1;
+  line-height: 1.25;
   position: relative;
   overflow: hidden;
   background: white;
