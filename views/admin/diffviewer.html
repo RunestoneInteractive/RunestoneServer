@@ -57,7 +57,7 @@ function displayCoachData () {
     orig2 = diffdata.code[diffcount];
     panes = 2;
     target.innerHTML = "";
-      dv = CodeMirror.MergeView(target, {
+    dv = CodeMirror.MergeView(target, {
         value: value,
         origLeft: panes == 3 ? orig1 : null,
         orig: orig2,
@@ -66,9 +66,8 @@ function displayCoachData () {
         highlightDifferences: hilight
       });
 
-
-
     $("#tstamp").html(diffdata.timestamps[diffcount]);
+
 
     $("#messviewer").html(diffdata.mess[diffcount] + '<br>' + diffdata.chints[diffcount]);
     $("#messviewer").css("margin-left","20px");
@@ -200,21 +199,21 @@ function diffRunner(myDiv, theButton, prog) {
 <button onclick="getDiffs()">Fetch</button>
 {{ pass }}
 
-
-<h3 id="tstamp"></h3>
+<div>
+<table width="100%">
+<tr><td width="50%"></td><td width="50%"><h3 id="tstamp"></h3></td></tr>
+</table>
+</div>
 <div id="codeviewer_div">
     <div id="diffviewer"></div>
-    <table>
-    <tr><td></td></tr>
-    <tr><td style="vertical-align: top;"><div id="messviewer"></div></td></tr>
-    </table>
-</div>
 <div id="btn-controls" style="clear: both;">
     <button id="firstb" class="btn" onclick="firstDiff()">First</button>
     <button id="prevb" class="btn" onclick="prevDiff()">Previous</button>
     <button id="nextb" class="btn" onclick="nextDiff()">Next</button>
     <button id="lastb" class="btn" onclick="lastDiff()">Last</button>
     <button class="btn" onclick="diffRunner('runner',self,getCode());">Run</button>
+</div>
+    <div id="messviewer"></div>
 </div>
 
 <div id="runner">
