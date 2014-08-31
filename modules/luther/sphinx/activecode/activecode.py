@@ -129,9 +129,9 @@ if ($("#%(divid)s_code_div").parents(".admonition").length == 0 && $("#%(divid)s
 		})
 		.queue(function (next) {
 			$("#%(divid)s_runb").parent().siblings(".ac_output").show();
-			runit('%(divid)s',this, undefined);
+			runit('%(divid)s',this, %(include)s);
 			$("#%(divid)s_runb").on("click", function(){
-				runit('%(divid)s',this, undefined);
+				runit('%(divid)s',this, %(include)s);
 			});
 		})
 		
@@ -141,7 +141,7 @@ else{
 	$("#%(divid)s_code_div").css({float : "none", marginLeft : "auto", marginRight : "auto"});
 	$("#%(divid)s_runb").parent().siblings(".ac_output").show().css({float : "none", right : "0px"});
 	$("#%(divid)s_runb").on("click", function(){
-		runit('%(divid)s',this, undefined);
+		runit('%(divid)s',this, %(include)s);
 	});
 }
 </script>
