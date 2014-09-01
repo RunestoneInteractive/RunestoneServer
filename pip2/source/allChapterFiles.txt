@@ -1,0 +1,508 @@
+   Assignments/intro-Week2endsJanuary17.rst
+   Assignments/ReadingResponse.rst
+   Assignments/ProblemSet.rst
+
+
+
+   Assignments/intro-Week4endsJanuary31.rst
+   Assignments/ReviewProblems(Ungraded).rst
+   Assignments/ReadingResponse.rst
+   Assignments/ProblemSet.rst
+
+
+
+   Assignments/intro-Week11endsApril42014.rst
+   Assignments/ReadingResponse10.rst
+   Assignments/Session23prep.rst
+
+
+
+   Assignments/intro-Week7endsFebruary21.rst
+   Assignments/ReadingResponse6.rst
+   Assignments/ProblemSet6.rst
+   Assignments/TuesdayInclassExercisesSorting.rst
+
+
+
+   Assignments/intro-Week3endsJanuary24.rst
+   Assignments/ReadingResponse.rst
+   Assignments/ProblemSet.rst
+
+
+
+   Assignments/intro-Week8endsMarch142014.rst
+   Assignments/ReadingResponse7.rst
+   Assignments/ProblemSet7.rst
+
+
+
+   Assignments/intro-Week13endsApril182014.rst
+   Assignments/ReadingResponse12.rst
+
+
+
+   Assignments/intro-Week12endsApril112014.rst
+   Assignments/ReadingResponse11.rst
+   Assignments/Session24prep.rst
+   Assignments/Session25prep.rst
+
+
+
+   Assignments/intro-Week9endsMarch212014.rst
+   Assignments/ReadingResponse8.rst
+   Assignments/Session18prep.rst
+   Assignments/Session19prep.rst
+
+
+
+   Assignments/intro-Week5endsFebruary7.rst
+   Assignments/ReadingResponse.rst
+   Assignments/ProblemSet.rst
+
+
+
+   Assignments/intro-Week6endsFebruary14.rst
+   Assignments/ReadingResponse.rst
+   Assignments/ProblemSet5.rst
+   Assignments/TuesdayInclassExercises.rst
+   Assignments/ThursdayInclassExercises.rst
+   Assignments/FunctionsReview.rst
+
+
+
+   Assignments/intro-Week10endsMarch282014.rst
+   Assignments/ReadingResponse9.rst
+   Assignments/Session21prep.rst
+
+
+
+   GeneralIntro/intro-TheWayoftheProgram.rst
+   GeneralIntro/Algorithms.rst
+   GeneralIntro/ThePythonProgrammingLanguage.rst
+   GeneralIntro/SpecialWaystoExecutePythoninthisBook.rst
+   GeneralIntro/MoreAboutPrograms.rst
+   GeneralIntro/WhatisDebugging.rst
+   GeneralIntro/Syntaxerrors.rst
+   GeneralIntro/RuntimeErrors.rst
+   GeneralIntro/SemanticErrors.rst
+   GeneralIntro/ExperimentalDebugging.rst
+   GeneralIntro/FormalandNaturalLanguages.rst
+   GeneralIntro/ATypicalFirstProgram.rst
+   GeneralIntro/Comments.rst
+   GeneralIntro/Glossary.rst
+
+
+
+   SimplePythonData/intro-VariablesExpressionsandStatements.rst
+   SimplePythonData/ValuesandDataTypes.rst
+   SimplePythonData/Typeconversionfunctions.rst
+   SimplePythonData/Variables.rst
+   SimplePythonData/VariableNamesandKeywords.rst
+   SimplePythonData/StatementsandExpressions.rst
+   SimplePythonData/OperatorsandOperands.rst
+   SimplePythonData/Input.rst
+   SimplePythonData/OrderofOperations.rst
+   SimplePythonData/Reassignment.rst
+   SimplePythonData/UpdatingVariables.rst
+   SimplePythonData/Glossary.rst
+   SimplePythonData/Exercises.rst
+
+
+
+   Debugging/intro-BuildingAProgram.rst
+   Debugging/SketchanOutline.rst
+   Debugging/CodeOneSectionataTime.rst
+   Debugging/CleanUp.rst
+   Debugging/Explain(Makeareferencediagram).rst
+   Debugging/Predict.rst
+   Debugging/Check.rst
+   Debugging/Example.rst
+
+
+
+   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
+   Debugging/HowtoAvoidDebugging.rst
+   Debugging/BeginningtipsforDebugging.rst
+   Debugging/KnowyourerrorMessages.rst
+   Debugging/Summary.rst
+
+
+
+   Sequences/intro-Sequences.rst
+   Sequences/OperationsonStrings.rst
+   Sequences/IndexOperatorWorkingwiththeCharactersofaString.rst
+   Sequences/OperationsandStrings.rst
+   Sequences/StringMethods.rst
+   Sequences/Length.rst
+   Sequences/TheSliceOperator.rst
+   Sequences/StringsareImmutable.rst
+   Sequences/Theinandnotinoperators.rst
+   Sequences/Characterclassification.rst
+   Sequences/ListValues.rst
+   Sequences/ListLength.rst
+   Sequences/AccessingElements.rst
+   Sequences/ListMembership.rst
+   Sequences/ConcatenationandRepetition.rst
+   Sequences/ListSlices.rst
+   Sequences/ListsareMutable.rst
+   Sequences/ListDeletion.rst
+   Sequences/ObjectsandReferences.rst
+   Sequences/Aliasing.rst
+   Sequences/CloningLists.rst
+   Sequences/ListMethods.rst
+   Sequences/AppendversusConcatenate.rst
+
+
+
+   Sequences/Tuples.rst
+   Sequences/TuplePacking.rst
+   Sequences/TuplesasReturnValues.rst
+   Sequences/TupleAssignmentwithunpacking.rst
+   Sequences/UnpackingDictionaryItems.rst
+   Sequences/Glossary.rst
+   Sequences/Exercises.rst
+
+
+
+   Sequences/intro-MapFilterandListComprehensions.rst
+   Sequences/Filter.rst
+   Sequences/ListComprehensions.rst
+
+
+
+   Iteration/intro-Iteration.rst
+   Iteration/TheforLoop.rst
+   Iteration/FlowofExecutionoftheforLoop.rst
+   Iteration/Stringsandforloops.rst
+   Iteration/TraversalandtheforLoopByIndex.rst
+   Iteration/Listsandforloops.rst
+   Iteration/TheAccumulatorPatternwithStrings.rst
+   Iteration/Summary.rst
+
+
+
+   Selection/intro-DecisionsandSelection.rst
+   Selection/BooleanValuesandBooleanExpressions.rst
+   Selection/Logicaloperators.rst
+   Selection/PrecedenceofOperators.rst
+   Selection/ConditionalExecutionBinarySelection.rst
+   Selection/OmittingtheelseClauseUnarySelection.rst
+   Selection/Nestedconditionals.rst
+   Selection/Chainedconditionals.rst
+   Selection/Glossary.rst
+   Selection/Exercises.rst
+
+
+
+   Files/intro-WorkingwithDataFiles.rst
+   Files/FindingaFileonyourDisk.rst
+   Files/ReadingaFile.rst
+   Files/Iteratingoverlinesinafile.rst
+   Files/AlternativeFileReadingMethods.rst
+   Files/WritingTextFiles.rst
+   Files/Glossary.rst
+   Files/Exercises.rst
+
+
+
+   Dictionaries/intro-AccumulatingMultipleResultsInaDictionary.rst
+   Dictionaries/AccumulatingResultsFromaDictionary.rst
+   Dictionaries/AccumulatingaMaximumValue.rst
+   Dictionaries/AccumulatingtheBestKey.rst
+   Dictionaries/Exercises.rst
+
+
+
+   Dictionaries/intro-Dictionaries.rst
+   Dictionaries/Dictionaryoperations.rst
+   Dictionaries/Dictionarymethods.rst
+   Dictionaries/Aliasingandcopying.rst
+   Dictionaries/Glossary.rst
+   Dictionaries/Exercises.rst
+
+
+
+   Functions/intro-OptionalParameters.rst
+   Functions/Exercises.rst
+
+
+
+   Functions/.rst
+
+
+
+   Functions/intro-FunctionsRevisited.rst
+   Functions/ProgramDevelopment.rst
+   Functions/Composition.rst
+   Functions/BooleanFunctions.rst
+   Functions/ProgrammingWithStyle.rst
+   Functions/Glossary.rst
+   Functions/Exercises.rst
+
+
+
+   Functions/intro-Functions.rst
+   Functions/FunctionsDefinitions.rst
+   Functions/FunctionInvocation.rst
+   Functions/FunctionParameters.rst
+   Functions/Returningavaluefromafunction.rst
+   Functions/Afunctionthataccumulates.rst
+   Functions/Glossary.rst
+
+
+
+   Functions/intro-MoreonFunctions.rst
+   Functions/DecodingaFunction.rst
+   Functions/MethodInvocations.rst
+   Functions/Variablesandparametersarelocal.rst
+   Functions/GlobalVariables.rst
+   Functions/Functionscancallotherfunctions.rst
+   Functions/FlowofExecutionSummary.rst
+   Functions/Printvs.return.rst
+   Functions/Themain()function.rst
+   Functions/PassingMutableObjects.rst
+   Functions/SideEffects.rst
+   Functions/Glossary.rst
+
+
+
+   Sequences/Glossary.rst
+
+
+
+   Sequences/ObjectsandReferences.rst
+
+
+
+   Sequences/StringMethods.rst
+
+
+
+   Sequences/ListMembership.rst
+
+
+
+   Sequences/ListsareMutable.rst
+
+
+
+   Sequences/Characterclassification.rst
+
+
+
+   Sequences/StringsareImmutable.rst
+
+
+
+   Sequences/Length.rst
+
+
+
+   Sequences/UnpackingDictionaryItems.rst
+
+
+
+   Sequences/ListComprehensions.rst
+
+
+
+   Sequences/ListLength.rst
+
+
+
+   Sequences/Theinandnotinoperators.rst
+
+
+
+   Sequences/ListDeletion.rst
+
+
+
+   Sequences/AppendversusConcatenate.rst
+
+
+
+   Sequences/CloningLists.rst
+
+
+
+   Sequences/IndexOperatorWorkingwiththeCharactersofaString.rst
+
+
+
+   Sequences/ListSlices.rst
+
+
+
+   Sequences/Tuples.rst
+
+
+
+   Sequences/OperationsonStrings.rst
+
+
+
+   Sequences/TupleAssignmentwithunpacking.rst
+
+
+
+   Sequences/OperationsandStrings.rst
+
+
+
+   Sequences/AccessingElements.rst
+
+
+
+   Sequences/Filter.rst
+
+
+
+   Sequences/TuplePacking.rst
+
+
+
+   Sequences/ListValues.rst
+
+
+
+   Sequences/Exercises.rst
+
+
+
+   Sequences/Aliasing.rst
+
+
+
+   Sequences/.rst
+
+
+
+   Sequences/ListMethods.rst
+
+
+
+   Sequences/TuplesasReturnValues.rst
+
+
+
+   Sequences/TheSliceOperator.rst
+
+
+
+   Sequences/.rst
+
+
+
+   Sequences/ConcatenationandRepetition.rst
+
+
+
+   Sort/intro-SortingwithSortandSorted.rst
+   Sort/Optionalreverseparameter.rst
+   Sort/Optionalkeyparameter.rst
+   Sort/Anonymousfunctionswithlambdaexpressions.rst
+   Sort/SortingaDictionary.rst
+   Sort/Glossary.rst
+   Sort/Exercises.rst
+
+
+
+   Sort/.rst
+
+
+
+   PythonModules/intro-ModulesandGettingHelp.rst
+   PythonModules/Modules.rst
+   PythonModules/Themathmodule.rst
+   PythonModules/Therandommodule.rst
+   PythonModules/Glossary.rst
+   PythonModules/Exercises.rst
+
+
+
+   Testing/intro-TestCasesRevisited.rst
+   Testing/Testingfunctions.rst
+   Testing/Testingclasses.rst
+   Testing/Glossary.rst
+
+
+
+   Testing/intro-TestCases.rst
+   Testing/Glossary.rst
+
+
+
+   NestedData/intro-NestedDataandNestedIteration.rst
+   NestedData/ListswithComplexItems.rst
+   NestedData/NestedDictionaries.rst
+   NestedData/NestedIteration.rst
+
+
+
+   MoreAboutIteration/intro-IterationRevisited.rst
+   MoreAboutIteration/Theforlooprevisited.rst
+   MoreAboutIteration/ThewhileStatement.rst
+   MoreAboutIteration/The3n1Sequence.rst
+   MoreAboutIteration/Newton'sMethod.rst
+   MoreAboutIteration/AlgorithmsRevisited.rst
+   MoreAboutIteration/Glossary.rst
+   MoreAboutIteration/Exercises.rst
+
+
+
+   Installation/intro-PreparingfortheRestoftheCourse.rst
+   Installation/ImportantConcepts.rst
+   Installation/CommandLineandFiles.rst
+   Installation/Installandconfigureatexteditor.rst
+   Installation/Installandconfigurepython.rst
+   Installation/Installandconfiguregitonyourcomputer.rst
+   Installation/Choosingthelocationforyourcodefolder.rst
+   Installation/Customizethegitbashdisplayalittle.rst
+   Installation/Installandconfigureatexteditor.rst
+   Installation/Installandconfigurepython.rst
+   Installation/Installandconfiguregitonyourcomputer.rst
+   Installation/InstallAppleCommandLineTools.rst
+   Installation/gitConceptsandVocabulary.rst
+   Installation/Makeapersonalforkoftheclasscoderepositoryonbitbucket.rst
+   Installation/Cloneyourbitbucketrepositorytoyourlocalmachine.rst
+   Installation/RunaCodeFile.rst
+   Installation/Makechangeslocally.rst
+   Installation/Configuregitwithyournameandemailaddress.rst
+   Installation/Commityourchangeslocally.rst
+   Installation/Pushyourchangestobitbucket.rst
+   Installation/Afewbashtips.rst
+   Installation/Afewbashcommands.rst
+   Installation/Summaryofyourregularworkflowusinggit.rst
+
+
+
+   StringFormatting/intro-PrintinginPython2.7.rst
+   StringFormatting/Exercises.rst
+
+
+
+   Classes/intro-ClassesandObjectstheBasics.rst
+   Classes/Objectorientedprogramming.rst
+   Classes/ObjectsRevisited.rst
+   Classes/UserDefinedClasses.rst
+   Classes/ImprovingourConstructor.rst
+   Classes/AddingOtherMethodstoourClass.rst
+   Classes/ObjectsasArgumentsandParameters.rst
+   Classes/ConvertinganObjecttoaString.rst
+   Classes/InstancesasReturnValues.rst
+   Classes/Glossary.rst
+   Classes/Exercises.rst
+
+
+
+   Classes/intro-ClassesandObjectsDiggingalittledeeper.rst
+   Classes/Fractions.rst
+   Classes/ObjectsareMutable.rst
+   Classes/Sameness.rst
+   Classes/ArithmeticMethods.rst
+   Classes/Glossary.rst
+   Classes/Exercises.rst
+
+
+

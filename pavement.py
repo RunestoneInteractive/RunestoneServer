@@ -113,6 +113,23 @@ def pip(options):
 
 @task
 @cmdopts([('all','a','rebuild everything')])
+def pip2(options):
+    # project-specific pavements have defaults set but we can override here
+    params = ["paver", "build", # task name
+              "--masterapp", master_app,
+              "--masterurl", master_url]
+    if 'all' in options.pip2:
+        params.append("-a")
+
+    os.chdir("pip2")
+    subprocess.call(params)
+    os.chdir("..")
+
+    if minify_js:
+        sh('./scripts/minifyjs.py %s' % "static/devcourse")
+
+@task
+@cmdopts([('all','a','rebuild everything')])
 def java4python(options):
     # project-specific pavements have defaults set but we can override here
     params = ["paver", "build", # task name
@@ -136,8 +153,10 @@ def allbooks(options):
     options.pythonds = opts
     options.overview = opts
     options.pip = opts
+    options.pip2 = opts
 
     thinkcspy(options)
     pythonds(options)
     overview(options)
     pip(options)
+    pip2(options)
