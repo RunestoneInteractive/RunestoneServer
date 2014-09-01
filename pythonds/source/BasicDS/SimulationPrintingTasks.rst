@@ -313,6 +313,7 @@ You can run the simulation for yourself in ActiveCode 2.
 
 .. activecode:: qumainsim
    :caption: Printer Queue Simulation
+   :nocodelens:
 
    from pythonds.basic.queue import Queue
 
@@ -434,6 +435,7 @@ necessary to construct a robust simulation.
    to make the number of students a parameter of the simulation.
 
    .. actex:: print_sim_selfcheck
+         :nocodelens:
 
          from pythonds.basic.queue import Queue
 

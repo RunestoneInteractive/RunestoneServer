@@ -44,6 +44,7 @@ complete function for palindrome-checking appears in
 
 .. activecode:: palchecker
    :caption: A Palindrome Checker Using Deque
+   :nocodelens:
 
    from pythonds.basic.deque import Deque
    

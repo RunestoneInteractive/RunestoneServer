@@ -39,12 +39,13 @@ call this number the “degree” of the fractal. Each time we make a
 recursive call, we subtract 1 from the degree until we reach 0. When we
 reach a degree of 0, we stop making recursive calls. The code that
 generated the Sierpinski Triangle in :ref:`Figure 3 <fig_sierpinski>` is shown in
-:ref:`ActiveCode 4 <lst_st>`.
+:ref:`ActiveCode 1 <lst_st>`.
 
 .. _lst_st:
 
 .. activecode:: lst_st
     :caption: Drawing a Sierpinski Triangle
+    :nocodelens:
 
     import turtle
 
@@ -93,7 +94,7 @@ generated the Sierpinski Triangle in :ref:`Figure 3 <fig_sierpinski>` is shown i
 
     
     
-The program in :ref:`ActiveCode 4 <lst_st>` follows the ideas outlined above. The
+The program in :ref:`ActiveCode 1 <lst_st>` follows the ideas outlined above. The
 first thing ``sierpinski`` does is draw the outer triangle. Next, there
 are three recursive calls, one for each of the new corner triangles we
 get when we connect the midpoints. Once again we make use of the
@@ -130,6 +131,6 @@ finished with the bottom left it moves to the bottom middle, and so on.
 
 The ``sierpinski`` function relies heavily on the ``getMid`` function.
 ``getMid`` takes as arguments two endpoints and returns the point
-halfway between them. In addition, :ref:`ActiveCode 4 <lst_st>` has a function that
+halfway between them. In addition, :ref:`ActiveCode 1 <lst_st>` has a function that
 draws a filled triangle using the ``begin_fill`` and ``end_fill`` turtle
-methods. This means that each degree of the Sierpinski triangle is drawn
+methods.

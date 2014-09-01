@@ -651,8 +651,8 @@ def getCodeDiffs():
     messages = []
     coachHints = []
 
-    diffs = differ.diff_lineMode(rows[0][3], rows[0][3], True)
-    diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
+#    diffs = differ.diff_lineMode(rows[0][3], rows[0][3], True)
+#    diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
     newcode.append(rows[0][3])
     ts.append(str(rows[0][0]))
     coachHints.append(getCoachingHints(int(rows[0][5])))
@@ -674,12 +674,15 @@ def getCoachingHints(ecId):
 
     rows = db.executesql("select category,symbol,line,msg from coach_hints where source=%d order by category, line" % ecId)
     res = ''
-    cat = ''
+    catres = {'C':'', 'R':'', 'W':'', 'E':'', 'F':''}
+    for k in catres:
+        catres[k] = '<h2>%s</h2>' % catToTitle[k]
     for row in rows:
-        if row[0] != cat:
-            res += '<h2>%s</h2>' % catToTitle[row[0]]
             cat = row[0]
-        res += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
+            catres[cat] += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
+
+    for ch in "FEWRC":
+        res += catres[ch]
     return res
 
 
