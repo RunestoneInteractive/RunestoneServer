@@ -149,7 +149,11 @@ function createActiveCode(divid,suppliedSource,sid) {
                     indentUnit: 4,
                     tabMode: "indent",
                     matchBrackets: true,
+                    autoMatchParens: true,
+                    extraKeys: keymap
                 });
+
+        editor.setSize(null,250);
 
 
         var myRun = function() {
@@ -230,6 +234,7 @@ function createActiveCode(divid,suppliedSource,sid) {
             suppliedSource = suppliedSource.replace(new RegExp('%27','g'),"'");
             editor.setValue(suppliedSource);
         }
+        editor.refresh()
     }
 }
 
