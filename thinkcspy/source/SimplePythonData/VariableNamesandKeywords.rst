@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: data-5-
+   :start: 1
+
 Variable Names and Keywords
 ---------------------------
 

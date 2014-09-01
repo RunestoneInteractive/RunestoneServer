@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: iter-10-
+   :start: 1
+
 Image Processing on Your Own
 ----------------------------
 

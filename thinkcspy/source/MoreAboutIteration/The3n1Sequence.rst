@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: iter-5-
+   :start: 1
+
 The 3n + 1 Sequence
 -------------------
 

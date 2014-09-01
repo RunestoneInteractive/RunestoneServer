@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: modules-1-
+   :start: 1
+
 Modules and Getting Help
 ------------------------
 

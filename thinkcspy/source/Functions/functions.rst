@@ -7,6 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: func-1-
+   :start: 1
 
 .. index::
     single: function

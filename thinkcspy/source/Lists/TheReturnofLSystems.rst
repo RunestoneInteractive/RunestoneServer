@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: list-15-
+   :start: 1
+
 The Return of L-Systems
 -----------------------
 

@@ -7,6 +7,11 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. qnum::
+   :prefix: intro-3-
+   :start: 1
+
 The Python Programming Language
 -------------------------------
 

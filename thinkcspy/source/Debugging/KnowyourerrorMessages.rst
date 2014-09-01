@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: debug-4-
+   :start: 1
+
 Know Your Error Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -170,8 +174,8 @@ Here's an example of a type error created by a Polish learner.  See if you can f
 
 .. activecode:: db_ex3_8
 
-    a = input('wpisuj cieciu godzine')
-    x = input('wpisuj ile godzin cieciu')
+    a = input(uu'wpisz godzinę')
+    x = input(uu'wpisz liczbę godzin')
     int(x)
     int(a)
     h = x // 24
