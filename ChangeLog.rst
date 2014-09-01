@@ -1,6 +1,15 @@
 Runestone ChangeLog
 ===================
 
+3.1.1 September 1, 2014
+-----------------------
+
+* Give code coach a better look
+* Move to new codemirror
+* fix question numbering in thinkcspy
+* Hidden controller for adding assignment_types
+
+
 3.1 August 21, 2014
 ------------------
 
