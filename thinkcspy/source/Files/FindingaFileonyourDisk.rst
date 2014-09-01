@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: file-1-
+   :start: 1
+
 Finding a File on your Disk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: select-3-
+   :start: 1
+
 Precedence of Operators
 -----------------------
 

@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: select-1-
+   :start: 1
+
 Boolean Values and Boolean Expressions
 --------------------------------------
 

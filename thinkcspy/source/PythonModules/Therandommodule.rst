@@ -7,8 +7,12 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: modules-4-
+   :start: 1
+
 The `random` module
------------------------------------
+-------------------
 
 We often want to use **random numbers** in programs.  Here are a few typical uses:
 

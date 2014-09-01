@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: list-25-
+   :start: 1
+
 ``list`` Type Conversion Function
 ---------------------------------
     

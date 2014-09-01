@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: func-10-
+   :start: 1
+
 A Turtle Bar Chart
 ------------------
 

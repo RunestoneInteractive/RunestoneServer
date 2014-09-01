@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: iter-8-
+   :start: 1
+
 Simple Tables
 -------------
 

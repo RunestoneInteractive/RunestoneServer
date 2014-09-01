@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: debug-2-
+   :start: 1
+
 How to Avoid Debugging
 ----------------------
 

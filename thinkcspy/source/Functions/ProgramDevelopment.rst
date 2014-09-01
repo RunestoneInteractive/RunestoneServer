@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: func-8-
+   :start: 1
+
 Program Development
 -------------------
 

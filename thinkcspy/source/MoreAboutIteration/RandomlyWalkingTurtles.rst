@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: iter-4-
+   :start: 1
+
 Randomly Walking Turtles
 ------------------------
 

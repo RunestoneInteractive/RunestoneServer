@@ -7,6 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: file-4-
+   :start: 1
 
 
 Iterating over lines in a file

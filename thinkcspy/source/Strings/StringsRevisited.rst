@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: strings-1-
+   :start: 1
+
 .. index:: compound data type, character, subscript operator, index
 
 Strings Revisited

@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: strings-4-
+   :start: 1
+
 Index Operator: Working with the Characters of a String
 -------------------------------------------------------
 

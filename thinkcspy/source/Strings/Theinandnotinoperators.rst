@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: strings-15-
+   :start: 1
+
 The ``in`` and ``not in`` operators
 -----------------------------------
 
