@@ -10,6 +10,8 @@ Assignments
    :maxdepth: 2
 
 
+   Assignments/ps1.rst
+
 General Introduction
 ::::::::::::::::::::
 

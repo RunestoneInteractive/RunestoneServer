@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _simple_python_data:
+
 Introduction: Values, Operators, Function calls, Variables
 ==========================================================
 
