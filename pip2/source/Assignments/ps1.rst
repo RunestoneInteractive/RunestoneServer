@@ -24,8 +24,9 @@ For this week, you have the following graded activities:
    
    * Before Thursday's class:
       * Fill in a little `info about you </runestone/default/bio>`_ and, optionally, upload a picture that looks like how you look in class, so I can start to learn your names.`
+      * Sign up for the `Facebook group <https://www.facebook.com/groups/269032479960344/>`_
       * :ref:`General Intro <the_way_of_the_program>`
-      * :ref:`Simple Python Data <simple_python_data>` (except for the section on Input, which you can delay until next week)
+      * :ref:`Simple Python Data <simple_python_data>` (except for the last section, on getting input from the user, which you can delay until next week)
 
 #. Reading responses
       * For Thursday, read the intro and chapter 1 of "The Most Human Human".
@@ -61,7 +62,6 @@ Problem Set
 #. The variable ``tpa`` currently has the value ``0``. Assign the variable ``tpa`` the value ``6`` .
 
 .. activecode:: ps_1_1
-   :include: test_framework
 
    tpa = 0
    
@@ -74,7 +74,6 @@ Problem Set
 #. Write code to assign the variable ``yb`` to have the same value that variable ``cw`` has. Do not change the first line of code (``cw = "Hello"``), but write code that would work no matter what the current value of ``cw`` is.
 
 .. activecode:: ps_1_2
-   :include: test_framework
 
    cw = "Hello"
    yb = 0
