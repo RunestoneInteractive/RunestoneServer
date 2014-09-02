@@ -114,7 +114,7 @@ def update():
     elif form.errors:
         response.flash = 'form has errors'
 
-
+    db.deadlines.section.requires = IS_IN_DB(db(db.sections.course_id == course),'sections.id','%(name)s')
     new_deadline_form = SQLFORM(db.deadlines,
         showid = False,
         fields=['section','deadline'],
