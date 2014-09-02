@@ -325,7 +325,7 @@ def getCompletionStatus():
         # the chapter might exist without the subchapter
         result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
         if not result:
-            db.user_chapter_progress.insert(user_id = author.user.id,
+            db.user_chapter_progress.insert(user_id = auth.user.id,
                                            chapter_id = lastPageChapter,
                                            status = -1)       
         return json.dumps([{'completionStatus': -1}])        
