@@ -3,12 +3,14 @@ import random
 import pprint
 import json
 import collections
-
+import datetime
 
 def schedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
+        dbfile = open('schedule_debug.log', 'a')
+        dbfile.write('%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
         allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
                          (db.user_sub_chapter_progress.user_id == db.auth_user.id) &
                          (db.auth_user.cohort_id == auth.user.cohort_id)).select(db.user_sub_chapter_progress.ALL,
@@ -31,6 +33,7 @@ def schedule():
                                                                                 db.cohort_plan.created_by,
                                                                                 db.cohort_plan.cohort_id,
                                                                                 db.cohort_plan.id)
+        dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for plan'))
         for plan in allPlans:
             if plan.cohort_plan.status=='new' and plan.cohort_plan.start_date < datetime.datetime.now().date():
                 plan.cohort_plan.status='active'
@@ -38,6 +41,7 @@ def schedule():
             for user in allUsers:
                 count=0
                 total=0
+                dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for allProgress'))
                 for progress in allProgress:
                     if int(progress.user_sub_chapter_progress.user_id)==user.id and progress.chapters.id==plan.chapters.id: 
                         if progress.user_sub_chapter_progress.status > 0:
@@ -48,12 +52,15 @@ def schedule():
 
             userProgress = db(db.user_chapter_progress.chapter_id==plan.chapters.id).select(db.user_chapter_progress.status)
             completed = True
-
+            dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for userProgress'))
             for progress in userProgress:
                 if progress.status<100:
                     completed=False
 
         cohortName = db(db.cohort_master.id == auth.user.cohort_id).select(db.cohort_master.cohort_name)
+
+        dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'done'))
+        dbfile.close()
         return dict(allPlans=allPlans, allProgress=allProgress, allUsers=allUsers,
                     allComments=allComments, cohortName=cohortName)
 
@@ -62,8 +69,9 @@ def newschedule():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
     else:
-        chapters = db(db.chapters.id==db.cohort_plan.chapter_id).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status, db.cohort_plan.cohort_id)
-        return dict(chapters = chapters)
+        chapters = db((db.chapters.id==db.cohort_plan.chapter_id) &
+                      (db.cohort_plan.cohort_id == auth.user.cohort_id)).select(db.chapters.id, db.chapters.chapter_name, db.cohort_plan.status, db.cohort_plan.cohort_id)
+        return dict(chapters=chapters)
 
 
 def modifiedschedule():
