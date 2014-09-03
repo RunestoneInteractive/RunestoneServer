@@ -23,10 +23,10 @@ For this week, you have the following graded activities:
    * Before Tuesday's class: 
    
    * Before Thursday's class:
-      * 
+      
 
 #. Reading responses
-      * 
+      
 
 #. Save answers to the exercises in Problem Set 2:
    :ref:`Problem Set 1 <problem_set_2>` 
@@ -238,4 +238,18 @@ Problem Set
 
 
 
+.. activecode:: addl_functions_2
+   :nopre:
+   :hidecode:
+
+   def square(num):
+      return num**2
+
+   def greeting(st):
+      #st = str(st) # just in case
+      return "Hello, " + st
+
+   def random_digit():
+     import random
+     return random.choice([0,1,2,3,4,5,6,7,8,9])
       
