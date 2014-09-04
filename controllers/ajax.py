@@ -334,7 +334,9 @@ def getlastpage():
     if auth.user:
         result = db((db.user_state.user_id == auth.user.id) &
                     (db.user_state.course_id == course) &
+                    (db.user_state.course_id == db.chapters.course_id) &
                     (db.user_state.last_page_chapter == db.chapters.chapter_label) &
+                    (db.sub_chapters.chapter_id == db.chapters.id) &
                     (db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
                     ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
                              db.chapters.chapter_name,
