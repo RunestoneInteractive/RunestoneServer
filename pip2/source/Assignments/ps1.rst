@@ -128,8 +128,9 @@ Problem Set
 
     ====
     print "\n\n---\n"
+    import test
     try:
-       test.testEqual(new_number, square(3))
+       test.testEqual(new_number, 9)
     except:
        print "Failed test: the variable new_number does not exist yet"
 

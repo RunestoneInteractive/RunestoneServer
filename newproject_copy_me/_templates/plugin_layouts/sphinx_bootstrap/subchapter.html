@@ -1,0 +1,24 @@
+{%- if prev %}
+  <li id="relations-prev" class="navLink" title='Previous Section - {{ prev.title }}' data-toggle="tooltip">
+    <a href="{{ prev.link|e }}" >
+      <i class='prevNav glyphicon glyphicon-chevron-left'></i>
+    </a>
+  </li>
+  <a class="navLinkBg" id="navLinkBgLeft"  href="{{ prev.link|e }}" ></a>
+  {% endif %}
+
+{%- if next %}
+  <li id="relations-next" class="navLink" title='Next Section - {{ next.title }}' data-toggle="tooltip" >
+    <a href="{{ next.link|e }}" >
+      <i id="relationsNextIcon" class='nextNav glyphicon glyphicon-chevron-right'></i>
+    </a>
+  </li>
+  <a class="navLinkBg navLink" id="navLinkBgRight" href="{{ next.link|e }}" >Next Section - {{ next.title }}</a>
+{%- endif %}
+
+<script type="text/javascript">
+
+  $('#relations-prev').tooltip({'placement':'right', 'selector': '', 'delay': { show: 100, hide: 50}});
+  $('#relations-next').tooltip({'placement':'left', 'selector': '', 'delay': { show: 100, hide: 50}});
+  
+</script>

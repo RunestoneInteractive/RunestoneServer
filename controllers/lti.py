@@ -101,7 +101,12 @@ def index():
                 user['course_id'] = course_id
                 user['section'] = section_id
                 user.update_record()
-    
+            if section_id:
+                # set the section in the section_users table
+                # test this
+                db.section_users.update_or_insert(db.section_users.auth_user == user['id'], auth_user=user['id'], section = section_id)
+
+                
     #    print user, type(user)
     #    print "Logging in..."
         auth.login_user(user)
