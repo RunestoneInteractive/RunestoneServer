@@ -53,8 +53,14 @@ def user():
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
-            chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
+            res = db(db.chapters.course_id == auth.user.course_name)
+            if res.count() > 0:
+                chapter_label = res.select().first().chapter_label
+            else:
+                session.flash = 'This course is not set up for tracking progress'
+                redirect(URL('default','index'))
+            if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                  (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                 db.executesql('''
                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
