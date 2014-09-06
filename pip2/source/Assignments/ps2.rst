@@ -144,7 +144,7 @@ Problem Set
 
 
 
-#. See comments for instructions again. (Keep in mind: All ordinal numbers in *instructions*, like "third" or "fifth" refer to the way HUMANS count. How do you write code to find the right things?)
+3. See comments for instructions again. (Keep in mind: All ordinal numbers in *instructions*, like "third" or "fifth" refer to the way HUMANS count. How do you write code to find the right things?)
 
 .. activecode:: ps_2_3
 
@@ -177,7 +177,7 @@ Problem Set
      test.testEqual(another_type, type(mixed_bag[0]))
 
 
-#. There is a function we are giving you for this problem set that takes two strings, and returns the length of both of those strings added together, called ``add_lengths``. We are also including the functions from Problem Set 1 called ``random_digit`` and ``square`` in this problem set. 
+4. There is a function we are giving you for this problem set that takes two strings, and returns the length of both of those strings added together, called ``add_lengths``. We are also including the functions from Problem Set 1 called ``random_digit`` and ``square`` in this problem set. 
 
 Now, take a look at the following code and related questions, in this code window.
 
@@ -228,7 +228,7 @@ Now, take a look at the following code and related questions, in this code windo
      # Given all this information, what type will fin_value hold once all this code is run?
 
 
-#. Here's another complicated expression, using the Turtle framework we talked about. Arrange these expressions in the order they are executed, like you did in an exercise in Chapter 2 of the textbook. 
+5. Here's another complicated expression, using the Turtle framework we talked about. Arrange these expressions in the order they are executed, like you did in an exercise in Chapter 2 of the textbook. 
 
 .. sourcecode:: python
    
