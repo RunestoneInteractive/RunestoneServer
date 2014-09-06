@@ -98,7 +98,7 @@ EDIT2 = '''
 VIZB = '''<button class='btn btn-default' id="%(divid)s_vizb" onclick="injectCodelens(this,'%(divid)s');">Show in Codelens</button>
 '''
 
-COACHB = '''<button class='btn btn-default' id="%(divid)s_coach_b" onclick="injectCodeCoach('%(divid)s');">Code Coach</button>
+COACHB = '''<button class='ac_opt btn btn-default' id="%(divid)s_coach_b" onclick="injectCodeCoach('%(divid)s');">Code Coach</button>
 '''
 
 SCRIPT = '''
