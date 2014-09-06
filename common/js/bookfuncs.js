@@ -491,6 +491,8 @@ function disableAcOpt() {
             $jqTheme(value).attr('title', 'Register or log in to save your code');
         } else if ($jqTheme(value).text() == 'Load') {
             $jqTheme(value).attr('title', 'Register or log in to load your saved code');
+        } else if ($jqTheme(value).text() == 'Code Coach') {
+            $jqTheme(value).attr('title', 'Register or log in to use Code Coach');
         }
         $jqTheme(value).tooltip({
                                     'selector': '',
