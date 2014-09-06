@@ -202,39 +202,29 @@ Problem Set
       x = "hello class".find("o") - 1
       ella.speed = 3
 
+	  
       ella.move(square(x*ella.speed))
 
    .. parsonsprob:: ps_2_5
 
-      Order the code fragments in the order in which the Python interpreter would evaluate them.
+      Order the code fragments in the order in which the Python interpreter would evaluate them, when evaluating that last line of code. (It may help to think about what specifically is happening in the first four lines of code as well.)
       -----
-      import the turtle library
+      Look up the variable ella and find that it is an instance of a Turtle object
       =====
-      look up the Turtle() object in the turtle library and create a new instance of a Turtle 
-      =====
-      assign a new Turtle instance to the variable ella
-      =====
-      execute the string method .find() on the string "hello class" and evaluate the expression "hello class".find("o")
-      =====
-      subtract 1 from the integer than "hello class".find("o") evaluates to
-      =====
-      assign an integer to the variable x
-      =====
-      look up the speed attribute of ella and evaluate that expression to an integer
-      ===== 
-      assign ella.speed to be equal to the value 3
-      =====
-      multiply the value in the variable x by the value in the expression ella.speed
-      =====
-      look up the variable square to get the function object
-      =====
-      evaluate the expression x * ella.speed
-      =====
-      run the square function on input x*ella.speed
-      =====
-      look up the move attribute on Turtle instances
-      =====      
-      execute the move method of ella on input of the evaluated expression square(x*ella.speed)
+	  Look up the method move of the Turtle ella
+	  =====
+	  Look up the function square
+	  =====
+	  Look up the value of the variable x and find that it is an integer
+	  =====
+	  Look up the value of the attribute speed of the instance ella and find that it is an integer
+	  =====
+	  Evaluate the expression x * ella.speed to one integer
+	  =====
+	  Call the function square on an integer value
+	  =====
+	  Call the method .move of the Turtle ella on its input integer
+	  
 
 
 
