@@ -15,6 +15,8 @@ def schedule():
             redirect(URL('mygroup','manageGroup'))
         dbfile.write('%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
         allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
+                         (db.auth_user.course_name == auth.user.course_name) &
+                         (db.chapters.course_id == auth.user.course_name) &
                          (db.user_sub_chapter_progress.user_id == db.auth_user.id) &
                          (db.auth_user.cohort_id == auth.user.cohort_id)).select(db.user_sub_chapter_progress.ALL,
                                                                                 db.chapters.ALL,
@@ -116,6 +118,9 @@ def comment():
 def initiateGroup():
     #if pprint.pprint(auth.user)
     if auth.user == None:
+        redirect(URL('default', 'user/login'))
+    elif db(db.chapters.course_id == auth.user.course_name).count() < 1:
+        session.flash = 'Your course does not appear to support Study Groups'
         redirect(URL('default', 'user/login'))
     else:
         return dict(requestArgs=request.args(0))
