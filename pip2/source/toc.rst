@@ -9,7 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 2
 
-
+   Assignments/ps2.rst
    Assignments/ps1.rst
 
 General Introduction
