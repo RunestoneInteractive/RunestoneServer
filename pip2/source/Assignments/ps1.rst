@@ -59,7 +59,7 @@ Problem Set
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
 
-#. The variable ``tpa`` currently has the value ``0``. Assign the variable ``tpa`` the value ``6`` .
+1. The variable ``tpa`` currently has the value ``0``. Assign the variable ``tpa`` the value ``6`` .
 
 .. activecode:: ps_1_1
 
@@ -71,7 +71,7 @@ Problem Set
    test.testEqual(tpa, 6)
 
 
-#. Write code to assign the variable ``yb`` to have the same value that variable ``cw`` has. Do not change the first line of code (``cw = "Hello"``), but write code that would work no matter what the current value of ``cw`` is.
+2. Write code to assign the variable ``yb`` to have the same value that variable ``cw`` has. Do not change the first line of code (``cw = "Hello"``), but write code that would work no matter what the current value of ``cw`` is.
 
 .. activecode:: ps_1_2
 
@@ -84,7 +84,7 @@ Problem Set
    test.testEqual(cw, yb)
 
 
-#. Write code to print out the type of the variable ``apples_and_oranges``, the type of the variable ``abc``, and the type of the variable ``new_var``.
+3. Write code to print out the type of the variable ``apples_and_oranges``, the type of the variable ``abc``, and the type of the variable ``new_var``.
 
 .. activecode:: ps_1_3
    
@@ -99,7 +99,7 @@ Problem Set
    print "\n\n---\n(There are no tests for this problem.)"
 
 
-#. There is a function we are giving you called ``square``. It takes one integer and returns the square of that integer value. Write code to assign a variable callex ``xyz`` the value ``5*5`` (five squared). Use the square function, rather than just multiplying with ``*``.
+4. There is a function we are giving you called ``square``. It takes one integer and returns the square of that integer value. Write code to assign a variable callex ``xyz`` the value ``5*5`` (five squared). Use the square function, rather than just multiplying with ``*``.
 
 .. activecode:: ps_1_4
    :include: addl_functions
@@ -120,7 +120,7 @@ Problem Set
       print "variable xyz doesn't have a value at all!"
       
 
-#. Write code to assign the return value of the function call ``square(3)`` to the variable ``new_number``.
+5. Write code to assign the return value of the function call ``square(3)`` to the variable ``new_number``.
 
 .. activecode:: ps_1_5
     :include: addl_functions
@@ -135,7 +135,7 @@ Problem Set
        print "Failed test: the variable new_number does not exist yet"
 
 
-#. Write in a comment what each line of this code does. 
+6. Write in a comment what each line of this code does. 
 
 .. activecode:: ps_1_6
     :include: addl_functions
@@ -161,7 +161,7 @@ Problem Set
 
     print pear
 
-#. There are a couple more functions we're giving you in this problem set. One is a function called ``greeting``, which takes any string and adds ``"Hello, "`` in front of it. (You can see examples in the code.) Another one is a function called ``random_digit``, which returns a value of any random integer between 0 and 9 (inclusive). (You can also see examples in the code.)
+7. There are a couple more functions we're giving you in this problem set. One is a function called ``greeting``, which takes any string and adds ``"Hello, "`` in front of it. (You can see examples in the code.) Another one is a function called ``random_digit``, which returns a value of any random integer between 0 and 9 (inclusive). (You can also see examples in the code.)
 
 Write code that assigns to the variable ``func_var`` the **function** ``greeting`` (without executing the function). 
 
@@ -192,7 +192,7 @@ Then, write code that assigns to the variable ``digit_func`` the **function** ``
    test.testEqual(type(new_digit), type(1))
    test.testEqual(type(digit_func), type(random_digit))
 
-#. Now write code that assigns the variable ``newval`` to hold the **return value** of ``greeting("everyone in class")``.
+8. Now write code that assigns the variable ``newval`` to hold the **return value** of ``greeting("everyone in class")``.
 
 .. activecode:: ps_1_8
    :include: addl_functions
@@ -203,7 +203,7 @@ Then, write code that assigns to the variable ``digit_func`` the **function** ``
    test.testEqual(newval, greeting("everyone in class"))
     
 
-#. This code causes an error. Why? Write a comment explaining.
+9. This code causes an error. Why? Write a comment explaining.
 
 .. activecode:: ps_1_9
 
