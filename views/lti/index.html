@@ -1,0 +1,27 @@
+<html>
+<head>
+<script src="/lti4web2py/static/js/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+{{if logged_in:}}
+<h3>Logged in</h3>
+<script type="text/javascript">
+function dodredirect() {
+    
+}
+if ( window.self === window.top ) { 
+   // alert('/{{=masterapp}}');
+   window.location.href = '/{{=masterapp}}';
+} else { 
+    document.write('<p>You are running this tool in an iframe, the login might not work due to cookies.  ' + 
+        'For best results, reconfigure your LMS to launch this tool in a new window.</p>');
+    document.write('<p><a href="/{{=masterapp}}" target="_blank">Press here to continue</a></p>');
+}
+</script>
+{{else:}}
+<h3>Not logged in due to the following error(s)</h3>
+<ul>
+{{for item in lti_errors:}}<li>{{=item}}</li>{{pass}}
+</ul>
+{{pass}}
+</body>
