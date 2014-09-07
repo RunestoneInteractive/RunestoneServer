@@ -346,7 +346,7 @@ class ActiveCode(Directive):
         if 'language' not in self.options:
             self.options['language'] = 'python'
 
-        if 'nocodelens' in self.options:
+        if 'nocodelens' in self.options or self.options['language'] != 'python':
             self.options['codelens'] = False
         else:
             self.options['codelens'] = True
