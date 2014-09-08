@@ -128,10 +128,14 @@ def initiateGroup():
 def manageGroup():
     if auth.user == None:
         redirect(URL('default', 'user/login'))
+    elif not auth.user.cohort_id:
+        session.flash = 'You do not appear to belong to a study group yet'
+        redirect(URL('mygroup', 'initiateGroup'))
     else:
-        cohortIdResult = db(db.auth_user.id==auth.user.id).select(db.auth_user.cohort_id) 
-        currentGroup = db(db.cohort_master.id==cohortIdResult[0].cohort_id).select(db.cohort_master.id, db.cohort_master.cohort_name, db.cohort_master.invitation_id, db.cohort_master.is_active)
-        allGroupMembers = db(db.auth_user.cohort_id==currentGroup[0].id).select(db.auth_user.first_name, db.auth_user.last_name)
+        currentGroup = db(db.cohort_master.id == auth.user.cohort_id).select(db.cohort_master.id, db.cohort_master.cohort_name,
+                                                                     db.cohort_master.invitation_id,
+                                                                     db.cohort_master.is_active)
+        allGroupMembers = db(db.auth_user.cohort_id == auth.user.cohort_id).select(db.auth_user.first_name, db.auth_user.last_name)
         return dict(currentGroup=currentGroup[0], allGroupMembers=allGroupMembers)
 
 def createNewGroup():
