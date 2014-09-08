@@ -104,10 +104,14 @@ def saveprog():
         idx = id.rfind('-') - 1
         return id[:idx]
     
-    section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+    section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
     # get the assignment object associated with acid, *and the current course*
-    assignment = db(db.assignments.id == db.problems.assignment)(db.problems.acid == acid)(db.assignments.course==section.course_id).select(db.assignments.ALL).first()
+    assignment = None
+    if section:
+        assignment = db((db.assignments.id == db.problems.assignment) &
+                        (db.problems.acid == acid) &
+                        (db.assignments.course==section.course_id)).select(db.assignments.ALL).first()
     if assignment:
         q = db(db.deadlines.assignment == assignment.id)
         if section:
