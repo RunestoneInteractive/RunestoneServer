@@ -1,17 +1,41 @@
 {{extend 'layout.html'}}
 
-<table>
-<tr>
-  <th>Question ID</th>
-  <th>Number of Tries</th>
-  <th>Percent Correct</th>
-</tr>
-{{for row in solutions:}}
-    <tr>
-        <td><a href="/{{=request.application}}/admin/assessdetail?id={{=row[0]}}">{{=row[0]}}</a></td>
-	<td>{{=row[1]}}</td>
-	<td>{{=row[2]}}</td>
-    </tr>  
-    {{pass}}
-
-</table>	
+<div class="panel-group">
+   <!-- row[0] is chapter title; row[1] is list of divs; 
+   -->
+   {{for row in solutions:}}
+   <div class="panel" id="chapters">
+      <div class="panel-heading">
+         <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="chapters" href="#chapter-{{=row[0]}}">{{=row[0]}}</a>
+         </h4>
+      </div>
+      <div id="chapter-{{=row[0]}}" class="panel-collapse collapse">
+         <div class="panel-body">
+            <table>
+            <tr>
+              <th>Subchapter</th>
+              <th>Question ID</th>
+              <th>Num Students</th>
+              <th style="padding-left: 15px;">Pct Correct on First Try</th>
+              <th>answer1</th>
+              <th>answer2</th>
+              <th>answer3</th>
+            </tr>
+            {{for ex in row[1]:}}
+            <tr>
+              <th>{{=ex['subchapter']}}</th>
+              <th>{{=ex['div_id']}}</th>
+              <th style="padding-left: 15px;">{{=len(ex['sids'])}}</th>
+              <th style="padding-left: 30px;">{{=ex['pct']}}%</th>
+              <th style="padding-left: 10px;">{{=ex['first']}}</th>
+              <th style="padding-left: 10px;">{{=ex['second']}}</th>
+              <th style="padding-left: 10px;">{{=ex['third']}}</th>
+            </tr>
+            {{pass}}  
+            </table>
+         </div>
+      </div> 
+   </div>
+   {{pass}}  
+</div>
