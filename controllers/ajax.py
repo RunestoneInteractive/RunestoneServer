@@ -653,18 +653,20 @@ def getCodeDiffs():
         sid = auth.user.username
     else:
         sid = request.vars['sid']
-    divid = request.vars['divid']
-    q = '''select timestamp, sid, div_id, code, emessage, id
-           from acerror_log 
-           where sid = '%s' and course_id = '%s' and div_id='%s'
-           order by timestamp
-    ''' % (sid, auth.user.course_name, divid)
 
-    rows = db.executesql(q)
+    divid = request.vars['divid']
+    rows = []
+    if sid and divid and auth.user:
+        q = '''select timestamp, sid, div_id, code, emessage, id
+               from acerror_log
+               where sid = '%s' and course_id = '%s' and div_id='%s'
+               order by timestamp
+        ''' % (sid, auth.user.course_name, divid)
+        rows = db.executesql(q)
     if len(rows) < 1:
         return json.dumps(dict(timestamps=[0], code=[''],
                                diffs=[''],
-                               mess=['No Coaching hints yet.  You need to run the example at least once.'],
+                               mess=['No Coaching hints yet.  You need to run the example at least once and be logged in and registered for a course'],
                                chints=['']))
 
     differ = diff_match_patch()
