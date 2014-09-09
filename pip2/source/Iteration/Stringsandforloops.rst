@@ -18,7 +18,7 @@ to predict what the output will be from this code before your run it.
     :nocanvas:
 
     for achar in "Go Spot Go":
-        print(achar)
+        print achar
 
 The loop variable ``achar`` is automatically reassigned each character in the string "Go Spot Go".
 We will refer to this type of sequence iteration as **iteration by item**.  
@@ -44,7 +44,7 @@ Note that the for loop processes the characters in a string or items in a sequen
 
       s = "python rocks"
       for ch in s:
-         print("HELLO")
+         print "HELLO"
 
    
    
@@ -67,7 +67,7 @@ Note that the for loop processes the characters in a string or items in a sequen
 
       s = "python rocks"
       for ch in s[3:8]:
-         print("HELLO")
+         print "HELLO"
 
 
 

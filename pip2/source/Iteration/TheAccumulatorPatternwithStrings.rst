@@ -51,7 +51,7 @@ everywhere in the above code).
       r = ""
       for item in s:
          r = item.upper() + r
-      print(r)
+      print r
 
 
 .. note::

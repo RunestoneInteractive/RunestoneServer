@@ -40,7 +40,7 @@ the buttons.  You can see the value of ``name`` change as the loop iterates thru
 .. codelens:: vtest
 
     for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        print("Hi ", name, "  Please come to my party on Saturday!")
+        print "Hi ", name, "  Please come to my party on Saturday!"
 
 
 

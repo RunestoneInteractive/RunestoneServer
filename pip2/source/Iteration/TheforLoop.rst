@@ -20,7 +20,7 @@ message for each friend.
     :tour_1: "Overall Tour"; 1-2: Example04_Tour01_Line01; 2: Example04_Tour01_Line02; 1: Example04_Tour01_Line03;
 
     for name in ["Joe", "Amy", "Brad", "Angelina", "Zuki", "Thandi", "Paris"]:
-        print("Hi", name, "Please come to my party on Saturday!")
+        print "Hi", name, "Please come to my party on Saturday!" 
 
 
 Take a look at the output produced when you press the ``run`` button.  There is one line printed for each friend.  Here's how it works:

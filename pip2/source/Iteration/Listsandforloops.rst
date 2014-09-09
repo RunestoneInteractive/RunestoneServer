@@ -18,7 +18,7 @@ It is also possible to perform **list traversal** using iteration by item as wel
     fruits = ["apple","orange","banana","cherry"]
 
     for afruit in fruits:     # by item
-        print(afruit)
+        print afruit
 
 It almost reads like natural language: For (every) fruit in (the list of) fruits,
 print (the name of the) fruit.
@@ -30,7 +30,7 @@ We can also use the indices to access the items in an iterative fashion.
     fruits = ["apple","orange","banana","cherry"]
 
     for position in range(len(fruits)):     # by index
-        print(fruits[position])
+        print fruits[position]
 
 
 In this example, each time through the loop, the variable ``position`` is used as an index into the
@@ -44,12 +44,12 @@ each of its elements as you go. The following code squares all the numbers from 
 .. activecode:: chp09_for4
 
     numbers = [10, 20, 30, 40, 50]
-    print(numbers)
+    print numbers
 
     for i in range(len(numbers)):
         numbers[i] = numbers[i]**2
 
-    print(numbers)
+    print numbers
 
 Take a moment to think about ``range(len(numbers))`` until you understand how
 it works. In this case, since ``len(numbers)`` is 5, it's the same as saying ``range(5)``.
