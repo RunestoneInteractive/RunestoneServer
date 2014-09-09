@@ -430,6 +430,7 @@ function saveEditor(divName) {
     // get editor from div name
     var editor = cm_editors[divName + "_code"];
     var data = {acid: divName, code: editor.getValue()};
+    data.lang = $('#'+divName).attr('lang');
     $(document).ajaxError(function (e, jqhxr, settings, exception) {
         alert("Request Failed for" + settings.url)
     });

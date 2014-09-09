@@ -126,7 +126,8 @@ def saveprog():
         db.code.insert(sid=auth.user.username,
             acid=acid,code=code,
             timestamp=datetime.datetime.now(),
-            course_id=auth.user.course_id)
+            course_id=auth.user.course_id,
+            language=request.vars.lang)
     except Exception as e:
         if not auth.user:
             return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])

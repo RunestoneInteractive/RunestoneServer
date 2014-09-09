@@ -18,6 +18,7 @@ db.define_table('code',
   Field('sid','string'),
   Field('timestamp','datetime'),
   Field('comment','text'),
+  Field('language','text', default='python'),
   migrate='runestone_code.table'
 )
 
