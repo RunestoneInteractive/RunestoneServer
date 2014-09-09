@@ -58,238 +58,108 @@ Problem Set
 
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
-  .. tabbed:: ps1_pb1
 
-    .. tab:: Problem
+1. The variable ``tpa`` currently has the value ``0``. Assign the variable ``tpa`` the value ``6`` .
 
-      1. The variable ``tpa`` currently has the value ``0``. Assign the variable ``tpa`` the value ``6`` .
+.. activecode:: ps_1_1
 
-      .. activecode:: ps_1_1
-
-         tpa = 0
-         
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(tpa, 6)
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_1s
-
-         tpa = 0 # just reassigning this to 6 is also fine
-         tpa = 6
-
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(tpa, 6)
+   tpa = 0
+   
+   ====
+   import test
+   print "\n\n---\n"
+   test.testEqual(tpa, 6)
 
 
 2. Write code to assign the variable ``yb`` to have the same value that variable ``cw`` has. Do not change the first line of code (``cw = "Hello"``), but write code that would work no matter what the current value of ``cw`` is.
 
+.. activecode:: ps_1_2
 
-  .. tabbed:: ps1_pb2
+   cw = "Hello"
+   yb = 0
 
-    .. tab:: Problem
-
-      .. activecode:: ps_1_2
-
-         cw = "Hello"
-         yb = 0
-
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(cw, yb)
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_2s
-
-         cw = "Hello"
-         yb = 0
-         yb = cw
-
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(cw, yb)
+   ====
+   import test
+   print "\n\n---\n"
+   test.testEqual(cw, yb)
 
 
 3. Write code to print out the type of the variable ``apples_and_oranges``, the type of the variable ``abc``, and the type of the variable ``new_var``.
 
-  .. tabbed:: ps1_pb3
+.. activecode:: ps_1_3
+   
+   apples_and_oranges = """hello, everybody
+                             how're you?"""
 
-    .. tab:: Problem
+   abc = 6.75483
 
-      .. activecode:: ps_1_3
-         
-         apples_and_oranges = """hello, everybody
-                                   how're you?"""
+   new_var = 824
 
-         abc = 6.75483
-
-         new_var = 824
-
-         ====
-         print "\n\n---\n(There are no tests for this problem.)"
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_3s
-         
-         apples_and_oranges = """hello, everybody
-                                   how're you?"""
-
-         abc = 6.75483
-
-         new_var = 824
-
-         print type(apples_and_oranges)
-         print type(abc)
-         print type(new_var)
-
-         ====
-         print "\n\n---\n(There are no tests for this problem.)"
+   ====
+   print "\n\n---\n(There are no tests for this problem.)"
 
 
 4. There is a function we are giving you called ``square``. It takes one integer and returns the square of that integer value. Write code to assign a variable callex ``xyz`` the value ``5*5`` (five squared). Use the square function, rather than just multiplying with ``*``.
 
-.. tabbed:: ps1_pb4
+.. activecode:: ps_1_4
+   :include: addl_functions
 
-  .. tab:: Problem
+   # Want to make sure there really is a function called square? Uncomment the following line and press run.
 
-    .. activecode:: ps_1_4
-       :include: addl_functions
+   #print type(square)
 
-       # Want to make sure there really is a function called square? Uncomment the following line and press run.
-
-       #print type(square)
-
-       xyz = ""
-       
-       ====
-       import test
-       print "\n\n---\n"
-       try:
-          test.testEqual(type(xyz), type(3))
-          test.testEqual(xyz,25)
-       except:
-          print "variable xyz doesn't have a value at all!"
-
-  .. tab:: Solution
-
-    .. activecode:: ps_1_4s
-       :include: addl_functions
-
-       # Want to make sure there really is a function called square? Uncomment the following line and press run.
-
-       #print type(square)
-
-       xyz = square(5)
-       
-       ====
-       import test
-       print "\n\n---\n"
-       try:
-          test.testEqual(type(xyz), type(3))
-          test.testEqual(xyz,25)
-       except:
-          print "variable xyz doesn't have a value at all!"
+   xyz = ""
+   
+   ====
+   import test
+   print "\n\n---\n"
+   try:
+      test.testEqual(type(xyz), type(3))
+      test.testEqual(xyz,25)
+   except:
+      print "variable xyz doesn't have a value at all!"
       
 
 5. Write code to assign the return value of the function call ``square(3)`` to the variable ``new_number``.
 
-  .. tabbed:: ps1_pb5
+.. activecode:: ps_1_5
+    :include: addl_functions
 
-    .. tab:: Problem
 
-      .. activecode:: ps_1_5
-          :include: addl_functions
-
-          ====
-          print "\n\n---\n"
-          import test
-          try:
-             test.testEqual(new_number, 9)
-          except:
-             print "Failed test: the variable new_number does not exist yet"
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_5s
-          :include: addl_functions
-
-          new_number = square(3)
-
-          ====
-          print "\n\n---\n"
-          import test
-          try:
-             test.testEqual(new_number, 9)
-          except:
-             print "Failed test: the variable new_number does not exist yet"
+    ====
+    print "\n\n---\n"
+    import test
+    try:
+       test.testEqual(new_number, 9)
+    except:
+       print "Failed test: the variable new_number does not exist yet"
 
 
 6. Write in a comment what each line of this code does. 
 
-  .. tabbed:: ps1_pb6
+.. activecode:: ps_1_6
+    :include: addl_functions
 
-    .. tab:: Problem
+    # Here's an example.
+    xyz = 12 # The variable xyz is being assigned the value 12, which is an integer
 
-      .. activecode:: ps_1_6
-          :include: addl_functions
+    # Now do the same for these!
+    a = 6
 
-          # Here's an example.
-          xyz = 12 # The variable xyz is being assigned the value 12, which is an integer
+    b = a
 
-          # Now do the same for these!
-          a = 6
+    # make sure to be very clear and detailed about the following line of code
+    orange = square(b)
 
-          b = a
+    print a
 
-          # make sure to be very clear and detailed about the following line of code
-          orange = square(b)
+    print b
 
-          print a
+    print orange
 
-          print b
+    pear = square
 
-          print orange
-
-          pear = square
-
-          print pear
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_6s
-        :include: addl_functions
-
-        # Here's an example.
-        xyz = 12 # The variable xyz is being assigned the value 12, which is an integer
-
-        # Now do the same for these!
-        a = 6 # the variable a is being assigned the integer value 6
-
-        b = a # the variable b is being assigned the value that the variable a holds
-
-        # make sure to be very clear and detailed about the following line of code
-        orange = square(b) # the variable orange is being assigned the value of the 
-        ## evaluated expression square(b), which, if b is an integer, will be another integer
-
-        print a # the (integer) value bound to/held by the variable a is printed
-
-        print b # the (integer) value bound to the variable b is printed
-
-        print orange # the (integer) value bound to the variable orange is printed
-
-        pear = square # the variable pear is being assigned the value of the variable name square(which is a function)
-
-        print pear # the value bound to the variable pear (now a function) is beign printed out 
-
-        ## remember, print is for people! printing out is for the programmer/user to see, not the computer or the program!
+    print pear
 
 7. There are a couple more functions we're giving you in this problem set. One is a function called ``greeting``, which takes any string and adds ``"Hello, "`` in front of it. (You can see examples in the code.) Another one is a function called ``random_digit``, which returns a value of any random integer between 0 and 9 (inclusive). (You can also see examples in the code.)
 
@@ -299,106 +169,46 @@ Then, write code that assigns to the variable ``new_digit`` the **return value**
 
 Then, write code that assigns to the variable ``digit_func`` the **function** ``random_digit`` (without executing the function).
 
-  .. tabbed:: ps1_pb7
 
-    .. tab:: Problem
+.. activecode:: ps_1_7
+   :include: addl_functions
 
-      .. activecode:: ps_1_7
-         :include: addl_functions
+   # For example
+   print greeting("Jackie")
+   print greeting("everybody")
+   print greeting("sdgadgsal")
+   
+   # Try running all this code more than once, so you can see how calling the function
+   # random_digit works.
+   print random_digit()
+   print random_digit()
 
-         # For example
-         print greeting("Jackie")
-         print greeting("everybody")
-         print greeting("sdgadgsal")
-         
-         # Try running all this code more than once, so you can see how calling the function
-         # random_digit works.
-         print random_digit()
-         print random_digit()
+   # Write code that assigns the variables as mentioned in the instructions.
 
-         # Write code that assigns the variables as mentioned in the instructions.
-
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(type(func_var), type(greeting))
-         test.testEqual(type(new_digit), type(1))
-         test.testEqual(type(digit_func), type(random_digit))
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_7s
-         :include: addl_functions
-
-         # For example
-         print greeting("Jackie")
-         print greeting("everybody")
-         print greeting("sdgadgsal")
-         
-         # Try running all this code more than once, so you can see how calling the function
-         # random_digit works.
-         print random_digit()
-         print random_digit()
-
-         # Write code that assigns the variables as mentioned in the instructions.
-         func_var = greeting
-         new_digit = random_digit()
-         digit_func = random_digit
-
-         ====
-         import test
-         print "\n\n---\n"
-         test.testEqual(type(func_var), type(greeting))
-         test.testEqual(type(new_digit), type(1))
-         test.testEqual(type(digit_func), type(random_digit))
-
+   ====
+   import test
+   print "\n\n---\n"
+   test.testEqual(type(func_var), type(greeting))
+   test.testEqual(type(new_digit), type(1))
+   test.testEqual(type(digit_func), type(random_digit))
 
 8. Now write code that assigns the variable ``newval`` to hold the **return value** of ``greeting("everyone in class")``.
 
-  .. tabbed:: ps1_pb8
+.. activecode:: ps_1_8
+   :include: addl_functions
 
-    .. tab:: Problem
-
-      .. activecode:: ps_1_8
-         :include: addl_functions
-
-         ====   
-         import test
-         print "\n\n---\n"
-         test.testEqual(newval, greeting("everyone in class"))
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_8s
-         :include: addl_functions
-
-         newval = greeting("everyone in class")
-
-         ====   
-         import test
-         print "\n\n---\n"
-         test.testEqual(newval, greeting("everyone in class"))
+   ====   
+   import test
+   print "\n\n---\n"
+   test.testEqual(newval, greeting("everyone in class"))
     
 
 9. This code causes an error. Why? Write a comment explaining.
 
-  .. tabbed:: ps1_pb9
+.. activecode:: ps_1_9
 
-    .. tab:: Problem
-
-      .. activecode:: ps_1_9
-
-         another_variable = "?!"
-         b = another_variable()
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_9s
-
-         another_variable = "?!"
-         b = another_variable()
-         # this code is trying to call a non-callable object
-         # another_value holds a string value, not a function value, so that cannot be called like a function can be!
+   another_variable = "?!"
+   b = another_variable()
 
    
 .. activecode:: addl_functions

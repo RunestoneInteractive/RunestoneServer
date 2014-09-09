@@ -258,8 +258,6 @@ etc.
 
          Solution not yet available.
 
-
-
    
 .. activecode:: addl_functions_3
    :nopre:
