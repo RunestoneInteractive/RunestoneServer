@@ -126,7 +126,7 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
 
-function createActiveCode(divid,suppliedSource,sid) {
+function createActiveCode(divid,suppliedSource,sid,language) {
     var edNode;
     var acblockid;
     if (sid !== undefined) {
@@ -137,6 +137,9 @@ function createActiveCode(divid,suppliedSource,sid) {
 
     edNode = document.getElementById(acblockid);
     edNode.lang = edNode.lang || 'python'
+    if (language !== undefined && language !== "None") {
+        edNode.lang = language;
+    }
     if (edNode.children.length == 0 ) {
         //edNode.style.display = 'none';
         edNode.style.backgroundColor = "white";

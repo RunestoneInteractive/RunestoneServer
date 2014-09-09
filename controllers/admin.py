@@ -215,6 +215,7 @@ def gradeassignment():
         db.code.sid,
         db.code.grade,
         db.code.id,
+        db.code.language,
         db.auth_user.first_name,
         db.auth_user.last_name,
         db.code.comment,
