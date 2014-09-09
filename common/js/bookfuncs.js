@@ -909,10 +909,6 @@ function createScratchActivecode() {
         });
     });
 
-    $(document).bind('keypress', '\\', function(evt) {
-        toggleScratchActivecode();
-        return false;
-    });
 }
 
 function toggleScratchActivecode() {
