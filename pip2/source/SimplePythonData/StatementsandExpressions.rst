@@ -75,7 +75,7 @@ Similarly, when calling a function, instead of putting a literal inside the pare
    def square(x):
       return x * x
       
-   def minus(x, y):
+   def sub(x, y):
       return x - y
       
 .. activecode:: ch02_14b
