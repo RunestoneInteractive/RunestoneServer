@@ -86,7 +86,7 @@ Similarly, when calling a function, instead of putting a literal inside the pare
    y = 1
    print square(y + 3)
    print square(y + square(x))
-   print minus(square(y), square(x))
+   print sub(square(y), square(x))
    
 With a function call, it's even possible to have a complex expression before the left parenthesis, as long as that expression evaluates to a function object. For now, though, we will just use variable names (like square, sub, and len) that are directly bound to function objects.
 
@@ -94,11 +94,11 @@ It is important to start learning to read code that contains complex expressions
 
 In order to evaluate an operator expression, the Python interpreter first completely evaluates the expression before the operator, then the one after. In order to evaluate a function call expression, the interpreter evaluates the expression before the parentheses (i.e., it looks up the name of the function). Then it tries to evaluate each of the expressions inside the parentheses. There may be more than one, separated by commas. The values of those expressions are passed as inputs to the function when the function is called.
 
-If a function call expression is a sub-expression of some more complicated expression, as ``square(x)`` is in ``minus(square(y), square(x))``, then the return value from ``square(x)`` is passed as an input to the ``sub`` function. This is one of the tricky things that you will have to get used to working out when you read (or write) code. In this example, the ``square`` function is called (twice) before the ``sub`` function is called, even though the ``sub`` function comes first when reading the code from left to right.
+If a function call expression is a sub-expression of some more complicated expression, as ``square(x)`` is in ``sub(square(y), square(x))``, then the return value from ``square(x)`` is passed as an input to the ``sub`` function. This is one of the tricky things that you will have to get used to working out when you read (or write) code. In this example, the ``square`` function is called (twice) before the ``sub`` function is called, even though the ``sub`` function comes first when reading the code from left to right.
 
 To start giving you some practice in reading and understanding complicated expressions, try doing the Parsons problem below. Be careful not to indent any of the lines of code; that's something that will come later in the course.
 
-Your job is to order the code fragments in the order in which the Python interpreter would evaluate them. x is 2 and y is 3. Now the interpreter is executing ``square(x + minus(square(y), 2 *x))``.
+Your job is to order the code fragments in the order in which the Python interpreter would evaluate them. x is 2 and y is 3. Now the interpreter is executing ``square(x + sub(square(y), 2 *x))``.
 
 .. parsonsprob:: ch02_14c
 
