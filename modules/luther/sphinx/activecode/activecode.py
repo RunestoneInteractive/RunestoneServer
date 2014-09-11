@@ -109,7 +109,7 @@ if ('%(hidecode)s' == 'none') {
     $('#%(divid)s_saveb').toggle();
     $('#%(divid)s_loadb').toggle();
 }
-if ($("#%(divid)s_code_div").parents(".admonition").length == 0 && $("#%(divid)s_code_div").parents("#exercises").length == 0){
+if ($("#%(divid)s").attr("lang") !== "html" && $("#%(divid)s_code_div").parents(".admonition").length == 0 && $("#%(divid)s_code_div").parents("#exercises").length == 0){
 	if ($(window).width() > 975){
 		$("#%(divid)s_code_div").offset({
 			left: $("#%(divid)s .clearfix").offset().left
@@ -168,6 +168,8 @@ VIZ = '''<div id="%(divid)s_codelens_div" style="display:none"></div>'''
 # </iframe>
 
 COACH = '''<div id="%(divid)s_coach_div" style="display:none;"></div>'''
+
+HTMLOUT = '''<div id="%(divid)s_htmlout" style="display:none;" class="ac_htmlout"></div>'''
 
 END = '''
 </div>
@@ -239,6 +241,9 @@ def visit_ac_node(self,node):
 
     if 'coach' in node.ac_components:
         res += COACH
+
+    if node.ac_components['language'] == 'html':
+        res += HTMLOUT
 
     res += SCRIPT
     res += END

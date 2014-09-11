@@ -305,8 +305,9 @@ function runit(myDiv, theButton, includes, suffix) {
             eval(prog);
         } else {
             // html
-            $('#'+myDiv+'_iframe').remove()
-            $('#'+myDiv).append('<iframe class="activehtml" id="' + myDiv + '_iframe" srcdoc="' +
+            $('#'+myDiv+'_iframe').remove();
+            $('#'+myDiv+'_htmlout').show();
+            $('#'+myDiv+'_htmlout').append('<iframe class="activehtml" id="' + myDiv + '_iframe" srcdoc="' +
                 prog.replace(/"/g,"'") + '">' + '</iframe>');
         }
         logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': 'success'}); // Log the run event
