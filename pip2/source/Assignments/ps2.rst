@@ -260,9 +260,7 @@ Now, take a look at the following code and related questions, in this code windo
    Call the function square on an integer value
    =====
    Call the method .move of the Turtle ella on its input integer
-	  
-
-
+	 
 
 .. activecode:: addl_functions_2
    :nopre:
