@@ -90,11 +90,12 @@ function createEditors() {
         } else {
             first_line = 1;
         }
+        var theMode = { name: 'python', version: 2, singleLineStringErrors: false };
+        if (lang == 'html') {
+            theMode = {name: 'htmlmixed'}
+        }
         cm_editors[newEdId] = CodeMirror.fromTextArea(edList[i], {
-                                                          mode: { name: lang,
-                                                                  version: 2,
-                                                                  singleLineStringErrors: false
-                                                                },
+                                                          mode: theMode,
                                                           lineNumbers: true,
                                                           firstLineNumber: first_line,
                                                           indentUnit: 4,
