@@ -7,6 +7,24 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. index::
+    single: modulus operator
+    single: operator; modulus
+
+
+.. index::
+    single: boolean value
+    single: value; boolean
+    single: boolean expression
+    single: expression; boolean
+    single: logical operator
+    single: operator; logical
+    single: operator; comparison
+    single: comparison operator
+
+.. _conditionals_chap:
+    
 Boolean Values and Boolean Expressions
 --------------------------------------
 
@@ -27,9 +45,9 @@ sensitive).
 
 .. activecode:: ch05_1
 
-    print(True)
-    print(type(True))
-    print(type(False))
+    print True
+    print type(True)
+    print type(False)
 
 .. note:: Boolean values are not strings!
 
@@ -40,8 +58,8 @@ sensitive).
 
 .. activecode:: ch05_1a
 
-    print(type(True))
-    print(type("True"))
+    print type(True)
+    print type("True")
 
 A **boolean expression** is an expression that evaluates to a boolean value.
 The equality operator, ``==``, compares two values and produces a boolean value related to whether the
@@ -49,8 +67,8 @@ two values are equal to one another.
 
 .. activecode:: ch05_2
 
-    print(5 == 5)
-    print(5 == 6)
+    print 5 == 5
+    print 5 == 6
 
 In the first statement, the two operands are equal, so the expression evaluates
 to ``True``.  In the second statement, 5 is not equal to 6, so we get ``False``.

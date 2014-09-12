@@ -87,7 +87,7 @@ Exercises
                else:
                   gr = "A"
                
-               print("Score", fl_sc, "gets a grade of", gr)
+               print "Score", fl_sc, "gets a grade of", gr
                  
             
 

@@ -16,12 +16,12 @@ The following pattern of selection shows how we might decide how they are relate
 .. sourcecode:: python
 
     if x < y:
-        print("x is less than y")
+        print "x is less than y"
     else:
         if x > y:
-            print("x is greater than y")
+            print "x is greater than y"
         else:
-            print("x and y must be equal")
+            print "x and y must be equal"
 
 The outer conditional contains two branches.
 The second branch (the else from the outer) contains another ``if`` statement, which
@@ -43,12 +43,12 @@ Here is a complete program that defines values for ``x`` and ``y``.  Run the pro
     y = 10
 
     if x < y:
-        print("x is less than y")
+        print "x is less than y"
     else:
         if x > y:
-            print("x is greater than y")
+            print "x is greater than y"
         else:
-            print("x and y must be equal")
+            print "x and y must be equal"
 
 .. note::
 
@@ -65,12 +65,12 @@ If you are still a bit unsure, here is the same selection as part of a codelens 
     y = 10
 
     if x < y:
-        print("x is less than y")
+        print "x is less than y"
     else:
         if x > y:
-            print("x is greater than y")
+            print "x is greater than y"
         else:
-            print("x and y must be equal")
+            print "x and y must be equal"
 
 
 **Check your understanding**
@@ -88,12 +88,12 @@ If you are still a bit unsure, here is the same selection as part of a codelens 
 
      x = -10
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      else:
          if x > 0:
-             print(x, " is a positive number")
+             print x, " is a positive number"
          else:
-             print(x," is 0")
+             print x," is 0"
 
 
 .. index::

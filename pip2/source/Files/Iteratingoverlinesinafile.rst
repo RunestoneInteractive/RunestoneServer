@@ -7,20 +7,63 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Reading a File
-~~~~~~~~~~~~~~
+Iterating over lines in a file
+------------------------------
 
-As an example, suppose we have a text file called ``qbdata.txt`` that contains
-the following data representing statistics about NFL quarterbacks. Although it
-would be possible to consider entering this data by hand each time it is used,
-you can imagine that it would be time-consuming and error-prone to do this. In
-addition, it is likely that there could be data from more quarterbacks and
-other years. The format of the data file is as follows
+We will now use this file as input in a program that will do some data
+processing. In the program, we will examine each line of the file and
+print it with some additional text. Because ``readlines()`` returns a list of lines of text, we can use the *for* loop to iterate through each line of
+the file.
+
+A **line** of a file is defined to be a sequence of characters up to and
+including a special character called the **newline** character. If you
+evaluate a string that contains a newline character you will see the
+character represented as ``\n``. If you print a string that contains a
+newline you will not see the ``\n``, you will just see its effects (a carriage return). When
+you are typing a Python program and you press the enter or return key on
+your keyboard, the editor inserts a newline character into your text at
+that point.
+
+As the *for* loop iterates through each line of the file the loop
+variable will contain the current line of the file as a string of
+characters. The general pattern for processing each line of a text file
+is as follows:
 
 ::
 
-    First Name, Last Name, Position, Team, Completions, Attempts, Yards, TDs Ints, Comp%, Rating
+        for line in myFile.readlines():
+            statement1
+            statement2
+            ...
 
+To process all of our quarterback data, we will use a *for* loop to iterate over the lines of the file. Using
+the ``split`` method, we can break each line into a list containing all the fields of interest about the
+quarterback. We can then take the values corresponding to first name, lastname, and passer rating to
+construct a simple sentence.
+
+
+.. activecode:: files_for
+
+    qbfile = open("qbdata.txt","r")
+
+    for aline in qbfile.readlines():
+        values = aline.split()
+        print 'QB ', values[0], values[1], 'had a rating of ', values[10]
+
+    qbfile.close()
+
+To make the code a little simpler, and to allow for more efficient processing, Python provides a built-in way to iterate through the contents of a file one line at a time, without first reading them all into a list. I have found that this is confusing to students initially, so I don't recommend doing it this way, until you get a little more comfortable with python. But this idiom is preferred by Python programmers, so you should be prepared to read it. And when you start dealing with big files, you may notice the efficiency gains of using it.
+
+.. activecode:: files_for
+
+    qbfile = open("qbdata.txt","r")
+
+    for aline in qbfile:
+        values = aline.split()
+        print 'QB ', values[0], values[1], 'had a rating of ', values[10]
+
+    qbfile.close()
+ 
 .. raw:: html
 
     <pre id="qbdata.txt">
@@ -59,17 +102,3 @@ other years. The format of the data file is as follows
     Sam Bradford QB STL    354 590 3512    18  15  60.0%   76.5
     Shaun Hill QB DET  257 416 2686    16  12  61.8%   81.3
     </pre>
-
-To open this file, we would call the ``open`` function. The variable,
-``fileref``, now holds a reference to the file object returned by
-``open``. When we are finished with the file, we can close it by using
-the ``close`` method. After the file is closed any further attempts to
-use ``fileref`` will result in an error.
-
-::
-
-   fileref = open("qbdata.txt","r")
-   ## other code here that refers to variable fileref
-   fileref.close()
-
-

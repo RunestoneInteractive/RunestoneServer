@@ -28,9 +28,9 @@ This is sometimes referred to as **binary selection** since there are two possib
     x = 15
 
     if x % 2 == 0:
-        print(x, "is even")
+        print x, "is even"
     else:
-        print(x, "is odd")
+        print x, "is odd"
 
 
 The syntax for an ``if`` statement looks like this:
@@ -100,9 +100,9 @@ There is no limit on the number of statements that can appear under the two clau
    .. code-block:: python
 
      if (4 + 5 == 10):
-         print("TRUE")
+         print "TRUE"
      else:
-         print("FALSE")
+         print "FALSE"
 
 
 .. mchoicemf:: test_question6_4_3
@@ -121,10 +121,10 @@ There is no limit on the number of statements that can appear under the two clau
    .. code-block:: python
 
      if (4 + 5 == 10):
-         print("TRUE")
+         print "TRUE"
      else:
-         print("FALSE")
-     print("TRUE")
+         print "FALSE"
+     print "TRUE"
 
    ::
 

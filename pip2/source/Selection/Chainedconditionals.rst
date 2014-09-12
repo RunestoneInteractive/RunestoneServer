@@ -17,11 +17,11 @@ conditional**
 .. sourcecode:: python
 
     if x < y:
-        print("x is less than y")
+        print "x is less than y"
     elif x > y:
-        print("x is greater than y")
+        print "x is greater than y"
     else:
-        print("x and y must be equal")
+        print "x and y must be equal"
 
 The flow of control can be drawn in a different orientation but the resulting pattern is identical to the one shown above.
 
@@ -45,11 +45,11 @@ Here is the same program using ``elif``.
     y = 10
 
     if x < y:
-        print("x is less than y")
+        print "x is less than y"
     elif x > y:
-        print("x is greater than y")
+        print "x is greater than y"
     else:
-        print("x and y must be equal")
+        print "x and y must be equal"
 
 
 
@@ -83,12 +83,12 @@ Here is the same program using ``elif``.
      # nested if-else statement
      x = -10
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      else:
          if x > 0:
-             print(x, " is a positive number")
+             print x, " is a positive number"
          else:
-             print(x, " is 0")
+             print x, " is 0"
 
 
    .. code-block:: python
@@ -96,11 +96,11 @@ Here is the same program using ``elif``.
      I.
      
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      else (x > 0):
-         print(x, " is a positive number")
+         print x, " is a positive number"
      else:
-         print(x, " is 0")
+         print x, " is 0"
 
 
    .. code-block:: python
@@ -108,22 +108,22 @@ Here is the same program using ``elif``.
      II.
      
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      elif (x > 0):
-         print(x, " is a positive number")
+         print x, " is a positive number"
      else:
-         print(x, " is 0")
+         print x, " is 0"
 
    .. code-block:: python
 
      III.
      
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      if (x > 0):
-         print(x, " is a positive number")
+         print x, " is a positive number"
      else:
-         print(x, " is 0")
+         print x, " is 0"
 
 
 .. mchoicemf:: test_question6_7_2
@@ -140,11 +140,11 @@ Here is the same program using ``elif``.
    .. code-block:: python
 
      if x < y and x < z:
-         print ("a")
+         print "a"
      elif y < x and y < z:
-         print ("b")
+         print "b"
      else:
-         print ("c")
+         print "c"
 
 
 

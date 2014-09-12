@@ -7,8 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _files_chap:
+
 Introduction: Working with Data Files
-=======================
+=====================================
 
 So far, the data we have used in this book have all been either coded right into the program, or have been entered by the user.  
 In real life data reside in files.  For example the images we worked with in the image processing unit ultimately live in files on your hard drive.  

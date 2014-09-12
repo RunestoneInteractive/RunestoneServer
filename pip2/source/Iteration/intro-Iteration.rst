@@ -7,8 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _iteration_chap:
+
 Introduction: Iteration
-=========
+=======================
 
 A basic building block of all programs is to be able to repeat some code
 over and over again.  In computing, we refer to this repetitive execution as **iteration**.  In this section, we will explore some mechanisms for basic iteration.

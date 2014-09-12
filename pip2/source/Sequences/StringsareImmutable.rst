@@ -61,4 +61,3 @@ The solution here is to concatenate a new first letter onto a slice of
     single: in operator
     single: operator; in
     
-.. _sequences-in-operator:

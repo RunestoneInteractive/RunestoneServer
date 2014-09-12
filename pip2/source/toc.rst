@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 2
 
+   Assignments/ps3.rst
    Assignments/ps2.rst
    Assignments/ps1.rst
 
@@ -115,8 +116,41 @@ Iteration
    Iteration/Stringsandforloops.rst
    Iteration/TraversalandtheforLoopByIndex.rst
    Iteration/Listsandforloops.rst
+   Iteration/TheAccumulatorPattern.rst
    Iteration/TheAccumulatorPatternwithStrings.rst
-   Iteration/Summary.rst
+   Iteration/Glossary.rst
+   Iteration/Exercises.rst
+
+Conditionals
+::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Selection/BooleanValuesandBooleanExpressions.rst
+   Selection/Logicaloperators.rst
+   Selection/PrecedenceofOperators.rst
+   Selection/ConditionalExecutionBinarySelection.rst
+   Selection/OmittingtheelseClauseUnarySelection.rst
+   Selection/Nestedconditionals.rst
+   Selection/Chainedconditionals.rst
+   Selection/Glossary.rst
+   Selection/Exercises.rst   
+
+Files
+:::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Files/intro-WorkingwithDataFiles.rst
+   Files/FindingaFileonyourDisk.rst
+   Files/ReadingaFile.rst
+   Files/AlternativeFileReadingMethods.rst
+   Files/Iteratingoverlinesinafile.rst
+   Files/WritingTextFiles.rst
+   Files/Glossary.rst
+   Files/Exercises.rst
 
 
 More chapters will be coming soon. I am making some revisions to the version of the textbook I created for the winter 2014 offering of the course, based on experience with students using it.

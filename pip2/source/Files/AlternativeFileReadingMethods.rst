@@ -10,15 +10,13 @@
 Alternative File Reading Methods
 --------------------------------
 
-In addition to the ``for`` loop, Python provides three other methods to read data
-from the input file. You don't really need to use all of them, but in case you encounter them, here's what they do.
-The ``readline`` method reads one line from the file and
-returns it as a string. The string returned by ``readline`` will contain the
-newline character at the end. This method returns the empty string when it
-reaches the end of the file. The ``readlines`` method returns the contents of
-the entire file as a list of strings, where each item in the list represents
-one line of the file. It is also possible to read the entire file into a
-single string with ``read``. :ref:`Table 2 <filemethods2a>` summarizes these methods
+Once you have a file "object", the thing returned by the open function, Python provides three methods to read data
+from that object. The ``read()`` method returns the entire contents of the file as a single string (or just some characters if you provide a number as an input parameter. 
+The ``readlines`` method returns the entire contents of
+the entire file as a list of strings, where each item in the list is
+one line of the file. The ``readline`` method reads one line from the file and
+returns it as a string. The strings returned by ``readlines`` or ``readline`` will contain the
+newline character at the end.  :ref:`Table 2 <filemethods2a>` summarizes these methods
 and the following session shows them in action.
 
 .. _filemethods2a:
@@ -48,17 +46,14 @@ and the following session shows them in action.
 ======================== =========================== =====================================
 
 
-In this course, we will generally either iterate through the contents of a file using a for loop, or use read() to get all of the contents as a single string.
+In this course, we will generally either iterate through the lines returned by ``readlines()`` with a for loop, or use ``read()`` to get all of the contents as a single string.
 
 In other programming languages, where they don't have the convenient for loop method of going through the lines of the file one by one, they use a different pattern which requires a different kind of loop, 
-the ``while`` loop. Fortunately, you don't need to learn this other pattern, and we will put off consideration of ``while`` loops indefinitely in this course.
+the ``while`` loop. Fortunately, you don't need to learn this other pattern, and we will put off consideration of ``while`` loops until later in this course. We don't need them for handling data from files.
 
 .. note::
 
-   A common error that novice programmers make is not realizing that all these ways of reading the file, including
-   using the for loop to iterate over the lines, **use up the file**. 
-   If you want to go through the contents twice, for now it is probably easiest to just
-   open it twice, and iterate through it twice. If you cared about efficiency, you might 
-   prefer to save the contents in a variable.
+   A common error that novice programmers make is not realizing that all these ways of reading the file contents, **use up the file**. 
+   After you call readlines(), if you call it again you'll get an empty list.
 
 

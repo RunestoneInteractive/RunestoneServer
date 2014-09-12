@@ -111,7 +111,7 @@ Similarly ``x % 100`` yields the last two digits.
 
    .. code-block:: python
 
-      print (18 / 4)
+      print 18 / 4
 
 .. mchoicemf:: test_question2_6_1
    :answer_a: 4.5
@@ -130,7 +130,7 @@ Similarly ``x % 100`` yields the last two digits.
 
    .. code-block:: python
 
-      print (18.0 / 4)
+      print 18.0 / 4
 
 
 
@@ -151,7 +151,7 @@ Similarly ``x % 100`` yields the last two digits.
 
    .. code-block:: python
 
-      print (18.0 // 4)
+      print 18.0 // 4
 
 
 .. mchoicemf:: test_question2_6_3
@@ -169,7 +169,7 @@ Similarly ``x % 100`` yields the last two digits.
 
    .. code-block:: python
 
-      print (18 % 4)
+      print 18 % 4
 
 
 .. index:: input, input dialog

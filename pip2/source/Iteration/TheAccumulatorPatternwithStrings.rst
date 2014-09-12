@@ -23,7 +23,7 @@ isn't very useful, but we will see more useful things later that accumulate stri
    print ac
  
 Look carefully at line 4 in the above program (``ac = ac + c + "-" + c + "-"``).  
-In words, it says that the new value of ``ac`` will be the old value of ``ac`` concatenated with the current character a dash, then the current character and a dash again.
+In words, it says that the new value of ``ac`` will be the old value of ``ac`` concatenated with the current character, a dash, then the current character and a dash again.
 We are building the result string character by character. 
 
 Take a close look also at the initialization of ``ac``.  We start with an empty string and then begin adding

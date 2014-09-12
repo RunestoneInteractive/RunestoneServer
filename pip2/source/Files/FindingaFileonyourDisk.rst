@@ -11,7 +11,7 @@ Finding a File on your Disk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Opening a file requires that you, as a programmer, and Python agree about the location of the file on your disk.  
-The way that files are located on disk is by their **path**  You can think of the filename as the short name for a file, and the path as the full name.  
+The way that files are located on disk is by their **path**.  You can think of the filename as the short name for a file, and the path as the full name.  
 For example on a Mac if you save the file ``hello.txt`` in your home directory the path to that file is ``/Users/yourname/hello.txt``  
 On a Windows machine the path looks a bit different but the same principles are in use.  For example on windows the path might be ``C:\Users\yourname\My Documents\hello.txt``
 

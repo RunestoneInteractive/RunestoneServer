@@ -34,8 +34,8 @@ executed.  Otherwise the flow of execution continues to the statement after the 
 
     x = 10
     if x < 0:
-        print("The negative number ",  x, " is not valid here.")
-    print("This is always printed")
+        print "The negative number ",  x, " is not valid here."
+    print "This is always printed"
 
 
 What would be printed if the value of ``x`` is negative?  Try it.
@@ -60,8 +60,8 @@ What would be printed if the value of ``x`` is negative?  Try it.
      
      x = -10
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
-     print("This is always printed")
+         print "The negative number ",  x, " is not valid here."
+     print "This is always printed"
 
    ::
 
@@ -89,11 +89,11 @@ What would be printed if the value of ``x`` is negative?  Try it.
 
      x = -10
      if x < 0:
-         print("The negative number ",  x, " is not valid here.")
+         print "The negative number ",  x, " is not valid here."
      else:
-         print(x, " is a positive number")
+         print x, " is a positive number"
      else:
-         print("This is always printed")
+         print "This is always printed"
 
 .. index::
     single: nested conditionals

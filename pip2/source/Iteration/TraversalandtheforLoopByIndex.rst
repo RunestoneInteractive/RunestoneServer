@@ -74,21 +74,21 @@ traversal by changing the sequence of index values.
    :answer_a: 0
    :answer_b: 1
    :answer_c: 2
-   :answer_d: Error, the for statement cannot have an if inside.
-   :correct: c
-   :feedback_a: The for loop visits each index but the selection only prints some of them.
-   :feedback_b: o is at positions 4 and 8
-   :feedback_c: Yes, it will print all the characters in even index positions and the o character appears both times in an even location.
-   :feedback_d: The for statement can have any statements inside, including if as well as for.
+   :answer_d: 3
+   :answer_e: 6
+   :correct: d
+   :feedback_a: idx % 2 is 0 whenever idx is even
+   :feedback_b: idx % 2 is 0 whenever idx is even
+   :feedback_c: idx % 2 is 0 whenever idx is even
+   :feedback_d: idx % 2 is 0 whenever idx is even
+   :feedback_e: idx % 2 is 0 whenever idx is even
 
-
-   How many times is the letter o printed by the following statements?
+   How many times is the letter p printed by the following statements?
    
    .. code-block:: python
 
-      s = "python rocks"
+      s = "python"
       for idx in range(len(s)):
-         if idx % 2 == 0:
-            print s[idx]
+         print s[idx % 2]
 
 

@@ -21,22 +21,36 @@ For this week, you have the following graded activities:
 1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
    
    * Before Tuesday's class: 
+        * Read :ref:`Iteration<iteration_chap>`, and do the exercises in that chapter 
    
    * Before Thursday's class:
+      * :ref:`Conditionals <conditionals_chap>`
+      * :ref:`File Input/Output <files_chap>` (read the Selection/Conditionals chapter first, or you won't be able to do the last exercise...)
 
 #. Reading responses
+
+   * By Wednesday night: 
+      * Read chapter 3 of The Most Human Human. 
+      * Answer :ref:`Reading Response 4 <reading_response_4>`. 
     
 
 #. Save answers to the exercises in Problem Set 1:
    :ref:`Problem Set 3 <problem_set_3>` 
 
-.. _response_1:
+.. _reading_response_4:
 
 Reading Response
 ----------------
 
-If you had to convince someone you were human and not a bot, via text only, what would you do?
+If you had to give up either your left-brain functions or your right-brain functions, which would you give up? Is the one you wouldn't give up the "soul" of who you really are? 
 
+.. activecode:: rr_4_1
+   :nocanvas:
+
+   # Fill in your answer on the lines between the triple quotes
+   s = """
+   """
+   print s
 
 
 
@@ -84,47 +98,35 @@ Problem Set
 
 1. Write code to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
 
-  .. tabbed:: ps3_pb1
+.. activecode:: ps_3_1
 
-    .. tab:: Problem
+   several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
+   
+   ====
+   import test
+   print "\n\n---\n"
+   print "(There are no tests for this problem.)"
 
-      .. activecode:: ps_3_1
-
-         several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
-         
-         ====
-         import test
-         print "\n\n---\n"
-         print "(There are no tests for this problem.)"
-
-    .. tab:: Solution
-
-      Solution not yet available.
 
 
 #. See the comments for directions.
 
-  .. tabbed:: ps3_pb2
+.. activecode:: ps_3_2
 
-    .. tab:: Problem
-
-      .. activecode:: ps_3_2
-
-        sent = "The magical mystery tour is waiting to take you away."
-
-        # Write a comment explaining how you would define what a word is for a computer.
-
-        # Write code that assigns a variable word_list to hold a LIST of all the WORDS in the string sent. It's fine if words include punctuation.
-
-        =====
-
-        import test
-        print "\n\n---\n"
-        test.testEqual(word_list,sent.split())
-
-    .. tab:: Solution
-
-      Solution not yet available.
+   sent = "The magical mystery tour is waiting to take you away."
+   
+   # Write a comment explaining how you would define what a word is for a computer.
+   
+   # Write code that assigns a variable word_list to hold a LIST of all the 
+   # WORDS in the string sent. It's fine if words include punctuation.
+   # Hint: use the split method
+   
+   ====
+   
+   import test
+   print "\n\n---\n"
+   test.testEqual(word_list,sent.split())
+   
 
 #. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
 ``hello``
@@ -134,129 +136,84 @@ Problem Set
 
 (Hint: remember string slicing!)
       
-      .. tabbed: ps3_pb3
-      
-        .. tab:: Problem  
+.. activecode:: ps_3_3
 
-          .. activecode:: ps_3_3
+   excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
 
-            excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
-
-            # Now, write code to print out each element of the list stored in excited_words,
-            # BUT print out each element WITHOUT the ending punctuation.
-            # Hint: remember string slicing? 
-
-            =====
-
-            import test
-            print "\n\n---\n"
-            print "(There are no tests for this problem.)
-
-        .. tab:: Solution
-
-          Solution not yet available.
+   # Now, write code to print out each element of the list stored in excited_words,
+   # BUT print out each element WITHOUT the ending punctuation.
+   # Hint: remember string slicing? 
+   
+   ====
+   
+   import test
+   print "\n\n---\n"
+   print "(There are no tests for this problem.)"
 
 
 #. Follow the directions in the comments!
 
-  .. tabbed:: ps3_pb4
+.. activecode:: ps_3_4
 
-        .. tab:: Problem
-
-           .. activecode:: ps_3_4
-
-              rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
-                 Over many a quaint and curious volume of forgotten lore,  
-                 While I nodded, nearly napping, suddenly there came a tapping,   
-                 As of some one gently rapping, rapping at my chamber door.   
-                 'Tis some visitor, I muttered, tapping at my chamber door;           5
-                 Only this and nothing more."""
-              
-              # Write code to assign the number of characters in the string rv to the variable num_chars.
-              
-              # Write code to assign the number of words in the string rv to the variable num_words. 
-              ## Hint: use the .split() method 
-
-              =====
-
-              import test
-              print "\n\n---\n"
-              test.testEqual(num_chars,len(rv))
-              test.testEqual(num_words,len(rv.split()))
-
-        .. tab:: Solution
-
-           Solution not yet available.
+   rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+     Over many a quaint and curious volume of forgotten lore,  
+     While I nodded, nearly napping, suddenly there came a tapping,   
+     As of some one gently rapping, rapping at my chamber door.   
+     'Tis some visitor, I muttered, tapping at my chamber door;           5
+     Only this and nothing more."""
+   
+   # Write code to assign the number of characters in the string rv to the variable num_chars.
+   
+   # Write code to assign the number of words in the string rv to the variable num_words. 
+   ## Hint: use the .split() method 
+   
+   ====
+   
+   import test
+   print "\n\n---\n"
+   test.testEqual(num_chars,len(rv))
+   test.testEqual(num_words,len(rv.split()))
 
 
 #. Write code to open the file we've included in this problem set, ``about_programming.txt``, and print it out, line by line. (Don't worry about the blank lines that will appear.)
 
 The first two lines should look like this:
 
-``Computer programming (often shortened to programming) is a process that leads from a
+   Computer programming (often shortened to programming) is a process that leads from a
   
-  original formulation of a computing problem to executable programs. It involves``
+   original formulation of a computing problem to executable programs. It involves
 
-etc.
-   
-   .. tabbed:: ps3_pb5
+.. activecode:: ps_3_5
 
-      .. tab:: Problem
+   # Write your code here.
+   # Don't worry about extra blank lines between each of the lines
+   # (but if you want to get rid of them, you can try out the .strip() method)
 
-         .. activecode:: ps_3_5
+   ====
 
-            # Write your code here.
-            # Don't worry about extra blank lines between each of the lines
-            # (but if you want to get rid of them, you can try out the .strip() method)
-
-            =====
-
-            import test
-            print "\n\n---\n"
-            print ("There are no tests for this problem.")
-
-
-      .. tab:: Solution
-
-         Solution not yet available.
+   import test
+   print "\n\n---\n"
+   print "There are no tests for this problem."
 
 
 #. Now write code to open the file ``about_programming.txt`` and assign the **number of lines** in the file to the variable ``file_lines_num``.
 
-  .. tabbed:: ps3_pb6
+.. activecode:: ps_3_6
 
-      .. tab:: Problem
+   # Write your code here.
 
-         .. activecode:: ps_3_6
+   ====
 
-            # Write your code here.
-
-            =====
-
-            import test
-            print "\n\n---\n"
-            test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
-
-      .. tab:: Solution
-
-         Solution not yet available.
-
+   import test
+   print "\n\n---\n"
+   test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
 
 
 #. **Challenge problem (OPTIONAL):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
 
-  .. tabbed:: ps3_pb7
+.. activecode:: ps_3_7
 
-      .. tab:: Problem
-
-         .. activecode:: ps_3_7
-
-            # Write your code here.
-
-
-      .. tab:: Solution
-
-         Solution not yet available.
+   # Write your code here.
 
    
 .. activecode:: addl_functions_3

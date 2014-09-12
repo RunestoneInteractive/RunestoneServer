@@ -7,16 +7,6 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Summary 
-------- 
-
-This chapter introduced the central concept of **iteration**.  The following summary 
-may prove helpful in remembering what you learned.
-
-.. glossary::
-
-
-
 Glossary
 ========
 
@@ -55,41 +45,3 @@ Glossary
          A pattern where the program initializes an accumulator variable and then changes it
          during each iteration, accumulating a final result.
 
-Exercises
-=========
-
-
-#. (You'll work on this one in class. Feel free to start thinking about it.) Print out a neatly formatted multiplication table, up to 12 x 12.
-
-   .. actex:: ex_8_4
-
-
-#. (You'll work on on this one in class. Feel free to start thinking about it.) In Robert McCloskey's
-   book *Make Way for Ducklings*, the names of the ducklings are Jack, Kack, Lack,
-   Mack, Nack, Ouack, Pack, and Quack.  This loop tries to output these names in order.
-
-   .. sourcecode:: python
-
-      prefixes = "JKLMNOPQ"
-      suffix = "ack"
-
-      for p in prefixes:
-          print p + suffix
-
-
-   Of course, that's not quite right because Ouack and Quack are misspelled.
-   Can you fix it?
-   
-    .. actex:: ex_8_2
-
-
-#. Get the user to enter some text and print it out in reverse. (Hint: we did this as well as capitalizing
-in one of the earlier exercises. But first see if you can generate the answer without looking back.)
-
-   .. actex:: ex_8_5
-
-
-#. Get the user to enter some text and print out True if it's a palindrome, False otherwise. (Hint: reuse
-some of your code from the last question.)
-
-   .. actex:: ex_8_6
