@@ -61,18 +61,22 @@ If you had to give up either your left-brain functions or your right-brain funct
 Unix Problems
 -------------
 
-The following problems include instructions for you to follow in your Terminal application, if you have a mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to <a href="https://ctools.umich.edu/portal/site/a98a2bac-51e6-472a-a68e-b43f85d1e8d1/page/81ac5f40-5c08-480b-8113-a87b39eb5178">Assignment 1</a> on CTools.
+The following problems include instructions for you to follow in your Terminal application, if you have a mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Assignment 1** on our course CTools page. (CTools > SI 106 002 > Assignments > Assignment 1)
+
 
 To take a screenshot, 
+
 **Mac:** Press ``Control`` + ``Shift`` + ``4`` and drag to create a screenshot of the part of your screen you drag the window over. It will be saved to your Desktop.
 
-**Windows:** Press ``Alt`` and the ``PrintScn`` button to take a screenshot of only your **active** window. That will be copied to your clipboard. You can then press ``Control`` + ``V`` to paste it into another program (Word is fine, or a PDF  or image program) and save it. **Please save it as a ``.jpg`` or ``.png`` file!**
+**Windows:** Press ``Alt`` and the ``PrintScn`` button to take a screenshot of only your **active** window. That will be copied to your clipboard. You can then press ``Control`` + ``V`` to paste it into another program (Word is fine, or a PDF  or image program) and save it. **Please save it as a .JPG or .PNG file!**
 
-1. Use the ``cd`` command to go to your home directory (``~``). Then use the ``ls`` command to list all of the files in your home directory. Take a screenshot of this, save it as ``unix_ps3_1``, and upload it to CTools.
+1. Use the ``cd`` command to go to your home directory (``~``). Then use the ``ls`` command to list all of the files in your home directory. Take a screenshot of this, save it as ``unix_ps3_1.png``, and upload it to CTools.
 
-#. ``cd`` to the directory where you save notes for SI 106. (If you take notes by hand only, you can choose another folder.) Use ``ls`` to list all the files in that directory and the option to sort the files and subdirectories by size. Take a screenshot of the results, save as ``unix_ps3_2``, and upload it to CTools.
+#. ``cd`` to the directory where you save notes for SI 106. (If you take notes by hand only, you can choose another folder.) Use ``ls`` to list all the files in that directory, and use the option to sort the files and subdirectories by size. Take a screenshot of the results, save as ``unix_ps3_2.png``, and upload it to CTools.
 
-#. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory in your command prompt. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_2``, and upload it it to CTools. (Remember that you can find a lot of familiar things in your home directory... that's where Desktops are usually found!)
+#. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory in your command prompt. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_3.png``, and upload it it to CTools. 
+
+(Remember that you can find a lot of familiar things in your home directory... that's where Desktop directories are usually found, in most people's file systems!)
 
 
 .. _problem_set_3:
