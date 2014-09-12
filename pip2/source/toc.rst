@@ -103,6 +103,22 @@ Sequences
    Sequences/Exercises.rst
 
 
+Iteration
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Iteration/intro-Iteration.rst
+   Iteration/TheforLoop.rst
+   Iteration/FlowofExecutionoftheforLoop.rst
+   Iteration/Stringsandforloops.rst
+   Iteration/TraversalandtheforLoopByIndex.rst
+   Iteration/Listsandforloops.rst
+   Iteration/TheAccumulatorPatternwithStrings.rst
+   Iteration/Summary.rst
+
+
 More chapters will be coming soon. I am making some revisions to the version of the textbook I created for the winter 2014 offering of the course, based on experience with students using it.
    
 Indices and tables
