@@ -54,7 +54,7 @@ construct a simple sentence.
 
 To make the code a little simpler, and to allow for more efficient processing, Python provides a built-in way to iterate through the contents of a file one line at a time, without first reading them all into a list. I have found that this is confusing to students initially, so I don't recommend doing it this way, until you get a little more comfortable with python. But this idiom is preferred by Python programmers, so you should be prepared to read it. And when you start dealing with big files, you may notice the efficiency gains of using it.
 
-.. activecode:: files_for
+.. activecode:: files_for_a
 
     qbfile = open("qbdata.txt","r")
 
@@ -66,7 +66,7 @@ To make the code a little simpler, and to allow for more efficient processing, P
  
 .. raw:: html
 
-    <pre id="qbdata.txt">
+    <pre hidden id="qbdata.txt">
     Colt McCoy QB CLE  135 222 1576    6   9   60.8%   74.5
     Josh Freeman QB TB 291 474 3451    25  6   61.4%   95.9
     Michael Vick QB PHI    233 372 3018    21  6   62.6%   100.2
