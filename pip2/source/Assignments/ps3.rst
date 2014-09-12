@@ -15,7 +15,6 @@
 Week 3: ends September 21
 =========================
 
-
 For this week, you have the following graded activities:
 
 1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
@@ -32,7 +31,11 @@ For this week, you have the following graded activities:
    * By Wednesday night: 
       * Read chapter 3 of The Most Human Human. 
       * Answer :ref:`Reading Response 4 <reading_response_4>`. 
-    
+
+
+#. Do the Unix Problems part of the problem set:
+   :ref: `Unix Problems (1)` <unix_pset3>`
+
 
 #. Save answers to the exercises in Problem Set 1:
    :ref:`Problem Set 3 <problem_set_3>` 
@@ -53,6 +56,23 @@ If you had to give up either your left-brain functions or your right-brain funct
    print s
 
 
+.. _unix_pset3:
+
+Unix Problems
+-------------
+
+The following problems include instructions for you to follow in your Terminal application, if you have a mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to <a href="https://ctools.umich.edu/portal/site/a98a2bac-51e6-472a-a68e-b43f85d1e8d1/page/81ac5f40-5c08-480b-8113-a87b39eb5178">Assignment 1</a> on CTools.
+
+To take a screenshot, 
+**Mac:** Press ``Control`` + ``Shift`` + ``4`` and drag to create a screenshot of the part of your screen you drag the window over. It will be saved to your Desktop.
+
+**Windows:** Press ``Alt`` and the ``PrintScn`` button to take a screenshot of only your **active** window. That will be copied to your clipboard. You can then press ``Control`` + ``V`` to paste it into another program (Word is fine, or a PDF  or image program) and save it. **Please save it as a ``.jpg`` or ``.png`` file!**
+
+1. Use the ``cd`` command to go to your home directory (``~``). Then use the ``ls`` command to list all of the files in your home directory. Take a screenshot of this, save it as ``unix_ps3_1``, and upload it to CTools.
+
+#. ``cd`` to the directory where you save notes for SI 106. (If you take notes by hand only, you can choose another folder.) Use ``ls`` to list all the files in that directory and the option to sort the files and subdirectories by size. Take a screenshot of the results, save as ``unix_ps3_2``, and upload it to CTools.
+
+#. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory in your command prompt. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_2``, and upload it it to CTools. (Remember that you can find a lot of familiar things in your home directory... that's where Desktops are usually found!)
 
 
 .. _problem_set_3:
@@ -129,9 +149,13 @@ Problem Set
    
 
 #. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
+
 ``hello``
+
 ``goodbye``
+
 ``wonderful``
+
 ``I love Python``
 
 (Hint: remember string slicing!)
