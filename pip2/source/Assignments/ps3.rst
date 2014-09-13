@@ -25,7 +25,7 @@ For this week, you have the following graded activities:
    * Before Thursday's class:
       * :ref:`Conditionals <conditionals_chap>`
       * :ref:`File Input/Output <files_chap>` (read the Selection/Conditionals chapter first, or you won't be able to do the last exercise...)
-      * 
+      * If you have a Windows machine, install the git bash command line. :ref:`Installing Git <install_git_bash>`
 
 #. Reading responses
 
@@ -35,7 +35,7 @@ For this week, you have the following graded activities:
 
 #. Problem set **Due:** **Sunday, September 21st at 5 pm**
 
-   * Do the Unix Problems part of the problem set: :ref: `Unix Problems (1)` <unix_pset3>`
+   * Do the Unix Problems part of the problem set: :ref:`Unix Problems (1) <unix_pset3>`
    
    * Save answers to the exercises in Problem Set 1: :ref:`Problem Set 3 <problem_set_3>` 
 
@@ -60,7 +60,7 @@ If you had to give up either your left-brain functions or your right-brain funct
 Unix Problems
 -------------
 
-The following problems include instructions for you to follow in your Terminal application, if you have a Mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Assignment 1** on our course CTools page. (CTools > SI 106 002 > Assignments > Assignment 1)
+The following problems include instructions for you to follow in your Terminal application, if you have a Mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <install_git_bash>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Unix Problems (PS3)** on our course CTools page. (CTools > SI 106 002 > Assignments > Unix Problems (PS3))
 
 
 To take a screenshot, 
@@ -71,7 +71,7 @@ To take a screenshot,
 
 In the Mac Finder or Windows Explorer, create a folder called ``106``. You may create this folder on the Desktop, or anywhere in your directory system that you would like, following your usual way of organizing folders on your computer. Inside the 106 folder, create a subfolder called ``ps3``. Use a text editor to create a file called ``test.py``. It doesn't matter what text you put in the file.  
 
-#. Use the Finder or Windows Explorer to figure out what the full path is for the 106/ps3 folder. In a Terminal window (Mac) or git bash command window (Windows), use the ``cd`` command to go to your 106/ps3 folder. Then use the ``ls`` command to list all of the files in this directory, presumably just test.py unless you also added some other file. Then use the ``cd ..`` command to connect to the parent directory, 106, and use ``ls`` again to show what's in that directory. Finally, use ``cd ps3`` to go back to the ps3 directory. Take a screenshot of window, showing a transcript of everything you typed and the responses, save it as ``unix_ps3_1.png`` or ``unix_ps1.jpg``, and upload it to CTools.
+#. Use the Finder or Windows Explorer to figure out what the full path is for the 106/ps3 folder. In a Terminal window (Mac) or git bash command window (Windows), use the ``cd`` command to go to your 106/ps3 folder. Then use the ``ls`` command to list all of the files in this directory, presumably just test.py unless you also added some other file. Then use the ``cd ..`` command to connect to the parent directory, 106, and use ``ls`` again to show what's in that directory. Finally, use ``cd ps3`` to go back to the ps3 directory. Take a screenshot of the window, showing a transcript of everything you typed and the responses, save it as ``unix_ps3_1.png`` or ``unix_ps1.jpg``, and upload it to CTools.
 
 #. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_2.png`` or ``unix_ps3_2.jpg``, and upload it it to CTools.
 
@@ -235,7 +235,7 @@ The first two lines should look like this:
    test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
 
 
-9. **Challenge problem (OPTIONAL):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
+9. **Challenge problem (OPTIONAL, much harder):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
 
 .. activecode:: ps_3_9
 

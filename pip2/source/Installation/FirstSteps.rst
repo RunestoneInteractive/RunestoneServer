@@ -7,15 +7,16 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _install_git_bash:
 
 Introduction to New Tools
 -------------------------
 
-The command prompt, or command line, is a way for you, a human programmer, to tell the computer what to do. This is discussed more in the chapter on Unix, but in this chapter, we'll walk you through the process of installing what you need.
+The command prompt, or command line, is a way for you, a human user, to tell the computer what programs to run. This is discussed more in the chapter on Unix, but in this chapter, we'll walk you through the process of installing what you need.
 
-In order to work with Unix commands, you need access to a command prompt, which everyone has. If you have a Mac, you have the **Terminal** application installed by default, and you'll use that.
+In order to work with Unix commands, you need access to a command prompt. If you have a Mac, you have the **Terminal** application installed by default, and you'll use that.
 
-If you have a PC with a Windows operating system, you'll need to install something called **Git Bash** -- see below.
+If you have a PC with a Windows operating system, you'll need to install something called **Git Bash** -- see below. Windows has its own command prompt, but it won't respond to the unix-style commands that we'll be using in this course.
 
 Installing Git Bash
 -------------------

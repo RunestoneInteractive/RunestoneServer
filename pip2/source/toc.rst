@@ -153,30 +153,22 @@ Files
    Files/Exercises.rst
 
 Installation
-:::::
+::::::::::::
 
 .. toctree::
    :maxdepth: 2
 
    Installation/FirstSteps.rst
 
-
-Installation
-:::::
-
-.. toctree::
-   :maxdepth: 2
-
-   Installation/FirstSteps.rst
 
 Unix
-:::::
+::::
 
 .. toctree::
    :maxdepth: 2
 
-   Unix/FoldersAndDirectories.rst
    Unix/CommandPrompt.rst
+   Unix/FoldersAndPaths.rst
 
 
    
