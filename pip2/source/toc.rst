@@ -152,6 +152,14 @@ Files
    Files/Glossary.rst
    Files/Exercises.rst
 
+Installation
+:::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Installation/FirstSteps.rst
+
 
 More chapters will be coming soon. I am making some revisions to the version of the textbook I created for the winter 2014 offering of the course, based on experience with students using it.
    
