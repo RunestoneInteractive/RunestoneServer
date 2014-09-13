@@ -25,6 +25,7 @@ For this week, you have the following graded activities:
    * Before Thursday's class:
       * :ref:`Conditionals <conditionals_chap>`
       * :ref:`File Input/Output <files_chap>` (read the Selection/Conditionals chapter first, or you won't be able to do the last exercise...)
+      * 
 
 #. Reading responses
 
@@ -32,13 +33,11 @@ For this week, you have the following graded activities:
       * Read chapter 3 of The Most Human Human. 
       * Answer :ref:`Reading Response 4 <reading_response_4>`. 
 
+#. Problem set **Due:** **Sunday, September 21st at 5 pm**
 
-#. Do the Unix Problems part of the problem set:
-   :ref: `Unix Problems (1)` <unix_pset3>`
-
-
-#. Save answers to the exercises in Problem Set 1:
-   :ref:`Problem Set 3 <problem_set_3>` 
+   * Do the Unix Problems part of the problem set: :ref: `Unix Problems (1)` <unix_pset3>`
+   
+   * Save answers to the exercises in Problem Set 1: :ref:`Problem Set 3 <problem_set_3>` 
 
 .. _reading_response_4:
 
@@ -61,20 +60,20 @@ If you had to give up either your left-brain functions or your right-brain funct
 Unix Problems
 -------------
 
-The following problems include instructions for you to follow in your Terminal application, if you have a mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Assignment 1** on our course CTools page. (CTools > SI 106 002 > Assignments > Assignment 1)
+The following problems include instructions for you to follow in your Terminal application, if you have a Mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <git_bash_installation>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Assignment 1** on our course CTools page. (CTools > SI 106 002 > Assignments > Assignment 1)
 
 
 To take a screenshot, 
 
 **Mac:** Press ``Control`` + ``Shift`` + ``4`` and drag to create a screenshot of the part of your screen you drag the window over. It will be saved to your Desktop.
 
-**Windows:** Press ``Alt`` and the ``PrintScn`` button to take a screenshot of only your **active** window. That will be copied to your clipboard. You can then press ``Control`` + ``V`` to paste it into another program (Word is fine, or a PDF  or image program) and save it. **Please save it as a .JPG or .PNG file!**
+**Windows:** Launch the program ``Snipping tools`` and use it to take a screen shot of all or part of the screen. **Please save it as a .JPG or .PNG file!**
 
-1. Use the ``cd`` command to go to your home directory (``~``). Then use the ``ls`` command to list all of the files in your home directory. Take a screenshot of this, save it as ``unix_ps3_1.png``, and upload it to CTools.
+In the Mac Finder or Windows Explorer, create a folder called ``106``. You may create this folder on the Desktop, or anywhere in your directory system that you would like, following your usual way of organizing folders on your computer. Inside the 106 folder, create a subfolder called ``ps3``. Use a text editor to create a file called ``test.py``. It doesn't matter what text you put in the file.  
 
-#. ``cd`` to the directory where you save notes for SI 106. (If you take notes by hand only, you can choose another folder.) Use ``ls`` to list all the files in that directory, and use the option to sort the files and subdirectories by size. Take a screenshot of the results, save as ``unix_ps3_2.png``, and upload it to CTools.
+#. Use the Finder or Windows Explorer to figure out what the full path is for the 106/ps3 folder. In a Terminal window (Mac) or git bash command window (Windows), use the ``cd`` command to go to your 106/ps3 folder. Then use the ``ls`` command to list all of the files in this directory, presumably just test.py unless you also added some other file. Then use the ``cd ..`` command to connect to the parent directory, 106, and use ``ls`` again to show what's in that directory. Finally, use ``cd ps3`` to go back to the ps3 directory. Take a screenshot of window, showing a transcript of everything you typed and the responses, save it as ``unix_ps3_1.png`` or ``unix_ps1.jpg``, and upload it to CTools.
 
-#. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory in your command prompt. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_3.png``, and upload it it to CTools. 
+#. Use the Unix commands you've learned in this chapter to go to your ``Desktop`` directory. Take a screenshot of the result that shows you've gotten to ``Desktop``, save it as ``unix_ps3_2.png`` or ``unix_ps3_2.jpg``, and upload it it to CTools.
 
 (Remember that you can find a lot of familiar things in your home directory... that's where Desktop directories are usually found, in most people's file systems!)
 
@@ -83,7 +82,6 @@ To take a screenshot,
 
 Problem Set
 -----------
-**Due:** **Sunday, September 21st at 5 pm**
 
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
@@ -120,9 +118,9 @@ Problem Set
    without a license from an accredited institution is illegal in many parts of the world.
 
 
-1. Write code to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
+3. Write code to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
 
-.. activecode:: ps_3_1
+.. activecode:: ps_3_3
 
    several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
    
@@ -133,9 +131,9 @@ Problem Set
 
 
 
-#. See the comments for directions.
+4. See the comments for directions.
 
-.. activecode:: ps_3_2
+.. activecode:: ps_3_4
 
    sent = "The magical mystery tour is waiting to take you away."
    
@@ -152,7 +150,7 @@ Problem Set
    test.testEqual(word_list,sent.split())
    
 
-#. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
+5. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
 
 ``hello``
 
@@ -164,7 +162,7 @@ Problem Set
 
 (Hint: remember string slicing!)
       
-.. activecode:: ps_3_3
+.. activecode:: ps_3_5
 
    excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
 
@@ -179,9 +177,9 @@ Problem Set
    print "(There are no tests for this problem.)"
 
 
-#. Follow the directions in the comments!
+6. Follow the directions in the comments!
 
-.. activecode:: ps_3_4
+.. activecode:: ps_3_6
 
    rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
      Over many a quaint and curious volume of forgotten lore,  
@@ -203,7 +201,7 @@ Problem Set
    test.testEqual(num_words,len(rv.split()))
 
 
-#. Write code to open the file we've included in this problem set, ``about_programming.txt``, and print it out, line by line. (Don't worry about the blank lines that will appear.)
+7. Write code to open the file we've included in this problem set, ``about_programming.txt``, and print it out, line by line. (Don't worry about the blank lines that will appear.)
 
 The first two lines should look like this:
 
@@ -211,7 +209,7 @@ The first two lines should look like this:
   
    original formulation of a computing problem to executable programs. It involves
 
-.. activecode:: ps_3_5
+.. activecode:: ps_3_7
 
    # Write your code here.
    # Don't worry about extra blank lines between each of the lines
@@ -224,9 +222,9 @@ The first two lines should look like this:
    print "There are no tests for this problem."
 
 
-#. Now write code to open the file ``about_programming.txt`` and assign the **number of lines** in the file to the variable ``file_lines_num``.
+8. Now write code to open the file ``about_programming.txt`` and assign the **number of lines** in the file to the variable ``file_lines_num``.
 
-.. activecode:: ps_3_6
+.. activecode:: ps_3_8
 
    # Write your code here.
 
@@ -237,9 +235,9 @@ The first two lines should look like this:
    test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
 
 
-#. **Challenge problem (OPTIONAL):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
+9. **Challenge problem (OPTIONAL):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
 
-.. activecode:: ps_3_7
+.. activecode:: ps_3_9
 
    # Write your code here.
 
