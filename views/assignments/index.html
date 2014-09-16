@@ -41,38 +41,36 @@
 					<div class="pull-right">
 					   {{if row.released: }}
 			            <strong>{{=row.points()}} </strong> points earned
+                     <div id="assignment-{{=row.assignment_id}}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                           {{ problems = row.db_row.scores(user = student, preclass=False)}}
+                           {{ completed_problems = [p for p in problems if p.points > 0]}}
+                           {{ preclass_problems = row.db_row.scores(user = student, preclass=True)}}
+                           {{ preclass_completed_problems = [p for p in preclass_problems if p.points > 0]}}
+                           {{ if type.grade_type == 'use':}}
+                              {{ time = row.db_row.time(user=student, preclass=False)}}
+                              {{ preclass_time = row.db_row.time(user=student, preclass=True)}}
+                              <p>You spent {{= "%.1f" % (time/60.0)}} minutes on these activities, {{= "%.1f" % (preclass_time/60.0)}} minutes before the class.</p>
+                              <p>You completed {{=len(completed_problems)}} activities, {{=len(preclass_completed_problems)}} before the class.</p>
+                              <p>You needed 20 minutes before the class session or {{=row.db_row.threshold}} activities before it was graded to get credit for the assignment.</p>
+                              {{ pass }}
+                           <ul class="list-group">
+                              {{for problem in problems:}}
+                                 <li class="list-group-item">
+                                    <span class="badge">{{=problem.points}}</span>
+                                    <h4>{{=problem.acid}}</h4>
+                                    {{if problem.comment:}}
+                                    <p>{{=problem.comment}}</p>
+                                    {{pass}}
+                                 </li>
+                              {{pass}}
+                           </ul>
+      
+                        </div>
+                     </div>
 					   {{else: }}
                      {{=row.form}}
 					   {{pass}}
-				   </div>
-				   <div id="assignment-{{=row.assignment_id}}" class="panel-collapse collapse">
-                  <div class="panel-body">
-                     {{ problems = row.db_row.scores(user = student, preclass=False)}}
-                     {{ completed_problems = [p for p in problems if p.points > 0]}}
-                     {{ preclass_problems = row.db_row.scores(user = student, preclass=True)}}
-                     {{ preclass_completed_problems = [p for p in preclass_problems if p.points > 0]}}
-                     {{ if type.grade_type == 'use':}}
-                        {{ time = row.db_row.time(user=student, preclass=False)}}
-                        {{ preclass_time = row.db_row.time(user=student, preclass=True)}}
-                        <p>You spent {{= "%.1f" % (time/60.0)}} minutes on these activities, {{= "%.1f" % (preclass_time/60.0)}} minutes before the class.</p>
-                        <p>You completed {{=len(completed_problems)}} activities, {{=len(preclass_completed_problems)}} before the class.</p>
-                        <p>You needed 20 minutes before the class session or {{=row.db_row.threshold}} activities before it was graded to get credit for the assignment.</p>
-                        {{ pass }}
-                     <ul class="list-group">
-                        {{for problem in problems:}}
-                           <li class="list-group-item">
-                              <span class="badge">{{=problem.points}}</span>
-                              <h4>{{=problem.acid}}</h4>
-                              {{if problem.comment:}}
-                              <p>{{=problem.comment}}</p>
-                              {{pass}}
-                           </li>
-                        {{pass}}
-                     </ul>
-
-                  </div>
-
-
 				   </div>
 				</div>
 			</div><!-- end .panel -->
