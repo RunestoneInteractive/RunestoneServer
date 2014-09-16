@@ -3,115 +3,90 @@ import datetime
 def pct2pts(x):
     return "%.2f" % (100*x)
 
-class Grade(object):
-    """Grade of one user for either a collection of assignments, or for the whole course"""
-    def __init__(self):
-        self.weight = 1
-        self.scores = []
-        self.assignment_scores = []
-    
-    def points(self):
-        self.scores.sort()
-        if len(self.scores) > self.assignments_count - self.assignments_dropped:
-            # too many grades; drop lowest
-            return sum(self.scores[self.assignments_dropped:])
-        else:
-            return sum(self.scores)
-    
-    def assignment_points(self):
-        self.assignment_scores.sort()
-        if len(self.scores) > self.assignments_count - self.assignments_dropped:
-            # too many grades; drop lowest assignment
-            return sum(self.assignment_scores[self.assignments_dropped:])
-        else:
-            return sum(self.assignment_scores)
-            
-    
-    def current(self):
-        if self.possible == 0:
-            return 0
-        points = float(self.points())/self.possible
-        return points*self.weight
-
-    def projected(self):
-        if self.assignment_points() == 0:
-            return 0
-        points = float(self.points())/self.assignment_points()
-        return points*self.weight
-
-    def points_after_drops(self):
-        self.scores.sort()
-        return sum(self.scores[self.assignments_dropped:])
-    def assignment_points_after_drops(self):
-        self.assignment_scores.sort()
-        return sum(self.assignment_scores[self.assignments_dropped:])
-
-    def max(self):
-        # this is more complicated because of the "best k of n" scoring
+class AssignmentGrade(object):
+    """Grade of one user for one assignment"""
+    def __init__(self, released, score, projected, assignment_score, assignment_id, assignment_name, grade_record, row):
+        self.released = released
+        self.score = score
+        self.projected = projected 
+        self.assignment_score = assignment_score
+        self.assignment_id = assignment_id
+        self.assignment_name = assignment_name
+        self.grade_record = grade_record
+        self.db_row = row
         
-        if self.possible == 0:
-            return 0
-        remaining = self.possible - self.assignment_points_after_drops()
-        if remaining < 0:
-            remaining = 0
-        points = (self.points_after_drops() + remaining)/self.possible
-        return points * self.weight
-
-    def percent(self, points=None, total=None):
-        if points == None:
-            points = self.points()
-        if total == None:
-            total = self.assignment_points()
-        if total == 0:
-            return "0%"
-        percent = round((points / total) * 100)
-        return "%d%%" % (percent)
-
-class CourseGrade(Grade):
-    def __init__(self):
-        super(CourseGrade, self ).__init__()
-        self.points = 0
-        self.projected_pts = 0
-        self.max_pts = 0
+    def points(self, projected = False, potential = False):
+        # potential gives max points for the assignment
+        # projected gives actual score if it's been released, else projected
+        actual = None
+        if potential:
+            return self.assignment_score
+        elif self.released:
+            return self.score
+        elif projected:
+            if self.projected:
+                return self.projected
+            else:
+                return 0
+        else:
+            return 0    
         
-    def current(self):
-        return self.points
-    
-    def projected(self):
-        return self.projected_pts
-    
-    def max(self):
-        return self.max_pts
 
-def student_grade(user=None, course=None, assignment_type=None):
-    grade = Grade()
+class AssignmentTypeGrade(object):
+    """Grade of one user for a collection of assignments,"""
+    def __init__(self):
+        self.assignments = []
+    
+    def points(self, projected = False, potential = False):
+        vals = [a.points(projected, potential) for a in self.assignments]
+        vals.sort()
+        # drop the self.assignments_dropped lowest values
+        return sum(vals[self.assignments_dropped:])
+
+class CourseGrade(object):
+    def __init__(self):
+        self.assignment_type_grades = []
+        
+    def points(self, projected = False, potential = False):
+        return sum([t.points(projected, potential) for t in self.assignment_type_grades])
+
+def student_grade_for_assignment_type(user=None, course=None, assignment_type=None):
+    t = AssignmentTypeGrade()
     if not user or not course or not assignment_type:
-        return grade
+        return t
 
     # Check assignment type weight before setting it in case its None
     if assignment_type.weight != None:
-        grade.weight = assignment_type.weight
+        t.weight = assignment_type.weight
     if assignment_type.points_possible != None:
-        grade.possible = assignment_type.points_possible
+        t.possible = assignment_type.points_possible
     if assignment_type.assignments_count:
-        grade.assignments_count = int(assignment_type.assignments_count)
+        t.assignments_count = int(assignment_type.assignments_count)
     if assignment_type.assignments_dropped:
-        grade.assignments_dropped = int(assignment_type.assignments_dropped) 
+        t.assignments_dropped = int(assignment_type.assignments_dropped) 
+    t.name = assignment_type.name
+    t.grade_type = assignment_type.grade_type
 
-    assignments = db(db.assignments.id == db.grades.assignment)
-    assignments = assignments(db.assignments.course == course.id)
-    assignments = assignments(db.grades.auth_user == user.id)
-    assignments = assignments(db.assignments.released == True)
-    assignments = assignments(db.assignments.assignment_type == assignment_type.id)
-    assignments = assignments.select(
-        db.assignments.ALL,
-        db.grades.ALL,
-        orderby=db.assignments.name,
-        )
+    assignments = db((db.assignments.course == course.id)
+                     & (db.assignments.assignment_type == assignment_type.id)                      
+                     ).select(orderby = db.assignments.name)
+    
     for row in assignments:
-        grade.scores.append(row.grades.score)
-        grade.assignment_scores.append(row.assignments.points)
-    return grade
+        # get or create the grade object for this user for this assignment row
+        grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
+        if not grade:
+            db.grades.insert(auth_user = user.id,
+                             assignment = row.id,
+                             score = 0,
+                             projected = 0)
+        grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
+        # add the AssignmentGrade to t
+        try:
+            t.assignments.append(AssignmentGrade(row.released, grade.score, grade.projected, row.points, row.id, row.name, grade, row))
+        except:
+            print "failed to append new grade", grade
+        
+    return t
 
 db.define_table('assignment_types',
     Field('name', 'string'),
@@ -444,6 +419,7 @@ db.define_table('grades',
     Field('auth_user', db.auth_user),
     Field('assignment', db.assignments),
     Field('score', 'double'),
+    Field('projected', 'double'),
     migrate='runestone_grades.table',
     )
 

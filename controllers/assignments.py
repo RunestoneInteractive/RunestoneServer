@@ -38,16 +38,30 @@ def index():
 
     grade = CourseGrade()
     assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    for t in assignment_types:
-        t.grade = student_grade(user = student, course = course, assignment_type=t)
-        grade.points += t.grade.current()
-        grade.projected_pts += t.grade.projected()
-        grade.max_pts += t.grade.max()
+    grade.assignment_type_grades = [student_grade_for_assignment_type(user = student, course = course, assignment_type=t) for t in assignment_types]
     last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
 
+    # add forms for all of the individual grades that are student-projected, because not yet released or no grade row at all yet
+    # use http://web2py.com/books/default/chapter/29/07/forms-and-validators, see section on multiple forms on one page
+
+    for t in grade.assignment_type_grades:
+        for a in t.assignments:
+            if (not a.released) or (not a.score):
+                a.form = SQLFORM(db.grades, 
+                                 record=a.grade_record, 
+                                 submit_button = 'change my projected grade',
+                                 fields = ['projected'],
+                                 showid = False
+                                 )
+                # still need to figure out how to get the right values for inserting; perhaps we should do the insertion on fetching, if the record didn't exist.
+                if a.form.process(formname=a.assignment_name + str(a.assignment_id)).accepted:
+                    print request.vars
+                    a.projected = float(request.vars.projected)
+                    response.flash = 'projected grade updated'
+            
+        
     return dict(
-        types = assignment_types,
-        assignments = assignments,
+#        types = assignment_types,
         student = student,
         grade = grade,
         last_action = last_action,
