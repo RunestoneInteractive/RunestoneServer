@@ -121,12 +121,14 @@ class score(object):
         self.comment = comment
 
 def canonicalize(div_id):
+    # needs to take a parameter for which book; hardcoded for pip2 right now
+    # used in calculating time spent for grading "use" assignment types
     if ".html" in div_id:
         full_url = div_id
         # return canonical url, without #anchors
         if full_url.rfind('#') > 0:
             full_url = full_url[:url.rfind('#')]
-        full_url = full_url.replace('/runestone/static/pip/', '')
+        full_url = full_url.replace('/runestone/static/pip2/', '')
         return full_url
     else:
         return div_id
@@ -380,6 +382,7 @@ def assignment_set_grade(assignment, user):
         time = assignment_get_engagement_time(assignment, user, preclass=True)
         if checks >= assignment.threshold or time > 20*60:
             # if enough checkmarks or enough time
+            # should be getting minimum time from a field of the assignment as well: FUTURE WORK
             points = assignment.points
         else:
             points = 0
