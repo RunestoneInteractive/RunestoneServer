@@ -153,38 +153,29 @@ def get_deadline(assignment, user):
         return None
 
 def assignment_get_engagement_time(assignment, user, preclass):
-    # get all the divids for this assignment
-    divids = [row.acid for row in db(db.problems.assignment == assignment.id).select(db.problems.acid)]
-    
-    # get all the activities for this user
-    # could probably simplify and get a reasonable approximation by just retrieving the activities for this assignment; FUTURE WORK
-    q = db(db.useinfo.sid == user.username)
+    q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
     if preclass:
         dl = get_deadline(assignment, user)
         if dl:
-            q = q(db.useinfo.timestamp < dl)
-
-    activities = q.select(db.useinfo.div_id, db.useinfo.timestamp, orderby = db.useinfo.timestamp)
+            q = q(db.useinfo.timestamp < dl)       
+    activities = q.select(db.useinfo.timestamp)
     sessions = []
-    THRESH = 600
+    THRESH = 300
     prev = None
-    for current in activities:
-        div_id = canonicalize(current.div_id)
-        if prev and canonicalize(prev.div_id) in divids:
-            if div_id not in divids or (current.timestamp - prev.timestamp).total_seconds() > THRESH:
-                # close previous session
-                if len(sessions) > 0 and not sessions[-1].end:
-                    sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
-            else:
-                # add to activities count for previous session
-                sessions[-1].count += 1
-        if div_id in divids:
-            if len(sessions) == 0 or sessions[-1].end:
-                sessions.append(Session(current.timestamp))
-        prev = current
-    if len(sessions) > 0 and not sessions[-1].end:
+    for activity in activities:
+        if not prev:
+            # first activity; start a session for it
+            sessions.append(Session(activity.timestamp))            
+        elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
+            # close previous session; set its end time be previous activity's time, plus 30 seconds
+            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+            # start a new session
+            sessions.append(Session(activity.timestamp))
+        prev = activity
+    if prev:
         # close out last session
         sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+    print len(sessions)
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
     return total_time
 
@@ -202,11 +193,11 @@ def assignment_get_use_scores(assignment, problem=None, user=None, section_id=No
                 q = q(db.useinfo.timestamp < dl)       
         attempted_problems = q.select(db.problems.acid)
         for problem in db(db.problems.assignment == assignment.id).select(db.problems.acid):
-            if ".html" in problem.acid:
-                # don't include opening the page as a problems they can attempt or not;
-                # they are included as problems so that total time on session prep
-                # is calculated correctly
-                continue
+#            if ".html" in problem.acid:
+#                # don't include opening the page as a problems they can attempt or not;
+#                # they are included as problems so that total time on session prep
+#                # is calculated correctly
+#                continue
             matches = [x for x in attempted_problems if x.acid == problem.acid]
             points = 0
             if len(matches) > 0:
