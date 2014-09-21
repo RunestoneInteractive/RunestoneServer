@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 2
 
+   Assignments/ps4.rst
    Assignments/ps3.rst
    Assignments/ps2.rst
    Assignments/ps1.rst
@@ -152,6 +153,37 @@ Files
    Files/Glossary.rst
    Files/Exercises.rst
 
+Dictionaries
+::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+
+   Dictionaries/intro-Dictionaries.rst
+   Dictionaries/Dictionaryoperations.rst
+   Dictionaries/Dictionarymethods.rst
+   Dictionaries/Aliasingandcopying.rst
+   Dictionaries/Glossary.rst
+   Dictionaries/Exercises.rst
+
+
+Accumulating Results in Dictionaries
+::::::::::::::::::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   DictionaryAccumulation/intro-AccumulatingMultipleResultsInaDictionary.rst
+   DictionaryAccumulation/AccumulatingResultsFromaDictionary.rst
+   DictionaryAccumulation/AccumulatingaMaximumValue.rst
+   DictionaryAccumulation/AccumulatingtheBestKey.rst
+   DictionaryAccumulation/Exercises.rst
+
+
+.. toctree::
+   :maxdepth: 2
+
 Installation
 ::::::::::::
 
@@ -159,6 +191,7 @@ Installation
    :maxdepth: 2
 
    Installation/FirstSteps.rst
+   
 
 
 Unix
@@ -169,6 +202,7 @@ Unix
 
    Unix/CommandPrompt.rst
    Unix/FoldersAndPaths.rst
+   Unix/lessCommand.rst
 
 
    
