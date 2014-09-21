@@ -158,7 +158,7 @@ def assignment_get_engagement_time(assignment, user, preclass):
         dl = get_deadline(assignment, user)
         if dl:
             q = q(db.useinfo.timestamp < dl)       
-    activities = q.select(db.useinfo.timestamp)
+    activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
     sessions = []
     THRESH = 300
     prev = None
