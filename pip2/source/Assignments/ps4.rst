@@ -24,7 +24,7 @@ For this week, you have the following graded activities:
    
    * Before Thursday's class:
        * Read :ref:`Accumulating results in dictionaries<dictionary_accum_chap>`, and do the exercises in that chapter
-       * Read :ref:`unix less<less_chap>`
+       * Read :ref:`unix cat and less<less_chap>`
  
 #. Reading responses
 
@@ -72,7 +72,7 @@ Unix Problems
 
 The following problems include instructions for you to follow in your Terminal application, if you have a Mac, or in Git Bash, if you have Windows (:ref:`instructions for installing git bash <install_git_bash>`). Each one requires you to take a screenshot of the result and upload all these screenshots to **Unix Problems (PS4)** on our course CTools page. (CTools > SI 106 002 > Assignments > Unix Problems (PS4))
 
-#. Create a folder ps4 in your 106 directory. Download the file ``sample.txt`` from cTools and save it in your ps4 directory.
+#. Create a folder ps4 in your 106 directory. Download the file ``sample.txt`` from the cTools Resources>Code directory and save it in your ps4 directory.
 
 #. Connect to the ps4 directory. Run the command ``less sample.txt``. Take a screenshot to show that the command worked for displaying the contents. Upload it to cTools.
 

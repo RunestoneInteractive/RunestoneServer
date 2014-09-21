@@ -203,8 +203,6 @@ Unix
    Unix/CommandPrompt.rst
    Unix/FoldersAndPaths.rst
    Unix/lessCommand.rst
-
-
    
 
 More chapters will be coming soon. I am making some revisions to the version of the textbook I created for the winter 2014 offering of the course, based on experience with students using it.

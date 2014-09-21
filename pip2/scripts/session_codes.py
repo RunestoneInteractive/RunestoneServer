@@ -35,7 +35,9 @@ sessions[4] = ["Sequences/intro-Sequences.rst", "Sequences/OperationsonStrings.r
 sessions[5] = ["Iteration/intro-Iteration.rst", "Iteration/TheforLoop.rst", "Iteration/FlowofExecutionoftheforLoop.rst", "Iteration/Stringsandforloops.rst", "Iteration/TraversalandtheforLoopByIndex.rst", "Iteration/Listsandforloops.rst", "Iteration/TheAccumulatorPattern.rst", "Iteration/TheAccumulatorPatternwithStrings.rst", "Iteration/Glossary.rst", "Iteration/Exercises.rst"]
 sessions[6] = ["Selection/BooleanValuesandBooleanExpressions.rst", "Selection/Logicaloperators.rst", "Selection/PrecedenceofOperators.rst", "Selection/ConditionalExecutionBinarySelection.rst", "Selection/OmittingtheelseClauseUnarySelection.rst", "Selection/Nestedconditionals.rst", "Selection/Chainedconditionals.rst", "Selection/Glossary.rst", "Selection/Exercises.rst"  
 ]
-sessions[6]+= ["Files/intro-WorkingwithDataFiles.rst", "Files/FindingaFileonyourDisk.rst", "Files/ReadingaFile.rst", "Files/AlternativeFileReadingMethods.rst", "Files/Iteratingoverlinesinafile.rst", "Files/WritingTextFiles.rst", "Files/Glossary.rst", "Files/Exercises.rst", "Installation/FirstSteps.rst"]
+sessions[6]+= ["Files/intro-WorkingwithDataFiles.rst", "Files/FindingaFileonyourDisk.rst", "Files/ReadingaFile.rst", "Files/AlternativeFileReadingMethods.rst", "Files/Iteratingoverlinesinafile.rst", "Files/WritingTextFiles.rst", "Files/Glossary.rst", "Files/Exercises.rst", "Installation/FirstSteps.rst", "Unix/CommandPrompt.rst", "Unix/FoldersAndPaths.rst"]
+sessions[7] = ["Dictionaries/intro-Dictionaries.rst", "Dictionaries/Dictionaryoperations.rst", "Dictionaries/Dictionarymethods.rst", "Dictionaries/Aliasingandcopying.rst", "Dictionaries/Glossary.rst", "Dictionaries/Exercises.rst"]
+sessions[8] = ["DictionaryAccumulation/intro-AccumulatingMultipleResultsInaDictionary.rst", "DictionaryAccumulation/AccumulatingResultsFromaDictionary.rst", "DictionaryAccumulation/AccumulatingaMaximumValue.rst", "DictionaryAccumulation/AccumulatingtheBestKey.rst", "DictionaryAccumulation/Exercises.rst", "Unix/lessCommand.rst"]
 
 
 f = open('session_codes.txt', 'w')
