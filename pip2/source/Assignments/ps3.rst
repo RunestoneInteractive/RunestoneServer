@@ -120,34 +120,83 @@ Problem Set
 
 3. Write code to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
 
-.. activecode:: ps_3_3
+.. tabbed:: ps3_pb3
 
-   several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
-   
-   ====
-   import test
-   print "\n\n---\n"
-   print "(There are no tests for this problem.)"
+  .. tab:: Problem
+
+    .. activecode:: ps_3_3
+
+       several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
+       
+       ====
+       import test
+       print "\n\n---\n"
+       print "(There are no tests for this problem.)"
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_3s
+
+      several_things = ["hello", 2, 4, 6.0, 7.5, 234352354, "the end", "", 99]
+     
+      for x in several_things:
+        print x
+
+      print "--" # adding this extra print just prints another line with the string "--" in between
+      # not necessary! this is only there so it's very clear for you to see if you run this
+
+      for yzb in several_things:
+        print type(yzb)
+
+      ====
+      import test
+      print "\n\n---\n"
+      print "(There are no tests for this problem.)"
 
 
 
 4. See the comments for directions.
 
-.. activecode:: ps_3_4
+.. tabbed:: ps3_pb4
 
-   sent = "The magical mystery tour is waiting to take you away."
-   
-   # Write a comment explaining how you would define what a word is for a computer.
-   
-   # Write code that assigns a variable word_list to hold a LIST of all the 
-   # WORDS in the string sent. It's fine if words include punctuation.
-   # Hint: use the split method
-   
-   ====
-   
-   import test
-   print "\n\n---\n"
-   test.testEqual(word_list,sent.split())
+  .. tab:: Problem
+
+    .. activecode:: ps_3_4
+
+       sent = "The magical mystery tour is waiting to take you away."
+       
+       # Write a comment explaining how you would define what a word is for a computer.
+       
+       # Write code that assigns a variable word_list to hold a LIST of all the 
+       # WORDS in the string sent. It's fine if words include punctuation.
+       # Hint: use the split method
+       
+       ====
+       
+       import test
+       print "\n\n---\n"
+       test.testEqual(word_list,sent.split())
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_4s
+
+       sent = "The magical mystery tour is waiting to take you away."
+       
+       # Write a comment explaining how you would define what a word is for a computer.
+       # A word is basically any set of characters besides whitespace separated by whitespace
+
+       # Write code that assigns a variable word_list to hold a LIST of all the 
+       # WORDS in the string sent. It's fine if words include punctuation.
+       # Hint: use the split method
+
+       word_list = sent.split() # default use of .split() method breaks on any group of whitespace
+       
+       ====
+       
+       import test
+       print "\n\n---\n"
+       test.testEqual(word_list,sent.split())
    
 
 5. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
@@ -161,44 +210,100 @@ Problem Set
 ``I love Python``
 
 (Hint: remember string slicing!)
+
+
+.. tabbed:: ps3_pb5
+
+  .. tab:: Problem
       
-.. activecode:: ps_3_5
+    .. activecode:: ps_3_5
 
-   excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
+       excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
 
-   # Now, write code to print out each element of the list stored in excited_words,
-   # BUT print out each element WITHOUT the ending punctuation.
-   # Hint: remember string slicing? 
-   
-   ====
-   
-   import test
-   print "\n\n---\n"
-   print "(There are no tests for this problem.)"
+       # Now, write code to print out each element of the list stored in excited_words,
+       # BUT print out each element WITHOUT the ending punctuation.
+       # Hint: remember string slicing? 
+       
+       ====
+       
+       import test
+       print "\n\n---\n"
+       print "(There are no tests for this problem.)"
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_5s
+
+       excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
+
+       # Now, write code to print out each element of the list stored in excited_words,
+       # BUT print out each element WITHOUT the ending punctuation.
+       # Hint: remember string slicing? 
+
+       for ib in excited_words:
+          print ib[:-1]
+       
+       ====
+       
+       import test
+       print "\n\n---\n"
+       print "(There are no tests for this problem.)"
+
+
 
 
 6. Follow the directions in the comments!
 
-.. activecode:: ps_3_6
+.. tabbed:: ps3_pb6
 
-   rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
-     Over many a quaint and curious volume of forgotten lore,  
-     While I nodded, nearly napping, suddenly there came a tapping,   
-     As of some one gently rapping, rapping at my chamber door.   
-     'Tis some visitor, I muttered, tapping at my chamber door;           5
-     Only this and nothing more."""
-   
-   # Write code to assign the number of characters in the string rv to the variable num_chars.
-   
-   # Write code to assign the number of words in the string rv to the variable num_words. 
-   ## Hint: use the .split() method 
-   
-   ====
-   
-   import test
-   print "\n\n---\n"
-   test.testEqual(num_chars,len(rv))
-   test.testEqual(num_words,len(rv.split()))
+  .. tab:: Problem
+
+    .. activecode:: ps_3_6
+
+       rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+         Over many a quaint and curious volume of forgotten lore,  
+         While I nodded, nearly napping, suddenly there came a tapping,   
+         As of some one gently rapping, rapping at my chamber door.   
+         'Tis some visitor, I muttered, tapping at my chamber door;           5
+         Only this and nothing more."""
+       
+       # Write code to assign the number of characters in the string rv to the variable num_chars.
+       
+       # Write code to assign the number of words in the string rv to the variable num_words. 
+       ## Hint: use the .split() method 
+       
+       ====
+       
+       import test
+       print "\n\n---\n"
+       test.testEqual(num_chars,len(rv))
+       test.testEqual(num_words,len(rv.split()))
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_6s
+
+     rv = """Once upon a midnight dreary, while I pondered, weak and weary,  
+       Over many a quaint and curious volume of forgotten lore,  
+       While I nodded, nearly napping, suddenly there came a tapping,   
+       As of some one gently rapping, rapping at my chamber door.   
+       'Tis some visitor, I muttered, tapping at my chamber door;           5
+       Only this and nothing more."""
+     
+     # Write code to assign the number of characters in the string rv to the variable num_chars.
+     num_chars = len(rv)
+     
+     # Write code to assign the number of words in the string rv to the variable num_words. 
+     ## Hint: use the .split() method 
+
+     num_words = len(rv.split())
+     
+     ====
+     
+     import test
+     print "\n\n---\n"
+     test.testEqual(num_chars,len(rv))
+     test.testEqual(num_words,len(rv.split()))  
 
 
 7. Write code to open the file we've included in this problem set, ``about_programming.txt``, and print it out, line by line. (Don't worry about the blank lines that will appear.)
@@ -209,37 +314,111 @@ The first two lines should look like this:
   
    original formulation of a computing problem to executable programs. It involves
 
-.. activecode:: ps_3_7
+.. tabbed:: ps3_pb7
 
-   # Write your code here.
-   # Don't worry about extra blank lines between each of the lines
-   # (but if you want to get rid of them, you can try out the .strip() method)
+  .. tab:: Problem
 
-   ====
+    .. activecode:: ps_3_7
 
-   import test
-   print "\n\n---\n"
-   print "There are no tests for this problem."
+       # Write your code here.
+       # Don't worry about extra blank lines between each of the lines
+       # (but if you want to get rid of them, you can try out the .strip() method)
+
+       ====
+
+       import test
+       print "\n\n---\n"
+       print "There are no tests for this problem."
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_7s
+
+     # Write your code here.
+     # Don't worry about extra blank lines between each of the lines
+     # (but if you want to get rid of them, you can try out the .strip() method)
+
+     f = open("about_programming.txt", "r")
+     fr = f.readlines() # this is a list of strings, each string is a line of the content in the file, including a newline character
+
+     for lp in fr:
+        print lp
+
+     ====
+
+     import test
+     print "\n\n---\n"
+     print "There are no tests for this problem."
 
 
 8. Now write code to open the file ``about_programming.txt`` and assign the **number of lines** in the file to the variable ``file_lines_num``.
 
-.. activecode:: ps_3_8
+.. tabbed:: ps3_pb8
 
-   # Write your code here.
+  .. tab:: Problem
 
-   ====
+    .. activecode:: ps_3_8
 
-   import test
-   print "\n\n---\n"
-   test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
+       # Write your code here.
+
+       ====
+
+       import test
+       print "\n\n---\n"
+       test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_8s
+
+     # Write your code here.
+
+     f = open("about_programming.txt","r")
+     oranges = f.readlines() # list of strings, each string is a line from that file
+     file_lines_num = len(oranges)
+
+     ====
+
+     import test
+     print "\n\n---\n"
+     test.testEqual(file_lines_num,len(open("about_programming.txt","r").readlines()))
 
 
 9. **Challenge problem (OPTIONAL, much harder):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
 
-.. activecode:: ps_3_9
+.. tabbed:: ps3_pb9
 
-   # Write your code here.
+  .. tab:: Problem
+
+    .. activecode:: ps_3_9
+
+       # Write your code here.
+
+  .. tab:: Solution
+
+    .. activecode:: ps_3_9s
+
+      # Write your code here.
+
+      # There are a couple ways to do this problem. It's pretty hard. (Awesome if you tried it.)
+
+      # Here's the way that uses the accumulation pattern we know, 
+      # and does not use some file manipulation tricks we haven't learned. 
+      # As almost always, there are multiple ways to solve this problem!
+
+      f = open("about_programming.txt", "r")
+      lns = f.readlines()
+      num_lines = len(lns) # now we have the total number of lines in the file
+
+      acc_total = 0 # here we initialize our accumulator
+      for x in lns: # now let's go through each line of the file in the result of .readlines()
+         sp = len(x.split()) # we want to find how many words, things separated by whitespace, are in each line string
+         acc_total = acc_total + sp # each time, we want to add that number to our accumulator
+
+
+      # now we have the total number of lines in the file AND the total number of words in the file, so we need to do some division for the average (the mean)
+      avg_num_wrds = float(acc_total)/num_lines
+      print avg_num_wrds # now let's print out the answer to see it
 
    
 .. activecode:: addl_functions_3
