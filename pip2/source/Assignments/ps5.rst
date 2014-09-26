@@ -44,6 +44,14 @@ Problem Set
 
 .. _problem_set_5:
 
+.. datafile:: timely_file.txt
+	:hide:
+
+	Autumn is interchangeably known as fall in the US and Canada, and is one of the four temperate seasons. Autumn marks the transition from summer into winter.
+	Some cultures regard the autumn equinox as mid autumn while others, with a longer temperature lag, treat it as the start of autumn then. 
+	In North America, autumn starts with the September equinox, while it ends with the winter solstice. 
+	(Wikipedia)
+
 
 #. Define a function called add_three, which takes one integer as input and returns that integer + 3.
 
@@ -71,6 +79,12 @@ Problem Set
 		y = subtract_five(9) - 6
 
 
+		====
+
+		print "\n---\n\n"
+		print "There are no tests for this problem"
+
+
 #. Here's another bit of code with a problem. Fix it so it works somehow, and comment about what's going on that causes a problem.
 
 	.. activecode:: ps_5_6
@@ -81,6 +95,11 @@ Problem Set
 
 		print yp
 
+		====
+
+		print "\n---\n\n"
+		print "There are no tests for this problem"
+
 
 #. Define a function called change_amounts that takes one integer as input. If the input is larger than 10, it should return the input + 5. If the input is smaller than or equal to 10, it should return the input + 2.
 
@@ -90,6 +109,13 @@ Problem Set
 		def change_amounts(num_here):
 			pass # delete this line and put in your own code for the body of the function.
 
+		====
+
+		print "\n---\n\n"
+		import test
+		test.testEqual(change_amounts(9),11)
+		test.testEqual(change_amounts(12),17)
+
 
 #. Given the string in the code below, write code to figure out what the most common word in the string is and assign that to the variable ``abc``. (Do not hard-code the right answer.) Hint: dictionaries will be useful here.
 
@@ -98,29 +124,30 @@ Problem Set
 		s = "Will there really be such a thing as morning in the morning"
 		# Write your code here...
 
+		====
 
+		print "\n---\n\n"
+		print "There are no tests for this problem"
 
 #. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. 
-
-.. datafile:: timely_file.txt
-	:hide:
-
-	Autumn is interchangeably known as fall in the US and Canada, and is one of the four temperate seasons. Autumn marks the transition from summer into winter.
-	Some cultures regard the autumn equinox as mid autumn while others, with a longer temperature lag, treat it as the start of autumn then. 
-	In North America, autumn starts with the September equinox, while it ends with the winter solstice. 
-	(Wikipedia)
-
 
 	.. activecode:: ps_5_9
 
 		# Write code here!
 
+		====
+		print "\n---\n\n"
+		print "There are no tests for this problem"
 
-#. Write code to add to this code that will keep printing what the user inputs over and over until the user enters the string "quit".
+
+#. Write code to add to this code **that will keep printing what the user inputs over and over until the user enters the string "quit".**
 
 	.. activecode:: ps_5_10
 
-		word_in = raw_input("Please enter a word. It will print out. If you want to stop, type 'quit'.")
+		word_in = raw_input("Please enter a word.")
 		# Write the rest of your code here.
 
+		====
+		print "\n---\n\n"
+		print "There are no tests for this problem"
 
