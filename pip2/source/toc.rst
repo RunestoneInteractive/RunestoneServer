@@ -182,8 +182,29 @@ Accumulating Results in Dictionaries
    DictionaryAccumulation/Exercises.rst
 
 
+Functions
+:::::::::
+
 .. toctree::
    :maxdepth: 2
+
+   Functions/FunctionDefinitions.rst
+   Functions/FunctionInvocation.rst
+   Functions/FunctionParameters.rst
+   Functions/Returningavaluefromafunction.rst
+   Functions/Afunctionthataccumulates.rst 
+   Functions/DecodingaFunction.rst
+   Functions/MethodInvocations.rst
+   Functions/Variablesandparametersarelocal.rst
+   Functions/GlobalVariables.rst
+   Functions/Functionscancallotherfunctions.rst
+   Functions/FlowofExecutionSummary.rst
+   Functions/Printvs.return.rst
+   Functions/Themain()function.rst
+   Functions/PassingMutableObjects.rst
+   Functions/SideEffects.rst
+   Functions/Glossary.rst
+
 
 Installation
 ::::::::::::
