@@ -30,11 +30,11 @@ another. While in the middle of one function, the program might have to execute
 the statements in another function. But while executing that new function, the
 program might have to execute yet another function!
 
-Fortunately, Python is adept at keeping track of where it is, so each time a
+Fortunately, the Python interperter is adept at keeping track of where it is, so each time a
 function completes, the program picks up where it left off in the function that
 called it. When it gets to the end of the program, it terminates.
 
-What's the moral of this sordid tale? When you read a program, don't read from
+What does all that mean for us when we try to understand a program? Don't read from
 top to bottom. Instead, follow the flow of execution.  This means that you will read the def statements as you
 are scanning from top to bottom, but you should skip the body of the function
 until you reach a point where that function is called.

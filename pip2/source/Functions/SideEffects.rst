@@ -68,5 +68,9 @@ to get a copy of the dictionary back as a return value.
    print mylst
    print newlst
 
+In general, any lasting effect that occurs in a function, not through its return value,  is called a side effect. There are three ways to have side effects:
 
+* Printing out a value. This doesn't change any objects or variable bindings, but it does have a potential lasting effect outside the function execution, because a person might see the output and be influenced by it.
+* Changing the value of a mutable object.
+* Changing the binding of a global variable.
 

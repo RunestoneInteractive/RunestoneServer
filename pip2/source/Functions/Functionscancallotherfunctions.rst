@@ -12,7 +12,7 @@ Functions can call other functions
 
 It is important to understand that each of the functions we write can be used
 and called from other functions we write.  This is one of the most important
-ways that computer scientists take a large problem and break it down into a
+ways that computer programmers take a large problem and break it down into a
 group of smaller problems. This process of breaking a problem into smaller
 subproblems is called **functional decomposition**.
 
@@ -56,7 +56,7 @@ though they have the same name. Each function invocation creates a new frame, an
 variables are looked up in that frame. Notice that at step 9, y has the value 25 is one frame
 and 2 in the other.  
 
-What happens you to refer to variable y on line 3? Python looks up the value of y
+What happens when you to refer to variable y on line 3? Python looks up the value of y
 in the stack frame for the ``square`` function. If it didn't find it there, it
 would go look in the global frame.  
 

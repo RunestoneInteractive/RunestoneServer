@@ -13,7 +13,7 @@ Function Invocation
 Defining a new function does not make the function run.
 To execute the function, we need a **function call**.  This is also known as a **function invocation**.
 
-.. note:
+.. note::
 
    This section is a review of something we learned the first week. 
 

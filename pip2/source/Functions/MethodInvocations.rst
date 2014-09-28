@@ -10,7 +10,7 @@
 Method Invocations
 ------------------
 
-.. note:
+.. note::
 
    This section is a review of material you have already seen, but it may be helpful to look at it again now that you're focusing on functions and function calls.
 

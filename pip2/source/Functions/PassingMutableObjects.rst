@@ -26,8 +26,8 @@ the function gets you the value of local variable x, not the global one. If you 
 ``x = 3``, it changes the value of the local variable x, but when the function finishes
 executing, that local x disappears, and so does the value 3. 
 
-If, one the other hand, the local variable x points to a list ``[1, 2, 7]``,
-setting ``x[2] = 0`` makes x still point to the same list, but changes the list's contents to ``[1, 2, 0]``.
+If, one the other hand, the local variable x points to a list ``[1, 3, 7]``,
+setting ``x[2] = 0`` makes x still point to the same list, but changes the list's contents to ``[1, 3, 0]``.
 The local variable x is discarded when the function completes execution, but the 
 mutation to the list lives on if there is some other variable outside the function
 that also is an alias for the same list.
