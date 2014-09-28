@@ -7,16 +7,11 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Functions Revisited
-===================
+Summary
+~~~~~~~
 
-.. index:: return statement, return value, temporary variable,
-           dead code, None, unreachable code
+* Make sure you take the time to understand error messages.  They can help you a lot.
 
-.. index::
-    single: value 
-    single: variable; temporary 
+* ``print`` statements are your friends.  Use them to help you uncover what is **really** happening in your code.
 
-
-.. index:: scaffolding, incremental development
-
+* Work backward from the error.  Many times an error message is caused by something that has happened before it in the program.  Always remember that python evaluates a program top to bottom (but taking detours for functions calls, repeating blocks of code in for and while loops, and skipping some code blocks in if-elif-else statements.)

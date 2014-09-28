@@ -7,14 +7,12 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Iteration Revisited
-===================
+.. _while_chap:
 
-.. index:: iteration, assignment, assignment statement, reassignment
+Introduction
+============
 
-.. index::
-    single: statement; assignment
-
+.. index:: iteration, indefinite iteration
 
 Computers are often used to automate repetitive tasks. Repeating identical or
 similar tasks without making errors is something that computers do well and
@@ -28,5 +26,4 @@ we are going to look at the ``while`` statement --- another way to have your
 program do iteration.
 
 
-.. index:: for loop
 

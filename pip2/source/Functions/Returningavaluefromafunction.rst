@@ -94,10 +94,8 @@ function returns.
 
 The problem with this function is that even though it prints the value of the squared input, 
 that value will not be returned to the place
-where the call was done.  Since line 6 uses the return value as the right hand 
-side of an assignment statement, the evaluation of the 
-function will be ``None``.  In this case, ``squareResult`` will refer to that 
-value after the assignment statement and therefore the result printed in line 7 is incorrect.  
+where the call was done.  Instead, the value ``None`` will be returned. Since line 6 uses the return value as the right hand 
+side of an assignment statement, ``squareResult`` will have ``None`` as its value and the result printed in line 7 is incorrect.  
 Typically, functions will return values that can be printed or processed in some other way by the caller.
 
 A return statement, once executed, immediately terminates execution of a function, even if it is not the
@@ -135,11 +133,11 @@ the return value 100 for entire function invocation and then does the multiplica
 To reiterate, when executing a line of code ``squareResult = 2 * square(toSquare)``, the python
 interpreter does these steps:
 
-   #. It's an assignment statement, so evaluate the right-hand side expression ``2 * square(toSquare)``.
-   #. Look up the values of the variables square and toSquare: square is a function object and toSquare is 10
-   #. Pass 10 as a parameter value to the function, get back the return value 100
-   #. Substitute 100 for square(toSquare), so that the expression now reads ``2 * 100``
-   #. Assign 200 to variable ``squareResult``
+#. It's an assignment statement, so evaluate the right-hand side expression ``2 * square(toSquare)``.
+#. Look up the values of the variables square and toSquare: square is a function object and toSquare is 10
+#. Pass 10 as a parameter value to the function, get back the return value 100
+#. Substitute 100 for square(toSquare), so that the expression now reads ``2 * 100``
+#. Assign 200 to variable ``squareResult``
 
 **Check your understanding**
 

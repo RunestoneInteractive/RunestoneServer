@@ -114,7 +114,7 @@ What you will notice here is that the ``while`` loop is more work for
 you --- the programmer --- than the equivalent ``for`` loop.  When using a ``while``
 loop you have to control the loop variable yourself.  You give it an initial value, test
 for completion, and then make sure you change something in the body so that the loop
-terminates.
+terminates. That also makes a while loop harder to read and understand than the equivalent for loop. So, while you *can* implement definite iteration with a while loop, it's not a good idea to do that. Use a for loop whenever it will be known at the beginning of the iteration process how many times the block of code needs to be executed. 
 
 
 **Check your understanding**
@@ -160,19 +160,4 @@ terminates.
    :feedback_c: Although you do not know how many iterations you loop will run before the program starts running, once you have chosen your random integer, Python knows exactly how many iterations the loop will run, so this is an example of definite iteration.
 
    Which type of loop can be used to perform the following iteration: You choose a positive integer at random and then print the numbers from 1 up to and including the selected integer.
-
-So why have two kinds of loop if ``for`` looks easier?  
-
-In the problem sets involving the Hangman game, you have seen an example where guesses are made until
-either the word is guessed or health goes down to 0. Since the number of guesses 
-that would be needed can't be fixed in advance, a while loop was needed rather
-than a for loop.
-
-The next example shows another indefinite iteration where
-we need the extra power that we get from the ``while`` loop because we can't predict
-in advance how many repetitions of the code block will be needed (or even 
-whether an infinite number will be needed).
-
-
-.. index:: 3n + 1 sequence
 

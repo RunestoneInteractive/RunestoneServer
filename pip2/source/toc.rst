@@ -7,7 +7,7 @@ Assignments
 :::::::::::
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Assignments/ps5.rst
    Assignments/ps4.rst
@@ -200,10 +200,33 @@ Functions
    Functions/Functionscancallotherfunctions.rst
    Functions/FlowofExecutionSummary.rst
    Functions/Printvs.return.rst
-   Functions/Themain()function.rst
    Functions/PassingMutableObjects.rst
    Functions/SideEffects.rst
    Functions/Glossary.rst
+
+
+While Loops
+:::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   IndefiniteIteration/intro-indefiniteiteration.rst
+   IndefiniteIteration/ThewhileStatement.rst
+   IndefiniteIteration/listenerLoop.rst
+
+Debugging
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+
+   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
+   Debugging/BeginningtipsforDebugging.rst
+   Debugging/KnowyourerrorMessages.rst
+   Debugging/Summary.rst
+
 
 
 Installation

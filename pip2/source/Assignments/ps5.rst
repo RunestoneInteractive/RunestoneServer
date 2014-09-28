@@ -12,10 +12,36 @@
     :linenothreshold: 500
 
 
-Week 5: ends September 28
-=========================
+Week 5: ends October 5
+======================
 
+1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
+   
+   * Before Tuesday's class: 
+      * Read :ref:`Defining Functions<functions_chap>`, and do the exercises in that chapter
+      * Read `External tutorial on unix <, >, and |  <http://www.ee.surrey.ac.uk/Teaching/Unix/unix3.html>`_
+         * Note: If you're trying out the commands in the tutorial on your own machine, don't be alamred by the *who* command that is used in one of the examples. It's not very intuitive what it's doing on a single-user computing system like a Mac, and it's not available all in git bash for Windows users.
+         * Note: you might also like some of the other pages in the tutorial at that site. 
+           
+   
+   * Before Thursday's class:
+       * Read :ref:`While loops<while_chap>`, and do the exercises in that chapter
+       * Read :ref:`Debugging tips<debugging_chap>`, and do the exercises in that chapter
+       * Read `External tutorial on unix grep  <http://www.uccs.edu/~ahitchco/grep/>`_
+       
+       
+ 
+#. Reading responses
 
+   * By Monday night: 
+      * Read *The Most Human Human*, Chapter 10, p.219-237 only (you'll read the rest of the chapter next week)
+      * Answer :ref:`Reading Response 5 <reading_response_5>`. 
+
+#. Problem set **Due:** **Sunday, September 28th at 5 pm**
+
+   * Do the Unix Problem part of the problem set: :ref:`Unix Problems (3) <unix_pset5>`
+   
+   * Save answers to the exercises in Problem Set 5: :ref:`Problem Set 5 <problem_set_5>` 
 
 
 
@@ -24,11 +50,16 @@ Reading Response
 
 .. _reading_response_6:
 
+Question(s) coming soon!
 
 Unix Problems
 -------------
 
 .. _unix_pset5:
+
+.. note:
+
+   The unix problems have not been finalized yet. Please don't work on them yet.
 
 Turn these in via CTools in the Assignments tab!
 
@@ -43,6 +74,10 @@ Problem Set
 -----------
 
 .. _problem_set_5:
+
+.. note:
+
+   The problem set questions have not been finalized yet. Please don't start working on them yet.
 
 .. datafile:: timely_file.txt
 	:hide:

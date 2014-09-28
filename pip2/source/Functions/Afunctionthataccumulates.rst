@@ -35,11 +35,21 @@ and our implementation may not be a very good one.
 
 
 
+.. parsonsprob:: functions_6a
 
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_05_06
+   Rearrange the code statements to match the activecode window above. (This is an exercise in noticing where the indenting and outdenting happens, and where the return statement goes.)
+   
+   -----
+   def mylen(x):
+   =====
+      c = 0 # initialize count variable to 0
+   =====
+      for y in x:
+   =====
+         c = c + 1   # increment the counter for each item in x
+   =====
+      return c
+   =====      
+   print mylen("hello")
+   print mylen([1, 2, 7]) 
 

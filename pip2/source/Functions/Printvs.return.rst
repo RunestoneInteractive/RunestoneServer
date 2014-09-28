@@ -20,6 +20,10 @@ outputs a printed representation of it in the output window. You can think of
 the print statement as something that takes an object from the land of the program
 and makes it visible to the land of the human observer.
 
+.. note::
+
+   **Print is for people**. Remember that slogan. Printing has no effect on the ongoing execution of a program. It doesn't assign a value to a variable. It doesn't return a value from a function call.
+
 If you're confused, chances are it not's really about the print statement but
 about returned values and the evaluation of complex expressions. A function that
 returns a value is producing a value for use *by the program*, in particular for
@@ -33,6 +37,7 @@ three possibilities.
 
 #. Save it for later. 
     The returned value may be:
+    
     * Assigned to a variable. For example, `w = square(3)`
     * Put in a list. For example, `L.append(square(3))`
     * Put in a dictionary. For example, `d[3] = square(3)`
@@ -65,4 +70,63 @@ up calling f and saving the return value or using it as part of a more complex e
 You will know you've really internalized the idea of functions when you are
 no longer confused about the difference between print and return. Keep working at it
 until it makes sense to you!
+
+**Check your understanding**
+
+.. mchoicemf:: test_questionfunctions_4_1
+   :answer_a: 2
+   :answer_b: 5
+   :answer_c: 7
+   :answer_d: 25
+   :answer_e: Error: y has a value but x is an unbound variable inside the square function
+   :correct: c
+   :feedback_a: 2 is the input; the value returned from h is what will be printed
+   :feedback_b: Don't forget that 2 gets squared.
+   :feedback_c: First square 2, then add 3.
+   :feedback_d: 3 is added to the result of squaring 2
+   :feedback_e: When square is called, x is bound to the parameter value that is passed in, 2.
+   
+   What will the following code output?
+   
+   .. code-block:: python 
+
+       def square(x):
+           return x*x
+           
+       def g(y):
+           return y + 3
+           
+       def h(y):
+           return square(y) + 3
+           
+       print h(2)
+
+
+.. mchoicemf:: test_questionfunctions_4_2
+   :answer_a: 2
+   :answer_b: 5
+   :answer_c: 7
+   :answer_d: 10
+   :answer_e: Error: you can't nest function calls
+   :correct: d
+   :feedback_a: Better read the section above one more time.
+   :feedback_b: Better read the section above one more time.
+   :feedback_c: That's h(2), but it is passed to g.
+   :feedback_d: h(2) returns 7, so y is bound to 7 when g is invoked 
+   :feedback_e: Ah, but you can next function calls.
+   
+   What will the following code output?
+   
+   .. code-block:: python 
+
+       def square(x):
+           return x*x
+           
+       def g(y):
+           return y + 3
+           
+       def h(y):
+           return square(y) + 3
+           
+       print g(h(2))
 

@@ -191,7 +191,7 @@ provided. The second parameter name is bound to the second value provided. And s
    :feedback_a: Yes, you can call a function multiple times by putting the call in a loop.
    :feedback_b: One of the purposes of a function is to allow you to call it more than once.   Placing it in a loop allows it to executed multiple times as the body of the loop runs multiple times.
 
-   True or false: A function can be called several times by placing a function call in the body of a loop.
+   True or false: A function can be called several times by placing a function call in the body of a for loop.
 
 .. mchoicemf:: test_questionfunctions_1_8
    :answer_a: Hello
