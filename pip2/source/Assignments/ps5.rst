@@ -50,34 +50,43 @@ Reading Response
 
 .. _reading_response_6:
 
-Question(s) coming soon!
+Compare a conversation that "stays in book" to one that doesn't. Which has more surprisal? Which would be easier to compress?
+
+.. activecode:: rr_6_1
+
+   # Fill in your response in between the triple quotes
+   s = """
+
+   """
+   print s
+
+Give an example of compression other than the ones Christian addresses. Explain. Why? In what situations does this occur?
+
+.. activecode:: rr_6_2
+
+   # Fill in your response in between the triple quotes
+   s = """
+
+   """
+   print s
+
 
 Unix Problems
 -------------
 
 .. _unix_pset5:
 
-.. note:
+Turn these in as screenshots via CTools in the Assignments tab!
 
-   The unix problems have not been finalized yet. Please don't work on them yet.
+#. In the `tutorial on unix <, >, and |  <http://www.ee.surrey.ac.uk/Teaching/Unix/unix3.html>`_,  there are instructions for creating two files called  ``list1`` and ``list2``. Write a single unix command that displays all lines in either file that contain the letter ``p``.
 
-Turn these in via CTools in the Assignments tab!
-
-1. Find lines in file with substring
-
-#. (Reference unix tutorial linked) Display all lines in ``list1`` and ``list2`` that contain the letter ``p``.
-
-#. Save a file in the ``106`` folder you created a couple weeks ago called ``fun_with_unix.txt``. Now use ``ls``, the ``|`` (pipe), and ``grep`` to find all filenames in your folder containing the string ``unix``. (Try this with other substrings and other folders)
+#. Save a file in the ``106`` folder you created a couple weeks ago called ``fun_with_unix.txt``. Now use ``ls``, ``|`` (pipe), and ``grep`` to find all filenames in your folder containing the string ``unix``. (For fun, try this with other substrings and other folders)
 
 
 Problem Set
 -----------
 
 .. _problem_set_5:
-
-.. note:
-
-   The problem set questions have not been finalized yet. Please don't start working on them yet.
 
 .. datafile:: timely_file.txt
 	:hide:
@@ -88,101 +97,111 @@ Problem Set
 	(Wikipedia)
 
 
-#. Define a function called add_three, which takes one integer as input and returns that integer + 3.
+3. Define a function called add_three, which takes one integer as input and returns that integer + 3.
 
-	.. activecode:: ps_5_4
+.. activecode:: ps_5_3
 
-		# Write your code here.
-		# (The tests for this problem are going to try to CALL the function that you write!)
+   # Write your code here.
+   # (The tests for this problem are going to try to CALL the function that you write!)
 
+   ====
 
-		====
-
-		import test
-		test.testEqual(add_three(2),5)
-		test.testEqual(add_three(33),36)
-
-
-#. Take a look at the code below. You'll get an error if you run it as is. Change it so it works!
-
-	.. activecode:: ps_5_5
-
-		def subtract_five(inp)
-			print inp - 5
-			return None
-
-		y = subtract_five(9) - 6
+   import test
+   print "testing if add_three(2) equals 5"
+   test.testEqual(add_three(2),5)
+   print "testing if add_three(33) equals 36"
+   test.testEqual(add_three(33),36)
 
 
-		====
+4. Write code **that will keep printing what the user inputs over and over until the user enters the string "quit".**
 
-		print "\n---\n\n"
-		print "There are no tests for this problem"
+.. activecode:: ps_5_4
 
+   # Write code here
 
-#. Here's another bit of code with a problem. Fix it so it works somehow, and comment about what's going on that causes a problem.
-
-	.. activecode:: ps_5_6
-
-		def change_amounts(yp):
-			n = yp - 4
-			return n * 7
-
-		print yp
-
-		====
-
-		print "\n---\n\n"
-		print "There are no tests for this problem"
+   ====
+   print "\n---\n\n"
+   print "There are no tests for this problem"
 
 
-#. Define a function called change_amounts that takes one integer as input. If the input is larger than 10, it should return the input + 5. If the input is smaller than or equal to 10, it should return the input + 2.
+5. Take a look at the code below. You'll get an error if you run it as is. Change it so it works!
 
-	.. activecode:: ps_5_7
+.. activecode:: ps_5_5
 
-		# We've started you off with the first line...
-		def change_amounts(num_here):
-			pass # delete this line and put in your own code for the body of the function.
-
-		====
-
-		print "\n---\n\n"
-		import test
-		test.testEqual(change_amounts(9),11)
-		test.testEqual(change_amounts(12),17)
-
-
-#. Given the string in the code below, write code to figure out what the most common word in the string is and assign that to the variable ``abc``. (Do not hard-code the right answer.) Hint: dictionaries will be useful here.
-
-	.. activecode:: ps_5_8
-
-		s = "Will there really be such a thing as morning in the morning"
-		# Write your code here...
-
-		====
-
-		print "\n---\n\n"
-		print "There are no tests for this problem"
-
-#. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. 
-
-	.. activecode:: ps_5_9
-
-		# Write code here!
-
-		====
-		print "\n---\n\n"
-		print "There are no tests for this problem"
+   def subtract_five(inp)
+      print inp - 5
+      return None
+   
+   y = subtract_five(9) - 6
+   
+   
+   ====
+   
+   print "\n---\n\n"
+   import test
+   print "testing if y is -2"
+   test.testEqual(y, -2)
 
 
-#. Write code to add to this code **that will keep printing what the user inputs over and over until the user enters the string "quit".**
+6. Here's another bit of code with a problem. Fix it so it calls change_amounts on some input and prints out the results. Also, add comments about what's going on with the current code that causes a problem.
 
-	.. activecode:: ps_5_10
+.. activecode:: ps_5_6
 
-		word_in = raw_input("Please enter a word.")
-		# Write the rest of your code here.
+   def change_amounts(yp):
+      n = yp - 4
+      return n * 7
+   
+   print yp
+   
+   ====
+   
+   print "\n---\n\n"
+   print "There are no tests for this problem"
 
-		====
-		print "\n---\n\n"
-		print "There are no tests for this problem"
+
+7. Define a function called change_amounts that takes one integer as input. If the input is larger than 10, it should return the input + 5. If the input is smaller than or equal to 10, it should return the input + 2.
+
+.. activecode:: ps_5_7
+
+   # We've started you off with the first line...
+   def change_amounts(num_here):
+      pass # delete this line and put in your own code for the body of the function.
+   
+   ====
+   
+   print "\n---\n\n"
+   import test
+   print "testing if change_amounts(9) equals 11"
+   test.testEqual(change_amounts(9),11)
+   print "testing if change_amounts(12) equals 17"
+   test.testEqual(change_amounts(12),17)
+
+
+8. Given the string in the code below, write code to figure out what the most common word in the string is and assign that to the variable ``abc``. (Do not hard-code the right answer.) Hint: dictionaries will be useful here.
+
+.. activecode:: ps_5_8
+
+   s = "Will there really be such a thing as morning in the morning"
+   # Write your code here...
+   
+   ====
+   
+   print "\n---\n\n"
+   import test
+   print "testing whether abc is set correctly"
+   test.testEqual(abc, 'morning')
+
+9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in the variable abc.
+
+.. activecode:: ps_5_9
+
+   # Write code here!
+   
+   ====
+   
+   print "\n---\n\n"
+   import test
+   print "testing whether abc is set correctly"
+   test.testEqual(abc, 'the')
+
 
