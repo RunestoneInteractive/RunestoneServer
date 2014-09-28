@@ -226,8 +226,8 @@ Debugging
    Debugging/BeginningtipsforDebugging.rst
    Debugging/KnowyourerrorMessages.rst
    Debugging/Summary.rst
-
-
+   BuildingAProgram/TheStrategy.rst
+   BuildingAProgram/UnderstandingCode.rst
 
 Installation
 ::::::::::::
