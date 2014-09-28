@@ -20,7 +20,7 @@ Week 5: ends October 5
    * Before Tuesday's class: 
       * Read :ref:`Defining Functions<functions_chap>`, and do the exercises in that chapter
       * Read `External tutorial on unix <, >, and |  <http://www.ee.surrey.ac.uk/Teaching/Unix/unix3.html>`_
-         * Note: If you're trying out the commands in the tutorial on your own machine, don't be alamred by the *who* command that is used in one of the examples. It's not very intuitive what it's doing on a single-user computing system like a Mac, and it's not available all in git bash for Windows users.
+         * Note: If you're trying out the commands in the tutorial on your own machine, don't be alarmed by the *who* command that is used in one of the examples. It's not very intuitive what it's doing on a single-user computing system like a Mac, and it's not available all in git bash for Windows users.
          * Note: you might also like some of the other pages in the tutorial at that site. 
            
    
