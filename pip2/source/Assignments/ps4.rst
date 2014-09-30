@@ -121,114 +121,278 @@ Problem Set
 
 1. Old McDonald had a farm. He records the animals on his farm in a dictionary called 'animals'. See comments for instructions...
 
-.. activecode:: ps_4_1
+.. tabbed:: ps4_pb1
 
-   animals = {'cows': 2, 'chickens': 8, 'pigs': 4, 'mice': 72, 'cats': 9,'dogs': 1}
+   .. tab:: Problem
 
-	# Write code to look up the number of chickens 
-   # Old McDonald recorded and assign it to the 
-   # variable num_chickens. 
-   # (Do not hard-code values! num_chickens = 8 will not earn points.)
+      .. activecode:: ps_4_1
 
-   # Write code to add the key-value pair "yak":3
-   # to the dictionary stored in the variable called animals.
+         animals = {'cows': 2, 'chickens': 8, 'pigs': 4, 'mice': 72, 'cats': 9,'dogs': 1}
 
-   # Write code to increase the value for the key 
-   # "dogs" in the animals dictionary we've provided) by 1.
+      	# Write code to look up the number of chickens 
+         # Old McDonald recorded and assign it to the 
+         # variable num_chickens. 
+         # (Do not hard-code values! num_chickens = 8 will not earn points.)
 
-   ====
-   
-   import test
-   try: 
-      test.testEqual(num_chickens, animals['chickens'])
-   except:
-      print "either num_chickens or animal['chickens'] is undefined"
+         # Write code to add the key-value pair "yak":3
+         # to the dictionary stored in the variable called animals.
 
-   try:
-      test.testEqual(animals['yak'], 3)
-   except:
-      print "key 'yak' is not set in dictionary num_chickens"
-      
-   test.testEqual(animals['dogs'], 2)
+         # Write code to increase the value for the key 
+         # "dogs" in the animals dictionary we've provided) by 1.
+
+         ====
+         
+         import test
+         try: 
+            test.testEqual(num_chickens, animals['chickens'])
+         except:
+            print "either num_chickens or animal['chickens'] is undefined"
+
+         try:
+            test.testEqual(animals['yak'], 3)
+         except:
+            print "key 'yak' is not set in dictionary num_chickens"
+            
+         test.testEqual(animals['dogs'], 2)
+
+   .. tab:: Solution
+
+      .. activecode:: ps_4_1s
+
+         animals = {'cows': 2, 'chickens': 8, 'pigs': 4, 'mice': 72, 'cats': 9,'dogs': 1}
+
+         # Write code to look up the number of chickens 
+         # Old McDonald recorded and assign it to the 
+         # variable num_chickens. 
+         # (Do not hard-code values! num_chickens = 8 will not earn points.)
+
+         num_chickens = animals["chickens"]
+
+         # Write code to add the key-value pair "yak":3
+         # to the dictionary stored in the variable called animals.
+
+         animals["yak"] = 3
+
+         # Write code to increase the value for the key 
+         # "dogs" in the animals dictionary we've provided) by 1.
+
+         animals["dogs"] = animals["dogs"] + 1
+
+         ====
+         
+         import test
+         try: 
+            test.testEqual(num_chickens, animals['chickens'])
+         except:
+            print "either num_chickens or animal['chickens'] is undefined"
+
+         try:
+            test.testEqual(animals['yak'], 3)
+         except:
+            print "key 'yak' is not set in dictionary num_chickens"
+            
+         test.testEqual(animals['dogs'], 2)
 
 2. See comments in code for instructions.
 
-.. activecode:: ps_4_2
+.. tabbed:: ps4_pb2
 
-   lp = ["hello","arachnophobia","lamplighter","inspirations","ice","amalgamation","programming","Python"]
+   .. tab:: Problem
 
-   # How many characters are in each element of list lp? 
-   # Write code to print the length (number of characters)
-   # of each element of the list on a separate line. 
-   ## (Do not write 8+ lines of code to do this. Use a for loop.)
+      .. activecode:: ps_4_2
 
-   # The output you get should be:
-   # 5
-   # 13
-   # 11
-   # 12
-   # 3
-   # 12
-   # 11
-   # 6
+         lp = ["hello","arachnophobia","lamplighter","inspirations","ice","amalgamation","programming","Python"]
 
-   # Now write code to print out each element of 
-   # list lp IF the length of the element is 
-   # an even number.
+         # How many characters are in each element of list lp? 
+         # Write code to print the length (number of characters)
+         # of each element of the list on a separate line. 
+         ## (Do not write 8+ lines of code to do this. Use a for loop.)
 
-   ====
+         # The output you get should be:
+         # 5
+         # 13
+         # 11
+         # 12
+         # 3
+         # 12
+         # 11
+         # 6
 
-   print "\n---\n\n"
-   print "There are no tests for this problem."
+         # Now write code to print out each element of 
+         # list lp IF the length of the element is 
+         # an even number.
+
+         ====
+
+         print "\n---\n\n"
+         print "There are no tests for this problem."
+
+   .. tab:: Solution
+
+      .. activecode:: ps_4_2s
+
+            lp = ["hello","arachnophobia","lamplighter","inspirations","ice","amalgamation","programming","Python"]
+
+            # How many characters are in each element of list lp? 
+            # Write code to print the length (number of characters)
+            # of each element of the list on a separate line. 
+            ## (Do not write 8+ lines of code to do this. Use a for loop.)
+
+            # The output you get should be:
+            # 5
+            # 13
+            # 11
+            # 12
+            # 3
+            # 12
+            # 11
+            # 6
+
+            for i in lp:
+                print len(i)
+
+            # Now write code to print out each element of 
+            # list lp IF the length of the element is 
+            # an even number.
+
+            for i in lp:
+                if len(i) % 2 == 0:
+                    print i
+
+            ====
+
+            print "\n---\n\n"
+            print "There are no tests for this problem."
+
 
 3. Write code to count the number of strings in list ``items`` that have the character ``w`` in it. Assign that number to the variable ``acc_num``. HINT 1: Use the accumulation pattern! HINT 2: the ``in`` operator checks whether a letter or substring is present in a string.
 
-.. activecode:: ps_4_3
+.. tabbed:: ps4_pb3
 
-	items = ["whirring", "calendar", "wry", "glass", "", "llama","tumultuous","owing"]
+    .. tab:: Problem
+
+        .. activecode:: ps_4_3
+
+        	items = ["whirring", "calendar", "wry", "glass", "", "llama","tumultuous","owing"]
 
 
-	====
+        	====
 
-	import test
-	print "\n---\n\n"
-	test.testEqual(acc_num,3)
+        	import test
+        	print "\n---\n\n"
+        	test.testEqual(acc_num,3)
+
+    .. tab:: Solution
+
+        .. activecode:: ps_4_3s
+
+            items = ["whirring", "calendar", "wry", "glass", "", "llama","tumultuous","owing"]
+            acc_num = 0
+            for x in items:
+                if "w" in x:
+                    acc_num = acc_num + 1
+
+            ====
+
+            import test
+            print "\n---\n\n"
+            test.testEqual(acc_num,3)
 
 
 4. Here's another dictionary. Write code to print out each key-value pair in it. Then follow the rest of the instructions in the comments.
 
-.. activecode:: ps_4_4
+.. tabbed:: ps4_pb4
 
-   nd = {"autumn":"spring", "well":"spring","4":"seasons","23":345}
-   
-   # Print out each key-value pair. 
-   # Remember that printing things with a comma, e.g.
-   # print "hello", "everyone" 
-   # will print out those things on the same 
-   # line with a space in between them.
-   
-   # Your output should look SOMETHING LIKE 
-   # (remember, the pairs could be in any order, 
-   # because it's a dictionary):
-   # autumn spring
-   # 4 seasons
-   # 23 345
-   # well spring
-   
-   # Now, write code to increase the 
-   # value of key "23" by 5
-   
-   # Now, write code to print the 
-   # value of the key "well".
-   
-   ====
-   
-   import test
-   test.testEqual(nd["23"],350)
+    .. tab:: Problem
+
+        .. activecode:: ps_4_4
+
+           nd = {"autumn":"spring", "well":"spring","4":"seasons","23":345}
+           
+           # Print out each key-value pair. 
+           # Remember that printing things with a comma, e.g.
+           # print "hello", "everyone" 
+           # will print out those things on the same 
+           # line with a space in between them.
+           
+           # Your output should look SOMETHING LIKE 
+           # (remember, the pairs could be in any order, 
+           # because it's a dictionary):
+           # autumn spring
+           # 4 seasons
+           # 23 345
+           # well spring
+           
+           # Now, write code to increase the 
+           # value of key "23" by 5
+           
+           # Now, write code to print the 
+           # value of the key "well".
+           
+           ====
+           
+           import test
+           test.testEqual(nd["23"],350)
+
+    .. tab:: Solution
+
+        .. activecode:: ps_4_4s
+
+            nd = {"autumn":"spring", "well":"spring","4":"seasons","23":345}
+           
+            # Print out each key-value pair. 
+            # Remember that printing things with a comma, e.g.
+            # print "hello", "everyone" 
+            # will print out those things on the same 
+            # line with a space in between them.
+
+            nd_keys = nd.keys()
+            for x in nd_keys:
+                print x, nd[x]
+
+
+            # Your output should look SOMETHING LIKE 
+            # (remember, the pairs could be in any order, 
+            # because it's a dictionary):
+            # autumn spring
+            # 4 seasons
+            # 23 345
+            # well spring
+
+            # Now, write code to increase the 
+            # value of key "23" by 5
+
+            nd["23"] = nd["23"] + 5
+
+            # Now, write code to print the 
+            # value of the key "well".
+
+            print nd["well"]
+
+            ====
+
+            import test
+            test.testEqual(nd["23"],350)
 
 
 5. We've included the same file in this problem set that we included in the last problem set -- ``about_programming.txt``. Write code to open the file and print out each line in the file that has a "program"-based word (any of the words ``program``, ``programs``, ``programming``, ``programmer``, or ``programmers``) in it.
 
-.. activecode:: ps_4_5
+.. tabbed:: ps4_pb5
 
-	# Write your code here!
+    .. tab:: Problem
+
+        .. activecode:: ps_4_5
+
+        	# Write your code here!
+
+    .. tab:: Solution
+
+        .. activecode:: ps_4_5s
+
+            # Write your code here!
+
+            f = open("about_programming.txt","r")
+            f_lines = f.readlines()
+            for y in f_lines:
+                if "program" in y:
+                    print y
