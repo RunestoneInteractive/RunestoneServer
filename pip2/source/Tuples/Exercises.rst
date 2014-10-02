@@ -21,8 +21,8 @@ Exercises
         return c, a
 
      = circleInfo(10) 
-    print("area is " + str(area))
-    print("circumference is " + str(circ))
+    print "area is " + str(area)
+    print "circumference is " + str(circ)
 
 #. Use a for loop to print out the last name, year of birth, and city for each of the people
 

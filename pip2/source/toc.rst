@@ -215,6 +215,42 @@ While Loops
    IndefiniteIteration/ThewhileStatement.rst
    IndefiniteIteration/listenerLoop.rst
 
+Optional and Keyword Parameters
+:::::::::::::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   OptionalAndKeywordParameters/OptionalParameters.rst
+   OptionalAndKeywordParameters/KeywordParameters.rst
+   OptionalAndKeywordParameters/exercises.rst
+
+Tuples
+::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Tuples/Tuples.rst
+   Tuples/TuplePacking.rst
+   Tuples/TuplesasReturnValues.rst
+   Tuples/TupleAssignmentwithunpacking.rst
+   Tuples/UnpackingDictionaryItems.rst
+   Tuples/Glossary.rst
+   Tuples/Exercises.rst
+
+
+Nested Data and Nested Iteration
+::::::::::::::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   NestedData/ListswithComplexItems.rst
+   NestedData/NestedDictionaries.rst
+   NestedData/NestedIteration.rst
+   
+
 Debugging
 :::::::::
 
@@ -228,6 +264,7 @@ Debugging
    Debugging/Summary.rst
    BuildingAProgram/TheStrategy.rst
    BuildingAProgram/UnderstandingCode.rst
+
 
 
 Installation

@@ -45,9 +45,9 @@ Here is a new version of the summation program that uses a while statement.
             aNumber = aNumber + 1
         return theSum
 
-    print(sumTo(4))
+    print sumTo(4)
 
-    print(sumTo(1000))
+    print sumTo(1000)
 
 
 
@@ -69,7 +69,7 @@ The same program in codelens will allow you to observe the flow of execution.
             aNumber = aNumber + 1
         return theSum
 
-    print(sumTo(4))
+    print sumTo(4)
 
 
 

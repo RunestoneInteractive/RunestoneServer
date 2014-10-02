@@ -37,7 +37,7 @@ Week 5: ends October 5
       * Read *The Most Human Human*, Chapter 10, p.219-237 only (you'll read the rest of the chapter next week). Note: we are skipping some of the other chapters.
       * Answer :ref:`Reading Response 6 <reading_response_6>`. 
 
-#. Problem set **Due:** **Sunday, September 28th at 5 pm**
+#. Problem set **Due:** **Sunday, October 5 at 5 pm**
 
    * Do the Unix Problem part of the problem set: :ref:`Unix Problems (3) <unix_pset5>`
    

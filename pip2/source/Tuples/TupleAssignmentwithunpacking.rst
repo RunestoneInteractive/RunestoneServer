@@ -11,8 +11,8 @@ Tuple Assignment with unpacking
 -------------------------------
 
 Python has a very powerful **tuple assignment** feature that allows a tuple of variable names 
-on the left of an assignment to be assigned values from a tuple
-on the right of the assignment. Another ay to think of this is that the tuple of values
+on the left of an assignment statement to be assigned values from a tuple
+on the right of the assignment. Another way to think of this is that the tuple of values
 is **unpacked** into the variable names.
 
 .. sourcecode:: python
@@ -49,8 +49,7 @@ right have to be the same.
 
 .. sourcecode:: python
 
-    >>> (a, b, c, d) = (1, 2, 3)
-    ValueError: need more than 3 values to unpack 
+    (a, b, c, d) = (1, 2, 3) # ValueError: need more than 3 values to unpack 
 
 Python even provides a way to pass a single tuple to a function and have it be
 unpacked for assignment to the named parameters. 
@@ -60,10 +59,10 @@ unpacked for assignment to the named parameters.
     def add(x, y):
         return x + y
         
-    print(add(3, 4))
+    print add(3, 4)
     z = (5, 4)
-    print(add(*z)) # this line will cause the values to be unpacked
-    print(add(z)) # this line causes an error
+    print add(*z) # this line will cause the values to be unpacked
+    print add(z) # this line causes an error
 
 If you run this, you will be get an error caused by line 7, where it says that
 the function add is expecting two parameters, but you're only passing one parameter

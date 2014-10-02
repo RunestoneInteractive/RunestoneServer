@@ -7,6 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. index::
+    single: tuple; return value 
+
 Tuples as Return Values
 -----------------------
 
@@ -29,7 +32,7 @@ of a circle of radius r.
         a = 3.14159 * r * r
         return (c, a)
 
-    print(circleInfo(10))
+    print circleInfo(10)
 
 Again, we can take advantage of packing to make the code look a little more readable on line 4
 
@@ -42,7 +45,7 @@ Again, we can take advantage of packing to make the code look a little more read
         a = 3.14159 * r * r
         return c, a
 
-    print(circleInfo(10))
+    print circleInfo(10)
 
 
 

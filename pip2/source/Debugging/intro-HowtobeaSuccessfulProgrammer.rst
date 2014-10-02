@@ -36,8 +36,8 @@ So, where to start?  The problem requires two pieces of input from the user, so 
    current_time = input("what is the current time (in hours)?")
    wait_time = input("How many hours do you want to wait")
 
-   print(current_time)
-   print(wait_time)
+   print current_time
+   print wait_time
 
 
 If you haven't yet, click Run: get in the habit of checking whether small things are working before you go on. 
@@ -49,11 +49,11 @@ So far so good.  Now lets take the next step.  We need to figure out what the ti
    current_time = input("what is the current time (in hours 0--23)?")
    wait_time = input("How many hours do you want to wait")
 
-   print(current_time)
-   print(wait_time)
+   print current_time
+   print wait_time
 
    final_time = current_time + wait_time
-   print(final_time)
+   print final_time
 
 Hmm, when you run that example you see that something funny has happened.
 
@@ -80,7 +80,7 @@ This error was probably pretty simple to spot, because we printed out the value 
    wait_time_int = int(wait_time_str)
 
    final_time_int = current_time_int + wait_time_int
-   print(final_time_int)
+   print final_time_int
 
 
 .. index:: boundary conditions, testing, debugging
@@ -101,7 +101,7 @@ So finally we need to account for those numbers that are bigger than 23.  For th
    
    final_answer = final_time_int % 24
 
-   print("The time after waiting is: ", final_answer)
+   print "The time after waiting is: ", final_answer
 
 Of course even in this simple progression, there are other ways you could have gone astray.  We'll look at some of those and how you track them down in the next section.
 

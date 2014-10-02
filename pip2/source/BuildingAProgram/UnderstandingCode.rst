@@ -62,11 +62,11 @@ In this program we are adding all the even numbers in a list together, accumulat
 
     z = 0
     for num in numbers:
-      print("*** LOOP ***")
-      print("Num =",num)
+      print "*** LOOP ***"
+      print "Num =",num
       if (num % 2) == 0:
-        print("Is even. Adding",num,"to",z)
+        print "Is even. Adding",num,"to",z
         z = num + z
-      print ("Running sum =",z)
-    print("*** DONE ***")
-    print ("Total = " , z)
+      print "Running sum =",z
+    print "*** DONE ***"
+    print "Total = " , z

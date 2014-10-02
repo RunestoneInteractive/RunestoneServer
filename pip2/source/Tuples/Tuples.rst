@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _tuples_chap:
+
 Tuples
 ------
 
@@ -42,8 +44,7 @@ tuple, we get an error.
 
 .. sourcecode:: python
 
-    julia[0] = 'X'
-    TypeError: 'tuple' object does not support item assignment
+    julia[0] = 'X'  # TypeError: 'tuple' object does not support item assignment
 
 Of course, even if we can't modify the elements of a tuple, we can make a variable
 reference a new tuple holding different information.  To construct the new tuple,
@@ -56,13 +57,13 @@ the new tuple.
 
 
     julia = ("Julia", "Roberts", 1967, "Duplicity", 2009, "Actress", "Atlanta, Georgia")
-    print(julia[2])
-    print(julia[2:6])
+    print julia[2]
+    print julia[2:6]
 
-    print(len(julia))
+    print len(julia)
 
     julia = julia[:3] + ("Eat Pray Love", 2010) + julia[5:]
-    print(julia)
+    print julia
 
 
 To create a tuple with a single element (but you're probably not likely
@@ -71,11 +72,11 @@ the final comma, Python treats the ``(5)`` below as an integer in parentheses:
 
 .. activecode:: chp09_tuple2
 
-    tup = (5,)
-    print(type(tup))
+    t = (5,)
+    print type(t)
 
     x = (5)
-    print(type(x))
+    print type(x)
  
 
 .. index::

@@ -7,12 +7,18 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. _nested_chap:
+
+Introduction: Nested Data and Nested Iteration
+==============================================
+
 Lists with Complex Items
 ------------------------
 
 
 The lists we have seen so far have had numbers or strings as items. Perhaps you 
-noticed the lists of tuples when we sorted the contents of dictionaries.
+noticed the lists of tuples that are returned by the ``.items()`` method of dictionaries.
 
 In fact, the items in a list can be any type of python object. For example,
 we can have a list of lists.
@@ -20,8 +26,8 @@ we can have a list of lists.
 .. activecode:: nested_data_1
 
     nested1 = [['a', 'b', 'c'],['d', 'e'],['f', 'g', 'h']]
-    print(nested1[0])
-    print(len(nested1))
+    print nested1[0]
+    print len(nested1)
     nested1.append(['i'])
     for L in nested1:
         print L
@@ -36,11 +42,12 @@ Codelens gives a you a reference diagram, a visual display of the contents of ne
 .. codelens:: nested_data_2
 
     nested1 = [['a', 'b', 'c'],['d', 'e'],['f', 'g', 'h']]
-    print(nested1[0])
-    print(len(nested1))
+    print nested1[0]
+    print len(nested1)
     nested1.append(['i'])
     for L in nested1:
         print L
+
 
 When you get
 to step 4 of the execution, take a look at the object that variable nested1 points to.
@@ -61,18 +68,18 @@ With a nested list, you can make complex expressions to get or set a value in a 
 
     nested1 = [['a', 'b', 'c'],['d', 'e'],['f', 'g', 'h']]
     y = nested1[1]
-    print(y)
-    print(y[0])
+    print y
+    print y[0]
     
-    print([10, 20, 30][1])
-    print(nested1[1][0])
+    print [10, 20, 30][1]
+    print nested1[1][0]
     
 Lines 1-4 above probably look pretty natural to you. Line 6 is just a reminder that
 you index into a list that is written out just as you can index into a list referred to by a variable.
     
 Just as with a function call where the return value can be thought of as replacing the text of the
 function call in an expression, you can evaluate an expression like that in line 7 from left to right. Because the
-value of nested1[1] is the list ['d', 'e'], nested[1][0] is the same as ['d', 'e'][0]. So line 7 is equivalent to lines 2-4; it is a simpler way
+value of nested1[1] is the list ['d', 'e'], nested[1][0] is the same as ['d', 'e'][0]. So line 7 is equivalent to lines 2 and 4; it is a simpler way
 of pulling out the first item from the second list. 
 
 At first, expressions like that on line 7 may look foreign. They will soon feel more natural, and you will end up using them a lot. Once you are comfortable
@@ -118,17 +125,17 @@ You can even have a list of functions (!).
         
     L = [square, abs, lambda x: x + 1]
 
-    print("****names****")        
+    print "****names****"        
     for f in L:
-        print(f)
+        print f
     
-    print("****call each of them****")    
+    print "****call each of them****"    
     for f in L:
-        print(f(-2))
+        print f(-2)
         
-    print("****just the first one in the list****")
-    print(L[0])
-    print(L[0](3))
+    print "****just the first one in the list****"
+    print L[0]
+    print L[0](3)
         
         
 Here, L is a list with three items. All those items are functions. The first is the
@@ -141,7 +148,7 @@ printed representation of the built-in function abs, so it just outputs <unknown
 
 In the second for loop, we call each of the functions, passing in the value -2 each time and printing whatever value the function returns. 
 
-The last two lines just emphasize that there's nothing special about lists of functions. They follow all the same rules for how python treats any other list. Because L[0] picks out the function square, L[0](3) calls the functions square, passing it the parameter 3.
+The last two lines just emphasize that there's nothing special about lists of functions. They follow all the same rules for how python treats any other list. Because L[0] picks out the function square, L[0](3) calls the function square, passing it the parameter 3.
 
 Step through it in Codelens if that's not all clear to you yet.
 
@@ -152,15 +159,15 @@ Step through it in Codelens if that's not all clear to you yet.
         
     L = [square, abs, lambda x: x + 1]
 
-    print("****names****")        
+    print "****names****"        
     for f in L:
-        print(f)
+        print f
     
-    print("****call each of them****")    
+    print "****call each of them****"    
     for f in L:
-        print(f(-2))
+        print f(-2)
         
-    print("****just the first one in the list****")
-    print(L[0])
-    print(L[0](3))
+    print "****just the first one in the list****"
+    print L[0]
+    print L[0](3)
 
