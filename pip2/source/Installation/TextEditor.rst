@@ -50,7 +50,7 @@ Start NotePad++ from either a Desktop icon or from the Start Programs menu and e
 .. image:: Figures/helloworld.JPG
       :width: 300px
     
-Save your program as firstprog.py. You can save it anywhere. In a little while we'll
+Save your program as ``firstprog.py``. You can save it anywhere. In a little while we'll
 create a code folder in a convenient place on your machine and you can resave the file then. 
 You will notice that after you save the file, NotePad++ will color your code based on the Python syntax rules. 
 Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
@@ -77,6 +77,7 @@ for _creating_ python programs. It's not intended (in this course) for running t
 Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. Enter your first Python program into TextWrangler:
 
 .. image:: Figures/helloworldmac.png
+      :width: 300px
     
 Save your program as ``firstprog.py``, in your 106 folder. You will notice that after you save the file, TextWrangler will color your code based on the Python syntax rules. That's because you saved it with the ``.py`` file extension, which tells the computer this file is a Python program.
 
