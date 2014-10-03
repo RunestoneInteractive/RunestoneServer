@@ -11,8 +11,8 @@ Now, you'll need to install the Python interpreter on your computer. This proces
 
 .. _windows_python_install:
 
-Install and configure python
-----------------------------
+Install and configure python for Windows
+========================================
 
 Please download and install Python 2.7 from:
 
