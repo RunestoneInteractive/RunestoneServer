@@ -274,8 +274,11 @@ Installation
    :maxdepth: 2
 
    Installation/FirstSteps.rst
+   Installation/NextSteps.rst
+   Installation/TextEditor.rst
+   Installation/pythonInstall.rst
+   Installation/runpythonprograms.rst
    
-
 
 Unix
 ::::
