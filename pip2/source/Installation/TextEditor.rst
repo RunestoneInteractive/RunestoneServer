@@ -54,7 +54,7 @@ Save your program as firstprog.py. You can save it anywhere. In a little while w
 create a code folder in a convenient place on your machine and you can resave the file then. 
 You will notice that after you save the file, NotePad++ will color your code based on the Python syntax rules. 
 Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
-NotePad++ only knows that your file is a Python file after you save it with a ".py" suffix, or file extension.
+NotePad++ only knows that your file is a Python file after you save it with a ``.py`` suffix, also known as file extension. It's like the ``.txt`` file extension we've seen that means a file is a plain text file, except this ``.py`` extension means that this file is a Python program.
 
 .. image:: Figures/firstprog.JPG
       :width: 300px
@@ -68,9 +68,9 @@ Mac Instructions
 The editor that we will help you to use is called **TextWrangler**. (TextWrangler and Notepad++ are very similar, but one runs on Macs and one runs on Windows.) Please download it from
 `the TextWrangler site <http://www.barebones.com/products/TextWrangler/download.html>`_. Download it and then run the installer to install TextWrangler, like you would most programs you download.
 
-TextWrangler may ask you to register for something. You can hit Cancel -- you do not need to register for anything to use TextWrangler, and it will not expire.
+TextWrangler may ask you to register for something, or to install other programs. You can hit Cancel -- you do not need to register for anything to use TextWrangler, you do not need any other programs, and it will not expire.
 
-Follow the instructions below. It should be 
+Follow the instructions that follow. It should be 
 quite intuitive. Keep in mind the concepts from earlier -- TextWrangler is an environment (a piece of software)
 for _creating_ python programs. It's not intended (in this course) for running them!
 
@@ -81,7 +81,7 @@ Start TextWrangler from a Dock shortcut icon, finding it in your Applications fo
 Save your program as ``firstprog.py``, in your 106 folder. You will notice that after you save the file, TextWrangler will color your code based on the Python syntax rules. That's because you saved it with the ``.py`` file extension, which tells the computer this file is a Python program.
 
 Syntax coloring is a very helpful feature, as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
-TextWrangler only knows that your file is a Python file after you save it with a ".py" suffix, or file extension.
+TextWrangler only knows that your file is a Python file after you save it with a ``.py`` suffix, also known as file extension. It's like the ``.txt`` file extension we've seen that means a file is a plain text file, except this ``.py`` extension means that this file is a Python program.
 
 .. image:: Figures/firstprogram_tw.png
       :width: 300px
