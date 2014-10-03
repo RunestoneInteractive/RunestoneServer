@@ -45,17 +45,9 @@ Because you have a mac, you're lucky in this case (though you can develop fine o
 
 If you have Mac OS 10.7 (Lion) or later, you definitely have Python 2.7. If you have Mac OS 10.6 (Snow Leopard) or earlier, you may have a different version of Python. If so, let's get this straightened out early -- come see one of the instructors. (If this applies to many people, we will provide additional instructions for that installation!)
 
-To find out what version of Python you have, you'll first need to open a program on your mac called the **Terminal**. You can find it via Spotlight, or in your Applications folder. The icon looks like this:
+To find out what version of Python you have, you'll first need to open your Terminal program.
 
-.. image:: Figures/terminalicon.png
-
-When you open it, you'll see a window that should look something like this:
-
-.. image:: Figures/emptyterminal.png
-
-Except the name of *your* computer will be there. (That'll be whatever you called your hard drive -- probably your name, if you've chosen to keep the default!)
-
-Terminal is the way you use your **command line**. That blinking cursor when you first open the window -- when you type there, we might say you're typing at the command prompt. Before we talk about how you use this, you're going to use a command that will tell us what version of python you have installed on your mac.
+Now you're going to use a command that will tell us what version of python you have installed on your mac.
 
 Type: ``python -V``, and press return. That process should look something like this:
 
