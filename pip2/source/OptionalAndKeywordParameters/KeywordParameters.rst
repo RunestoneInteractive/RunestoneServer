@@ -19,7 +19,7 @@
 Keyword Parameters
 ==================
 
-In the previous section, on :ref:`Optional Parameters <optional_pararams_chap>` you learned how to define default values for formal parameters, which made it optional to provide values for those parameters when invoking the functions.
+In the previous section, on :ref:`Optional Parameters <optional_params_chap>` you learned how to define default values for formal parameters, which made it optional to provide values for those parameters when invoking the functions.
 
 In this chapter, you'll see one more way to invoke functions with optional parameters, with keyword-based parameter passing. This is particularly convenient when there are several optional parameters and you want to provide a value for one of the later parameters while not providing a value for the earlier ones.
 

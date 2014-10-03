@@ -24,10 +24,10 @@ Week 6: ends October 12
    * Before Thursday's class:
        * Read :ref:`Tuples<tuples_chap>`, and do the exercises in that chapter
        * Read :ref:`Nested Data Structures and Nested Iteration<nested_chap>`, and do the exercises in that chapter
-       * Read :ref:`Installing a Native Python Interpreter and Text Editor <install_python_chap>` and follow the instructions to set up for running python on your computer
+       * Read :ref:`Installing a Native Python Interpreter and Text Editor <next_steps>` and follow the instructions to set up for running python on your computer
 
  
-#. Reading responses
+. Reading responses
 
    * By Monday midnight: 
       * Read `Tutorial on unix diff <http://www.computerhope.com/unix/udiff.htm>`_ (This will help you understand the section of "The Most Human Human" below).
@@ -58,8 +58,7 @@ Suppose you write and edit a long text file over the course of several days, sav
    print s
 
 
-
-If you were to compute information entropy scores for all the students you've met since enrolling at the University of Michigan, which of them has the highest entropy and why? 
+Think about assigning entropy scores to people instead of documents. If you were to compute information entropy scores for all the students you've met since enrolling at the University of Michigan, which of them has the highest entropy and why? 
 
 .. activecode:: rr_7_2
 
@@ -77,6 +76,8 @@ Command Line Problems
 
 Turn these in as screenshots via CTools in the Assignments tab!
 
+Details coming soon, probably on Sunday...
+
 #. Something that requires editing a file in the text editor and saving it as a new file name.
 
 #. Something that requires running a diff command to show what's different between the two.
@@ -89,4 +90,4 @@ Problem Set
 
 .. _problem_set_6:
 
-Some questions go here...
+These will be posted later, probably on Sunday...

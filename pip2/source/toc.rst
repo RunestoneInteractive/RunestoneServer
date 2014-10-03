@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps6.rst
    Assignments/ps5.rst
    Assignments/ps4.rst
    Assignments/ps3.rst

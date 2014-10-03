@@ -47,7 +47,7 @@ of the screen cast. You will need Apple QuickTime installed to view this video. 
 
 Start NotePad++ from either a Desktop icon or from the Start Programs menu and enter your first Python program into NotePad++:
 
-.. image:: Figures/helloworld.JPG
+   .. image:: Figures/helloworld.JPG
       :width: 300px
     
 Save your program as ``firstprog.py``. You can save it anywhere. In a little while we'll
@@ -56,7 +56,7 @@ You will notice that after you save the file, NotePad++ will color your code bas
 Syntax coloring is a very helpful feature as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
 NotePad++ only knows that your file is a Python file after you save it with a ``.py`` suffix, also known as file extension. It's like the ``.txt`` file extension we've seen that means a file is a plain text file, except this ``.py`` extension means that this file is a Python program.
 
-.. image:: Figures/firstprog.JPG
+   .. image:: Figures/firstprog.JPG
       :width: 300px
 
 
@@ -76,7 +76,7 @@ for _creating_ python programs. It's not intended (in this course) for running t
 
 Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. Enter your first Python program into TextWrangler:
 
-.. image:: Figures/helloworldmac.png
+   .. image:: Figures/helloworldmac.png
       :width: 300px
     
 Save your program as ``firstprog.py``, in your 106 folder. You will notice that after you save the file, TextWrangler will color your code based on the Python syntax rules. That's because you saved it with the ``.py`` file extension, which tells the computer this file is a Python program.
@@ -84,6 +84,6 @@ Save your program as ``firstprog.py``, in your 106 folder. You will notice that 
 Syntax coloring is a very helpful feature, as it gives you visual feedback about your program and can help you track down syntax errors more easily. 
 TextWrangler only knows that your file is a Python file after you save it with a ``.py`` suffix, also known as file extension. It's like the ``.txt`` file extension we've seen that means a file is a plain text file, except this ``.py`` extension means that this file is a Python program.
 
-.. image:: Figures/firstprogram_tw.png
+   .. image:: Figures/firstprogram_tw.png
       :width: 300px
 

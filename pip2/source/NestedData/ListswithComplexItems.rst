@@ -123,7 +123,7 @@ You can even have a list of functions (!).
     def square(x):
         return x*x
         
-    L = [square, abs, lambda x: x + 1]
+    L = [square, abs]
 
     print "****names****"        
     for f in L:
@@ -143,7 +143,7 @@ function square that is defined on lines 1 and 2. The second is the built-in pyt
 function abs. The third is an anonymous function that returns one more than its input.
 
 In the first for loop, we do not call the functions, we just output their printed representations. The output <function square>
-confirms that square truly is a function object. For some reason, in codelens, it's not able to produce a nice
+confirms that square truly is a function object. For some reason, in our online environment, it's not able to produce a nice
 printed representation of the built-in function abs, so it just outputs <unknown>
 
 In the second for loop, we call each of the functions, passing in the value -2 each time and printing whatever value the function returns. 
@@ -157,7 +157,7 @@ Step through it in Codelens if that's not all clear to you yet.
     def square(x):
         return x*x
         
-    L = [square, abs, lambda x: x + 1]
+    L = [square, abs]
 
     print "****names****"        
     for f in L:
