@@ -77,11 +77,22 @@ Command Line Problems
 
 Turn these in as screenshots via CTools in the Assignments tab!
 
-#. Something that requires editing a file in the text editor and saving it as a new file name.
+#. Make a new file in your text editor, and save it as ``new_program.py``. (This is a Python program!)
 
-#. Something that requires running a diff command to show what's different between the two. (Save partic file with error in text editor, run it [see that errors are like the errors in the browser environment], fix it, run diff to see the difference, take screenshot.)
+#. In your ``new_program.py`` file, write the following code (copy it from here).
 
-#. Something that requires running the native python interpreter on the program.
+..activecode:: example_code_ps6
+
+   def cool_machine(x):
+      y = x**2 +7
+      print y
+
+   z = 65.3
+   print z + cool_machine(8)
+
+Then, run the Python program in your native Python interpreter. You should get an error. Take a screenshot of this and upload it to CTools.
+
+Make edits to this code so it will work, without an error, and then save it with a different name (``fixed_program.py``). Now, run unix ``diff`` on these two files. Take a screenshot of the output, and upload it to CTools.
 
 
 Problem Set
