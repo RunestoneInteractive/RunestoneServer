@@ -277,8 +277,8 @@ The first task you have to build part of the Hangman game follows:
    def main():
        max_health = 3
        health = max_health
-       to_guess = raw_input("What's the word to guess? (Don't let the player see it!)")
-       to_guess = to_guess.upper() # everything in all capitals to avoid confusion
+       secret_word = raw_input("What's the word to guess? (Don't let the player see it!)")
+       secret_word = secret_word.upper() # everything in all capitals to avoid confusion
        guesses_so_far = ""
        game_over = False
 
@@ -287,7 +287,7 @@ The first task you have to build part of the Hangman game follows:
        # Now interactively ask the user to guess
        while not game_over:
            # replace this comment with code that invokes game_state_prompt and assign the return value to the variable prompt
-           prompt = game_state_prompt(feedback, health, max_health, to_guess, guesses_so_far)
+           prompt = game_state_prompt(feedback, health, max_health, secret_word, guesses_so_far)
            next_guess = raw_input(prompt)
            next_guess = next_guess.upper()
            feedback = ""
@@ -297,13 +297,13 @@ The first task you have to build part of the Hangman game follows:
                feedback = "You already guessed that"
            else:
                guesses_so_far = guesses_so_far + next_guess
-               if next_guess in to_guess:
-                   if blanked(to_guess, guesses_so_far) == to_guess:
+               if next_guess in secret_word:
+                   if blanked(secret_word, guesses_so_far) == secret_word:
                        feedback = "Congratulations"
                        game_over = True
                    else:
                        feedback = "Yes, that letter is in the word"
-               else: # next_guess is not in the word to_guess
+               else: # next_guess is not in the word secret_word
                    feedback = "Sorry, " + next_guess + " is not in the word."
                    health = health - 1
                    if health <= 0:
@@ -311,9 +311,9 @@ The first task you have to build part of the Hangman game follows:
                        game_over= True
 
        print(feedback)
-       print("The word was..." + to_guess)
+       print("The word was..." + secret_word)
 
-   import sys #don't worry about this line; yo'll understand it next week
+   import sys #don't worry about this line; you'll understand it next week
    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
    main()
 
