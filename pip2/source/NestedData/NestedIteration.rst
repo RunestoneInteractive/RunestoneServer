@@ -19,7 +19,7 @@ to traverse them.
     for x in nested1:
         print "level1: "
         for y in x:
-            print "\tlevel2: " + y
+            print "     level2: " + y
 
 Line 3 executes once for each top-level list, three times in all. With each sub-list,
 line 5 executes once for each item in the sub-list. Try stepping through it in Codelens to make sure you understand what the nested iteration does.
@@ -30,7 +30,7 @@ line 5 executes once for each item in the sub-list. Try stepping through it in C
     for x in nested1:
         print "level1: "
         for y in x:
-            print "\tlevel2: " + y
+            print "    level2: " + y
 
 
 .. parsonsprob:: nested_data_12

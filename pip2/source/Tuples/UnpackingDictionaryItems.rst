@@ -20,7 +20,6 @@ You can iterate over the key-value pairs.
     d = {"k1": 3, "k2": 7, "k3": "some other value"}
     
     for p in d.items():
-        print p
         print p[0]
         print p[1]
         print '*** LOOP ***'
