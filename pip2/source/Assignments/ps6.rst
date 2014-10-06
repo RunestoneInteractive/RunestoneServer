@@ -251,146 +251,21 @@ Follow the directions in the comments!
 
 .. image:: Figures/HangmanSample.JPG
 
-See the flow chart[LINK] for a better understanding of what's happening in the code for the Hangman game overall.
+See the flow chart below for a better understanding of what's happening in the code for the Hangman game overall.
 
-The first task you have to build part of the Hangman game follows:
+.. image:: Figures/HangmanFlowchart.jpg
+
+Your first task is just to understand the logic of the program, by matching up elements of the flow chart above with elements of the code below. In later problems, you'll fill in a few details that aren't fully implemented here.  For this question, write which lines of code go with which lines of the flow chart box, by answering the questions in comments at the bottom of this activecode box. 
+
+(Note: you may find it helpful to run this program in order to understand it. It will tell you feedback about your last guess, but won't tell you where the correct letters were or how much health you have. Those are the improvements you'll make in later problems.)
 
 .. activecode:: ps_6_6
 
-   # define the function blanked(). 
-   # It takes a word and a string of letters that have been revealed.
-   # It should return a string with the same number of characters as
-   # the original word, but with the unrevealed characters replaced by _ 
-         
-   # a sample call to this function:
-   print(blanked("hello", "elj"))
-   #should output _ell_
-
-   ====
-   
-   import test
-   print "testing blanking of hello when e,l, and j have been guessed"
-   test.testEqual(blanked("hello", "elj"), "_ell_")
-   print "testing blanking of hello when nothing has been guessed"
-   test.testEqual(blanked("hello", ""), "_____")
-   print "testing blanking of ground when r and n have been guessed"
-   test.testEqual(blanked("ground", "rn"), "_r__n_")
-
-7. The second task to build part of the Hangman game:
-
-.. activecode:: ps_6_7
-
-   # define the function health_prompt(). The first parameter is the current
-   # health and the second is the the maximum health you can have. It should return a string 
-   # with + signs for the current health, and - signs for the health that has been lost.
-
-
-
-
-   print(health_prompt(3, 7))
-   #this should produce the output
-   #health: +++----
-
-   print(health_prompt(0, 4))
-   #this should produce the output
-   #health: ----
-
-   ====
-   
-   import test
-   print "testing health_prompt(3, 7)"
-   test.testEqual(health_prompt(3,7), "+++----")
-   print "testing health_prompt(0, 4)"
-   test.testEqual(health_prompt(0, 4), "----")
-
-8. Here's a function, game_state_prompt, that produces a prompt, suitable for display to a human player, telling the current state of the game. It includes calls to blanked() and health_prompt(). Copy your versions of those function in. Your task here is to correctly fill in the invocations of the function so that it returns the correct prompt strings.
-
-.. activecode:: ps_6_8
-
-   def game_state_prompt(txt ="Nothing", h = 6, m_h = 6, word = "HELLO", guesses = ""):
-       res = "\n" + txt + "\n"
-       res = res + health_prompt(h, m_h) + "\n"
-       if guesses != "":
-           res = res + "Guesses so far: " + guesses.upper() + "\n"
-       else:
-           res = res + "No guesses so far" + "\n"
-       res = res + "Word: " + blanked(word, guesses) + "\n"
-
-       return(res)
-
-   p1 = game_state_prompt() # fill in parameters; see test results for correct output   
-   p2 = game_state_prompt() # fill in parameters; see test results for correct output
-   p3 = game_state_prompt() # fill in parameters; see test results for correct output
-   
-   ====
-   
-   import test
-   test.testEqual(p1, game_state_prompt("You already guessed that", 5, 6, "EASY", "ST"))
-   test.testEqual(p2, game_state_prompt("Yes, that letter is in the word", 2, 4, "EASY", "AST"))
-   test.testEqual(p3, game_state_prompt("Congratlations", 1, 6, "EASY", "EASTY"))
-   
-9. Here's almost all of the Hangman game code. You'll have to copy your definitions of blanked() and health_prompt() again. Then, the only thing you have to do is change the line that calls game_state_prompt, to provide the appropriate parameters. (Hint: all of the correct parameters are variables that are already set elsewhere in the program). 
-Then you can play when you run the program and play hangman! 
-
-.. activecode:: ps_6_9
-   
-   def game_state_prompt(txt ="Nothing", h = 6, m_h = 6, word = "HELLO", guesses = ""):
-       res = "\n" + txt + "\n"
-       res = res + health_prompt(h, m_h) + "\n"
-       if guesses != "":
-           res = res + "Guesses so far: " + guesses.upper() + "\n"
-       else:
-           res = res + "No guesses so far" + "\n"
-       res = res + "Word: " + blanked(word, guesses) + "\n"
-
-       return(res)
-
-   def main():
-       max_health = 3
-       health = max_health
-       secret_word = raw_input("What's the word to guess? (Don't let the player see it!)")
-       secret_word = secret_word.upper() # everything in all capitals to avoid confusion
-       guesses_so_far = ""
-       game_over = False
-
-       feedback = "let's get started"
-
-       # Now interactively ask the user to guess
-       while not game_over:
-           # replace the next line with a correct invocation of game_state_prompt
-           prompt = game_state_prompt()
-           next_guess = raw_input(prompt)
-           next_guess = next_guess.upper()
-           feedback = ""
-           if len(next_guess) != 1:
-               feedback = "I only understand single letter guesses. Please try again."
-           elif next_guess in guesses_so_far:
-               feedback = "You already guessed that"
-           else:
-               guesses_so_far = guesses_so_far + next_guess
-               if next_guess in secret_word:
-                   if blanked(secret_word, guesses_so_far) == secret_word:
-                       feedback = "Congratulations"
-                       game_over = True
-                   else:
-                       feedback = "Yes, that letter is in the word"
-               else: # next_guess is not in the word secret_word
-                   feedback = "Sorry, " + next_guess + " is not in the word."
-                   health = health - 1
-                   if health <= 0:
-                       feedback = " Waah, waah, waah. Game over."
-                       game_over= True
-
-       print(feedback)
-       print("The word was..." + secret_word)
-
-   import sys #don't worry about this line; you'll understand it next week
-   sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
-   main()
-
-10. Look at the code for the Hangman game, repeated below. Then look at the flow chart. Write which lines of code go with which lines of the flow chart box, by answering the questions in comments below.
-
-.. activecode:: ps_6_10
+   def blanked(word, guesses):
+      return "blanked word"
+      
+   def health_prompt(x, y):
+      return "health prompt"
 
    def game_state_prompt(txt ="Nothing", h = 6, m_h = 6, word = "HELLO", guesses = ""):
        res = "\n" + txt + "\n"
@@ -415,8 +290,7 @@ Then you can play when you run the program and play hangman!
 
        # Now interactively ask the user to guess
        while not game_over:
-           # replace the next line with a correct invocation of game_state_prompt
-           prompt = game_state_prompt()
+           prompt = game_state_prompt(feedback, health, max_health, secret_word, guesses_so_far)
            next_guess = raw_input(prompt)
            next_guess = next_guess.upper()
            feedback = ""
@@ -463,3 +337,119 @@ Then you can play when you run the program and play hangman!
    # What line(s) of code do what's mentioned in box 8?
 
    # What line(s) of code do what's mentioned in box 9?
+
+   # What line(s) of code do what's mentioned in box 10?
+
+   # What line(s) of code do what's mentioned in box 11?
+
+
+
+7. The next task you have is to create a correct version of the blanked function:
+
+.. activecode:: ps_6_7
+
+   # define the function blanked(). 
+   # It takes a word and a string of letters that have been revealed.
+   # It should return a string with the same number of characters as
+   # the original word, but with the unrevealed characters replaced by _ 
+         
+   # a sample call to this function:
+   print(blanked("hello", "elj"))
+   #should output _ell_
+
+   ====
+   
+   import test
+   print "testing blanking of hello when e,l, and j have been guessed"
+   test.testEqual(blanked("hello", "elj"), "_ell_")
+   print "testing blanking of hello when nothing has been guessed"
+   test.testEqual(blanked("hello", ""), "_____")
+   print "testing blanking of ground when r and n have been guessed"
+   test.testEqual(blanked("ground", "rn"), "_r__n_")
+
+8. Now you have to create a good version of the health_prompt() function.
+
+.. activecode:: ps_6_8
+
+   # define the function health_prompt(). The first parameter is the current
+   # health and the second is the the maximum health you can have. It should return a string 
+   # with + signs for the current health, and - signs for the health that has been lost.
+
+
+
+
+   print(health_prompt(3, 7))
+   #this should produce the output
+   #health: +++----
+
+   print(health_prompt(0, 4))
+   #this should produce the output
+   #health: ----
+
+   ====
+   
+   import test
+   print "testing health_prompt(3, 7)"
+   test.testEqual(health_prompt(3,7), "+++----")
+   print "testing health_prompt(0, 4)"
+   test.testEqual(health_prompt(0, 4), "----")
+
+   
+9. Now you have a fully functioning hangman program! Copy your two function definitions for the last two problems at the top of this code box and try playing the game with your friends.
+
+.. activecode:: ps_6_9
+   
+   def game_state_prompt(txt ="Nothing", h = 6, m_h = 6, word = "HELLO", guesses = ""):
+       res = "\n" + txt + "\n"
+       res = res + health_prompt(h, m_h) + "\n"
+       if guesses != "":
+           res = res + "Guesses so far: " + guesses.upper() + "\n"
+       else:
+           res = res + "No guesses so far" + "\n"
+       res = res + "Word: " + blanked(word, guesses) + "\n"
+
+       return(res)
+
+   def main():
+       max_health = 3
+       health = max_health
+       secret_word = raw_input("What's the word to guess? (Don't let the player see it!)")
+       secret_word = secret_word.upper() # everything in all capitals to avoid confusion
+       guesses_so_far = ""
+       game_over = False
+
+       feedback = "let's get started"
+
+       # Now interactively ask the user to guess
+       while not game_over:
+           prompt = game_state_prompt(feedback, health, max_health, secret_word, guesses_so_far)
+           next_guess = raw_input(prompt)
+           next_guess = next_guess.upper()
+           feedback = ""
+           if len(next_guess) != 1:
+               feedback = "I only understand single letter guesses. Please try again."
+           elif next_guess in guesses_so_far:
+               feedback = "You already guessed that"
+           else:
+               guesses_so_far = guesses_so_far + next_guess
+               if next_guess in secret_word:
+                   if blanked(secret_word, guesses_so_far) == secret_word:
+                       feedback = "Congratulations"
+                       game_over = True
+                   else:
+                       feedback = "Yes, that letter is in the word"
+               else: # next_guess is not in the word secret_word
+                   feedback = "Sorry, " + next_guess + " is not in the word."
+                   health = health - 1
+                   if health <= 0:
+                       feedback = " Waah, waah, waah. Game over."
+                       game_over= True
+
+       print(feedback)
+       print("The word was..." + secret_word)
+
+   import sys #don't worry about this line; you'll understand it next week
+   sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
+   main()
+
+   
