@@ -34,7 +34,7 @@ Week 6: ends October 12
       * Read *The Most Human Human*, Chapter 10, p.237-259.
       * Answer :ref:`Reading Response 7 <reading_response_7>`. 
 
-#. Problem set **Due:** **Sunday, October 12 at 5 pm**
+#. Problem set **Due:** **Tuesday, October 14 at 5 pm** (Note later due date because of fall break)
 
    * Do the :ref:`Native Python Interpreter and Text Editor part of Problem Set 6. <unix_pset6>`
    
