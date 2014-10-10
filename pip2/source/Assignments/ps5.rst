@@ -99,109 +99,284 @@ Problem Set
 
 3. Define a function called add_three, which takes one integer as input and returns that integer + 3.
 
-.. activecode:: ps_5_3
+.. tabbed:: ps5_pb3
 
-   # Write your code here.
-   # (The tests for this problem are going to try to CALL the function that you write!)
+  .. tab:: Problem
 
-   ====
+    .. activecode:: ps_5_3
 
-   import test
-   print "testing if add_three(2) equals 5"
-   test.testEqual(add_three(2),5)
-   print "testing if add_three(33) equals 36"
-   test.testEqual(add_three(33),36)
+       # Write your code here.
+       # (The tests for this problem are going to try to CALL the function that you write!)
 
+       ====
+
+       import test
+       print "testing if add_three(2) equals 5"
+       test.testEqual(add_three(2),5)
+       print "testing if add_three(33) equals 36"
+       test.testEqual(add_three(33),36)
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_3s
+
+     # Write your code here.
+     # (The tests for this problem are going to try to CALL the function that you write!)
+
+     def add_three(x):
+      return x + 3
+
+     ====
+
+     import test
+     print "testing if add_three(2) equals 5"
+     test.testEqual(add_three(2),5)
+     print "testing if add_three(33) equals 36"
+     test.testEqual(add_three(33),36)
 
 4. Write code **that will keep printing what the user inputs over and over until the user enters the string "quit".**
 
-.. activecode:: ps_5_4
+.. tabbed:: ps5_pb4
 
-   # Write code here
+  .. tab:: Problem
 
-   ====
-   print "\n---\n\n"
-   print "There are no tests for this problem"
+    .. activecode:: ps_5_4
 
+      # Write code here
+
+      ====
+      print "\n---\n\n"
+      print "There are no tests for this problem"
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_4s
+
+      # Write code here
+      x = ""
+      while x != "quit":
+        x = raw_input("Please enter text. To stop, enter 'quit'.") 
+
+      ====
+      print "\n---\n\n"
+      print "There are no tests for this problem"
 
 5. Take a look at the code below. You'll get an error if you run it as is. Change it so it works!
 
-.. activecode:: ps_5_5
+.. tabbed:: ps5_pb5
 
-   def subtract_five(inp)
-      print inp - 5
-      return None
-   
-   y = subtract_five(9) - 6
-   
-   
-   ====
-   
-   print "\n---\n\n"
-   import test
-   print "testing if y is -2"
-   test.testEqual(y, -2)
+  .. tab:: Problem
 
+    .. activecode:: ps_5_5
+
+      def subtract_five(inp)
+        print inp - 5
+        return None
+       
+      y = subtract_five(9) - 6
+
+      ====
+   
+      print "\n---\n\n"
+      import test
+      print "testing if y is -2"
+      test.testEqual(y, -2)
+
+   
+  .. tab:: Solution
+
+    .. activecode:: ps_5_5s
+
+      def subtract_five(inp)
+        return inp - 5
+        
+     
+      y = subtract_five(9) - 6 
+
+      ====
+   
+      print "\n---\n\n"
+      import test
+      print "testing if y is -2"
+      test.testEqual(y, -2)
+   
 
 6. Here's another bit of code with a problem. Fix it so it calls change_amounts on some input and prints out the results. Also, add comments about what's going on with the current code that causes a problem.
 
-.. activecode:: ps_5_6
+.. tabbed:: ps5_pb6
 
-   def change_amounts(yp):
-      n = yp - 4
-      return n * 7
-   
-   print yp
-   
-   ====
-   
-   print "\n---\n\n"
-   print "There are no tests for this problem"
+  .. tab:: Problem
+
+    .. activecode:: ps_5_6
+
+       def change_amounts(yp):
+          n = yp - 4
+          return n * 7
+       
+       print yp
+       
+       ====
+       
+       print "\n---\n\n"
+       print "There are no tests for this problem"
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_6s
+
+      def change_amounts(yp):
+        n = yp - 4
+        return n * 7
+     
+      print change_amounts(8) # you could put any input into this function
+      # the important part is that you don't print things that are only in the scope
+      # of the function definition!
+     
+      ====
+     
+      print "\n---\n\n"
+      print "There are no tests for this problem"
 
 
 7. Define a function called change_amounts that takes one integer as input. If the input is larger than 10, it should return the input + 5. If the input is smaller than or equal to 10, it should return the input + 2.
 
-.. activecode:: ps_5_7
+.. tabbed:: ps5_pb7
 
-   # We've started you off with the first line...
-   def change_amounts(num_here):
-      pass # delete this line and put in your own code for the body of the function.
-   
-   ====
-   
-   print "\n---\n\n"
-   import test
-   print "testing if change_amounts(9) equals 11"
-   test.testEqual(change_amounts(9),11)
-   print "testing if change_amounts(12) equals 17"
-   test.testEqual(change_amounts(12),17)
+  .. tab:: Problem
 
+    .. activecode:: ps_5_7
+
+       # We've started you off with the first line...
+       def change_amounts(num_here):
+          pass # delete this line and put in your own code for the body of the function.
+       
+       ====
+       
+       print "\n---\n\n"
+       import test
+       print "testing if change_amounts(9) equals 11"
+       test.testEqual(change_amounts(9),11)
+       print "testing if change_amounts(12) equals 17"
+       test.testEqual(change_amounts(12),17)
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_7s
+
+      # We've started you off with the first line...
+      def change_amounts(num_here):
+        if num_here > 10:
+          return num_here + 5
+        else:
+          return num_here + 2
+     
+      ====
+     
+      print "\n---\n\n"
+      import test
+      print "testing if change_amounts(9) equals 11"
+      test.testEqual(change_amounts(9),11)
+      print "testing if change_amounts(12) equals 17"
+      test.testEqual(change_amounts(12),17)
 
 8. Given the string in the code below, write code to figure out what the most common word in the string is and assign that to the variable ``abc``. (Do not hard-code the right answer.) Hint: dictionaries will be useful here.
 
-.. activecode:: ps_5_8
+.. tabbed:: ps5_pb8
 
-   s = "Will there really be such a thing as morning in the morning"
-   # Write your code here...
-   
-   ====
-   
-   print "\n---\n\n"
-   import test
-   print "testing whether abc is set correctly"
-   test.testEqual(abc, 'morning')
+  .. tab:: Problem
+
+    .. activecode:: ps_5_8
+
+      s = "Will there really be such a thing as morning in the morning"
+      # Write your code here...
+       
+      ====
+       
+      print "\n---\n\n"
+      import test
+      print "testing whether abc is set correctly"
+      test.testEqual(abc, 'morning')
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_8s
+
+      s = "Will there really be such a thing as morning in the morning"
+      
+      # this is a solution that involves writing a function
+      # you could also solve this problem by writing code that is not in a function definition
+      def common_word(st):
+        list_of_words = st.split()
+        d = {}
+        for w in list_of_words:
+          if w in d:
+            d[w] = d[w] + 1
+          else:
+            d[w] = 1
+        all_keys = d.keys()
+        commonest_key = all_keys[0]
+        for k in all_keys:
+          if d[k] > d[commonest_key]:
+            commonest_key = k
+        return commonest_key
+
+      abc = common_word(s) # calling the function and assigning the return value to abc
+       
+      ====
+       
+      print "\n---\n\n"
+      import test
+      print "testing whether abc is set correctly"
+      test.testEqual(abc, 'morning')
 
 9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in the variable abc.
 
-.. activecode:: ps_5_9
+.. tabbed:: ps5_pb9
 
-   # Write code here!
-   
-   ====
-   
-   print "\n---\n\n"
-   import test
-   print "testing whether abc is set correctly"
-   test.testEqual(abc, 'the')
+  .. tab:: Problem
+
+    .. activecode:: ps_5_9
+
+      # Write code here!
+       
+      ====
+       
+      print "\n---\n\n"
+      import test
+      print "testing whether abc is set correctly"
+      test.testEqual(abc, 'the')
+
+  .. tab:: Solution
+
+    .. activecode:: ps_5_9s
+
+        # can use the same function written in problem 8
+        def common_word(st):
+          list_of_words = st.split()
+          d = {}
+          for w in list_of_words:
+            if w in d:
+              d[w] = d[w] + 1
+            else:
+              d[w] = 1
+          all_keys = d.keys()
+          commonest_key = all_keys[0]
+          for k in all_keys:
+            if d[k] > d[commonest_key]:
+              commonest_key = k
+          return commonest_key
+
+        f = open("timely_file.txt","r")
+        contents = f.read()
+        
+        abc = common_word(contents)
+
+         
+        ====
+         
+        print "\n---\n\n"
+        import test
+        print "testing whether abc is set correctly"
+        test.testEqual(abc, 'the')
 
 
