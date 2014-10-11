@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
    Assignments/ps4.rst
@@ -250,6 +251,20 @@ Nested Data and Nested Iteration
    NestedData/ListswithComplexItems.rst
    NestedData/NestedDictionaries.rst
    NestedData/NestedIteration.rst
+   
+Sorting
+:::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Sort/intro-SortingwithSortandSorted.rst
+   Sort/Optionalreverseparameter.rst
+   Sort/Optionalkeyparameter.rst
+   Sort/Anonymousfunctionswithlambdaexpressions.rst
+   Sort/SortingaDictionary.rst
+   Sort/Glossary.rst
+   Sort/Exercises.rst
    
 
 Debugging

@@ -34,11 +34,11 @@ in a minute.)
         else:
             return -x
             
-    print(absolute(3))
-    print(absolute(-119))
+    print absolute(3)
+    print absolute(-119)
     
     for y in L1:
-        print(absolute(y))
+        print absolute(y)
         
 
 Now, we can pass the absolute function to L1 in order to specify that we want
@@ -55,22 +55,21 @@ their actual value.
         else:
             return -x
             
-    L2 = sorted(L1, None, absolute)
-    print(L2)
+    L2 = sorted(L1, key=absolute)
+    print L2
     
     #or in reverse order
-    print(sorted(L1, None, absolute, True)) 
+    print sorted(L1, reverse = True, key = absolute) 
      
 What's really going on there? We've done something pretty strange. Before, all the
 values we have passed as parameters have been pretty easy to understand: numbers, strings,
 lists, Booleans, dictionaries. Here we have passed a function object: absolute
 is a variable name whose value is the function. When we pass that function object,
-it is *not* automatically invoked. Instead, it is just bound the formal parameter
+it is *not* automatically invoked. Instead, it is just bound to the formal parameter
 key of the function sorted.
 
 We are not going to look at the source code for the built-in function sorted. But if
-we did, we would find somewhere in its code a reference to the variable key, whose
-value would be bound to the function we passed in. In fact, what the sorted function
+we did, we would find somewhere in its code a parameter named key with a default value of None. When a value is provided for that parameter in an invocation of the function sorted, it has to be a function. What the sorted function
 does is call that key function once for each item in the list that's getting sorted.
 It associates the result returned by that function (the absolute function in our case)
 with the original value. Think of those associated values as being little post-it notes
@@ -86,18 +85,21 @@ of sorted, I have added some print statements into the code.
     L1 = [1, 7, 4, -2, 3]
      
     def absolute(x):
-        print("--- figuring out what to write on the post-it note for " + str(x)) 
+        print "--- figuring out what to write on the post-it note for " + str(x)
         if x >= 0:
             return x
         else:
             return -x
     
-    print("About to call sorted")
+    print "About to call sorted"
     L2 = sorted(L1, None, absolute)
-    print("Finished execution of sorted")
-    print(L2)
+    print "Finished execution of sorted"
+    print L2
 
 Note that this code never explicitly calls the absolute function at all. It passes
 the absolute function as a parameter value to the sorted function. Inside the 
 sorted function, whose code we haven't seen, that function gets invoked.
 
+.. note::
+
+   It is a little confusing that we are reusing the word *key* so many times. The name of the optional parameter is ``key``. We will usually pass a parameter value using the keyword parameter passing mechanism (see :ref:`chapter <keyword_pararams_chap>` to review). When we write ``key = some_function`` in the function invocation, the word key is there because it is the name of the parameter, specified in the definition of the sort function, not because we are using keyword-based parameter passing.

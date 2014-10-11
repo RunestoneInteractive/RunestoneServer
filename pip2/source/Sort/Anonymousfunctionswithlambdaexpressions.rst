@@ -29,13 +29,13 @@ Consider the following code
     def f(x):
         return x - 1
     
-    print(f)
-    print(type(f))
-    print(f(3))
+    print f
+    print type(f)
+    print f(3)
     
-    print(lambda x: x-2)
-    print(type(lambda x: x-2))
-    print((lambda x: x-2)(6))
+    print lambda x: x-2
+    print type(lambda x: x-2)
+    print (lambda x: x-2)(6)
     
 Note the paralells between the two. At line 4, f is bound to a function object. Its printed representation
 is "<function f>". At line 8, the lambda expression produces a function object. Because it is
@@ -54,22 +54,28 @@ by name. Others find the syntax of lambda expressions confusing. It's up to you
 which version you want to use. In all the examples below, both ways of doing it will
 be illustrated.
 
-Below, sorting on absolute value has been rewritten using lambda notation.
+Below, sorting on absolute value has been rewritten using lambda notation and the built-in function abs.
 
 .. activecode:: sort_8
 
     L1 = [1, 7, 4, -2, 3]
     
-    print("About to call sorted")
-    L2 = sorted(L1, None, lambda x: abs(x))
-    print("Finished execution of sorted")
-    print(L2)
-  
-.. note::
-    Unfortunately, there is a bug in the online
-    environment so that is not working currently. You can write ``sorted(L1, None, absolute)`` or ``sorted(L1, None, lambda x: abs(x)``.
-    But you can't write ``sorted(L1, None, abs)`` or ``sorted(L1, None, lambda x: absolute(x))``. In a full python
-    implementation, any of those four would work.
+    print "About to call sorted"
+    L2 = sorted(L1, key=lambda x: abs(x))
+    print "Finished execution of sorted"
+    print L2
+
+Of course, it's unnecessary to make an anonymous function that takes an input and just calls an existing function on it. That's equivalent to just providing the existing function as a lambda expression. You may find, however, that the lambda expression above helps you understand what sorted does with the function that is passed in: it calls the function on each of the items in the list that is passed to sorted. Make sure you understand why the code above and the code immediately below cause the list to be sorted the same way. 
+
+.. activecode:: sort_8a  
+
+    L1 = [1, 7, 4, -2, 3]
+    
+    print "About to call sorted"
+    L2 = sorted(L1, key=abs)
+    print "Finished execution of sorted"
+    print L2
+
 
 .. mchoicemf:: test_questionsort_1
    :answer_a: descending order, from 7 down to -2
@@ -86,7 +92,7 @@ Below, sorting on absolute value has been rewritten using lambda notation.
 
     L1 = [1, 7, 4, -2, 3]
      
-    print(sorted(L1, None, lambda x: -x))
+    print sorted(L1, key = lambda x: -x)
 
 .. mchoicemf:: test_questionsort_2
    :answer_a: descending order, from 7 down to -2
@@ -103,7 +109,5 @@ Below, sorting on absolute value has been rewritten using lambda notation.
 
     L1 = [1, 7, 4, -2, 3]
      
-    print(sorted(L1, None, lambda x: -x), True)
-
-.. _sort_dictionaries:
+    print sorted(L1, key = lambda x: -x, reverse = True)
 

@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _sort_dictionaries:
+
 Sorting a Dictionary
 --------------------
 
@@ -24,7 +26,7 @@ For example, the following code counts the frequencies of different numbers in t
         else:
             d[x] = 1
     for x in d.keys():
-        print(str(x) + " appears " + str(d[x]) + " times")
+        print str(x) + " appears " + str(d[x]) + " times"
 
 The dictionary's keys are not sorted in any particular order. In fact, you
 may get a different order of output than someone else running the same
@@ -43,12 +45,12 @@ sorting the keys.
             d[x] = 1
     y = sorted(d.keys())
     for x in y:
-        print(str(x) + " appears " + str(d[x]) + " times")
+        print str(x) + " appears " + str(d[x]) + " times"
 
     # or in reverse order
-    print("---------")
+    print "---------" 
     for x in sorted(d.keys(), None, None, True):
-         print(str(x) + " appears " + str(d[x]) + " times")
+         print str(x) + " appears " + str(d[x]) + " times"
     
 
 With a dictionary that's maintaining counts or some other kind of score,
@@ -71,11 +73,11 @@ Here's the first way, using a lambda expression.
             d[x] = 1
             
     items = d.items();
-    sorted_items = sorted(items, None, lambda x: x[1], True)
+    sorted_items = sorted(items, key = lambda x: x[1], reverse=True)
     for x in sorted_items:
-        print(str(x[0]) + " appears " + str(x[1]) + " times")
+        print str(x[0]) + " appears " + str(x[1]) + " times"
 
-Here's the first way, using a named function.
+Here's that same way of doing it, using a named function instead of a lambda expression that produces an anonymous function.
 
 .. activecode:: sort_12
 
@@ -92,9 +94,9 @@ Here's the first way, using a named function.
         return pair[1]        
         
     items = d.items();
-    sorted_items = sorted(items, None, g, True)
+    sorted_items = sorted(items, key=g, reverse=True)
     for x in sorted_items:
-        print(str(x[0]) + " appears " + str(x[1]) + " times")
+        print str(x[0]) + " appears " + str(x[1]) + " times"
 
 
 Most python programmers would never sort the items (the key, value pairs) from
@@ -102,10 +104,11 @@ a dictionary. Instead, the standard idiom is to sort just the keys, based on the
 associated values. Because python
 lets you pass a function to the sorted parameter, you can pass a function that
 looks up the value associated with a key and causes that value to be written on
-the post-it notes that determine the sort order. 
-Here's a version using a lambda expression.
+the post-it notes that determine the sort order.
+ 
+Here's a version based on sorting the keys rather than the complete items, using a lambda expression.
 
-.. sourcecode:: python
+.. activecode:: sort_11a
 
     L = [4, 5, 1, 0, 3, 8, 8, 2, 1, 0, 3, 3, 4, 3]
     
@@ -117,15 +120,15 @@ Here's a version using a lambda expression.
             d[x] = 1
     
     # just sort the keys, not the key-value pairs        
-    y = sorted(d.keys(), None, lambda k: d[k], True)
+    y = sorted(d.keys(), key=lambda k: d[k], reverse=True)
     
     # now loop through the keys
     for k in y:
-        print(str(k) + " appears " + str(val) + " times")
+        print str(k) + " appears " + str(d[k]) + " times"
 
 And here's a version of that using a named function. 
 
-.. sourcecode:: python
+.. activecode:: sort_12a
 
     L = [4, 5, 1, 0, 3, 8, 8, 2, 1, 0, 3, 3, 4, 3]
 
@@ -140,56 +143,51 @@ And here's a version of that using a named function.
         return d[k]
 
     # just sort the keys, not the key-value pairs        
-    y = sorted(d.keys(), None, g, True)
+    y = sorted(d.keys(), key=g, reverse=True)
     
     # now loop through the keys
     for k in y:
-        print(str(k) + " appears " + str(val) + " times")
+        print str(k) + " appears " + str(d[k]) + " times"
 
-.. note:: 
+.. note::
 
-    Unfortunately, due to a bug in
-    the activecode implementation, neither of these will run in the browser. For
-    now, you will have to sort the (key, value) pairs rather than just sorting
-    the keys, even though that's not the preferred way to do things among python programmers.
+   When we sort the keys, passing a function with ``key = lambda x: d[x]`` does not specify to sort the keys of a dictionary. The lists of keys are passed as the first parameter value in the invocation of sort. The key parameter provides a function that says *how* to sort them.
 
-.. omit this until sorted bugs are fixed in skuplt
 
-    An experienced programmer would probably not even separate out the sorting step. And
-    they might take advantage of the fact that when you pass a dictionary to something
-    that is expecting a list, its the same as passing the list of keys.
-    
-    .. activecode:: sort_16
-    
-        L = [4, 5, 1, 0, 3, 8, 8, 2, 1, 0, 3, 3, 4, 3]
-    
-        d = {}
-        for x in L:
-            if x in d:
-                d[x] = d[x] + 1
-            else:
-                d[x] = 1
-            
-        # now loop through the sorted keys
-        for k in sorted(d, None, lambda k: d[k], True)
-            print(str(k) + " appears " + str(val) + " times")
-    
-    
-    Eventually, you will be able to read code like that above and immediately know
-    what it's doing. For now, when you come across something confusing, like line 11,
-    try breaking it down. The function sorted is invoked. Its first parameter value is a
-    dictionary, which really means the keys of the dictionary. The third parameter, the
-    key function, decorates the key with a post-it note containing that key's value in
-    dictionary d. The last parameter, True, says to sort in reverse order.
+An experienced programmer would probably not even separate out the sorting step. And
+they might take advantage of the fact that when you pass a dictionary to something
+that is expecting a list, its the same as passing the list of keys.
+
+.. activecode:: sort_16
+
+  L = [4, 5, 1, 0, 3, 8, 8, 2, 1, 0, 3, 3, 4, 3]
+
+  d = {}
+  for x in L:
+      if x in d:
+          d[x] = d[x] + 1
+      else:
+          d[x] = 1
+      
+  # now loop through the sorted keys
+  for k in sorted(d, key=lambda k: d[k], reverse=True):
+      print str(k) + " appears " + str(d[k]) + " times"
+
+Eventually, you will be able to read code like that above and immediately know
+what it's doing. For now, when you come across something confusing, like line 11,
+try breaking it down. The function sorted is invoked. Its first parameter value is a
+dictionary, which really means the keys of the dictionary. The third parameter, the
+key function, decorates the dictionary key with a post-it note containing that key's value in
+dictionary d. The last parameter, True, says to sort in reverse order.
     
 .. mchoicema:: test_questionsort_3
-   :answer_a: sorted(ks, None, g) 
-   :answer_b: sorted(ks, None, lambda x: g(x, d))
-   :answer_c: sorted(ks, None, lambda x: d[x])
+   :answer_a: sorted(ks, key=g) 
+   :answer_b: sorted(ks, key=lambda x: g(x, d))
+   :answer_c: sorted(ks, key=lambda x: d[x])
    :correct: b,c
    :feedback_a: g is a function that takes two parameters. The key function passed to sorted must always take just one parameter 
-   :feedback_b: The lambda function takes just one parameter, and calls g with two parameters. (Unfortunately, this won't run correctly in the browser due to a bug.)
-   :feedback_c: The lambda function looks up the value of x in d. (Unfortunately, this won't run correctly in the browser due to a bug.)
+   :feedback_b: The lambda function takes just one parameter, and calls g with two parameters. 
+   :feedback_c: The lambda function looks up the value of x in d. 
 
    Which of the following will sort the keys of d in ascending order of their values (i.e., from lowest to highest)?
    
