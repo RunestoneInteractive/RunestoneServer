@@ -573,81 +573,149 @@ Your first task is just to understand the logic of the program, by matching up e
          main()
          
          # What line(s) of code do what's mentioned in box 1?
-
+         # 21
          # What line(s) of code do what's mentioned in box 2?
-
+         # 29
          # What line(s) of code do what's mentioned in box 3?
-
+         # 30, 31
          # What line(s) of code do what's mentioned in box 4?
-
+         # 31 (32 acceptable in addition)
          # What line(s) of code do what's mentioned in box 5?
-
+         # 34
          # What line(s) of code do what's mentioned in box 6?
-
+         # 36
          # What line(s) of code do what's mentioned in box 7?
-
+         # 39
          # What line(s) of code do what's mentioned in box 8?
-
+         # 40
          # What line(s) of code do what's mentioned in box 9?
-
+         # 41
          # What line(s) of code do what's mentioned in box 10?
-
+         # 48
          # What line(s) of code do what's mentioned in box 11?
-
+         # 49
 
 
 7. The next task you have is to create a correct version of the blanked function:
 
-.. activecode:: ps_6_7
+.. tabbed:: ps6_pb7
 
-   # define the function blanked(). 
-   # It takes a word and a string of letters that have been revealed.
-   # It should return a string with the same number of characters as
-   # the original word, but with the unrevealed characters replaced by _ 
+   .. tab:: Problem
+
+      .. activecode:: ps_6_7
+
+         # define the function blanked(). 
+         # It takes a word and a string of letters that have been revealed.
+         # It should return a string with the same number of characters as
+         # the original word, but with the unrevealed characters replaced by _ 
+               
+         # a sample call to this function:
+         print(blanked("hello", "elj"))
+         #should output _ell_
+
+         ====
          
-   # a sample call to this function:
-   print(blanked("hello", "elj"))
-   #should output _ell_
+         import test
+         print "testing blanking of hello when e,l, and j have been guessed"
+         test.testEqual(blanked("hello", "elj"), "_ell_")
+         print "testing blanking of hello when nothing has been guessed"
+         test.testEqual(blanked("hello", ""), "_____")
+         print "testing blanking of ground when r and n have been guessed"
+         test.testEqual(blanked("ground", "rn"), "_r__n_")
 
-   ====
-   
-   import test
-   print "testing blanking of hello when e,l, and j have been guessed"
-   test.testEqual(blanked("hello", "elj"), "_ell_")
-   print "testing blanking of hello when nothing has been guessed"
-   test.testEqual(blanked("hello", ""), "_____")
-   print "testing blanking of ground when r and n have been guessed"
-   test.testEqual(blanked("ground", "rn"), "_r__n_")
+   .. tab:: Solution
+
+      .. activecode:: ps_6_7s
+
+         # define the function blanked(). 
+         # It takes a word and a string of letters that have been revealed.
+         # It should return a string with the same number of characters as
+         # the original word, but with the unrevealed characters replaced by _ 
+         
+         def blanked(word,revealed_letters):
+            blanked_word = "" # assigning the empty string to the blanked_word to be accumulated
+            for ch in word:
+               if ch in revealed_letters: # if the letter has been revealed
+                  blanked_word = blanked_word + ch # add that letter to be visible in the blanked word
+               else: # otherwise,
+                  blanked_word = blanked_word + "_" # add a blank 
+            return blanked_word
+
+         # a sample call to this function:
+         print(blanked("hello", "elj"))
+         #should output _ell_
+
+         ====
+         
+         import test
+         print "testing blanking of hello when e,l, and j have been guessed"
+         test.testEqual(blanked("hello", "elj"), "_ell_")
+         print "testing blanking of hello when nothing has been guessed"
+         test.testEqual(blanked("hello", ""), "_____")
+         print "testing blanking of ground when r and n have been guessed"
+         test.testEqual(blanked("ground", "rn"), "_r__n_")
 
 8. Now you have to create a good version of the health_prompt() function.
 
-.. activecode:: ps_6_8
+.. tabbed:: ps6_pb8
 
-   # define the function health_prompt(). The first parameter is the current
-   # health and the second is the the maximum health you can have. It should return a string 
-   # with + signs for the current health, and - signs for the health that has been lost.
+   .. tab:: Problem
+
+      .. activecode:: ps_6_8
+
+         # define the function health_prompt(). The first parameter is the current
+         # health and the second is the the maximum health you can have. It should return a string 
+         # with + signs for the current health, and - signs for the health that has been lost.
 
 
 
 
-   print(health_prompt(3, 7))
-   #this should produce the output
-   #health: +++----
+         print(health_prompt(3, 7))
+         #this should produce the output
+         #health: +++----
 
-   print(health_prompt(0, 4))
-   #this should produce the output
-   #health: ----
+         print(health_prompt(0, 4))
+         #this should produce the output
+         #health: ----
 
-   ====
+         ====
+         
+         import test
+         print "testing health_prompt(3, 7)"
+         test.testEqual(health_prompt(3,7), "+++----")
+         print "testing health_prompt(0, 4)"
+         test.testEqual(health_prompt(0, 4), "----")
+
+   .. tab:: Solution
+
+      .. activecode:: ps_6_8s
+
+         # define the function health_prompt(). The first parameter is the current
+         # health and the second is the the maximum health you can have. It should return a string 
+         # with + signs for the current health, and - signs for the health that has been lost.
+
+         def health_prompt(current_health, max_health):
+            return "+"*current_health + "-"*(max_health-current_health) # multiplying strings by proper amounts and returning the new, concatenated string
+
+
+         print(health_prompt(3, 7))
+         #this should produce the output
+         #health: +++----
+
+         print(health_prompt(0, 4))
+         #this should produce the output
+         #health: ----
+
+         ====
+         
+         import test
+         print "testing health_prompt(3, 7)"
+         test.testEqual(health_prompt(3,7), "+++----")
+         print "testing health_prompt(0, 4)"
+         test.testEqual(health_prompt(0, 4), "----")
+
    
-   import test
-   print "testing health_prompt(3, 7)"
-   test.testEqual(health_prompt(3,7), "+++----")
-   print "testing health_prompt(0, 4)"
-   test.testEqual(health_prompt(0, 4), "----")
-
-   
-9. Now you have a fully functioning hangman program! Copy your two function definitions for the last two problems at the top of this code box and try playing the game with your friends.
+9. Now you have a fully functioning hangman program! Copy your two function definitions for the last two problems at the top of this code box and try playing the game with your friends. ** There is no solution for this problem, because if you paste in the correct functions, it will work correctly! This one's for fun -- nothing to be graded here.**
 
 .. activecode:: ps_6_9
    
