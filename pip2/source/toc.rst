@@ -267,6 +267,15 @@ Sorting
    Sort/Exercises.rst
    
 
+Prediction and Classification
+:::::::::::::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Prediction/intro-prediction.rst
+   Prediction/rule-based.rst
+
 Debugging
 :::::::::
 
