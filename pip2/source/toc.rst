@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
@@ -274,7 +275,11 @@ Prediction and Classification
    :maxdepth: 2
 
    Prediction/intro-prediction.rst
+   Prediction/hangman_guesser.rst
    Prediction/rule-based.rst
+   Prediction/shannon_guesser.rst
+   Prediction/training.rst
+   Prediction/evaluation.rst
 
 Debugging
 :::::::::
