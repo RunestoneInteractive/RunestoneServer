@@ -107,7 +107,12 @@ When we call the classify function we can pass a different set of rules. For exa
 
 .. activecode:: prediction_5
    :nocanvas:
-   :include: prediction_4
+
+   def classify(s, rls):
+      for (f, gender) in rls:
+         if f(s):
+            return gender
+      return "male"
 
    rules = [(lambda x: x[:2] == "En", "male"),
             (lambda x: x[-1] == 'e', "female"), 
