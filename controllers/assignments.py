@@ -428,6 +428,8 @@ def mass_grade_problem():
         if len(cells) < 2:
             continue
         email = cells[0]
+        if cells[1]=="":
+            cells[1]=0
         grade = float(cells[1])
         comment = ""
         user = db(db.auth_user.email == email).select().first()
