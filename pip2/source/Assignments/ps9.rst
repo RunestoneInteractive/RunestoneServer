@@ -28,8 +28,9 @@ Week 9: ends November 2
  
 #. Reading responses
 
-   * Read *The Success of Open Source*, Preface and Chapter 1
-   * :ref:`Reading response 8 <reading_response_8>`
+   * By Wednesday midnight: 
+      * Read *The Success of Open Source*, Preface and Chapter 1
+      * :ref:`Reading response 8 <reading_response_8>`
 
 #. Problem set
 
