@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _write_text_file_chap:
+
 Writing Text Files
 ------------------
 

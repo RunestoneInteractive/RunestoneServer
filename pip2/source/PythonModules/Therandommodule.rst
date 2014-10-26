@@ -10,6 +10,16 @@
 The `random` module
 -------------------
 
+
+.. video:: randmodvid
+    :controls:
+    :thumb: ../_static/mathrandommodule.png
+
+    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.mov
+    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.webm
+
+
+
 We often want to use **random numbers** in programs.  Here are a few typical
 uses:
 
@@ -25,18 +35,20 @@ Python provides a module ``random`` that helps with tasks like this.  You can
 take a look at it in the documentation.  Here are the key things we can do with
 it.
 
+
 .. activecode:: chmodule_rand
 
     import random
 
     prob = random.random()
-    print(prob)
+    print prob
 
     diceThrow = random.randrange(1,7)       # return an int, one of 1,2,3,4,5,6
-    print(diceThrow)
+    print diceThrow
 
 Press the run button a number of times.  Note that the values change each time.
 These are random numbers.
+
 
 The ``randrange`` function generates an integer between its lower and upper
 argument, using the same semantics as ``range`` --- so the lower bound is
@@ -56,16 +68,14 @@ numbers --- numbers close to 0 are just as likely to occur as numbers close to
 3, or numbers close to 5. If you continue to press the run button you will see
 random values between 0.0 and up to but not including 5.0.
 
+
 .. activecode:: chmodule_rand2
 
     import random
 
     prob = random.random()
     result = prob * 5
-    print(result)
-
-
-
+    print result
 
 .. index:: deterministic algorithm,  algorithm; deterministic, unit tests
 
@@ -80,37 +90,10 @@ that even though the random numbers are being created algorithmically, you will
 likely get random behavior each time you execute.
 
 
-
 **Check your understanding**
 
-.. mchoicemf:: question4_4_1
-   :answer_a: math.pi
-   :answer_b: math(pi)
-   :answer_c: pi.math
-   :answer_d: math->pi
-   :correct: a
-   :feedback_a: To invoke or reference something contained in a module you use the dot (.) notation.
-   :feedback_b: This is the syntax for calling a function, not referencing an item in a module.
-   :feedback_c: The module name must come first when accessing values and functions with a module.
-   :feedback_d: The -> notation is not used in Python.
 
-   Which of the following is the correct way to reference the value pi within the math module.   Assume you have already imported the math module.
-
-.. mchoicemf:: question4_4_2
-   :answer_a: the math module
-   :answer_b: the random module
-   :answer_c: the turtle module
-   :answer_d: the game module
-   :correct: b
-   :feedback_a: While you might want to use the math module for other numerical computations in your program, it does not contain functions that are likely to help you simulate a dice roll.
-   :feedback_b: You would likely call the function random.randrange.
-   :feedback_c: The turtle module, while producing interesting graphics, is unlikely to help you here.
-   :feedback_d: Python does not have a game module.
-
-   Which module would you most likely use if you were writing a function to simulate rolling dice?
-
-
-.. mchoicemf:: question4_4_3
+.. mchoicemf:: randmodule_1
    :answer_a: prob = random.randrange(1, 101)
    :answer_b: prob = random.randrange(1, 100)
    :answer_c: prob = random.randrange(0, 101)
@@ -122,6 +105,7 @@ likely get random behavior each time you execute.
    :feedback_d: This will generate a number between 0 and 100, but does not include 100.  The lowest value generated is 0 and the highest value generated will be 99.
 
    The correct code to generate a random number between 1 and 100 (inclusive) is:
+
 
 .. mchoicemf:: question4_4_4
    :answer_a: There is no computer on the stage for the drawing.
@@ -135,13 +119,4 @@ likely get random behavior each time you execute.
    :feedback_d: While a programmer would need to ensure the computer did not select the same number more than once, it is easy to ensure this.
 
    One reason that lotteries don’t use computers to generate random numbers is:
-
-
-.. note::
-
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-   .. activecode:: scratch_04
-
-
 

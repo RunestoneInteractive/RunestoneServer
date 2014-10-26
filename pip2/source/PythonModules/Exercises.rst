@@ -7,6 +7,28 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Modules and Getting Help
-========================
+Exercises
+---------
 
+#.  .. tabbed:: q1
+
+        .. tab:: Question
+
+           Use a ``for`` statement to print 10 random numbers.
+        
+
+        .. tab:: Answer
+            
+            .. activecode:: mod_q1_answer
+            
+               import random
+            
+               howmany = 10 
+               for counter in range(howmany):
+                  arandom = random.random() 
+                  print(arandom)
+
+#.  Repeat the above exercise but this time print 10 random numbers between
+    25 and 35.
+
+    .. actex:: ex_mod_2

@@ -1,47 +1,3 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
-
-Introduction: Printing in Python 2.7
-======================
-
-We have been a little sloppy with print statements, sometimes putting expressions in parentheses to make it look like print is a function call, but sometimes not. This was left ambiguous because printing is handled a little differently in the online environment than in a proper Python 2.7 interpreter.
-
-Let's look a little more carefully at how print really works in Python 2.7, now that you can test things locally on your machine, with a full Pyton 2.7 interpreter. 
-
-In fact, print is a special statement, not a function call. The general form of its syntax is ``print <expr> [, <expr>]*``. The square brackets indicates that it's optional to have additional expressions. The * means that you can have 0 or more of them. If <expr> evaluates to a single value, then the printed representation of that value is output. If there are several expressions, then the printed representation of each one is output, with spaces separating them. 
-
-If there is just one expression and it is in parentheses, it has the same effect as not including the parentheses.
-
-The online environment diverges slightly from a proper Python interpreter when it handles a statement like ``print (3, 5)``. In the online environment, that is treated the same as ``print 3, 5``, yielding an output of ``3 5``. In your native Python interpreter, ``print (3, 5)`` treats (3, 5) as a tuple, whose printed representation is ``(3, 5)``.
-
-You can see the difference by comparing the outputs in Codelens and in an ActiveCode window. CodeLens uses a native Python interpreter, while ActiveCode is exececuted in the browser environment.
-
-.. codelens:: interpolation_0
-
-   print (3)
-   print (3, 5)
-   print 3, 5
-   x = (3, 5)
-   print x
-
-.. activecode:: interpolation_0a
-
-   print (3)
-   print (3, 5)
-   print 3, 5
-   x = (3, 5)
-   print x
-
-From here on, when you run code in ActiveWindows, don't worry too much about whether the output looks like a tuple or not. The output that you get when you run it in a native python environment is what matters.
-
-.. _interpolation_chap:
-
 String Interpolation
 ====================
 
@@ -61,7 +17,7 @@ Or perhaps more realistically:
    for (name, score) in scores:
       print "Hello " + name + ". Your score is " + str(score)
 
-In this chapter, you will learn to write that in a more readable way:
+In this section, you will learn to write that in a more readable way:
 
 .. activecode:: interpolation_3
  
@@ -73,7 +29,7 @@ In this chapter, you will learn to write that in a more readable way:
    for (name, score) in scores:
       print "Hello %(nm)s. Your score is %(sc) d" % {"nm":name, "sc":score}
 
-``%`` is the interpolation operator. It takes a format string on the left, and values on the right. Together, the whole expression produces a single string. 
+``%`` is the interpolation operator. It takes a format string on the left, and a tuple of values on the right. Together, the whole expression produces a single string. 
 
 You now know enough python that you can start to learn directly from the python documentation. The python documentation on string interpolation is readable, with some effort, and a few explanations below. `String interpolation documentation <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_   
 
@@ -112,6 +68,5 @@ Try to predict what each of these lines will produce as you step through the cod
    print "You have $%d in your pocket" % (x)
    print "You have $%02d in your pocket" % (x)
    print "You have $%0.2f. If you spend $1.25, you will have $%0.2f left" % (x, x-1.25)
-
 
 

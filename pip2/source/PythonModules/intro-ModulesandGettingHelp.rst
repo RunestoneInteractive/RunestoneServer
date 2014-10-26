@@ -7,8 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _modules_chap: 
+
 Modules
--------
+=======
 
 .. video:: inputvid
     :controls:
@@ -40,15 +42,15 @@ part of the standard library.  Find the turtle module.
 
 .. admonition:: Note: Python modules and limitations with activecode
 
-	Throughout the chapters of this book, activecode windows allow you to practice the Python that you are learning.
-	We mentioned in the first chapter that programming is normally done using some type of development
-	environment and that the
-	activecode used here was strictly to help us learn.  It is not the way we write production programs.
+   Throughout the chapters of this book, activecode windows allow you to practice the Python that you are learning.
+   We mentioned in the first chapter that programming is normally done using some type of development
+   environment and that the
+   activecode used here was strictly to help us learn.  It is not the way we write production programs.
 
-	To that end, it is necessary to mention that many of the  modules available in standard Python
-	will **not** work in the activecode environment.  In fact, only turtle, math, random, and a couple others have been
-	ported at this point.  If you wish to explore any
-	additional modules, you will need to also explore using a more robust development environment.
+   To that end, it is necessary to mention that many of the  modules available in standard Python
+   will **not** work in the activecode environment.  In fact, only turtle, math, random, and a couple others have been
+   ported at this point.  If you wish to explore any
+   additional modules, you will need to also explore using a more robust development environment.
 
 **Check your understanding**
 
@@ -88,14 +90,5 @@ part of the standard library.  Find the turtle module.
    True / False:  All standard Python modules will work in activecode.
 
 
-
-
-
-.. video:: randmodvid
-    :controls:
-    :thumb: ../_static/mathrandommodule.png
-
-    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.mov
-    http://media.interactivepython.org/thinkcsVideos/mathrandommodule.webm
 
 

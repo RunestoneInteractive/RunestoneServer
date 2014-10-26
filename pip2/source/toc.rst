@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps9.rst
    Assignments/ps8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
@@ -280,6 +281,28 @@ Prediction and Classification
    Prediction/shannon_guesser.rst
    Prediction/training.rst
    Prediction/evaluation.rst
+
+String Formatting
+:::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   StringFormatting/intro-PrintinginPython2.7.rst
+   StringFormatting/Interpolation.rst
+   StringFormatting/CSV.rst
+   StringFormatting/Exercises.rst
+
+Python Modules
+::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   PythonModules/intro-ModulesandGettingHelp.rst
+   PythonModules/Therandommodule.rst
+   PythonModules/Glossary.rst
+   PythonModules/Exercises.rst
 
 Debugging
 :::::::::
