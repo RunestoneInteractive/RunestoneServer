@@ -31,8 +31,11 @@ Glossary
         attributes to their initial (factory-default) state.
         
     instance
-        An object whose type is of some class.  Instance and object are used
+        An object whose type is of some class.  The words instance and object are used
         interchangeably.
+    
+    instance variable
+        A variable that stores a value associated with the instance. The instance variables together store the state of an instance.
         
     instantiate
         To create an instance of a class, and to run its initializer. 

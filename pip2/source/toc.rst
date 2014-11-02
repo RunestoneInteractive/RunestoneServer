@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps10.rst
    Assignments/ps9.rst
    Assignments/ps8.rst
    Assignments/ps7.rst
@@ -303,6 +304,37 @@ Python Modules
    PythonModules/Therandommodule.rst
    PythonModules/Glossary.rst
    PythonModules/Exercises.rst
+
+REST APIs
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   RESTAPIs/intro.rst
+   RESTAPIs/RequestURLs.rst
+   RESTAPIs/jsonlib.rst
+   RESTAPIs/unicode.rst
+   RESTAPIs/flickr.rst
+
+Classes
+:::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Classes/intro-ClassesandObjectstheBasics.rst
+   Classes/ObjectsRevisited.rst
+   Classes/UserDefinedClasses.rst
+   Classes/ImprovingourConstructor.rst
+   Classes/AddingOtherMethodstoourClass.rst
+   Classes/ObjectsasArgumentsandParameters.rst
+   Classes/ConvertinganObjecttoaString.rst
+   Classes/InstancesasReturnValues.rst
+   Classes/sorting_instances.rst
+   Classes/Glossary.rst
+   Classes/Exercises.rst
+
 
 Debugging
 :::::::::

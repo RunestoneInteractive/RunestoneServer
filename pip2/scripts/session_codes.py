@@ -43,7 +43,9 @@ sessions[10] = ["IndefiniteIteration/intro-indefiniteiteration.rst", "Indefinite
 sessions[11] = ["OptionalAndKeywordParameters/OptionalParameters.rst", "OptionalAndKeywordParameters/KeywordParameters.rst", "OptionalAndKeywordParameters/exercises.rst"]
 sessions[12] = ["Tuples/Tuples.rst", "Tuples/TuplePacking.rst", "Tuples/TuplesasReturnValues.rst", "Tuples/TupleAssignmentwithunpacking.rst", "Tuples/UnpackingDictionaryItems.rst", "Tuples/Glossary.rst", "Tuples/Exercises.rst", "NestedData/ListswithComplexItems.rst", "NestedData/NestedDictionaries.rst", "NestedData/NestedIteration.rst"]
 sessions[13] =  ["Sort/intro-SortingwithSortandSorted.rst", "Sort/Optionalreverseparameter.rst", "Sort/Optionalkeyparameter.rst", "Sort/Anonymousfunctionswithlambdaexpressions.rst", "Sort/SortingaDictionary.rst", "Sort/Glossary.rst", "Sort/Exercises.rst"]
-
+sessions[14] = ["Prediction/intro-prediction.rst", "Prediction/hangman_guesser.rst", "Prediction/rule-based.rst", "Prediction/shannon_guesser.rst", "Prediction/training.rst", "Prediction/evaluation.rst"]  
+sessions[15] = ["PythonModules/intro-ModulesandGettingHelp.rst", "PythonModules/Therandommodule.rst", "PythonModules/Glossary.rst", "PythonModules/Exercises.rst"]
+sessions[16] = ["StringFormatting/intro-PrintinginPython2.7.rst", "StringFormatting/Interpolation.rst", "StringFormatting/CSV.rst", "StringFormatting/Exercises.rst"]
 
 f = open('session_codes.txt', 'w')
 g = open('json_sessin_codes.txt', 'w')

@@ -7,6 +7,14 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _classes_chap:
+
+Introduction: Classes and Objects - the Basics
+==============================================
+
+
+.. index:: object-oriented programming
+
 Object-oriented programming
 ---------------------------
 
@@ -31,5 +39,3 @@ operate on data. In object-oriented programming the focus is on the creation of
 Usually, each object definition corresponds to some object or concept in the real
 world and the functions that operate on that object correspond to the ways
 real-world objects interact.
-
-

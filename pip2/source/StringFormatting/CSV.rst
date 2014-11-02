@@ -31,7 +31,7 @@ The typical pattern for writing data to a CSV file will be to write a header row
    # output each of the rows:
    for student in students:
        outfile.write("%s, %d, %s\n" % student)
-   outfile.close
+   outfile.close()
    
 There are a couple of things worth noting in the code above. First, unlike the print statement, the .write() method on a file object does not automatically insert a newline. Instead, we had to explicitly add the character ``\n`` at the end of each line.
 
@@ -51,6 +51,6 @@ If one or more columns contain text, and that text could contain commas, we need
    # output each of the rows:
    for student in students:
        outfile.write('"%s", "%d", "%s"\n' % student)
-   outfile.close
+   outfile.close()
 
 Python also includes a .csv module, which provides a cleaner, more abstract way to handle writing .csv files. It can generate slightly different CSV formats, and handles a few other aspects of more complicated outputs in a nice way. You are welcome to explore the `documentation for the csv module <https://docs.python.org/2/library/csv.html>`_ if you'd like to learn how to use it.

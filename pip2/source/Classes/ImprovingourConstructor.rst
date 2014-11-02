@@ -7,8 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Improving our Constructor
-------------------------- 
+
+Adding Parameters to the  Constructor
+-------------------------------------
 
 Our constructor so far can only create points at location ``(0,0)``.  To create a point at position (7, 6) requires that we
 provide some additional capability for the user to pass information to the constructor.  Since constructors are simply specially named functions, we can use parameters (as we've seen before) to provide the specific information. 
@@ -30,7 +31,7 @@ the ``__init__`` method, as shown in this example.
 
 
 
-Now when we create new points, we supply the x and y coordinates as parameters.  When the point is created, the values of ``initX`` and ``initY`` are assigned to the state of the object.
+Now when we create new points, we supply the x and y coordinates as parameters.  When the point is created, the values of ``initX`` and ``initY`` are assigned to the state of the object, in the **instance variables** x and y.
 
 
 .. image:: Figures/objectpic5.png

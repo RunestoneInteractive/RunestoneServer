@@ -50,9 +50,9 @@ the target.
     q = Point(5,12)
     mid = p.halfway(q)
 
-    print(mid)
-    print(mid.getX())
-    print(mid.getY())
+    print mid
+    print mid.getX()
+    print mid.getY()
        
 
 The resulting Point, ``mid``, has an x value of 4 and a y value of 8.  We can also use any other methods on ``mid`` since it is a

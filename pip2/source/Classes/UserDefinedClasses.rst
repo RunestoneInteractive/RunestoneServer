@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. index:: compound data type
+
 User Defined Classes
 --------------------
 
@@ -71,7 +73,7 @@ their initial state values.  The ``self`` parameter (you could choose any
 other name, but nobody ever does!) is automatically set to reference
 the newly created object that needs to be initialized.   
 
-So let's use our new Point class now.
+So let's use our new Point class now. This next part should look a little familiar, if you remember some of the syntax for how we created instances of the Turtle class, in the :ref:`chapter on Turtle graphics <turtles_chap>`. 
 
 .. activecode:: chp13_classes1
     
@@ -86,13 +88,13 @@ So let's use our new Point class now.
     p = Point()         # Instantiate an object of type Point
     q = Point()         # and make a second point
 
-    print("Nothing seems to have happened with the points")
+    print "Nothing seems to have happened with the points"
     
    
 During the initialization of the objects, we created two
-attributes called `x` and `y` for each, and gave them both the value 0.  You will note that when you run the
+attributes called `x` and `y` for each object, and gave them both the value 0.  You will note that when you run the
 program, nothing happens.  It turns out that this is not quite the case.  In fact, two ``Points`` have been created, each
-having an x and y coordinate with value 0.  However, because we have not asked the point to do anything, we don't see any other result.
+having an x and y coordinate with value 0.  However, because we have not asked the program to do anything with the points, we don't see any other result.
 
 
 .. image:: Figures/objectpic4.png
@@ -101,7 +103,7 @@ having an x and y coordinate with value 0.  However, because we have not asked t
 
 
 The following program adds a few print statements. You can see that the output suggests that each one is a ``Point object``.
-However, notice that the ``is`` operator returns ``False`` meaning that they are different objects (we will have more to say about this in a later chapter).
+However, notice that the ``is`` operator returns ``False`` meaning that they are different objects (we will have more to say about this in a later section).
 
 .. activecode:: chp13_classes2
     
@@ -116,10 +118,10 @@ However, notice that the ``is`` operator returns ``False`` meaning that they are
     p = Point()         # Instantiate an object of type Point
     q = Point()         # and make a second point
 
-    print(p)
-    print(q)
+    print p
+    print q
 
-    print(p is q)
+    print p is q
 
 
 A function like ``Point`` that creates a new object instance 
@@ -157,7 +159,7 @@ To get a clearer understanding of what happens when instantiating a new instance
 
     print(p is q)
     
-At Step 6 in the codelens, you can see that Point has been bound to an object representing the point class, but there are not yet any instances. The execution of line 9, ``p = Point()``, occurs at steps 7-9. First, at step 7, you can see that a blank instance of the class has been created, and is passed as the first (and only parameter) to the ``__init__`` method. That method's code is executed, with the variable self bound to that instance. At steps 8 and 9, two instance variables are filled in: x and y are both set to 0. Nothing is returned from the __init__ method, but the point object itself is returned from the call to ``Point()``. Thus, at step 10,  p is bound to the new point that was created and initialized.
+At Step 6 in the codelens execution, you can see that Point has been bound to an object representing the point class, but there are not yet any instances. The execution of line 9, ``p = Point()``, occurs at steps 7-9. First, at step 7, you can see that a blank instance of the class has been created, and is passed as the first (and only parameter) to the ``__init__`` method. That method's code is executed, with the variable self bound to that instance. At steps 8 and 9, two instance variables are filled in: x and y are both set to 0. Nothing is returned from the __init__ method, but the point object itself is returned from the call to ``Point()``. Thus, at step 10,  p is bound to the new point that was created and initialized.
 
 Skipping ahead, by the time we get to Step 16, p and q are each bound to different points. Even though both have x and y instance variables set to 0, they are *different objects*. Thus ``p is q`` evaluates to False.
 

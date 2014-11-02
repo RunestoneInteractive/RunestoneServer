@@ -56,6 +56,6 @@ Answer the following questions.
    s = """
 
    """
-
+   print s
 
        
