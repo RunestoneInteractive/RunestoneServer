@@ -52,8 +52,9 @@ def schedule():
                         if progress.user_sub_chapter_progress.status > 0:
                             count += 1
                         total += 1
-                result = round(count*100/total)
-                db((db.user_chapter_progress.user_id==user.id) & (db.user_chapter_progress.chapter_id==plan.chapters.id)).update(status=result)
+                if total > 0:
+                    result = round(count*100/total)
+                    db((db.user_chapter_progress.user_id==user.id) & (db.user_chapter_progress.chapter_id==plan.chapters.id)).update(status=result)
 
             userProgress = db(db.user_chapter_progress.chapter_id==plan.chapters.id).select(db.user_chapter_progress.status)
             completed = True
