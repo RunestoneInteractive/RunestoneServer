@@ -138,7 +138,7 @@ and the surrounding quotes are not part of the value.
     print("""And so is this.""")
 
 So the Python language designers usually chose to surround their strings by
-single quotes.  What do think would happen if the string already contained
+single quotes.  What do you think would happen if the string already contained
 single quotes?
 
 When you type a large integer, you might be tempted to use commas between
