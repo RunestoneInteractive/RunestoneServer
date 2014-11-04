@@ -112,9 +112,9 @@ children *before* making the recursive call to ``preorder``.
     def preorder(self):
         print(self.key)
         if self.leftChild:
-            self.left.preorder()
+            self.leftChild.preorder()
         if self.rightChild:
-            self.right.preorder()
+            self.rightChild.preorder()
 
 
 
