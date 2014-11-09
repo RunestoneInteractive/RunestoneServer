@@ -46,7 +46,10 @@ sessions[13] =  ["Sort/intro-SortingwithSortandSorted.rst", "Sort/Optionalrevers
 sessions[14] = ["Prediction/intro-prediction.rst", "Prediction/hangman_guesser.rst", "Prediction/rule-based.rst", "Prediction/shannon_guesser.rst", "Prediction/training.rst", "Prediction/evaluation.rst"]  
 sessions[15] = ["PythonModules/intro-ModulesandGettingHelp.rst", "PythonModules/Therandommodule.rst", "PythonModules/Glossary.rst", "PythonModules/Exercises.rst"]
 sessions[16] = ["StringFormatting/intro-PrintinginPython2.7.rst", "StringFormatting/Interpolation.rst", "StringFormatting/CSV.rst", "StringFormatting/Exercises.rst"]
-
+sessions[17] = ["RESTAPIs/intro.rst", "RESTAPIs/RequestURLs.rst", "RESTAPIs/jsonlib.rst", "RESTAPIs/unicode.rst", "RESTAPIs/flickr.rst"]
+sessions[18] = ["Classes/intro-ClassesandObjectstheBasics.rst", "Classes/ObjectsRevisited.rst", "Classes/UserDefinedClasses.rst", "Classes/ImprovingourConstructor.rst", "Classes/AddingOtherMethodstoourClass.rst", "Classes/ObjectsasArgumentsandParameters.rst", "Classes/ConvertinganObjecttoaString.rst", "Classes/InstancesasReturnValues.rst", "Classes/sorting_instances.rst", "Classes/Glossary.rst", "Classes/Exercises.rst"]
+sessions[19] = ["Assignments/session21.rst"]
+sessions[20] = []
 f = open('session_codes.txt', 'w')
 g = open('json_sessin_codes.txt', 'w')
 

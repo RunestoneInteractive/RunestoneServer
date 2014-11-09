@@ -1,5 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
+..  Copyright (C)  Paul Resnick.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
     Foundation; with Invariant Sections being Forward, Prefaces, and
@@ -7,12 +6,6 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Introduction: Map, Filter, and List Comprehensions
-==================================================
-
-Let's revisit the :ref:`accumulator pattern <accum_pattern>`. We have frequently taken a list and produced another list from it that contains either a subset of the items or a transformed version of each item. When each item is transformed we say that the operation is a **mapping, or just a map** of the original list. When some items are omitted, we call it a **filter**. 
-
-Python provides built-in functions ``map`` and ``filter``. Python also provides a new syntax, called **list comprehensions**, that lets you express a mapping and/or filtering operation. Just as with named functions and lambda expressions, some students seem to find it easier to think in terms of the map and filter functions, while other students find it easier to read and write list comprehensions. You'll learn both ways; one may even help you understand the other. Most python programmers use list comprehensions, so make sure you learn to read those; you can choose to learn to write list comprehensions or to use map and filter, whichever you prefer.   
 
 Map
 ---
@@ -34,7 +27,7 @@ The following function produces a new list with each item in the original list d
     things = doubleStuff(things)
     print things
 
-The doubleStuff function is an example of the accumulator pattern. On line 3, new_list is initialized. On line 5, the doubled value for the current item is produced and on line 6 it is appended to the list we're accumulating. Line 7 executes after we've process all the items in the original list: it returns the new_list. Once again, codelens helps us to see the actual references and objects as they are passed and returned.
+The doubleStuff function is an example of the accumulator pattern, in particular the mapping pattern. On line 3, new_list is initialized. On line 5, the doubled value for the current item is produced and on line 6 it is appended to the list we're accumulating. Line 7 executes after we've processrf all the items in the original list: it returns the new_list. Once again, codelens helps us to see the actual references and objects as they are passed and returned.
 
 .. codelens:: listcomp_2
 
@@ -78,13 +71,9 @@ Of course, once we get used to using the map function, it's no longer necessary 
 
    things = [2, 5, 9]
    
-   things4 = map(lambda value: 4*value, things)
+   things4 = map((lambda value: 4*value), things)
    print things4
    
    # or all on one line
-   print map(lambda value: 5*value, [1, 2, 3])
-
-.. note::
-
-   There are some problems with the implementation of the map function in this online environment. So take a look at the exercises in the file session22.py
+   print map((lambda value: 5*value), [1, 2, 3])
 

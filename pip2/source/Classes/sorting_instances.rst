@@ -18,7 +18,7 @@
 Sorting Lists of Instances
 ==========================
 
-You previously learned :ref:`how to sort lists <invoking_sort_chap>`. Sorting lists of instances of a class is not fundamentally different from sorting lists of objects of any other type. There is a way to define a default sort order for instances, right in the class definition, but it requires defining a bunch of methods or one complicated method, so we won't bother with that. Instead, you should just provide a key function as a parameter to sorted (or sort).
+You previously learned :ref:`how to sort lists <sort_chap>`. Sorting lists of instances of a class is not fundamentally different from sorting lists of objects of any other type. There is a way to define a default sort order for instances, right in the class definition, but it requires defining a bunch of methods or one complicated method, so we won't bother with that. Instead, you should just provide a key function as a parameter to sorted (or sort).
 
 Previously, you have seen how to provide such a function when sorting lists of other kinds of objects. For example, given a list of strings, you can sort them in ascending order of their lengths by passing a key parameter. Note that if you refer to a function by name, you give the name of the function without parentheses after it, because you want the function object itself. The sorted function will take care of calling the function, passing the current item in the list. Thus, in the example below, we write ``key=len`` and not ``key=len()``.
 

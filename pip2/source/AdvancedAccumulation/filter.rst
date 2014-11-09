@@ -1,5 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
+..  Copyright (C)  Paul Resnick.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
     Foundation; with Invariant Sections being Forward, Prefaces, and
@@ -33,4 +32,6 @@ Again, this pattern of computation is so common that python offers a more compac
       
    print keep_odds([3, 4, 6, 7, 0, 1])
 
-Now try the filter exercises in session22.py
+Exercises
+---------
+
