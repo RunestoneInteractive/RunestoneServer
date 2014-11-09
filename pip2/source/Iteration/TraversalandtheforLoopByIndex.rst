@@ -7,6 +7,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _for_by_index:
+
 Traversal and the ``for`` Loop: By Index
 ----------------------------------------
 

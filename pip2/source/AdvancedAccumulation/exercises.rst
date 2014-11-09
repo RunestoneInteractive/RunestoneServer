@@ -59,19 +59,19 @@ Now define lengths using a list comprehension instead.
    test.testEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3])
    
    
-.. activecode:: filter_1
+.. activecode:: filter_exercise_1
 
    things = [3, 5, -4, 7]
    # write code to produce a list of only the positive things, [3, 5, 7], via manual accumulation
 
-.. activecode:: filter_2
+.. activecode:: filter_exercise_2
 
    things = [3, 5, -4, 7]
    # write code to produce a list of only the positive things, [3, 5, 7], via manual accumulation
 
 # define longwords using manual accumulation
 
-.. activecode:: filter_3
+.. activecode:: filter_exercise_3
 
    def longwords(strings):
        """Return a shorter list of strings containing only the strings with more than four characters. Use manual accumulation."""
@@ -82,7 +82,7 @@ Now define lengths using a list comprehension instead.
 
 # define longwords using filter
    
-.. activecode:: filter_4
+.. activecode:: filter_exercise_4
 
    def longwords(strings):
        """Return a shorter list of strings containing only the strings with more than four characters. Use the filter function."""
@@ -150,7 +150,7 @@ Now, try it using map and sum
    
 Finally, try doing it using reduce 
 
-.. activecode:: reduce_exercise_3
+.. activecode:: reduce_exercise_4
    
    def sumSquares(L):
       return None
@@ -159,3 +159,29 @@ Finally, try doing it using reduce
    
    import test
    test.testEqual(sumSquares(nums), 19)  
+
+Use the zip function to take the lists below and turn them into a list of tuples, with all the first items in the first tuple, etc.
+
+.. activecode:: zip_exercise_1
+
+   L1 = [1, 2, 3, 4]
+   L2 = [4, 3, 2, 3]
+   L3 = [0, 5, 0, 5]
+   
+   tups = []
+   
+   import test   
+   test.testEqual(tups, [(1, 4, 0), (2, 3, 5), (3, 2, 0), (4, 3, 5)])
+   
+Use zip and map or a list comprehension to make a list consisting the maximum value for each position.
+
+.. activecode:: zip_exercise_2
+
+   L1 = [1, 2, 3, 4]
+   L2 = [4, 3, 2, 3]
+   L3 = [0, 5, 0, 5]
+   
+   maxs = []
+   
+   import test   
+   test.testEqual(maxs, [4, 5, 3, 5])
