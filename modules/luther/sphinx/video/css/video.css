@@ -6,6 +6,7 @@
 .active_out {
     background-color:#dcdcdc;
     border-radius: 6px;
+    min-width: 20em;
 }
 
 figcaption {
