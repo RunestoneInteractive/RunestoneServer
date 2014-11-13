@@ -9,7 +9,7 @@ var extendType;
 
 function enableUserHighlights(){
 	//check if it's not the contents or index page.
-	if ((window.location.href).match( /(index.html|genindex.html|navhelp.html|toc.html)/ ) == null){
+	if ((window.location.href).match( /(index.html|genindex.html|navhelp.html|toc.html|assignments.html)/ ) == null){
 		//checksum generator for each div.section and paragraph. Add that checksum as a class _[checksumValue]
 		$('body p, body .section').each(function(index) {
 			var s = $(this).text();
