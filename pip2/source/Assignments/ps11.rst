@@ -27,7 +27,7 @@ Week 11: ends November 16
          * `Part II <http://readwrite.com/2013/10/02/github-for-beginners-part-2>`_
 
    * Before Thursday's class:
-       * Read :ref:`List comprehensions<list_comp_chap>` and do the exercises in the chapter (coming soon)
+       * Read :ref:`List comprehensions<list_comp_chap>` and do the exercises in the chapter
  
 #. Reading responses
 

@@ -49,7 +49,9 @@ sessions[16] = ["StringFormatting/intro-PrintinginPython2.7.rst", "StringFormatt
 sessions[17] = ["RESTAPIs/intro.rst", "RESTAPIs/RequestURLs.rst", "RESTAPIs/jsonlib.rst", "RESTAPIs/unicode.rst", "RESTAPIs/flickr.rst"]
 sessions[18] = ["Classes/intro-ClassesandObjectstheBasics.rst", "Classes/ObjectsRevisited.rst", "Classes/UserDefinedClasses.rst", "Classes/ImprovingourConstructor.rst", "Classes/AddingOtherMethodstoourClass.rst", "Classes/ObjectsasArgumentsandParameters.rst", "Classes/ConvertinganObjecttoaString.rst", "Classes/InstancesasReturnValues.rst", "Classes/sorting_instances.rst", "Classes/Glossary.rst", "Classes/Exercises.rst"]
 sessions[19] = ["Assignments/session21.rst"]
-sessions[20] = []
+sessions[20] = ["AdvancedAccumulation/intro.rst", "AdvancedAccumulation/map.rst", "AdvancedAccumulation/filter.rst", "AdvancedAccumulation/listcomp.rst", "AdvancedAccumulation/reduce.rst", "AdvancedAccumulation/zip.rst", "AdvancedAccumulation/exercises.rst"]
+sessions[21] = []
+sessions[22] = ["Testing/intro-TestCases.rst", "Testing/TestCasesRevisited.rst", "Testing/Testingfunctions.rst", "Testing/Testingclasses.rst", "Testing/Glossary.rst"]
 f = open('session_codes.txt', 'w')
 g = open('json_sessin_codes.txt', 'w')
 

@@ -9,7 +9,9 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps12.rst
    Assignments/ps11.rst
+   Assignments/session21.rst
    Assignments/ps10.rst
    Assignments/ps9.rst
    Assignments/ps8.rst
@@ -350,6 +352,18 @@ More on Accumulation: Map, Filter, Reduce, List Comprehensions, and Zip
    AdvancedAccumulation/zip.rst
    AdvancedAccumulation/exercises.rst
    
+Test Cases
+::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   Testing/intro-TestCases.rst
+   Testing/TestCasesRevisited.rst
+   Testing/Testingfunctions.rst
+   Testing/Testingclasses.rst
+   Testing/Glossary.rst
+
 
 Debugging
 :::::::::
