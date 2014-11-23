@@ -7,6 +7,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. _understand_code_chap:
 
 Understanding Code
 ==================

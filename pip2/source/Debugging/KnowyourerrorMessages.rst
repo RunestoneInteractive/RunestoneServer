@@ -326,3 +326,11 @@ Run the program but instead of typing in anything to the dialog box just click O
 ValueErrors are not always caused by user input error, but in this program that is the case.  We'll look again at ValueErrors again when we get to more complicated programs.  For now it is worth repeating that you need to keep track of the types of your variables, and understand what types your function is expecting.  You can do this by writing comments in your code, or by naming your variables in a way that reminds you of their type.
 
 
+Summary
+~~~~~~~
+
+* Make sure you take the time to understand error messages.  They can help you a lot.
+
+* ``print`` statements are your friends.  Use them to help you uncover what is **really** happening in your code.
+
+* Work backward from the error.  Many times an error message is caused by something that has happened before it in the program.  Always remember that python evaluates a program top to bottom (but taking detours for functions calls, repeating blocks of code in for and while loops, and skipping some code blocks in if-elif-else statements.)

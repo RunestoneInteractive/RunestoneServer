@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/ps13.rst
    Assignments/ps12.rst
    Assignments/ps11.rst
    Assignments/session21.rst
@@ -257,6 +258,8 @@ Nested Data and Nested Iteration
    NestedData/ListswithComplexItems.rst
    NestedData/NestedDictionaries.rst
    NestedData/NestedIteration.rst
+   NestedData/DebuggingNestedData.rst
+   
    
 Sorting
 :::::::
@@ -375,7 +378,6 @@ Debugging
    Debugging/intro-HowtobeaSuccessfulProgrammer.rst
    Debugging/BeginningtipsforDebugging.rst
    Debugging/KnowyourerrorMessages.rst
-   Debugging/Summary.rst
    BuildingAProgram/TheStrategy.rst
    BuildingAProgram/UnderstandingCode.rst
 

@@ -7,6 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. _build_program_chap:
+
 Building A Program: A Strategy
 ==============================
 
