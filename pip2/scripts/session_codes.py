@@ -52,6 +52,7 @@ sessions[19] = ["Assignments/session21.rst"]
 sessions[20] = ["AdvancedAccumulation/intro.rst", "AdvancedAccumulation/map.rst", "AdvancedAccumulation/filter.rst", "AdvancedAccumulation/listcomp.rst", "AdvancedAccumulation/reduce.rst", "AdvancedAccumulation/zip.rst", "AdvancedAccumulation/exercises.rst"]
 sessions[21] = []
 sessions[22] = ["Testing/intro-TestCases.rst", "Testing/TestCasesRevisited.rst", "Testing/Testingfunctions.rst", "Testing/Testingclasses.rst", "Testing/Glossary.rst"]
+sessions[23] = ["NestedData/DebuggingNestedData.rst"]
 f = open('session_codes.txt', 'w')
 g = open('json_sessin_codes.txt', 'w')
 
