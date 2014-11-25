@@ -131,9 +131,9 @@ The assignment statement ``theSum = 0`` creates a variable called
 statement is evaluated and a reference to the resulting data object is
 “assigned” to the name on the left-hand side. At this point in our
 example, the type of the variable is integer as that is the type of the
-data currently being referred to by ``thesum``. If the type of the data
+data currently being referred to by ``theSum``. If the type of the data
 changes (see :ref:`Figure 4 <fig_assignment2>`), as shown above with the boolean
-value ``True``, so does the type of the variable (``thesum`` is now of
+value ``True``, so does the type of the variable (``theSum`` is now of
 the type boolean). The assignment statement changes the reference being
 held by the variable. This is a dynamic characteristic of Python. The
 same variable can refer to many different types of data.
