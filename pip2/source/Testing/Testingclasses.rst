@@ -35,7 +35,7 @@ To test whether the class constructor (the __init__) method is working correctly
    test.testEqual(p.y, 4)
    test.testEqual(p.x, 3)
 
-A method like distanceFromOrigin does its work by computing a return value, so it needs to be tested with a return value test. A method like move does its work by changing the contents of a mutable object (the point instance has its instance variable changes) so it needs to be tested with a side effect test. 
+A method like distanceFromOrigin does its work by computing a return value, so it needs to be tested with a return value test. A method like move does its work by changing the contents of a mutable object (the point instance has its instance variable changed) so it needs to be tested with a side effect test. 
 
 .. sourcecode:: python
 
