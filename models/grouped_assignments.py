@@ -175,7 +175,6 @@ def assignment_get_engagement_time(assignment, user, preclass):
     if prev:
         # close out last session
         sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
-    print len(sessions)
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
     return total_time
 
