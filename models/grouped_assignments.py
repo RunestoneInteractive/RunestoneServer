@@ -273,13 +273,12 @@ def get_all_times_and_activity_counts(course):
                 ret[nm+"_max_act"] = act_per_ass[a]
             return ret
             
-                
-    students = db(db.auth_user.course_id == course.id).select(db.auth_user.registration_id)
+    students = db(db.auth_user.course_id == course.id).select(db.auth_user.registration_id, db.auth_user.username)
     all_user_data = {}
     for student in students:
-        curr_user = User_data(student.registration_id)        
+        curr_user = User_data(student.registration_id)
         ## get all use scores and times for this user
-        rows = db(db.useinfo.sid == student.registration_id).select(orderby=db.useinfo.timestamp)
+        rows = db(db.useinfo.sid == student.username).select(orderby=db.useinfo.timestamp)
         curr_session = None
         prev_row = None
         THRESH = 600
