@@ -544,7 +544,7 @@ def download():
     assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type==db.assignment_types.id).select(orderby=db.assignments.assignment_type)
     grades = db(db.grades).select()
 
-    field_names = ['Lastname','Firsname','Email','Total']
+    field_names = ['Lastname','Firstname','Email','Total']
     type_names = []
     assignment_names = []
     
