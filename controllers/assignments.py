@@ -36,9 +36,8 @@ def index():
         orderby = db.assignments.name,
         )
 
-    grade = CourseGrade()
     assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    grade.assignment_type_grades = [student_grade_for_assignment_type(user = student, course = course, assignment_type=t) for t in assignment_types]
+    grade = CourseGrade(user = student, course=course, assignment_types = assignment_types)
     last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
 
     # add forms for all of the individual grades that are student-projected, because not yet released or no grade row at all yet
@@ -497,6 +496,47 @@ def migrate_to_scores():
     session.flash = "Set %d scores for %d users" % (acid_count, user_count)
     return redirect(URL("assignments","index"))
 
+#@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+#def download():
+#    course = db(db.courses.id == auth.user.course_id).select().first()
+#    students = db(db.auth_user.course_id == course.id).select()
+#    assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type==db.assignment_types.id).select(orderby=db.assignments.assignment_type)
+#    grades = db(db.grades).select()
+#
+#    field_names = ['Name','Email']
+#    regular_assignments = [a for a in assignments if a.assignment_types.grade_type != 'use']
+#    use_assignments = [a for a in assignments if a.assignment_types.grade_type == 'use']
+#    def sort_key(assignment_name):
+#        try:
+#            return int(assignment_name.split()[-1])
+#        except:
+#            return assignment_name
+#    for ass in regular_assignments:
+#        field_names.append(ass.assignments.name)
+#    for postfix in ["_time", "_time_pre_deadline", "_activities", "_activities_pre_deadline", "_max_act"]:
+#        for nm in sorted([ass.assignments.name for ass in use_assignments], key = sort_key):
+#            field_names.append(nm + postfix)
+#
+#    student_data = []
+#    use_data = get_all_times_and_activity_counts(course)
+#    for student in students:
+#        row = {}
+#        row['Name']=student.first_name+" "+student.last_name
+#        row['Email']=student.email
+#        for ass in assignments:
+#            grade = [x for x in grades if x.auth_user==student.id and x.assignment==ass.assignments.id]
+#            if len(grade) > 0:
+#                row[ass.assignments.name] = grade[0].score
+#            else:
+#                row[ass.assignments.name] = 0
+#        usage = use_data[student.registration_id]
+#        for k in usage:
+#            row[k]= usage[k]
+#
+#        student_data.append(row)
+#    response.view='generic.csv'
+#    return dict(filename='grades_download.csv', csvdata=student_data,field_names=field_names)
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def download():
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -504,39 +544,14 @@ def download():
     assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type==db.assignment_types.id).select(orderby=db.assignments.assignment_type)
     grades = db(db.grades).select()
 
-    field_names = ['Name','Email']
-    regular_assignments = [a for a in assignments if a.assignment_types.grade_type != 'use']
-    use_assignments = [a for a in assignments if a.assignment_types.grade_type == 'use']
-    def sort_key(assignment_name):
-        try:
-            return int(assignment_name.split()[-1])
-        except:
-            return assignment_name
-    for ass in regular_assignments:
-        field_names.append(ass.assignments.name)
-    for postfix in ["_time", "_time_pre_deadline", "_activities", "_activities_pre_deadline", "_max_act"]:
-        for nm in sorted([ass.assignments.name for ass in use_assignments], key = sort_key):
-            field_names.append(nm + postfix)
-
-    student_data = []
-    use_data = get_all_times_and_activity_counts(course)
-    for student in students:
-        row = {}
-        row['Name']=student.first_name+" "+student.last_name
-        row['Email']=student.email
-        for ass in assignments:
-            grade = [x for x in grades if x.auth_user==student.id and x.assignment==ass.assignments.id]
-            if len(grade) > 0:
-                row[ass.assignments.name] = grade[0].score
-            else:
-                row[ass.assignments.name] = 0
-        usage = use_data[student.registration_id]
-        for k in usage:
-            row[k]= usage[k]
-
-        student_data.append(row)
+    field_names = ['Lastname','Firsname','Email','Total']
+    type_names = []
+    assignment_names = []
+    
+    assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
+    rows = [CourseGrade(user = student, course=course, assignment_types = assignment_types).csv(type_names, assignment_names) for student in students]
     response.view='generic.csv'
-    return dict(filename='grades_download.csv', csvdata=student_data,field_names=field_names)
+    return dict(filename='grades_download.csv', csvdata=rows,field_names=field_names+type_names+assignment_names)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
