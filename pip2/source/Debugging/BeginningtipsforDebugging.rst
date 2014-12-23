@@ -20,4 +20,4 @@ Debugging a program is a different way of thinking than writing a program.  The 
 
     #. Print Statements
 
-There are also many other helpful ways to debug a program. You can import a PDB library in order to set trace statements in your code.  For example, you could write pdb.set_trace() in order to debug a section of your code.  
+There are also more advanced ways to debug a program. For example, later in the course you will about a module called pdb. It lets you set breakpoints in your code. Execution stops at each breakpoint and you can then inspect the value of variables and continue the execution. It's a faster way to understand what's going wrong than using print statements alone.  
