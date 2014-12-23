@@ -63,6 +63,62 @@ function outf(text) {
     mypre.innerHTML = mypre.innerHTML + text;
 }
 
+
+JSoutput = function(a) {
+
+    var str = "["
+
+    if (typeof(a)=="object" && a.length) {
+
+        for (var i=0; i < a.length; i++) 
+
+            if (typeof(a[i])=="object" && a[i].length) {
+
+                str += (i==0?"":" ")+"["
+
+                for (var j=0; j<a[i].length; j++) 
+
+                    str += a[i][j]+(j==a[i].length-1?
+
+                            "]"+(i==a.length-1?"]":",")+"\n":", ");
+
+            } else str += a[i]+(i==a.length-1?"]":", ");
+
+    } else {
+      try {
+        str = JSON.stringify(a);
+      } catch(e) {
+        str = a;
+      }
+    }
+    return str;
+
+}
+
+
+
+write = function(str) {
+
+    var outnode = document.getElementById(Sk.pre);
+
+    outnode.innerHTML += JSoutput(str);
+
+}
+
+
+
+writeln = function(str) {
+
+    if (!str) str="";
+
+    var outnode = document.getElementById(Sk.pre);
+
+    outnode.innerHTML += JSoutput(str)+"<br />";
+
+}
+
+
+
 var keymap = {
     "Ctrl-Enter" : function (editor) {
         runit(editor.parentDiv);
@@ -90,11 +146,12 @@ function createEditors() {
         } else {
             first_line = 1;
         }
+        var theMode = { name: 'python', version: 2, singleLineStringErrors: false };
+        if (lang == 'html') {
+            theMode = {name: 'htmlmixed'}
+        }
         cm_editors[newEdId] = CodeMirror.fromTextArea(edList[i], {
-                                                          mode: { name: lang,
-                                                                  version: 2,
-                                                                  singleLineStringErrors: false
-                                                                },
+                                                          mode: theMode,
                                                           lineNumbers: true,
                                                           firstLineNumber: first_line,
                                                           indentUnit: 4,

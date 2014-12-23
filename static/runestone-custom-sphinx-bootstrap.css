@@ -137,7 +137,8 @@ div.section {
      * height while still relying on max-height (which keeps 
      * the CM editors to no more than the size needed 
      * unless resized) */
-    max-height: 9999px;
+    max-height: 30em;
+    min-width: 30em;
 }
 
 .ac_section .CodeMirror pre {

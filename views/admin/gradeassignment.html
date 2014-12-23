@@ -58,6 +58,7 @@
                 <input id="input-comments-{{=s.code.sid}}" type="text" class="form-control" value="{{=s.code.comment}}" onchange="sendComment(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});"/>
               </form>
             </div>
+            <div id="{{ =s.code.acid }}_{{ =s.code.sid }}_htmlout"></div>
             <div class="modal-footer">
               <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
             </div>

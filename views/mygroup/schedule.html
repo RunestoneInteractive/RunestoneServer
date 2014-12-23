@@ -175,7 +175,7 @@ pass
 												</span>
 											 </div>
 											 <div class="col-md-4 aligned-right">												
-												{{if plan.cohort_plan.end_date<datetime.datetime.today():}}
+												{{if plan.cohort_plan.end_date<datetime.datetime.today().date():}}
 														<span>
 															This plan has passed the deadline!
 														</span>															
