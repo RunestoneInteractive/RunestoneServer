@@ -70,7 +70,7 @@ list (0, 1, 2, etc.), so that we can assign a new value to the position in the l
    :feedback_a: 5 is added to each item before the append is peformed.
    :feedback_b: There are too many items in this list.  Only 5 append operations are performed.
    :feedback_c: Yes, the for loop processes each item of the list.  5 is added before it is appended to blist.
-   :feedback_d: 5 is added to each item before the append is performed.
+   :feedback_d: 5 is added to each item before the append operation is performed.
    
    What is printed by the following statements?
    
