@@ -27,7 +27,7 @@ The following function produces a new list with each item in the original list d
     things = doubleStuff(things)
     print things
 
-The doubleStuff function is an example of the accumulator pattern, in particular the mapping pattern. On line 3, new_list is initialized. On line 5, the doubled value for the current item is produced and on line 6 it is appended to the list we're accumulating. Line 7 executes after we've processrf all the items in the original list: it returns the new_list. Once again, codelens helps us to see the actual references and objects as they are passed and returned.
+The doubleStuff function is an example of the accumulator pattern, in particular the mapping pattern. On line 3, new_list is initialized. On line 5, the doubled value for the current item is produced and on line 6 it is appended to the list we're accumulating. Line 7 executes after we've processed all the items in the original list: it returns the new_list. Once again, codelens helps us to see the actual references and objects as they are passed and returned.
 
 .. codelens:: listcomp_2
 
