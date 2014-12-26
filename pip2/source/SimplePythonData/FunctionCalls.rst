@@ -25,10 +25,10 @@ It is also possible for programmers to define new functions in their programs. Y
    def square(x):
       return x * x
       
-   def minus(x, y):
+   def sub(x, y):
       return x - y
 
-We've defined two functions above. The code is hidden so as not to bother you (yet) with how functions are defined. `square`` takes a single input parameter, and returns that input multiplied by itself. ``minus`` takes two input parameters and returns the result of subtracting the second from the first. Obviously, these functions are not particularly useful, since we have the operators ``*`` and ``-`` available. But they illustrate how functions work.
+We've defined two functions above. The code is hidden so as not to bother you (yet) with how functions are defined. `square`` takes a single input parameter, and returns that input multiplied by itself. ``sub`` takes two input parameters and returns the result of subtracting the second from the first. Obviously, these functions are not particularly useful, since we have the operators ``*`` and ``-`` available. But they illustrate how functions work.
 
 .. activecode:: functionCalls_2
    :include: functionCalls_1
@@ -37,8 +37,8 @@ We've defined two functions above. The code is hidden so as not to bother you (y
    
    print square(3)
    square(5)
-   print minus(6, 4)
-   print minus(5, 9)
+   print sub(6, 4)
+   print sub(5, 9)
 
 
 Notice that when a function takes more than one input parameter, the inputs are separated by a comma. Also notice that the order of the inputs matters. The value before the comma is treated as the first input, the value after it as the second input.
@@ -53,10 +53,10 @@ Remember the note that some kinds of python objects don't have a nice printed re
    
    
    print square
-   print minus
+   print sub
 
 .. mchoicemf:: exercise_functionCalls_1
-      :answer_a: minus(5, 8)
+      :answer_a: sub(5, 8)
       :answer_b: -3
       :answer_c: 3
       :answer_d: nothing will rpint
@@ -70,10 +70,10 @@ Remember the note that some kinds of python objects don't have a nice printed re
        
       .. code-block:: python
        
-         print minus(5, 8)
+         print sub(5, 8)
          
 .. mchoicemf:: exercise_functionCalls_2
-      :answer_a: minus(5, 8)
+      :answer_a: sub(5, 8)
       :answer_b: -3
       :answer_c: 3
       :answer_d: nothing will rpint
@@ -87,10 +87,10 @@ Remember the note that some kinds of python objects don't have a nice printed re
        
       .. code-block:: python
        
-         print "minus(5, 8)"
+         print "sub(5, 8)"
          
 .. mchoicemf:: exercise_functionCalls_3
-      :answer_a: minus(5, 8)
+      :answer_a: sub(5, 8)
       :answer_b: -3
       :answer_c: 3
       :answer_d: nothing will rpint
@@ -104,10 +104,10 @@ Remember the note that some kinds of python objects don't have a nice printed re
        
       .. code-block:: python
        
-         minus(5, 8)
+         sub(5, 8)
          
 .. mchoicemf:: exercise_functionCalls_4
-      :answer_a: minus(5, 8)
+      :answer_a: sub(5, 8)
       :answer_b: -3
       :answer_c: 3
       :answer_d: nothing will rpint
@@ -121,4 +121,4 @@ Remember the note that some kinds of python objects don't have a nice printed re
        
       .. code-block:: python
        
-         "minus(5, 8)"
+         "sub(5, 8)"

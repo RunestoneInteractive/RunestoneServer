@@ -48,8 +48,8 @@ Take a look at the ActiveCode interpreter in action.  If we take a simple Python
 
 .. activecode:: codeexample1
 
-   print("My first program adds two numbers, 2 and 3:")
-   print(2 + 3)
+   print "My first program adds two numbers, 2 and 3:"
+   print 2 + 3
 
 
 The CodeLens Tool
@@ -61,8 +61,8 @@ all variables as they are created and modified.  The following example shows Cod
 .. codelens:: firstexample
     :showoutput:
 
-    print("My first program adds two numbers, 2 and 3:")
-    print(2 + 3)
+    print "My first program adds two numbers, 2 and 3:"
+    print 2 + 3
 
 
 Self-Check Questions

@@ -1062,7 +1062,7 @@ function injectCodelens(button, div_id) {
     myVars.curInstr = 0
     myVars.codeDivWidth = 350
     myVars.codeDivHeight = 400
-    var srcURL = 'http://pythontutor.com/iframe-embed.html'
+    var srcURL = '//pythontutor.com/iframe-embed.html'
     var embedUrlStr = $.param.fragment(srcURL, myVars, 2 /* clobber all */)
     var myIframe = document.createElement('iframe')
     myIframe.setAttribute("id",div_id+'_codelens')

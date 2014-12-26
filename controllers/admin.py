@@ -107,7 +107,7 @@ def listassessments():
     for div in divs.values():
         div['pct'] = int(100 * float(div['correct']) / len(div['sids']))
         counts = {}
-        pop_answers = sorted(div['answers'].keys(), key = lambda k: div['answers'][k])
+        pop_answers = sorted(div['answers'].keys(), key = lambda k: div['answers'][k], reverse = True)
         try:
             div['first'] = (pop_answers[0], div['answers'][pop_answers[0]])
         except:

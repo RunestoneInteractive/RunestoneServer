@@ -3,115 +3,118 @@ import datetime
 def pct2pts(x):
     return "%.2f" % (100*x)
 
-class Grade(object):
-    """Grade of one user for either a collection of assignments, or for the whole course"""
-    def __init__(self):
-        self.weight = 1
-        self.scores = []
-        self.assignment_scores = []
-    
-    def points(self):
-        self.scores.sort()
-        if len(self.scores) > self.assignments_count - self.assignments_dropped:
-            # too many grades; drop lowest
-            return sum(self.scores[self.assignments_dropped:])
-        else:
-            return sum(self.scores)
-    
-    def assignment_points(self):
-        self.assignment_scores.sort()
-        if len(self.scores) > self.assignments_count - self.assignments_dropped:
-            # too many grades; drop lowest assignment
-            return sum(self.assignment_scores[self.assignments_dropped:])
-        else:
-            return sum(self.assignment_scores)
-            
-    
-    def current(self):
-        if self.possible == 0:
-            return 0
-        points = float(self.points())/self.possible
-        return points*self.weight
-
-    def projected(self):
-        if self.assignment_points() == 0:
-            return 0
-        points = float(self.points())/self.assignment_points()
-        return points*self.weight
-
-    def points_after_drops(self):
-        self.scores.sort()
-        return sum(self.scores[self.assignments_dropped:])
-    def assignment_points_after_drops(self):
-        self.assignment_scores.sort()
-        return sum(self.assignment_scores[self.assignments_dropped:])
-
-    def max(self):
-        # this is more complicated because of the "best k of n" scoring
+class AssignmentGrade(object):
+    """Grade of one user for one assignment"""
+    def __init__(self, released, score, projected, assignment_score, assignment_id, assignment_name, grade_record, row):
+        self.released = released
+        self.score = score
+        self.projected = projected 
+        self.assignment_score = assignment_score
+        self.assignment_id = assignment_id
+        self.assignment_name = assignment_name
+        self.grade_record = grade_record
+        self.db_row = row
         
-        if self.possible == 0:
+    def points(self, projected = False, potential = False):
+        # potential gives max points for the assignment
+        # projected gives actual score if it's been released, else projected
+        actual = None
+        if potential:
+            return self.assignment_score
+        elif self.released:
+            return self.score
+        elif projected:
+            if self.projected:
+                return self.projected
+            else:
+                return 0
+        else:
             return 0
-        remaining = self.possible - self.assignment_points_after_drops()
-        if remaining < 0:
-            remaining = 0
-        points = (self.points_after_drops() + remaining)/self.possible
-        return points * self.weight
-
-    def percent(self, points=None, total=None):
-        if points == None:
-            points = self.points()
-        if total == None:
-            total = self.assignment_points()
-        if total == 0:
-            return "0%"
-        percent = round((points / total) * 100)
-        return "%d%%" % (percent)
-
-class CourseGrade(Grade):
-    def __init__(self):
-        super(CourseGrade, self ).__init__()
-        self.points = 0
-        self.projected_pts = 0
-        self.max_pts = 0
         
-    def current(self):
-        return self.points
+    def csv(self, row, type_name, assignment_names):
+        # add values to row dictionary and field names to lists as needed
+        name = type_name + '_' + self.assignment_name
+        if name not in assignment_names:
+            assignment_names.append(name)
+        row[name] = self.points()   
+        
+
+class AssignmentTypeGrade(object):
+    """Grade of one user for a collection of assignments,"""
+    def __init__(self, assignment_type, user=None, course=None):
+        self.assignments = []
+        self.name = assignment_type.name
+        self.grade_type = assignment_type.grade_type
+        
+        try:
+            self.weight = assignment_type.weight
+        except:
+            self.weight = 0
+        try:
+            self.possible = assignment_type.points_possible
+        except:
+            self.possible = 0
+        try:
+            self.assignments_count = int(assignment_type.assignments_count)
+        except:
+            self.assignments_count = 0
+        try:
+            self.assignments_dropped = int(assignment_type.assignments_dropped)
+        except:
+            self.assignments_dropped = 0 
     
-    def projected(self):
-        return self.projected_pts
+        assignments = db((db.assignments.course == course.id)
+                         & (db.assignments.assignment_type == assignment_type.id)                      
+                         ).select(orderby = db.assignments.name)
+        
+        for row in assignments:
+            # get or create the grade object for this user for this assignment row
+            grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
+            if not grade:
+                db.grades.insert(auth_user = user.id,
+                                 assignment = row.id,
+                                 score = 0,
+                                 projected = 0)
+            grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
+            # add the AssignmentGrade to t
+            self.assignments.append(AssignmentGrade(row.released, grade.score, grade.projected, row.points, row.id, row.name, grade, row))            
     
-    def max(self):
-        return self.max_pts
+    def points(self, projected = False, potential = False):
+        vals = [a.points(projected, potential) for a in self.assignments]
+        vals.sort()
+        # drop the self.assignments_dropped lowest values
+        return sum(vals[self.assignments_dropped:])
+    
+    def csv(self, row, type_names, assignment_names):
+        # add values to row dictionary and field names to lists as needed
+        if self.name not in type_names:
+            type_names.append(self.name)
+        row[self.name] = self.points()
+        for a in self.assignments:
+            a.csv(row, self.name, assignment_names)
 
-def student_grade(user=None, course=None, assignment_type=None):
-    grade = Grade()
-    if not user or not course or not assignment_type:
-        return grade
+class CourseGrade(object):
+    def __init__(self, user, course, assignment_types):
+        self.assignment_type_grades = [AssignmentTypeGrade(t, user, course) for t in assignment_types]
+        self.student = user
+        self.course = course
 
-    # Check assignment type weight before setting it in case its None
-    if assignment_type.weight != None:
-        grade.weight = assignment_type.weight
-    if assignment_type.points_possible != None:
-        grade.possible = assignment_type.points_possible
-    if assignment_type.assignments_count:
-        grade.assignments_count = int(assignment_type.assignments_count)
-    if assignment_type.assignments_dropped:
-        grade.assignments_dropped = int(assignment_type.assignments_dropped) 
+        
+    def points(self, projected = False, potential = False):
+        return sum([t.points(projected, potential) for t in self.assignment_type_grades])
+    
+    def csv(self, type_names, assignment_names):
+        # pass the row dictionary and fields_names into the csv method for the components, which will accumulate extra values and field names
+        row = {}
+        row['Lastname']= self.student.last_name
+        row['Firstname']= self.student.first_name
+        row['Email']= self.student.email
+        row['Total']= self.points()
+        for t in self.assignment_type_grades:
+            t.csv(row, type_names, assignment_names)
+        return row
 
-    assignments = db(db.assignments.id == db.grades.assignment)
-    assignments = assignments(db.assignments.course == course.id)
-    assignments = assignments(db.grades.auth_user == user.id)
-    assignments = assignments(db.assignments.released == True)
-    assignments = assignments(db.assignments.assignment_type == assignment_type.id)
-    assignments = assignments.select(
-        db.assignments.ALL,
-        db.grades.ALL,
-        orderby=db.assignments.name,
-        )
-    for row in assignments:
-        grade.scores.append(row.grades.score)
-        grade.assignment_scores.append(row.assignments.points)
-    return grade
+
 
 db.define_table('assignment_types',
     Field('name', 'string'),
@@ -146,12 +149,14 @@ class score(object):
         self.comment = comment
 
 def canonicalize(div_id):
+    # needs to take a parameter for which book; hardcoded for pip2 right now
+    # used in calculating time spent for grading "use" assignment types
     if ".html" in div_id:
         full_url = div_id
         # return canonical url, without #anchors
         if full_url.rfind('#') > 0:
             full_url = full_url[:url.rfind('#')]
-        full_url = full_url.replace('/runestone/static/pip/', '')
+        full_url = full_url.replace('/runestone/static/pip2/', '')
         return full_url
     else:
         return div_id
@@ -176,36 +181,26 @@ def get_deadline(assignment, user):
         return None
 
 def assignment_get_engagement_time(assignment, user, preclass):
-    # get all the divids for this assignment
-    divids = [row.acid for row in db(db.problems.assignment == assignment.id).select(db.problems.acid)]
-    
-    # get all the activities for this user
-    # could probably simplify and get a reasonable approximation by just retrieving the activities for this assignment; FUTURE WORK
-    q = db(db.useinfo.sid == user.username)
+    q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
     if preclass:
         dl = get_deadline(assignment, user)
         if dl:
-            q = q(db.useinfo.timestamp < dl)
-
-    activities = q.select(db.useinfo.div_id, db.useinfo.timestamp, orderby = db.useinfo.timestamp)
+            q = q(db.useinfo.timestamp < dl)       
+    activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
     sessions = []
-    THRESH = 600
+    THRESH = 300
     prev = None
-    for current in activities:
-        div_id = canonicalize(current.div_id)
-        if prev and canonicalize(prev.div_id) in divids:
-            if div_id not in divids or (current.timestamp - prev.timestamp).total_seconds() > THRESH:
-                # close previous session
-                if len(sessions) > 0 and not sessions[-1].end:
-                    sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
-            else:
-                # add to activities count for previous session
-                sessions[-1].count += 1
-        if div_id in divids:
-            if len(sessions) == 0 or sessions[-1].end:
-                sessions.append(Session(current.timestamp))
-        prev = current
-    if len(sessions) > 0 and not sessions[-1].end:
+    for activity in activities:
+        if not prev:
+            # first activity; start a session for it
+            sessions.append(Session(activity.timestamp))            
+        elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
+            # close previous session; set its end time be previous activity's time, plus 30 seconds
+            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+            # start a new session
+            sessions.append(Session(activity.timestamp))
+        prev = activity
+    if prev:
         # close out last session
         sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
@@ -225,11 +220,11 @@ def assignment_get_use_scores(assignment, problem=None, user=None, section_id=No
                 q = q(db.useinfo.timestamp < dl)       
         attempted_problems = q.select(db.problems.acid)
         for problem in db(db.problems.assignment == assignment.id).select(db.problems.acid):
-            if ".html" in problem.acid:
-                # don't include opening the page as a problems they can attempt or not;
-                # they are included as problems so that total time on session prep
-                # is calculated correctly
-                continue
+#            if ".html" in problem.acid:
+#                # don't include opening the page as a problems they can attempt or not;
+#                # they are included as problems so that total time on session prep
+#                # is calculated correctly
+#                continue
             matches = [x for x in attempted_problems if x.acid == problem.acid]
             points = 0
             if len(matches) > 0:
@@ -305,13 +300,12 @@ def get_all_times_and_activity_counts(course):
                 ret[nm+"_max_act"] = act_per_ass[a]
             return ret
             
-                
-    students = db(db.auth_user.course_id == course.id).select(db.auth_user.registration_id)
+    students = db(db.auth_user.course_id == course.id).select(db.auth_user.registration_id, db.auth_user.username)
     all_user_data = {}
     for student in students:
-        curr_user = User_data(student.registration_id)        
+        curr_user = User_data(student.registration_id)
         ## get all use scores and times for this user
-        rows = db(db.useinfo.sid == student.registration_id).select(orderby=db.useinfo.timestamp)
+        rows = db(db.useinfo.sid == student.username).select(orderby=db.useinfo.timestamp)
         curr_session = None
         prev_row = None
         THRESH = 600
@@ -405,6 +399,7 @@ def assignment_set_grade(assignment, user):
         time = assignment_get_engagement_time(assignment, user, preclass=True)
         if checks >= assignment.threshold or time > 20*60:
             # if enough checkmarks or enough time
+            # should be getting minimum time from a field of the assignment as well: FUTURE WORK
             points = assignment.points
         else:
             points = 0
@@ -444,6 +439,7 @@ db.define_table('grades',
     Field('auth_user', db.auth_user),
     Field('assignment', db.assignments),
     Field('score', 'double'),
+    Field('projected', 'double'),
     migrate='runestone_grades.table',
     )
 

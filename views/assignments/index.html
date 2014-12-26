@@ -6,6 +6,9 @@
 		<p class="last_action"><em>Last Action: {{=last_action.timestamp}}</em></p>
 		{{ pass }}
 	</div>
+	<div class="col-md-8">
+	   For problem sets or exams that have not been graded yet, you can enter a projected number of points for yourself, which will be combined with your actual points from graded assignments to let you project your final point total for the course.
+	</div>
 	<div class="col-md-4">
 		<h3>Course Points</h3>
 		<div class="row" style="text-align:center;">
@@ -14,48 +17,65 @@
 			<div class="col-md-3">Maximum</div>
 		</div>
 		<div class="row" style="text-align:center;">
-			<div class="col-md-6"><strong><span class="hidden">Projected Points:</span> {{=pct2pts(grade.projected())}}</strong></div>
-			<div class="col-md-3"><span class="hidden">Current Points:</span> {{=pct2pts(grade.current())}}</div>
-			<div class="col-md-3"><span class="hidden">Max Points:</span> {{=pct2pts(grade.max())}}</div>
+			<div class="col-md-6"><strong><span class="hidden">Projected Points:</span> {{=grade.points(projected=True)}}</strong></div>
+			<div class="col-md-3"><span class="hidden">Current Points:</span> {{=grade.points()}}</div>
+			<div class="col-md-3"><span class="hidden">Max Points:</span> {{=grade.points(potential=True)}}</div>
 		</div>
 	</div>
 </div>
 <div class="panel-group" id="assignments">
-{{ for type in types: }}
-	<h2>{{=type.name}} ({{=int(type.weight * 100)}} course points)</h2>
+{{ for type in grade.assignment_type_grades: }}
+	<h2>{{=type.name}}</h2>
 	<div class="row">
 		<div class="col-md-8">
-<p class="grade"><strong>{{=type.grade.points()}} points</strong> of {{=type.grade.assignment_points()}} points (or {{=type.grade.percent()}})</p>
-			{{ type_found = False }}
-			{{for row in assignments:}}
-				{{ if row.assignments.assignment_type == type.id: }}
-					{{ type_found = True }}
+<p class="grade"><strong>{{=type.points()}} </strong> points earned so far; max of {{=type.points(potential=True)}}; projected {{=type.points(projected=True)}}; 
+   {{if type.assignments_dropped > 0:}}{{=type.assignments_dropped}} lowest grades dropped{{pass}}
+   </p>
+			{{for row in type.assignments:}}
 		    <div class="panel panel-default">
 				<div class="panel-heading">
-					<a data-toggle="collapse" data-parent="#assignments" href="#assignment-{{=row.assignments.id}}">
-						{{=row.assignments.name}}
-					</a>
-					<div class="pull-right"><strong>{{=row.grades.score}} points</strong> of {{=row.assignments.points}} points</div>
-				</div>
-				<div id="assignment-{{=row.assignments.id}}" class="panel-collapse collapse">
-			      <div class="panel-body">
-
-			      </div>
+               <a data-toggle="collapse" data-parent="#assignments" href="#assignment-{{=row.assignment_id}}">
+                  {{=row.assignment_name}}
+               </a>
+               {{=row.points(potential=True)}} points possible
+					<div class="pull-right">
+					   {{if row.released: }}
+			            <strong>{{=row.points()}} </strong> points earned
+                     <div id="assignment-{{=row.assignment_id}}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                           {{ problems = row.db_row.scores(user = student, preclass=False)}}
+                           {{ completed_problems = [p for p in problems if p.points > 0]}}
+                           {{ preclass_problems = row.db_row.scores(user = student, preclass=True)}}
+                           {{ preclass_completed_problems = [p for p in preclass_problems if p.points > 0]}}
+                           {{ if type.grade_type == 'use':}}
+                              {{ time = row.db_row.time(user=student, preclass=False)}}
+                              {{ preclass_time = row.db_row.time(user=student, preclass=True)}}
+                              <p>You spent {{= "%.1f" % (time/60.0)}} minutes on these activities, {{= "%.1f" % (preclass_time/60.0)}} minutes before the class.</p>
+                              <p>You completed {{=len(completed_problems)}} activities, {{=len(preclass_completed_problems)}} before the class.</p>
+                              <p>You needed 20 minutes before the class session or {{=row.db_row.threshold}} activities before it was graded to get credit for the assignment.</p>
+                              {{ pass }}
+                           <ul class="list-group">
+                              {{for problem in problems:}}
+                                 <li class="list-group-item">
+                                    <span class="badge">{{=problem.points}}</span>
+                                    <h4>{{=problem.acid}}</h4>
+                                    {{if problem.comment:}}
+                                    <p>{{=problem.comment}}</p>
+                                    {{pass}}
+                                 </li>
+                              {{pass}}
+                           </ul>
+      
+                        </div>
+                     </div>
+					   {{else: }}
+                     {{=row.form}}
+					   {{pass}}
+				   </div>
 				</div>
 			</div><!-- end .panel -->
-				{{pass}}
-		    {{pass}}
-		    {{ if not type_found: }}
-			<div class="alert alert-info">No {{=type.name}} Assignments</div>
-		    {{ pass }}
-		</div>
-		<div class="col-md-4" style="text-align:center;">
-			<div class="row">
-				<div class="col-md-6"><strong><span class="hidden">Projected Points:</span> {{=pct2pts(type.grade.projected())}}</strong></div>
-				<div class="col-md-3"><span class="hidden">Current Points:</span> {{=pct2pts(type.grade.current())}}</div>
-				<div class="col-md-3"><span class="hidden">Max Points:</span> {{=pct2pts(type.grade.max())}}</div>
-			</div>
+		   {{pass}} <!-- end loop over assignments -->
 		</div>
 	</div>
-{{ pass }}
+{{ pass }}  <!-- end loop over types -->
 </div><!-- end #assignments -->
