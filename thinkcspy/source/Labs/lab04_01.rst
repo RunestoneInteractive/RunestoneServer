@@ -19,7 +19,7 @@ solving strategies that illustrate how computer scientists think as they
 solve problems.
 
 In figuring out how to write this function we must realize that there are
-some limitations ot our ability to draw a circle.  First,
+some limitations of our ability to draw a circle.  First,
 we are limited by the turtle functions we already know about, for example,
 left, right, forward.  There is not a method for drawing a curved line with a
 turtle (well, actually there is, but we're not going to use it).
