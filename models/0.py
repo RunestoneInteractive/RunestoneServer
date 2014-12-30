@@ -19,6 +19,7 @@ settings.login_method = 'local'
 settings.login_config = ''
 settings.course_id = 'devcourse'
 settings.plugins = []
+settings.server_type = "http://"
 
 # real API key and domain set in gitignore'd 1.py
 settings.janrain_api_key = 'a_fake_key'
