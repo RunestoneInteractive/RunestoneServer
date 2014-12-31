@@ -576,16 +576,17 @@ def getSphinxBuildStatus():
 
     st = row['status']
 
+    response.headers['content-type'] = 'application/json'
     if st == 'COMPLETED':
         status = 'true'
-        return dict(status=status, course_url=course_url)
+        return json.dumps(dict(status=status, course_url=course_url))
     elif st == 'RUNNING' or st == 'QUEUED' or st == 'ASSIGNED':
         status = 'false'
-        return dict(status=status, course_url=course_url)
+        return json.dumps(dict(status=status, course_url=course_url))
     else:  # task failed
         status = 'failed'
         tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
-        return dict(status=status, traceback=tb)
+        return json.dumps(dict(status=status, traceback=tb))
 
 def getassignmentgrade():
     response.headers['content-type'] = 'application/json'

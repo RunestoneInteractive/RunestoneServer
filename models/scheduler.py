@@ -113,7 +113,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     confoverrides['html_context.appname'] = application
     confoverrides['html_context.course_id'] = coursename
     confoverrides['html_context.loglevel'] = 10
-    confoverrides['html_context.course_url'] = 'http://' + http_host
+    confoverrides['html_context.course_url'] = settings.server_type + http_host
 
     cwd = os.getcwd()
     os.chdir(path.join('applications',application))
