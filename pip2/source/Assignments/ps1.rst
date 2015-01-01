@@ -21,7 +21,7 @@ You have the following graded activities:
    
    * Before Wednesday's class, 1/7: 
       * Fill in a little `info about you </runestone/default/bio>`_ and, optionally, upload a picture that looks like how you look in class, so I can start to learn your names.`
-      * Sign up for the `Facebook group <https://www.facebook.com/groups/269032479960344/>`_
+      * Sign up for the `Facebook group <https://www.facebook.com/groups/1196007610428928/>`_
       * Read :ref:`General Intro <the_way_of_the_program>`, and do the exercises in that chapter.
    
    * Before Monday's class, 1/12:
