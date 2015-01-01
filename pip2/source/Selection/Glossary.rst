@@ -19,14 +19,6 @@ Glossary
         The block of statements in a compound statement that follows the
         header.
 
-    boolean expression
-        An expression that is either true or false.
-
-    boolean value
-        There are exactly two boolean values: ``True`` and ``False``. Boolean
-        values result when a boolean expression is evaluated by the Python
-        interepreter.  They have type ``bool``.
-
     branch
         One of the possible paths of the flow of execution determined by
         conditional execution.
@@ -48,15 +40,6 @@ Glossary
         A statement that controls the flow of execution depending on some
         condition. In Python the keywords ``if``, ``elif``, and ``else`` are
         used for conditional statements.
-
-    logical operator
-        One of the operators that combines boolean expressions: ``and``,
-        ``or``, and ``not``.
-
-    modulus operator
-        An operator, denoted with a percent sign ( ``%``), that works on
-        integers and yields the remainder when one number is divided by
-        another.
 
     nesting
         One program structure within another, such as a conditional statement

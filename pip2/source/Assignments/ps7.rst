@@ -12,12 +12,14 @@
     :linenothreshold: 500
 
 
-Week 7: ends October 19
-=======================
+Activities through 3/1
+======================
 
-1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
+You have the following graded activities:
+
+1. Class prep. Don't forget: always access the textbook by clicking on the Textbook link from cTools, so that you'll be logged in and get credit for doing the prep.
    
-   * Before Thursday's class:
+   * Before Monday's class:
        * Read :ref:`Sorting<sort_chap>`, and do the exercises in that chapter
  
 #. Reading responses

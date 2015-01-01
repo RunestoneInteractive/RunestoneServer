@@ -28,7 +28,8 @@ You have the following graded activities:
       * :ref:`Simple Python Data <simple_python_data>`
 
    * Before Wednesday's class, 1/14:
-       * Read :ref:`Object Instances and Turtle graphics<turtles_chap>`, and do the exercises in that chapter 
+      * Read :ref:`Debugging tips<debugging_chap>`, and do the exercises in that chapter
+      * Read :ref:`Object Instances and Turtle graphics<turtles_chap>`, and do the exercises in that chapter 
  
 2. Reading responses
 

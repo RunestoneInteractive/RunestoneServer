@@ -29,6 +29,7 @@ You have the following graded activities:
    * Before Wednesday's class:
        * Read :ref:`Accumulating results in dictionaries<dictionary_accum_chap>`, and do the exercises in that chapter
        * Read `External tutorial on unix grep  <http://www.uccs.edu/~ahitchco/grep/>`_
+       * Read :ref:`Strategy for building programs <build_program_chap>` 
  
 #. Reading responses
 

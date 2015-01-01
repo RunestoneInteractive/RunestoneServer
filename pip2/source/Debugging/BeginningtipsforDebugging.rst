@@ -15,9 +15,7 @@ Debugging a program is a different way of thinking than writing a program.  The 
 #. Everyone is a suspect (Except Python)!  Its common for beginner programmers to blame Python, but that should be your last resort.  Remember that Python has been used to solve CS1 level problems millions of times by millions of other programmers.  So, Python is probably not the problem.
 
 #. Find clues.  This is the biggest job of the detective and right now there are two important kinds of clues for you to understand.
+    * Error Messages
+    * Print Statements
 
-    #. Error Messages
-
-    #. Print Statements
-
-There are also more advanced ways to debug a program. For example, later in the course you will about a module called pdb. It lets you set breakpoints in your code. Execution stops at each breakpoint and you can then inspect the value of variables and continue the execution. It's a faster way to understand what's going wrong than using print statements alone.  
+There are also more advanced ways to debug a program. For example, later in the course you will learn about a module called pdb. It lets you set breakpoints in your code. Execution stops at each breakpoint and you can then inspect the value of variables and continue the execution. It's a faster way to understand what's going wrong than using print statements alone.  

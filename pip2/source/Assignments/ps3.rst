@@ -27,6 +27,7 @@ You have the following graded activities:
    * Before Wednesday's class:
       * :ref:`Conditionals <conditionals_chap>`
       * :ref:`File Input/Output <files_chap>` (read the Selection/Conditionals chapter first, or you won't be able to do the last exercise...)
+      * :ref:`Understanding Code <understand_code_chap>`
 
 2. Reading responses
 

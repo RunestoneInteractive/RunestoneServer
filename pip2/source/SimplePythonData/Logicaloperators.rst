@@ -7,6 +7,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. index::
+    single: logical operator
+    single: operator; logical
+
 Logical operators
 -----------------
 

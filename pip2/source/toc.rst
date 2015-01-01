@@ -9,14 +9,6 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
-   Assignments/ps14.rst
-   Assignments/ps13.rst
-   Assignments/ps12.rst
-   Assignments/ps11.rst
-   Assignments/session21.rst
-   Assignments/ps10.rst
-   Assignments/ps9.rst
-   Assignments/ps8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
@@ -64,11 +56,25 @@ Simple Python Data
    SimplePythonData/VariableNamesandKeywords.rst
    SimplePythonData/StatementsandExpressions.rst
    SimplePythonData/OrderofOperations.rst
+   SimplePythonData/BooleanValuesandBooleanExpressions.rst
+   SimplePythonData/Logicaloperators.rst
+   SimplePythonData/PrecedenceofOperators.rst
    SimplePythonData/Reassignment.rst
    SimplePythonData/UpdatingVariables.rst
    SimplePythonData/Input.rst
    SimplePythonData/Glossary.rst
    SimplePythonData/Exercises.rst
+
+Debugging
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+
+   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
+   Debugging/BeginningtipsforDebugging.rst
+   Debugging/KnowyourerrorMessages.rst
 
 Object Instances
 ::::::::::::::::
@@ -139,9 +145,6 @@ Conditionals
 .. toctree::
    :maxdepth: 2
    
-   Selection/BooleanValuesandBooleanExpressions.rst
-   Selection/Logicaloperators.rst
-   Selection/PrecedenceofOperators.rst
    Selection/ConditionalExecutionBinarySelection.rst
    Selection/OmittingtheelseClauseUnarySelection.rst
    Selection/Nestedconditionals.rst
@@ -163,6 +166,15 @@ Files
    Files/WritingTextFiles.rst
    Files/Glossary.rst
    Files/Exercises.rst
+
+Understanding Code
+::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   BuildingAProgram/UnderstandingCode.rst
+
 
 Dictionaries
 ::::::::::::
@@ -190,6 +202,14 @@ Accumulating Results in Dictionaries
    DictionaryAccumulation/AccumulatingaMaximumValue.rst
    DictionaryAccumulation/AccumulatingtheBestKey.rst
    DictionaryAccumulation/Exercises.rst
+
+Building Programs
+:::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   BuildingAProgram/TheStrategy.rst
 
 
 Functions
@@ -369,18 +389,6 @@ Test Cases
    Testing/Glossary.rst
 
 
-Debugging
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-
-   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
-   Debugging/BeginningtipsforDebugging.rst
-   Debugging/KnowyourerrorMessages.rst
-   BuildingAProgram/TheStrategy.rst
-   BuildingAProgram/UnderstandingCode.rst
 
 
 

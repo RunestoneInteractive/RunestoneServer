@@ -25,7 +25,6 @@ You have the following graded activities:
    
    * Before Wednesday's class:
        * Read :ref:`While loops<while_chap>`, and do the exercises in that chapter
-       * Read :ref:`Debugging tips<debugging_chap>`, and do the exercises in that chapter
        * Read :ref:`Installing a Native Python Interpreter and Text Editor <next_steps>` and follow the instructions to set up for running python on your computer
        
  

@@ -255,6 +255,12 @@ Now, take a look at the following code and related questions, in this code windo
    =====
    Call the method .move of the Turtle ella on its input integer
 	 
+6. Write a program that uses the turtle module to draw something interesting. It doesn't have to be complicated, but draw something different than we did in the textbook or in class. (Optional but encouraged: post a screenshot of the artistic outcome to the Facebook group, or a short video of the drawing as it is created.)
+
+.. activecode:: ps_2_6
+
+   import turtle
+
 
 .. activecode:: addl_functions_2
    :nopre:
@@ -273,3 +279,6 @@ Now, take a look at the following code and related questions, in this code windo
       
    def add_lengths(str1, str2):
       return len(str1) + len(str2)
+
+   
+   
