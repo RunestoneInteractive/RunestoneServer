@@ -426,11 +426,15 @@ def mass_grade_problem():
         cells = row.split(",")
         if len(cells) < 2:
             continue
+        
         email = cells[0]
         if cells[1]=="":
             cells[1]=0
         grade = float(cells[1])
-        comment = ""
+        if len(cells) == 2:
+            comment = ""
+        else: # should only ever be 2 or 3
+            comment = cells[-1] # comment should be the last element
         user = db(db.auth_user.email == email).select().first()
         if user == None:
             continue
