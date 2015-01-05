@@ -329,6 +329,12 @@ def detail():
     if student and not acid:
         fill_empty_scores(scores = scores, problems = problems, student=student)
 
+    # get average of scores for problem set, not counting 0s
+    score_sum = float(sum([s for s in scores if s != 0])) # TODO check -- wrong use of score?
+    mean_score = score_sum/len([s for s in scores if s!= 0])
+    # get min, max [todo: other stats worthwhile?]
+
+
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
         arg_str = "?id=%d" % (id)
@@ -351,6 +357,7 @@ def detail():
         page_args = page_args,
         selected_acid = acid,
         course_id = auth.user.course_name,
+        avg_score = mean_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )

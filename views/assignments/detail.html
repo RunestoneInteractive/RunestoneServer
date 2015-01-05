@@ -89,6 +89,10 @@
 			<div class="btn-group">
 				<a class="btn mass-grade" data-acid="{{=selected_acid}}" href="#">Import Scores for {{=selected_acid}}</a>
 			</div>
+			<div class="prob-stat">
+				Average score for {{=selected_acid}}:
+				{{=avg_score}}
+			</div>
 			{{ pass }}
 			<ul class="list-group">
 			{{for p in problems:}}
