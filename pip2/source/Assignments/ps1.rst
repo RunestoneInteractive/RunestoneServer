@@ -42,7 +42,7 @@ You have the following graded activities:
       * Answer :ref:`Reading Response 2 <reading_response_2>`.
 
 
-3. Save answers to the exercises in Problem Set 1 (due Sunday 1/11 by 5PM):
+3. Save answers to the exercises in Problem Set 1 (due Sunday 1/18 by 5PM):
    :ref:`Problem Set 1 <problem_set_1>` 
 
 .. _reading_response_1:
@@ -82,7 +82,7 @@ Reading Response 2
 
 Problem Set
 -----------
-**Due:** **Sunday, January 11th by 5 pm**
+**Due:** **Sunday, January 18th by 5 pm**
 
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
@@ -242,11 +242,6 @@ Then, write code that assigns to the variable ``digit_func`` the **function** ``
 
    another_variable = "?!"
    b = another_variable()
-
-    .. tab:: Solution
-
-      .. activecode:: ps_1_9s
-
 
    
 .. activecode:: addl_functions
