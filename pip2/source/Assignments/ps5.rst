@@ -34,7 +34,7 @@ You have the following graded activities:
       * Read *The Most Human Human*, Chapter 10, p.219-237 only (you'll read the rest of the chapter next week). Note: we are skipping some of the other chapters.
       * Answer :ref:`Reading Response 6 <reading_response_6>`. 
 
-#. Problem set **Due:** **Sunday, October 5 at 5 pm**
+#. Problem set **Due:** **Sunday, February 15 at 5 pm**
 
    * Do the :ref:`Native Python Interpreter and Text Editor part of Problem Set 5. <unix_pset5>`
       

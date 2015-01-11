@@ -34,7 +34,7 @@ You have the following graded activities:
       * Read *The Most Human Human*, Chapter 10, p.237-259.
       * Answer :ref:`Reading Response 7 <reading_response_7>`. 
 
-3. Problem set **Due:** **Tuesday, October 14 at 5 pm** (Note later due date because of fall break)
+3. Problem set **Due:** **Sunday, February 22**
 
    * Save answers to the exercises in Problem Set 6: :ref:`Problem Set 6 <problem_set_6>` 
 

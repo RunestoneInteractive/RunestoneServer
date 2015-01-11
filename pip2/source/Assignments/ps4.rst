@@ -35,7 +35,7 @@ You have the following graded activities:
 
    * By Tuesday night: 
       * Read *The Most Human Human*, Chapter 5, "Getting out of Book"
-      * Answer :ref:`Reading Response 4 <reading_response_4>`. 
+      * Answer :ref:`Reading Response 5 <reading_response_5>`. 
 
 #. Problem set **Due:** **Sunday, February 8 at 5 pm**
 
