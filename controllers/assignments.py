@@ -54,7 +54,6 @@ def index():
                                  )
                 # still need to figure out how to get the right values for inserting; perhaps we should do the insertion on fetching, if the record didn't exist.
                 if a.form.process(formname=a.assignment_name + str(a.assignment_id)).accepted:
-                    print request.vars
                     a.projected = float(request.vars.projected)
                     response.flash = 'projected grade updated'
             
@@ -398,44 +397,54 @@ def detail():
 import json
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def problem():
+    ### This endpoint is hit either to update (if 'grade' and 'comment' are in request.vars)
+    ### Or just to get the current state of the grade for this acid (if not present)
+    
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success':False, 'message':"Need problem and user."})
 
     user = db(db.auth_user.username == request.vars.sid).select().first()
     if not user:
-        return json.dumps({'success':False, 'message':"User does not exit. Sorry!"})
+        return json.dumps({'success':False, 'message':"User does not exist. Sorry!"})
 
-    # update grade - if you dare!
+    # get last timestamped record
+    # null timestamps come out at the end, so the one we want could be in the middle, whether we sort in reverse order or regular; ugh
+    # solution: the last one by id order should be the last timestamped one, as we only create ones without timestamp during grading, and then only if there is no existing record
+    c = db((db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)).select(orderby = db.code.id).last()
     if 'grade' in request.vars and 'comment' in request.vars:
+        # update grade
         grade = float(request.vars.grade)
         comment = request.vars.comment
-        q = db(db.code.acid == request.vars.acid)(db.code.sid == request.vars.sid).select().first()
-        if not q:
-            db.code.insert(
+        if c:
+            c.update_record(grade=grade, comment=comment)
+        else:
+            id = db.code.insert(
                 acid = request.vars.acid,
                 sid = user.username,
                 grade = request.vars.grade,
                 comment = request.vars.comment,
                 )
-        else:
-            db((db.code.acid == request.vars.acid) &
-                (db.code.sid == request.vars.sid)
-                ).update(
-                grade = grade,
-                comment = comment,
-                )
-
+            c = db.code(id)
+  
     res = {
         'id':"%s-%d" % (request.vars.acid, user.id),
         'acid':request.vars.acid,
         'sid':user.id,
         'username':user.username,
         'name':"%s %s" % (user.first_name, user.last_name),
-        'code':"",
-        'grade':0.0,
-        'comment':"",
-        }
-
+    }    
+    
+    if c:
+        # return the existing code, grade, and comment
+        res['code'] = c.code
+        res['grade'] = c.grade
+        res['comment'] = c.comment
+    else:
+        # default: return grade of 0.0 if nothing exists
+        res['code'] = ""
+        res['grade'] = 0.0
+        res['comment'] = ""
+        
     q = db(db.code.sid == db.auth_user.username)
     q = q(db.code.acid == request.vars.acid)
     q = q(db.auth_user.username == request.vars.sid)
@@ -457,6 +466,7 @@ def problem():
             'comment':q.code.comment,
             'lang':q.code.language
             }
+
     return json.dumps(res)
 
 def mass_grade_problem():

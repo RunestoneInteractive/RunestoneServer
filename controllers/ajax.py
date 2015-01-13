@@ -167,7 +167,8 @@ def getprog():
         result = db(query)
         res['acid'] = acid
         if not result.isempty():
-            r = result.select(orderby=~codetbl.timestamp).first().code
+            # get the last code they saved; id order gets that for us
+            r = result.select(orderby=codetbl.id).last().code
             res['source'] = r
             if sid:
                 res['sid'] = sid
