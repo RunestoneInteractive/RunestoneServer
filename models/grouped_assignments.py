@@ -355,14 +355,13 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
                 # save score for prev_user
                 scores.append(last_score)
                 last_score = None
-            if g.code.grade:
-                # set or reset current user's last_score
-                last_score = score(
-                    points=g.code.grade,
-                    comment=g.code.comment,
-                    acid=problem,
-                    user=g.auth_user,
-                    )
+            # set or reset current user's last_score
+            last_score = score(
+                points=g.code.grade,
+                comment=g.code.comment,
+                acid=problem,
+                user=g.auth_user,
+                )
             prev_user = g.auth_user
         if last_score:
             # score for final user wasn't appended yet
@@ -388,13 +387,12 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
                 scores.append(last_score)
                 last_score = None
                 
-            if g.grade:
-                last_score = score(
-                    points=g.grade,
-                    comment=g.comment,
-                    acid=g.acid,
-                    user=user,
-                    )
+            last_score = score(
+                points=g.grade,
+                comment=g.comment,
+                acid=g.acid,
+                user=user,
+                )
             prev_acid = g.acid
         if last_score:
             # score for final acid wasn't appended yet
