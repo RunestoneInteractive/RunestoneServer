@@ -83,7 +83,7 @@ Problem Set
 
 **Instructions:** Write the code you want to save in the provided boxes, and click **save** for each one. The last code you have saved for each one by the deadline is what will be graded.
 
-1. Assign the variable ``fl`` the value of the first element of the string value in ``original_str``. Assign the variable ``last_l`` the value of the last element of the string value in ``original_str``.
+1. Assign the variable ``fl`` the value of the first element of the string value in ``original_str``. Use string indexing to assign the variable ``last_l`` the value of the last element of the string value in ``original_str``.
 
 .. activecode:: ps_2_1
  
@@ -95,8 +95,14 @@ Problem Set
    
    import test
    print "\n\n---\n"
-   test.testEqual(fl,original_str[0])
-   test.testEqual(last_l, original_str[-1])
+   try:
+      test.testEqual(fl,original_str[0])
+   except:
+      print "The variable fl has not been defined yet"
+   try:
+      test.testEqual(last_l, original_str[-1])
+   except:
+      print "The variable last_l has not been defined yet"
 
 2. See comments for instructions.
 
@@ -134,9 +140,18 @@ Problem Set
    
    import test
    print "\n\n---\n"
-   test.testEqual(len_of_sent,len(sent))
-   test.testEqual(short_len,len(short_sent))
-   test.testEqual(index_of_v, sent.find('v'))
+   try:
+      test.testEqual(len_of_sent,len(sent))
+   except:
+      print "The variable len_of_sent has not been defined yet"
+   try:
+      test.testEqual(short_len,len(short_sent))
+   except:
+      print "The variable short_len has not been defined yet"
+   try:
+      test.testEqual(index_of_v, sent.find('v'))
+   except:
+      print "The variable index_of_v has not been defined yet"
 
 
 3. See comments for instructions again. (Keep in mind: All ordinal numbers in *instructions*, like "third" or "fifth" refer to the way HUMANS count. How do you write code to find the right things?)
@@ -165,11 +180,26 @@ Problem Set
 
    import test
    print "\n\n---\n"
-   test.testEqual(third_elem, num_lst[2])
-   test.testEqual(elem_sixth, num_lst[5])
-   test.testEqual(num_lst_len,len(num_lst))
-   test.testEqual(fifth_type,type(mixed_bag[4]))
-   test.testEqual(another_type, type(mixed_bag[0]))
+   try:
+      test.testEqual(third_elem, num_lst[2])
+   except:
+      print "The variable third_elem has not been defined"
+   try:
+      test.testEqual(elem_sixth, num_lst[5])
+   except:
+      print "The variable elem_sixth has not been defined"
+   try:
+      test.testEqual(num_lst_len,len(num_lst))
+   except:
+      print "The variable num_lst_len has not been defined"
+   try:
+      test.testEqual(fifth_type,type(mixed_bag[4]))
+   except:
+      print "The variable fifth_type has not been defined"
+   try:
+      test.testEqual(another_type, type(mixed_bag[0]))
+   except:
+      print "The variable another_type has not been defined"
 
 
 4. There is a function we are giving you for this problem set that takes two strings, and returns the length of both of those strings added together, called ``add_lengths``. We are also including the functions from Problem Set 1 called ``random_digit`` and ``square`` in this problem set. 
@@ -221,6 +251,9 @@ Now, take a look at the following code and related questions, in this code windo
    
    # Given all this information, what type will fin_value hold once all this code is run?
 
+   ====
+
+   print "\n\nThere are no tests for this problem"
  
 5. Here's another complicated expression, using the Turtle framework we talked about. Arrange these expressions in the order they are executed, like you did in an exercise in Chapter 2 of the textbook. 
 
