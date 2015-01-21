@@ -341,11 +341,19 @@ def detail():
     # get average of scores for problem set, not counting 0s
     problem_points = [s.points for s in scores if s.points > 0]
     score_sum = float(sum(problem_points))
-    mean_score = score_sum/len(problem_points)
-    # get min, max, median
+    try:
+        mean_score = score_sum/len(problem_points)
+    except:
+        mean_score = 0
+    # get min, max, median, count
     min_score = min(problem_points)
     max_score = max(problem_points)
-    median_score = get_median(problem_points)
+    if len(problem_points) > 0:
+        median_score = get_median(problem_points)
+        real_score_count = len(problem_points)
+    else:
+        median_score = 0
+        real_score_count = 0
 
 
     # Used as a convinence function for navigating within the page template
@@ -373,6 +381,7 @@ def detail():
         avg_score = mean_score,
         min_score = min_score,
         max_score = max_score,
+        real_score_count = real_score_count,
         median_score = median_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
