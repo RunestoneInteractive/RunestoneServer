@@ -314,6 +314,7 @@ def detail():
     students = students.select(db.auth_user.ALL, orderby=db.auth_user.last_name | db.auth_user.first_name)
     problems = db(db.problems.assignment == assignment.id).select(db.problems.ALL)
 
+
     # getting scores
     student = None
     if 'sid' in request.vars:
@@ -359,16 +360,19 @@ def detail():
         min_score = min(problem_points)
         max_score = max(problem_points)
         median_score = float("%0.02f" % get_median(problem_points))
+        min_score = min(problem_points)
+        max_score = max(problem_points)
         #real_score_count = len(problem_points) # not being used right now
         avg_score = get_mean(problem_points)
     else:
         min_score = 0
         max_score = 0
         median_score = 0
+        min_score,max_score = 0,0
         #real_score_count = 0 # not being used right now
         avg_score = 0
     # get number of problems with any code saved
-    num_problems_with_code = len([p.code for p in problems if p is not None])
+    num_problems_with_code = len([p.code for p in problems if p.code is not None])
 
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
