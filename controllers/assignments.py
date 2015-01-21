@@ -329,6 +329,33 @@ def detail():
     if student and not acid:
         fill_empty_scores(scores = scores, problems = problems, student=student)
 
+
+    # easy median
+    def get_median(lst):
+        sorts = sorted(lst)
+        length = len(sorts)
+        if not length % 2:
+            return (sorts[length/2] + sorts[length/2 - 1]) / 2.0
+        return sorts[length/2]
+
+    # get average of scores for problem set, not counting 0s
+    problem_points = [s.points for s in scores if s.points > 0]
+    score_sum = float(sum(problem_points))
+    try:
+        mean_score = score_sum/len(problem_points)
+    except:
+        mean_score = 0
+    # get min, max, median, count
+    min_score = min(problem_points)
+    max_score = max(problem_points)
+    if len(problem_points) > 0:
+        median_score = get_median(problem_points)
+        real_score_count = len(problem_points)
+    else:
+        median_score = 0
+        real_score_count = 0
+
+
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
         arg_str = "?id=%d" % (id)
@@ -351,6 +378,11 @@ def detail():
         page_args = page_args,
         selected_acid = acid,
         course_id = auth.user.course_name,
+        avg_score = mean_score,
+        min_score = min_score,
+        max_score = max_score,
+        real_score_count = real_score_count,
+        median_score = median_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )
