@@ -312,7 +312,7 @@ def detail():
     except:
         pass
 
-    students = students.select(db.auth_user.ALL, orderby=db.auth_user.last_name)
+    students = students.select(db.auth_user.ALL, orderby=db.auth_user.last_name | db.auth_user.first_name)
     problems = db(db.problems.assignment == assignment.id).select(db.problems.ALL)
 
     # getting scores
