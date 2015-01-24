@@ -185,6 +185,7 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
 
+
 function createActiveCode(divid,suppliedSource,sid,language) {
     var edNode;
     var acblockid;
@@ -540,32 +541,34 @@ function requestCode(divName, sid) {
 }
 
 function loadEditor(data, status, whatever) {
-    // function called when contents of database are returned successfully
-    var res = eval(data)[0];
-    var editor;
-    if (res.sid) {
-        editor = cm_editors[res.acid + "_" + res.sid + "_code"];
-    } else {
-        editor = cm_editors[res.acid + "_code"];
-    }
+   // function called when contents of database are returned successfully
+   var result = eval(data)[0];
+   var editor;
+   if (result.sid) {
+      editor = cm_editors[result.acid + "_" + result.sid + "_code"];
+   } else {
+      editor = cm_editors[result.acid + "_code"];
+   }
 
-    var loadbtn = $("#"+res.acid+"_loadb");
-    if (res.source) {
-        editor.setValue(res.source);
-        loadbtn.tooltip({'placement': 'bottom',
-                         'title': "Loaded your saved code.",
-                         'trigger': 'manual'
-                        });
-    } else {
-        loadbtn.tooltip({'placement': 'bottom',
-                         'title': "No saved code.",
-                         'trigger': 'manual'
-                        });
-    }
-    loadbtn.tooltip('show');
-    setTimeout(function () {
-        loadbtn.tooltip('destroy')
-    }, 4000);
+   var loadbtn = $("#" + result.acid + "_loadb");
+   if (result.source) {
+      editor.setValue(result.source);
+      loadbtn.tooltip({
+         'placement' : 'bottom',
+         'title' : "Loaded your saved code.",
+         'trigger' : 'manual'
+      });
+   } else {
+      loadbtn.tooltip({
+         'placement' : 'bottom',
+         'title' : "No saved code.",
+         'trigger' : 'manual'
+      });
+   }
+   loadbtn.tooltip('show');
+   setTimeout(function() {
+      loadbtn.tooltip('destroy')
+   }, 4000);
 }
 
 function disableAcOpt() {
