@@ -26,6 +26,14 @@
 	<li><a href="{{=URL('assignments','release_grades')}}?id={{=assignment.id}}">Release Grades</a></li>
 </ul>
 <div class="container-fluid">
+	<h3>Stats</h3>
+	<p>Number with above-zero scores: {{=real_score_count}}</p>
+	<p>Mean score: {{=avg_score}}</p>
+	<p>Median score: {{=median_score}}</p>
+	<p>Max score: {{=max_score}}</p>
+	<p>Min score: {{=min_score}}</p>
+</div>
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Students</h3>
@@ -89,6 +97,7 @@
 			<div class="btn-group">
 				<a class="btn mass-grade" data-acid="{{=selected_acid}}" href="#">Import Scores for {{=selected_acid}}</a>
 			</div>
+			
 			{{ pass }}
 			<ul class="list-group">
 			{{for p in problems:}}
@@ -126,6 +135,7 @@
 		</div>
 	</div>
 </div>
+
 <div id="mass-grade-modal-template" class="template" style="display:none;">
 	<div class="modal-mass-grader modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
