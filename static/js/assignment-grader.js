@@ -61,7 +61,7 @@ function getGradingModal(element, acid, studentId){
 		if (ACFactory) {
 			ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, null, data.lang);
 		} else {
-			createActiveCode(data.acid,null,data.username);
+			createActiveCode(data.acid,data.code,data.username);
 		}
 		jQuery('form',modal).submit(save);
 		jQuery('.next',modal).click(function(event){
@@ -74,6 +74,15 @@ function getGradingModal(element, acid, studentId){
 
 			modal.modal('hide');
 		});
+		
+		// make the text show up once it is loaded
+		modal.on('shown.bs.modal show.bs.modal', function() {
+         modal.find('.CodeMirror').each(function(i, e) {
+            e.CodeMirror.refresh();
+            e.CodeMirror.focus();
+          });
+      });
+
 		modal.modal('show');
 		jQuery('#'+data.id).focus();
 	}
