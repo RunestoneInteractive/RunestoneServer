@@ -111,7 +111,7 @@ Problem Set
    without a license from an accredited institution is illegal in many parts of the world.
 
 
-3. Write code to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
+3. Write code that uses iteration to print out each element of the list ``several_things``. Then, write code to print out the TYPE of each element of the list called ``several_things``.
 
 .. activecode:: ps_3_3
 
@@ -130,7 +130,8 @@ Problem Set
 
     sent = "The magical mystery tour is waiting to take you away."
     
-    # Write a comment explaining how you would define what a word is for a computer.
+    # Write a comment explaining how you would define what a word is for
+    # a computer.
     
     # Write code that assigns a variable word_list to hold a LIST of all the 
     # WORDS in the string sent. It's fine if words include punctuation.
@@ -146,7 +147,7 @@ Problem Set
     except:
         print "The variable word_list has not been defined"
 
-5. Write code to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
+5. Write code that uses iteration to print out each element of the list stored in ``excited_words``, BUT print out each element **without** its ending punctuation. You should see:
 
 ``hello``
 
@@ -163,7 +164,8 @@ Problem Set
 
     excited_words = ["hello!", "goodbye!", "wonderful!", "I love Python?"]
    
-    # Now, write code to print out each element of the list stored in excited_words,
+    # Now, write code that uses iteration to print out each element of the
+    # list stored in excited_words,
     # BUT print out each element WITHOUT the ending punctuation.
     # Hint: remember string slicing? 
     
@@ -185,9 +187,11 @@ Problem Set
       'Tis some visitor, I muttered, tapping at my chamber door;
       Only this and nothing more."""
     
-    # Write code to assign the number of characters in the string rv to the variable num_chars.
+    # Write code to assign the number of characters in the string rv to
+    # the variable num_chars.
     
-    # Write code to assign the number of words in the string rv to the variable num_words. 
+    # Write code to assign the number of words in the string rv to the
+    # variable num_words.
     ## Hint: remember how to split strings?
     
     ====
