@@ -130,7 +130,7 @@ Problem Set
 
    animals = {'cows': 2, 'chickens': 8, 'pigs': 4, 'mice': 72, 'cats': 9,'dogs': 1}
 
-	# Write code to look up the number of chickens 
+	# Write code to look up the number of chickens
    # Old McDonald recorded and assign it to the 
    # variable num_chickens. 
    # (Do not hard-code values! num_chickens = 8 will not earn points.)
@@ -180,18 +180,12 @@ Problem Set
 
    # Now write code to print out each element of 
    # list lp IF the length of the element is 
-   # an even number.
+   # an even number. Use iteration (a for loop!).
 
    ====
 
    print "\n---\n\n"
    print "There are no tests for this problem."
-
-
-            ====
-
-            print "\n---\n\n"
-            print "There are no tests for this problem."
 
 
 3. Write code to count the number of strings in list ``items`` that have the character ``w`` in it. Assign that number to the variable ``acc_num``. HINT 1: Use the accumulation pattern! HINT 2: the ``in`` operator checks whether a letter or substring is present in a string.
@@ -205,7 +199,10 @@ Problem Set
 
   	import test
   	print "\n---\n\n"
-  	test.testEqual(acc_num,3)
+    try:
+    	test.testEqual(acc_num,3)
+    except:
+      print "The variable acc_num has not been defined yet"
 
 
 4. Here's another dictionary. Write code to print out each key-value pair in it. Then follow the rest of the instructions in the comments.
@@ -220,7 +217,7 @@ Problem Set
      # will print out those things on the same 
      # line with a space in between them.
      
-     # Your output should look SOMETHING LIKE 
+     # Your output should look SOMETHING LIKE this 
      # (remember, the pairs could be in any order, 
      # because it's a dictionary):
      # autumn spring
@@ -237,14 +234,20 @@ Problem Set
      ====
      
      import test
-     test.testEqual(nd["23"],350)
+     print "\n---\n\n"
+     try:
+      test.testEqual(nd["23"],350)
+     except:
+      print "Did you change the dictionary nd? Keep it the same!"
 
 
-
-5. We've included the same file in this problem set that we included in the last problem set -- ``about_programming.txt``. Write code to open the file and print out each line in the file that has a "program"-based word (any of the words ``program``, ``programs``, ``programming``, ``programmer``, or ``programmers``) in it.
+5. We've included the same file in this problem set that we included in the last problem set -- ``about_programming.txt``. Write code to open the file and print out each line in the file that has a "program"-based word (any of the words ``program``, ``programs``, ``programming``, ``programmer``, or ``programmers``...) in it.
 
 .. activecode:: ps_4_5
 
   	# Write your code here!
 
- 
+    ====
+
+    print "\n---\n\n"
+    print "There are no tests for this problem"
