@@ -56,13 +56,39 @@ function getGradingModal(element, acid, studentId){
 		jQuery('.activecode-target',modal).attr('id',data.acid+"_"+data.username);
 		jQuery('#input-grade',modal).val(data.grade);
 		jQuery('#input-comments',modal).val(data.comment);
+
+      if (data.file_includes){
+         // create divids for any files they might need
+         var file_div_template = '<pre id="file_div_template" style = "display:none;">template text</pre>;'
+         var index;
+         for (index = 0; index < data.file_includes.length; index+=1) {
+            if (jQuery('#' + data.file_includes[index].acid).length == 0){
+               // doesn't exist yet, so add it.
+               jQuery('body').append(file_div_template);
+               jQuery('#file_div_template').text(data.file_includes[index].contents);
+               jQuery('#file_div_template').attr("id", data.file_includes[index].acid);
+            }
+         } 
+      }     
+  
+      // pull in any prefix or suffix code, already retrieved in data
+      var complete_code = data.code;
+      if (data.includes){
+         complete_code = data.includes + '\n#### end of included code\n\n' + complete_code; 
+      }
+      if (data.suffix_code){
+         complete_code = complete_code + '\n\n#### tests ####\n' + data.suffix_code;
+      }
+		createActiveCode(data.acid,complete_code,data.username);
+
         // outerdiv, acdiv, sid, initialcode, language
 		// for backward compatibility check for Factory otherwise use old function
 		if (ACFactory) {
 			ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, null, data.lang);
 		} else {
-			createActiveCode(data.acid,data.code,data.username);
+			createActiveCode(data.acid,complete_code,data.username);
 		}
+
 		jQuery('form',modal).submit(save);
 		jQuery('.next',modal).click(function(event){
 			event.preventDefault();

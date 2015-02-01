@@ -410,7 +410,6 @@ import json
 def problem():
     ### This endpoint is hit either to update (if 'grade' and 'comment' are in request.vars)
     ### Or just to get the current state of the grade for this acid (if not present)
-    
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success':False, 'message':"Need problem and user."})
 
@@ -455,29 +454,28 @@ def problem():
         res['code'] = ""
         res['grade'] = 0.0
         res['comment'] = ""
+    
+    # add prefixes, suffix_code and files that are available
+    # retrieve the db record
+    source = db.source_code(acid = request.vars.acid)
+    if source and c and c.code:
+        def get_source(acid):
+            r = db.source_code(acid=acid)
+            if r:
+                return r.main_code
+            else:
+                return ""
         
-    q = db(db.code.sid == db.auth_user.username)
-    q = q(db.code.acid == request.vars.acid)
-    q = q(db.auth_user.username == request.vars.sid)
-    q = q.select(
-        db.auth_user.ALL,
-        db.code.ALL,
-        orderby = db.code.acid|db.code.timestamp,
-        distinct = db.code.acid,
-        ).first()
-    if q:
-        res = {
-            'id':"%s-%d" % (q.code.acid, q.auth_user.id),
-            'acid':q.code.acid,
-            'sid':int(q.auth_user.id),
-            'username':q.auth_user.username,
-            'name':"%s %s" % (q.auth_user.first_name, q.auth_user.last_name),
-            'code':q.code.code,
-            'grade':q.code.grade,
-            'comment':q.code.comment,
-            'lang':q.code.language
-            }
-
+        included_divs = [x.strip() for x in source.includes.split(',') if x != '']
+        #print included_divs
+        # join together code for each of the includes
+        res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
+        #print res['includes']
+        res['suffix_code'] = source.suffix_code
+        #print source.suffix_code
+        
+        file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
+        res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
     return json.dumps(res)
 
 def mass_grade_problem():

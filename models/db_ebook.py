@@ -10,6 +10,7 @@ db.define_table('useinfo',
   migrate='runestone_useinfo.table'
 )
 
+# stores student's saved code and, unfortunately, comments and grades, which really should be their own table linked to this
 db.define_table('code',
   Field('acid','string'),
   Field('code','text'),
@@ -20,6 +21,17 @@ db.define_table('code',
   Field('comment','text'),
   Field('language','text', default='python'),
   migrate='runestone_code.table'
+)
+
+# Stores the source code for activecodes, including prefix and suffix code, so that prefixes and suffixes can be run when grading
+# Contents of this table are filled when processing activecode directives, in activecod.py
+db.define_table('source_code',
+  Field('acid','string', required=True),
+  Field('includes', 'string'), # comma-separated string of acid main_codes to include when running this source_code
+  Field('available_files', 'string'), # comma-separated string of file_names to make available as divs when running this source_code
+  Field('main_code','text'),
+  Field('suffix_code', 'text'), # hidden suffix code
+  migrate='runestone_source_code.table'
 )
 
 db.define_table('acerror_log',
