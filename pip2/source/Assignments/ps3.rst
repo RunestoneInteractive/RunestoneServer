@@ -14,7 +14,7 @@
 
 Activities through 2/1
 ======================
-
+ 
 
 You have the following graded activities:
 
@@ -213,6 +213,7 @@ The first two lines should look like this:
    original formulation of a computing problem to executable programs. It involves
 
 .. activecode:: ps_3_7
+       :available_files: about_programming.txt
 
        # Write your code here.
        # Don't worry about extra blank lines between each of the lines
@@ -228,6 +229,7 @@ The first two lines should look like this:
 8. Now write code to open the file ``about_programming.txt`` and assign the **number of lines** in the file to the variable ``file_lines_num``.
 
 .. activecode:: ps_3_8
+       :available_files: about_programming.txt
 
        # Write your code here.
 
@@ -244,8 +246,9 @@ The first two lines should look like this:
 9. **Challenge problem (OPTIONAL, much harder):** write code to find the average (mean) number of words in each line of the file ``about_programming.txt``.
 
 .. activecode:: ps_3_9
+      :available_files: about_programming.txt
 
-       # Write your code here.
+      # Write your code here.
 
        ====
 
