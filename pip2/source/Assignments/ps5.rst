@@ -109,10 +109,13 @@ Problem Set
     ====
 
     import test
-    print "testing if add_three(2) equals 5"
-    test.testEqual(add_three(2),5)
-    print "testing if add_three(33) equals 36"
-    test.testEqual(add_three(33),36)
+    try:
+      print "testing if add_three(2) equals 5"
+      test.testEqual(add_three(2),5)
+      print "testing if add_three(33) equals 36"
+      test.testEqual(add_three(33),36)
+    except:
+      print "The function add_three has not been defined yet, OR it hasn't been defined properly"
 
 
 4. Write code **that will keep printing what the user inputs over and over until the user enters the string "quit".**
@@ -140,8 +143,11 @@ Problem Set
 
    print "\n---\n\n"
    import test
-   print "testing if y is -2"
-   test.testEqual(y, -2)
+   try:
+    print "testing if y is -2"
+    test.testEqual(y, -2)
+   except:
+    print "The variable y was deleted or is not defined"
 
 6. Here's another bit of code with a problem. Fix it so it calls change_amounts on some input and prints out the results. Also, add comments about what's going on with the current code that causes a problem.
 
@@ -171,10 +177,13 @@ Problem Set
     
     print "\n---\n\n"
     import test
-    print "testing if change_amounts(9) equals 11"
-    test.testEqual(change_amounts(9),11)
-    print "testing if change_amounts(12) equals 17"
-    test.testEqual(change_amounts(12),17)
+    try:
+      print "testing if change_amounts(9) equals 11"
+      test.testEqual(change_amounts(9),11)
+      print "testing if change_amounts(12) equals 17"
+      test.testEqual(change_amounts(12),17)
+    except:
+      print "The function change_amounts has not been defined properly"
 
 8. Given the string in the code below, write code to figure out what the most common word in the string is and assign that to the variable ``abc``. (Do not hard-code the right answer.) Hint: dictionaries will be useful here.
 
@@ -188,10 +197,13 @@ Problem Set
    print "\n---\n\n"
    import test
    print "testing whether abc is set correctly"
-   test.testEqual(abc, 'morning')
+   try:
+     test.testEqual(abc, 'morning')
+   except:
+     print "The variable abc has not been defined"
 
 
-9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in the variable abc.
+9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in a variable called abc.
 
 .. activecode:: ps_5_9
 
@@ -201,5 +213,8 @@ Problem Set
     
    print "\n---\n\n"
    import test
-   print "testing whether abc is set correctly"
-   test.testEqual(abc, 'the')
+   try:
+     print "testing whether abc is set correctly"
+     test.testEqual(abc, 'the')
+   except:
+     print "The variable abc has not been defined"
