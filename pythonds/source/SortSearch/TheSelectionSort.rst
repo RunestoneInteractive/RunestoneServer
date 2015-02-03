@@ -97,7 +97,7 @@ the bubble sort makes 20 exchanges, while the selection sort makes only
       :correct: d
       :answer_a: [7, 11, 12, 1, 6, 14, 8, 18, 19, 20]
       :answer_b: [7, 11, 12, 14, 19, 1, 6, 18, 8, 20]
-      :answer_c: [11, 7, 12, 13, 1, 6, 8, 18, 19, 20]
+      :answer_c: [11, 7, 12, 14, 1, 6, 8, 18, 19, 20]
       :answer_d: [11, 7, 12, 14, 8, 1, 6, 18, 19, 20]
       :feedback_a: Selection sort is similar to bubble sort (which you appear to have done) but uses fewer swaps
       :feedback_b: This looks like an insertion sort.
