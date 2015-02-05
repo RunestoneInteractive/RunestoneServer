@@ -206,6 +206,7 @@ Problem Set
 9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in a variable called abc.
 
 .. activecode:: ps_5_9
+   :available_files: timely_file.txt
 
    # Write code here!
     

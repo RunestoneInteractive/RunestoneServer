@@ -192,16 +192,15 @@ Problem Set
 
 .. activecode:: ps_4_3
 
-  	items = ["whirring", "calendar", "wry", "glass", "", "llama","tumultuous","owing"]
+   items = ["whirring", "calendar", "wry", "glass", "", "llama","tumultuous","owing"]
 
+   ====
 
-  	====
-
-  	import test
-  	print "\n---\n\n"
-    try:
-    	test.testEqual(acc_num,3)
-    except:
+   import test
+   print "\n---\n\n"
+   try:
+      test.testEqual(acc_num,3)
+   except:
       print "The variable acc_num has not been defined yet"
 
 
@@ -209,45 +208,47 @@ Problem Set
 
 .. activecode:: ps_4_4
 
-     nd = {"autumn":"spring", "well":"spring","4":"seasons","23":345}
-     
-     # Print out each key-value pair. 
-     # Remember that printing things with a comma, e.g.
-     # print "hello", "everyone" 
-     # will print out those things on the same 
-     # line with a space in between them.
-     
-     # Your output should look SOMETHING LIKE this 
-     # (remember, the pairs could be in any order, 
-     # because it's a dictionary):
-     # autumn spring
-     # 4 seasons
-     # 23 345
-     # well spring
-     
-     # Now, write code to increase the 
-     # value of key "23" by 5
-     
-     # Now, write code to print the 
-     # value of the key "well".
-     
-     ====
-     
-     import test
-     print "\n---\n\n"
-     try:
+   nd = {"autumn":"spring", "well":"spring", "4":"seasons"," 23":345}
+   
+   # Use a for looop to print out each key-value pair. 
+   # Remember that printing things with a comma, e.g.
+   # print "hello", "everyone" 
+   # will print out those things on the same 
+   # line with a space in between them.
+   
+   # Your output should look SOMETHING LIKE this 
+   # (remember, the pairs could be in any order, 
+   # because it's a dictionary):
+   # autumn spring
+   # 4 seasons
+   # 23 345
+   # well spring
+   
+   # Now, write code to increase the 
+   # value of key "23" by 5
+   
+   # Now, write code to print the 
+   # value of the key "well".
+   
+   ====
+   
+   import test
+   print "\n---\n\n"
+   try:
       test.testEqual(nd["23"],350)
-     except:
+   except:
       print "Did you change the dictionary nd? Keep it the same!"
 
 
 5. We've included the same file in this problem set that we included in the last problem set -- ``about_programming.txt``. Write code to open the file and print out each line in the file that has a "program"-based word (any of the words ``program``, ``programs``, ``programming``, ``programmer``, or ``programmers``...) in it.
 
 .. activecode:: ps_4_5
+    :available_files: about_programming.txt
 
-  	# Write your code here!
+  	 # Write your code here!
 
     ====
 
     print "\n---\n\n"
     print "There are no tests for this problem"
+
