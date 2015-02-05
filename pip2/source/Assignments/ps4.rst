@@ -237,7 +237,7 @@ Problem Set
    try:
       test.testEqual(nd["23"],350)
    except:
-      print "Did you change the dictionary nd? Keep it the same!"
+      print "nd doesn't exist or doesn't have the key '23'"
 
 
 5. We've included the same file in this problem set that we included in the last problem set -- ``about_programming.txt``. Write code to open the file and print out each line in the file that has a "program"-based word (any of the words ``program``, ``programs``, ``programming``, ``programmer``, or ``programmers``...) in it.
