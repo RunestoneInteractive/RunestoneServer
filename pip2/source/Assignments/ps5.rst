@@ -73,8 +73,8 @@ Turn these in as screenshots via CTools in the Assignments tab!
 .. activecode:: example_code_ps6
 
    def cool_machine(x):
-      y = x**2 +7
-      print y
+   	y = x**2 +7
+   	print y
 
    z = 65.3
    print z + cool_machine(8)
@@ -126,13 +126,13 @@ Problem Set
    print "There are no tests for this problem"
 
 
-5. Take a look at the code below. You'll get an error if you run it as is. Change it so it works!
+5. Take a look at the code below. The function subtract_five is supposed to take one integer as input and return that integer - 5. You'll get an error if you run it as is. Change it so it works!
 
 .. activecode:: ps_5_5
 
    def subtract_five(inp)
-     print inp - 5
-     return None
+   	print inp - 5
+	return None
     
    y = subtract_five(9) - 6
 
@@ -143,13 +143,13 @@ Problem Set
    print "testing if y is -2"
    test.testEqual(y, -2)
 
-6. Here's another bit of code with a problem. Fix it so it calls change_amounts on some input and prints out the results. Also, add comments about what's going on with the current code that causes a problem.
+6. Here's another bit of code with a problem. Also, add comments about what's going on with the current code that causes a problem. Then, fix it so it calls change_amounts on some input and prints out the results.
 
 .. activecode:: ps_5_6
 
     def change_amounts(yp):
-       n = yp - 4
-       return n * 7
+	n = yp - 4
+	return n * 7
     
     print yp
     
@@ -191,7 +191,7 @@ Problem Set
    test.testEqual(abc, 'morning')
 
 
-9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in the variable abc.
+9. We've given you another data file in this problem. It's called ``timely_file.txt``. Write code to figure out which is the most common word in the file. Again, save it in the variable ``abc``.
 
 .. activecode:: ps_5_9
 
