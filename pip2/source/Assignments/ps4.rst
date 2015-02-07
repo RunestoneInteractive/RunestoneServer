@@ -208,7 +208,7 @@ Problem Set
 
 .. activecode:: ps_4_4
 
-   nd = {"autumn":"spring", "well":"spring", "4":"seasons"," 23":345}
+   nd = {"autumn":"spring", "well":"spring", "4":"seasons","23":345}
    
    # Use a for looop to print out each key-value pair. 
    # Remember that printing things with a comma, e.g.
