@@ -81,8 +81,7 @@ Turn these in as screenshots via CTools in the Assignments tab!
 
 Then, run the Python program in your native Python interpreter. You should get an error. Take a screenshot of this and upload it to CTools.
 
-Make edits to this code so it will work (the only output should be 136.3), without an error, and then save it with a different name (``fixed_program.py``). Now, run unix ``diff`` on these two files. Take a screenshot of the output, and upload it to CTools.
-
+In a text editor, make edits to this code so it will work (the only output should be 136.3), saving it with a different name (``fixed_program.py``). Take a screenshot of the text editor with the correct coce, and upload it to CTools.
 
 
 .. _problem_set_5:
