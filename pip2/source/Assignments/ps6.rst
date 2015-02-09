@@ -215,8 +215,14 @@ Follow the directions in the comments!
       print 'testing whether "Bigger" is a prefix of "Big"'
       test.testEqual(is_prefix("Bigger", "Big"), False)
 
+6. Write code that repeatedly asks the user to input numbers. Keep going until the sum of the numbers is 21 or more. Print out the total. 
 
-6. Now, in the next few questions, you’ll build components and then a complete program that lets people play Hangman. Below is an image from the middle of a game...
+.. activecode:: ps_6_6
+
+   # Write your code here!
+
+
+7. Now, in the next few questions, you’ll build components and then a complete program that lets people play Hangman. Below is an image from the middle of a game...
 
 .. image:: Figures/HangmanSample.JPG
 
@@ -228,7 +234,7 @@ Your first task is just to understand the logic of the program, by matching up e
 
 (Note: you may find it helpful to run this program in order to understand it. It will tell you feedback about your last guess, but won't tell you where the correct letters were or how much health you have. Those are the improvements you'll make in later problems.)
 
-.. activecode:: ps_6_6
+.. activecode:: ps_6_7
 
    def blanked(word, guesses):
       return "blanked word"
@@ -314,9 +320,9 @@ Your first task is just to understand the logic of the program, by matching up e
          
 
 
-7. The next task you have is to create a correct version of the blanked function:
+8. The next task you have is to create a correct version of the blanked function:
 
-.. activecode:: ps_6_7
+.. activecode:: ps_6_8
 
    # define the function blanked(). 
    # It takes a word and a string of letters that have been revealed.
@@ -366,9 +372,9 @@ Your first task is just to understand the logic of the program, by matching up e
       test.testEqual(health_prompt(0, 4), "----")
 
    
-9. Now you have a fully functioning hangman program! Copy your two function definitions for the last two problems at the top of this code box and try playing the game with your friends. ** There is no solution for this problem, because if you paste in the correct functions, it will work correctly! This one's for fun -- nothing to be graded here.**
+10. Now you have a fully functioning hangman program! Copy your two function definitions for the last two problems at the top of this code box and try playing the game with your friends. ** There is no solution for this problem, because if you paste in the correct functions, it will work correctly! This one's for fun -- nothing to be graded here.**
 
-.. activecode:: ps_6_9
+.. activecode:: ps_6_10
    
    def game_state_prompt(txt ="Nothing", h = 6, m_h = 6, word = "HELLO", guesses = ""):
        res = "\n" + txt + "\n"
@@ -423,7 +429,7 @@ Your first task is just to understand the logic of the program, by matching up e
    sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
    main()
 
-10. Now you have to copy all your answers into a single file and run that file from the command prompt. 
+11. Now you have to copy all your answers into a single file and run that file from the command prompt. 
 
    * From cTools, look in the Assignments tab, at PS 6. 
       * download ps6.py into whatever directory on your local machine that you used last week for saving and running python files
