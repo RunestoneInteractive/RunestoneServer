@@ -85,7 +85,7 @@
 		right: 40px;
 	}
 	canvas{
-		width: 320px;
+		width: auto;
 	}	
 }
 @media (min-width: 1200px){
