@@ -395,6 +395,7 @@ div.flash {
 
 .ac-canvas {
     background-color: white;
+    display: inline-block;
 }
 
 .video-play-overlay {

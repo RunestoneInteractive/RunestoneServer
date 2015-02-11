@@ -34,6 +34,8 @@
        tList = []
        head = 0
        numTurtles = 10
+       wn = turtle.Screen()
+       wn.setup(500,500)
        for i in range(numTurtles):
            nt = turtle.Turtle()   # Make a new turtle, initialize values
            nt.setheading(head)
@@ -49,10 +51,10 @@
 
        w = tList[0]
        w.up()
-       w.goto(-130,40)
-       w.write("How to Think Like a ",True,"center","30px Arial")
-       w.goto(-130,-35)
-       w.write("Computer Scientist",True,"center","30px Arial")
+       w.goto(0,40)
+       w.write("How to Think Like a ",True,"center","40pt Bold")
+       w.goto(0,-35)
+       w.write("Computer Scientist",True,"center","40pt Bold")
 
    def moveTurtles(turtleList,dist,angle):
        for turtle in turtleList:   # Make every turtle on the list do the same actions.
