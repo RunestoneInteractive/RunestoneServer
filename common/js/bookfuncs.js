@@ -359,8 +359,12 @@ function runit(myDiv, theButton, includes, suffix) {
     var lang = document.getElementById(myDiv).lang;
     try {
         if(lang === 'python') {
-            Sk.misceval.asyncToPromise(function() {
+            var myPromise = Sk.misceval.asyncToPromise(function() {
                 return Sk.importMainWithBody("<stdin>",false,prog,true);
+            });
+            myPromise.then(function(mod) {}, function(err) {
+                logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': err.toString()}); // Log the run event
+                addErrorMessage(err, myDiv)
             });
         } else if (lang === 'javascript') {
             eval(prog);
