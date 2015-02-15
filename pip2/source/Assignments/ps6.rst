@@ -300,8 +300,8 @@ Your first task is just to understand the logic of the program, by matching up e
                   feedback = " Waah, waah, waah. Game over."
                   game_over= True
   
-  print(feedback)
-  print("The word was..." + secret_word)
+    print(feedback)
+    print("The word was..." + secret_word)
 
   import sys #don't worry about this line; you'll understand it next week
   sys.setExecutionLimit(60000)     # let the game take up to a minute, 60 * 1000 milliseconds
