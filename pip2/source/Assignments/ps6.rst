@@ -99,8 +99,11 @@ You can see the function definition in the code below, but that's only so you ca
    import test
    print "\n---\n\n"
    print "Testing whether your function works as expected (calling the function mult_both)"
-   test.testEqual(mult_both(), 12)
-   test.testEqual(mult_both(5,10), 50)
+   try:
+      test.testEqual(mult_both(), 12)
+      test.testEqual(mult_both(5,10), 50)
+   except:
+      print "mult_both not defined or yields an error when invoked"
 
 
 3. Use a for loop to print the second element of each tuple in the list ``new_tuple_list``.
@@ -187,7 +190,10 @@ Follow the directions in the comments!
 
       import test
       print "testing whether variable first_message was set correctly"
-      test.testEqual(first_message,fb_data["data"][0]["message"])
+      try:
+         test.testEqual(first_message,fb_data["data"][0]["message"])
+      except:
+         print "first_message not defined, or fb_data was changed"
 
 
 
