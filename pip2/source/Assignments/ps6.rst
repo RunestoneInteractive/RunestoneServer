@@ -21,7 +21,6 @@ You have the following graded activities:
    
    * Before Monday's class: 
       * Read :ref:`Optional and Keyword Parameters<optional_params_chap>`, and do the exercises in that chapter
-      * Read `Blog post and demo of sliding window compression  <http://jvns.ca/blog/2013/10/24/day-16-gzip-plus-poetry-equals-awesome/>`_
    
    * Before Wednesday's class:
        * Read :ref:`Tuples<tuples_chap>`, and do the exercises in that chapter
