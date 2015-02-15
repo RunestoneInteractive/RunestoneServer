@@ -263,7 +263,7 @@ Your first task is just to understand the logic of the program, by matching up e
           res = res + "No guesses so far" + "\n"
           res = res + "Word: " + blanked(word, guesses) + "\n"
 
-    return(res)
+      return(res)
 
   def main():
     max_health = 3
