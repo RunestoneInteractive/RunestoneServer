@@ -79,8 +79,8 @@ Take a look at the activecode interpreter in action.  If we take a simple Python
 
 Now try modifying the activecode program shown above.  First, modify the string in the first print statement
 by changing the word *adds* to the word *multiplies*.  Now press *run*.  You can see that the result of the program
-has changed.  However, it still prints "30" as the answer.  Modify the second print statement by changing the
-addition symbol, the "+", to the multiplication symbol, "*".  Press *run* to see the new results.
+has changed.  However, it still prints "30" as the answer.  Modify the total calculation by changing the
+addition symbol, the "+", to the multiplication symbol, "*".  Press *run* to see the new results (note that you should also fix the total initialization for a correct claculation).
 You can do this as many times as you like.  You can even start completely over by simply deleting all the code from the window.
 
 If you are a registered user and have logged in,
