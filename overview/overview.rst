@@ -449,7 +449,7 @@ HTML
 ----
 
 Teaching a class on HTML and simple web design?  Why not use activecode for HTML too?
-Although you don't run HTML, clicking the run button will case the HTML to be rendered.
+Although you don't run HTML, clicking the run button will cause the HTML to be rendered.
 
 .. activecode:: html1
    :language: html
