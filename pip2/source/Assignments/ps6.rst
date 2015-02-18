@@ -222,7 +222,7 @@ Follow the directions in the comments!
         print 'testing whether "Bigger" is a prefix of "Big"'
         test.testEqual(is_prefix("Bigger", "Big"), False)
         print 'testing whether "ge" is a prefix of "Bigger"'
-        test.testEqual(is_prefix("ge","Bigger"))
+        test.testEqual(is_prefix("ge","Bigger"), False)
       except:
         print "Looks like the function is_prefix has not been defined or has an error"
 
