@@ -52,6 +52,10 @@ in :ref:`Figure 1 <fig_knightmoves>`.
                    ktGraph.addEdge(nodeId,nid)
         return ktGraph
 
+    def posToNodeId(row, column, board_size):
+        board = [[(x + (y * 5)) for x in range(5)] for y in range(5)]
+        return board[row][column]
+
 The ``genLegalMoves`` function (:ref:`Listing 2 <lst_knighttour2>`) takes the position of the knight on the
 board and generates each of the eight possible moves. The ``legalCoord``
 helper function (:ref:`Listing 2 <lst_knighttour2>`) makes sure that a particular move that is generated is
