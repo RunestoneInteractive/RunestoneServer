@@ -17,7 +17,7 @@ Activities through 3/1
 
 You have the following graded activities:
 
-1. 654654Class prep. Don't forget: always access the textbook by clicking on the Textbook link from cTools, so that you'll be logged in and get credit for doing the prep.
+1. Class prep. Don't forget: always access the textbook by clicking on the Textbook link from cTools, so that you'll be logged in and get credit for doing the prep.
    
    * Before Monday's class:
        * Read :ref:`Sorting<sort_chap>`, and do the exercises in that chapter
