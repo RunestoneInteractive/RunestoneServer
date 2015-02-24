@@ -325,11 +325,10 @@ function runit(myDiv, theButton, includes, suffix) {
         }
     }
     prog = prog + editor.getValue();
-    var spre = document.getElementById(myDiv + '_suffix');
-    var suffix = '';
-    if (spre) {
-        suffix = spre.innerText || '';  // for some reason Firefox returns undefined when no innerText
-    }
+
+    var suffix;
+    suffix = $('#'+myDiv+'_suffix').text() || '';
+
     prog = prog + '\n' + suffix;
 
     var mypre = document.getElementById(myDiv + "_pre");
