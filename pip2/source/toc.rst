@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/week8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
@@ -310,17 +311,6 @@ Prediction and Classification
    Prediction/training.rst
    Prediction/evaluation.rst
 
-String Formatting
-:::::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   StringFormatting/intro-PrintinginPython2.7.rst
-   StringFormatting/Interpolation.rst
-   StringFormatting/CSV.rst
-   StringFormatting/Exercises.rst
-
 Python Modules
 ::::::::::::::
 
@@ -331,6 +321,17 @@ Python Modules
    PythonModules/Therandommodule.rst
    PythonModules/Glossary.rst
    PythonModules/Exercises.rst
+
+String Formatting
+:::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   StringFormatting/intro-PrintinginPython2.7.rst
+   StringFormatting/Interpolation.rst
+   StringFormatting/CSV.rst
+   StringFormatting/Exercises.rst
 
 REST APIs
 :::::::::
