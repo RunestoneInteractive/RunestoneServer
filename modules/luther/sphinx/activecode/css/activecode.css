@@ -84,9 +84,9 @@
 		float: right;
 		right: 40px;
 	}
-	canvas{
-		width: 320px;
-	}	
+/*    canvas{
+        width: auto;
+    }*/	
 }
 @media (min-width: 1200px){
 	.ac_code_div{
@@ -101,7 +101,7 @@
 		right: 40px;
 		width: 35%;
 	}
-	canvas{
-		width: auto;
-	}
+/*    canvas{
+        width: auto;
+    }*/
 }

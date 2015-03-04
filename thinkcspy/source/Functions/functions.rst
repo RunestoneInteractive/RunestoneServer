@@ -43,7 +43,7 @@ The syntax for a **function definition** is:
 You can make up any names you want for the functions you create, except that
 you can't use a name that is a Python keyword, and the names must follow the rules
 for legal identifiers that were given previously. The parameters specify
-what information, if any, you have to provide in order to use the new function.  Another way to say this is that the parameters specify what the function needs to do it's work.
+what information, if any, you have to provide in order to use the new function.  Another way to say this is that the parameters specify what the function needs to do its work.
 
 There can be any number of statements inside the function, but they have to be
 indented from the ``def``. In the examples in this book, we will use the

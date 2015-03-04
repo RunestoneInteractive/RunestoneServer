@@ -336,6 +336,8 @@ function runit(myDiv, theButton, includes, suffix) {
     Sk.canvas = myDiv + "_canvas";
     Sk.pre = myDiv + "_pre";
     var can = document.getElementById(Sk.canvas);
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = Sk.canvas;
+    
     // The following lines reset the canvas so that each time the run button
     // is pressed the turtle(s) get a clean canvas.
     if (can) {
@@ -356,7 +358,13 @@ function runit(myDiv, theButton, includes, suffix) {
     var lang = document.getElementById(myDiv).lang;
     try {
         if(lang === 'python') {
-            Sk.importMainWithBody("<stdin>", false, prog);
+            var myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>",false,prog,true);
+            });
+            myPromise.then(function(mod) {}, function(err) {
+                logRunEvent({'div_id': myDiv, 'code': prog, 'errinfo': err.toString()}); // Log the run event
+                addErrorMessage(err, myDiv)
+            });
         } else if (lang === 'javascript') {
             eval(prog);
         } else {

@@ -125,6 +125,11 @@ if ($("#%(divid)s").attr("lang") !== "html" && $("#%(divid)s_code_div").parents(
 				$("#%(divid)s_code_div").animate({
 					left: 40
 				}, 500, next);
+                if (! Sk.TurtleGraphics ) {
+                    Sk.TurtleGraphics = {};
+                }
+                Sk.TurtleGraphics.height = 320;
+                Sk.TurtleGraphics.width = 320;
 			}
 			else{
 				next();
@@ -154,7 +159,7 @@ OUTPUT_START = '''
 
 CANVAS = '''
 <div style="text-align: center">
-<canvas id="%(divid)s_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>
+<div id="%(divid)s_canvas" class="ac-canvas" style="border-style: solid; text-align: center"></div>
 </div>
 '''
 
