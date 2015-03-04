@@ -310,6 +310,8 @@ Prediction and Classification
    Prediction/shannon_guesser.rst
    Prediction/training.rst
    Prediction/evaluation.rst
+   Prediction/Glossary.rst
+   
 
 Python Modules
 ::::::::::::::
