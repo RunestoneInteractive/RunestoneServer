@@ -24,8 +24,9 @@ You have the following graded activities:
        * Read :ref:`Importing modules<modules_chap>`
     
    * Before Wednesday's class:
-       * Coming soon: textbook chapter on ``HTTP and urllib2``
-       * Coming soon: textbook chapter on ``try/except`` 
+       * Read :ref:`try/except <exceptions_chap>`
+       * Read :ref:`pip module installer <pip_chap>`
+       * Read :ref:`Fetching data <requests_chap>`
  
 2. Reading responses
 
