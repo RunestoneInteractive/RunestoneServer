@@ -228,3 +228,7 @@ Indices and tables
    :hidden:
 
    navhelp
+
+.. raw:: html
+
+   <div style="width: 500px; margin-left: auto; margin-right: auto;"><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0; display:block; margin-left: auto; margin-right:auto;" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Problem Solving with Algorithms and Data Structures using Python</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Bradley N. Miller, David L. Ranum</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</div>
