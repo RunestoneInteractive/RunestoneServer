@@ -184,9 +184,9 @@ def get_deadline(assignment, user):
 
 def get_engagement_time(assignment, user, preclass, all_problem_sets = False, all_non_problem_sets = False):
     if all_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments'))
+        q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_'))
     elif all_non_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments')))
+        q =  db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
     else:
         q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
         if preclass:
