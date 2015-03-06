@@ -309,7 +309,7 @@ represented by a negative numerator.
             n = oldm%oldn
         return n
 
-    print gcd(20,10)
+    print(gcd(20,10))
 
 Now we can use this function to help reduce any fraction. To put a
 fraction in lowest terms, we will divide the numerator and the
