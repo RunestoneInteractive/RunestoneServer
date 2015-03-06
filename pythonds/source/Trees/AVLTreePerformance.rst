@@ -82,7 +82,7 @@ then solve for :math:`h` we get the following derivation:
 
 
 This derivation shows us that at any time the height of our AVL tree is
-equal to a constant(1.44) times the log of the height of the tree. This
+equal to a constant(1.44) times the log of the number of nodes in the tree. This
 is great news for searching our AVL tree because it limits the search to
 :math:`O(\log{N})`.
 
