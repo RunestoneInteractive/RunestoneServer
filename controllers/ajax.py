@@ -121,7 +121,7 @@ def saveprog():
         dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
         if dl:
             if dl.deadline < now:
-                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s on the server's timezone (probably Greenwich Mean Time)" % (dl.deadline)])
     try:
         db.code.insert(sid=auth.user.username,
             acid=acid,code=code,

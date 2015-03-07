@@ -94,7 +94,9 @@ Problem Set
    
    ====
    import test
-   print "\n\n---\n"
+   print "\n\n---tests---\n"
+   if type(tpa) != type(6):
+      print "tpa should be an integer; check it's type with print type(tpa)"
    test.testEqual(tpa, 6)
 
 
@@ -107,8 +109,13 @@ Problem Set
 
    ====
    import test
-   print "\n\n---\n"
-   test.testEqual(cw, yb)
+   print "\n\n---tests---\n"
+   try:
+      test.testEqual(cw, yb)
+   except:
+      print "yb may not be defined yet..."
+   print "Checking to make sure you didn't change cw"
+   test.testEqual(cw, "Hello")
 
 
 3. Write code to print out the type of the variable ``apples_and_oranges``, the type of the variable ``abc``, and the type of the variable ``new_var``.
@@ -139,7 +146,7 @@ Problem Set
     
     ====
     import test
-    print "\n\n---\n"
+    print "\n\n---tests---\n"
     try:
        test.testEqual(type(xyz), type(3))
        test.testEqual(xyz,25)

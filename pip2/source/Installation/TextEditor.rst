@@ -74,7 +74,20 @@ Follow the instructions that follow. It should be
 quite intuitive. Keep in mind the concepts from earlier -- TextWrangler is an environment (a piece of software)
 for _creating_ python programs. It's not intended (in this course) for running them!
 
-Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. Enter your first Python program into TextWrangler:
+Start TextWrangler from a Dock shortcut icon, finding it in your Applications folder, or startinit from Spotlight. 
+
+You should make some configuration changes in TextWrangler to make sure that your spaces will be consistent. (Indenting matters in Python, as you know, and it also matters whether your indentations are spaces or tabs -- these are different, even when they look the same to us humans.) To make sure this will not cause you problems, do the following:
+
+Go to the menu at the top, to **TextWrangler > Preferences**. Click the **Auto-expand tabs** box, and make sure the **Tab width** text box has **4** in it. It should look like this:
+
+   .. image:: Figures/textwranglerprefs.png
+      :width: 300px
+
+Then, if you have opened any documents in TextWrangler already, go to **Edit > Normalize options** and click **Normalize**. This will set the spacing settings on all of your current documents to be the new default (4 spaces of indentation when you indent on a new line, et cetera).
+
+If you run into any indentation problems while using TextWrangler when you do not expect to, you should check all your code carefully, then repeat that process, or ask the Instructional Team/your classmates to help you debug the problem!
+
+Now, enter your first Python program into TextWrangler:
 
    .. image:: Figures/helloworldmac.png
       :width: 300px

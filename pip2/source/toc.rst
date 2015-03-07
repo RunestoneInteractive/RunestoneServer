@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/week8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
@@ -309,6 +310,42 @@ Prediction and Classification
    Prediction/shannon_guesser.rst
    Prediction/training.rst
    Prediction/evaluation.rst
+   Prediction/Glossary.rst
+   
+
+Python Modules
+::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   PythonModules/intro-ModulesandGettingHelp.rst
+   PythonModules/Therandommodule.rst
+   PythonModules/Glossary.rst
+   PythonModules/Exercises.rst
+
+Exceptions
+::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Exceptions/intro-exceptions.rst
+   Exceptions/using-exceptions.rst
+
+Requests
+::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Requests/intro.rst
+   Requests/fetching_a_page.rst
+   Requests/how_the_Internet_works.rst
+   Requests/urls.rst
+   Requests/http.rst
+   Requests/requests_details.rst
+
 
 String Formatting
 :::::::::::::::::
@@ -321,16 +358,6 @@ String Formatting
    StringFormatting/CSV.rst
    StringFormatting/Exercises.rst
 
-Python Modules
-::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   PythonModules/intro-ModulesandGettingHelp.rst
-   PythonModules/Therandommodule.rst
-   PythonModules/Glossary.rst
-   PythonModules/Exercises.rst
 
 REST APIs
 :::::::::
@@ -403,6 +430,7 @@ Installation
    Installation/TextEditor.rst
    Installation/pythonInstall.rst
    Installation/runpythonprograms.rst
+   Installation/pip.rst
    
 
 Unix
