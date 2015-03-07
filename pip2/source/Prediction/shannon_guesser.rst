@@ -12,11 +12,11 @@ In the code below, we implement a guesser function and a list of two rules. The 
    :nocanvas:
 
    def guesser(prev_txt, rls):
-      all_guesses = ""
-      for (f, guesses) in rls:
-         if f(prev_txt):
-            all_guesses = all_guesses + guesses
-      return all_guesses
+   	all_guesses = ""
+   	for (f, guesses) in rls:
+   		if f(prev_txt):
+   			all_guesses = all_guesses + guesses
+   	return all_guesses
    
    rules = [(lambda x: x[-1] == "q", "uai"),
             (lambda x: True, "abcdefghijklmnopqrstuvwxyz")]

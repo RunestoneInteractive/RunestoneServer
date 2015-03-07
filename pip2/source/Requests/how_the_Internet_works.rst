@@ -15,7 +15,7 @@ What's really going when you fetch a web page, using the browser, UNIX curl, or 
 
 The Internet is a transport mechanism that lets any connected device communicate with any other connected device. Behind the scenes:
 
-* Each device has a globally distinct IP address, which is a 32 bit number. Usually an IP address is represented a sequence of four decimal numbers, each number in the range (0, 255). For example, when I checked the IP address for my laptop just now, it was 141.211.203.248. Any IP address beginning with 141.211 is for a device at the University of Michigan. When I take my laptop home and connect to a network there, my laptop gets a different IP address that it uses there.
+* Each device has a globally distinct IP address, which is a 32 bit number. Usually an IP address is represented as a sequence of four decimal numbers, each number in the range (0, 255). For example, when I checked the IP address for my laptop just now, it was 141.211.203.248. Any IP address beginning with 141.211 is for a device at the University of Michigan. When I take my laptop home and connect to a network there, my laptop gets a different IP address that it uses there.
 
 * Data is chopped up into reasonable sized packets (up to 65,535 bytes, but usually much smaller).
 
