@@ -149,7 +149,7 @@ There's one other useful feature. The exception code can access a variable that 
    :answer_c: 3
    :answer_d: 4
    :answer_e: 5  
-   :correct: e
+   :correct: d
    :feedback_a: Try i = 0; that should print out .3333
    :feedback_b: Keep trying.
    :feedback_c: When i=3, it will no longer be able to pring 1.0/ (3-i), but it will still print one more line in the except clause
