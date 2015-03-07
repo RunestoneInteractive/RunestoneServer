@@ -19,20 +19,20 @@ If you look at these samples of names, one thing that might jump out at you is t
    :nocanvas:
    
    def final_e(s):
-   	return s[-1] == 'e'
+       return s[-1] == 'e'
    def final_a(s):
-   	return s[-1] == 'a'
+       return s[-1] == 'a'
    def final_i(s):
-   	return s[-1] == 'i'
+       return s[-1] == 'i'
    
    def classify(s):
-   	if final_e(s):
-   		return "female"
-   	if final_a(s):
-   		return "female"
-   	if final_i(s):
-   		return "female"
-   	return "male"
+       if final_e(s):
+           return "female"
+       if final_a(s):
+           return "female"
+       if final_i(s):
+           return "female"
+       return "male"
 
    print classify("Mark")
    print classify("Julie")
@@ -43,17 +43,17 @@ Note the structure of the classify() function. It checks each of the three rules
    :nocanvas:
    
    def final_e(s):
-   	return s[-1] == 'e'
+       return s[-1] == 'e'
    def final_a(s):
-   	return s[-1] == 'a'
+       return s[-1] == 'a'
    def final_i(s):
-   	return s[-1] == 'i'
+       return s[-1] == 'i'
 
    def classify(s, rls):
-   	for (f, gender) in rls:
-   		if f(s):
-   			return gender
-   	return "male"
+       for (f, gender) in rls:
+           if f(s):
+               return gender
+       return "male"
 
    rules = [(final_e, "female"), 
             (final_a, "female"), 
@@ -92,10 +92,10 @@ For those of you who preferred lambda expressions when passing a function for th
    :nocanvas:
 
    def classify(s, rls):
-   	for (f, gender) in rls:
-   		if f(s):
-   			return gender
-		return "male"
+       for (f, gender) in rls:
+           if f(s):
+               return gender
+        return "male"
 
    rules = [(lambda x: x[-1] == 'e', "female"), 
             (lambda x: x[-1] == 'a', "female"), 
@@ -109,10 +109,10 @@ When we call the classify function we can pass a different set of rules. For exa
    :nocanvas:
 
    def classify(s, rls):
-   	for (f, gender) in rls:
-   		if f(s):
-   			return gender
-		return "male"
+       for (f, gender) in rls:
+           if f(s):
+               return gender
+        return "male"
 
    rules = [(lambda x: x[:2] == "En", "male"),
             (lambda x: x[-1] == 'e', "female"), 
