@@ -169,4 +169,4 @@ Note here how important the order of the rules is. If the check for whether the 
    :feedback_c: The second element of the first tuple is "male"
    :feedback_d: That's a function object
 
-   What expression would you ouse to pick out the string "male"?   
+   What expression would you use to pick out the string "male"?   
