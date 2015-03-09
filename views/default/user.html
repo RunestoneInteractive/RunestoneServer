@@ -122,6 +122,20 @@
 </script>
 
 <div class='col-md-6'>
+  {{if request.args(0)=='register':}}
+  <h2>Which course name?</h2>
+  <ul>
+      <li>If you are part of a high school, college,or university course your instructor should provide this for you.</li>
+      <li>Otherwise the following are open to anyone:
+          <ul>
+              <li>thinkcspy &mdash; How to Think Like a Computer Scientist</li>
+              <li>pythonds &mdash; Problem Solving with Algorithms and Data Structures using Python </li>
+              <li>pip2 &mdash; Programs Information and People</li>
+              <li>JavaReview &mdash; Review course for AP CS Exam</li>
+              </ul>
+      </li>
+  </ul>
+  {{pass}}
   <h2>More Information</h2>
     <ul>
         <li>Instructors:<ul><li> <a href='/{{=request.application}}/static/overview/instructor.html'>How do I use this for my course?</a></li>
