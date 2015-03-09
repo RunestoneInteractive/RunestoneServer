@@ -128,6 +128,15 @@ class IS_COURSE_ID:
             return (db(db.courses.course_name == value).select()[0].id, None)
         return (value, self.e)
 
+class HAS_NO_DOTS:
+    def __init__(self, error_message='Your username may not contain a . use _ instead'):
+        self.e = error_message
+    def __call__(self, value):
+        if "." not in value:
+            return (value, None)
+        return (value, self.e)
+    def formatter(self, value):
+        return value
 
 db.define_table('auth_user',
     Field('username', type='string',
@@ -167,7 +176,7 @@ db.define_table('auth_user',
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 db.auth_user.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 db.auth_user.password.requires = CRYPT(key=auth.settings.hmac_key)
-db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
+db.auth_user.username.requires = (HAS_NO_DOTS(), IS_NOT_IN_DB(db, db.auth_user.username))
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
                                IS_NOT_IN_DB(db, db.auth_user.email))
