@@ -349,11 +349,19 @@ function runit(myDiv, theButton, includes, suffix) {
     }
     // set execLimit in milliseconds  -- for student projects set this to
     // 25 seconds -- just less than Chrome's own timer.
-    Sk.execLimit = 25000;
+    if (prog.indexOf('ontimer') > -1 || 
+        prog.indexOf('onclick') > -1 || 
+        prog.indexOf('onkey') > -1  ||
+        prog.indexOf('setDelay') > -1 ) {
+        Sk.execLimit = null;
+    } else {
+        Sk.execLimit = 25000;
+    }
     // configure Skulpt output function, and module reader
-    Sk.configure({output: outf,
-                     read: builtinRead,
-                     python3: true
+    Sk.configure({output : outf,
+                  read   : builtinRead,
+                  python3: true,
+                  imageProxy : 'http://localhost:8080/320x'     
                  });
     var lang = document.getElementById(myDiv).lang;
     try {
