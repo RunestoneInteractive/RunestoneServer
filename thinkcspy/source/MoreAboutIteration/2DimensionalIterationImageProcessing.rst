@@ -274,8 +274,9 @@ Change the name of the file in the ``image.Image()`` call to see how these image
     import image
 
     img = image.Image("luther.jpg")
-    newimg = image.EmptyImage(img.getWidth(), img.getHeight())
-    win = image.ImageWin()
+    win = image.ImageWin(img.getWidth(), img.getHeight())
+    img.draw(win)
+    img.setDelay(1,15)   # setDelay(0) turns off animation
 
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -287,9 +288,9 @@ Change the name of the file in the ``image.Image()`` call to see how these image
 
             newpixel = image.Pixel(newred, newgreen, newblue)
 
-            newimg.setPixel(col, row, newpixel)
+            img.setPixel(col, row, newpixel)
 
-    newimg.draw(win)
+    img.draw(win)
     win.exitonclick()
 
 Let's take a closer look at the code.  After importing the image module, we create two image objects.  The first, ``img``, represents a typical digital photo.  The second, ``newimg``, is an empty image that will be "filled in" as we process the original pixel by pixel.  Note that the width and height of the empty image is set to be the same as the width and height of the original.
@@ -300,8 +301,9 @@ Line 9 gets an individual pixel.
 Lines 11-13 create the negative intensity values by extracting the original intensity from the pixel and subtracting it
 from 255.  Once we have the ``newred``, ``newgreen``, and ``newblue`` values, we can create a new pixel (Line 15).
 
-Finally, we need to insert the new pixel into the empty image in the same location as the original pixel that it came from in the digital photo.
+Finally, we need to replace the old pixel with the new pixel in our image. It is important to put the new pixel into the same location as the original pixel that it came from in the digital photo.
 
+Try to change the program above so that the outer loop iterates over the columns and the inner loop iterates over the rows.  We still create a negative image, but you can see that the pixels update in a very different order.
 
 .. admonition:: Other pixel manipulation
 
