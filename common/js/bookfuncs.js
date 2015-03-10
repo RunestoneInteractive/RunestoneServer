@@ -350,7 +350,10 @@ function runit(myDiv, theButton, includes, suffix) {
     }
     // set execLimit in milliseconds  -- for student projects set this to
     // 25 seconds -- just less than Chrome's own timer.
-    if (prog.indexOf('ontimer') > -1 || prog.indexOf('onclick') > -1 || prog.indexOf('onkey') > -1 ) {
+    if (prog.indexOf('ontimer') > -1 || 
+        prog.indexOf('onclick') > -1 || 
+        prog.indexOf('onkey') > -1  ||
+        prog.indexOf('setDelay') > -1 ) {
         Sk.execLimit = null;
     } else {
         Sk.execLimit = 25000;
