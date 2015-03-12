@@ -42,7 +42,7 @@
            nt.pensize(2)
            nt.color(random.randrange(256),random.randrange(256),random.randrange(256))
            nt.speed(10)
-           nt.tracer(30,0)
+           wn.tracer(30,0)
            tList.append(nt)       # Add the new turtle to the list
            head = head + 360/numTurtles
 
