@@ -405,13 +405,16 @@ Note that it is a much more simple example file in that the exit is very close t
             self.wn.setworldcoordinates(-(columnsInMaze-1)/2-.5,-(rowsInMaze-1)/2-.5,(columnsInMaze-1)/2+.5,(rowsInMaze-1)/2+.5)
 
         def drawMaze(self):
-            self.t.speed(10)        
+            self.t.speed(10)
+            self.wn.tracer(0)        
             for y in range(self.rowsInMaze):
                 for x in range(self.columnsInMaze):
                     if self.mazelist[y][x] == OBSTACLE:
                         self.drawCenteredBox(x+self.xTranslate,-y+self.yTranslate,'orange')
             self.t.color('black')
             self.t.fillcolor('blue')
+            self.wn.update()
+            self.wn.tracer(1)
 
         def drawCenteredBox(self,x,y,color):
             self.t.up()
