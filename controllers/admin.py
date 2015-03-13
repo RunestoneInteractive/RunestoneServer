@@ -419,9 +419,11 @@ def sections_update():
 def diffviewer():
     sid = ""
     div_id = request.vars.divid
+    course_name = "thinkcspy"
     if auth.user:
         sid = auth.user.username
-    return dict(course_id="overview", sid=sid, divid=div_id)
+        course_name = auth.user.course_name
+    return dict(course_id=course_name, sid=sid, divid=div_id)
 
 
 
