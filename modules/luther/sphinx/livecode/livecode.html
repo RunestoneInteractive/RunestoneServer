@@ -12,9 +12,9 @@
     </div>
     <br/>
 
-    <div id="{{ divid }}_code_div" style="display: {{ hidecode }}" class="ac_code_div">
+    <div id="{{ divid }}_code_div" style="display: block;" class="ac_code_div">
         <textarea cols="50" rows="12" id="{{ divid }}_code" class="active_code" prefixcode="{{ include }}" lang="{{ language }}">
-        {{ initialcode }}
+{{ initialcode }}
         </textarea>
     </div>
 
@@ -23,4 +23,7 @@
             <pre id="{{ divid }}_pre" class="active_out"></pre>
         </div>
     </div> <!-- end output -->
+    <div class="clearfix"></div>
+    <p class="ac_caption"><span class="ac_caption_text"> {{ caption }} ( {{ divid }} )</span> </p>
+
 </div>

@@ -49,9 +49,9 @@ class LiveCode(Directive):
         self.options['divid'] = self.arguments[0]
         if 'language' not in self.options:
             raise KeyError("language must be specified")
-        self.options['initialcode'] = self.content
+        self.options['initialcode'] = "\n".join(self.content)
 
-        env = Environment(loader=FileSystemLoader(__path__))
+        env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)))
         template = env.get_template('livecode.html')
         output = template.render(**self.options)
 

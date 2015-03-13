@@ -511,6 +511,19 @@ connect it to the print block.  Now click the run button and you should see 10 p
 in the gray output area.
 
 
+Other Languages - LiveCode
+--------------------------
+
+.. livecode:: lc1
+   :language: cpp
+
+   #include <stdio.h>
+
+   int main() {
+      printf("Hello World\n");
+   }
+
+
 What To Do Now
 --------------
 
