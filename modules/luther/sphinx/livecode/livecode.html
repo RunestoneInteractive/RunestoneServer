@@ -2,7 +2,7 @@
 <div id="{{ divid }}" lang="{{ language }}" class="ac_section alert alert-warning">
 
     <div class="ac_actions">
-        <button class='btn btn-success' id="{{ divid }}_runb">Run</button>
+        <button class='btn btn-success' id="{{ divid }}_runb" onclick="runlive('{{divid}}', '{{language}}')">Run</button>
         <button class="ac_opt btn btn-default" style="display: inline-block" id="{{ divid }}_saveb"
                 onclick="saveEditor('{{ divid }}');">Save
         </button>
@@ -18,8 +18,8 @@
         </textarea>
     </div>
 
-    <div class="ac_output">
-        <div style="text-align: center">
+    <div class="lc_output">
+        <div>
             <pre id="{{ divid }}_pre" class="active_out"></pre>
         </div>
     </div> <!-- end output -->

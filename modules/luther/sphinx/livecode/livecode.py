@@ -34,8 +34,8 @@ from jinja2 import Environment, FileSystemLoader
 def setup(app):
     app.add_directive('livecode', LiveCode)
     app.add_stylesheet('codemirror.css')
-    app.add_stylesheet('activecode.css')
-    app.add_javascript('jobe.js')
+    app.add_stylesheet('livecode.css')
+    app.add_javascript('livecode.js')
 
 class LiveCode(Directive):
     required_arguments = 1
