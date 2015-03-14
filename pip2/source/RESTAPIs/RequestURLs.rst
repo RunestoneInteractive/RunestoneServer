@@ -11,7 +11,7 @@
 Generating Request URLs
 =======================
 
-In a REST API, the client or application program-- the kind of program you will be writing-- makes an HTTP requests that includes information about what kind of request it is making. Web sites are free to define whatever format they want for how the request should be formatted. This chapter covers a particularly common and particularly simple format, where the request information is encoded right in the URL. This is  convenient, because if something goes wrong, we can debug by copying the URL into a browser and see what happens when it tries to visit that URL.
+In a REST API, the client or application program-- the kind of program you will be writing-- makes an HTTP request that includes information about what kind of request it is making. Web sites are free to define whatever format they want for how the request should be formatted. This chapter covers a particularly common and particularly simple format, where the request information is encoded right in the URL. This is  convenient, because if something goes wrong, we can debug by copying the URL into a browser and see what happens when it tries to visit that URL.
 
 In this format, the URL has a standard structure:
 
@@ -60,6 +60,10 @@ Now why is ``"violins and guitars"`` represented in the URL as ``%22violins+and+
 
 Using urllib.urlencode()
 ------------------------
+
+.. note::
+
+    I will be updating this section to reflect our use of the requests module this semester, instead of urlencode. Some of these things will be even simpler for us.
 
 Fortunately, when you want to pass information as a URL parameter value, you don't have to remember all the substitutions that are required to encode special characters. Instead, you can make use of a function urlencode() in the module urllib. 
 
