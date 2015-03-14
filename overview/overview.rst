@@ -515,13 +515,13 @@ Other Languages - LiveCode
 --------------------------
 
 .. livecode:: lc1
-   :language: cpp
+   :language: java
 
-   #include <stdio.h>
-
-   int main() {
-      printf("Hello World\n");
-   }
+   public class HelloWorldApp {
+       public static void main(String[] args) {
+           System.out.println("Hello World!");
+       }
+    }
 
 
 What To Do Now
