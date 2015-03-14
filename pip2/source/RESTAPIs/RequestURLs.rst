@@ -1,5 +1,4 @@
-..  Copyright (C)  Paul Resnick, Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
+..  Copyright (C)  Paul Resnick.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
     Foundation; with Invariant Sections being Forward, Prefaces, and
@@ -56,36 +55,42 @@ Here's another URL that has a similar format. ``https://www.google.com/search?q=
    * ``q=%22violins+and+guitars%22`` says that the query to search for is "violins and guitars".
    *  ``tbm=isch`` says to go to the tab for image search
 
-Now why is ``"violins and guitars"`` represented in the URL as ``%22violins+and+guitars%22``? The answer is that some characters are not safe to include, as is, in URLs. For example, a URL path is not allowed to include the double-quote character. It also can't include a : or / or a space. Whenever we want to include one of those characters in a URL, we have to *encode* them with other characters. A space is encoded as ``+``. ``"`` is encoded as ``%22``. ``:`` wpuld be encoded as ``%3A``. And so on.  
+Now why is ``"violins and guitars"`` represented in the URL as ``%22violins+and+guitars%22``? The answer is that some characters are not safe to include, as is, in URLs. For example, a URL path is not allowed to include the double-quote character. It also can't include a : or / or a space. Whenever we want to include one of those characters in a URL, we have to *encode* them with other characters. A space is encoded as ``+``. ``"`` is encoded as ``%22``. ``:`` would be encoded as ``%3A``. And so on.  
 
-Using urllib.urlencode()
-------------------------
+Using requests.get to encode URL parameters
+-------------------------------------------
 
-.. note::
+Fortunately, when you want to pass information as a URL parameter value, you don't have to remember all the substitutions that are required to encode special characters. Instead, that capability is built into the requests module.
 
-    I will be updating this section to reflect our use of the requests module this semester, instead of urlencode. Some of these things will be even simpler for us.
+The get function in the requests module takes an optional parameter called ``params``. If a value is specified for that parameter, it should be a dictionary. The keys and values in that dictionary are used to append something to the URL that is requested from the remote site. 
 
-Fortunately, when you want to pass information as a URL parameter value, you don't have to remember all the substitutions that are required to encode special characters. Instead, you can make use of a function urlencode() in the module urllib. 
-
-You have already used the urllib2 module, in particular the fuction urlopen() in that module. The urlopen function in urllib2 is more convenient to use than the one in the older module urllib.
-
-The older urllib module still has some useful functions, though, especially urlencode. urlencode takes a dictionary as input. It returns a string.
-
-Here's an example of the inputs and outputs of the urlencode function.
+For example, in the following, the base url is https://google.com/search. A dictionary with two parameters is passed. Thus, the whole url is that base url, plus a question "?", plus a "q=..." and a "tbm=..." separated by an "&". In other words, the final url that is visited is ``https://www.google.com/search?q=%22violins+and+guitars%22&tbm=isch``. Actually, because dictionary keys are unordered in python, the final url might sometimes have the encoded key-value pairs in the other order: ``https://www.google.com/search?tbm=isch&q=%22violins+and+guitars%22``. Fortunately, most websites that accept URL parameters in this form will accept the key-value pairs in any order.
 
 .. sourcecode:: python
 
-   import urllib
-   d = {}
-   d['format'] = 'json'
-   d['p2'] = 'hi there: yes'
-   print urllib.urlencode(d)
+    d = {'q': 'violins and guitars', 'tbm': 'isch'}
+    results = requests.get("https://google.com/search", params=d)
+    print results.url
+
+.. note: 
+
+    If you're ever unsure exactly what url has been produced when calling requests.get and passing a value for params, you can access the .url attribute of the object that is returned. This will be a helpful debugging strategy. You can take that url and plug it into a browser and see what results come back! 
+
+**Check your understanding**
+
+.. mchoicemf:: restapis_1
+   :answer_a: requests.get("http://bar.com/goodstuff", '?", {'greet': 'hi there'}, '&', {'frosted':'no'})
+   :answer_b: requests.get("http://bar.com/", params = {'goodstuff':'?', 'greet':'hi there', 'frosted':'no'})
+   :answer_c: requests.get("http://bar.com/goodstuff", params = ['greet', 'hi', 'there', 'frosted', 'no'])
+   :answer_d: requests.get("http://bar.com/goodstuff", params = {'greet': 'hi there', 'frosted':'no'})
+   :correct: a
+   :feedback_a: The ? and the & are added automatically.
+   :feedback_b: goodstuff is part of the base url, not the query params
+   :feedback_c: The value of params should be a dictionary, not a list
+   :feedback_d: The ? and & are added automatically, and the space in hi there is automatically encoded as %3A.
+
+   How would you request the URL ``http://bar.com/goodstuff?greet=hi%3Athere&frosted=no`` using the requests module?
    
-   # result is "p2=hi+there%3A+yes&format=json"
-
-In the dictionary that is passed in to urlencode, there are two keys: 'format' and 'p2'. The output string has the key-value pairs, separated by an &. Between each key and value there is an = sign. Special characters are encoded: the spaces in 'hi there: yes' became plus signs and the colon became ``%3A``.
-
-Putting this all together, the typical way that we generate a URL for a call to a REST API is to make a dictionary with the key-value parameters to be passed to the web site, then concatenate together the base URL, a question mark, and the result returned by a call to urlencode. For example:
 
 .. sourcecode:: python
 

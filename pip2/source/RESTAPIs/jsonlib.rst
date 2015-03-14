@@ -1,5 +1,4 @@
-..  Copyright (C)  Paul Resnick, Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
+..  Copyright (C)  Paul Resnick.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
     Foundation; with Invariant Sections being Forward, Prefaces, and
@@ -11,7 +10,7 @@
 Processing JSON results
 =======================
 
-JSON stands for JavaScript Object Notation. It looks a lot like the representation of nested dictionaries and lists in python when we write them out as literals in a program. When your program receives a JSON-formatted string, generally you will want to convert it into a python object, a list or a dictionary.
+JSON stands for JavaScript Object Notation. It looks a lot like the representation of nested dictionaries and lists in python when we write them out as literals in a program, but with a few small differences (e.g., the word null instead of None). When your program receives a JSON-formatted string, generally you will want to convert it into a python object, a list or a dictionary.
 
 Again, python provides a module for doing this. The module is called json. We will be using two functions in this module, loads and dumps.
 
@@ -21,9 +20,9 @@ Consider, for example, the FAA's REST API. If we request
 
 .. sourcecode:: python
 
-   result = urllib2.urlopen("http://services.faa.gov/airport/status/DTW?format=json").read()
+   result = requests.get("https://services.faa.gov/airport/status/DTW", params ={'format':'json'})
 
-We will get back a string that looks like this (though not as nicely formatted with indentations and line breaks).
+result.text will be a string that looks like this (though not as nicely formatted with indentations and line breaks).
 
 .. sourcecode:: python
 
@@ -62,13 +61,12 @@ Putting it all together, you can try putting this code into a file and executing
 
 .. sourcecode:: python
 
-   import urllib2
-   import urllib
-   import json
-   result = urllib2.urlopen("http://services.faa.gov/airport/status/DTW?format=json").read()
-   d = json.loads(result)
-   print d['city']
-   print d['weather']['temp']
+    import requests
+    import json
+    result = requests.get("https://services.faa.gov/airport/status/DTW", params ={'format':'json'})
+    d = json.loads(result.text)
+    print d['city']
+    print d['weather']['temp']
 
 You should get a result like this (your temperature may vary!)
 
