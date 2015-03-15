@@ -61,7 +61,7 @@ class LiveCode(Directive):
         env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)))
         template = env.get_template('livecode.html')
         output = template.render(**self.options)
-        print output
+
         return [nodes.raw('', output, format='html')]
 
 
