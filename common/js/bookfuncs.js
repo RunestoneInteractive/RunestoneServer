@@ -361,7 +361,7 @@ function runit(myDiv, theButton, includes, suffix) {
     Sk.configure({output : outf,
                   read   : builtinRead,
                   python3: true,
-                  imageProxy : 'http://localhost:8080/320x'     
+                  imageProxy : 'http://image.runestone.academy:8080/320x'
                  });
     var lang = document.getElementById(myDiv).lang;
     try {
