@@ -182,7 +182,7 @@ pixel at column 45, row 55, has RGB values of 165, 161, and 158.  Try a few othe
    :feedback_c: These are the values from the original example (row 45, column 55). Get the values for row 100 and column 30 with p = img.getPixel(30, 100).
    :feedback_d: These are simply made-up values that may or may not appear in the image.  Get the values for row 100 and column 30 with p = img.getPixel(30, 100).
 
-   In the previous ActiveCode example, what are the RGB values of the pixel at row 100, column 30?
+   Using the previous ActiveCode example, select the answer that is closest to the RGB values of the pixel at row 100, column 30?  The values may be off by one or two due to differences in browsers.
 
 
 Image Processing and Nested Iteration
