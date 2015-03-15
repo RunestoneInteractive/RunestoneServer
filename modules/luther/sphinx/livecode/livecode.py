@@ -43,18 +43,25 @@ class LiveCode(Directive):
     has_content = True
     option_spec = {
         'language':directives.unchanged,
+        'stdin'   :directives.unchanged
     }
 
     def run(self):
         self.options['divid'] = self.arguments[0]
         if 'language' not in self.options:
             raise KeyError("language must be specified")
+        if 'stdin' in self.options:
+            self.options['stdin_val'] = self.options['stdin']
+            self.options['stdin'] = True
+        else:
+            self.options['stdin'] = False
+
         self.options['initialcode'] = "\n".join(self.content)
 
         env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)))
         template = env.get_template('livecode.html')
         output = template.render(**self.options)
-
+        print output
         return [nodes.raw('', output, format='html')]
 
 

@@ -24,6 +24,12 @@
         </div>
     </div> <!-- end output -->
     <div class="clearfix"></div>
+    {% if stdin %}
+    <div>
+        <label for="{{ divid}}_stdin">Input for program</label>
+        <input id="{{ divid }}_stdin" type="text" size="35" value="{{ stdin_val }}" />
+    </div>
+    {% endif %}
     <p class="ac_caption"><span class="ac_caption_text"> {{ caption }} ( {{ divid }} )</span> </p>
 
 </div>

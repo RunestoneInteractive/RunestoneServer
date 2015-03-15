@@ -9,7 +9,7 @@ var JOBE_SERVER = 'http://jobe2.cosc.canterbury.ac.nz';
 var resource = '/jobe/index.php/restapi/runs/';
 
 function runlive (divid, language) {
-    var xhr;
+    var xhr, stdin;
     var runspec = {};
     var data, host, source, editor;
     var sfilemap = { java: 'test.java', cpp : 'test.cpp', c : 'test.c', python3: 'test.py', python2: 'test.py'}
@@ -17,12 +17,17 @@ function runlive (divid, language) {
     editor = cm_editors[divid + "_code"];
     source = editor.getValue();
 
+    stdin = $("#" + divid + "_stdin").val()
+
     runspec = {
         language_id: language,
         sourcecode: source,
         sourcefilename: sfilemap[language]
     };
 
+    if (stdin) {
+        runspec.input = stdin
+    }
     data = JSON.stringify({'run_spec': runspec});
     host = JOBE_SERVER + resource
     xhr.open("POST", host, true);
