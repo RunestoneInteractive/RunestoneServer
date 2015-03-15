@@ -367,6 +367,7 @@ Note that it is a much more simple example file in that the exit is very close t
 .. activecode:: completemaze
     :caption: Complete Maze Solver
     :nocodelens:
+    :timelimit: off
 
     import turtle
 

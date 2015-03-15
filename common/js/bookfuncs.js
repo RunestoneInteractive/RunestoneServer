@@ -347,6 +347,7 @@ function runit(myDiv, theButton, includes, suffix) {
             Sk.tg.turtleList = [];
         }
     }
+    var timelimit = $("#"+myDiv).attr("time")
     // set execLimit in milliseconds  -- for student projects set this to
     // 25 seconds -- just less than Chrome's own timer.
     if (prog.indexOf('ontimer') > -1 || 
@@ -355,7 +356,13 @@ function runit(myDiv, theButton, includes, suffix) {
         prog.indexOf('setDelay') > -1 ) {
         Sk.execLimit = null;
     } else {
-        Sk.execLimit = 25000;
+        if (timelimit === "off") {
+            Sk.execLimit = null;
+        } else if (timelimit) {
+            Sk.execLimit = timelimit;
+        } else {
+            Sk.execLimit = 25000;
+        }
     }
     // configure Skulpt output function, and module reader
     Sk.configure({output : outf,
