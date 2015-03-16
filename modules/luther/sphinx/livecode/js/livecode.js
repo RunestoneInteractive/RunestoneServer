@@ -36,7 +36,6 @@ var Jobe = new (function() {
             runspec['file_list'] = [[div2id[datafile],datafile]];
         }
         data = JSON.stringify({'run_spec': runspec});
-
         host = JOBE_SERVER + resource
         xhr.open("POST", host, true);
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -51,6 +50,7 @@ var Jobe = new (function() {
                     $(odiv).html(result.stdout.replace(/\n/g, "<br>"));
                     break;
                 case 11: // compiler error
+                    $(odiv).html("There were errors compiling your code. See below.");
                     addJobeErrorMessage(result.cmpinfo, divid);
                     break;
                 case 12:  // run time error
