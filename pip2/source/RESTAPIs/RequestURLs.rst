@@ -83,7 +83,7 @@ For example, in the following, the base url is https://google.com/search. A dict
    :answer_b: requests.get("http://bar.com/", params = {'goodstuff':'?', 'greet':'hi there', 'frosted':'no'})
    :answer_c: requests.get("http://bar.com/goodstuff", params = ['greet', 'hi', 'there', 'frosted', 'no'])
    :answer_d: requests.get("http://bar.com/goodstuff", params = {'greet': 'hi there', 'frosted':'no'})
-   :correct: a
+   :correct: d
    :feedback_a: The ? and the & are added automatically.
    :feedback_b: goodstuff is part of the base url, not the query params
    :feedback_c: The value of params should be a dictionary, not a list
