@@ -275,12 +275,12 @@ function createActiveCode(divid,suppliedSource,sid,language) {
             }
         }
         edNode.appendChild(document.createElement('br'));
-        var newCanvas = edNode.appendChild(document.createElement("canvas"));
+        var newCanvas = edNode.appendChild(document.createElement("div"));
         newCanvas.id = acblockid+"_canvas";
         newCanvas.height = 400;
         newCanvas.width = 400;
         newCanvas.style.border = '2px solid black';
-        newCanvas.style.display = 'none';
+        newCanvas.style.display = 'block';
         var newPre = edNode.appendChild(document.createElement("pre"));
         newPre.id = acblockid + "_pre";
         newPre.className = "active_out";
@@ -972,7 +972,7 @@ function createScratchActivecode() {
         '          <button class="ac_opt btn btn-default" style="display: inline-block" id="' + divid + '_loadb" onclick="requestCode(\'' + divid + '\');">Load</button>' +
 
         '          <div style="text-align: center">' +
-        '            <canvas id="' + divid + '_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
+        '            <div id="' + divid + '_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: block; text-align: center"></canvas>' +
         '          </div>' +
         '          <pre id="' + divid + '_suffix" style="display:none">' +
         '          </pre>' +
