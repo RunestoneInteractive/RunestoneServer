@@ -42,19 +42,24 @@ class LiveCode(Directive):
     optional_arguments = 0
     has_content = True
     option_spec = {
-        'language':directives.unchanged,
-        'stdin'   :directives.unchanged
+        'language':directives.unchanged_required,
+        'stdin'   :directives.unchanged,
+        'datafile' : directives.unchanged,
     }
 
     def run(self):
         self.options['divid'] = self.arguments[0]
         if 'language' not in self.options:
             raise KeyError("language must be specified")
+
         if 'stdin' in self.options:
             self.options['stdin_val'] = self.options['stdin']
             self.options['stdin'] = True
         else:
             self.options['stdin'] = False
+
+        if 'datafile' not in self.options:
+            self.options['datafile'] = False
 
         self.options['initialcode'] = "\n".join(self.content)
 

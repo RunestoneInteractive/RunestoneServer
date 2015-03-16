@@ -2,7 +2,7 @@
 <div id="{{ divid }}" lang="{{ language }}" class="ac_section alert alert-warning">
 
     <div class="ac_actions">
-        <button class='btn btn-success' id="{{ divid }}_runb" onclick="runlive('{{divid}}', '{{language}}')">Run</button>
+        <button class='btn btn-success' id="{{ divid }}_runb" onclick="Jobe.runlive('{{divid}}', '{{language}}', '{{datafile}}')">Run</button>
         <button class="ac_opt btn btn-default" style="display: inline-block" id="{{ divid }}_saveb"
                 onclick="saveEditor('{{ divid }}');">Save
         </button>
@@ -30,6 +30,12 @@
         <input id="{{ divid }}_stdin" type="text" size="35" value="{{ stdin_val }}" />
     </div>
     {% endif %}
+
     <p class="ac_caption"><span class="ac_caption_text"> {{ caption }} ( {{ divid }} )</span> </p>
 
+    {% if datafile %}
+    <script>
+        $(document).ready(function() { Jobe.pushDataFile("{{ datafile }}"); } );
+    </script>
+    {% endif %}
 </div>
