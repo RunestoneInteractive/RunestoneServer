@@ -8,6 +8,8 @@ var USE_API_KEY = true;
 var JOBE_SERVER = 'http://jobe2.cosc.canterbury.ac.nz';
 var resource = '/jobe/index.php/restapi/runs/';
 
+// todo:  set up a request to push a data file to the server
+
 function runlive (divid, language) {
     var xhr, stdin;
     var runspec = {};
