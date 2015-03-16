@@ -105,3 +105,24 @@
         width: auto;
     }*/
 }
+
+.ac_caption {
+    text-align: center;
+    font-weight: bold;
+}
+
+.ac_caption_text {
+    font-weight: normal;
+}
+.ac_caption:before {
+    content: "ActiveCode: " counter(activecode) " ";
+    counter-increment: activecode;
+}
+
+.active_out {
+    background-color:#dcdcdc;
+    border-radius: 6px;
+    min-width: 20em;
+    max-height: 300px;
+    overflow: auto;
+}
