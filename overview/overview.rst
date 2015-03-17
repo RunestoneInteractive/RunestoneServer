@@ -511,6 +511,35 @@ connect it to the print block.  Now click the run button and you should see 10 p
 in the gray output area.
 
 
+Other Languages - LiveCode
+--------------------------
+
+.. livecode:: lc1
+   :language: java
+   :stdin: 100
+
+   import java.util.Scanner;
+
+   public class TempConv {
+       public static void main(String[] args) {
+            Double fahr;
+            Double cel;
+            Scanner in;
+
+            in = new Scanner(System.in);
+            System.out.println("Enter the temperature in F: ");
+            fahr = in.nextDouble();
+
+            cel = (fahr - 32) * 5.0/9.0;
+            System.out.println(fahr + " degrees F is: " + cel + " C");
+
+            System.exit(0);
+       }
+
+   }
+
+
+
 What To Do Now
 --------------
 
