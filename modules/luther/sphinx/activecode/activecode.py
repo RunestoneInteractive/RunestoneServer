@@ -57,7 +57,7 @@ def setup(app):
 
 START = '''
 <div id="cont"></div>
-<div id="%(divid)s" lang="%(language)s" class="ac_section alert alert-warning" >
+<div id="%(divid)s" lang="%(language)s" time="%(timelimit)s" class="ac_section alert alert-warning" >
 '''
 
 
@@ -295,7 +295,8 @@ class ActiveCode(Directive):
         'tour_4':directives.unchanged,
         'tour_5':directives.unchanged,
         'nocodelens':directives.flag,
-        'coach':directives.flag
+        'coach':directives.flag,
+        'timelimit':directives.unchanged
     }
 
     def run(self):
@@ -363,6 +364,9 @@ class ActiveCode(Directive):
             self.options['codelens'] = False
         else:
             self.options['codelens'] = True
+
+        if 'timelimit' not in self.options:
+            self.options['timelimit'] = ''
 
         return [ActivcodeNode(self.options)]
 

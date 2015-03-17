@@ -117,7 +117,7 @@ def index():
                     x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
         except:
             session.flash = "Your course is not set up to track your progress"
-
+        #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
         redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()

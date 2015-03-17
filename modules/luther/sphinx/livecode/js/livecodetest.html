@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    API_KEY = '2AAA7A5415B4A9B394B54BF1D2E9D';  //# A working (100/hr) key on Jobe2
+    USE_API_KEY = true;
+    JOBE_SERVER = 'http://jobe2.cosc.canterbury.ac.nz';
+    resource = '/jobe/index.php/restapi/runs/'
+    xhr = new XMLHttpRequest();
+    runspec = {language_id    : 'cpp',
+               sourcecode     : 'main() { printf("Hello World"); }',
+               sourcefilename : 'test.cpp'};
+
+    data = JSON.stringify({'run_spec' : runspec });
+    host = JOBE_SERVER+resource
+    xhr.open("POST",host,true);
+    xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhr.setRequestHeader('Accept','application/json');
+    xhr.setRequestHeader('X-API-KEY',API_KEY);
+
+    xhr.onload = function() {
+        alert(xhr.responseText);
+    }
+    xhr.send(data);
+
+</script>
+</body>
+</html>

@@ -275,12 +275,12 @@ function createActiveCode(divid,suppliedSource,sid,language) {
             }
         }
         edNode.appendChild(document.createElement('br'));
-        var newCanvas = edNode.appendChild(document.createElement("canvas"));
+        var newCanvas = edNode.appendChild(document.createElement("div"));
         newCanvas.id = acblockid+"_canvas";
         newCanvas.height = 400;
         newCanvas.width = 400;
         newCanvas.style.border = '2px solid black';
-        newCanvas.style.display = 'none';
+        newCanvas.style.display = 'block';
         var newPre = edNode.appendChild(document.createElement("pre"));
         newPre.id = acblockid + "_pre";
         newPre.className = "active_out";
@@ -347,6 +347,7 @@ function runit(myDiv, theButton, includes, suffix) {
             Sk.tg.turtleList = [];
         }
     }
+    var timelimit = $("#"+myDiv).attr("time")
     // set execLimit in milliseconds  -- for student projects set this to
     // 25 seconds -- just less than Chrome's own timer.
     if (prog.indexOf('ontimer') > -1 || 
@@ -355,13 +356,19 @@ function runit(myDiv, theButton, includes, suffix) {
         prog.indexOf('setDelay') > -1 ) {
         Sk.execLimit = null;
     } else {
-        Sk.execLimit = 25000;
+        if (timelimit === "off") {
+            Sk.execLimit = null;
+        } else if (timelimit) {
+            Sk.execLimit = timelimit;
+        } else {
+            Sk.execLimit = 25000;
+        }
     }
     // configure Skulpt output function, and module reader
     Sk.configure({output : outf,
                   read   : builtinRead,
                   python3: true,
-                  imageProxy : 'http://localhost:8080/320x'     
+                  imageProxy : 'http://image.runestone.academy:8080/320x'
                  });
     var lang = document.getElementById(myDiv).lang;
     try {
@@ -965,7 +972,7 @@ function createScratchActivecode() {
         '          <button class="ac_opt btn btn-default" style="display: inline-block" id="' + divid + '_loadb" onclick="requestCode(\'' + divid + '\');">Load</button>' +
 
         '          <div style="text-align: center">' +
-        '            <canvas id="' + divid + '_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: none; text-align: center"></canvas>' +
+        '            <div id="' + divid + '_canvas" class="ac-canvas" height="400" width="400" style="border-style: solid; display: block; text-align: center"></canvas>' +
         '          </div>' +
         '          <pre id="' + divid + '_suffix" style="display:none">' +
         '          </pre>' +
