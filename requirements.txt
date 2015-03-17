@@ -11,7 +11,7 @@ diff-match-patch==20110725.1
 docutils==0.12
 logilab-common==0.62.0
 lxml==3.3.5
-psycopg2==2.5.2
+psycopg2==2.6
 pygal==1.4.6
 pylint==1.2.1
 sphinxcontrib-paverutils==1.6
