@@ -11,22 +11,28 @@ var Jobe = new (function() {
 
 // todo:  set up a request to push a data file to the server
 
-    var runlive = function (divid, language, datafile) {
+    var runlive = function (divid, language, sourcefile, datafile) {
         var xhr, stdin;
         var runspec = {};
         var data, host, source, editor;
-        var sfilemap = {java: 'test.java', cpp: 'test.cpp', c: 'test.c', python3: 'test.py', python2: 'test.py'}
+        var sfilemap = {java: '', cpp: 'test.cpp', c: 'test.c', python3: 'test.py', python2: 'test.py'}
+
         xhr = new XMLHttpRequest();
         editor = cm_editors[divid + "_code"];
         source = editor.getValue();
 
         stdin = $("#" + divid + "_stdin").val()
 
+        if (! sourcefile ) {
+            sourcefile = sfilemap[language];
+        }
+
         runspec = {
             language_id: language,
             sourcecode: source,
-            sourcefilename: sfilemap[language]
+            sourcefilename: sourcefile
         };
+
 
         if (stdin) {
             runspec.input = stdin

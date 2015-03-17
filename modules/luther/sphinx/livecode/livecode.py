@@ -45,6 +45,7 @@ class LiveCode(Directive):
         'language':directives.unchanged_required,
         'stdin'   :directives.unchanged,
         'datafile' : directives.unchanged,
+        'sourcefile': directives.unchanged
     }
 
     def run(self):
@@ -60,6 +61,10 @@ class LiveCode(Directive):
 
         if 'datafile' not in self.options:
             self.options['datafile'] = False
+
+        if 'sourcefile' not in self.options:
+            self.options['sourcefile'] = ""
+
 
         self.options['initialcode'] = "\n".join(self.content)
 
