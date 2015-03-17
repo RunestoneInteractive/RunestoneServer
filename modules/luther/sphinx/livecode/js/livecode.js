@@ -49,7 +49,12 @@ var Jobe = new (function() {
         xhr.setRequestHeader('X-API-KEY', API_KEY);
 
         xhr.onload = function () {
-            var result = JSON.parse(xhr.responseText);
+            try {
+                var result = JSON.parse(xhr.responseText);
+            } catch (e) {
+                result = {};
+                result.outcome = -1;
+            }
             var odiv = "#" + divid + "_pre";
             switch (result.outcome) {
                 case 15:
