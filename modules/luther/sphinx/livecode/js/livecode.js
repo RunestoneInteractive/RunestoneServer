@@ -49,6 +49,7 @@ var Jobe = new (function() {
         xhr.setRequestHeader('X-API-KEY', API_KEY);
 
         xhr.onload = function () {
+            var logresult;
             try {
                 var result = JSON.parse(xhr.responseText);
             } catch (e) {
@@ -56,6 +57,12 @@ var Jobe = new (function() {
                 result.outcome = -1;
             }
             var odiv = "#" + divid + "_pre";
+            if (result.outcome === 15) {
+                logresult = 'success';
+            } else {
+                logresult = result.outcome;
+            }
+            logRunEvent({'div_id': divid, 'code': source, 'errinfo': logresult, 'event':'livecode'});
             switch (result.outcome) {
                 case 15:
                     $(odiv).html(result.stdout.replace(/\n/g, "<br>"));
