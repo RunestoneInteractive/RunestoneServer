@@ -36,6 +36,7 @@ def setup(app):
     app.add_stylesheet('codemirror.css')
     app.add_stylesheet('livecode.css')
     app.add_javascript('livecode.js')
+    app.add_javascript('clike.js')
 
 class LiveCode(Directive):
     required_arguments = 1
