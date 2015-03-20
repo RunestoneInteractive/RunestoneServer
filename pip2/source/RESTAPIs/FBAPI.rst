@@ -12,10 +12,10 @@
     :linenothreshold: 500
     
     
-.. _session_21_exercises:
+.. _fb_api_exercises:
 
-Session 21 prep
----------------
+Facebook API Exercises
+----------------------
   
 .. mchoicemf:: session21_1
    :answer_a: EDT

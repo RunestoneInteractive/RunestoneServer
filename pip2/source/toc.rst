@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/week10.rst
    Assignments/week9.rst
    Assignments/week8.rst
    Assignments/ps7.rst
@@ -389,6 +390,14 @@ Classes
    Classes/sorting_instances.rst
    Classes/Glossary.rst
    Classes/Exercises.rst
+
+The FaceBook Graph API
+::::::::::::::::::::::
+
+.. toctree::
+    :maxdepth: 2
+    
+    RESTAPIs/FBAPI.rst
 
 More on Accumulation: Map, Filter, Reduce, List Comprehensions, and Zip
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
