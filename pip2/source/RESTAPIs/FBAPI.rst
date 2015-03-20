@@ -16,8 +16,46 @@
 
 Facebook API Exercises
 ----------------------
+
+Download the code file fbapi.py from cTools. It contains the following code.
+
+.. sourcecode:: python
+
+    import facebook
+    import json
+    import test
+    import requests
+    
+    def pretty(obj):
+        return json.dumps(obj, sort_keys=True, indent=2)
+    
+    fb_class_id = '1196007610428928'
+        
+    r = requests.get("https://graph.facebook.com/?%s" % (fb_class_id))
+    print r.status_code
+    print r.text
+    
+    # get access token from 
+    # https://developers.facebook.com/tools/explorer"
+    access_token = None
+    
+    if access_token == None:
+        access_token = raw_input("\nCopy and paste token from https://developers.facebook.com/tools/explorer\n>  ")
+    
+    # create an instance of the class GraphAPI, which saves our access_token
+    graph = facebook.GraphAPI(access_token)
+    # access_token is automatically passed to FB, in the format FB wants it (not in the URL, unfortunately)
+    feed = graph.get_object("%s/feed" % (fb_class_id))
+    
+    print type(feed)
+    print feed.keys()
+    print type(feed['data'])
+    print len(feed['data'])
+    print pretty(feed['data'][2])
+    print feed['data'][2]["message"]
+
   
-.. mchoicemf:: session21_1
+.. mchoicemf:: fb_api_1
    :answer_a: EDT
    :answer_b: GMT
    :answer_c: Ann Arbor
@@ -30,7 +68,7 @@ Facebook API Exercises
    
    Use the `Facebook Graph explorer <https://developers.facebook.com/tools/explorer>`_ and run a GET request on /me. In the results, what is the value associated with the "locale" key?
   
-.. mchoicemf:: session21_3
+.. mchoicemf:: fb_api_3
    :answer_a: The Facebook server is temporarily not working
    :answer_b: Facebook only accepts REST API calls accompanied by an authorization key
    :answer_c: The ? is in the wrong place
@@ -41,10 +79,10 @@ Facebook API Exercises
    :feedback_c: The ? is in the right place, according to the FB Graph API documentation https://developers.facebook.com/docs/graph-api/using-graph-api
    :feedback_d: That's actually the id for the FB group for our class.
    
-   Last week, you learned how to call REST APIs using urllib2.urlopen. What happens when you try to invoke the FB API using urllib2.urlopen? Try uncommenting and executing line 9 from session21.py. Also try visiting the URL https://graph.facebook.com/?269032479960344 in your browser. What do you think is going on?         
+   Last week, you learned how to call REST APIs using requests.get. What happens when you try to invoke the FB API using requests.get? Try uncommenting and executing line 9-11 from fbapi.py. Also try visiting the URL https://graph.facebook.com/?269032479960344 in your browser. What do you think is going on?         
    
    
-.. mchoicema:: session21_4
+.. mchoicema:: fb_api_4
    :answer_a: You would like your code to be compressed so that it uses less space on your file system
    :answer_b: You would like to be able to see or revert to any past version of any of the files in your project
    :answer_c: You want to collaborate with others, working in parallel on a project and merging your changes together occasionally

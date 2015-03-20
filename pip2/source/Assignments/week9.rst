@@ -33,8 +33,6 @@ You have the following graded activities:
       * Read *The Success of Open Source*, Chapter 2
       * :ref:`Reading response 9 <reading_response_9>`
 
-3. Problem set **Due:** **Sunday, March 15**
-
 3. Problem set: **Due:** **Sunday, March 22**
 
    * This week, there will be a file called ps8.py. You should download a copy of it. You will edit it on your laptop or workstation and test it by running it using your native Python interpreter.
