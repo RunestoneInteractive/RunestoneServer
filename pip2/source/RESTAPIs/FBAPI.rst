@@ -72,14 +72,14 @@ Download the code file fbapi.py from cTools. It contains the following code.
    :answer_a: The Facebook server is temporarily not working
    :answer_b: Facebook only accepts REST API calls accompanied by an authorization key
    :answer_c: The ? is in the wrong place
-   :answer_d: 245188182322906 is not an object that FB recognizes
+   :answer_d: 269032479960344 is not an id that FB recognizes
    :correct: b
    :feedback_a: Even when the server is working, it won't provide data in response to a request unless it is accompanied by an authorization key
-   :feedback_b: The authorization key is normally acquired through the oauth protocol, though we will work around that by copying and pasting it from the FB Graph Explorer https://developers.facebook.com/tools/explorer
+   :feedback_b: The authorization key is normally acquired through the oauth protocol, which we aren't using. We will work around that by copying and pasting it from the FB Graph Explorer https://developers.facebook.com/tools/explorer
    :feedback_c: The ? is in the right place, according to the FB Graph API documentation https://developers.facebook.com/docs/graph-api/using-graph-api
    :feedback_d: That's actually the id for the FB group for our class.
    
-   Last week, you learned how to call REST APIs using requests.get. What happens when you try to invoke the FB API using requests.get? Try uncommenting and executing line 9-11 from fbapi.py. Also try visiting the URL https://graph.facebook.com/?269032479960344 in your browser. What do you think is going on?         
+   Last week, you learned how to call REST APIs using requests.get. What happens when you try to invoke the FB API using requests.get? Try executing line 9-13 from fbapi.py. Also try visiting the URL https://graph.facebook.com/?269032479960344 in your browser. What do you think is going on?
    
    
 .. mchoicema:: fb_api_4

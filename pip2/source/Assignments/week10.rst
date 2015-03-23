@@ -28,7 +28,7 @@ You have the following graded activities:
    
    * Before Wednesday's class:
        * View slides ``FB Graph API`` in cTools resources/Slides
-       * Ue pip to install the facebook-sdk module 
+       * Use pip to install the facebook-sdk module 
        * Do the :ref:`FaceBook API exercises <fb_api_exercises>`. 
         
 2. Reading responses
