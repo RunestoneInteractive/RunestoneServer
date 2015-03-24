@@ -122,6 +122,8 @@ class DataFile(Directive):
             
         if 'edit' not in self.options:
             self.options['edit'] = False
+        else:
+            self.options['edit'] = True
         
         return [DataFileNode(self.options)]
 
