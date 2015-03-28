@@ -9,6 +9,7 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
+   Assignments/week11.rst
    Assignments/week10.rst
    Assignments/week9.rst
    Assignments/week8.rst
