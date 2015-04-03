@@ -24,6 +24,7 @@ You have the following graded activities:
    
    * Before Wednesday's class:
        * Download the code file from cTools, oauth_with_twitter.py
+       * install the requests_oauthlib python module (using pip, the same 
        * Follow the instructions in it to create an app for yourself on dev.twitter.com
        * Understand and run the code
        * Answer the question :ref:`below <twitter_oauth_checkin>`
