@@ -53,7 +53,7 @@
                 <div id="{{ =s.code.acid }}_{{ =s.code.sid }}"></div>
                 <form>
                   <label for="#input-grade-{{=s.code.sid}}">Grade</label>
-                <input id="input-grade-{{=s.code.sid}}" type="text" class="form-control " value= "{{=s.code.grade}}" autofocus="autofocus" onchange="sendGrade(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});$('#col-grade-{{=s.code.sid}}').html(this.value);" />
+                <input id="input-grade-{{=s.code.sid}}" type="text" class="form-control " value= "{{=s.code.grade}}" onchange="sendGrade(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});$('#col-grade-{{=s.code.sid}}').html(this.value);" />
                 <label for="#input-comments-{{=s.code.sid}}">Comments</label>
                 <input id="input-comments-{{=s.code.sid}}" type="text" class="form-control" value="{{=s.code.comment}}" onchange="sendComment(this.value,'{{ =s.code.sid }}','{{ =s.code.acid }}', {{=s.code.id}});"/>
               </form>
