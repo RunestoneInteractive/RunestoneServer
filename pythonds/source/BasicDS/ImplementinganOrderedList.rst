@@ -284,4 +284,4 @@ process every node in the list.
 You may also have noticed that the performance of this implementation
 differs from the actual performance given earlier for Python lists. This
 suggests that linked lists are not the way Python lists are implemented.
-The actual implementation of a Python list is based on the notion of an
+The actual implementation of a Python list is based on the notion of an array.  We discuss this in more detail in Chapter 8.
