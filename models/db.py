@@ -208,7 +208,11 @@ auth.settings.expiration = 3600*24
 ## register with janrain.com, write your domain:api_key in private/janrain.key
 #from gluon.contrib.login_methods.rpx_account import use_janrain
 #use_janrain(auth,filename='private/janrain.key')
-from gluon.contrib.login_methods.rpx_account import RPXAccount
+try:
+    from gluon.contrib.login_methods.janrain_account import RPXAccount
+except:
+    print "Warning you should upgrade to a newer web2py for better janrain support"
+    from gluon.contrib.login_methods.rpx_account import RPXAccount
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
 janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
