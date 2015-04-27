@@ -1,0 +1,245 @@
+{% macro URL(folder, value='', type='text', size=20) -%}
+    {{ folder }}/{{ value|e }}
+{%- endmacro %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      {{ response.title or request.application }}
+    </title>
+
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
+
+    <link rel="stylesheet" type="text/css" href="{{ URL('static', 'bootstrap-3.0.0/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ URL('static', 'css/bootstrap-sphinx.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ URL('static', 'css/runestone-custom-sphinx-bootstrap.css')}}" />
+
+
+    <script src="{{ URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
+    <script src="{{ URL('static', 'js/jquery-fix.js')}}"></script>
+    <script src="{{ URL('static', 'bootstrap-3.0.0/js/bootstrap.min.js')}}"></script>
+    <script src="{{ URL('static', 'js/bootstrap-sphinx.js')}}"></script>
+    <script type="text/javascript">
+      var eBookConfig = {};
+      var portPart = '';
+      eBookConfig.host = "";
+      eBookConfig.app = eBookConfig.host+'/{{ request.application }}';
+      eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+      eBookConfig.logLevel = 10;
+      eBookConfig.loginRequired = true;
+    </script>
+  </head>
+<body>
+{% block navbar %}
+<!-- needed for Facebook button -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<!-- Begin navbar -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+{% if response.flash: %}
+    <div class="flash">{{ response.flash or ''}}</div>
+{% endif %}
+
+  <div class="container">
+
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div>
+        <a class="brand-logo" style='background: transparent url("{{ URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{ URL('default', 'user/login')}}">&nbsp; </a>
+        <a class="navbar-brand" href="/">Runestone Interactive</a>
+      </div>
+    </div>
+
+    <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li class="divider-vertical"></li>
+
+        <!-- social media dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+          </a>
+          <ul class="dropdown-menu social-menu">
+              <li>
+                <div>
+                  <b>Runestone in social media:</b>
+                </div>
+                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+              </li>
+
+              <li class="divider"></li>
+              <li>
+                <div>
+                  <b>Help support us:</b>
+                </div>
+                <div class="gittip">
+                  <iframe style="border:0;"
+                    src="https://www.gittip.com/bnmnetp/widget.html"
+                    width="48pt" height="22pt" class="gittip-button">
+                  </iframe>
+                </div>
+              </li>
+          </ul>
+        </li>
+        <!-- end social media dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- user account dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+{#            {% if auth.user %}
+              <li><span class='loggedinuser'>{{ auth.user.email }}</span></li>
+            {% else %}
+              <li><span class='loggedinuser'>Not logged in</span></li>
+            {% endif %}  #}
+            <li class="divider"></li>
+            <li><a href='/{{ request.application}}/mygroup/schedule'>Group Schedule</a></li>
+            <li><a href='/{{ request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
+            <li><a href='/{{ request.application}}/mygroup/manageGroup'>Manage Group</a></li>
+            <li class="divider"></li>
+            <li><a href='/{{ request.application}}/admin/index'>Instructor's Page</a></li>
+            <li class="divider"></li>
+{#            {% if auth.user %}
+              <li><a href="/{{ request.application}}/default/user/profile">Edit Profile</a>
+              <li><a href="/{{ request.application}}/default/user/change_password">Change Password</a>
+              <li><a href='{{ URL('assignments','index')}}'>Progress Page</a></li>              
+              <li class='loginout'><a href='{{ URL("default", "user/logout")}}'>Log Out</a></li>
+            {% else %}
+              <li><a href='{{ URL("default", "user/register")}}'>Register</a></li>
+              <li class='loginout'><a href='{{ URL("default", "user/login")}}'>Login</a></li>
+            {% endif %}    #}
+          </ul>
+        </li>
+        <!-- end user account dropdown -->
+
+        <li class="divider-vertical"></li>
+
+        <!-- help menu dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+          </a>
+          <ul class="dropdown-menu user-menu">
+
+            <li><a href='/{{ request.application}}/static/overview/instructor.html'>Help for Instructors</a></li> 
+            <li class="divider"></li>            
+            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='https://github.com/bnmnetp/runestone/issues/new'>Report A Problem</a></li>
+          </ul>
+        </li>
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav">
+
+        <li class="divider-vertical"></li>
+
+        <!-- open library dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/{{ request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist</a></li>
+            <li><a href="/{{ request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures</a></li>
+            <li><a href="/{{ request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
+            <li><a href="/{{ request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
+            <li><a href="/{{ request.application}}/static/Teacher-CSP/index.html">CS Principles for teachers</a></li>
+            <li><a href="/{{ request.application}}/static/pip/index.html">Programs, Information, People version 1</a></li>
+            <li><a href="/{{ request.application}}/static/pip2/index.html">Programs, Information, People version 2</a></li>
+            <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
+          </ul>
+        </li>
+
+        <li class="divider-vertical"></li>
+
+
+
+        <li class="divider-vertical"></li>
+
+      </ul>
+
+    </div>
+  </div>
+
+</div>
+<!-- End navbar -->
+{% endblock %}
+
+<!-- begin body content -->
+  <div class="container">
+      {% block contents %}
+      {% endblock %}
+  </div>
+<!-- end body content -->
+
+{% block footer %}
+<!-- begin footer -->
+  <footer class="footer" style="margin-top:20px;">
+    <div class="container">
+      <p class="pull-right">
+{#        {% if auth.user %}
+          <span class='loggedinuser'>{{ auth.user.email}}</span> | <a href="#">Back to top</a>
+        {% else %}
+          <span class='loggedinuser'>Not logged in</span> | <a href="#">Back to top</a>
+        {% endif %}    #}
+      </p>
+      <p>
+        &copy; Copyright 2014 Brad Miller, David Ranum
+      </p>
+    </div>
+  </footer>
+<!-- end footer -->
+{% endblock %}
+
+</body>
+<script type='text/javascript'>
+  // do some styling of the web2py login and registration form
+  // this is done here because web2py doesn't have an easy way
+  // to add class to the auth form. We don't want to duplicate the
+  // styles from .form-control into our custom CSS.
+  var el = $("#web2py_user_form");
+  el.find("input[type='text']").addClass('form-control');
+  el.find("input[type='password']").addClass('form-control');
+</script>
+
+{% if request.application == 'runestone' %}
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-32029811-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+{% endif %}
+
+</html>

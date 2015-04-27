@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block statusbar %}
+{% endblock %}
+
+{% block contents %}
+<!-- Carousel
+    ================================================== -->
+    <link href="/static/css/carousel.css" rel="stylesheet">
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
+        <li data-target="#myCarousel" data-slide-to="5"></li>
+      </ol>
+      <div class="carousel-inner">
+
+          <div class="item active">
+
+            <div class="container">
+              <div class="carousel-caption">
+                <h1>Welcome to Interactive Python</h1>
+                <p>Interactive Python is a project of Runestone Interactive.  We host a growing number of Open Source, Interactive Textbooks. Written by award winning authors. Used by some of the best schools.</p>
+                <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/library.html" role="button">See the List</a>
+                   <a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/overview/overview.html" role="button">Take a Tour</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="item">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>How to Think Like a Computer Scientist: Interactive Edition</h1>
+              <p>Based on the original open source book.  Learn Python, try examples, answer questions, interactively, right in the book!</p>
+              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/thinkcspy/index.html" role="button">Try it Now</a></p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="item">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Algorithms and Data Structures using Python</h1>
+              <p>Written by Brad Miller and David Ranum, this is a free and open source version of the book published by Franklin Beedle.</p>
+              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/pythonds/index.html" role="button">Learn more</a></p>
+            </div>
+          </div>
+        </div>
+
+          <div class="item">
+            <div class="container">
+              <div class="carousel-caption">
+                <h1>Take a Tour</h1>
+                <p>This page shows you some of the unique interactive features used in our books.</p>
+                <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/overview/overview.html" role="button">Learn more</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="container">
+              <div class="carousel-caption">
+                <h1>CS Principles -- Big Ideas in Programming</h1>
+                <p>By Mark Guzdial, written specially for teachers, this book introduces important concepts for the new AP CS Principles course.</p>
+                <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/Teacher-CSP/index.html" role="button">Learn more</a></p>
+              </div>
+            </div>
+          </div>
+
+        <div class="item">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Java Review for the AP CS A Exam</h1>
+              <p>Not just for Python.  This great resource, written by Barbara Ericson, is loaded with review questions and clear explanations.</p>
+              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/JavaReview/index.html" role="button">Get Started</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
+
+{% endblock contents %}
+
+
+
+
