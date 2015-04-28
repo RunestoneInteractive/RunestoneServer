@@ -11,13 +11,17 @@ from runestone.model import *
 
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+
+# Create custom registration form here then add it on the constructor
+# or maybe set it later with security.state.register_form
 security = Security(app, user_datastore)
 
 # Create a user to test with
 @app.before_first_request
 def create_user():
     db.create_all()
-    user_datastore.create_user(email='matt@nobien.net', password='password')
+    if not user_datastore.get_user('matt@nobien.net'):
+        user_datastore.create_user(email='matt@nobien.net', password='password')
     db.session.commit()
 
 # Views

@@ -1,11 +1,10 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
-
-app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = 'super-secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///devdb.db'
+app.config.from_object('config')
+Bootstrap(app)
 
 # Create database connection object
 db = SQLAlchemy(app)

@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% include "security/_messages.html" %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-4"></div>
+<div class="col-md-4 center-block">
+<h1>Login</h1>
+<form class="form form-horizontal" action="{{ url_for_security('login') }}" method="POST" name="login_user_form" role="form">
+  {{ login_user_form.hidden_tag() }}
+  {{ render_field_with_errors(login_user_form.email) }}
+  {{ render_field_with_errors(login_user_form.password) }}
+  {{ render_field_with_errors(login_user_form.remember) }}
+  {{ render_field(login_user_form.next) }}
+  {{ render_field(login_user_form.submit) }}
+</form>
+</div>
+<div class="col-md-4">
+{% include "security/_menu.html" %}
+
+</div>
+</div>
+</div>
+{% endblock %}
