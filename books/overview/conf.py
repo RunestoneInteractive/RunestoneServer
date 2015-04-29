@@ -175,8 +175,8 @@ html_short_title ='Runestone Interactive Overview'
 module_paths = [x.replace('.','/') for x in extensions]
 module_static_js = ['../modules/%s/js' % x for x in module_paths if os.path.exists('../modules/%s/js' % x)]
 module_static_css = ['../modules/%s/css' % x for x in module_paths if os.path.exists('../modules/%s/css' % x)]
-html_static_path = ['_static', '../common/js', '../common/css',
-                    '../common/bootstrap', '../common/images'] + module_static_js + module_static_css
+html_static_path = ['_static', '../modules/common/js', '../modules/common/css',
+                    '../modules/common/bootstrap', '../modules/common/images'] + module_static_js + module_static_css
 
 print html_static_path
 
