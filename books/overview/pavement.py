@@ -9,7 +9,7 @@ from sphinxcontrib import paverutils
 sys.path.append(os.getcwd())
 
 ######## CHANGE THIS ##########
-project_name = "devcourse"
+project_name = "overview"
 ###############################
 
 master_url = 'http://127.0.0.1:8000'
@@ -19,9 +19,9 @@ options(
     sphinx = Bunch(docroot=".",),
 
     build = Bunch(
-        builddir="../static/"+project_name,
-        sourcedir="../source/",
-        outdir="../static/"+project_name,
+        builddir="../../static/"+project_name,
+        sourcedir=".",
+        outdir="../../static/"+project_name,
         confdir=".",
         template_args={'course_id':project_name,
                        'login_required':'false',
@@ -40,14 +40,16 @@ if project_name == "<project_name>":
     ('all','a','rebuild everything'),
     ('outputdir=', 'o', 'output static files here'),
     ('masterurl=', 'u', 'override the default master url'),
-    ('masterapp=', 'p', 'override the default master app')
+    ('masterapp=', 'p', 'override the default master app'),
 ])
 def build(options):
-    sh('cp %s/index.rst %s' % (options.build.confdir,options.build.sourcedir))
-
     if 'all' in options.build:
       options['force_all'] = True
       options['freshenv'] = True
+
+    bi = sh('git describe --long',capture=True)[:-1]
+    bi = bi.split('-')[0]
+    options.build.template_args["build_info"] = bi
 
     if 'outputdir' in options.build:
         options.build.outdir = options.build.outputdir
