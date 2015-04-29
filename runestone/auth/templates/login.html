@@ -1,5 +1,5 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}This is an example page{% endblock %}
+{% block title %}Runestone Login{% endblock %}
 
 {% block navbar %}
 <div class="navbar navbar-fixed-top">
@@ -14,8 +14,8 @@
 {% block content %}
 <div class="container-fluid">
 <div class="row">
-<div class="col-md-4"></div>
-<div class="col-md-4 center-block">
+<div class="col-sm-4"></div>
+<div class="col-sm-4 center-block">
 <h1>Login</h1>
 <form class="form form-horizontal" action="{{ url_for_security('login') }}" method="POST" name="login_user_form" role="form">
   {{ login_user_form.hidden_tag() }}
@@ -26,9 +26,8 @@
   {{ render_field(login_user_form.submit) }}
 </form>
 </div>
-<div class="col-md-4">
+<div class="col-sm-4">
 {% include "security/_menu.html" %}
-
 </div>
 </div>
 </div>
