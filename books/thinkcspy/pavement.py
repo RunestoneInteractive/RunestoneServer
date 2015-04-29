@@ -27,9 +27,9 @@ options(
     sphinx = Bunch(docroot=".",),
 
     build = Bunch(
-        builddir="../static/"+project_name,
+        builddir="../../static/"+project_name,
         sourcedir="./source/",
-        outdir="../static/"+project_name,
+        outdir="../../static/"+project_name,
         confdir=".",
         template_args={'course_id':project_name,
                        'login_required':'false',
