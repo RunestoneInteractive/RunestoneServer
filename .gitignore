@@ -47,3 +47,4 @@ static/webfundamentals
 books/modules/MANIFEST
 books/modules/dist
 books/build_info
+books/paverconfig.py
