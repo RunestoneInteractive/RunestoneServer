@@ -261,6 +261,31 @@ var checkTimedRadio = function (divid) {
 
 var tookTimedExam = function () {
 
+   $("#output").css({
+			'width': '50%',
+			'margin': '0 auto',
+			'background-color': '#DFF0D8',
+			'text-align': 'center',
+			'border': '2px solid #DFF0D8',
+			'border-radius': '25px'
+		});
+		
+		$("#results").css({
+			'width': '50%',
+			'margin': '0 auto',
+			'background-color': '#DFF0D8',
+			'text-align': 'center',
+			'border': '2px solid #DFF0D8',
+			'border-radius': '25px'
+		});
+
+        $(".tooltipTime").css({
+		    'margin': '0',
+		    'padding': '0',
+		    'background-color': 'black',
+		    'color' : 'white'
+		});
+
    var len = localStorage.length;
    var pageName = getPageName();
    if (len > 0) {
@@ -633,22 +658,6 @@ function showTime(time){
 		if(secs<10){
 			secs = "0" + secs;
 		}
-		
-		$("#output").css({
-			'width': '50%',
-			'margin': '0 auto',
-			'background-color': '#DFF0D8',
-			'text-align': 'center',
-			'border': '2px solid #DFF0D8',
-			'border-radius': '25px'
-		});
-
-        $(".tooltipTime").css({
-		    'margin': '0',
-		    'padding': '0',
-		    'background-color': 'black',
-		    'color' : 'white'
-		});
 		
 		document.getElementById("output").innerHTML = "Time Remaining  " + mins + ":" + secs;
 		var timeTips = document.getElementsByClassName("timeTip");

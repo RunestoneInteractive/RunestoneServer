@@ -150,7 +150,7 @@ class StartTimer(Directive):
 		    <div id="startWrapper">
 		    <p id="output"></p>
 		    </div>
-		    <div id="controls">
+		    <div id="controls" style="text-align: center;">
 			<button class='btn btn-inverse' id ="start" onclick="start()">Start</button>
 			<button class='btn btn-inverse' id ="pause" onclick="pause()">Pause</button>
 			
@@ -200,7 +200,9 @@ class FinishTimer(Directive):
         
         TEMPLATE_END = '''
 	
+	<div style="text-align: center;">
 	<button class='btn btn-inverse' id ="finish" onclick="checkTimedMCMFStorage()">Submit Answers</button>
+	</div>
 	<p id="results"></p>
 	<script>
 	    $(document).ready(function() {checkIfFinished()});
