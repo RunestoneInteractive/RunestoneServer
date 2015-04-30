@@ -3,6 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='runestone',
     version='0.1dev',
+    author = 'Brad Miller',
+    author_email = 'bonelake@mac.com',
     packages= find_packages(),
     include_package_data = True,
     package_dir = {'' : '.'},
