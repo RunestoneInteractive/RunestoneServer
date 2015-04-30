@@ -7,7 +7,7 @@ setup(
     author_email = 'bonelake@mac.com',
     packages= find_packages(),
     include_package_data = True,
-    package_dir = {'' : '.'},
+    package_dir = {'runestone' : 'runestone'},
     package_data = { '' : ['js/*.js', 'css/*.css', '*.txt']},
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     scripts=['bin/runestone'],

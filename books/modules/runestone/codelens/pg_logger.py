@@ -132,7 +132,7 @@ CUSTOM_MODULE_IMPORTS = ('callback_module',
                          'matrix',
                          'htmlFrame')
 
-CUSTOM_MODULE_IMPORTS = tuple(['luther.sphinx.codelens.'+x for x in
+CUSTOM_MODULE_IMPORTS = tuple(['runestone.codelens.'+x for x in
                                CUSTOM_MODULE_IMPORTS])
 # PREEMPTIVELY import all of these modules, so that when the user's
 # script imports them, it won't try to do a file read (since they've

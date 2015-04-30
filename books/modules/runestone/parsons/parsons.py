@@ -19,7 +19,7 @@ import re
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-from luther.sphinx.assess import Assessment
+from runestone.assess import Assessment
 
 def setup(app):
     app.add_directive('parsonsprob',ParsonsProblem)
