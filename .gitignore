@@ -44,3 +44,6 @@ models/1.py
 node_modules
 */_static/blockly*.html
 static/webfundamentals
+books/modules/MANIFEST
+books/modules/dist
+books/build_info

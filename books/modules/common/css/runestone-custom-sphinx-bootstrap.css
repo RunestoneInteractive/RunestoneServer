@@ -1,1 +1,539 @@
-../../static/runestone-custom-sphinx-bootstrap.css
+/* Runestone custom modifications */
+
+body {
+    padding-top: 60px;
+    background-color: #eeeeee;
+}
+
+pre {
+    margin: 0 0 1em;
+}
+
+h5 {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+/* navbar and menu related styles */
+@media (max-width: 768px) {
+    /* Remove top padding when top navbar goes collapsed in narrow viewports */
+    body {
+        padding-top: 0;
+        margin: auto auto auto 5px;
+    }
+
+    .navbar-fixed-top {
+        position: static;
+    }
+}
+
+@media (min-width: 768px) {
+    /* when navbar is collapsed we don't want any vertical dividers taking up space */
+    .navbar .divider-vertical {
+        height: 50px;
+        margin: 0 3px;
+        border-left: 1px solid #f2f2f2;
+    }
+}
+
+div.container {
+    background-color: #ffffff;
+}
+
+div.section {
+    margin-left: auto;
+    margin-right: auto;
+}
+.container{
+	padding-left:0;
+	padding-right:0;
+}
+ .container  .section >*:not(.section) {
+	max-width: 500pt;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container .section>img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container  .section .parsons, .container  .section .parsons .sortable-code-container, .container  .section .ac_section, .container  .section .cd_section{
+	max-width: none;
+}
+.navbar>.container .navbar-brand {
+    margin-left: 0;
+}
+
+.navbar>.container  {
+    background-color: #f8f8f8;
+}
+
+.footer>.container {
+    background-color: #eeeeee;
+}
+
+.brand-logo {
+    float: left;
+    display: block;
+    background-size: 40px 40px !important;
+    width: 40px;
+    height: 40px;
+    margin-top: 4px;
+}
+
+.social-menu {
+    width: 220px;
+    padding: 10px 10px 15px 20px;
+}
+
+.fb-like {
+    margin-top: 7px;
+}
+
+.fb_iframe_widget span, .fb_iframe_widget iframe {
+    height: 20px !important;
+    width: 82px !important;
+}
+
+.twitter-follow-button {
+    margin-top: 10px;
+}
+
+.gittip {
+    margin-top: 8px;
+}
+
+.gittip-button {
+    margin-bottom: -6px;
+}
+
+.dropdown-menu > li > span {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loggedinuser {
+    font-weight: bold;
+}
+
+/* end navbar and menu related styles */
+
+.CodeMirror {
+    margin: 0 0 1em 0;
+    background-color: #fff;
+	clear:both;
+}
+
+.CodeMirror-scroll {
+    /* this allows CM elements to be resized to (almost) any 
+     * height while still relying on max-height (which keeps 
+     * the CM editors to no more than the size needed 
+     * unless resized) */
+    max-height: 30em;
+    min-width: 30em;
+}
+
+.ac_section .CodeMirror pre {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border-width: 0; margin: 0; padding: 0; background: transparent;
+  font-family:  Monaco, Courier New, monospace;
+  font-size: inherit;
+  padding: 0; margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+button.btn, btn.btn-sm,
+input[type="submit"].btn.btn-sm,
+input[type="button"].btn.btn-sm {
+    font-size: 1em;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.btn {
+    margin: 5px 0;
+}
+
+.btn.disabled {
+    /* needed in Bootstrap 3 to allow tooltips on disabled buttons */
+    pointer-events: auto;
+}
+
+.btn-default,
+.btn-default.disabled,
+.btn-default[disabled],
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover {
+    color: #fff;
+    background-color: #474949;
+    border-color: #474949;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+    background-color: #3a3c3c;
+    border-color: #2e2f2f;
+    color: #fff;
+}
+
+.tooltip {
+    z-index: 2000 !important;
+}
+
+.tooltip.in {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.alert form {
+    margin-bottom: 0;
+}
+/* default bookstrap alert color is hard to read (low contrast). */
+.alert {
+    color: #333;
+    padding: 10px;
+}
+
+/* override the color styles applied by Skulpt to the unittest results divs */
+.unittest-results.alert-danger {
+    background-color: #f2dede !important;
+}
+
+.unittest-results.alert-success {
+    background-color: #dff0d8 !important;
+}
+
+.alert label {
+    font-weight: normal;
+}
+
+/* These admonition styles styles are copied from the Bootstrap .alert classes.
+ Most of the !important declarations are to override the Sphinx basic.css styles */
+.admonition {
+    padding: 8px 35px 8px 14px !important;
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+/* .alert-danger */
+.admonition.caution {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}
+
+/* .alert-info */
+.admonition.tip, .admonition.note {
+    color: #333;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+/* from web2py.css */
+div.flash {
+    font-weight: bold;
+    position: fixed;
+    padding: 10px;
+    top: 55px;
+    right: 45px;
+    opacity: 0.95;
+    margin: 0 0 10px 10px;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    background-image: -webkit-linear-gradient(top, #222, #000);
+    background-image: -o-linear-gradient(top, #222, #000);
+    background-image: -moz-linear-gradient(90deg, #222, #000);
+    background-image: linear-gradient(top, #222, #000);
+    background-repeat: repeat-x;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    z-index: 2000;
+}
+
+/* Styles for the login, registration, and Janrain forms */
+#web2py_user_form {
+    margin-top: 10px;
+}
+
+#web2py_user_form form {
+    float: left;
+    margin-right: 150px;
+    padding-top: 3px;
+}
+
+#web2py_user_form td {
+    padding-bottom: 15px;
+}
+
+#web2py_user_form td.w2p_fw {
+    width: 299px;
+}
+
+#auth-actions {
+    margin-top: 50px;
+}
+
+#sign_in_text td {
+    font-size: 17px;
+    color: #333;
+    font-family: 'lucida grande', Verdana, sans-serif;
+    padding-bottom: 13px;
+}
+
+#auth_user_remember {
+    margin-top: -20px;
+}
+/* End login, registration, Janrain styles */
+
+/* end-of-chapter exercises styles */
+#exercises > ol > li,
+#programming-exercises > ol > li {
+    margin-bottom: 30px;
+}
+
+#exercises > ol > li:nth-child(even),
+#programming-exercises > ol > li:nth-child(even) {
+    padding: 1.2em 1.4em;
+    background: #faf7df;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+/* End chapter exercises styles */
+
+/* Modal dialog styles (scratch activecode, compare me, etc) */
+.scratch-ac-modal {
+    width: 800px;
+}
+
+.compare-modal .progress {
+    margin-bottom: 0;
+}
+
+.compare-me-progress {
+    width: 100%;
+}
+
+.compare-me-progress .progress-bar,
+.unittest-results-progress .progress-bar {
+    color: #333;
+}
+
+.unittest-results-progress {
+    width: 25%;
+}
+
+.compare-modal {
+    width: 350px;
+}
+
+.compare-modal table {
+    border-collapse: separate;
+    border-spacing: 10px 5px;
+}
+
+.codelens-modal {
+    /* we set some custom position styles so that the modal doesn't obscure the codelens visualizer */
+    top: 20%;
+    right: 20%;
+    left: auto;
+    bottom: auto;
+}
+
+@media (max-width: 768px) {
+    /* remove any custom position styles when the screen is small (mobile devices)
+    to prevent the modal from being partially off the screen */
+    .codelens-modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+    }
+}
+
+.codelens-modal > .modal-dialog {
+    width: 400px;
+}
+/* End modal dialog styles */
+
+.footnote.table {
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.footnote.table td.label {
+    padding: 2px 5px 2px 5px;
+    background-color: #d9edf7;
+}
+
+.ac-canvas {
+    background-color: white;
+    display: inline-block;
+}
+
+.video-play-overlay {
+	position: relative;
+	top: -150px;
+	left: 44%;
+    height: 85px;
+    width: 130px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.video_popup video {
+	width: 500pt;
+	cursor:pointer;
+}
+.ui-sortable-helper {
+    height: auto !important;
+    width: auto !important;
+}
+.navLink{
+	z-index:2;
+	display: inline;
+	bottom: 65px;
+	position:fixed;
+}
+
+#relations-next{
+	right: 35px;
+}
+
+#relations-prev{
+	left: 35px;
+}
+
+.navLink a{
+	color: #999;
+}
+
+#completionButton{
+	margin-top: 25px;
+	margin-bottom: 15px;
+	padding-left: 70px;
+	padding-right: 70px;
+	color: #fff;
+	font-weight: bold;
+}
+.buttonAskCompletion{
+	background-color: #ffaa2b;
+	border-color:#ff9f19;
+	font-weight: bold;
+}
+.buttonAskCompletion:hover{
+	background-color: #ff9f19;
+	border-color:#ff9f19;
+}
+
+.buttonConfirmCompletion{
+	background-color: #50d392;
+	border-color:#3dc682;
+
+}
+.buttonConfirmCompletion:hover{
+	background-color: #3dc682;
+	border-color:#3dc682;
+}
+
+.navLinkBg{
+	height: 40px;
+	background-color: #fff;
+	z-index: 1;
+	position: fixed;
+	bottom: 55px;
+	color: #999;
+	font-weight: bold;
+	-webkit-box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
+	-moz-box-shadow:    0px 0px 3px rgba(50, 50, 50, 0.5);
+	box-shadow:         0px 0px 3px rgba(50, 50, 50, 0.5);
+}
+
+.navLinkBg:hover{
+	color: #999;
+}
+
+#navLinkBgRight{
+	right: -1000px;
+	padding: 10px 15px 0 65px;
+}
+
+#navLinkBgLeft{
+	left: -65px;
+	padding-left: 15px;
+	padding-right: 50px;
+}
+
+.activehtml  {
+    width: 100%;
+    height: 400px;
+    background-color: #fff;
+}
+
+.container  .section>div.sidebar {
+	margin: 0 0 0.5em 1em;
+	width: auto;
+	}
+
+a.disqus_thread_link {
+    display: block;
+}
+
+.reveal_button {
+    display: block;
+    margin-left: 0;
+}
+
+iframe[seamless] {
+    display: block;
+}
+
+@media (min-width: 768px){
+	.container  .section>div.sidebar {
+		margin: 0 3em 0.5em 1em;
+	}
+}
+@media (min-width: 992px){
+	.container  .section>div.sidebar {
+		margin: 0 11em 0.5em 1em;
+	}
+}
+@media (min-width: 1200px){
+	.container  .section>div.sidebar {
+		margin: 0 18em 0.5em 1em;
+	}
+}
+
+
+div.ExecutionVisualizer table.visualizer {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+}
