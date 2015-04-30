@@ -34,12 +34,18 @@ var createAudioTourHTML = function (divid, code, bnum, audio_text) {
         bval.push(aword[0]);
     }
 
-    var first = "<pre><div id='" + divid + "_l1'>" + "1.  " + codeArray[0] + "</div>";
+    var first = "<pre><div id='" + divid + "_l1'>" + "1.   " + codeArray[0] + "</div>";
     num_lines = codeArray.length;
     for (var i = 1; i < num_lines; i++) {
-        var sec = "<div id='" + divid + "_l" + (i + 1) + "'>" + (i + 1) + ".  " + codeArray[i] + "</div>";
-        var next = first.concat(sec);
-        first = next;
+       if (i < 9) {
+        first = first + "<div id='" + divid + "_l" + (i + 1) + "'>" + (i + 1) + ".   " + codeArray[i] + "</div>";
+       }
+       else if (i < 99) {
+        first = first + "<div id='" + divid + "_l" + (i + 1) + "'>" + (i + 1) + ".  " + codeArray[i] + "</div>";
+       }
+       else {
+        first = first + "<div id='" + divid + "_l" + (i + 1) + "'>" + (i + 1) + ". " + codeArray[i] + "</div>";
+       }
     }
     first = first + "</pre>"
 
@@ -59,7 +65,7 @@ var createAudioTourHTML = function (divid, code, bnum, audio_text) {
     $('#cont').html(html_string);
     $('#windowcode').html(first);
 
-    // Position modal box in the center of the page
+    // Position modal box 
     $.fn.center = function () {
         this.css("position", "absolute");
         // y position
