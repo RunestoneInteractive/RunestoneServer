@@ -33,6 +33,14 @@ Glossary
         ``=`` is Python's assignment token, which should not be confused
         with the mathematical comparison operator using the same symbol.
 
+    boolean expression
+        An expression that is either true or false.
+
+    boolean value
+        There are exactly two boolean values: ``True`` and ``False``. Boolean
+        values result when a boolean expression is evaluated by the Python
+        interepreter.  They have type ``bool``.
+
     class
 		see **data type** below
 
@@ -92,8 +100,14 @@ Glossary
     literal
         A number or string that is written directly in a program. Sometimes these are also referred to as literal values, or just values, but be careful not to confuse a literal value as written in a program from an internal value maintained by the Python interpreter during execution of a program.
         
+    logical operator
+        One of the operators that combines boolean expressions: ``and``,
+        ``or``, and ``not``.
+
     modulus operator
-		Also called remainder operator or integer remainder operator.  Gives the remainder after performing integer division.
+        An operator, denoted with a percent sign ( ``%``), that works on
+        integers and yields the remainder when one number is divided by
+        another.
 
     object
 		Also known as a data object (or data value).  The fundamental things that programs are designed to

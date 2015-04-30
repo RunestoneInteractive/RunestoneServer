@@ -9,14 +9,12 @@ Assignments
 .. toctree::
    :maxdepth: 1
 
-   Assignments/ps14.rst
-   Assignments/ps13.rst
-   Assignments/ps12.rst
-   Assignments/ps11.rst
-   Assignments/session21.rst
-   Assignments/ps10.rst
-   Assignments/ps9.rst
-   Assignments/ps8.rst
+   Assignments/week13.rst
+   Assignments/week12.rst
+   Assignments/week11.rst
+   Assignments/week10.rst
+   Assignments/week9.rst
+   Assignments/week8.rst
    Assignments/ps7.rst
    Assignments/ps6.rst
    Assignments/ps5.rst
@@ -64,11 +62,25 @@ Simple Python Data
    SimplePythonData/VariableNamesandKeywords.rst
    SimplePythonData/StatementsandExpressions.rst
    SimplePythonData/OrderofOperations.rst
+   SimplePythonData/BooleanValuesandBooleanExpressions.rst
+   SimplePythonData/Logicaloperators.rst
+   SimplePythonData/PrecedenceofOperators.rst
    SimplePythonData/Reassignment.rst
    SimplePythonData/UpdatingVariables.rst
    SimplePythonData/Input.rst
    SimplePythonData/Glossary.rst
    SimplePythonData/Exercises.rst
+
+Debugging
+:::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+
+   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
+   Debugging/BeginningtipsforDebugging.rst
+   Debugging/KnowyourerrorMessages.rst
 
 Object Instances
 ::::::::::::::::
@@ -139,9 +151,6 @@ Conditionals
 .. toctree::
    :maxdepth: 2
    
-   Selection/BooleanValuesandBooleanExpressions.rst
-   Selection/Logicaloperators.rst
-   Selection/PrecedenceofOperators.rst
    Selection/ConditionalExecutionBinarySelection.rst
    Selection/OmittingtheelseClauseUnarySelection.rst
    Selection/Nestedconditionals.rst
@@ -163,6 +172,15 @@ Files
    Files/WritingTextFiles.rst
    Files/Glossary.rst
    Files/Exercises.rst
+
+Understanding Code
+::::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   BuildingAProgram/UnderstandingCode.rst
+
 
 Dictionaries
 ::::::::::::
@@ -190,6 +208,14 @@ Accumulating Results in Dictionaries
    DictionaryAccumulation/AccumulatingaMaximumValue.rst
    DictionaryAccumulation/AccumulatingtheBestKey.rst
    DictionaryAccumulation/Exercises.rst
+
+Building Programs
+:::::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   BuildingAProgram/TheStrategy.rst
 
 
 Functions
@@ -289,6 +315,42 @@ Prediction and Classification
    Prediction/shannon_guesser.rst
    Prediction/training.rst
    Prediction/evaluation.rst
+   Prediction/Glossary.rst
+   
+
+Python Modules
+::::::::::::::
+
+.. toctree::
+   :maxdepth: 2
+
+   PythonModules/intro-ModulesandGettingHelp.rst
+   PythonModules/Therandommodule.rst
+   PythonModules/Glossary.rst
+   PythonModules/Exercises.rst
+
+Exceptions
+::::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Exceptions/intro-exceptions.rst
+   Exceptions/using-exceptions.rst
+
+Requests
+::::::::
+
+.. toctree::
+   :maxdepth: 2
+   
+   Requests/intro.rst
+   Requests/fetching_a_page.rst
+   Requests/how_the_Internet_works.rst
+   Requests/urls.rst
+   Requests/http.rst
+   Requests/requests_details.rst
+
 
 String Formatting
 :::::::::::::::::
@@ -301,16 +363,6 @@ String Formatting
    StringFormatting/CSV.rst
    StringFormatting/Exercises.rst
 
-Python Modules
-::::::::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-   PythonModules/intro-ModulesandGettingHelp.rst
-   PythonModules/Therandommodule.rst
-   PythonModules/Glossary.rst
-   PythonModules/Exercises.rst
 
 REST APIs
 :::::::::
@@ -335,12 +387,20 @@ Classes
    Classes/UserDefinedClasses.rst
    Classes/ImprovingourConstructor.rst
    Classes/AddingOtherMethodstoourClass.rst
-   Classes/ObjectsasArgumentsandParameters.rst
+   Classes/ObjectsasArgumentsandParameters.rst                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
    Classes/ConvertinganObjecttoaString.rst
    Classes/InstancesasReturnValues.rst
    Classes/sorting_instances.rst
    Classes/Glossary.rst
    Classes/Exercises.rst
+
+The FaceBook Graph API
+::::::::::::::::::::::
+
+.. toctree::
+    :maxdepth: 2
+    
+    RESTAPIs/FBAPI.rst
 
 More on Accumulation: Map, Filter, Reduce, List Comprehensions, and Zip
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -369,18 +429,6 @@ Test Cases
    Testing/Glossary.rst
 
 
-Debugging
-:::::::::
-
-.. toctree::
-   :maxdepth: 2
-
-
-   Debugging/intro-HowtobeaSuccessfulProgrammer.rst
-   Debugging/BeginningtipsforDebugging.rst
-   Debugging/KnowyourerrorMessages.rst
-   BuildingAProgram/TheStrategy.rst
-   BuildingAProgram/UnderstandingCode.rst
 
 
 
@@ -395,6 +443,7 @@ Installation
    Installation/TextEditor.rst
    Installation/pythonInstall.rst
    Installation/runpythonprograms.rst
+   Installation/pip.rst
    
 
 Unix

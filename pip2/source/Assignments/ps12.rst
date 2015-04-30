@@ -38,40 +38,6 @@ Week 12: ends November 23
    * This week, there will be a file called ps11.py. You should download a copy of it. You will edit it on your laptop or workstation and test it by running it using your native Python interpreter.
    * If you put ps11.py in a different directory than ps7.py, you will also need to download a copy of test.py into the directory where you put ps11.py.
    
-Reading Response
-----------------
 
-.. _reading_response_11:
-
-Answer the following questions. 
-
-1. The chapter describes forking as something that could fragment developer efforts and thus slow down progress of a project. If you tried to make a "fork" of Linux today, would it be technically feasible to do so? What do you think would happen?
-
-#. Pages 116-119 describes the genesis of "Bitkeeper", which later was replaced by git. Why would the promise of switching to use something like git have helped to defuse a potential forking of the Linux project?
-
-#. What seems similar and what seems different between the Linux project's developer community and the Drupal project's developer community?
-
-.. activecode:: rr_11_1
-
-   # Fill in your response in between the triple quotes
-   s = """
-
-   """
-   print s
-
-.. _twitter_oauth_checkin:
-
-Session 21 Prep Question
-------------------------
-
-What is the value associated with the "language" attribute in the dictionary that is returned when you run oauth_with_twitter.py after pasting in your keys?
-
-.. activecode:: twitter_oauth_1
-
-   # Fill in your response in between the triple quotes
-   s = """
-
-   """
-   print s
 
    

@@ -7,6 +7,9 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+
+.. _folders_and_paths_sect:
+
 Directories and Paths
 ---------------------
 

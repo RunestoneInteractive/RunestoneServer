@@ -23,8 +23,6 @@
     single: operator; comparison
     single: comparison operator
 
-.. _conditionals_chap:
-    
 Boolean Values and Boolean Expressions
 --------------------------------------
 

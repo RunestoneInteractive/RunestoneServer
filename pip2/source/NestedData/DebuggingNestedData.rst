@@ -21,7 +21,7 @@ Follow the system described below and you will have success with extracting nest
 
 Understand. Extract. Repeat.
 
-To illustrate this, we will walk through extracting information from the data returned from the Twitter API. This nested dictionary results from querying Twitter, asking for three tweets matching "University of Michigan". As you'll see, it's quite a daunting data structure, even when printed with nice indentation as it's shown below. 
+To illustrate this, we will walk through extracting information from the data returned from the Twitter API, which you will work with later in the course. This nested dictionary results from querying Twitter, asking for three tweets matching "University of Michigan". As you'll see, it's quite a daunting data structure, even when printed with nice indentation as it's shown below. 
 
 .. activecode:: extract_nested_data_1
 

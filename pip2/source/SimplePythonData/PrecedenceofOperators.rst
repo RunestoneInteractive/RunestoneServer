@@ -10,7 +10,7 @@
 Precedence of Operators
 -----------------------
 
-We have now added a number of additional operators to those we learned in the previous chapters.  It is important to understand how these operators relate to the others with respect to operator precedence.  Python will always evaluate the arithmetic operators first (** is highest, then multiplication/division, then addition/subtraction).  Next comes the relational operators.  Finally, the logical operators are done last.  This means that the expression ``x*5 >= 10 and y-6 <= 20`` will be evaluated so as to first perform the arithmetic and then check the relationships.  The ``and`` will be done last.  Although many programmers might place parenthesis around the two relational expressions, it is not necessary.
+Arithmetic operators take precedence over logical operators. Python will always evaluate the arithmetic operators first (** is highest, then multiplication/division, then addition/subtraction).  Next comes the relational operators.  Finally, the logical operators are done last.  This means that the expression ``x*5 >= 10 and y-6 <= 20`` will be evaluated so as to first perform the arithmetic and then check the relationships.  The ``and`` will be done last.  Many programmers might place parentheses around the two relational expressions, ``(x*5 >= 10) and (y-6 <= 20)``. It is not necessary to do so, but causes no harm and may make it easier for people to read and understand the code.
 
 The following table summarizes the operator precedence from highest to lowest.  A complete table for the entire language can be found in the `Python Documentation <http://docs.python.org/py3k/reference/expressions.html#expression-lists>`_.
 
@@ -28,13 +28,6 @@ Level     Category        Operators
 
 
 
-.. note::
-
-  This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-  .. activecode:: scratch_06_01
-
-
 **Check your understanding**
 
 .. mchoicemf:: test_question6_3_1
@@ -49,15 +42,4 @@ Level     Category        Operators
    :feedback_d: This grouping assumes that &quot;and&quot; has a higher precedence than ==, which is not true. 
 
    Which of the following properly expresses the  precedence of operators (using parentheses) in the following expression: 5*3 > 10 and 4+6==11
-
-.. index:: conditional branching, conditional execution, if, elif, else,
-           if statement, compound statement, statement block, block, body,
-           pass statement
-
-.. index::
-    single: statement; if
-    single: compound statement; header
-    single: compound statement; body
-    single: conditional statement
-    single: statement; pass
 

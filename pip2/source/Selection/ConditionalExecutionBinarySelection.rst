@@ -7,6 +7,19 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. index:: conditional branching, conditional execution, if, elif, else,
+           if statement, compound statement, statement block, block, body,
+           pass statement
+
+.. index::
+    single: statement; if
+    single: compound statement; header
+    single: compound statement; body
+    single: conditional statement
+    single: statement; pass
+
+.. _conditionals_chap:
+    
 Conditional Execution: Binary Selection
 ---------------------------------------
 

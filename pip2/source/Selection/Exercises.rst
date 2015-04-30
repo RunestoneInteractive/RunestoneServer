@@ -9,38 +9,7 @@
 
 Exercises
 ---------
-#.
 
-    .. tabbed:: q1
-
-        .. tab:: Question
-
-            What do these expressions evaluate to?
-        
-            #.  ``3 == 3``
-            #.  ``3 != 3``
-            #.  ``3 >= 4``
-            #.  ``not (3 < 4)``
-        
-                .. actex:: ex_6_1
-        
-
-        .. tab:: Answer
-            
-            #. True
-            #. False
-            #. False
-            #. False
-
-
-#.  Give the **logical opposites** of these conditions.  You are not allowed to use the ``not`` operator.
-
-    #.  ``a > b``
-    #.  ``a >= b``
-    #.  ``a >= 18  and  day == 3``
-    #.  ``a >= 18  or  day != 3``
-
-        .. actex:: ex_6_2
 
 #.
 

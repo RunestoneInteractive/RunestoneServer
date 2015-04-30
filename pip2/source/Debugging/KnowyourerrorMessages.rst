@@ -23,9 +23,9 @@ Many problems in your program will lead to an error message.  For example as I w
    final_time_int = current_time_int + wait_time_int
    print final_time_int
 
-Can you see what is wrong, just by looking at the code?  Maybe, maybe not.  Our brain tends to see what we think is there, so sometimes it is very hard to find the problem just by looking at the code.  Especially when it is our own code and we are sure that we have done everything right!
+Can you see what is wrong, just by looking at the code?  Maybe, maybe not.  Our brains tend to see what we think is there, so sometimes it is very hard to find the problem just by looking at the code.  Especially when it is our own code and we are sure that we have done everything right!
 
-Lets try the program again, but this time in an activecode:
+Let's try the program again, but this time in an activecode window:
 
 .. activecode:: db_ex3_5
 

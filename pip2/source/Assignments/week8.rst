@@ -12,30 +12,31 @@
     :linenothreshold: 500
 
 
-Week 9: ends November 2
+Activities through 3/15
 =======================
 
-1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
+You have the following graded activities:
+
+1. Class prep. Don't forget: always access the textbook by clicking on the Textbook link from cTools, so that you'll be logged in and get credit for doing the prep.
    
-   * Before Tuesday's class:
-      * Read :ref:`Importing modules<modules_chap>`
-      * View slides ``HTTP and urllib2 and TryExcept`` in cTools resources/Slides
-
-   * Before Thursday's class:
-       * Read `External Tutorial on Reading CSV Files <https://thenewcircle.com/s/post/1572/python_for_beginners_reading_and_manipulating_csv_files>`_
-       * Read :ref:`String Formatting<formatting_chap>`
-       * Read :ref:`Writing CSV files<csv_chap>`
+   * Before Monday's class: 
+       * Read :ref:`Prediction and Classification<prediction_chap>`
+       * Read :ref:`Importing modules<modules_chap>`
+    
+   * Before Wednesday's class:
+       * Read :ref:`try/except <exceptions_chap>`
+       * Read :ref:`pip module installer <pip_chap>`
+       * Read :ref:`Fetching data <requests_chap>`
  
-#. Reading responses
+2. Reading responses
 
-   * By Wednesday midnight: 
+   * By Tuesday midnight: 
       * Read *The Success of Open Source*, Preface and Chapter 1
       * :ref:`Reading response 8 <reading_response_8>`
 
-#. Problem set
+3. Problem set **Due:** **Sunday, March 15**
 
-   * This week, there will be a file called ps8.py. You should download a copy of it. You will edit it on your laptop or workstation and test it by running it using your native Python interpreter.
-   * If you put ps8.py in a different directory than ps7.py, you will also need to download a copy of test.py into the directory where you put ps8.py.
+   * Starting this week, the main problem set is distributed via cTools. There is a file called ps7.py. You should download a copy of it. You will edit it on your laptop or workstation and test it by running it using your native Python interpreter. You will also need to download a file called 106test.py. It contains the testEqual function that gives you feedback on whether you have correctly implemented various things in the problem set.
    
 Reading Response
 ----------------
@@ -57,5 +58,8 @@ Answer the following questions.
 
    """
    print s
+   
+
+
 
        

@@ -19,3 +19,12 @@ For example, for the gender classifier described in a previous section, instead 
 In machine learning, we refer to a set of labeled examples like this as *training data*. You could then consider various features, such as last letters or first letters, or the presence of certain letter combinations. For each of those features, you could count up how many of the male and female names in the training set match the feature (e.g., have the last letter 'i'). If the feature is much more common in examples labeled as female than male, then you could add a new rule to the rule set, outputting "female" when the feature is present.
 
 In problem set 8, you will create rules for a rule-based predictor for the Shannon Game. The interesting twist will be that the training data will consist not only of some publicly available English texts, but also the sequence of letters that have already been revealed from the current text. The features will be the most recent letter or letters that have been revealed. Thus, for example, using publicly available English texts, you might learn a rule that following a 'q' the next letter is almost always 'u'. Using the previously revealed letters from the current text, you might learn that if the most recent letters are "Mr. ", then the next letter is likely to be "C".
+
+.. mchoicemf:: prediction_4
+   :answer_a: labeled data used to make a classifier or predictor perform better over time
+   :answer_b: a process of making a dataset better over time
+   :correct: a
+   :feedback_a: The data are used to "train" a classifier. We make it perform well, at least on the training data.
+   :feedback_b: The data are not getting trained. They are being used to train the classifier.
+
+   What does "training data" refer to?  

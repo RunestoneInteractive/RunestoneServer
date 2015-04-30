@@ -6,6 +6,10 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
+.. qnum::
+   :prefix: prediction-
+   :start: 1
+
 .. _prediction_chap:
 
 Prediction and Classification

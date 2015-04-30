@@ -22,7 +22,7 @@ One very common pattern is called a **listener loop**. Inside the while loop the
       x = int(raw_input("next number to add up (enter 0 if no more numbers): "))
       theSum = theSum + x
 
-   print thuSum
+   print theSum
    
 This is just our old friend, the accumulation pattern, adding each additional output to the sum-so-far, which is stored in a variable called theSum and reassigned to that variable on each iteration. Notice that theSum is initialized to 0. Also notice that we had to initialize x, our variable that stores each input that the user types, before the while loop. This is typical with while loops, and makes them a little tricky to read and write. We had to initialize it because the condition ``x != 0`` is checked at the very beginning, before the code block is ever executed. In this case, we picked an initial value that we knew would make the condition true, to ensure that the while loop's code block would execute at least once.
 

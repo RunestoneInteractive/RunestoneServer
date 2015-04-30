@@ -38,22 +38,21 @@ before it assigns the resulting value to the name on the left.
 Before you can update a variable, you have to **initialize** it, usually with a
 simple assignment.  In the above example, ``x`` was initialized to 6.
 
-Updating a variable by adding 1 is called an **increment**; subtracting 1 is
-called a **decrement**.  Sometimes programmers also talk about **bumping**
-a variable, which means the same as incrementing it by 1.
+Updating a variable by adding something to it is called an **increment**; subtracting is
+called a **decrement**.  Sometimes programmers talk about incrementing or decrementing without specifying by how much; when they do they usually mean by 1. Sometimes programmers also talk about **bumping** a variable, which means the same as incrementing it by 1.
 
-.. admonition:: Advanced Topics
+Incrementing and decrementing are such common operations that programming languages often include special syntax for it. In python ``+=`` is used for incrementing, and ``-=`` for decrementing. In some other languages, there is even a special syntax ``++`` and ``--`` for incrementing or decrementing by 1. Python does not have such a special syntax. To increment x by 1 you have to write ``x += 1`` or ``x = x + 1``.
 
-   * `Topic 1: <at_1_1.html>`_ Python Beyond the Browser.  This is a gentle
-     introduction to using Python from the command line.  We'll cover this
-     later, but if you are curious about what Python looks like outside of this
-     eBook, you can have a look here.  There are also instructions for
-     installing Python on your computer here.
+.. activecode:: ch07_update2
 
-   * `Topic 2: <http://interactivepython.org/courselib/static/diveintopython3/index.html>`_ Dive Into Python 3,
-     this is an online textbook by Mark Pilgrim.  If you have already had some
-     programming experience, this book takes you off the deep end with
-     both feet.
+    x = 6        # initialize x
+    print x
+    x += 3       # increment x by 3; same as x = x + 3
+    print x
+    x -= 1       # decrement x by 1
+    print x
+
+
 
 **Check your understanding**
 
@@ -107,12 +106,19 @@ a variable, which means the same as incrementing it by 1.
    mybankbalance = mybankbalance + 34
    print mybankbalance
 
+.. mchoicema:: test_question2_10_3
+   :answer_a: x = x + y
+   :answer_b: y += x
+   :answer_c: x += x + y
+   :answer_d: x += y
+   :answer_e: x++ y
+   :correct: a,d
+   :feedback_a: x is updated to be the old value of x plus the value of y.
+   :feedback_b: y is updated to be the old value of y plus the value of x.
+   :feedback_c: This updates x to be its old value (because of the +=) plus its old value again (because of the x on the right side) plus the value of y, so it's equivalent to x = x + x + y
+   :feedback_d: x is updated to be the old value of x plus the value of y.
+   :feedback_e: ++ is not a syntax that means anything in python
 
-.. note::
 
-   This workspace is provided for your convenience.  You can use this activecode window to try out anything you like.
-
-.. activecode:: scratch_02
-
-
-
+   Which of the following statements are equivalent?
+ 

@@ -12,12 +12,14 @@
     :linenothreshold: 500
 
 
-Week 7: ends October 19
-=======================
+Activities through 3/1
+======================
 
-1. Do the multiple choice questions and exercises in the textbook chapters, including the ones at the bottom of the chapters, below the glossary. Don't forget to click Save for each of the exercises, and always access the textbook by clicking on the link from cTools, so that you'll be logged in.
+You have the following graded activities:
+
+1. Class prep. Don't forget: always access the textbook by clicking on the Textbook link from cTools, so that you'll be logged in and get credit for doing the prep.
    
-   * Before Thursday's class:
+   * Before Monday's class:
        * Read :ref:`Sorting<sort_chap>`, and do the exercises in that chapter
  
 #. Reading responses
@@ -30,7 +32,7 @@ Week 7: ends October 19
    
 #. Exam preparation
 
-   * In CTools you will find a practice midterm exam; another one will be posted closer to the exam time
+   * In CTools you will find a practice midterm exam and a solution set.
    
    * Suggested practice for making best use of the problem sets for review
       * Go through all the problem sets, looking at your answers and comparing them to the solution set answers. (The solution sets are all embedded in the problem sets; we have been releasing them when we release the grades for each problem set.)
@@ -43,7 +45,7 @@ Week 7: ends October 19
 Practice Problems: Material Prior to Functions
 ----------------------------------------------
 
-See comments in code for instructions.
+1. See comments in code for instructions.
 
 .. actex:: rv_1_1
 
@@ -65,7 +67,7 @@ See comments in code for instructions.
    # 11
    # 6
 
-#. See comments in code for instructions.
+2. See comments in code for instructions.
 
 .. actex:: rv_1_2
 
@@ -93,7 +95,7 @@ See comments in code for instructions.
    # 9907
    # 19
 
-#. See comments in code for instructions.
+3. See comments in code for instructions.
 
 .. actex:: rv_1_3
 
@@ -116,7 +118,7 @@ See comments in code for instructions.
    # =
 
 
-#. See comments in code for instructions.
+4. See comments in code for instructions.
 
 .. actex:: rv_1_4
 
@@ -129,7 +131,7 @@ See comments in code for instructions.
    # Your output should be:
    # t
 
-#. See comments in code for instructions.
+5. See comments in code for instructions.
 
 .. actex:: rv_1_5
 
@@ -151,7 +153,7 @@ See comments in code for instructions.
    # Nice to meet you, mrs hudson
 
 
-#. See comments in code for instructions.
+6. See comments in code for instructions.
 
 .. actex:: rv_1_6
 
@@ -162,7 +164,7 @@ See comments in code for instructions.
    # Write code to print the type of the value in the variable ab.
 
 
-#. See comments in code for instructions.
+7. See comments in code for instructions.
 
 .. actex:: rv_1_7
 
@@ -238,7 +240,7 @@ We strongly suggest that you try to do the problems yourself before looking at t
 
           print get_vowels("Hello all")
 
-#. Define (and call) a function called `` sum_a_list `` which **takes any list of integers** and **returns the sum of all integers in the list**.
+2. Define (and call) a function called `` sum_a_list `` which **takes any list of integers** and **returns the sum of all integers in the list**.
 
 .. tabbed:: func_review_2
 
@@ -268,7 +270,7 @@ We strongly suggest that you try to do the problems yourself before looking at t
                   tot = tot + i
               return tot
 
-          print sum_a_list(1,4,7,5])
+          print sum_a_list([1,4,7,5])
 
           # Here's the version of the function that will work
           #   for EITHER a list of integers or a string of digits
@@ -281,7 +283,7 @@ We strongly suggest that you try to do the problems yourself before looking at t
           print sum_a_list_or_digitstring("1475")
 
 
-#. Define (and call!) a function called ``common_word`` that **takes a string** and **prints a tuple** of **the most commonly used word in the string** and **the number of times that word is used**. (If there's more than one word that's used most frequently, the function should **print** all of those words.) 
+3. Define (and call!) a function called ``common_word`` that **takes a string** and **prints a tuple** of **the most commonly used word in the string** and **the number of times that word is used**. (If there's more than one word that's used most frequently, the function should **print** all of those words.) 
 
 .. tabbed:: func_review_3
 
@@ -323,11 +325,13 @@ We strongly suggest that you try to do the problems yourself before looking at t
                       print ky, d[ky] # print the key and its value
                       # note that we do NOT return anything here!
                       # because we asked to print stuff out
+		  
+          common_word("hello hello hello is what they said to the class!") # should print: hello
 
           # Think further: what would happen if you put a return statement where that print statement is? why wouldn't that work?
 
 
-#. Define (and call!) a function called ``smallest_value_name`` that **takes a dictionary** with key-value pairs of names and integer values, like this: ``{"Nick": 56, "Paul":73, "Jackie":42}``, and **returns the name associated with the *lowest integer value**. (So in the case of that example dictionary, the function should return ``Jackie``.)
+4. Define (and call!) a function called ``smallest_value_name`` that **takes a dictionary** with key-value pairs of names and integer values, like this: ``{"Nick": 56, "Paul":73, "Jackie":42}``, and **returns the name associated with the *lowest integer value**. (So in the case of that example dictionary, the function should return ``Jackie``.)
 
 .. tabbed:: func_review_4
 
@@ -339,7 +343,7 @@ We strongly suggest that you try to do the problems yourself before looking at t
 
           # Here's a sample call
           df = {"Nick": 56, "Paul":73, "Jackie":42}
-          pritn smallest_value_name(df) # should print: Jackie
+          print smallest_value_name(df) # should print: Jackie
 
   .. tab:: Solution
 
@@ -364,8 +368,8 @@ We strongly suggest that you try to do the problems yourself before looking at t
               return tn[0]
 
           # Sample calls of these solution functions
-          d_new = {"Nick": 56, "Paul":73, "Jackie":42, "Ellie":36}
-          print smallest_val_name(d_new)
+          d_new = {"Nick": 56, "Paul":73, "Jackie":42}
+          print smallest_value_name(d_new)
 
           print smallest_val_name_diff(d_new)
           # both these calls above print "Ellie"!
