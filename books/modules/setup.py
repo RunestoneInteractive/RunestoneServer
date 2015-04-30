@@ -1,9 +1,12 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='runestone',
     version='0.1dev',
-    packages=['luther','gatech','luther.sphinx','luther.sphinx.activecode'],
+    packages= find_packages(),
+    include_package_data = True,
+    package_dir = {'' : '.'},
+    package_data = { '' : ['js/*.js', 'css/*.css', '*.txt']},
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     scripts=['bin/runestone'],
     data_files=[('common',['common/*'])],
