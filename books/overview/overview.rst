@@ -275,6 +275,58 @@ next line executed.
     else:
         print 'x is even'
         y = y - x
+        
+Timed Exam Questions
+---------------------
+
+You can add a timed exam of multiple-choice questions that the user can only take once.  All the feedback will be shown after the time is up or after the user has clicked the "Submit Answers" button at the end of the timed exam.  To start the timed exam click on the "Start" button.  This will also start the countdown of the time remaining.  You can pause the timer by clicking on the "Pause" button and start it again by clicking on the "Resume" button.  When you pause the timed exam the questions will be hidden.  There is also a clock icon that will display the time remaining when the reader hovers over it.  
+
+Please note that you can currently only have one timed exam per html page.
+
+It currently needs at least 4 directives to function: starttimer, revealquestions, timedmchoicemf, and finishtimer.  You can have as many timedmchoicemf as you want.  The time is specified in minutes using the :duration option in starttimer.  
+
+.. starttimer:: Start
+    :duration: 38
+
+.. revealquestions:: timed_Test
+    :showtitle: Timed Exam Paused or Not Started
+    :hidetitle: Currently Taking Timed Exam
+    
+    .. timedmchoicemf:: te_1
+       :answer_a: The value you are searching for is the first element in the array.
+       :answer_b: The value you are searching for is the last element in the array
+       :answer_c: The value you are searching for is in the middle of the array.
+       :answer_d: The value you are searching for is not in the array
+       :answer_e: Sequential Search can never be faster than Binary Search.
+       :correct: a
+       :feedback_a: Only when the search value is the first item in the array, and thus the first value encountered in sequential search, will sequential be faster than binary.
+       :feedback_b: In this case a sequential search will have to check every element before finding the correct one, whereas a binary search will not.
+       :feedback_c: Results will differ depending on the exact location of the element, but Binary Search will still find the element faster while Sequential will have to check more elements.
+       :feedback_d: If the search value is not in the array, a sequential search will have to check every item in the array before failing, a binary search will be faster.
+       :feedback_e: When the search value is the first element, Sequential will always be faster, as it will only need to check one element.
+
+       Under which of these conditions will a sequential search be faster than a binary search?
+
+    .. timedmchoicemf:: te_2
+       :answer_a: (c || d)
+       :answer_b: (c && d)
+       :answer_c: (!c) || (!d)
+       :answer_d: !(c && d)
+       :answer_e: (!c) && (!d)
+       :correct: e
+       :feedback_a: NOTing an OR expression does not result in the same values ORed.
+       :feedback_b: You do negate the OR to AND, but you also need to negate the values of d and d.
+       :feedback_c: This would be equivalent to (!(c && d)) using De Morgans laws.
+       :feedback_d: This would be equivalent to (!c || !d)
+       :feedback_e: NOTing (negating) an OR expression is the same as the AND of the individual values NOTed (negated). See De Morgans laws.
+
+       Which of the following expressions is equivalent to the following? 
+   
+       .. code-block:: java
+
+           !(c || d)
+           
+    .. finishtimer:: Finish
 
 Unit Tests for Code
 -------------------
