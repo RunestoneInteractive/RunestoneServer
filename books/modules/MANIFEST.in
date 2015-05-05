@@ -1,1 +1,2 @@
 recursive-include runestone *
+graft newproject_copy_me
