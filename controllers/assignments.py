@@ -338,13 +338,13 @@ def detail():
             return (sorts[length/2] + sorts[length/2 - 1]) / 2.0
         return sorts[length/2]
 
+    # easy mean (for separating code)
+    # will sometimes be ugly - could fix
     def get_mean(lst):
-        return float(sum([i for i in lst if type(i) == type(2)]+ [i for i in lst if type(i) == type(2.0)]))/len(lst)
-
-
+        return round(float(sum([i for i in lst if type(i) == type(2)]+ [i for i in lst if type(i) == type(2.0)]))/len(lst),2)
     # get spread measures of scores for problem set, not counting 0s
     # don't want to look at # of 0s because test users, instructors, etc, throws this off
-    
+
     problem_points = [s.points for s in scores if s.points > 0]
     score_sum = float(sum(problem_points))
 
