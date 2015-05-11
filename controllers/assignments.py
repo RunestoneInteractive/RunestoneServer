@@ -338,22 +338,27 @@ def detail():
             return (sorts[length/2] + sorts[length/2 - 1]) / 2.0
         return sorts[length/2]
 
-    # get average of scores for problem set, not counting 0s
+    def get_mean(lst):
+        return float(sum([i for i in lst if type(i) == type(2)]+ [i for i in lst if type(i) == type(2.0)]))/len(lst)
+
+
+    # get spread measures of scores for problem set, not counting 0s
+    # don't want to look at # of 0s because test users, instructors, etc, throws this off
+    
     problem_points = [s.points for s in scores if s.points > 0]
     score_sum = float(sum(problem_points))
-    try:
-        mean_score = score_sum/len(problem_points)
-    except:
-        mean_score = 0
+
     # get min, max, median, count
     min_score = min(problem_points)
     max_score = max(problem_points)
     if len(problem_points) > 0:
         median_score = get_median(problem_points)
         real_score_count = len(problem_points)
+        avg_score = get_mean(problem_points)
     else:
         median_score = 0
         real_score_count = 0
+        avg_score = 0
 
 
     # Used as a convinence function for navigating within the page template
