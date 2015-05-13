@@ -26,6 +26,13 @@
 	<li><a href="{{=URL('assignments','release_grades')}}?id={{=assignment.id}}">Release Grades</a></li>
 </ul>
 <div class="container-fluid">
+	{{ if assignment.released == True:}}
+	<strong>ASSIGNMENT RELEASED</strong> <!-- silly flag for now -->
+
+	{{ else }}
+	{{ pass }}
+</div>
+<div class="container-fluid">
 	<h3>Stats</h3>
 	<p>Number with above-zero scores: {{=real_score_count}}</p>
 	<p>Mean score: {{=avg_score}}</p>
