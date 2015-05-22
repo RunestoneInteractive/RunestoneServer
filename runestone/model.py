@@ -1,26 +1,20 @@
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+from flask.ext.mongoengine import MongoEngine
+from flask.ext.security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin, login_required  
 
 from runestone import db, app
 
 
 # Define models
-roles_users = db.Table('roles_users',
-        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
+class Role(db.Document, RoleMixin):
+    name = db.StringField(max_length=80, unique=True)
+    description = db.StringField(max_length=255)
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
-    course = db.Column(db.String(50))
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
+class User(db.Document, UserMixin):
+    email = db.StringField(max_length=255)
+    password = db.StringField(max_length=255)
+    active = db.BooleanField(default=True)
+    confirmed_at = db.DateTimeField()
+    course = db.StringField(max_length=50)
+    roles = db.ListField(db.ReferenceField(Role), default=[])
