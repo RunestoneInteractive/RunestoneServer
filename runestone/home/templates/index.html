@@ -88,6 +88,25 @@
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
 
+
+        <button onclick="corsTest();">TestCORS</button>
+
+<script>
+    function corsTest() {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.onload = function () {
+            alert(xhr.responseText);
+        }
+        xhr.onerror = function () {
+            alert("error");
+        }
+
+        xhr.open("GET", "http://localhost:8080/ajax/page", true)
+        xhr.send()
+    }
+</script>
+
 {% endblock contents %}
 
 

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template
+from flask import Flask, Blueprint, render_template, request
 
 from flask.ext.security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin, login_required  
@@ -8,6 +8,7 @@ auth = Blueprint('auth', __name__,
     
 from runestone import db, app
 from runestone.model import *
+from flask.ext.cors import cross_origin
 
 # Setup Flask-Security
 user_datastore = MongoEngineUserDatastore(db, User, Role)
@@ -26,6 +27,7 @@ def create_user():
 # Views
 @auth.route('/authtest')
 @login_required
+@cross_origin(supports_credentials=True)
 def home():
-    return render_template('index.html')
-
+    response = dict(title='foo')
+    return render_template('index.html',response=response)
