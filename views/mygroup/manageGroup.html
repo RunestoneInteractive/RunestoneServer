@@ -17,7 +17,7 @@ response.files.insert(3,URL('static','css/custom.css'))
 			<h4 class="subheading">Your Group: {{=currentGroup.cohort_name}}</h4>
 			<p id="current-members"><strong>Current Members</strong></p>
 			{{for member in allGroupMembers:}}
-				<p style="margin-left: 15px;">{{=member.first_name}} {{=member.first_name}}</p>
+				<p style="margin-left: 15px;">{{=member.first_name}} {{=member.last_name}}</p>
 			{{pass}}
 			<p><strong>Use the following invite code to invite others to your group: </strong>{{=currentGroup.invitation_id}}</p>
 			<br/>
