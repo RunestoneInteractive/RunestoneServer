@@ -132,6 +132,15 @@ pass
 	  						 </div>
 						</div>
 						{{pass}}
+            {{ if newPlanCount == 0 and activePlanCount == 0:}}
+              <h1>Getting Started</h1>
+              <div>
+                It looks like you have not setup any reading plans. Get started studying by scheduling a group reading.
+              </div>
+
+            {{pass}}
+
+
 						{{ if activePlanCount != 0:}}
 						<div class="row" id="schedule-section">
 							<div class="col-md-12">
@@ -250,6 +259,7 @@ pass
 													 {{pass}}
 
 													<div class="message-container">
+<!-- HERE HERE -->
 														<div class="alert alert-warning">{{=plan.cohort_plan.created_by.first_name}},<br/>
                                                         {{=plan.cohort_plan.note}}<br/><a href="#" style="text-decoration:underline;">Continue Studying</a>
 														</div>
