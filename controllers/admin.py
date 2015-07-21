@@ -447,8 +447,12 @@ def cohortprogress():
 def editcustom():
     course_name = auth.user.course_name
     custom_file = request.args[0]
-    assignfile = open(path.join('applications', request.application,
+    try:
+        assignfile = open(path.join('applications', request.application,
                                 'custom_courses', course_name, custom_file+'.rst'), 'r')
+    except IOError as e:
+        session.flash = "Sorry, " + custom_file + " does not exist for this course."
+        redirect(URL('index'))
 
     form = FORM(TEXTAREA(_id='text', _name='text', value=assignfile.read()),
                 INPUT(_type='submit', _value='submit'))
@@ -466,5 +470,5 @@ def editcustom():
         response.flash = 'Assignments has errors'
 
 
-    return dict(form=form)
+    return dict(form=form,cfile=custom_file.capitalize())
 

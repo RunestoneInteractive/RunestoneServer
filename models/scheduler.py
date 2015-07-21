@@ -66,6 +66,10 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             shutil.copy(path.join(confdir, 'assignments.rst'),
                         path.join(sourcedir, 'assignments.rst'))
 
+            if os.path.exists(path.join(confdir, 'toc.rst')):
+                shutil.copy(path.join(confdir, 'toc.rst'),
+                            path.join(sourcedir, 'toc.rst'))
+
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
@@ -99,6 +103,10 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
                         path.join(confdir, dest_file))
             shutil.copy(path.join(workingdir, base_course, template_file),
                         path.join(sourcedir, dest_file))
+        if os.path.exists(path.join(workingdir, base_course, 'source', 'toc.rst')):
+            shutil.copy(path.join(workingdir, base_course, 'source', 'toc.rst'),
+                        path.join(confdir, 'toc.rst'))
+
 
 
     ###########
