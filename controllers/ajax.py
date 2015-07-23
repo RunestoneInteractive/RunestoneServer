@@ -122,7 +122,7 @@ def saveprog():
         else:
             q = q(db.deadlines.section==None)
         dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
-        if dl:
+        if dl and dl.deadline:
             if dl.deadline < now:
                 return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
     try:
