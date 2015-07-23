@@ -135,7 +135,9 @@ pass
             {{ if newPlanCount == 0 and activePlanCount == 0:}}
               <h1>Getting Started</h1>
               <div>
-                It looks like you have not setup any reading plans. Get started studying by scheduling a group reading.
+                You have not setup any reading plans, yet! Get started studying by scheduling a section to begin reading.
+                <p>Its hard to keep yourself motivated to study. <br/>
+      Be part of a group, plan deadlines and motivate each other to finish a chapter, on a <strong>deadline you all set together.</strong> </p>
               </div>
 
             {{pass}}
@@ -198,7 +200,7 @@ pass
 													Days Left: 
 												</span> 
 												<span class="sc-days-left">
-													{{=abs((plan.cohort_plan.end_date - datetime.datetime.today()).days)}}
+													{{=abs((plan.cohort_plan.end_date- datetime.datetime.today().date()).days)}}
 												</span>
 												{{pass}}
 											 </div>
@@ -259,7 +261,6 @@ pass
 													 {{pass}}
 
 													<div class="message-container">
-<!-- HERE HERE -->
 														<div class="alert alert-warning">{{=plan.cohort_plan.created_by.first_name}},<br/>
                                                         {{=plan.cohort_plan.note}}<br/><a href="#" style="text-decoration:underline;">Continue Studying</a>
 														</div>
