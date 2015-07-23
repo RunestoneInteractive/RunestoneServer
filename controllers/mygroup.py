@@ -38,6 +38,9 @@ def schedule():
                                                                                 db.cohort_plan.created_by,
                                                                                 db.cohort_plan.cohort_id,
                                                                                 db.cohort_plan.id)
+
+        courseName = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first().course_name
+
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for plan'))
 
         for plan in allPlans:
@@ -69,7 +72,7 @@ def schedule():
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'done'))
         dbfile.close()
         return dict(allPlans=allPlans, allProgress=allProgress, allUsers=allUsers,
-                    allComments=allComments, cohortName=cohortName)
+                    allComments=allComments, cohortName=cohortName, courseName=courseName)
 
 def newschedule():
     if auth.user == None:
