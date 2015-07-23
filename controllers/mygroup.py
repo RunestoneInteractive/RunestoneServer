@@ -15,12 +15,12 @@ def schedule():
             redirect(URL('mygroup','manageGroup'))
         dbfile.write('%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
         allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
-                         (db.auth_user.course_name == auth.user.course_name) &
-                         (db.chapters.course_id == auth.user.course_name) &
+                         #(db.auth_user.course_name == auth.user.course_name) & #this isn't used anywhere
+                         (db.chapters.id == auth.user.course_id) &
                          (db.user_sub_chapter_progress.user_id == db.auth_user.id) &
                          (db.auth_user.cohort_id == auth.user.cohort_id)).select(db.user_sub_chapter_progress.ALL,
-                                                                                db.chapters.ALL,
-                                                                                db.auth_user.ALL)
+                                                                                db.chapters.ALL)
+                                                                                #db.auth_user.ALL) #this isn't used anywhere.
 
         allUsers = db(db.auth_user.cohort_id == auth.user.cohort_id).select(db.auth_user.ALL)
 
@@ -38,8 +38,6 @@ def schedule():
                                                                                 db.cohort_plan.created_by,
                                                                                 db.cohort_plan.cohort_id,
                                                                                 db.cohort_plan.id)
-
-        courseName = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first().course_name
 
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for plan'))
 
@@ -72,7 +70,7 @@ def schedule():
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'done'))
         dbfile.close()
         return dict(allPlans=allPlans, allProgress=allProgress, allUsers=allUsers,
-                    allComments=allComments, cohortName=cohortName, courseName=courseName)
+                    allComments=allComments, cohortName=cohortName, courseName=auth.user.course_name)
 
 def newschedule():
     if auth.user == None:
@@ -121,8 +119,7 @@ def complete():
         redirect(URL('default', 'user/login'))
     else:
         db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed', actual_end_date=datetime.datetime.now())
-        db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())
-
+        
 def comment():
 	db.user_comments.insert(cohort_id=auth.user.cohort_id,chapter_id=request.vars.chapter,comment=request.vars.text,comment_by=auth.user)
 
