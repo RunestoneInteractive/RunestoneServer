@@ -7,6 +7,7 @@ import re
 from paver.easy import sh
 from sphinx.application import Sphinx
 import logging
+from pkg_resources import resource_string, resource_filename
 
 
 ################
@@ -18,7 +19,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     workingdir = folder
     mylog = logging.getLogger('web2py.root')
     # sourcedir holds the all sources temporarily
-    sourcedir = path.join(workingdir,rvars['projectname'])
+    sourcedir = path.join(workingdir, 'build', rvars['projectname'])
 
     # create the custom_courses dir if it doesn't already exist
     if not os.path.exists(path.join(workingdir, 'custom_courses')):
@@ -27,141 +28,88 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # confdir holds the conf and index files
     confdir = path.join(workingdir, 'custom_courses', rvars['projectname'])
     custom_dir = confdir
-    if not os.path.exists(confdir):
-        os.mkdir(confdir)
+    if not os.path.exists(custom_dir):
+        os.mkdir(custom_dir)
 
     # ## check for base_course  if base_course == None
     ### read conf.py and look for How to Think to determine coursetype
     if base_course == None:
-        conf_file = open(path.join(confdir, 'conf.py'), 'r')
-        conf_text = conf_file.read()
-        if 'How to Think' in conf_text:
-            base_course = 'thinkcspy'
-        elif 'Programs, Information' in conf_text:
-            base_course = 'pip'
-        else:
-            base_course = 'pythonds'
-        conf_file.close()
-        db(db.courses.course_name == rvars['projectname']).update(base_course=base_course)
+        base_course = 'thinkcspy'
+
+    # copy all the sources into the temporary sourcedir
+    if os.path.exists(sourcedir):
+        shutil.rmtree(sourcedir)
+    shutil.copytree(path.join(workingdir, 'books', base_course), sourcedir)
 
     #########
     # We're rebuilding a course
     #########
     if rvars['coursetype'] == 'rebuildcourse':
-        try:
-            # copy all the sources into the temporary sourcedir
-            if os.path.exists(sourcedir):
-                shutil.rmtree(sourcedir)
-            shutil.copytree(path.join(workingdir, base_course, 'source'), sourcedir)
-        except:
-            raise OSError("Problems with source directory: workingdir = %s, sourcedir = %s base_course = %s" % (workingdir, sourcedir, base_course))
 
         try:
             # copy the index and conf files to the sourcedir
-            shutil.copy(path.join(confdir, 'conf.py'), path.join(sourcedir, 'conf.py'))
-            shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, 'index.rst'))
+            shutil.copy(path.join(confdir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
+            shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
 
             # copy the assignments.rst file from confidir as it may contain assignments written
             # by the instructor
             shutil.copy(path.join(confdir, 'assignments.rst'),
-                        path.join(sourcedir, 'assignments.rst'))
+                        path.join(sourcedir, '_sources', 'assignments.rst'))
 
             if os.path.exists(path.join(confdir, 'toc.rst')):
                 shutil.copy(path.join(confdir, 'toc.rst'),
-                            path.join(sourcedir, 'toc.rst'))
+                            path.join(sourcedir, '_sources', 'toc.rst'))
 
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
             raise OSError("missing conf, index, or assignments file")
 
-        # for old legacy courses that may not have a base_course value
-        # read conf.py and look for 'How to Think'
-            # do we care about a totally custom course?
-
-            # now update the database so we don't have to do this again
-
-
-
-
-
     ########
     # we're just copying one of the pre-existing books
     ########
     else:
-        # copy all the sources into the temporary sourcedir
-        shutil.copytree(path.join(workingdir, base_course, 'source'), sourcedir)
+        paver_stuff = resource_string('runestone','common/project_template/pavement.tmpl')
 
-        # copy the config file. We save it in confdir (to allow rebuilding the course at a later date),
-        # and we also copy it to the sourcedir (which will be used for this build and then deleted.
-        for template_file in ['template_conf.py', 'index.rst', 'assignments.rst']:
-            if 'template' in template_file:
-                dest_file = template_file.replace('template_', '')
-            else:
-                dest_file = template_file
-            shutil.copy(path.join(workingdir, base_course, template_file),
-                        path.join(confdir, dest_file))
-            shutil.copy(path.join(workingdir, base_course, template_file),
-                        path.join(sourcedir, dest_file))
-        if os.path.exists(path.join(workingdir, base_course, 'source', 'toc.rst')):
-            shutil.copy(path.join(workingdir, base_course, 'source', 'toc.rst'),
-                        path.join(confdir, 'toc.rst'))
+        opts = { 'master_url'   : 'http://interactivepython.org',
+                 'project_name' : rvars['projectname'],
+                 'build_dir'    : 'build',
+                 'login_req'    : 'loginreq' in rvars,
+                 'log_level'    : 10,
+                 'use_services' : 'true',
+                 'python3'      : 'false'
+        }
+        paver_stuff = paver_stuff % opts
+        with open(path.join(sourcedir,'pavement.py'),'w') as fp:
+            fp.write(paver_stuff)
 
+        # Save copies of files that the instructor may customize
+        shutil.copy(path.join(sourcedir,'pavement.py'),custom_dir)
+        shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
+        shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
+        if os.path.exists(path.join(sourcedir,'_sources', 'toc.rst')):
+            shutil.copy(path.join(sourcedir,'_sources', 'toc.rst'),custom_dir)
 
 
     ###########
-    # Set up and run Sphinx
+    # Set up and run Paver build
     ###########
-    coursename = rvars['projectname']
-    confdir = sourcedir  # Sphinx build actually gets conf stuff from temp sourcedir
-    outdir = path.join(folder, 'static', coursename)
-    doctreedir = path.join(outdir, 'doctrees')
-    buildername = 'html'
-    confoverrides = {}
-    confoverrides['html_context.appname'] = application
-    confoverrides['html_context.course_id'] = coursename
-    confoverrides['html_context.loglevel'] = 10
-    confoverrides['html_context.course_url'] = settings.server_type + http_host
 
-    cwd = os.getcwd()
-    os.chdir(path.join('applications',application))
-    build_info = sh("git describe --long", capture=True)
-    bi = open(path.join('custom_courses',coursename,'build_info'),'w')
-    bi.write(build_info)
-    bi.close()
-    os.chdir(cwd)    
-    build_split = build_info.split('-')
-    confoverrides['html_context.build_info'] = build_split[0]
-
-    if 'loginreq' in rvars:
-        confoverrides['html_context.login_required'] = 'true'
-    else:
-        confoverrides['html_context.login_required'] = 'false'
-    status = sys.stdout
-    warning = sys.stdout
-    freshenv = True
-    warningiserror = False
-    tags = []
-
-    sys.path.insert(0,path.join(folder,'modules'))
-    from chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
-
-    force_all = True
-    filenames = []
-
-    app = Sphinx(sourcedir, confdir, outdir, doctreedir, buildername,
-                confoverrides, status, warning, freshenv,
-                warningiserror, tags)
-    app.build(force_all, filenames)
-
-
+    from paver.tasks import main as paver_main
+    os.chdir(sourcedir)
+    paver_main(args=["build"])
 
     if base_course == 'thinkcspy':
         idxname = 'toc.rst'
     else:
         idxname = 'index.rst'
 
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, idxname))
+    #
+    # Build the completion database
+    #
+    sys.path.insert(0,path.join(folder,'modules'))
+    from chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', idxname))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     for root, dirs, files in os.walk(sourcedir):
@@ -170,8 +118,17 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
                 fh = open(path.join(root, fn), 'r')
                 populateSubchapter(root, fn, fh, sourcedir, rvars['projectname'])
 
-    shutil.rmtree(sourcedir)
+    #
+    # move the sourcedir/build/projectname folder into static
+    #
+    shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
+    shutil.move(os.path.join(sourcedir,'build',rvars['projectname']),
+                os.path.join(workingdir,'static',rvars['projectname']) )
+    #
+    # clean up
+    #
 
+    shutil.rmtree(sourcedir)
 
     donefile = open(os.path.join(custom_dir, 'done'), 'w')
     donefile.write('success')
