@@ -21,6 +21,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # sourcedir holds the all sources temporarily
     sourcedir = path.join(workingdir, 'build', rvars['projectname'])
 
+
     # create the custom_courses dir if it doesn't already exist
     if not os.path.exists(path.join(workingdir, 'custom_courses')):
         os.mkdir(path.join(workingdir, 'custom_courses'))
@@ -71,14 +72,18 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     else:
         paver_stuff = resource_string('runestone','common/project_template/pavement.tmpl')
 
-        opts = { 'master_url'   : 'http://interactivepython.org',
+        opts = { 'master_url'   : 'http://' + http_host,
                  'project_name' : rvars['projectname'],
                  'build_dir'    : 'build',
-                 'login_req'    : 'loginreq' in rvars,
                  'log_level'    : 10,
-                 'use_services' : 'true',
-                 'python3'      : 'false'
+                 'use_services' : 'true'
         }
+
+        if 'loginreq' in rvars:
+            opts['login_req'] = 'true'
+        if 'python3' in rvars:
+            opts['python3'] = 'true'
+
         paver_stuff = paver_stuff % opts
         with open(path.join(sourcedir,'pavement.py'),'w') as fp:
             fp.write(paver_stuff)

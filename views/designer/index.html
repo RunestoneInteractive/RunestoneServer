@@ -56,7 +56,7 @@
 
       <div class='form-group'>
         <label>
-          Choose one of our ready-made books or to create a custom course:
+          Choose one of our ready-made books for your course:
         </label>
         <div class="radio">
           <label>
@@ -79,6 +79,13 @@
             </label>
           </div>
 
+          <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="apcsareview" />
+              AP CS-A Review Course
+            </label>
+          </div>
+
         <!-- <label>
           OR
         </label>
@@ -96,14 +103,21 @@
       <div class='form-group'>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="loginreq" value="yes" id="login-req" checked="checked" />
+            <input type="checkbox" name="loginreq" value="true" id="login-req" checked="checked" />
             Require a username to access this course.
          </label>
         </div>
 
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="instructor" value="yes" checked="checked"/> 
+            <input type="checkbox" name="python3" value="true" id="python3" checked="checked"  />
+            Use Python3 print function and true division
+         </label>
+        </div>
+
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="instructor" value="yes" checked="checked"/>
             Make me the Instructor of this course.
           </label>
         </div>
