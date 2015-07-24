@@ -12,8 +12,9 @@ def get_lint(code, divid, sid):
         tfile = open(fn, 'w')
         tfile.write(code)
         tfile.close()
-    except:
+    except Exception as e:
         print "failed to open/write file ", sid, divid
+        print str(e)
 
     pyl_opts = ' --msg-template="{C}: {symbol}: {msg_id}:{line:3d},{column}: {obj}: {msg}" '
     pyl_opts += ' --reports=n '
