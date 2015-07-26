@@ -134,8 +134,13 @@ def makePavement(http_host, rvars, sourcedir):
             }
     if 'loginreq' in rvars:
         opts['login_req'] = 'true'
+    else:
+        opts['login_req'] = 'false'
     if 'python3' in rvars:
         opts['python3'] = 'true'
+    else:
+        opts['python3'] = 'false'
+
     paver_stuff = paver_stuff % opts
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
