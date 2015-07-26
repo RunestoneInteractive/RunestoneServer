@@ -42,6 +42,9 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         shutil.rmtree(sourcedir)
     shutil.copytree(path.join(workingdir, 'books', base_course), sourcedir)
 
+    makePavement(http_host, rvars, sourcedir)
+    shutil.copy(path.join(sourcedir,'pavement.py'),custom_dir)
+
     #########
     # We're rebuilding a course
     #########
@@ -64,32 +67,13 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
-            raise OSError("missing conf, index, or assignments file")
+            raise OSError("missing paver, index, or assignments file")
 
     ########
     # we're just copying one of the pre-existing books
     ########
     else:
-        paver_stuff = resource_string('runestone','common/project_template/pavement.tmpl')
-
-        opts = { 'master_url'   : 'http://' + http_host,
-                 'project_name' : rvars['projectname'],
-                 'build_dir'    : 'build',
-                 'log_level'    : 10,
-                 'use_services' : 'true'
-        }
-
-        if 'loginreq' in rvars:
-            opts['login_req'] = 'true'
-        if 'python3' in rvars:
-            opts['python3'] = 'true'
-
-        paver_stuff = paver_stuff % opts
-        with open(path.join(sourcedir,'pavement.py'),'w') as fp:
-            fp.write(paver_stuff)
-
         # Save copies of files that the instructor may customize
-        shutil.copy(path.join(sourcedir,'pavement.py'),custom_dir)
         shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
         shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
         if os.path.exists(path.join(sourcedir,'_sources', 'toc.rst')):
@@ -138,6 +122,23 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     donefile = open(os.path.join(custom_dir, 'done'), 'w')
     donefile.write('success')
     donefile.close()
+
+
+def makePavement(http_host, rvars, sourcedir):
+    paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
+    opts = {'master_url': 'http://' + http_host,
+            'project_name': rvars['projectname'],
+            'build_dir': 'build',
+            'log_level': 10,
+            'use_services': 'true'
+            }
+    if 'loginreq' in rvars:
+        opts['login_req'] = 'true'
+    if 'python3' in rvars:
+        opts['python3'] = 'true'
+    paver_stuff = paver_stuff % opts
+    with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
+        fp.write(paver_stuff)
 
 
 div_re = re.compile(
