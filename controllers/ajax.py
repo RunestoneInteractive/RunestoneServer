@@ -176,6 +176,32 @@ def getprog():
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
+def getlastanswer():
+    print "Hello from Get Last Answer"
+    logging.debug("Hello from getlastanswer")
+    divid = request.vars.div_id
+    if  auth.user:
+        sid = auth.user.username
+        query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
+        print "finding last answer for %s %s " % (sid,divid)
+    else:
+        query = None
+        print "No User, No Query"
+
+    res = {}
+    if query:
+        result = db(query)
+        if not result.isempty():
+            r = result.select(orderby=~db.useinfo.timestamp).first()
+            res['divid'] = divid
+            res['answer'] = r.act
+            res['timestamp'] = r.timestamp.isoformat()
+        else:
+            print "No saved answers for %s %s" %(sid,divid)
+    response.headers['content-type'] = 'application/json'
+    return json.dumps(res)
+
+
 
 @auth.requires_membership('instructor')
 def savegrade():
