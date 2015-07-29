@@ -15,12 +15,12 @@ def schedule():
             redirect(URL('mygroup','manageGroup'))
         dbfile.write('%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
         allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
-                         (db.auth_user.course_name == auth.user.course_name) &
-                         (db.chapters.course_id == auth.user.course_name) &
+                         #(db.auth_user.course_name == auth.user.course_name) & #this isn't used anywhere
+                         (db.chapters.id == auth.user.course_id) &
                          (db.user_sub_chapter_progress.user_id == db.auth_user.id) &
                          (db.auth_user.cohort_id == auth.user.cohort_id)).select(db.user_sub_chapter_progress.ALL,
-                                                                                db.chapters.ALL,
-                                                                                db.auth_user.ALL)
+                                                                                db.chapters.ALL)
+                                                                                #db.auth_user.ALL) #this isn't used anywhere.
 
         allUsers = db(db.auth_user.cohort_id == auth.user.cohort_id).select(db.auth_user.ALL)
 
@@ -38,7 +38,9 @@ def schedule():
                                                                                 db.cohort_plan.created_by,
                                                                                 db.cohort_plan.cohort_id,
                                                                                 db.cohort_plan.id)
+
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'before for plan'))
+
         for plan in allPlans:
             if plan.cohort_plan.status=='new' and plan.cohort_plan.start_date < datetime.datetime.now().date():
                 plan.cohort_plan.status='active'
@@ -68,8 +70,7 @@ def schedule():
         dbfile.write('%s : %s\n' % (datetime.datetime.now(), 'done'))
         dbfile.close()
         return dict(allPlans=allPlans, allProgress=allProgress, allUsers=allUsers,
-                    allComments=allComments, cohortName=cohortName)
-
+                    allComments=allComments, cohortName=cohortName, courseName=auth.user.course_name)
 
 def newschedule():
     if auth.user == None:
@@ -89,29 +90,36 @@ def modifiedschedule():
 
 
 def modify():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='new')
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(start_date=request.vars.startDate)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(end_date=request.vars.endDate)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(note=request.vars.note)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_by=auth.user)
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(created_on=datetime.datetime.now())
-    plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
-    plan_fields = db.cohort_plan._filter_fields(plan)
-    plan_fields['plan_id'] = plan.id
-    db.cohort_plan_revisions.insert(**plan_fields)
-
+    if auth.user == None:
+        redirect(URL('default', 'user/login'))
+    else:
+        db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='new',
+            start_date=datetime.datetime.strptime(request.vars.startDate, "%Y-%m-%d %H:%M:%S"),
+            end_date=datetime.datetime.strptime(request.vars.endDate, "%Y-%m-%d %H:%M:%S"),
+            note=request.vars.note,
+            created_by=auth.user,
+            created_on=datetime.datetime.now())
+        plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
+        plan_fields = db.cohort_plan._filter_fields(plan)
+        plan_fields['plan_id'] = plan.id
+        db.cohort_plan_revisions.insert(**plan_fields)
 
 def delete():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='notStarted')
-    plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
-    db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
-    db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=plan.id)
-    db((db.user_comments.cohort_id==auth.user.cohort_id) & (db.user_comments.chapter_id==request.vars.chapter)).delete()
+    if auth.user == None:
+        redirect(URL('default', 'user/login'))
+    else:
+        db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='notStarted')
+        plan = db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).select(db.cohort_plan.ALL).first()
+        db.cohort_plan_revisions.insert(**db.cohort_plan._filter_fields(plan))
+        db((db.cohort_plan_revisions.chapter_id==request.vars.chapter) & (db.cohort_plan_revisions.cohort_id==auth.user.cohort_id)).update(plan_id=plan.id)
+        db((db.user_comments.cohort_id==auth.user.cohort_id) & (db.user_comments.chapter_id==request.vars.chapter)).delete()
 
 def complete():
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed', actual_end_date=datetime.datetime.now())
-    db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(actual_end_date=datetime.datetime.now())
-
+    if auth.user == None:
+        redirect(URL('default', 'user/login'))
+    else:
+        db((db.cohort_plan.chapter_id==request.vars.chapter) & (db.cohort_plan.cohort_id==auth.user.cohort_id)).update(status='completed', actual_end_date=datetime.datetime.now())
+        
 def comment():
 	db.user_comments.insert(cohort_id=auth.user.cohort_id,chapter_id=request.vars.chapter,comment=request.vars.text,comment_by=auth.user)
 
