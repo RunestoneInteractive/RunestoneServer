@@ -9,7 +9,7 @@ import os, sys
 sys.path.insert(0,os.path.dirname(__file__))
 from coach import get_lint
 
-logger = logging.getLogger("web2py.app.eds")
+logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
@@ -177,16 +177,15 @@ def getprog():
     return json.dumps([res])
 
 def getlastanswer():
-    print "Hello from Get Last Answer"
     logging.debug("Hello from getlastanswer")
     divid = request.vars.div_id
     if  auth.user:
         sid = auth.user.username
         query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
-        print "finding last answer for %s %s " % (sid,divid)
+        logging.debug("finding last answer for %s %s " % (sid,divid))
     else:
         query = None
-        print "No User, No Query"
+        logging.debug("No User, No Query")
 
     res = {}
     if query:
@@ -197,7 +196,7 @@ def getlastanswer():
             res['answer'] = r.act
             res['timestamp'] = r.timestamp.isoformat()
         else:
-            print "No saved answers for %s %s" %(sid,divid)
+            logging.debug("No saved answers for %s %s" %(sid,divid))
     response.headers['content-type'] = 'application/json'
     return json.dumps(res)
 
@@ -281,7 +280,7 @@ def deletehighlight():
     if uniqueId:
         db(db.user_highlights.id == uniqueId).update(is_active = 0)
     else:
-        print 'uniqueId is None'
+        logging.debug('uniqueId is None')
 
 def gethighlights():
     """
@@ -513,7 +512,7 @@ def getaggregateresults():
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
             except:
-                print "Bad data for %s data is %s " % (question,key)
+                logging.debug("Bad data for %s data is %s " % (question,key))
 
     miscdata['correct'] = correct
     miscdata['course'] = course
