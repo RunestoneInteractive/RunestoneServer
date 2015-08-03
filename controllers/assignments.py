@@ -71,12 +71,14 @@ def admin():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     sections = db(db.sections.course_id == course.id).select()
-    students = db(db.auth_user.course_id == course.id)
+    students = db((db.auth_user.course_id == course.id) &
+                            (db.auth_user.active==True))
     section_id = None
     try:
         section_id = int(request.get_vars.section_id)
         current_section = [x for x in sections if x.id == section_id][0]
-        students = students((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
+        students = students((db.sections.id==db.section_users.section) &
+                            (db.auth_user.id==db.section_users.auth_user))
         students = students(db.sections.id == current_section.id)
     except:
         pass
@@ -298,7 +300,8 @@ def detail():
         return redirect(URL("assignments","index"))
 
     sections = db(db.sections.course_id == course.id).select(db.sections.ALL)
-    students = db(db.auth_user.course_id == course.id)
+    students = db(( db.auth_user.course_id == course.id) &
+                            (db.auth_user.active==True))
 
     section_id = None
     try:
