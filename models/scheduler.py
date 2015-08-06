@@ -141,6 +141,8 @@ def makePavement(http_host, rvars, sourcedir):
     else:
         opts['python3'] = 'false'
 
+    opts['dest'] = '../../static'
+
     paver_stuff = paver_stuff % opts
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
