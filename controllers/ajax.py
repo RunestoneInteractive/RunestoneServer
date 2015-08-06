@@ -9,7 +9,7 @@ import os, sys
 sys.path.insert(0,os.path.dirname(__file__))
 from coach import get_lint
 
-logger = logging.getLogger("web2py.app.eds")
+logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
@@ -176,6 +176,31 @@ def getprog():
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
+def getlastanswer():
+    logging.debug("Hello from getlastanswer")
+    divid = request.vars.div_id
+    if  auth.user:
+        sid = auth.user.username
+        query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
+        logging.debug("finding last answer for %s %s " % (sid,divid))
+    else:
+        query = None
+        logging.debug("No User, No Query")
+
+    res = {}
+    if query:
+        result = db(query)
+        if not result.isempty():
+            r = result.select(orderby=~db.useinfo.timestamp).first()
+            res['divid'] = divid
+            res['answer'] = r.act
+            res['timestamp'] = r.timestamp.isoformat()
+        else:
+            logging.debug("No saved answers for %s %s" %(sid,divid))
+    response.headers['content-type'] = 'application/json'
+    return json.dumps(res)
+
+
 
 @auth.requires_membership('instructor')
 def savegrade():
@@ -255,7 +280,7 @@ def deletehighlight():
     if uniqueId:
         db(db.user_highlights.id == uniqueId).update(is_active = 0)
     else:
-        print 'uniqueId is None'
+        logging.debug('uniqueId is None')
 
 def gethighlights():
     """
@@ -308,51 +333,53 @@ def updatelastpage():
                    end_date = datetime.datetime.now())
 
 def getCompletionStatus():
-    lastPageUrl = request.vars.lastPageUrl
-    lastPageChapter = lastPageUrl.split("/")[-2]
-    lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
-    result = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
-                (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
-                (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
-    rowarray_list = []
-    if result:
-        for row in result:
-            res = {'completionStatus': row.status}
-            rowarray_list.append(res)
-            #question: since the javascript in user-highlights.js is going to look only at the first row, shouldn't we be returning just the *last* status? Or is there no history of status kept anyway?
-        return json.dumps(rowarray_list)
-    else:
-        # haven't seen this Chapter/Subchapter before
-        # make the insertions into the DB as necessary
+    if auth.user:
+        lastPageUrl = request.vars.lastPageUrl
+        lastPageChapter = lastPageUrl.split("/")[-2]
+        lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+        result = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                    (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                    (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
+        rowarray_list = []
+        if result:
+            for row in result:
+                res = {'completionStatus': row.status}
+                rowarray_list.append(res)
+                #question: since the javascript in user-highlights.js is going to look only at the first row, shouldn't we be returning just the *last* status? Or is there no history of status kept anyway?
+            return json.dumps(rowarray_list)
+        else:
+            # haven't seen this Chapter/Subchapter before
+            # make the insertions into the DB as necessary
 
-        # we know the subchapter doesn't exist      
-        db.user_sub_chapter_progress.insert(user_id=auth.user.id,
-                                            chapter_id = lastPageChapter,
-                                            sub_chapter_id = lastPageSubchapter,
-                                            status = -1)
-        # the chapter might exist without the subchapter
-        result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
-        if not result:
-            db.user_chapter_progress.insert(user_id = auth.user.id,
-                                           chapter_id = lastPageChapter,
-                                           status = -1)       
-        return json.dumps([{'completionStatus': -1}])        
+            # we know the subchapter doesn't exist
+            db.user_sub_chapter_progress.insert(user_id=auth.user.id,
+                                                chapter_id = lastPageChapter,
+                                                sub_chapter_id = lastPageSubchapter,
+                                                status = -1)
+            # the chapter might exist without the subchapter
+            result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
+            if not result:
+                db.user_chapter_progress.insert(user_id = auth.user.id,
+                                               chapter_id = lastPageChapter,
+                                               status = -1)
+            return json.dumps([{'completionStatus': -1}])
 
 def getAllCompletionStatus():
-    result = db((db.user_sub_chapter_progress.user_id == auth.user.id)).select(db.user_sub_chapter_progress.chapter_id, db.user_sub_chapter_progress.sub_chapter_id, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.end_date)
-    rowarray_list = []
-    if result:
-        for row in result:
-            if row.end_date == None:
-                endDate = 0
-            else:
-                endDate = row.end_date.strftime('%d %b, %Y')
-            res = {'chapterName': row.chapter_id,
-                   'subChapterName': row.sub_chapter_id,
-                   'completionStatus': row.status,
-                   'endDate': endDate}
-            rowarray_list.append(res)
-        return json.dumps(rowarray_list)
+    if auth.user:
+        result = db((db.user_sub_chapter_progress.user_id == auth.user.id)).select(db.user_sub_chapter_progress.chapter_id, db.user_sub_chapter_progress.sub_chapter_id, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.status, db.user_sub_chapter_progress.end_date)
+        rowarray_list = []
+        if result:
+            for row in result:
+                if row.end_date == None:
+                    endDate = 0
+                else:
+                    endDate = row.end_date.strftime('%d %b, %Y')
+                res = {'chapterName': row.chapter_id,
+                       'subChapterName': row.sub_chapter_id,
+                       'completionStatus': row.status,
+                       'endDate': endDate}
+                rowarray_list.append(res)
+            return json.dumps(rowarray_list)
 
 def getlastpage():
     course = request.vars.course
@@ -487,7 +514,7 @@ def getaggregateresults():
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
             except:
-                print "Bad data for %s data is %s " % (question,key)
+                logging.debug("Bad data for %s data is %s " % (question,key))
 
     miscdata['correct'] = correct
     miscdata['course'] = course

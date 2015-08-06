@@ -3,14 +3,17 @@
 <script type="text/javascript">
   eBookConfig.course = '{{=course_id}}'
 </script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js" type="text/javascript"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/bookfuncs.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/runestonebase.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/activecode.js" type="text/javascript"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.tablesorter.js"></script>
 
 <link href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" rel="stylesheet" type="text/css"/>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 <style type="text/css" media="screen">
   #content {
     width: 900px;
@@ -41,7 +44,7 @@
       <td>{{ =s.auth_user.last_name}} </td>
       <td id="col-grade-{{=s.code.sid}}">{{=s.code.grade}}</td>
       <td>
-        <button class='btn btn-default' data-toggle="modal" data-target="#modal-{{=s.code.sid.replace(":","")}}" onclick="createActiveCode('{{ =s.code.acid }}',undefined,'{{ =s.code.sid }}','{{ =s.code.language }}')">grade</button>
+        <button class='btn btn-default' data-toggle="modal" data-target="#modal-{{=s.code.sid.replace(":","")}}" onclick="ACFactory.addActiveCodeToDiv('{{ =s.code.acid }}','{{ =s.code.acid }}_{{=s.code.sid}}','{{ =s.code.sid }}', undefined, '{{ =s.code.language }}')">grade</button>
         <div id="modal-{{=s.code.sid.replace(":","")}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">

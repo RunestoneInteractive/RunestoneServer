@@ -2,7 +2,7 @@ from os import path
 import os
 import pygal
 from datetime import date, timedelta
-
+from paver.easy import sh
 
 
 # this is for admin links
@@ -19,15 +19,20 @@ from datetime import date, timedelta
 
 @auth.requires_login()
 def index():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
+    cwd = os.getcwd()
     try:
-        mbf = open(path.join('applications',request.application,'build_info'),'r')
-        master_build = mbf.read()[:-1]
-        mbf.close()
+        os.chdir(path.join('applications',request.application,'books',row.base_course))
+        master_build = sh("git describe --long", capture=True)[:-1]
+        with open('build_info','w') as bc:
+            bc.write(master_build)
+            bc.write("\n")
     except:
         master_build = ""
+    finally:
+        os.chdir(cwd)
 
     try:
         mbf = open(path.join('applications',request.application,'custom_courses',row.course_name,'build_info'),'r')
