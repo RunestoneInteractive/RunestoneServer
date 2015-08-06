@@ -26,7 +26,7 @@ def index():
     try:
         os.chdir(path.join('applications',request.application,'books',row.base_course))
         master_build = sh("git describe --long", capture=True)[:-1]
-        with open('base_course','w') as bc:
+        with open('build_info','w') as bc:
             bc.write(master_build)
             bc.write("\n")
     except:
