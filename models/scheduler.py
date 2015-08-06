@@ -87,6 +87,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     from paver.tasks import main as paver_main
     os.chdir(sourcedir)
     paver_main(args=["build"])
+    try:
+        shutil.copy('build_info',custom_dir)
+    except IOError as copyfail:
+        logging.debug("Failed to copy build_info_file")
+        logging.debug(copyfail.message)
 
     if base_course == 'thinkcspy':
         idxname = 'toc.rst'
