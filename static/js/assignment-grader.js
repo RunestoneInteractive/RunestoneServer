@@ -57,7 +57,12 @@ function getGradingModal(element, acid, studentId){
 		jQuery('#input-grade',modal).val(data.grade);
 		jQuery('#input-comments',modal).val(data.comment);
         // outerdiv, acdiv, sid, initialcode, language
-		ACFactory.addActiveCodeToDiv(data.acid, data.acid+"_"+data.username, data.username, null, data.lang);
+		// for backward compatibility check for Factory otherwise use old function
+		if (ACFactory) {
+			ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, null, data.lang);
+		} else {
+			createActiveCode(data.acid,null,data.username);
+		}
 		jQuery('form',modal).submit(save);
 		jQuery('.next',modal).click(function(event){
 			event.preventDefault();
