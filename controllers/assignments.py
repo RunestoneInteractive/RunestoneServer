@@ -415,6 +415,7 @@ def problem():
             'code':q.code.code,
             'grade':q.code.grade,
             'comment':q.code.comment,
+            'lang':q.code.language
             }
     return json.dumps(res)
 
