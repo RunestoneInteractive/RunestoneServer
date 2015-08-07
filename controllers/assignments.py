@@ -2,7 +2,7 @@ from os import path
 import os
 import shutil
 import sys
-from sphinx.application import Sphinx
+
 
 # controller for "Progress Page" as well as List/create assignments
 def index():

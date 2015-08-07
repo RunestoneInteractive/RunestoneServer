@@ -5,7 +5,6 @@ import os
 import sys
 import re
 from paver.easy import sh
-from sphinx.application import Sphinx
 import logging
 from pkg_resources import resource_string, resource_filename
 
