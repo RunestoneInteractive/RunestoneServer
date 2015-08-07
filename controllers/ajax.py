@@ -325,12 +325,13 @@ def updatelastpage():
                    last_page_subchapter = lastPageSubchapter,
                    last_page_scroll_location = lastPageScrollLocation,
                    last_page_accessed_on = datetime.datetime.now())
-
+        db.commit()
         db((db.user_sub_chapter_progress.user_id == auth.user.id) &
            (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
            (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
                    status = completionFlag,
                    end_date = datetime.datetime.now())
+        db.commit()
 
 def getCompletionStatus():
     if auth.user:
