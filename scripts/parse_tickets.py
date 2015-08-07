@@ -24,5 +24,6 @@ for t in tickets:
 outset = Counter(outlist)
 
 for m in outset.most_common(10):
+    print("========")
     print(m)
     
