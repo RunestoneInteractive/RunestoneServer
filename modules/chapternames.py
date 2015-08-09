@@ -1,7 +1,12 @@
+from __future__ import print_function
 import os
 import psycopg2
+from sqlalchemy import create_engine, Table, MetaData, select, delete
 from collections import OrderedDict
 import sys
+import six
+from functools import reduce
+
 
 
 def findFullTitle(ftext, start):
@@ -45,13 +50,20 @@ def findChaptersSubChapters(tocfile):
 
 
 def addChapterInfoToDB(subChapD, chapTitles, course_id):
+    dbname = 'runestone'
     uname = os.environ['USER']
-    db = psycopg2.connect(database="runestone", user=uname)
+    if uname == 'bnmnetp':
+        uname = 'bnmnetp_courselib'
+        dbname = 'bnmnetp_courselib'
+
+    db = psycopg2.connect(database=dbname, user=uname)
     cursor = db.cursor()
     cursor.execute("DELETE from chapters where course_id='%s'" % course_id)
+#    engine.execute().delete().where(chapters.c.course_id == course_id)
     db.commit()
     for chapter in subChapD:
-        print chapter
+        print(chapter)
+
         res = cursor.execute(
             "INSERT INTO chapters(chapter_name,course_id,chapter_label) VALUES(%(chapter)s, %(course_id)s, %(chapterLabel)s) returning id",
             {"chapter": chapTitles[chapter], "course_id": course_id, "chapterLabel": chapter})
@@ -66,16 +78,8 @@ def addChapterInfoToDB(subChapD, chapTitles, course_id):
 
 
 def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
-    sys.path.insert(0, os.path.join('..', '..', '..'))
-    try:
-        from gluon.dal import DAL, Field
-    except ImportError:
-        print "... WARNING ..."
-        print "Cannot Update Chapter and Subchapter Tables in Database"
-        print "Because I am unable to import DAL from web2py"
-        print "In order to update, this application should be installed"
-        print "in the applications folder of a web2py installation"
-        return False
+    sys.path.insert(0, os.path.join('..', '..', '..', '..','gluon'))
+    from dal import DAL, Field
 
     module_path = os.path.abspath(os.path.dirname(__file__))
     dbpath = os.path.join(module_path, '..', 'databases')
@@ -83,10 +87,10 @@ def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
     sys.path.insert(0, os.path.join('..', 'models'))
     _temp = __import__('0', globals(), locals())
     settings = _temp.settings
-    execfile(os.path.join('..', 'models', '1.py'), globals(), locals())
+    exec(compile(open(os.path.join('..', 'models', '1.py')).read(), os.path.join('..', 'models', '1.py'), 'exec'), globals(), locals())
 
     db = DAL(settings.database_uri, folder=dbpath, auto_import=False)
-    execfile(os.path.join('..', 'models', 'db_ebook_chapters.py'))
+    exec(compile(open(os.path.join('..', 'models', 'db_ebook_chapters.py')).read(), os.path.join('..', 'models', 'db_ebook_chapters.py'), 'exec'))
 
     addChapterInfoFromScheduler(subChapD, chapTitles, course_id, db)
 
@@ -95,9 +99,9 @@ def addChapterInfoFromScheduler(subChapD, chapTitles, course_id, db):
     myset = db(db.chapters.course_id == course_id)
     myset.delete()
     db.commit()
-    print "Adding Chapter Info to DB"
+    print("Adding Chapter Info to DB")
     for chapter in subChapD:
-        print chapter
+        print(chapter)
         currentRowId = db.chapters.insert(chapter_name=chapTitles[chapter], course_id=course_id, chapter_label=chapter)
         for subchaptername in subChapD[chapter]:
             db.sub_chapters.insert(sub_chapter_name=unCamel(subchaptername),
@@ -109,7 +113,14 @@ def addChapterInfoFromScheduler(subChapD, chapTitles, course_id, db):
 def populateChapterInfo(project_name, index_file):
     scd, ct = findChaptersSubChapters(index_file)
     # addChapterInfoToDB(scd, ct, project_name)
-    addChapterInfoUsingDAL(scd, ct, project_name)
+    try:
+        addChapterInfoUsingDAL(scd, ct, project_name)
+    except Exception as e:
+        print("trying alternative database access due to ", e)
+        try:
+            addChapterInfoToDB(scd, ct, project_name)
+        except Exception as e:
+            print("Chapter Information DB not updated due to ", e)
 
 
 if __name__ == '__main__':
