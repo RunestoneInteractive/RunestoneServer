@@ -1,12 +1,9 @@
 from __future__ import print_function
 import os
-import psycopg2
 from sqlalchemy import create_engine, Table, MetaData, select, delete
 from collections import OrderedDict
 import sys
-import six
 from functools import reduce
-
 
 
 def findFullTitle(ftext, start):
@@ -56,26 +53,25 @@ def addChapterInfoToDB(subChapD, chapTitles, course_id):
         uname = 'bnmnetp_courselib'
         dbname = 'bnmnetp_courselib'
 
-    db = psycopg2.connect(database=dbname, user=uname)
-    cursor = db.cursor()
-    cursor.execute("DELETE from chapters where course_id='%s'" % course_id)
-#    engine.execute().delete().where(chapters.c.course_id == course_id)
-    db.commit()
+    dburl = 'postgresql://{}@localhost/{}'.format(uname,dbname)
+    engine = create_engine(dburl)
+    meta = MetaData()
+    chapters = Table('chapters', meta, autoload=True, autoload_with=engine)
+    sub_chapters = Table('sub_chapters', meta, autoload=True, autoload_with=engine)
+
+    engine.execute(chapters.delete().where(chapters.c.course_id == course_id))
+
     for chapter in subChapD:
         print(chapter)
-
-        res = cursor.execute(
-            "INSERT INTO chapters(chapter_name,course_id,chapter_label) VALUES(%(chapter)s, %(course_id)s, %(chapterLabel)s) returning id",
-            {"chapter": chapTitles[chapter], "course_id": course_id, "chapterLabel": chapter})
-        db.commit()
-        currentRowId = cursor.fetchone()[0]
+        ins = chapters.insert().values(chapter_name=chapTitles[chapter],
+                                       course_id=course_id, chapter_label=chapter)
+        res = engine.execute(ins)
+        currentRowId = res.inserted_primary_key[0]
         for subchaptername in subChapD[chapter]:
-            res = cursor.execute('''INSERT INTO sub_chapters(sub_chapter_name,chapter_id, sub_chapter_label)
-                                    VALUES(%(subchaptername)s, %(currentRowId)s, %(subChapterLabel)s)''',
-                                 {"subchaptername": unCamel(subchaptername),
-                                  "currentRowId": str(currentRowId), "subChapterLabel": subchaptername})
-        db.commit()
-
+            ins = sub_chapters.insert().values(sub_chapter_name=unCamel(subchaptername),
+                                               chapter_id=str(currentRowId),
+                                               sub_chapter_label=subchaptername)
+            engine.execute(ins)
 
 def addChapterInfoUsingDAL(subChapD, chapTitles, course_id):
     sys.path.insert(0, os.path.join('..', '..', '..', '..','gluon'))
