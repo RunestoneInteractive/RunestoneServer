@@ -35,15 +35,23 @@ def index():
         os.chdir(cwd)
 
     try:
-        mbf = open(path.join('applications',request.application,'custom_courses',row.course_name,'build_info'),'r')
+        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
+        mbf = open(mbf_path,'r')
+        last_build = os.path.getmtime(mbf_path)
         my_build = mbf.read()[:-1]
         mbf.close()
     except:
         my_build = ""
+        last_build = 0
 
     my_vers = 0
     mst_vers = 0
-    if master_build and my_build:
+    rebuild_notice = path.join('applications',request.application,'REBUILD')
+    if os.path.exists(rebuild_notice):
+        rebuild_post = os.path.getmtime(rebuild_notice)
+        if rebuild_post > last_build:
+            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
+    elif master_build and my_build:
         mst_vers,mst_bld,mst_hsh = master_build.split('-')
         my_vers,my_bld,my_hsh = my_build.split('-')
         if my_vers != mst_vers:
