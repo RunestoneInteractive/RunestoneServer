@@ -92,7 +92,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         logging.debug("Failed to copy build_info_file")
         logging.debug(copyfail.message)
 
-    if base_course == 'thinkcspy':
+    if base_course == 'thinkcspy' or base_course == 'pip2':
         idxname = 'toc.rst'
     else:
         idxname = 'index.rst'
