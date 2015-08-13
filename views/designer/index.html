@@ -14,8 +14,8 @@
     var x = document.forms["mainform"]["projectname"].value;
     var basecourse = document.forms["mainform"]["coursetype"].value;
 
-    if (x == "" || x.indexOf(" ") !== -1) {
-        alert('Error:  Your Project Name may not contain spaces')
+    if (x == "" || x.indexOf(" ") !== -1 || x.indexOf("/") > -1) {
+        alert('Error:  Your Project Name may not contain spaces or /')
         return false;
     }
 
