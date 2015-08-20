@@ -22,6 +22,10 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
+    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'pip2']:
+        if not verifyInstructorStatus(auth.user.course_name, auth.user):
+            session.flash = "You must be an instructor to access this page"
+            redirect(URL(c="default"))
     cwd = os.getcwd()
     try:
         os.chdir(path.join('applications',request.application,'books',row.base_course))
