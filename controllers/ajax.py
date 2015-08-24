@@ -482,6 +482,9 @@ def getaggregateresults():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
+    if not auth.user:
+        return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
+
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()

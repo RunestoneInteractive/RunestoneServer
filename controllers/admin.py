@@ -489,3 +489,82 @@ def editcustom():
 
     return dict(form=form,cfile=custom_file.capitalize())
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def chapterprogress():
+    import numpy as np
+    from matplotlib import use, colors
+    use('Agg')
+    import matplotlib.pyplot as plt
+    from collections import OrderedDict
+
+    subcquery = '''
+    select chapter_label, sub_chapter_label, sub_chapter_name
+    from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id
+    WHERE course_id = '{}' order by chapters.id
+    '''.format(auth.user.course_name)
+
+    subs = db.executesql(subcquery)
+
+    idxdict = {}
+    xlabs = []
+    i = 0
+    for row in subs:
+        idxdict[row[0]+row[1]] = i
+        xlabs.append(row[2])
+        i += 1
+
+    subs = None
+
+    spquery = '''
+    select username, chapter_id, sub_chapter_id, status, start_date, end_date
+from user_sub_chapter_progress join auth_user on auth_user.id = user_sub_chapter_progress.user_id join courses on courses.course_name = auth_user.course_name
+where auth_user.course_name = '{}' and sub_chapter_id in
+    (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = '{}' order by chapters.id)
+order by username;
+    '''.format(auth.user.course_name, auth.user.course_name)
+
+    spres = db.executesql(spquery)
+
+    snames = OrderedDict()
+    for row in spres:
+            snames[row[0]] = None
+
+    statmat = [[2 for j in range(len(idxdict))] for i in range(len(snames))]
+    print len(idxdict), len(snames)
+    rowix = -1
+    prev = ""
+    for row in spres:
+        #        statmat[row][idxdict[i[1].subchap]] = i[1].status
+        scidx = row[1]+row[2]
+        if row[0] != prev:
+            rowix += 1
+        if row[3]< 0:
+            status = 2
+        else:
+            status = row[3]
+        if scidx in idxdict:
+            statmat[rowix][idxdict[scidx]] = status
+        prev = row[0]
+
+    final = np.matrix(statmat)
+
+    fig,ax = plt.subplots(figsize=(20,20))
+    cmap = colors.ListedColormap(['orange', 'green', 'white'])
+
+    #labels = [item.get_text() for item in ax.get_xticklabels()]
+    labels = list(snames.keys())
+    ax.set_yticks(list(range(len(snames))))
+    ax.set_yticklabels(labels)
+
+    ax.set_xticks(list(range(len(xlabs))))
+    ax.set_xticklabels(xlabs)
+
+
+    for i in ax.xaxis.get_major_ticks():
+        i.label.set_rotation(90)
+    ax.imshow(final,interpolation='nearest', cmap=cmap)
+    saveName = path.join('applications',request.application,'static', auth.user.course_name,'_static','progress.png')
+    fig.savefig(saveName)
+
+    return dict(coursename=auth.user.course_name)
