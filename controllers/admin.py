@@ -520,9 +520,9 @@ def chapterprogress():
     select username, chapter_id, sub_chapter_id, status, start_date, end_date
 from user_sub_chapter_progress join auth_user on auth_user.id = user_sub_chapter_progress.user_id join courses on courses.course_name = auth_user.course_name
 where auth_user.course_name = '{}' and sub_chapter_id in
-    (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = 'webfundamentals' order by chapters.id)
+    (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = '{}' order by chapters.id)
 order by username;
-    '''.format(auth.user.course_name)
+    '''.format(auth.user.course_name, auth.user.course_name)
 
     spres = db.executesql(spquery)
 
@@ -543,7 +543,8 @@ order by username;
             status = 2
         else:
             status = row[3]
-        statmat[rowix][idxdict[scidx]] = status
+        if scidx in idxdict:
+            statmat[rowix][idxdict[scidx]] = status
         prev = row[0]
 
     final = np.matrix(statmat)
