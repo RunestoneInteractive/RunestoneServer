@@ -493,9 +493,10 @@ def editcustom():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def chapterprogress():
     import numpy as np
-    import matplotlib.pyplot as plt
     from matplotlib import use, colors
     use('Agg')
+    import matplotlib.pyplot as plt
+    from collections import OrderedDict
 
     subcquery = '''
     select chapter_label, sub_chapter_label, sub_chapter_name
@@ -525,9 +526,9 @@ order by username;
 
     spres = db.executesql(spquery)
 
-    snames = set()
+    snames = OrderedDict()
     for row in spres:
-        snames.add(row[0])
+            snames[row[0]] = None
 
     statmat = [[2 for j in range(len(idxdict))] for i in range(len(snames))]
     print len(idxdict), len(snames)
@@ -551,7 +552,7 @@ order by username;
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
     #labels = [item.get_text() for item in ax.get_xticklabels()]
-    labels = list(snames)
+    labels = list(snames.keys())
     ax.set_yticks(list(range(len(snames))))
     ax.set_yticklabels(labels)
 
@@ -562,4 +563,7 @@ order by username;
     for i in ax.xaxis.get_major_ticks():
         i.label.set_rotation(90)
     ax.imshow(final,interpolation='nearest', cmap=cmap)
-    fig.savefig('progress.png')
+    saveName = path.join('applications',request.application,'static', auth.user.course_name,'_static','progress.png')
+    fig.savefig(saveName)
+
+    return dict(coursename=auth.user.course_name)
