@@ -136,7 +136,7 @@ def delete_course():
                        TR(LABEL("Type in the name of the course to verify: ", INPUT(_name='coursename', requires=IS_NOT_EMPTY() ))),
                        TR(INPUT(_type='submit')),
                        labels=''))
-    print 'in delete', request.vars
+
     deleted = False
     if verify_form.process().accepted and request.vars.checkyes == 'on':
         course_name = request.vars.coursename
@@ -154,6 +154,7 @@ def delete_course():
                     shutil.rmtree(path.join('applications',request.application,'static', course_name))
                     shutil.rmtree(path.join('applications',request.application,'custom_courses', course_name))
                     deleted = True
+                    session.clear()
                 except:
                     response.flash = 'Error, %s does not appear to exist' % course_name
             else:
