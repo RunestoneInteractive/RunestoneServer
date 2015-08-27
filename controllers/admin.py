@@ -519,7 +519,7 @@ def chapterprogress():
     spquery = '''
     select username, chapter_id, sub_chapter_id, status, start_date, end_date
 from user_sub_chapter_progress join auth_user on auth_user.id = user_sub_chapter_progress.user_id join courses on courses.course_name = auth_user.course_name
-where auth_user.course_name = '{}' and sub_chapter_id in
+where auth_user.course_name = '{}' and auth_user.active = 'T' and sub_chapter_id in
     (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = '{}' order by chapters.id)
 order by username;
     '''.format(auth.user.course_name, auth.user.course_name)
