@@ -548,8 +548,8 @@ order by username;
         prev = row[0]
 
     final = np.matrix(statmat)
-
-    fig,ax = plt.subplots(figsize=(20,20))
+    ht = max(len(snames)/4, 1)
+    fig,ax = plt.subplots(figsize=(20,ht))
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
     #labels = [item.get_text() for item in ax.get_xticklabels()]
