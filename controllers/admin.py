@@ -494,6 +494,7 @@ def editcustom():
 def chapterprogress():
     import numpy as np
     from matplotlib import use, colors
+    from math import ceil
     use('Agg')
     import matplotlib.pyplot as plt
     from collections import OrderedDict
@@ -548,8 +549,10 @@ order by username;
         prev = row[0]
 
     final = np.matrix(statmat)
-    ht = max(len(snames)/4, 1)+1
-    fig,ax = plt.subplots(figsize=(15,ht))
+    ht = int(ceil(len(snames)/4.0)+1)
+    wt = int(ceil(len(xlabs)/4.0)+1)
+    print "figsize, wt, ht = ", wt, ht, len(snames), len(xlabs)
+    fig,ax = plt.subplots(figsize=(wt,ht))
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
     #labels = [item.get_text() for item in ax.get_xticklabels()]
