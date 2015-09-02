@@ -332,6 +332,38 @@ def detail():
     if student and not acid:
         fill_empty_scores(scores = scores, problems = problems, student=student)
 
+
+    # easy median
+    def get_median(lst):
+        sorts = sorted(lst)
+        length = len(sorts)
+        if not length % 2:
+            return (sorts[length/2] + sorts[length/2 - 1]) / 2.0
+        return sorts[length/2]
+
+    # easy mean (for separating code)
+    # will sometimes be ugly - could fix
+    def get_mean(lst):
+        return round(float(sum([i for i in lst if type(i) == type(2)]+ [i for i in lst if type(i) == type(2.0)]))/len(lst),2)
+    # get spread measures of scores for problem set, not counting 0s
+    # don't want to look at # of 0s because test users, instructors, etc, throws this off
+
+    problem_points = [s.points for s in scores if s.points > 0]
+    score_sum = float(sum(problem_points))
+
+    # get min, max, median, count
+    min_score = min(problem_points)
+    max_score = max(problem_points)
+    if len(problem_points) > 0:
+        median_score = get_median(problem_points)
+        real_score_count = len(problem_points)
+        avg_score = get_mean(problem_points)
+    else:
+        median_score = 0
+        real_score_count = 0
+        avg_score = 0
+
+
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
         arg_str = "?id=%d" % (id)
@@ -354,6 +386,11 @@ def detail():
         page_args = page_args,
         selected_acid = acid,
         course_id = auth.user.course_name,
+        avg_score = mean_score,
+        min_score = min_score,
+        max_score = max_score,
+        real_score_count = real_score_count,
+        median_score = median_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )
@@ -430,11 +467,15 @@ def mass_grade_problem():
         cells = row.split(",")
         if len(cells) < 2:
             continue
+        
         email = cells[0]
         if cells[1]=="":
             cells[1]=0
         grade = float(cells[1])
-        comment = ""
+        if len(cells) == 2:
+            comment = ""
+        else: # should only ever be 2 or 3
+            comment = cells[-1] # comment should be the last element
         user = db(db.auth_user.email == email).select().first()
         if user == None:
             continue
