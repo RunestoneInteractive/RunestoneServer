@@ -64,25 +64,56 @@ After you download it, extract the zip file to some folder on your hard drive. (
 
 * Tell web2py to use that database
     * Create a file applications/runestone/models/1.py, with the following line: ``settings.database_uri = <your_connection_string>``
+        * NOTE: Don't put this inside an if statement, like it shows in models/1.prototype
     * on windows, you will also need to edit models/0.py
         * remove the line ``from os import uname``
         * remove the section beginning ``if 'local' in uname()[1] or 'Darwin' in uname()[0]:``
     * You may also need to put the connection string somewhere else, TBD
+    * You will need a customization to runestone/modules/chapternames.py
+        * (Note: hopefully, this will be fixed in the future so that it automatically reads from models/1.py)
+        * In chapternames.py, where it sets dburl = a connection string, put your connection string there.
+
 
 * Edit /applications/runestone/books/<yourbook>/pavement.py
     * set the master_url variable for your server, if not localhost
 
-
-# Change book pavement.py to refer to your local database
+# Run web2py once, so that it will create all the tables
+    * cd web2py/
+    * python web2py.py
 
 # Build the book.
+
 
 * cd web2py/applications/runestone/books/<your book>
 
 * runestone build
 
-*
+  * At the end, it should say ``trying alternative database access due to  No module named pydal`` and then, if things are working correctly, start outputting the names of the chapters.
 
+* runestone deploy
+    * If you're on windows where rsync doesn't work, here's the alternative
+        * rm -r applications/runestone/static/<your book name>
+        * cd runestone/books/<your book name>
+        * mv build/<your book name> ../static/
+
+* Create an account for yourself
+    * restart web2py if it's not running
+    * go to runestone/appadmin
+    * create a course for the book
+        * insert new courses
+        * course_id can be blank
+        * course name should be your book name, the directory name inside books/ (no spaces)
+        * date is in format 2015-08-29
+        * institution doesn't matter
+        * base course should be same as course name
+    * create an account for yourself
+        * insert new auth_user
+        * cohort id should be "id"
+        * Course name should be the course name from above (not a number)
+        * Do *not* make up a registration key or a reset password key; leave them blank
+    * make yourself the instructor for the course
+        * insert new course_instructor
+        * Course is the *number* for the course (probably 5 if you just inserted one additional course)
 
 
 
