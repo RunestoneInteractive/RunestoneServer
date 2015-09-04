@@ -10,6 +10,69 @@ Runestone Interactive Tools and Content
 
 Build Status |buildstatus|
 
+Relationship to other Runestone components
+------------------------------------------
+
+If you just want to use Runestone's capabilities to build pre-existing books or to make your own books using Sphinx and directives like ActiveCode, then you won't need this repository at all.
+
+This repository has the extra materials needed for running a web2py server with extra features for running courses using Runestone books and tools.
+
+
+Installation
+------------
+
+#. Install python.
+
+First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
+
+There are a couple of prerequisites you need to satisfy before you can build and use this
+eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
+
+You can simply install all dependencies by running the following command in main runestone directory:
+
+::
+
+    # pip install -r requirements.txt
+
+Note, development works well with a Python ``virtualenv``  If  you don't have root privileges on your computer I strongly recommend you install ``virtualenv`` and install all of the dependencies there.
+
+On Windows machines, some of the installations may not go smoothly with pip.
+
+* For dulwich, you will need a C++ compiler.
+Install Microsoft Visual C++ Compiler for Python 2.7 from http://www.microsoft.com/en-us/download/details.aspx?id=44266.
+I had to also run: pip install setuptools --upgrade
+
+* For numpy, you can try the Windows installer from http://sourceforge.net/projects/numpy/postdownload?source=dlp If
+that fails, you can try installing from a wheel file at http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
+
+
+#. Install web2py. The easiest way to do so is to download the **Source Code** distribution from http://www.web2py.com/init/default/download.
+`Here <http://www.web2py.com/examples/static/web2py_src.zip>`_ is a direct link to the zip archive.
+After you download it, extract the zip file to some folder on your hard drive. (web2py requires no real "installation").  I avoid the web2py.app installation on OS X as it messes with the Python path.  On Windows, the web2py.exe is also problematic because it won't find modules installed in a virtualenv.
+
+# Get familiar with the Runestone Components, which were installed with pip. The come from https://github.com/RunestoneInteractive/RunestoneComponents and there are good quick start instructions there.
+
+# Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.
+
+# Clone the book that you want to use, **into the web2py/applications/runestone/books** directory. You can see some of the available books at https://github.com/RunestoneInteractive Again, if you might contribute back to the book, please fork the book repository first and then do a local clone onto your machine.
+
+# Set up your local database
+
+*
+
+# Change book pavement.py to refer to your local database
+
+# Build the book.
+
+* cd web2py/applications/runestone/books/<your book>
+
+* runestone build
+
+*
+
+
+
+
 Documentation
 -------------
 
