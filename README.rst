@@ -65,6 +65,7 @@ After you download it, extract the zip file to some folder on your hard drive. (
 * Tell web2py to use that database
     * Create a file applications/runestone/models/1.py, with the following line: ``settings.database_uri = <your_connection_string>``
         * NOTE: Don't put this inside an if statement, like it shows in models/1.prototype
+    * If you're running https, edit settings.server_type in models/0.py
     * on windows, you will also need to edit models/0.py
         * remove the line ``from os import uname``
         * remove the section beginning ``if 'local' in uname()[1] or 'Darwin' in uname()[0]:``
