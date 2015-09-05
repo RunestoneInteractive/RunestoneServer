@@ -1,188 +1,33 @@
+
 {{extend 'layout.html'}}
 
 {{block statusbar}}
 {{end}}
 
-{{if request.args(0) != 'register':}}
-
-<!-- Carousel
-    ================================================== -->
-    <link href="/runestone/static/css/carousel.css" rel="stylesheet">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-        <li data-target="#myCarousel" data-slide-to="4"></li>
-        <li data-target="#myCarousel" data-slide-to="5"></li>
-      </ol>
-      <div class="carousel-inner">
-
-          <div class="item active">
-
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>Welcome to Interactive Python</h1>
-                <p>Interactive Python is a project of Runestone Interactive.  We host a growing number of Open Source, Interactive Textbooks. Written by award winning authors. Used by some of the best schools.</p>
-                <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/library.html" role="button">See the List</a>
-                   <a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/overview/overview.html" role="button">Take a Tour</a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-        <div class="item">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>How to Think Like a Computer Scientist: Interactive Edition</h1>
-              <p>Based on the original open source book.  Learn Python, try examples, answer questions, interactively, right in the book!</p>
-              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/thinkcspy/index.html" role="button">Try it Now</a></p>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="item">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Algorithms and Data Structures using Python</h1>
-              <p>Written by Brad Miller and David Ranum, this is a free and open source version of the book published by Franklin Beedle.</p>
-              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/pythonds/index.html" role="button">Learn more</a></p>
-            </div>
-          </div>
-        </div>
-
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>Take a Tour</h1>
-                <p>This page shows you some of the unique interactive features used in our books.</p>
-                <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/overview/overview.html" role="button">Learn more</a></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>CS Principles -- Big Ideas in Programming</h1>
-                <p>By Mark Guzdial, written specially for teachers, this book introduces important concepts for the new AP CS Principles course.</p>
-                <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/Teacher-CSP/index.html" role="button">Learn more</a></p>
-              </div>
-            </div>
-          </div>
-
-        <div class="item">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Java Review for the AP CS A Exam</h1>
-              <p>Not just for Python.  This great resource, written by Barbara Ericson, is loaded with review questions and clear explanations.</p>
-              <p><a class="btn btn-lg btn-primary" href="http://interactivepython.org/runestone/static/JavaReview/index.html" role="button">Get Started</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-    </div><!-- /.carousel -->
-{{pass}}
-
-{{ if 'static' in request.env.query_string:}}
-<h2>Welcome</h2>
-<p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
-<p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p>
-
-{{pass}}
-
-<div class='col-md-6'>
-  <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
-  <div id="loginexp">
-    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
-  </div>
-
-  <div id="web2py_user_form">
-    {{=form}}
-    {{if request.args(0)=='login':}}
-      <div id='auth-actions'>
-        {{if not 'register' in auth.settings.actions_disabled:}}
-          <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
-        {{pass}}
-        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-          <a class="btn btn-lg btn-primary" href="{{=URL(args='request_reset_password')}}" role="button">{{=T('Lost Password')}}</a>
-        {{pass}}
-      </div>
-    {{pass}}
-  </div>
-  <br />
-
+<div>
+    <h2>Programs, Information, and People</h2>
+    <p>This website is used primarily for teaching the course UMSI 106, Programs, Information, and People, at the <a href="https://www.si.umich.edu/">University of Michigan School of Information</a>.</p>
 </div>
 
-<script language="javascript">
-    var cur_course = $('#auth_user_course_id').val();
-    if (cur_course == '') {
-        $('#auth_user_course_id').val('thinkcspy, pythonds, pip or other')
-    }
-    $("#auth_user_course_id").on("click", function () {
-       $(this).select();
-    });
-</script>
+<div>
+   <h2>Why Log in Via cTools?</h2>
+    <p>You have to login to be able to save your work and come back to it later, or submit assignments for grades.</p>
+    <p>Also, to get "class preparation" points for reading the textbook and doing exercises before class sessions, you have to be logged in.</p>
+    <p>So...Login by going to the Ctools site for the course and clicking on "Textbook", then "Press here to launch". </p>
+    <p>Visitors who are not registered for the class can still <a href = "/runestone/static/publicPIP/index.html">check out the textbook</a> and do everything but save your work and track your progress, without logging in.</p>
+</div>
 
-<div class='col-md-6'>
-  {{if request.args(0)=='register':}}
-  <h2>Which course name?</h2>
-  <ul>
-      <li>If you are part of a high school, college,or university course your instructor should provide this for you.</li>
-      <li>Otherwise the following are open to anyone:
-          <ul>
-              <li>thinkcspy &mdash; How to Think Like a Computer Scientist</li>
-              <li>pythonds &mdash; Problem Solving with Algorithms and Data Structures using Python </li>
-              <li>pip2 &mdash; Programs Information and People</li>
-              <li>JavaReview &mdash; Review course for AP CS Exam</li>
-              </ul>
-      </li>
-  </ul>
-  {{pass}}
-  <h2>More Information</h2>
-    <ul>
-        <li>Instructors:<ul><li> <a href='/{{=request.application}}/static/overview/instructor.html'>How do I use this for my course?</a></li>
-        <li><a href="http://runestoneinteractive.org/instructors.html">How can I make my own lecture materials?</a></li>
-            </ul>
-        <li>Authors: <a href="http://runestoneinteractive.org/instructors.html">How do I use the Runestone tools for my own book?</a></li>
-        <li>Developers: <ul><li><a href="http://runestoneinteractive.org/build/html/index.html">How can I help with development?</a></li>
-        <li><a href="http://github.com/bnmnetp/runestone">Check out our github page</a></li>
-        <li><a href="http://runestoneinteractive.org">Runestone Interactive Home</a></li></ul>
-        <li>Other Questions<ul>
-        <li><a href="https://groups.google.com/forum/#!forum/runestoneinteractive">Google Group</a></li>
-        <li><a href="mailto:runestoneinteractive@gmail.com">Email: runestoneinteractive@gmail.com</a></li>
-        </ul>
-    </li>
-    </ul>
-  <h2>Support Us</h2>
-  <p>This project is Open Source, but it does take time and resources.
-     Especially as our popularity has grown we have server costs.  We
-     were also able to make great progress during the Summer of 2013
-     thanks to a generous grant from ACM-SIGCSE that supported one of our
-     undergraduate students. It would be great if we could have a student
-     working on this all the time.</p>
-  <p>If you these books have helped you, if you liked them,
-     please consider making a small donation.</p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-  <input type="hidden" name="cmd" value="_s-xclick">
-  <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-  <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-  <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-  </form>
-
-    <h2>Your Privacy</h2>
-    <p>The books provided on interactivepython.org are free and open source.  They are for educational purposes.  As part
+<div>
+  <h2>Your Privacy</h2>
+    <p>This book is free and open source.  As part
     of our educational mission we do collect usage data to help us better understand how you learn and how you use our
     books.  In exchange, we may use this data to make decisions about revisions to the content, and we may use this data to publish
     academic papers.  We would never publish anything that revealed your identity.  We may share this data with fellow
     educational researchers, but rest assured that all personally identifying information will be anonymized before we do.
-    If you have questions about this please feel free to <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+    If you have questions about this please feel free to <a href="mailto:presnick@umich.edu">contact</a> us.</p>
 </div>
 
-
+   <div id="web2py_user_form">
+      You won't be able to login using the form below unless we've set up some special magic for you! Log in via cTools only.
+    {{=form}}
+   </div>
