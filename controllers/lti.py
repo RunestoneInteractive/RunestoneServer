@@ -1,13 +1,10 @@
 import uuid
 
+from applications.runestone.modules import oauth
+from applications.runestone.modules import oauth_store
+
 def index():
-    print "In my index"
-    
-    # import oauth
-    # import oauth_store
-    oauth = local_import('oauth',reload=True)
-    oauth_store = local_import('oauth_store',reload=True)
-    
+
     #print "In imslti.py"
 #    print dict(request.vars)
     
