@@ -352,13 +352,15 @@ def detail():
     score_sum = float(sum(problem_points))
 
     # get min, max, median, count
-    min_score = min(problem_points)
-    max_score = max(problem_points)
     if len(problem_points) > 0:
+        min_score = min(problem_points)
+        max_score = max(problem_points)
         median_score = get_median(problem_points)
         real_score_count = len(problem_points)
         avg_score = get_mean(problem_points)
     else:
+        min_score = 0
+        max_score = 0
         median_score = 0
         real_score_count = 0
         avg_score = 0
@@ -386,7 +388,7 @@ def detail():
         page_args = page_args,
         selected_acid = acid,
         course_id = auth.user.course_name,
-        avg_score = mean_score,
+        avg_score = avg_score,
         min_score = min_score,
         max_score = max_score,
         real_score_count = real_score_count,
