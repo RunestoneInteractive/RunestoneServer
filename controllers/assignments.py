@@ -371,7 +371,8 @@ def detail():
         #real_score_count = 0 # not being used right now
         avg_score = 0
     # get number of problems with any code saved
-    num_problems_with_code = len([p.code for p in problems if p.code is not None])
+    #num_problems_with_code = len([p.code for p in problems if p.code is not None])
+    num_problems_with_code = "not calculated"
 
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
