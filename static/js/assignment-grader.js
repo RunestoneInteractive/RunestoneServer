@@ -79,12 +79,12 @@ function getGradingModal(element, acid, studentId){
       if (data.suffix_code){
          complete_code = complete_code + '\n\n#### tests ####\n' + data.suffix_code;
       }
-		createActiveCode(data.acid,complete_code,data.username);
+		//createActiveCode(data.acid,complete_code,data.username);
 
         // outerdiv, acdiv, sid, initialcode, language
 		// for backward compatibility check for Factory otherwise use old function
 		if (ACFactory) {
-			ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, null, data.lang);
+			ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, complete_code, data.lang);
 		} else {
 			createActiveCode(data.acid,complete_code,data.username);
 		}
@@ -100,15 +100,6 @@ function getGradingModal(element, acid, studentId){
 
 			modal.modal('hide');
 		});
-		
-		// make the text show up once it is loaded
-		modal.on('shown.bs.modal show.bs.modal', function() {
-         modal.find('.CodeMirror').each(function(i, e) {
-            e.CodeMirror.refresh();
-            e.CodeMirror.focus();
-          });
-      });
-
 		modal.modal('show');
 		jQuery('#'+data.id).focus();
 	}
