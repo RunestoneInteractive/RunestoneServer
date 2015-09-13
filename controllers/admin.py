@@ -22,7 +22,7 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
-    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2']:
+    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
             redirect(URL(c="default"))
