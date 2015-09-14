@@ -77,3 +77,15 @@ db.define_table('coach_hints',
     Field('source',db.acerror_log),
     migrate='runestone_coach_hints.table'
     )
+
+db.define_table('timed_exam',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('correct','integer'),
+    Field('incorrect','integer'),
+    Field('skipped','integer'),
+    Field('time_taken','integer'),
+    migrate='runestone_timed_exam.table'
+    )
