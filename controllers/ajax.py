@@ -647,6 +647,7 @@ def getassignmentgrade():
         ).select(
             db.code.grade,
             db.code.comment,
+            orderby=~db.code.timestamp
         ).first()
 
     ret = {
