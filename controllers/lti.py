@@ -80,18 +80,16 @@ def index():
     
     # Time to create / update / login the user
     if consumer is not None:
-        # userinfo['username'] = consumer.key + ":" + user_id;
-        # no colons in the usernames; some of the grading interface uses the usernames and fails when usernames have spaces or semicolons
-        userinfo['username'] = consumer.key + user_id
+        userinfo['username'] = consumer.key + ":" + user_id;
         # print db.auth_user.password.validate('1C5CHFA_enUS503US503')
         # pw = db.auth_user.password.validate('2C5CHFA_enUS503US503')[0];
-        pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
+        pw = db.auth_user.password.validate(str(uuid.uuid4()))[0];
     #    print pw 
         userinfo['password'] = pw
     #    print userinfo
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
         if user is None : 
-            lti_errors.append("Unable to create user record")
+            lti_errors.append("Unable to create user record");
         else:
             # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
             course_id = request.vars.get('custom_course_id', None)
