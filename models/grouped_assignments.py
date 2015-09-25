@@ -340,6 +340,20 @@ def get_all_times_and_activity_counts(course):
         all_user_data[curr_user.user_id] = curr_user.csv_dict()
     return all_user_data
 
+def partition(L, f):
+    # make a new list when f(item) changes
+    cur_list = []
+    prev_item = None
+    Ls = [cur_list]
+    for cur_item in L:
+        if (not prev_item) or (f(prev_item) == f(cur_item)):
+            cur_list.append(cur_item)
+        else:
+            cur_list = [cur_item]
+            Ls.append(cur_list)
+        prev_item = cur_item
+    return Ls
+
 def assignment_get_scores(assignment, problem=None, user=None, section_id=None, preclass=True):
     assignment_type = db(db.assignment_types.id == assignment.assignment_type).select().first()
     if assignment_type and assignment_type.grade_type == 'use':
@@ -355,56 +369,38 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
             orderby= db.code.sid | db.code.id
             )
         # keep only last grade for each user for this problem
-        prev_user = None
-        last_score = None
-        for g in grades:
-            if g.auth_user != prev_user and last_score:
-                # save score for prev_user
-                scores.append(last_score)
-                last_score = None
-            # set or reset current user's last_score
-            last_score = score(
+        Ls = partition(grades, lambda g: g. auth_user.id)
+        last_grades = [L[-1] for L in Ls]
+        for g in last_grades:
+            scores.append(score(
                 points=g.code.grade,
-                comment=g.code.comment,
+                comment= g.code.comment,
                 acid=problem,
                 user=g.auth_user,
-                )
-            prev_user = g.auth_user
-        if last_score:
-            # score for final user wasn't appended yet
-            scores.append(last_score)
+                ))
     elif user:
         # get grades for individual components of this assignment
-        # keep only last grade for each problem for this user
         q = db(db.problems.acid == db.code.acid)
         q = q(db.problems.assignment == assignment.id)
         q = q(db.code.sid == user.username)
         grades = q.select(
-            db.code.acid,
-            db.code.grade,
-            db.code.comment,
-            db.code.timestamp,
-            orderby = db.code.acid | db.code.id
-            )
-        prev_acid = None
-        last_score = None
-        for g in grades:
-            if g.acid != prev_acid and last_score:
-                # save score for previous acid
-                scores.append(last_score)
-                last_score = None
-                
-            last_score = score(
-                points=g.grade,
-                comment=g.comment,
-                acid=g.acid,
-                user=user,
-                )
-            prev_acid = g.acid
-        if last_score:
-            # score for final acid wasn't appended yet
-            scores.append(last_score)
-
+           db.code.acid,
+           db.code.grade,
+           db.code.comment,
+           db.code.timestamp,
+           orderby = db.code.acid | db.code.id
+           )
+        # keep only last grade for each problem for this user
+        Ls = partition(grades, lambda g: g.acid)
+        last_grades = [L[-1] for L in Ls]
+        for g in last_grades:
+            scores.append(
+                score(
+                   points=g.grade,
+                   comment=g.comment,
+                   acid=g.acid,
+                   user=user
+                ))
     else:
         # for all users: grades for all assignments, not for individual problems
         grades = db(db.grades.assignment == assignment.id).select(db.grades.ALL)
