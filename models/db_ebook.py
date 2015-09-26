@@ -27,6 +27,7 @@ db.define_table('code',
 # Contents of this table are filled when processing activecode directives, in activecod.py
 db.define_table('source_code',
   Field('acid','string', required=True),
+  Field('course_id', 'string'),
   Field('includes', 'string'), # comma-separated string of acid main_codes to include when running this source_code
   Field('available_files', 'string'), # comma-separated string of file_names to make available as divs when running this source_code
   Field('main_code','text'),

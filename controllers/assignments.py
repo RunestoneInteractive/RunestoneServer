@@ -457,7 +457,7 @@ def problem():
     
     # add prefixes, suffix_code and files that are available
     # retrieve the db record
-    source = db.source_code(acid = request.vars.acid)
+    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
     if source and c and c.code:
         def get_source(acid):
             r = db.source_code(acid=acid)

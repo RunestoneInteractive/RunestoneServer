@@ -370,7 +370,7 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
             )
         # keep only last grade for each user for this problem
         Ls = partition(grades, lambda g: g. auth_user.id)
-        last_grades = [L[-1] for L in Ls]
+        last_grades = [L[-1] for L in Ls if len(L)>0]
         for g in last_grades:
             scores.append(score(
                 points=g.code.grade,
