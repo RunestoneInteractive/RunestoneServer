@@ -237,7 +237,7 @@ def gradeassignment():
         db.auth_user.last_name,
         db.code.comment,
         distinct = db.code.sid,
-        orderby = db.code.sid|db.code.timestamp,
+        orderby = db.code.sid|~db.code.timestamp,
         )
     return dict(
         acid = acid,
