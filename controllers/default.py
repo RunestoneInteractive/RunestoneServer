@@ -38,7 +38,11 @@ def user():
 
     if 'profile' in request.args(0):
         sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
-        sectname = db(db.sections.id == sect).select(db.sections.name).first().name
+        sectname = db(db.sections.id == sect).select(db.sections.name).first()
+        if sectname:
+            sectname = sectname.name
+        else:
+            sectname = 'default'
         if not sect:
             sect = 'default'
         my_extra_element = TR(LABEL('Section Name'),
