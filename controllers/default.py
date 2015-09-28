@@ -37,8 +37,12 @@ def user():
     form = auth()
 
     if 'profile' in request.args(0):
+        sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
+        sectname = db(db.sections.id == sect).select(db.sections.name).first().name
+        if not sect:
+            sect = 'default'
         my_extra_element = TR(LABEL('Section Name'),
-                           INPUT(_name='section', value='default', _type='text'))
+                           INPUT(_name='section', value=sectname, _type='text'))
         form[0].insert(-1, my_extra_element)
 
     if 'register' in request.args(0) and request.janrain_form:
@@ -70,6 +74,7 @@ def user():
                       (db.sections.name == form.vars.section)).select(db.sections.id).first()
             if sect:
                 x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
+                db((auth.user.id == db.section_users.auth_user) & ((db.section_users.section != sect) | (db.section_users.section == None))).delete()
             # select from sections where course_id = auth_user.course_id and section.name = 'default'
             # add a row to section_users for this user with the section selected.
             redirect(URL('default', 'index'))
