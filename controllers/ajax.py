@@ -164,10 +164,10 @@ def getprog():
     sid = request.vars.sid
 
     if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid))
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
     else:
         if auth.user:
-            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid))
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
         else:
             query = None
 
