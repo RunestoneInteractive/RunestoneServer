@@ -46,7 +46,7 @@ def build():
 
     if request.vars.coursetype != 'custom':
         # run_sphinx is defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=request.vars.coursetype,
                                                                        application=request.application,
@@ -101,7 +101,7 @@ def build():
 
 def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
                                                                    http_host=request.env.http_host))

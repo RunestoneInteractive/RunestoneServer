@@ -41,6 +41,15 @@ def hsblog():    # Human Subjects Board Log
     ts = datetime.datetime.now()
 
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    if event == 'timedExam' and act == 'finish':
+        try:
+            db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
+                             incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
+                             time_taken=int(request.vars.time), timestamp=ts,
+                             div_id=div_id)
+        except:
+            logger.debug('failed to insert')
+
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -155,10 +164,10 @@ def getprog():
     sid = request.vars.sid
 
     if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid))
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
     else:
         if auth.user:
-            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid))
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
         else:
             query = None
 
@@ -639,6 +648,7 @@ def getassignmentgrade():
         ).select(
             db.code.grade,
             db.code.comment,
+            orderby=~db.code.timestamp
         ).first()
 
     ret = {

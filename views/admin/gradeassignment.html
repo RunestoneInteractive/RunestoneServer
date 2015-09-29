@@ -24,6 +24,19 @@
   }
 </style>
 
+<script type="text/javascript">
+    function sendGrade(grade, sid, acid, id) {
+    data = {'sid': sid, 'acid': acid, 'grade': grade, 'id': id};
+    jQuery.get(eBookConfig.ajaxURL + 'savegrade', data);
+}
+
+function sendComment(comment, sid, acid, id) {
+    data = {'sid': sid, 'acid': acid, 'comment': comment, 'id': id};
+    jQuery.get(eBookConfig.ajaxURL + 'savegrade', data);
+}
+</script>
+
+
 {{=section_form}}
 
 <table id="studentlist" class="tablesorter">
