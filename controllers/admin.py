@@ -22,7 +22,7 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
-    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2']:
+    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
             redirect(URL(c="default"))
@@ -237,7 +237,7 @@ def gradeassignment():
         db.auth_user.last_name,
         db.code.comment,
         distinct = db.code.sid,
-        orderby = db.code.sid|db.code.timestamp,
+        orderby = db.code.sid|~db.code.timestamp,
         )
     return dict(
         acid = acid,
@@ -303,7 +303,7 @@ def rebuildcourse():
         course.update_record(term_start_date=date)
         
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,
@@ -494,6 +494,7 @@ def editcustom():
 def chapterprogress():
     import numpy as np
     from matplotlib import use, colors
+    from math import ceil
     use('Agg')
     import matplotlib.pyplot as plt
     from collections import OrderedDict
@@ -548,8 +549,10 @@ order by username;
         prev = row[0]
 
     final = np.matrix(statmat)
-    ht = max(len(snames)/4, 1)+1
-    fig,ax = plt.subplots(figsize=(15,ht))
+    ht = int(ceil(len(snames)/4.0)+1)
+    wt = int(ceil(len(xlabs)/4.0)+1)
+    print "figsize, wt, ht = ", wt, ht, len(snames), len(xlabs)
+    fig,ax = plt.subplots(figsize=(wt,ht))
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
     #labels = [item.get_text() for item in ax.get_xticklabels()]
