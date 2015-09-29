@@ -119,18 +119,16 @@
             {{ else: }}
               <li><span class='loggedinuser'>Not logged in</span></li>
             {{ pass }}
-<!--            <li class="divider"></li>
+            <li class="divider"></li>
             <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
             <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
             <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li>
             <li class="divider"></li>
-            -->
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
             {{ if auth.user: }}
- <!--             <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
+              <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
               <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              -->
               <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>              
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
@@ -164,8 +162,8 @@
       <ul class="nav navbar-nav">
 
         <li class="divider-vertical"></li>
+
         <!-- open library dropdown -->
-<!--
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu">
@@ -179,7 +177,7 @@
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>
--->
+
         <li class="divider-vertical"></li>
 
 
