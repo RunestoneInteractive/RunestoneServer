@@ -47,13 +47,14 @@ def findChaptersSubChapters(tocfile):
 
 
 def addChapterInfoToDB(subChapD, chapTitles, course_id):
-    dbname = 'runestone'
-    uname = os.environ['USER']
-    if uname == 'bnmnetp':
-        uname = 'bnmnetp_courselib'
-        dbname = 'bnmnetp_courselib'
-
-    dburl = 'postgresql://{}@localhost/{}'.format(uname,dbname)
+    # dbname = 'runestone'
+    # uname = os.environ['USER']
+    # if uname == 'bnmnetp':
+    #     uname = 'bnmnetp_courselib'
+    #     dbname = 'bnmnetp_courselib'
+    #
+    # dburl = 'postgresql://{}@localhost/{}'.format(uname,dbname)
+    dburl = 'postgres://postgres:presnick@localhost/runestone'
     engine = create_engine(dburl)
     meta = MetaData()
     chapters = Table('chapters', meta, autoload=True, autoload_with=engine)
@@ -121,4 +122,4 @@ def populateChapterInfo(project_name, index_file):
 
 if __name__ == '__main__':
     # todo:  get file, and course_id from environment
-    populateChapterInfo('pythonds', 'index.rst')
+    populateChapterInfo('pip2', 'index.rst')
