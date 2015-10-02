@@ -354,6 +354,9 @@ def partition(L, f):
         prev_item = cur_item
     return Ls
 
+def extract_last_grades(L, f):
+    return [L[-1] for L in partition(L, f) if len(L) > 0]
+
 def assignment_get_scores(assignment, problem=None, user=None, section_id=None, preclass=True):
     assignment_type = db(db.assignment_types.id == assignment.assignment_type).select().first()
     if assignment_type and assignment_type.grade_type == 'use':
@@ -368,9 +371,8 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
             db.auth_user.ALL,
             orderby= db.code.sid | db.code.id
             )
-        # keep only last grade for each user for this problem
-        Ls = partition(grades, lambda g: g. auth_user.id)
-        last_grades = [L[-1] for L in Ls if len(L)>0]
+        # keep only last grade for each user (for this problem)
+        last_grades = extract_last_grades(grades, lambda g: g. auth_user.id)
         for g in last_grades:
             scores.append(score(
                 points=g.code.grade,
@@ -390,9 +392,8 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
            db.code.timestamp,
            orderby = db.code.acid | db.code.id
            )
-        # keep only last grade for each problem for this user
-        Ls = partition(grades, lambda g: g.acid)
-        last_grades = [L[-1] for L in Ls]
+        # keep only last grade for each problem (for this user)
+        last_grades = extract_last_grades(grades, lambda g: g.acid)
         for g in last_grades:
             scores.append(
                 score(
