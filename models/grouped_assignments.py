@@ -203,13 +203,13 @@ def get_engagement_time(assignment, user, preclass, all_problem_sets = False, al
             sessions.append(Session(activity.timestamp))            
         elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
             # close previous session; set its end time be previous activity's time, plus 30 seconds
-            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
             # start a new session
             sessions.append(Session(activity.timestamp))
         prev = activity
     if prev:
         # close out last session
-        sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+        sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
     return total_time
 
@@ -426,7 +426,7 @@ def assignment_set_grade(assignment, user):
     points = 0.0
     if assignment_type.grade_type == 'use':
         checks = len([p for p in assignment_get_scores(assignment, user=user, preclass=False) if p.points > 0])
-        time = get_engagement_time(assignment, user, preclass=True)
+        time = get_engagement_time(assignment, user, preclass=False)
         if checks >= assignment.threshold or time > 20*60:
             # if enough checkmarks or enough time
             # should be getting minimum time from a field of the assignment as well: FUTURE WORK
