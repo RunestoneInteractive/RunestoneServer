@@ -95,7 +95,7 @@ db.define_table('mchoice_answers',
     Field('div_id','string'),
     Field('sid','string'),
     Field('course_name','string'),
-    Field('answer','integer'),
-    Field('correct','integer'),
+    Field('answer','string', length=1),
+    Field('correct','boolean'),
     migrate='runestone_mchoice_answers.table'
     )

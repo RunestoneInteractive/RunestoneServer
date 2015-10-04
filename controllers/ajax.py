@@ -39,7 +39,7 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
-
+    responseMap = {'0':'a', '1':'b','2':'c','3':'d','4':'e'}
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
     if event == 'timedExam' and act == 'finish':
         try:
@@ -49,6 +49,15 @@ def hsblog():    # Human Subjects Board Log
                              div_id=div_id)
         except:
             logger.debug('failed to insert')
+    if event == 'mChoice' and auth.user:
+        # has user already submitted a correct answer for this question?
+        if db((db.mchoice_answers.sid == sid) &
+              (db.mchoice_answers.div_id == div_id) &
+              (db.mchoice_answers.correct == 'T')).count() == 0:
+            x,resp,result = act.split(':')
+            corr = 'T' if result == 'correct' else 'F'
+            resp = responseMap.get(resp,resp)
+            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
