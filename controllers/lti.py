@@ -1,13 +1,10 @@
 import uuid
 
+from applications.runestone.modules import oauth
+from applications.runestone.modules import oauth_store
+
 def index():
-    print "In my index"
-    
-    # import oauth
-    # import oauth_store
-    oauth = local_import('oauth',reload=True)
-    oauth_store = local_import('oauth_store',reload=True)
-    
+
     #print "In imslti.py"
 #    print dict(request.vars)
     
@@ -99,6 +96,7 @@ def index():
             section_id = request.vars.get('custom_section_id', None)
             if course_id:
                 user['course_id'] = course_id
+                user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
                 user['section'] = section_id
                 user.update_record()
             if section_id:

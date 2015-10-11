@@ -381,6 +381,18 @@ div.flash {
 .codelens-modal > .modal-dialog {
     width: 400px;
 }
+
+@media (min-width: 768px){
+   /* widescreen, for grading */
+   .modal-dialog {
+      right: auto;
+      left: 50;
+      width: 90%;
+      padding-top: 30px;
+      padding-bottom: 30px;
+   }
+}
+
 /* End modal dialog styles */
 
 .footnote.table {

@@ -10,7 +10,7 @@ def findFullTitle(ftext, start):
     found = False
     while not found and start > 0:
         if ":::" in ftext[start]:
-            return ftext[start - 1]
+            return ftext[start - 1].strip()
         start -= 1
     return ""
 
