@@ -130,7 +130,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
 def makePavement(http_host, rvars, sourcedir):
     paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
-    opts = {'master_url': 'http://' + http_host,
+    opts = {'master_url': settings.server_type + http_host,
             'project_name': rvars['projectname'],
             'build_dir': 'build',
             'log_level': 10,

@@ -142,3 +142,46 @@ def ack():
     return dict()
 
     
+@auth.requires_login()
+def bio():
+    existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
+    db.user_biography.laptop_type.widget = SQLFORM.widgets.radio.widget
+    form = SQLFORM(db.user_biography, existing_record,
+        showid = False,
+        fields=['prefered_name', 'interesting_fact', 'programming_experience', 'laptop_type', 'image'],
+        keepvalues = True,
+        upload=URL('download'),
+        formstyle='table3cols',
+        col3={'prefered_name': "Name you would like to be called by in class. Pronunciation hints are also welcome!",
+              'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? an expert on South American insects? going into the Peace Corps after graduation? have a company that you started last summer? have an unusual favorite color?",
+              'programming_experience': "Have you ever done any programming before? If so, please describe briefly. (Note: no prior programming experience is required for this course. I just like to know whether you have programmed before.)",
+              'image': 'I use a flashcard app to help me learn student names. Please provide a recent photo. (Optional. If you have religious or privacy or other objections to providing a photo, feel free to skip this.)',
+              'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?"}
+        )
+    form.vars.user_id = auth.user.id
+    if form.process().accepted:
+        session.flash = 'form accepted'
+        redirect(URL('default','bio'))
+    elif form.errors:
+        response.flash = 'form has errors'
+    return dict(form=form)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def bios():
+    # go to /default/bios and then click on TSV (not CSV) to export properly with First and Last names showing instead of id
+    # get only the people in the course you are instructor for
+    q = (db.user_biography.user_id == db.auth_user.id) & (db.auth_user.course_id == auth.user.course_id)
+    fields = [db.user_biography.image,
+              db.user_biography.prefered_name,
+              db.user_biography.user_id,
+              db.user_biography.interesting_fact,
+              db.user_biography.programming_experience]
+    # headers that make it easy to import into Flashcards Deluxe
+    headers = {'user_biography.image': 'Picture 1',
+              'user_biography.prefered_name': 'Text 2',
+              'user_biography.user_id': 'Text 3',
+              'user_biography.interesting_fact' : 'Text 4',
+              'user_biography.programming_experience' : 'Text 5'}
+    bios = SQLFORM.grid(q, fields=fields, headers = headers)
+    return dict(bios=bios)
