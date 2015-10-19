@@ -442,13 +442,14 @@ def problem():
         'sid':user.id,
         'username':user.username,
         'name':"%s %s" % (user.first_name, user.last_name),
-    }    
+    }
     
     if c:
         # return the existing code, grade, and comment
         res['code'] = c.code
         res['grade'] = c.grade
         res['comment'] = c.comment
+        res['lang'] = c.language
     else:
         # default: return grade of 0.0 if nothing exists
         res['code'] = ""
