@@ -40,8 +40,26 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
-
+    responseMap = {'0':'a', '1':'b','2':'c','3':'d','4':'e'}
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    if event == 'timedExam' and act == 'finish':
+        try:
+            db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
+                             incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
+                             time_taken=int(request.vars.time), timestamp=ts,
+                             div_id=div_id)
+        except:
+            logger.debug('failed to insert')
+    if event == 'mChoice' and auth.user:
+        # has user already submitted a correct answer for this question?
+        if db((db.mchoice_answers.sid == sid) &
+              (db.mchoice_answers.div_id == div_id) &
+              (db.mchoice_answers.correct == 'T')).count() == 0:
+            x,resp,result = act.split(':')
+            corr = 'T' if result == 'correct' else 'F'
+            resp = responseMap.get(resp,resp)
+            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -156,10 +174,10 @@ def getprog():
     sid = request.vars.sid
 
     if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid))
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
     else:
         if auth.user:
-            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid))
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
         else:
             query = None
 
@@ -168,7 +186,8 @@ def getprog():
         result = db(query)
         res['acid'] = acid
         if not result.isempty():
-            r = result.select(orderby=~codetbl.timestamp).first().code
+            # get the last code they saved; id order gets that for us
+            r = result.select(orderby=codetbl.id).last().code
             res['source'] = r
             if sid:
                 res['sid'] = sid
@@ -483,6 +502,9 @@ def getaggregateresults():
     # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
 
+    if not auth.user:
+        return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
+
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
@@ -636,6 +658,7 @@ def getassignmentgrade():
         ).select(
             db.code.grade,
             db.code.comment,
+            orderby=~db.code.timestamp
         ).first()
 
     ret = {

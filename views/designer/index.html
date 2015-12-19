@@ -14,8 +14,8 @@
     var x = document.forms["mainform"]["projectname"].value;
     var basecourse = document.forms["mainform"]["coursetype"].value;
 
-    if (x == "" || x.indexOf(" ") !== -1) {
-        alert('Error:  Your Project Name may not contain spaces')
+    if (x == "" || x.indexOf(" ") !== -1 || x.indexOf("/") > -1) {
+        alert('Error:  Your Project Name may not contain spaces or /')
         return false;
     }
 
@@ -72,10 +72,17 @@
           </label>
         </div>
 
+         <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="apcsareview" />
+              AP CS A Java Review, by Barbara Ericson
+            </label>
+          </div>
+
           <div class="radio">
             <label>
               <input type="radio" name="coursetype" value="pip2" />
-              Programs, Information, People, Barbara Ericson
+              Programs, Information, People, by Paul Resnick
             </label>
           </div>
 
@@ -83,6 +90,13 @@
             <label>
               <input type="radio" name="coursetype" value="webfundamentals" />
               Fundamentals of Web Development (HTML, CSS, and intro to Javascript), Brad Miller
+            </label>
+          </div>
+
+         <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="StudentCSP" />
+              CS Principles: Big Ideas in Programming, by Mark Guzdial, Barbara Ericson, and Briana Morrison
             </label>
           </div>
 

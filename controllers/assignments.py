@@ -54,7 +54,6 @@ def index():
                                  )
                 # still need to figure out how to get the right values for inserting; perhaps we should do the insertion on fetching, if the record didn't exist.
                 if a.form.process(formname=a.assignment_name + str(a.assignment_id)).accepted:
-                    print request.vars
                     a.projected = float(request.vars.projected)
                     response.flash = 'projected grade updated'
             
@@ -312,8 +311,9 @@ def detail():
     except:
         pass
 
-    students = students.select(db.auth_user.ALL, orderby=db.auth_user.last_name)
+    students = students.select(db.auth_user.ALL, orderby=db.auth_user.last_name | db.auth_user.first_name)
     problems = db(db.problems.assignment == assignment.id).select(db.problems.ALL)
+
 
     # getting scores
     student = None
@@ -331,6 +331,48 @@ def detail():
         fill_empty_scores(scores = scores, students = students, acid=acid)
     if student and not acid:
         fill_empty_scores(scores = scores, problems = problems, student=student)
+
+
+    # easy median
+    def get_median(lst):
+        sorts = sorted(lst)
+        length = len(sorts)
+        if not length % 2:
+            return (sorts[length/2] + sorts[length/2 - 1]) / 2.0
+        return sorts[length/2]
+
+    # easy mean (for separating code)
+    # will sometimes be ugly - could fix
+    def get_mean(lst):
+        return round(float(sum([i for i in lst if type(i) == type(2)]+ [i for i in lst if type(i) == type(2.0)]))/len(lst),2)
+    # get spread measures of scores for problem set, not counting 0s
+    # don't want to look at # of 0s because test users, instructors, etc, throws this off
+
+    problem_points = [s.points for s in scores if s.points > 0]
+    score_sum = float(sum(problem_points))
+
+    try:
+        mean_score = float("%.02f" % score_sum/len(problem_points))
+    except:
+        mean_score = 0
+    # get min, max, median, count
+    if len(problem_points) > 0:
+        min_score = min(problem_points)
+        max_score = max(problem_points)
+        median_score = get_median(problem_points)
+        min_score = min(problem_points)
+        max_score = max(problem_points)
+        avg_score = get_mean(problem_points)
+    else:
+        min_score = 0
+        max_score = 0
+        median_score = 0
+        min_score,max_score = 0,0
+        #real_score_count = 0 # not being used right now
+        avg_score = 0
+    # get number of problems with any code saved
+    #num_problems_with_code = len([p.code for p in problems if p.code is not None])
+    num_problems_with_code = "not calculated"
 
     # Used as a convinence function for navigating within the page template
     def page_args(id=assignment.id, section_id=section_id, student=student, acid=acid):
@@ -354,6 +396,11 @@ def detail():
         page_args = page_args,
         selected_acid = acid,
         course_id = auth.user.course_name,
+        avg_score = avg_score,
+        min_score = min_score,
+        max_score = max_score,
+        real_score_count = num_problems_with_code,
+        median_score = median_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )
@@ -361,65 +408,75 @@ def detail():
 import json
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def problem():
+    ### This endpoint is hit either to update (if 'grade' and 'comment' are in request.vars)
+    ### Or just to get the current state of the grade for this acid (if not present)
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success':False, 'message':"Need problem and user."})
 
     user = db(db.auth_user.username == request.vars.sid).select().first()
     if not user:
-        return json.dumps({'success':False, 'message':"User does not exit. Sorry!"})
+        return json.dumps({'success':False, 'message':"User does not exist. Sorry!"})
 
-    # update grade - if you dare!
+    # get last timestamped record
+    # null timestamps come out at the end, so the one we want could be in the middle, whether we sort in reverse order or regular; ugh
+    # solution: the last one by id order should be the last timestamped one, as we only create ones without timestamp during grading, and then only if there is no existing record
+    c = db((db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)).select(orderby = db.code.id).last()
     if 'grade' in request.vars and 'comment' in request.vars:
+        # update grade
         grade = float(request.vars.grade)
         comment = request.vars.comment
-        q = db(db.code.acid == request.vars.acid)(db.code.sid == request.vars.sid).select().first()
-        if not q:
-            db.code.insert(
+        if c:
+            c.update_record(grade=grade, comment=comment)
+        else:
+            id = db.code.insert(
                 acid = request.vars.acid,
                 sid = user.username,
                 grade = request.vars.grade,
                 comment = request.vars.comment,
                 )
-        else:
-            db((db.code.acid == request.vars.acid) &
-                (db.code.sid == request.vars.sid)
-                ).update(
-                grade = grade,
-                comment = comment,
-                )
-
+            c = db.code(id)
+  
     res = {
         'id':"%s-%d" % (request.vars.acid, user.id),
         'acid':request.vars.acid,
         'sid':user.id,
         'username':user.username,
         'name':"%s %s" % (user.first_name, user.last_name),
-        'code':"",
-        'grade':0.0,
-        'comment':"",
-        }
-
-    q = db(db.code.sid == db.auth_user.username)
-    q = q(db.code.acid == request.vars.acid)
-    q = q(db.auth_user.username == request.vars.sid)
-    q = q.select(
-        db.auth_user.ALL,
-        db.code.ALL,
-        orderby = db.code.acid|db.code.timestamp,
-        distinct = db.code.acid,
-        ).first()
-    if q:
-        res = {
-            'id':"%s-%d" % (q.code.acid, q.auth_user.id),
-            'acid':q.code.acid,
-            'sid':int(q.auth_user.id),
-            'username':q.auth_user.username,
-            'name':"%s %s" % (q.auth_user.first_name, q.auth_user.last_name),
-            'code':q.code.code,
-            'grade':q.code.grade,
-            'comment':q.code.comment,
-            'lang':q.code.language
-            }
+    }
+    
+    if c:
+        # return the existing code, grade, and comment
+        res['code'] = c.code
+        res['grade'] = c.grade
+        res['comment'] = c.comment
+        res['lang'] = c.language
+    else:
+        # default: return grade of 0.0 if nothing exists
+        res['code'] = ""
+        res['grade'] = 0.0
+        res['comment'] = ""
+    
+    # add prefixes, suffix_code and files that are available
+    # retrieve the db record
+    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
+    if source and c and c.code:
+        def get_source(acid):
+            r = db.source_code(acid=acid)
+            if r:
+                return r.main_code
+            else:
+                return ""
+        
+        included_divs = [x.strip() for x in source.includes.split(',') if x != '']
+        #print included_divs
+        # join together code for each of the includes
+        res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
+        #print res['includes']
+        res['suffix_code'] = source.suffix_code
+        #print source.suffix_code
+        
+        file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
+        res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
     return json.dumps(res)
 
 def mass_grade_problem():
@@ -430,11 +487,15 @@ def mass_grade_problem():
         cells = row.split(",")
         if len(cells) < 2:
             continue
+        
         email = cells[0]
         if cells[1]=="":
             cells[1]=0
         grade = float(cells[1])
-        comment = ""
+        if len(cells) == 2:
+            comment = ""
+        else: # should only ever be 2 or 3
+            comment = cells[-1] # comment should be the last element
         user = db(db.auth_user.email == email).select().first()
         if user == None:
             continue

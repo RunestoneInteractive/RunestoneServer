@@ -22,6 +22,10 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
+    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
+        if not verifyInstructorStatus(auth.user.course_name, auth.user):
+            session.flash = "You must be an instructor to access this page"
+            redirect(URL(c="default"))
     cwd = os.getcwd()
     try:
         os.chdir(path.join('applications',request.application,'books',row.base_course))
@@ -35,15 +39,23 @@ def index():
         os.chdir(cwd)
 
     try:
-        mbf = open(path.join('applications',request.application,'custom_courses',row.course_name,'build_info'),'r')
+        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
+        mbf = open(mbf_path,'r')
+        last_build = os.path.getmtime(mbf_path)
         my_build = mbf.read()[:-1]
         mbf.close()
     except:
         my_build = ""
+        last_build = 0
 
     my_vers = 0
     mst_vers = 0
-    if master_build and my_build:
+    rebuild_notice = path.join('applications',request.application,'REBUILD')
+    if os.path.exists(rebuild_notice):
+        rebuild_post = os.path.getmtime(rebuild_notice)
+        if rebuild_post > last_build:
+            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
+    elif master_build and my_build:
         mst_vers,mst_bld,mst_hsh = master_build.split('-')
         my_vers,my_bld,my_hsh = my_build.split('-')
         if my_vers != mst_vers:
@@ -225,7 +237,7 @@ def gradeassignment():
         db.auth_user.last_name,
         db.code.comment,
         distinct = db.code.sid,
-        orderby = db.code.sid|db.code.timestamp,
+        orderby = db.code.sid|~db.code.timestamp,
         )
     return dict(
         acid = acid,
@@ -291,7 +303,7 @@ def rebuildcourse():
         course.update_record(term_start_date=date)
         
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,
@@ -365,7 +377,7 @@ def sections_create():
     if form.accepts(request,session):
         section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
         session.flash = "Section Created"
-        return redirect('/%s/admin/sections_update?id=%d' % (request.application, section.id))
+        return redirect('/%s/admin/sections_create' % (request.application))
     return dict(
         form = form,
         )
@@ -477,3 +489,85 @@ def editcustom():
 
     return dict(form=form,cfile=custom_file.capitalize())
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def chapterprogress():
+    import numpy as np
+    from matplotlib import use, colors
+    from math import ceil
+    use('Agg')
+    import matplotlib.pyplot as plt
+    from collections import OrderedDict
+
+    subcquery = '''
+    select chapter_label, sub_chapter_label, sub_chapter_name
+    from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id
+    WHERE course_id = '{}' order by chapters.id
+    '''.format(auth.user.course_name)
+
+    subs = db.executesql(subcquery)
+
+    idxdict = {}
+    xlabs = []
+    i = 0
+    for row in subs:
+        idxdict[row[0]+row[1]] = i
+        xlabs.append(row[2])
+        i += 1
+
+    subs = None
+
+    spquery = '''
+    select username, chapter_id, sub_chapter_id, status, start_date, end_date
+from user_sub_chapter_progress join auth_user on auth_user.id = user_sub_chapter_progress.user_id join courses on courses.course_name = auth_user.course_name
+where auth_user.course_name = '{}' and auth_user.active = 'T' and sub_chapter_id in
+    (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = '{}' order by chapters.id)
+order by username;
+    '''.format(auth.user.course_name, auth.user.course_name)
+
+    spres = db.executesql(spquery)
+
+    snames = OrderedDict()
+    for row in spres:
+            snames[row[0]] = None
+
+    statmat = [[2 for j in range(len(idxdict))] for i in range(len(snames))]
+    print len(idxdict), len(snames)
+    rowix = -1
+    prev = ""
+    for row in spres:
+        #        statmat[row][idxdict[i[1].subchap]] = i[1].status
+        scidx = row[1]+row[2]
+        if row[0] != prev:
+            rowix += 1
+        if row[3]< 0:
+            status = 2
+        else:
+            status = row[3]
+        if scidx in idxdict:
+            statmat[rowix][idxdict[scidx]] = status
+        prev = row[0]
+
+    final = np.matrix(statmat)
+    ht = int(ceil(len(snames)/4.0)+1)
+    wt = int(ceil(len(xlabs)/4.0)+1)
+    print "figsize, wt, ht = ", wt, ht, len(snames), len(xlabs)
+    fig,ax = plt.subplots(figsize=(wt,ht))
+    cmap = colors.ListedColormap(['orange', 'green', 'white'])
+
+    #labels = [item.get_text() for item in ax.get_xticklabels()]
+    labels = list(snames.keys())
+    ax.set_yticks(list(range(len(snames))))
+    ax.set_yticklabels(labels)
+
+    ax.set_xticks(list(range(len(xlabs))))
+    ax.set_xticklabels(xlabs)
+
+
+    for i in ax.xaxis.get_major_ticks():
+        i.label.set_rotation(90)
+    ax.imshow(final,interpolation='nearest', cmap=cmap)
+    saveName = path.join('applications',request.application,'static', auth.user.course_name,'_static','progress.png')
+    fig.savefig(saveName)
+
+    return dict(coursename=auth.user.course_name)

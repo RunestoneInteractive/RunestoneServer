@@ -110,11 +110,13 @@ class CourseGrade(object):
         row['Firstname']= self.student.first_name
         row['Email']= self.student.email
         row['Total']= self.points()
+        type_names.append('NonPS Hours')
+        row['NonPS Hours'] = get_engagement_time(None, self.student, False, all_non_problem_sets = True)/3600.0
+        type_names.append('PS Hours')
+        row['PS Hours'] = get_engagement_time(None, self.student, False, all_problem_sets = True)/3600.0
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
-
-
 
 db.define_table('assignment_types',
     Field('name', 'string'),
@@ -180,12 +182,17 @@ def get_deadline(assignment, user):
     else:
         return None
 
-def assignment_get_engagement_time(assignment, user, preclass):
-    q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
-    if preclass:
-        dl = get_deadline(assignment, user)
-        if dl:
-            q = q(db.useinfo.timestamp < dl)       
+def get_engagement_time(assignment, user, preclass, all_problem_sets = False, all_non_problem_sets = False):
+    if all_problem_sets:
+        q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_'))
+    elif all_non_problem_sets:
+        q =  db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
+    else:
+        q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
+        if preclass:
+            dl = get_deadline(assignment, user)
+            if dl:
+                q = q(db.useinfo.timestamp < dl)       
     activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
     sessions = []
     THRESH = 300
@@ -196,13 +203,13 @@ def assignment_get_engagement_time(assignment, user, preclass):
             sessions.append(Session(activity.timestamp))            
         elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
             # close previous session; set its end time be previous activity's time, plus 30 seconds
-            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
             # start a new session
             sessions.append(Session(activity.timestamp))
         prev = activity
     if prev:
         # close out last session
-        sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=30)
+        sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
     return total_time
 
@@ -333,6 +340,23 @@ def get_all_times_and_activity_counts(course):
         all_user_data[curr_user.user_id] = curr_user.csv_dict()
     return all_user_data
 
+def partition(L, f):
+    # make a new list when f(item) changes
+    cur_list = []
+    prev_item = None
+    Ls = [cur_list]
+    for cur_item in L:
+        if (not prev_item) or (f(prev_item) == f(cur_item)):
+            cur_list.append(cur_item)
+        else:
+            cur_list = [cur_item]
+            Ls.append(cur_list)
+        prev_item = cur_item
+    return Ls
+
+def extract_last_grades(L, f):
+    return [L[-1] for L in partition(L, f) if len(L) > 0]
+
 def assignment_get_scores(assignment, problem=None, user=None, section_id=None, preclass=True):
     assignment_type = db(db.assignment_types.id == assignment.assignment_type).select().first()
     if assignment_type and assignment_type.grade_type == 'use':
@@ -341,39 +365,45 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
     if problem and user:
         pass
     elif problem:
+        # get grades for this acid for all users
         grades = db(db.code.sid == db.auth_user.username)(db.code.acid == problem).select(
             db.code.ALL,
             db.auth_user.ALL,
-            orderby=db.code.sid | db.code.timestamp,
-            distinct=db.code.sid,
+            orderby= db.code.sid | db.code.id
             )
-        for g in grades:
+        # keep only last grade for each user (for this problem)
+        last_grades = extract_last_grades(grades, lambda g: g. auth_user.id)
+        for g in last_grades:
             scores.append(score(
                 points=g.code.grade,
-                comment=g.code.comment,
+                comment= g.code.comment,
                 acid=problem,
                 user=g.auth_user,
                 ))
     elif user:
+        # get grades for individual components of this assignment
         q = db(db.problems.acid == db.code.acid)
         q = q(db.problems.assignment == assignment.id)
         q = q(db.code.sid == user.username)
         grades = q.select(
-            db.code.acid,
-            db.code.grade,
-            db.code.comment,
-            db.code.timestamp,
-            orderby=db.code.acid | db.code.timestamp,
-            distinct=db.code.acid,
-            )
-        for g in grades:
-            scores.append(score(
-                points=g.grade,
-                comment=g.comment,
-                acid=g.acid,
-                user=user,
+           db.code.acid,
+           db.code.grade,
+           db.code.comment,
+           db.code.timestamp,
+           orderby = db.code.acid | db.code.id
+           )
+        # keep only last grade for each problem (for this user)
+        last_grades = extract_last_grades(grades, lambda g: g.acid)
+        for g in last_grades:
+            scores.append(
+                score(
+                   points=g.grade,
+                   comment=g.comment,
+                   acid=g.acid,
+                   user=user
                 ))
     else:
+        # for all users: grades for all assignments, not for individual problems
         grades = db(db.grades.assignment == assignment.id).select(db.grades.ALL)
         for g in grades:
             scores.append(score(
@@ -382,7 +412,7 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
                 ))
     return scores
 db.assignments.scores = Field.Method(lambda row, problem=None, user=None, section_id=None, preclass=True: assignment_get_scores(row.assignments, problem, user, section_id, preclass))
-db.assignments.time = Field.Method(lambda row, user=None, preclass=True: assignment_get_engagement_time(row.assignments, user, preclass))
+db.assignments.time = Field.Method(lambda row, user=None, preclass=True: get_engagement_time(row.assignments, user, preclass))
 
 def assignment_set_grade(assignment, user):
     # delete the old grades; we're regrading
@@ -396,7 +426,7 @@ def assignment_set_grade(assignment, user):
     points = 0.0
     if assignment_type.grade_type == 'use':
         checks = len([p for p in assignment_get_scores(assignment, user=user, preclass=False) if p.points > 0])
-        time = assignment_get_engagement_time(assignment, user, preclass=True)
+        time = get_engagement_time(assignment, user, preclass=False)
         if checks >= assignment.threshold or time > 20*60:
             # if enough checkmarks or enough time
             # should be getting minimum time from a field of the assignment as well: FUTURE WORK

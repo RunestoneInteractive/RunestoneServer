@@ -46,7 +46,7 @@ def build():
 
     if request.vars.coursetype != 'custom':
         # run_sphinx is defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=request.vars.coursetype,
                                                                        application=request.application,
@@ -101,7 +101,7 @@ def build():
 
 def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=120, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
                                                                    http_host=request.env.http_host))
@@ -136,7 +136,7 @@ def delete_course():
                        TR(LABEL("Type in the name of the course to verify: ", INPUT(_name='coursename', requires=IS_NOT_EMPTY() ))),
                        TR(INPUT(_type='submit')),
                        labels=''))
-    print 'in delete', request.vars
+
     deleted = False
     if verify_form.process().accepted and request.vars.checkyes == 'on':
         course_name = request.vars.coursename
@@ -154,6 +154,7 @@ def delete_course():
                     shutil.rmtree(path.join('applications',request.application,'static', course_name))
                     shutil.rmtree(path.join('applications',request.application,'custom_courses', course_name))
                     deleted = True
+                    session.clear()
                 except:
                     response.flash = 'Error, %s does not appear to exist' % course_name
             else:
