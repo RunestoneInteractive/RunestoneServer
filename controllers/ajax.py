@@ -2,6 +2,7 @@ import json
 import datetime
 import logging
 import time
+import uuid
 from collections import Counter
 from diff_match_patch import *
 import os, sys
@@ -32,7 +33,7 @@ def hsblog():    # Human Subjects Board Log
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
-            sid = str(int(time.time()*1000))+"@"+request.client
+            sid = str(uuid.uuid1().int)+"@"+request.client
             setCookie = True
     act = request.vars.act
     div_id = request.vars.div_id
@@ -59,7 +60,7 @@ def runlog():    # Log errors and runs with code
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
-            sid = str(int(time.time()*1000))+"@"+request.client
+            sid = str(uuid.uuid1().int)+"@"+request.client
             setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
