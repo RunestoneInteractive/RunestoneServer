@@ -1,3 +1,6 @@
+.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready 
+ :target: https://waffle.io/RunestoneInteractive/RunestoneServer
+ :alt: 'Stories in Ready'
 Runestone Interactive Tools and Content
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
