@@ -46,6 +46,7 @@ def build():
 
     if request.vars.coursetype != 'custom':
         # run_sphinx is defined in models/scheduler.py
+        # todo:  Here we can add some processing to check for an A/B testing course
         row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=request.vars.coursetype,

@@ -1,7 +1,9 @@
-.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready 
+Runestone Interactive Server and API
+
+
+.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
  :target: https://waffle.io/RunestoneInteractive/RunestoneServer
  :alt: 'Stories in Ready'
-Runestone Interactive Tools and Content
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
