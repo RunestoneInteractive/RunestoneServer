@@ -154,7 +154,7 @@ def bio():
         col3={'prefered_name': "Name you would like to be called by in class. Pronunciation hints are also welcome!",
               'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? an expert on South American insects? going into the Peace Corps after graduation? have a company that you started last summer? have an unusual favorite color?",
               'programming_experience': "Have you ever done any programming before? If so, please describe briefly. (Note: no prior programming experience is required for this course. I just like to know whether you have programmed before.)",
-              'image': 'I use a flashcard app to help me learn student names. Please provide a recent photo. (Optional. If you have religious or privacy or other objections to providing a photo, feel free to skip this.)',
+              'image': "I use a flashcard app to try to learn student names. I will use the mugshot that I get with the student roster (presumably from your Mcard). If you have a better photo to help me recognize you in class, please upload it. For example, if you always wear a particular hat or glasses, wear them in the picture. I won't succeed at learning everyone's name with so many in the class, so please forgive me in advance.",
               'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?"}
         )
     form.vars.user_id = auth.user.id
@@ -175,7 +175,9 @@ def bios():
               db.user_biography.prefered_name,
               db.user_biography.user_id,
               db.user_biography.interesting_fact,
-              db.user_biography.programming_experience]
+              db.user_biography.programming_experience,
+              db.user_biography.laptop_type,
+              db.auth_user.email]
     # headers that make it easy to import into Flashcards Deluxe
     headers = {'user_biography.image': 'Picture 1',
               'user_biography.prefered_name': 'Text 2',
