@@ -1,6 +1,9 @@
 __author__ = 'bmiller'
 
-import psycopg2
+try:
+    import psycopg2
+except ImportError:
+    print("Cannot import psycopg2, lintMany will fail.")
 import os
 import re
 from pylint import epylint as lint
