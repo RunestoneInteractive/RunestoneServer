@@ -48,6 +48,7 @@ def user():
         my_extra_element = TR(LABEL('Section Name'),
                            INPUT(_name='section', value=sectname, _type='text'))
         form[0].insert(-1, my_extra_element)
+        form.element('#auth_user_username')['_readonly']=True
 
     if 'register' in request.args(0) and request.janrain_form:
         # add the Janrain login form

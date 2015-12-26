@@ -1,4 +1,9 @@
-Runestone Interactive Tools and Content
+Runestone Interactive Server and API
+
+
+.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
+ :target: https://waffle.io/RunestoneInteractive/RunestoneServer
+ :alt: 'Stories in Ready'
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
@@ -50,7 +55,7 @@ After you download it, extract the zip file to some folder on your hard drive. (
 
 3. Get familiar with the Runestone Components, which were installed with pip. The come from https://github.com/RunestoneInteractive/RunestoneComponents and there are good quick start instructions there.
 
-4. Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.
+4. Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.  When you make the clone you should clone it into runestone rather than the default RunestoneComponents.  All the web2py stuff is configured assuming that the application will be called runestone.
 
 5. Clone the book that you want to use, **into the web2py/applications/runestone/books** directory. You can see some of the available books at https://github.com/RunestoneInteractive Again, if you might contribute back to the book, please fork the book repository first and then do a local clone onto your machine.
 
