@@ -1,4 +1,5 @@
 {{extend 'layout.html'}}
+
 <h1>{{=student.first_name}} {{=student.last_name}}</h1>
 <div class="row">
 	<div class="col-md-8">
@@ -58,7 +59,7 @@
                               {{for problem in problems:}}
                                  <li class="list-group-item">
                                     <span class="badge">{{=problem.points}}</span>
-                                    <h4>{{=problem.acid}}</h4>
+                                    <h4>{{=problem.truncated_acid()}}</h4>
                                     {{if problem.comment:}}
                                     <p>{{=problem.comment}}</p>
                                     {{pass}}
