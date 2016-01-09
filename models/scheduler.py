@@ -135,7 +135,8 @@ def makePavement(http_host, rvars, sourcedir):
             'build_dir': 'build',
             'log_level': 10,
             'use_services': 'true',
-            'dburl': settings.database_uri
+            'dburl': settings.database_uri,
+            'basecourse': base_course,
             }
     if 'loginreq' in rvars:
         opts['login_req'] = 'true'
