@@ -41,7 +41,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         shutil.rmtree(sourcedir)
     shutil.copytree(path.join(workingdir, 'books', base_course), sourcedir)
 
-    makePavement(http_host, rvars, sourcedir)
+    makePavement(http_host, rvars, sourcedir, base_course)
     shutil.copy(path.join(sourcedir,'pavement.py'),custom_dir)
 
     #########
@@ -128,7 +128,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     donefile.close()
 
 
-def makePavement(http_host, rvars, sourcedir):
+def makePavement(http_host, rvars, sourcedir, base_course):
     paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
     opts = {'master_url': settings.server_type + http_host,
             'project_name': rvars['projectname'],
