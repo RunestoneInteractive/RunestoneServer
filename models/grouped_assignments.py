@@ -150,6 +150,15 @@ class score(object):
             self.points = 0 
         self.comment = comment
 
+    def truncated_acid(self):
+        if "/" in self.acid:
+            # DictionaryAccumulation/AccumulatingtheBestKey.html replaces
+            # /runestone/static/f15/DictionaryAccumulation/AccumulatingtheBestKey.html
+            parts = self.acid.split("/")
+            return "/".join(parts[-2:])
+        else:
+            return self.acid
+
 def canonicalize(div_id):
     # needs to take a parameter for which book; hardcoded for pip2 right now
     # used in calculating time spent for grading "use" assignment types
@@ -458,6 +467,8 @@ def assignment_release_grades(assignment, released=True):
     assignment.update_record()
     return True
 db.assignments.release_grades = Field.Method(lambda row, released=True: assignment_release_grades(row.assignments, released))
+
+
 
 db.define_table('problems',
     Field('assignment', db.assignments),
