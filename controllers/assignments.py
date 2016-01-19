@@ -466,9 +466,10 @@ def problem():
                 return r.main_code
             else:
                 return ""
-        
-        included_divs = [x.strip() for x in source.includes.split(',') if x != '']
-        #print included_divs
+        if source.includes:
+            # strip off "data-include"
+            txt = source.includes[len("data-include="):]
+            included_divs = [x.strip() for x in txt.split(',') if x != '']
         # join together code for each of the includes
         res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
         #print res['includes']
