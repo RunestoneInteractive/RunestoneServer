@@ -470,11 +470,11 @@ def problem():
             # strip off "data-include"
             txt = source.includes[len("data-include="):]
             included_divs = [x.strip() for x in txt.split(',') if x != '']
-        # join together code for each of the includes
-        res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
-        #print res['includes']
-        res['suffix_code'] = source.suffix_code
-        #print source.suffix_code
+            # join together code for each of the includes
+            res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
+            #print res['includes']
+            res['suffix_code'] = source.suffix_code
+            #print source.suffix_code
         
         file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
