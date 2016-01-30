@@ -459,6 +459,7 @@ def problem():
     # add prefixes, suffix_code and files that are available
     # retrieve the db record
     source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
+
     if source and c and c.code:
         def get_source(acid):
             r = db.source_code(acid=acid)
@@ -473,6 +474,7 @@ def problem():
             # join together code for each of the includes
             res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
             #print res['includes']
+        if source.suffix_code:
             res['suffix_code'] = source.suffix_code
             #print source.suffix_code
         
