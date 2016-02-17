@@ -2,11 +2,9 @@
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
-	{{include 'dashboard-nav.html'}}
+	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</style></h1>
 	<div class="col-md-6">
 		<h2>Chapter 4 - Names for Strings</h2>
 		<div class="dash-section">
@@ -16,7 +14,7 @@
 			<div class="dash-section-content">
 				<div id="chart-overall-activity"></div>
 				<div class="dash-section-right">
-					<a href="studentprogress">View Individual Student Progression</a>
+					<a href="dashboard-progress">View Individual Student Progression</a>
 				</div>
 
 			</div>
@@ -42,4 +40,4 @@
 </div>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
-<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
+<style src="{{=URL('static', 'dashboard.css')}}"></style>
