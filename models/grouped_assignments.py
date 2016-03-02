@@ -110,9 +110,11 @@ class CourseGrade(object):
         row['Firstname']= self.student.first_name
         row['Email']= self.student.email
         row['Total']= self.points()
-        type_names.append('NonPS Hours')
+        if 'NonPS Hours' not in type_names:
+            type_names.append('NonPS Hours')
         row['NonPS Hours'] = get_engagement_time(None, self.student, False, all_non_problem_sets = True)/3600.0
-        type_names.append('PS Hours')
+        if 'PS Hours' not in type_names:
+            type_names.append('PS Hours')
         row['PS Hours'] = get_engagement_time(None, self.student, False, all_problem_sets = True)/3600.0
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
