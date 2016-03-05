@@ -3,6 +3,7 @@
 from os import path
 import uuid
 import shutil
+import random
 
 #########################################################################
 ## This is a samples controller
@@ -47,9 +48,14 @@ def build():
     if request.vars.coursetype != 'custom':
         # run_sphinx is defined in models/scheduler.py
         # todo:  Here we can add some processing to check for an A/B testing course
+        if path.exists(path.join(request.folder,'books',request.vars.coursetype+"_A")):
+            base_course = request.vars.coursetype + "_" + random.sample("AB",1)[0]
+        else:
+            base_course = request.vars.coursetype
+
         row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
-                                                                       base_course=request.vars.coursetype,
+                                                                       base_course=base_course,
                                                                        application=request.application,
                                                                        http_host=request.env.http_host))
         uuid = row['uuid']
@@ -67,7 +73,7 @@ def build():
         cid = db.courses.update_or_insert(course_name=request.vars.projectname,
                                           term_start_date=request.vars.startdate,
                                           institution=institution,
-                                          base_course=request.vars.coursetype)
+                                          base_course=base_course)
 
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
