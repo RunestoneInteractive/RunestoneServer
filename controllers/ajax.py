@@ -190,6 +190,7 @@ def getprog():
         # get the code they saved in chronological order; id order gets that for us
         r = result.select(orderby=codetbl.id)
         res['history'] = [row.code for row in r]
+        res['timestamps'] = [row.timestamp.isoformat() for row in r]
 
     response.headers['content-type'] = 'application/json'
     return json.dumps(res)
