@@ -83,6 +83,7 @@ def runlog():    # Log errors and runs with code
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code
+    to_save = request.vars.to_save
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
     if error_info != 'success':
@@ -94,16 +95,17 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    db.code.insert(sid=sid,
-        acid=div_id,
-        code=code,
-        emessage=error_info,
-        timestamp=ts,
-        course_id=course,
-        language=request.vars.lang)
-    lintAfterSave(dbid, code, div_id, sid)
+    if to_save != "False":
+        db.code.insert(sid=sid,
+            acid=div_id,
+            code=code,
+            emessage=error_info,
+            timestamp=ts,
+            course_id=course,
+            language=request.vars.lang)
+        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        lintAfterSave(dbid, code, div_id, sid)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
