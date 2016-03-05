@@ -110,9 +110,11 @@ class CourseGrade(object):
         row['Firstname']= self.student.first_name
         row['Email']= self.student.email
         row['Total']= self.points()
-        type_names.append('NonPS Hours')
+        if 'NonPS Hours' not in type_names:
+            type_names.append('NonPS Hours')
         row['NonPS Hours'] = get_engagement_time(None, self.student, False, all_non_problem_sets = True)/3600.0
-        type_names.append('PS Hours')
+        if 'PS Hours' not in type_names:
+            type_names.append('PS Hours')
         row['PS Hours'] = get_engagement_time(None, self.student, False, all_problem_sets = True)/3600.0
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
@@ -434,8 +436,8 @@ def assignment_set_grade(assignment, user):
 
     points = 0.0
     if assignment_type.grade_type == 'use':
-        checks = len([p for p in assignment_get_scores(assignment, user=user, preclass=False) if p.points > 0])
-        time = get_engagement_time(assignment, user, preclass=False)
+        checks = len([p for p in assignment_get_scores(assignment, user=user, preclass=True) if p.points > 0])
+        time = get_engagement_time(assignment, user, preclass=True)
         if checks >= assignment.threshold or time > 20*60:
             # if enough checkmarks or enough time
             # should be getting minimum time from a field of the assignment as well: FUTURE WORK
