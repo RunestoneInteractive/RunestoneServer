@@ -162,12 +162,12 @@ def saveprog():
 
 def getprog():
     """
-    return the program code for a particular acid
+    return the history of saved code by this user for a particular acid
     :Parameters:
         - `acid`: id of the active code block
         - `user`: optional identifier for the owner of the code
     :Return:
-        - json object containing the source text
+        - json object containing a list/array of source texts
     """
     codetbl = db.code
     acid = request.vars.acid
@@ -185,18 +185,17 @@ def getprog():
     if query:
         result = db(query)
         res['acid'] = acid
-        if not result.isempty():
-            # get the last code they saved; id order gets that for us
-            r = result.select(orderby=codetbl.id).last().code
-            res['source'] = r
-            if sid:
-                res['sid'] = sid
-        else:
-            logging.debug("Did not find anything to load for %s"%sid)
+        if sid:
+            res['sid'] = sid
+        # get the code they saved in chronological order; id order gets that for us
+        r = result.select(orderby=codetbl.id)
+        res['history'] = [row.code for row in r]
+
     response.headers['content-type'] = 'application/json'
-    return json.dumps([res])
+    return json.dumps(res)
 
 def getlastanswer():
+    # get's user's last answer for multiple choice question
     logging.debug("Hello from getlastanswer")
     divid = request.vars.div_id
     if  auth.user:
