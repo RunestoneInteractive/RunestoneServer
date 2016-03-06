@@ -1,6 +1,7 @@
 from os import path
 import os
 import pygal
+import logging
 from datetime import date, timedelta
 from paver.easy import sh
 
@@ -122,6 +123,11 @@ def index():
             "unreadPercent": '85%',
         }
     ]
+
+    res = db((db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id,
+        orderby=~db.useinfo.timestamp)
+
+    logging.warning(res)
     return dict(course_name=auth.user.course_name, questions=questions, sections=sections)
 
 @auth.requires_login()
@@ -140,6 +146,10 @@ def studentreport():
 def studentprogress():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
+
+
+
+
 
     return dict(course_name=auth.user.course_name)
 
