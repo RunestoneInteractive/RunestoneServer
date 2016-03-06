@@ -83,6 +83,7 @@ def runlog():    # Log errors and runs with code
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code
+    to_save = request.vars.to_save
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
     if error_info != 'success':
@@ -94,9 +95,17 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    lintAfterSave(dbid, code, div_id, sid)
+    if to_save != "False":
+        db.code.insert(sid=sid,
+            acid=div_id,
+            code=code,
+            emessage=error_info,
+            timestamp=ts,
+            course_id=course,
+            language=request.vars.lang)
+        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        lintAfterSave(dbid, code, div_id, sid)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -110,53 +119,54 @@ def runlog():    # Log errors and runs with code
 #  Ajax Handlers for saving and restoring active code blocks
 #
 
-def saveprog():
-    user = auth.user
-    if not user:
-        return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-    course = db(db.courses.id == auth.user.course_id).select().first()
-
-    acid = request.vars.acid
-    code = request.vars.code
-
-    now = datetime.datetime.now()
-
-    response.headers['content-type'] = 'application/json'
-    def strip_suffix(id):
-        idx = id.rfind('-') - 1
-        return id[:idx]
-    
-    section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
-    section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
-    # get the assignment object associated with acid, *and the current course*
-    assignment = None
-    if section:
-        assignment = db((db.assignments.id == db.problems.assignment) &
-                        (db.problems.acid == acid) &
-                        (db.assignments.course==section.course_id)).select(db.assignments.ALL).first()
-    if assignment:
-        q = db(db.deadlines.assignment == assignment.id)
-        if section:
-            q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
-        else:
-            q = q(db.deadlines.section==None)
-        dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
-        if dl and dl.deadline:
-            if dl.deadline < now:
-                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
-    try:
-        db.code.insert(sid=auth.user.username,
-            acid=acid,code=code,
-            timestamp=datetime.datetime.now(),
-            course_id=auth.user.course_id,
-            language=request.vars.lang)
-    except Exception as e:
-        if not auth.user:
-            return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-        else:
-            return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
-
-    return json.dumps([acid])
+## This should no longer be needed; saving automatically in runlog
+# def saveprog():
+#     user = auth.user
+#     if not user:
+#         return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+#     course = db(db.courses.id == auth.user.course_id).select().first()
+#
+#     acid = request.vars.acid
+#     code = request.vars.code
+#
+#     now = datetime.datetime.now()
+#
+#     response.headers['content-type'] = 'application/json'
+#     def strip_suffix(id):
+#         idx = id.rfind('-') - 1
+#         return id[:idx]
+#
+#     section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
+#     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
+#     # get the assignment object associated with acid, *and the current course*
+#     assignment = None
+#     if section:
+#         assignment = db((db.assignments.id == db.problems.assignment) &
+#                         (db.problems.acid == acid) &
+#                         (db.assignments.course==section.course_id)).select(db.assignments.ALL).first()
+#     if assignment:
+#         q = db(db.deadlines.assignment == assignment.id)
+#         if section:
+#             q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
+#         else:
+#             q = q(db.deadlines.section==None)
+#         dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+#         if dl and dl.deadline:
+#             if dl.deadline < now:
+#                 return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
+#     try:
+#         db.code.insert(sid=auth.user.username,
+#             acid=acid,code=code,
+#             timestamp=datetime.datetime.now(),
+#             course_id=auth.user.course_id,
+#             language=request.vars.lang)
+#     except Exception as e:
+#         if not auth.user:
+#             return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+#         else:
+#             return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
+#
+#     return json.dumps([acid])
 
 
 
