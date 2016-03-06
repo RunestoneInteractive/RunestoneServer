@@ -83,7 +83,6 @@ def runlog():    # Log errors and runs with code
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code
-    to_save = request.vars.to_save
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
     if error_info != 'success':
@@ -96,16 +95,25 @@ def runlog():    # Log errors and runs with code
         else:
             event = 'activecode'
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    if to_save != "False":
-        db.code.insert(sid=sid,
-            acid=div_id,
-            code=code,
-            emessage=error_info,
-            timestamp=ts,
-            course_id=course,
-            language=request.vars.lang)
+    if ('to_save' not in request.vars):
+        # old API
         dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
         lintAfterSave(dbid, code, div_id, sid)
+    else:
+        # new API
+        if (request.vars.to_save != "False"):
+            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+            lintAfterSave(dbid, code, div_id, sid)
+
+            # auto-save to code table
+            db.code.insert(sid=sid,
+                acid=div_id,
+                code=code,
+                emessage=error_info,
+                timestamp=ts,
+                course_id=course,
+                language=request.vars.lang)
+
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -114,63 +122,60 @@ def runlog():    # Log errors and runs with code
         response.cookies['ipuser']['path'] = '/'
     return json.dumps(res)
 
-
-#
-#  Ajax Handlers for saving and restoring active code blocks
-#
-
-## This should no longer be needed; saving automatically in runlog
-# def saveprog():
-#     user = auth.user
-#     if not user:
-#         return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-#     course = db(db.courses.id == auth.user.course_id).select().first()
-#
-#     acid = request.vars.acid
-#     code = request.vars.code
-#
-#     now = datetime.datetime.now()
-#
-#     response.headers['content-type'] = 'application/json'
-#     def strip_suffix(id):
-#         idx = id.rfind('-') - 1
-#         return id[:idx]
-#
-#     section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
-#     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
-#     # get the assignment object associated with acid, *and the current course*
-#     assignment = None
-#     if section:
-#         assignment = db((db.assignments.id == db.problems.assignment) &
-#                         (db.problems.acid == acid) &
-#                         (db.assignments.course==section.course_id)).select(db.assignments.ALL).first()
-#     if assignment:
-#         q = db(db.deadlines.assignment == assignment.id)
-#         if section:
-#             q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
-#         else:
-#             q = q(db.deadlines.section==None)
-#         dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
-#         if dl and dl.deadline:
-#             if dl.deadline < now:
-#                 return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
-#     try:
-#         db.code.insert(sid=auth.user.username,
-#             acid=acid,code=code,
-#             timestamp=datetime.datetime.now(),
-#             course_id=auth.user.course_id,
-#             language=request.vars.lang)
-#     except Exception as e:
-#         if not auth.user:
-#             return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
-#         else:
-#             return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
-#
-#     return json.dumps([acid])
+# Ajax Handlers for saving and restoring active code blocks
 
 
+# This should no longer be needed once we fully transition all legacy sites to calling runlog with automatic saving
+def saveprog():
+    user = auth.user
+    if not user:
+        return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+    course = db(db.courses.id == auth.user.course_id).select().first()
 
-def getprog():
+    acid = request.vars.acid
+    code = request.vars.code
+
+    now = datetime.datetime.now()
+
+    response.headers['content-type'] = 'application/json'
+    def strip_suffix(id):
+        idx = id.rfind('-') - 1
+        return id[:idx]
+
+    section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
+    section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
+    # get the assignment object associated with acid, *and the current course*
+    assignment = None
+    if section:
+        assignment = db((db.assignments.id == db.problems.assignment) &
+                        (db.problems.acid == acid) &
+                        (db.assignments.course==section.course_id)).select(db.assignments.ALL).first()
+    if assignment:
+        q = db(db.deadlines.assignment == assignment.id)
+        if section:
+            q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
+        else:
+            q = q(db.deadlines.section==None)
+        dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        if dl and dl.deadline:
+            if dl.deadline < now:
+                return json.dumps(["ERROR: Sorry. The deadline for this assignment has passed. The deadline was %s" % (dl.deadline)])
+    try:
+        db.code.insert(sid=auth.user.username,
+            acid=acid,code=code,
+            timestamp=datetime.datetime.now(),
+            course_id=auth.user.course_id,
+            language=request.vars.lang)
+    except Exception as e:
+        if not auth.user:
+            return json.dumps(["ERROR: auth.user is not defined.  Copy your code to the clipboard and reload or logout/login"])
+        else:
+            return json.dumps(["ERROR: " + str(e) + "Please copy this error and use the Report a Problem link"])
+
+    return json.dumps([acid])
+
+def gethist():
+
     """
     return the history of saved code by this user for a particular acid
     :Parameters:
@@ -204,6 +209,43 @@ def getprog():
 
     response.headers['content-type'] = 'application/json'
     return json.dumps(res)
+
+
+def getprog():
+    """
+    return the program code for a particular acid
+    :Parameters:
+        - `acid`: id of the active code block
+        - `user`: optional identifier for the owner of the code
+    :Return:
+        - json object containing the source text
+    """
+    codetbl = db.code
+    acid = request.vars.acid
+    sid = request.vars.sid
+
+    if sid:
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
+    else:
+        if auth.user:
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
+        else:
+            query = None
+
+    res = {}
+    if query:
+        result = db(query)
+        res['acid'] = acid
+        if not result.isempty():
+            # get the last code they saved; id order gets that for us
+            r = result.select(orderby=codetbl.id).last().code
+            res['source'] = r
+            if sid:
+                res['sid'] = sid
+        else:
+            logging.debug("Did not find anything to load for %s"%sid)
+    response.headers['content-type'] = 'application/json'
+    return json.dumps([res])
 
 def getlastanswer():
     # get's user's last answer for multiple choice question
