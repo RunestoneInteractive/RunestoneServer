@@ -7,14 +7,13 @@ from collections import Counter
 from diff_match_patch import *
 import os, sys
 # kind of a hacky approach to import coach functions
-sys.path.insert(0,os.path.dirname(__file__))
-from coach import get_lint
+#sys.path.insert(0,os.path.dirname(__file__))
+#from coach import get_lint
 
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
-
 
 def compareAndUpdateCookieData(sid):
     if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
@@ -59,6 +58,15 @@ def hsblog():    # Human Subjects Board Log
             corr = 'T' if result == 'correct' else 'F'
             resp = responseMap.get(resp,resp)
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+    # -------------- NEW CODE -----------------------------
+
+    if event == "fillb" and auth.user:
+        # Has user already submitted a correct answer for this question? If not, insert a record
+        if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
+            x,resp,result = act.split(':')
+            corr = 'T' if result == 'correct' else 'F'
+            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+    # -------------- END NEW CODE -------------------------
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -96,7 +104,7 @@ def runlog():    # Log errors and runs with code
             event = 'activecode'
     dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    lintAfterSave(dbid, code, div_id, sid)
+    #lintAfterSave(dbid, code, div_id, sid)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -125,7 +133,7 @@ def saveprog():
     def strip_suffix(id):
         idx = id.rfind('-') - 1
         return id[:idx]
-    
+
     section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
     # get the assignment object associated with acid, *and the current course*
@@ -780,3 +788,63 @@ def lintAfterSave(dbid, code, div_id, sid):
                                   line=g.group(4), col=g.group(5), obj=g.group(6),
                                   msg=g.group(7).replace("'", ""), source=dbid)
 
+
+# --------------------------- NEW CODE ------------------------------
+def getAssessResults():
+
+    if not auth.user:
+        # This is just for development
+        raise Exception("YOU NEED TO LOGIN")
+
+    course = request.vars.course
+    div_id = request.vars.div_id
+    event = request.vars.event
+    sid = auth.user.username
+
+    response.headers['content-type'] = 'application/json'
+
+    if event == "fillb":
+        query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""   # return empty string so we load from local storage instead
+        res = rows[0][5]
+        return json.dumps(rows[0][5])   # else return the answer
+    elif event == "mChoice":
+        query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+            rows = db.executesql(query)
+            if len(rows) == 0:
+                return ""   # return empty string so we load from local storage instead
+            res = rows[0]
+            print("RES: ", res)
+            return json.dumps(rows[0])   # else return the answer
+
+
+'''def getpollresults():
+    course = request.vars.course
+    div_id = request.vars.div_id
+
+    response.headers['content-type'] = 'application/json'
+
+    query = """select act from useinfo
+               where event = 'poll' and div_id = '%s' and course_id = '%s'
+               """ % (div_id, course)
+    rows = db.executesql(query)
+
+    result_list = []
+    for row in rows:
+        val = row[0].split(":")[0]
+        result_list.append(int(val))
+
+    # maps option : count
+    opt_counts = Counter(result_list)
+
+    # opt_list holds the option numbers from smallest to largest
+    # count_list[i] holds the count of responses that chose option i
+    opt_list = sorted(opt_counts.keys())
+    count_list = []
+    for i in opt_list:
+        count_list.append(opt_counts[i])
+
+    return json.dumps([len(result_list), opt_list, count_list, div_id])
+'''

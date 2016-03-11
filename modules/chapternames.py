@@ -53,7 +53,7 @@ def addChapterInfoToDB(subChapD, chapTitles, course_id):
         uname = 'bnmnetp_courselib'
         dbname = 'bnmnetp_courselib'
 
-    dburl = 'postgresql://{}@localhost/{}'.format(uname,dbname)
+    dburl = "postgres://mayeis01:@localhost/isaiah"
     engine = create_engine(dburl)
     meta = MetaData()
     chapters = Table('chapters', meta, autoload=True, autoload_with=engine)

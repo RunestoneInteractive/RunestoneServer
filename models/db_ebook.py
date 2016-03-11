@@ -112,3 +112,13 @@ db.define_table('mchoice_answers',
     Field('correct','boolean'),
     migrate='runestone_mchoice_answers.table'
     )
+
+db.define_table('fitb_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('correct','boolean'),
+    migrate='runestone_fitb_answers.table'
+    )
