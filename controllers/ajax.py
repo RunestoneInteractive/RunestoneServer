@@ -805,46 +805,11 @@ def getAssessResults():
 
     if event == "fillb":
         query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
-        rows = db.executesql(query)
-        if len(rows) == 0:
-            return ""   # return empty string so we load from local storage instead
-        res = rows[0][5]
-        return json.dumps(rows[0][5])   # else return the answer
     elif event == "mChoice":
         query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
-            rows = db.executesql(query)
-            if len(rows) == 0:
-                return ""   # return empty string so we load from local storage instead
-            res = rows[0]
-            print("RES: ", res)
-            return json.dumps(rows[0])   # else return the answer
 
-
-'''def getpollresults():
-    course = request.vars.course
-    div_id = request.vars.div_id
-
-    response.headers['content-type'] = 'application/json'
-
-    query = """select act from useinfo
-               where event = 'poll' and div_id = '%s' and course_id = '%s'
-               """ % (div_id, course)
     rows = db.executesql(query)
-
-    result_list = []
-    for row in rows:
-        val = row[0].split(":")[0]
-        result_list.append(int(val))
-
-    # maps option : count
-    opt_counts = Counter(result_list)
-
-    # opt_list holds the option numbers from smallest to largest
-    # count_list[i] holds the count of responses that chose option i
-    opt_list = sorted(opt_counts.keys())
-    count_list = []
-    for i in opt_list:
-        count_list.append(opt_counts[i])
-
-    return json.dumps([len(result_list), opt_list, count_list, div_id])
-'''
+    if len(rows) == 0:
+        return ""   # return empty string so we load from local storage instead
+    res = rows[0][5]
+    return json.dumps(rows[0][5])   # else return the answer
