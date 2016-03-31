@@ -60,12 +60,25 @@ def hsblog():    # Human Subjects Board Log
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
     # -------------- NEW CODE -----------------------------
 
-    if event == "fillb" and auth.user:
+    elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
         if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
             x,resp,result = act.split(':')
             corr = 'T' if result == 'correct' else 'F'
             db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+
+    elif event == "dragNdrop" and auth.user:
+
+        if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
+            answers,minHeight = act.split('_split_')
+            correct = request.vars.correct
+
+            db.dragndrop_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answers, correct=correct, course_name=course, minHeight=minHeight)
+    elif event == "clickableArea" and auth.user:
+        if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
+            correct = request.vars.correct
+            db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
+
     # -------------- END NEW CODE -------------------------
 
     response.headers['content-type'] = 'application/json'
@@ -791,10 +804,8 @@ def lintAfterSave(dbid, code, div_id, sid):
 
 # --------------------------- NEW CODE ------------------------------
 def getAssessResults():
-
     if not auth.user:
-        # This is just for development
-        raise Exception("YOU NEED TO LOGIN")
+        return ""
 
     course = request.vars.course
     div_id = request.vars.div_id
@@ -805,11 +816,29 @@ def getAssessResults():
 
     if event == "fillb":
         query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""   # return empty string so we load from local storage instead
+        res = rows[0][5]
+        return json.dumps(res)   # else return the answer
     elif event == "mChoice":
         query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
-
-    rows = db.executesql(query)
-    if len(rows) == 0:
-        return ""   # return empty string so we load from local storage instead
-    res = rows[0][5]
-    return json.dumps(rows[0][5])   # else return the answer
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""   # return empty string so we load from local storage instead
+        res = rows[0][5]
+        return json.dumps(res)   # else return the answer
+    elif event == "dragNdrop":
+        query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = str(rows[0][5]) + "_split_" + str(rows[0][7])
+        return json.dumps(res)
+    elif event == "clickableArea":
+        query = "select * from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""   # return empty string so we load from local storage instead
+        res = rows[0][5]
+        return json.dumps(res)   # else return the answer
