@@ -815,28 +815,28 @@ def getAssessResults():
     response.headers['content-type'] = 'application/json'
 
     if event == "fillb":
-        query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""   # return empty string so we load from local storage instead
         res = rows[0][5]
         return json.dumps(res)   # else return the answer
     elif event == "mChoice":
-        query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""   # return empty string so we load from local storage instead
         res = rows[0][5]
         return json.dumps(res)   # else return the answer
     elif event == "dragNdrop":
-        query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
         res = str(rows[0][5]) + "_split_" + str(rows[0][7])
         return json.dumps(res)
     elif event == "clickableArea":
-        query = "select * from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp" % (div_id, course, sid)
+        query = "select * from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""   # return empty string so we load from local storage instead
