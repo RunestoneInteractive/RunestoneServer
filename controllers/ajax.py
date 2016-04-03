@@ -58,8 +58,6 @@ def hsblog():    # Human Subjects Board Log
             corr = 'T' if result == 'correct' else 'F'
             resp = responseMap.get(resp,resp)
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
-    # -------------- NEW CODE -----------------------------
-
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
         if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
@@ -78,8 +76,6 @@ def hsblog():    # Human Subjects Board Log
         if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
-
-    # -------------- END NEW CODE -------------------------
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -801,10 +797,9 @@ def lintAfterSave(dbid, code, div_id, sid):
                                   line=g.group(4), col=g.group(5), obj=g.group(6),
                                   msg=g.group(7).replace("'", ""), source=dbid)
 
-
-# --------------------------- NEW CODE ------------------------------
 def getAssessResults():
     if not auth.user:
+        # can't query for user's answers if we don't know who the user is, so just load from local storage
         return ""
 
     course = request.vars.course
@@ -814,20 +809,21 @@ def getAssessResults():
 
     response.headers['content-type'] = 'application/json'
 
+    # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
         query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
-            return ""   # return empty string so we load from local storage instead
+            return ""   # server doesn't have it so we load from local storage instead
         res = rows[0][5]
-        return json.dumps(res)   # else return the answer
+        return json.dumps(res)
     elif event == "mChoice":
         query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
-            return ""   # return empty string so we load from local storage instead
+            return ""
         res = rows[0][5]
-        return json.dumps(res)   # else return the answer
+        return json.dumps(res)
     elif event == "dragNdrop":
         query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
@@ -839,6 +835,13 @@ def getAssessResults():
         query = "select * from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
-            return ""   # return empty string so we load from local storage instead
+            return ""
         res = rows[0][5]
-        return json.dumps(res)   # else return the answer
+        return json.dumps(res)
+    elif event == "timedExam":
+        query = "select * from timed_exam where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = ";".join([str(rows[0][5]), str(rows[0][6]), str(rows[0][7]), str(rows[0][8])])
+        return json.dumps(res)
