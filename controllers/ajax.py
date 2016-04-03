@@ -7,8 +7,8 @@ from collections import Counter
 from diff_match_patch import *
 import os, sys
 # kind of a hacky approach to import coach functions
-#sys.path.insert(0,os.path.dirname(__file__))
-#from coach import get_lint
+sys.path.insert(0,os.path.dirname(__file__))
+from coach import get_lint
 
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
@@ -113,7 +113,7 @@ def runlog():    # Log errors and runs with code
             event = 'activecode'
     dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    #lintAfterSave(dbid, code, div_id, sid)
+    lintAfterSave(dbid, code, div_id, sid)
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
