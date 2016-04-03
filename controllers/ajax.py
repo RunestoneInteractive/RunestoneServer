@@ -94,9 +94,26 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    lintAfterSave(dbid, code, div_id, sid)
+    if ('to_save' not in request.vars):
+        # old API
+        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        lintAfterSave(dbid, code, div_id, sid)
+    else:
+        # new API
+        if (request.vars.to_save != "False"):
+            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+            lintAfterSave(dbid, code, div_id, sid)
+
+            # auto-save to code table
+            db.code.insert(sid=sid,
+                acid=div_id,
+                code=code,
+                emessage=error_info,
+                timestamp=ts,
+                course_id=course,
+                language=request.vars.lang)
+
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -105,11 +122,10 @@ def runlog():    # Log errors and runs with code
         response.cookies['ipuser']['path'] = '/'
     return json.dumps(res)
 
+# Ajax Handlers for saving and restoring active code blocks
 
-#
-#  Ajax Handlers for saving and restoring active code blocks
-#
 
+# This should no longer be needed once we fully transition all legacy sites to calling runlog with automatic saving
 def saveprog():
     user = auth.user
     if not user:
@@ -125,7 +141,7 @@ def saveprog():
     def strip_suffix(id):
         idx = id.rfind('-') - 1
         return id[:idx]
-    
+
     section_users = db((db.sections.id == db.section_users.section) & (db.auth_user.id == db.section_users.auth_user))
     section = section_users(db.auth_user.id == user.id).select(db.sections.ALL).last()
     # get the assignment object associated with acid, *and the current course*
@@ -158,6 +174,41 @@ def saveprog():
 
     return json.dumps([acid])
 
+def gethist():
+
+    """
+    return the history of saved code by this user for a particular acid
+    :Parameters:
+        - `acid`: id of the active code block
+        - `user`: optional identifier for the owner of the code
+    :Return:
+        - json object containing a list/array of source texts
+    """
+    codetbl = db.code
+    acid = request.vars.acid
+    sid = request.vars.sid
+
+    if sid:
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
+    else:
+        if auth.user:
+            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
+        else:
+            query = None
+
+    res = {}
+    if query:
+        result = db(query)
+        res['acid'] = acid
+        if sid:
+            res['sid'] = sid
+        # get the code they saved in chronological order; id order gets that for us
+        r = result.select(orderby=codetbl.id)
+        res['history'] = [row.code for row in r]
+        res['timestamps'] = [row.timestamp.isoformat() for row in r]
+
+    response.headers['content-type'] = 'application/json'
+    return json.dumps(res)
 
 
 def getprog():
@@ -197,6 +248,7 @@ def getprog():
     return json.dumps([res])
 
 def getlastanswer():
+    # get's user's last answer for multiple choice question
     logging.debug("Hello from getlastanswer")
     divid = request.vars.div_id
     if  auth.user:
