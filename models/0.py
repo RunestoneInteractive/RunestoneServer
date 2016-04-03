@@ -27,7 +27,7 @@ settings.janrain_domain = 'a-fake-domain'
 
 if 'local' in uname()[1] or 'Darwin' in uname()[0]:
     settings.database_uri = 'sqlite://storage.sqlite'
-elif 'webfaction' in uname()[1]:
+elif 'webfaction' in uname()[1]: 
     # the real uri is set in gitignore'd 1.py
     settings.database_uri = 'postgres://a_fake_database'
 elif 'luther' in uname()[1]:
