@@ -21,6 +21,8 @@ from paver.easy import sh
 def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
+    
+
     questions = [
         {
         "id": "5",
@@ -126,6 +128,44 @@ def index():
 
     res = db((db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id,
         orderby=~db.useinfo.timestamp)
+
+    #count answer frequency
+    problemStats = {}
+    for result in res:
+        if result.event == "mChoice":
+            if not result.div_id in problemStats:
+                problemStats[result.div_id] = {}
+
+            answer = result.act.split(':')
+            choice = answer[1]
+            problemStats[result.div_id][choice] = problemStats[result.div_id].get(choice, 0) + 1
+            
+        if result.event == "fillb":
+            if not result.div_id in problemStats:
+                problemStats[result.div_id] = {}
+            answer = result.act.split(':')
+            choice = answer[1]
+            problemStats[result.div_id][choice] = problemStats[result.div_id].get(choice, 0) + 1
+    print problemStats
+
+    #each problem by numb
+    problemStats = {}
+    for result in res:
+        if result.event == "mChoice":
+            if not result.div_id in problemStats:
+                problemStats[result.div_id] = {}
+
+            answer = result.act.split(':')
+            choice = answer[1]
+            problemStats[result.div_id][choice] = problemStats[result.div_id].get(choice, 0) + 1
+            
+        if result.event == "fillb":
+            if not result.div_id in problemStats:
+                problemStats[result.div_id] = {}
+            answer = result.act.split(':')
+            choice = answer[1]
+            problemStats[result.div_id][choice] = problemStats[result.div_id].get(choice, 0) + 1
+    print problemStats
 
     logging.warning(res)
     return dict(course_name=auth.user.course_name, questions=questions, sections=sections)
