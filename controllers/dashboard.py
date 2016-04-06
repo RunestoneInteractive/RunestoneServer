@@ -113,35 +113,16 @@ def grades():
     return dict(course_name=auth.user.course_name)
 
 def exercisemetrics():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    course = db(db.courses.id == auth.user.course_id).select().first()
-
-    answers = [{
-        "student":"Bob Brown",
-        "answers":["4.0", "0", "2","4"]
-    },{
-        "student":"Nick Collans",
-        "answers":["2.0", "4.0", "2","4"]
-    },{
-        "student":"Tim Collans",
-        "answers":["8", "4", "",""]
-    },{
-        "student":"Xu Hung",
-        "answers":["8", "4", "", ""]
-    },{
-        "student":"Jack Jackson",
-        "answers":["5", "4", "", ""]
-    },{
-        "student":"Brittany Jones",
-        "answers":["4", "", "", ""]
-    }]
-
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     problem_metrics = data_analyzer.problem_metrics
 
     prob_id = request.get_vars["id"]
     answers = []
+    attempt_histogram = []
+
     problem_metric = problem_metrics.problems[prob_id]
+    response_frequency = problem_metric.aggregate_responses
+
     for username, user_responses in problem_metric.user_responses.iteritems():
         responses = user_responses.responses[:4]
         responses += [''] * (4 - len(responses))
@@ -149,15 +130,11 @@ def exercisemetrics():
             "student":username,
             "answers":responses
             })
-    print answers
-    response_frequency = problem_metric.aggregate_responses
-    print response_frequency
-    attempt_histogram = []
+
     for attempts, count in problem_metric.user_number_responses().iteritems():
         attempt_histogram.append({
             "attempts": attempts,
             "frequency": count
             })
 
-    print attempt_histogram
-    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram)
+    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=prob_id)

@@ -66,6 +66,8 @@ class ProblemMetrics(object):
     	histogram = {}
     	for username, user_response in self.user_responses.iteritems():
     		attempts = len(user_response.responses)
+    		if attempts >= 5:
+    			attempts = "5+"
     		histogram[attempts] = histogram.get(attempts,0) + 1
     	return histogram
 class UserResponse(object):
@@ -139,7 +141,9 @@ class DashboardDataAnalyzer(object):
 		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
 		self.chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
 			(db.auth_user.course_id == auth.user.course_id)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id)
-		print self.chapter_progress
+		#print self.chapter_progress
+		#self.divs = db(db.div_ids).select(db.div_ids.div_id)
+		#print self.divs
 		self.problem_metrics = CourseProblemMetrics(course_id, self.users)
 		self.problem_metrics.update_metrics(self.logs)
 		self.user_activity = UserActivityMetrics(course_id, self.users)

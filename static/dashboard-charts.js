@@ -383,7 +383,7 @@ console.log(d);
         g.append("text")
             .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
             .attr("dy", ".35em")
-            .text(function(d) { return d.data.count; });
+            .text(function(d) { if (d.data.count == 0) { return "" } else { return d.data.count; } });
 
         function type(d) {
           d.count = +d.count;
