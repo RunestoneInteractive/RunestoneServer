@@ -40,7 +40,7 @@
 				</div>-->
 			</div>
 			<script type="text/javascript">
-			DashboardCharts.exerciseAttempts();
+			DashboardCharts.exerciseAttempts({{response.write(attempt_histogram,escape=False)}});
 			</script>
 		</div>
 		<div class="dash-section">
@@ -56,25 +56,14 @@
 						</tr>
 					</thead>
 					<tbody>
+						{{ for answer, frequency in response_frequency.iteritems():}}
 						<tr>
-							<td>4</td>
-							<td>24</td>
+							<td>{{=answer}}</td>
+							<td>{{=frequency}}</td>
 						</td>
-						<tr>
-							<td>4.0</td>
-							<td>11</td>
-						</td>
-						<tr>
-							<td>2</td>
-							<td>7</td>
-						</td>
-						<tr>
-							<td>28</td>
-							<td>5</td>
-						</td>
+						{{pass}}
 					</tbody>
 				</table>
-<b style="color:red">currently response text isn't stored, just correct or incorrect</b>
 			</div>
 		</div>
 	</div>

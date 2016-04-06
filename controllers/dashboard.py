@@ -21,71 +21,7 @@ from paver.easy import sh
 def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
-    
 
-    questions = [
-        {
-        "id": "5",
-        "text": "CSP-4-4-4: Put the blocks below into the correct order to print a twist on a famous poem.",
-        "correctPercent": '15%',
-        "attemptPercent": '40%',
-        "missedPercent": '45%',
-        "neverPercent": '5%',
-        "correct":5,
-        "attempted":4,
-        "missed":9,
-        "never":2,
-        "completedStudents": '18'
-        },
-                {
-        "id": "6",
-        "text": "CSP-4-2-3: Given the following code segment, what will be printed?",
-        "correctPercent": '35%',
-        "attemptPercent": '20%',
-        "missedPercent": '45%',
-        "correct":7,
-        "attempted":3,
-        "missed":8,
-        "never":2,
-        "completedStudents": '18'
-        },
-                {
-        "id": "7",
-        "text": "CSP-4-2-1: What will be printed when the following executes?",
-        "correctPercent": '40%',
-        "attemptPercent": '40%',
-        "missedPercent": '20%',
-        "correct":8,
-        "attempted":3,
-        "missed":4,
-        "never":5,
-        "completedStudents": '15'
-        },
-                {
-        "id": "8",
-        "text": "CSP-4-1-2: What will be printed when the following executes?",
-        "correctPercent": '55%',
-        "attemptPercent": '30%',
-        "missedPercent": '15%',
-        "correct":10,
-        "attempted":4,
-        "missed":3,
-        "never":3,
-        "completedStudents": '17'
-        },
-                {
-        "id": "9",
-        "text": "CSP-4-1-1: : Given the following code segment, what will be printed?",
-        "correctPercent": '60%',
-        "attemptPercent": '30%',
-        "missedPercent": '10%',
-        "correct":14,
-        "attempted":3,
-        "missed":1,
-        "never":2,
-        "completedStudents": '18'
-        }
-    ]
     sections = [
         {
             "id": "5",
@@ -125,11 +61,13 @@ def index():
             "unreadPercent": '85%',
         }
     ]
-
-    course_metrics = CourseProblemMetrics(auth.user.course_id)
+    users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
+    #print users
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    problem_metrics = data_analyzer.problem_metrics
 
     questions = []
-    for problem_id, metric in course_metrics.problems.iteritems():
+    for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
         questions.append({
@@ -141,7 +79,6 @@ def index():
             "not_attempted": stats[0],
             "attemptedBy": stats[1] + stats[2] + stats[3]
             })
-        print "{0}: {1}".format(problem_id, metric.user_response_stats())
 
     #logging.warning(res)
     return dict(course_name=auth.user.course_name, questions=questions, sections=sections)
@@ -199,4 +136,28 @@ def exercisemetrics():
         "answers":["4", "", "", ""]
     }]
 
-    return dict(course_name=auth.user.course_name, answers=answers)
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    problem_metrics = data_analyzer.problem_metrics
+
+    prob_id = request.get_vars["id"]
+    answers = []
+    problem_metric = problem_metrics.problems[prob_id]
+    for username, user_responses in problem_metric.user_responses.iteritems():
+        responses = user_responses.responses[:4]
+        responses += [''] * (4 - len(responses))
+        answers.append({
+            "student":username,
+            "answers":responses
+            })
+    print answers
+    response_frequency = problem_metric.aggregate_responses
+    print response_frequency
+    attempt_histogram = []
+    for attempts, count in problem_metric.user_number_responses().iteritems():
+        attempt_histogram.append({
+            "attempts": attempts,
+            "frequency": count
+            })
+
+    print attempt_histogram
+    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram)

@@ -277,7 +277,7 @@ function DashboardCharts(){
             .call(yAxis);
     }
 
-    function exerciseAttempts() {
+    function exerciseAttempts(data) {
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 500 - margin.left - margin.right,
     height = 150 - margin.top - margin.bottom;
@@ -302,24 +302,7 @@ var svg = d3.select("#chart-exercise-attempts").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var data = [{
-        attempts: '1',
-        frequency: 8
-    },{
-        attempts: '2',
-        frequency: 3
-    },{
-        attempts: '3',
-        frequency: 2
-    },{
-        attempts: '4',
-        frequency: 3
-    },{
-        attempts: '5+',
-        frequency: 4
-    }];
-
+console.log(data);
 
 
 x.domain(data.map(function(d) { return d.attempts; }));
