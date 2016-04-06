@@ -81,7 +81,7 @@
 				<div id="chart-question-{{=question['id']}}" style="width: 100px; float: left;"></div>
 				<div style="margin-left: 105px; height: 110px;">
 					<b>{{=question["text"]}}</b>
-					<p>Attempted by {{=question["completedStudents"]}} of 20</p>
+					<p>Attempted by {{=question["attemptedBy"]}} students</p>
 					<div style="float: right; width: 100px; text-align: right;"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">More Details &raquo;</a></div>
 				</div>
 				{{pass}}
@@ -89,32 +89,19 @@
 					{{ for question in questions:}}
 					DashboardCharts.donutChart([{
 						type: 'never',
-						count: {{=question["never"]}}
+						count: {{=question["not_attempted"]}}
 					},{
 						type: 'missed',
-						count: {{=question["missed"]}}
+						count: {{=question["incomplete"]}}
 					},{
 						type: 'attempted',
-						count: {{=question["attempted"]}}
+						count: {{=question["correct_mult_attempt"]}}
 					},{
 						type: 'correct',
 						count: {{=question["correct"]}}
 					}],"#chart-question-{{=question['id']}}")
 					{{ pass }}
 				</script>
-
-				{{ for question in questions:}}
-				<div class="dash-subsection">
-					<p>{{=question["text"]}}</p>
-					<div class="dash-bar-container">
-						<div class="dash-bar dash-bar-correct" style="width: {{=question['correctPercent']}};"> {{=question["correctPercent"]}} </div>
-						<div class="dash-bar dash-bar-attempts" style=" width: {{=question['attemptPercent']}};"> {{=question["attemptPercent"]}} </div>
-						<div class="dash-bar dash-bar-missed" style="width: {{=question['missedPercent']}};"> {{=question["missedPercent"]}} </div>
-					</div>
-					<div>{{=question["completedStudents"]}} students completed.<div style="float: right; width: 100px; text-align: right;"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">More Details &raquo;</a></div>
-					</div>	
-				</div>
-				{{pass}}
 				<div id="chart-overall-activity"></div>
 			</div>
 		</div>
