@@ -142,3 +142,12 @@ db.define_table('clickablearea_answers',
     Field('correct','boolean'),
     migrate='runestone_clickablearea_answers.table'
     )
+db.define_table('parsons_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('correct','boolean'),
+    migrate='runestone_parsons_answers.table'
+    )

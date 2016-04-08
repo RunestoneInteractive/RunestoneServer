@@ -66,7 +66,6 @@ def hsblog():    # Human Subjects Board Log
             db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
-
         if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
             answers,minHeight = act.split('_split_')
             correct = request.vars.correct
@@ -76,6 +75,13 @@ def hsblog():    # Human Subjects Board Log
         if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
+
+    elif event == "parsons" and auth.user:
+        print("Inserting parsons problem")
+        if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
+            correct = request.vars.correct
+            answer = request.vars.answer
+            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct="T", course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -896,4 +902,11 @@ def getAssessResults():
         if len(rows) == 0:
             return ""
         res = ";".join([str(rows[0][5]), str(rows[0][6]), str(rows[0][7]), str(rows[0][8])])
+        return json.dumps(res)
+    elif event == "parsons":
+        query = "select * from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = rows[0][5]
         return json.dumps(res)
