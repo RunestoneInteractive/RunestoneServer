@@ -19,9 +19,6 @@ from paver.easy import sh
 
 @auth.requires_login()
 def index():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    course = db(db.courses.id == auth.user.course_id).select().first()
-
     sections = [
         {
             "id": "5",
@@ -61,9 +58,17 @@ def index():
             "unreadPercent": '85%',
         }
     ]
-    users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
-    #print users
+
+    chapters = db(db.chapters.course_id == auth.user.course_name).select()
+    selected_chapter = None
+    for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
+        selected_chapter = chapter
+    if selected_chapter is None:
+        selected_chapter = chapters.first()
+
+    print selected_chapter
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer.load_chapter_metrics(selected_chapter)
     problem_metrics = data_analyzer.problem_metrics
 
     questions = []
@@ -81,7 +86,7 @@ def index():
             })
 
     #logging.warning(res)
-    return dict(course_name=auth.user.course_name, questions=questions, sections=sections)
+    return dict(course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter)
 
 @auth.requires_login()
 def studentreport():

@@ -7,13 +7,16 @@
 <div id="dashboard">
 	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
 	{{include 'dashboard/dashboard-nav.html'}}
-	<h2 style="width: 800px; display: inline;">Chapter 4 - Names for Strings</h2>
+	<h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
 	<div style="float: right"><b>Select Chapter</b>
-					<select name="exercise-sortby">
-					  <option value="missed">Ch 1</option>
-					  <option value="saab">Ch 2</option>
-					  <option value="fiat">Ch 3</option>
-					  <option value="audi" selected>Ch 4 - Names for Strings</option>
+					<select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
+					  {{for chapter in chapters:}}
+					  {{if chapter['chapter_label'] == selected_chapter['chapter_label']: }}
+					  	<option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  {{else:}}
+					  	<option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  {{pass}}
+					  {{pass}}
 					</select>
 				</div>
 	<div class="col-md-7" style="">

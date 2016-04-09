@@ -126,32 +126,48 @@ class UserActivityMetrics(object):
 class UserActivity(object):
 	def __init__(self):
 		self.rows = []
+		self.page_views = []
 
 	def add_activity(self, row):
 		self.rows.append(row)
+
+	def get_page_views(self):
+		return self
+
+	def get_activity_stats(self):
+		return self
+
+class ProgressMetrics(object):
+	def __init__(self, course_id, users):
+		self.sections = []
+
+	def update_metrics(self, logs, chapter_progress):
+		for row in chapter_progress:
+			return self
+
 
 class DashboardDataAnalyzer(object):
 	def __init__(self, course_id):
 		self.course_id = course_id
 
+	def load_chapter_metrics(self, chapter_id):
 		#go get all the course data... in the future the post processing
 		#should probably be stored and only new data appended.
 		self.course = db(db.courses.id == self.course_id).select().first()
 		self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
 		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
-		self.chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
-			(db.auth_user.course_id == auth.user.course_id)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id)
-		#print self.chapter_progress
+		self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
+			(db.auth_user.course_id == auth.user.course_id)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
+		#print self.db_chapter_progress
 		#self.divs = db(db.div_ids).select(db.div_ids.div_id)
 		#print self.divs
-		self.problem_metrics = CourseProblemMetrics(course_id, self.users)
+		self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
 		self.problem_metrics.update_metrics(self.logs)
-		self.user_activity = UserActivityMetrics(course_id, self.users)
+		self.user_activity = UserActivityMetrics(self.course_id, self.users)
 		self.user_activity.update_metrics(self.logs)
+		self.chapter_progress = ProgressMetrics(self.course_id, self.users)
+		self.chapter_progress.update_metrics(self.logs, self.db_chapter_progress)
 
-
-		#if row.event == "mChoice" or row.event == "fillb":
-		#if row.event == "page":
 			
 
 
