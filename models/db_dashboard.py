@@ -1,3 +1,4 @@
+from collections import OrderedDict
 
 db.define_table('dash_problem_answers',
   Field('timestamp','datetime'),
@@ -138,35 +139,66 @@ class UserActivity(object):
 		return self
 
 class ProgressMetrics(object):
-	def __init__(self, course_id, users):
-		self.sections = []
+	def __init__(self, course_id, sub_chapters, users):
+		self.sub_chapters = OrderedDict()
+		for sub_chapter in sub_chapters:
+			print sub_chapter
+			self.sub_chapters[sub_chapter.sub_chapter_label] = SubChapterActivity(sub_chapter, len(users))
 
 	def update_metrics(self, logs, chapter_progress):
 		for row in chapter_progress:
-			return self
+			self.sub_chapters[row.user_sub_chapter_progress.sub_chapter_id].add_activity(row)
+
+class SubChapterActivity(object):
+	def __init__(self, sub_chapter, total_users):
+		self.chapter_label = sub_chapter.sub_chapter_label
+		self.not_started = 0
+		self.started = 0
+		self.completed = 0
+		self.total_users = total_users
+
+	def add_activity(self, row):
+		if row.user_sub_chapter_progress.status == -1:
+			self.not_started += 1
+		if row.user_sub_chapter_progress.status == 0:
+			self.started += 1
+		if row.user_sub_chapter_progress.status == 1:
+			self.completed += 1
+
+	def get_started_percent(self):
+		return "{0}%".format(float(self.started) / self.total_users * 100)
+
+	def get_not_started_percent(self):
+		return "{0}%".format(float(self.not_started) / self.total_users * 100)
+
+	def get_completed_percent(self):
+		return "{0}%".format(float(self.completed) / self.total_users * 100)
 
 
 class DashboardDataAnalyzer(object):
 	def __init__(self, course_id):
 		self.course_id = course_id
 
-	def load_chapter_metrics(self, chapter_id):
+	def load_chapter_metrics(self, chapter):
+		self.db_chapter = chapter
 		#go get all the course data... in the future the post processing
 		#should probably be stored and only new data appended.
 		self.course = db(db.courses.id == self.course_id).select().first()
 		self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
 		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
 		self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
-			(db.auth_user.course_id == auth.user.course_id)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
-		#print self.db_chapter_progress
+			(db.auth_user.course_id == auth.user.course_id) &
+			(db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
+
+		self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
 		#self.divs = db(db.div_ids).select(db.div_ids.div_id)
 		#print self.divs
 		self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
 		self.problem_metrics.update_metrics(self.logs)
 		self.user_activity = UserActivityMetrics(self.course_id, self.users)
 		self.user_activity.update_metrics(self.logs)
-		self.chapter_progress = ProgressMetrics(self.course_id, self.users)
-		self.chapter_progress.update_metrics(self.logs, self.db_chapter_progress)
+		self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)
+		self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
 
 			
 

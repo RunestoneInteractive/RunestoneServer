@@ -19,59 +19,21 @@ from paver.easy import sh
 
 @auth.requires_login()
 def index():
-    sections = [
-        {
-            "id": "5",
-            "text": "Assign a Name to a String",
-            "readPercent": '75%',
-            "startedPercent": '20%',
-            "unreadPercent": '5%',
-        },        {
-            "id": "6",
-            "text": "Strings are Objects",
-            "readPercent": '60%',
-            "startedPercent": '30%',
-            "unreadPercent": '10%',
-        },        {
-            "id": "7",
-            "text": "Strings are Immutable",
-            "readPercent": '25%',
-            "startedPercent": '40%',
-            "unreadPercent": '35%',
-        },        {
-            "id": "8",
-            "text": "Making a MadLib Story",
-            "readPercent": '15%',
-            "startedPercent": '10%',
-            "unreadPercent": '75%',
-        },        {
-            "id": "8",
-            "text": "Chapter 4 - Summary",
-            "readPercent": '45%',
-            "startedPercent": '10%',
-            "unreadPercent": '45%',
-        },        {
-            "id": "8",
-            "text": "Chapter 4 Exercises",
-            "readPercent": '5%',
-            "startedPercent": '10%',
-            "unreadPercent": '85%',
-        }
-    ]
-
-    chapters = db(db.chapters.course_id == auth.user.course_name).select()
     selected_chapter = None
+    questions = []
+    sections = []
+    
+    chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
         selected_chapter = chapters.first()
 
-    print selected_chapter
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_chapter_metrics(selected_chapter)
     problem_metrics = data_analyzer.problem_metrics
+    progress_metrics = data_analyzer.progress_metrics
 
-    questions = []
     for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
@@ -85,7 +47,15 @@ def index():
             "attemptedBy": stats[1] + stats[2] + stats[3]
             })
 
-    #logging.warning(res)
+    for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
+        sections.append({
+            "id": metric.chapter_label,
+            "text": metric.chapter_label,
+            "readPercent": metric.get_completed_percent(),
+            "startedPercent": metric.get_started_percent(),
+            "unreadPercent": metric.get_not_started_percent()
+            })
+
     return dict(course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter)
 
 @auth.requires_login()
