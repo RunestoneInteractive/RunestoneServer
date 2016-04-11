@@ -20,6 +20,7 @@
 				<div class="chapter">
 					<div class="clickable {{=chapter['status']}}">
 						{{=chapter["label"]}}
+						<div class="collapse-icon"></div>
 					</div>
 					<div class="chapter-detail dhide">
 						{{ for subchapter in chapter["subchapters"]: }}
@@ -30,8 +31,9 @@
 				</div>
 				{{ pass }}
 				<script>
-				$(".chapter").click(function(){
-					$(this).children(".chapter-detail").toggleClass("dhide");
+				$(".chapter .clickable").click(function(){
+					$(this).toggleClass("expanded")
+					$(this).parent().children(".chapter-detail").toggleClass("dhide");
 				});
 				</script>
 			</div>

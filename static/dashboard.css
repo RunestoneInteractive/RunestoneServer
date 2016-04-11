@@ -72,21 +72,45 @@
     text-align: right;
 }
 #dashboard #book-completion .completed{
-    color:#009900; font-weight: bold;
+    color:#009900;
 }
 #dashboard #book-completion .started{
-    color:#998800; font-weight: bold;
+    color:#998800;
 }
 #dashboard #book-completion .notstarted{
-    color:#333333; font-weight: bold;
+    color:#333333;
 }
 #dashboard .clickable {
     cursor: pointer;
+    font-weight: bold;
+}
+#dashboard .clickable:hover {
+    cursor: pointer;
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+#dashboard .clickable .collapse-icon {
+    background-image: url('images/collapse.png');
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+    float: right;
+}
+#dashboard .clickable.expanded {
+    background
+}
+#dashboard .completed {
+    background-image: url('images/completed.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+#dashboard .chapter {
 }
 #dashboard .chapter-detail {
     border-left: 1px solid #e5e5e5;
     margin-left: 0.5em;
     margin-bottom: 1em;
+    font-weight: normal;
 }
 #dashboard .chapter-detail div{
     margin-left: 0.5em;

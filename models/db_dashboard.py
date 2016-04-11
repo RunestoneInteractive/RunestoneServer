@@ -304,7 +304,10 @@ class DashboardDataAnalyzer(object):
 		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
 		self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
 		self.problem_metrics.update_metrics(self.logs)
-		
+
+# This whole object is a workaround because these strings
+# are not generated and stored in the db. This needs automating
+# to support all books.	
 class IdConverter(object):
 	problem_id_map = {
 		"3_2_1_Mult_fill":"3-2-1: What will be printed when you click on the Run button in the code below?",
@@ -313,6 +316,33 @@ class IdConverter(object):
 	}
 
 	sub_chapter_id_map = {
+		#CSP - Ch1
+		"studentBook": "This Book is for Stuents",
+		"pretest": "Pretest",
+		"computeNumbers": "Compute with Numbers",
+		"computeWords": "Compute with Words",
+		"computeTurtles": "Compute with Turtles",
+		"computeImages": "Compute with Images",
+		"standards": "Standards - Big Ideas",
+		"ch1_summary": "Chapter 1 - Concept Summary",
+		#CSP - Ch2
+		"whatIsComputer": "What is a Computer?",
+		"turingMachines": "Turing Machines",
+		"abilities": "Computer Abilities",
+		"ch2_summary": "Chapter 2 - Concept Summary",
+		"exam1a2": "Exam Questions for Chapters 1 and 2",
+		#CSP - Ch3
+		"assignName": "Assigning a Name",
+		"expression": "Expressions",
+		"expressionTable": "Summary of Expression Types",
+		"orderOfOperations": "How Expressions are Evaluated",
+		"driving": "Driving from Chicago to Dallas",
+		"ketchup": "Following the Ketchup Ooze",
+		"walkAssign": "Walking through Assignment more Generally",
+		"invoice": "Figuring out an Invoice",
+		"ch3_summary": "Chapter 3 - Summary",
+		"ch3_exercises": "Chapter 3 Exercises",
+		#CSP - Ch4
 		"assignNameStr":"Assign a Name to a String",
 		"strObjects":"Strings are Objects",
 		"immutable":"Strings are Immutable",
