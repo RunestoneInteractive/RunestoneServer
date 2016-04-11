@@ -22,7 +22,7 @@ def index():
     selected_chapter = None
     questions = []
     sections = []
-    
+
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
         selected_chapter = chapter
@@ -39,7 +39,7 @@ def index():
 
         questions.append({
             "id": problem_id,
-            "text": problem_id,
+            "text": metric.problem_text,
             "correct": stats[2],
             "correct_mult_attempt": stats[3],
             "incomplete": stats[1],
@@ -49,8 +49,8 @@ def index():
 
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
-            "id": metric.chapter_label,
-            "text": metric.chapter_label,
+            "id": metric.sub_chapter_label,
+            "text": metric.sub_chapter_text,
             "readPercent": metric.get_completed_percent(),
             "startedPercent": metric.get_started_percent(),
             "unreadPercent": metric.get_not_started_percent()
@@ -60,25 +60,20 @@ def index():
 
 @auth.requires_login()
 def studentreport():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    course = db(db.courses.id == auth.user.course_id).select().first()
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer.load_user_metrics(request.get_vars["id"])
 
-    chapters = [{
-        "text":"Chapter 1: What is this book about?",
-        "sections":[{
-            "text"
-        }]
-    }]
-    return dict(course_name=auth.user.course_name,student_name=auth.user.first_name + " " + auth.user.last_name, chapters=chapters)
+    chapters = []
+    for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
+        chapters.append({
+            "label": chapter.chapter_label,
+            "status": chapter.status_text(),
+            "subchapters": chapter.get_sub_chapter_progress()
+            })
+    activity = data_analyzer.formatted_activity.activities
+    return dict(course_name=auth.user.course_name,user=data_analyzer.user, chapters=chapters, activity=activity)
 
 def studentprogress():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    course = db(db.courses.id == auth.user.course_id).select().first()
-
-
-
-
-
     return dict(course_name=auth.user.course_name)
 
 def grades():
@@ -89,6 +84,7 @@ def grades():
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer.load_exercise_metrics(request.get_vars["id"])
     problem_metrics = data_analyzer.problem_metrics
 
     prob_id = request.get_vars["id"]
@@ -102,7 +98,8 @@ def exercisemetrics():
         responses = user_responses.responses[:4]
         responses += [''] * (4 - len(responses))
         answers.append({
-            "student":username,
+            "user":user_responses.user,
+            "username": user_responses.username,
             "answers":responses
             })
 
@@ -112,4 +109,4 @@ def exercisemetrics():
             "frequency": count
             })
 
-    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=prob_id)
+    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)

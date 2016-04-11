@@ -6,7 +6,7 @@
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
+	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
 	{{include 'dashboard/dashboard-nav.html'}}
 	<h3>{{=exercise_label}}</h3>
 	<div>
@@ -94,7 +94,7 @@
 					</thead>
 					{{ for answer in answers: }}
 					<tr>
-						<td><a href="{{=URL('studentreport')}}?id=1">{{=answer["student"]}}</a></td>
+						<td><a href="{{=URL('studentreport')}}?id={{=answer['username']}}">{{=answer["user"]}}</a></td>
 						<td>{{=answer["answers"][0]}}</td>
 						<td>{{=answer["answers"][1]}}</td>
 						<td>{{=answer["answers"][2]}}</td>

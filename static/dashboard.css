@@ -41,6 +41,59 @@
 #dashboard .nodec tr {
     border: none;
 }
+#dashboard .question-metric {
+    position: relative;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+}
+#dashboard .question-metric:nth-child(even) {
+    background-color: #f3f3f3;
+}
+#dashboard .question-metric:last-child {
+    border-bottom: 1px solid #e5e5e5;
+}
+#dashboard .question-metric .donut-chart {
+    width: 100px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+#dashboard .question-metric .question-info {
+    margin-left: 105px;
+    height: 110px;
+    padding: 10px;
+    position: relative;
+}
+#dashboard .question-info .detail-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+}
+#dashboard #book-completion .completed{
+    color:#009900; font-weight: bold;
+}
+#dashboard #book-completion .started{
+    color:#998800; font-weight: bold;
+}
+#dashboard #book-completion .notstarted{
+    color:#333333; font-weight: bold;
+}
+#dashboard .clickable {
+    cursor: pointer;
+}
+#dashboard .chapter-detail {
+    border-left: 1px solid #e5e5e5;
+    margin-left: 0.5em;
+    margin-bottom: 1em;
+}
+#dashboard .chapter-detail div{
+    margin-left: 0.5em;
+}
+#dashboard .dhide {
+    display: none;
+}
 .dash-nav {
     background-color: #e5e5e5;
     margin-bottom: 1em;

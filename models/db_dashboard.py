@@ -28,18 +28,22 @@ class ProblemMetrics(object):
     def __init__(self, course_id, problem_id, users):
         self.course_id = course_id
         self.problem_id = problem_id
+        self.problem_text = IdConverter.problem_id_to_text(problem_id)
         #total responses by answer choice, eg. A: 5, B: 3, C: 13
         self.aggregate_responses = {}
         #responses keyed by user
         self.user_responses = {}
 
         for user in users:
-        	self.user_responses[user.username] = UserResponse()
+        	self.user_responses[user.username] = UserResponse(user)
 
     def add_data_point(self, row):
     	answer = row.act.split(':')
     	choice = answer[1]
     	correct = answer[2] == "correct"
+    	if choice == "":
+			choice = "(empty)"
+
     	self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
     	
     	if row.sid in self.user_responses:
@@ -71,15 +75,18 @@ class ProblemMetrics(object):
     			attempts = "5+"
     		histogram[attempts] = histogram.get(attempts,0) + 1
     	return histogram
+
 class UserResponse(object):
 	NOT_ATTEMPTED = 0
 	INCOMPLETE = 1
 	CORRECT = 2
 	CORRECT_AFTER_MULTIPLE_ATTEMPTS = 3
 
-	def __init__(self):
+	def __init__(self, user):
 		self.status = UserResponse.NOT_ATTEMPTED
 		self.correct = False
+		self.username = user.username
+		self.user = '{0} {1}'.format(user.first_name, user.last_name)
 		self.responses = []
 
 	def add_response(self, response, correct):
@@ -138,6 +145,57 @@ class UserActivity(object):
 	def get_activity_stats(self):
 		return self
 
+class UserActivityChapterProgress(object):
+	def __init__(self, chapters, sub_chapter_progress):
+		self.chapters = OrderedDict()
+		for chapter in chapters:
+			self.chapters[chapter.chapter_label] = UserActivitySubChapterProgress(chapter)
+		for sub_chapter in sub_chapter_progress:
+			self.chapters[sub_chapter.chapter_id].add_progress(sub_chapter)
+
+class UserActivitySubChapterProgress(object):
+	def __init__(self, chapter):
+		self.chapter_label = chapter.chapter_name
+		self.sub_chapters = OrderedDict()
+		self.highest_status = -1
+		self.lowest_status = 1
+
+	def add_progress(self, progress):
+		self.sub_chapters[progress.sub_chapter_id] = progress.status
+		if self.lowest_status > progress.status:
+			self.lowest_status = progress.status
+		if self.highest_status < progress.status:
+			self.highest_status = progress.status
+
+	def get_sub_chapter_progress(self):
+		subchapters = []
+		for subchapter_label, status in self.sub_chapters.iteritems():
+			subchapters.append({
+				"label": IdConverter.sub_chapter_label_to_text(subchapter_label),
+				"status": UserActivitySubChapterProgress.completion_status_to_text(status)
+				})
+		return subchapters
+
+	def status_text(self):
+		status = None
+		if self.highest_status == -1:
+			status = -1
+		elif self.lowest_status == 1:
+			status = 1
+		else:
+			status = 0
+		return UserActivitySubChapterProgress.completion_status_to_text(status)
+
+	@staticmethod
+	def completion_status_to_text(status):
+		if status == 1:
+			return "completed"
+		elif status == 0:
+			return "started"
+		elif status == -1:
+			return "notstarted"
+		return status
+
 class ProgressMetrics(object):
 	def __init__(self, course_id, sub_chapters, users):
 		self.sub_chapters = OrderedDict()
@@ -151,7 +209,8 @@ class ProgressMetrics(object):
 
 class SubChapterActivity(object):
 	def __init__(self, sub_chapter, total_users):
-		self.chapter_label = sub_chapter.sub_chapter_label
+		self.sub_chapter_label = sub_chapter.sub_chapter_label
+		self.sub_chapter_text = IdConverter.sub_chapter_label_to_text(sub_chapter.sub_chapter_label)
 		self.not_started = 0
 		self.started = 0
 		self.completed = 0
@@ -173,7 +232,33 @@ class SubChapterActivity(object):
 
 	def get_completed_percent(self):
 		return "{0}%".format(float(self.completed) / self.total_users * 100)
+class UserLogCategorizer(object):
+	def __init__(self, logs):
+		self.activities = []
+		for log in logs:
+			self.activities.append({
+				"time": log.timestamp,
+				"event": UserLogCategorizer.format_event(log.event, log.act, log.div_id)
+				})
 
+	@staticmethod
+	def format_event(event, action, div_id):
+		if len(div_id) > 25:
+			short_div_id = "...{0}".format(div_id[-25:])
+		if (event == 'page') & (action == 'view'):
+			return "{0} {1}".format("Viewed", short_div_id)
+		elif (event == 'activecode') & (action == 'run'):
+			return "{0} {1}".format("Ran Activecode", div_id)
+		elif (event == 'parsons') & (action == 'yes'):
+			return "{0} {1}".format("Solved Parsons", div_id)
+		elif (event == 'parsons') & (action != 'yes'):
+			return "{0} {1}".format("Attempted Parsons", div_id)
+		elif (event == 'mChoice') | (event == 'fillb'):
+			answer = action.split(':')
+			if answer[2] == 'correct':
+				return "{0} {1}".format("Solved", div_id)
+			return "{0} {1}".format("Attempted", div_id)
+		return "{0} {1}".format(event, div_id)
 
 class DashboardDataAnalyzer(object):
 	def __init__(self, course_id):
@@ -188,7 +273,7 @@ class DashboardDataAnalyzer(object):
 		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
 		self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
 			(db.auth_user.course_id == auth.user.course_id) &
-			(db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
+			(db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
 
 		self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
 		#self.divs = db(db.div_ids).select(db.div_ids.div_id)
@@ -200,6 +285,49 @@ class DashboardDataAnalyzer(object):
 		self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)
 		self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
 
-			
+	def load_user_metrics(self, username):
+		self.username = username
+		self.course = db(db.courses.id == self.course_id).select().first()
+		self.chapters = db(db.chapters.course_id == auth.user.course_name).select()
+		self.user = db((db.auth_user.username == username) & (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
+		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.sid == username) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
+		self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == self.user.id)).select(db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
+		print self.db_chapter_progress
+		print self.logs
+		print self.user
+		self.formatted_activity = UserLogCategorizer(self.logs)
+		self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)
+	
+	def load_exercise_metrics(self, exercise):
+		self.course = db(db.courses.id == self.course_id).select().first()
+		self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
+		self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
+		self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
+		self.problem_metrics.update_metrics(self.logs)
+		
+class IdConverter(object):
+	problem_id_map = {
+		"3_2_1_Mult_fill":"3-2-1: What will be printed when you click on the Run button in the code below?",
+		"3_2_2_Div_fill":"3-2-2: What will be printed when you click on the Run button in the code below?",
+		"3_2_3_Mod_fill":"3-2-3: What will be printed when you click on the Run button in the code below?"
+	}
 
+	sub_chapter_id_map = {
+		"assignNameStr":"Assign a Name to a String",
+		"strObjects":"Strings are Objects",
+		"immutable":"Strings are Immutable",
+		"madlib":"Making a MadLib Story",
+		"ch4_summary":"Chapter 4 - Summary",
+		"ch4_exercises":"Chapter 4 Exercises",
+		"exam3a4":"Exam Questions for Chapters 3 and 4"
+
+	}
+	@staticmethod
+	def problem_id_to_text(problem_id):
+		return IdConverter.problem_id_map.get(problem_id, problem_id)
+			
+	@staticmethod
+	def sub_chapter_label_to_text(sub_chapter_label):
+		return IdConverter.sub_chapter_id_map.get(sub_chapter_label, sub_chapter_label)
+		
 

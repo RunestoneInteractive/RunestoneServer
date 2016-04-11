@@ -6,47 +6,34 @@
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
+	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
 	{{include 'dashboard/dashboard-nav.html'}}
-	<h2>Student Report - {{=student_name}}</h2>
+	<h2>Student Report - {{=user.first_name}} {{=user.last_name}}</h2>
 	<div class="col-md-7">
 		
-		<div class="dash-section">
+		<div class="dash-section" id="book-completion">
 			<div class="dash-section-header">
 				Book Completion
 			</div>
 			<div class="dash-section-content">
 				{{ for chapter in chapters: }}
-
-				{{ pass }}
-				<div style="color:#009900; font-weight: bold;">Chapter 1: What is this Book About?</div>
-				<div style="color:#009900; font-weight: bold;">Chapter 2: What can Computers Do?</div>
-				<div style="color:#009900; font-weight: bold;">Chapter 3: Names for Numbers</div>
-				<div style="color:#998800; font-weight: bold;">Chapter 4: Names for Strings</div>
-				<div style="color:#009900;margin-left:1em;">Assign a Name to a String
-				<div style="margin-left:1em;color:#000000;">
-					Exercises Attempted: 5 of 5<br/>Exercises Completed: 3 of 5</div>
+				<div class="chapter">
+					<div class="clickable {{=chapter['status']}}">
+						{{=chapter["label"]}}
+					</div>
+					<div class="chapter-detail dhide">
+						{{ for subchapter in chapter["subchapters"]: }}
+						<div class="{{=subchapter['status']}}">{{=subchapter["label"]}}
+						</div>
+						{{ pass }}
+					</div>
 				</div>
-				<div style="color:#009900;margin-left:1em;">Strings are Objects</div>
-				<div style="color:#998800;margin-left:1em;">Strings are Immutable</div>
-				<div style="color:#999999;margin-left:1em;">Making a MadLib Story</div>
-				<div style="color:#009900;margin-left:1em;">Chapter 4 - Summary</div>
-				<div style="color:#999999;margin-left:1em;">Chapter 4 Exercises</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 5: Names for Turtles</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 6: Computers can Name Anything</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 7: Computers can Repeat Steps</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 8: While and For Loops</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 9: Repeating Steps with Strings</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 10: Repeating Steps with Turtles</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 11: Repeating Steps with Images</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 12: A Computer can Make Decisions</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 13: Using Decisions with Strings</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 14: Using Decisions with Turtles</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 15: Using Decisions with Images</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 16: Working with Collections</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 17: Getting pieces out of strings and lists</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 18: Working with Data on the Web</div>
-				<div style="color:#999999; font-weight: bold;">Chapter 19: Computer Abilities Summary</div>
+				{{ pass }}
+				<script>
+				$(".chapter").click(function(){
+					$(this).children(".chapter-detail").toggleClass("dhide");
+				});
+				</script>
 			</div>
 		</div>
 		<div class="dash-section">
@@ -118,9 +105,10 @@
 				Profile
 			</div>
 			<div class="dash-section-content">
-				<div>Email: m.moldavan@gmail.com</div>
-				<div><a href="">Reset Password &raquo;</a></div>
-				<div style="float:right;"><a href="">Email Student &raquo;</a></div>
+				<div>Username: {{=user.username}}</div>
+				<div>Email: {{=user.email}}</div>
+				<!--<div><a href="">Reset Password &raquo;</a></div>-->
+				<!--<div style="float:right;"><a href="email:">Email Student &raquo;</a></div>-->
 			</div>
 		</div>
 		<div class="dash-section">
@@ -128,128 +116,13 @@
 				Recent Activity
 			</div>
 			<div class="dash-section-content">
-				<table width="90%" class="nodec">
-					<thead>
-						<tr>
-							<td colspan="2">Today</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Completed Reading Ch.4.2</td>
-							<td>11 minutes ago</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-4-2-1</td>
-							<td>13 minutes ago</td>
-						</tr>
-						<tr>
-							<td>Attempted CSP-4-2-1</td>
-							<td>14 minutes ago</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.4.1</td>
-							<td>17 minutes ago</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.4.1</td>
-							<td>17 minutes ago</td>
-						</tr>
-					</tbody>
-					<thead>
-						<tr>
-							<td colspan="2">Yesterday</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Solved CSP-4-1-3</td>
-							<td>1:20 pm</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-4-1-2</td>
-							<td>1:18 pm</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-4-1-1</td>
-							<td>1:18 pm</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.8</td>
-							<td>1:10 pm</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.7</td>
-							<td>1:02 pm</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-7-5</td>
-							<td>12:58 pm</td>
-						</tr>
-					</tbody>
-					<thead>
-						<tr>
-							<td colspan="2">Past Two Weeks</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Solved CSP-3-7-4</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-7-3</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-7-2</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.6</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.5</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-7-5</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.4</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-4-3</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-4-2</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Attempted CSP-3-4-2</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Attempted CSP-3-4-2</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Solved CSP-3-4-1</td>
-							<td>2/2/2016</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.3</td>
-							<td>2/1/2016</td>
-						</tr>
-						<tr>
-							<td>Completed Reading Ch.3.2</td>
-							<td>2/1/2016</td>
-						</tr>
-					</tbody>
+				<table class="nodec">
+					{{for row in activity:}}
+					<tr>
+						<td>{{=row["event"]}}</td>
+						<td>{{=row["time"]}}</td>
+					</tr>
+					{{pass}}
 				</table>
 			</div>
 		</div>

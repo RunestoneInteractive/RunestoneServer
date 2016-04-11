@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
+	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
 	{{include 'dashboard/dashboard-nav.html'}}
 	<h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
 	<div style="float: right"><b>Select Chapter</b>
@@ -79,15 +79,18 @@
 					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Never attempted 
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
-					
+				<div id="question-metrics">
 				{{ for question in questions:}}
-				<div id="chart-question-{{=question['id']}}" style="width: 100px; float: left;"></div>
-				<div style="margin-left: 105px; height: 110px;">
-					<b>{{=question["text"]}}</b>
-					<p>Attempted by {{=question["attemptedBy"]}} students</p>
-					<div style="float: right; width: 100px; text-align: right;"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">More Details &raquo;</a></div>
+				<div class="question-metric">
+					<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
+					<div class="question-info">
+						<b>{{=question["text"]}}</b>
+						<p>Attempted by {{=question["attemptedBy"]}} students</p>
+						<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
+					</div>
 				</div>
 				{{pass}}
+			</div>
 				<script type="text/javascript">
 					{{ for question in questions:}}
 					DashboardCharts.donutChart([{
@@ -120,7 +123,8 @@
 					  <option value="missed" selected>Alphabetical</option>
 					  <option value="saab">Corect Attempts</option>
 					  <option value="fiat">Missed Attmpts</option>
-					  <option value="fiat">Sections Read</option>
+					  <option value="fiat">Sections Completed</option>
+					  <option value="fiat">Page Views</option>
 					  <option value="audi">Total Activity</option>
 					</select>
 					<select name="activity-timespan">
@@ -131,7 +135,10 @@
 					</select>
 				</div>
 				<div style="float: left; margin-right: 1em;">
-					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #009DD9; float: left; margin-top: 3px; margin-right: 3px"></div> Sections Read
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #009DD9; float: left; margin-top: 3px; margin-right: 3px"></div> Sections Completed
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #009DD9; float: left; margin-top: 3px; margin-right: 3px"></div> Page Views
 				</div>
 				<div style="float: left; margin-right: 1em;">
 					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #00CC66; float: left; margin-top: 3px; margin-right: 3px"></div> Correct Exercise Attempts
