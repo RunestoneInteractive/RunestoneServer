@@ -16,7 +16,7 @@
 #dashboard table {
     border: 1px solid #333;
     border-collapse: collapse;
-    margin: 1em;
+    margin: 0.5em;
 }
 #dashboard thead {
     background-color: #e6e6e6;
@@ -143,16 +143,16 @@
     margin: 1em 0;
 }
 .dash-bar {
-    height: 10px;
+    height: 11px;
     text-align: right;
-    font-size: 8px;
+    font-size: 9px;
     color: #ffffff;
     float: left;
 }
 .dash-bar-container {
     width: 100%;
-    height: 12px;
-    border: 1px solid #333;
+    height: 13px;
+    border: 1px solid #777;
     background-color: #e5e5e5;
 }
 .dash-bar-correct {

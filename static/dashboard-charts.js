@@ -14,7 +14,7 @@ function DashboardCharts(){
             bottom: 24
         },
         width = 400 - margins.left - margins.right,
-            height = (15 * 24) - margins.top - margins.bottom,
+            height = (10 * 24) - margins.top - margins.bottom,
             
             dataset = [{
                 data: [{
@@ -47,21 +47,6 @@ function DashboardCharts(){
                 }, {
                     student: 'Gina Kidder',
                     count: 7
-                }, {
-                    student: 'Hannah Nguyen',
-                    count: 3
-                }, {
-                    student: 'Eric Glazebrook',
-                    count: 11
-                }, {
-                    student: 'Tommy Ruz',
-                    count: 8
-                }, {
-                    student: 'Brittany Jones',
-                    count: 3
-                }, {
-                    student: 'Mary Salter',
-                    count: 4
                 }],
                 name: 'Sections Read'
             }, {
@@ -103,21 +88,6 @@ function DashboardCharts(){
                 }, {
                     student: 'Gina Kidder',
                     count: 7
-                }, {
-                    student: 'Hannah Nguyen',
-                    count: 8
-                }, {
-                    student: 'Eric Glazebrook',
-                    count: 14
-                }, {
-                    student: 'Tommy Ruz',
-                    count: 16
-                }, {
-                    student: 'Brittany Jones',
-                    count: 2
-                }, {
-                    student: 'Mary Salter',
-                    count: 2
                 }],
                 name: 'Exercises Correct'
             }, {
@@ -151,21 +121,6 @@ function DashboardCharts(){
                 }, {
                     student: 'Gina Kidder',
                     count: 8
-                }, {
-                    student: 'Hannah Nguyen',
-                    count: 9
-                }, {
-                    student: 'Eric Glazebrook',
-                    count: 4
-                }, {
-                    student: 'Tommy Ruz',
-                    count: 2
-                }, {
-                    student: 'Brittany Jones',
-                    count: 0
-                }, {
-                    student: 'Mary Salter',
-                    count: 1
                 }],
                 name: 'Exercises Missed'
             }
@@ -219,12 +174,8 @@ function DashboardCharts(){
             yScale = d3.scale.ordinal()
                 .domain(students)
                 .rangeRoundBands([0, height], .1),
-            xAxis = d3.svg.axis()
-                .scale(xScale)
-                .orient('bottom'),
-            yAxis = d3.svg.axis()
-                .scale(yScale)
-                .orient('left'),
+            xAxis = d3.svg.axis().scale(xScale).orient('bottom'),
+            yAxis = d3.svg.axis().scale(yScale).orient('left'),
             colors = ['#009DD9','#00CC66','#CCCC33'],//d3.scale.category10(),
             groups = svg.selectAll('g')
                 .data(dataset)
@@ -266,12 +217,16 @@ function DashboardCharts(){
                 .on('mouseout', function () {
                 d3.select('#dash-chart-tooltip').attr('hidden', true);
             })
-
             /*svg.append('g')
                 .attr('class', 'axis')
                 .attr('transform', 'translate(0,' + height + ')')
                 .call(xAxis);*/
-
+d3.selectAll("text")
+    .filter(function(d){ return typeof(d) == "string"; })
+    .style("cursor", "pointer")
+    .on("click", function(d){
+        document.location.href = "http://www.example.com/" + d;
+    });
         svg.append('g')
             .attr('class', 'axis')
             .call(yAxis);

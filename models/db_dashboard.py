@@ -225,13 +225,13 @@ class SubChapterActivity(object):
 			self.completed += 1
 
 	def get_started_percent(self):
-		return "{0}%".format(float(self.started) / self.total_users * 100)
+		return "{0:.2f}%".format(float(self.started) / self.total_users * 100)
 
 	def get_not_started_percent(self):
-		return "{0}%".format(float(self.not_started) / self.total_users * 100)
+		return "{0:.2f}%".format(float(self.not_started) / self.total_users * 100)
 
 	def get_completed_percent(self):
-		return "{0}%".format(float(self.completed) / self.total_users * 100)
+		return "{0:.2f}%".format(float(self.completed) / self.total_users * 100)
 class UserLogCategorizer(object):
 	def __init__(self, logs):
 		self.activities = []
@@ -247,6 +247,12 @@ class UserLogCategorizer(object):
 			short_div_id = "...{0}".format(div_id[-25:])
 		if (event == 'page') & (action == 'view'):
 			return "{0} {1}".format("Viewed", short_div_id)
+		elif (event == 'timedExam') & (action =='start'):
+			return "{0} {1}".format("Started Timed Exam", div_id)
+		elif (event == 'timedExam') & (action =='finish'):
+			return "{0} {1}".format("Finished Timed Exam", div_id)
+		elif (event == 'highlight'):
+			return "{0} {1}".format("Highlighted", short_div_id)
 		elif (event == 'activecode') & (action == 'run'):
 			return "{0} {1}".format("Ran Activecode", div_id)
 		elif (event == 'parsons') & (action == 'yes'):
@@ -310,9 +316,22 @@ class DashboardDataAnalyzer(object):
 # to support all books.	
 class IdConverter(object):
 	problem_id_map = {
+		"pre_1":"Pretest-1: What will be the values in x, y, and z after the following lines of code execute?",
+		"pre_2":"Pretest-2: What is the output from the program below?",
+		"1_3_1_BMI_Q1":"1-3-1: Imagine that you are 5 foot 7 inches and weighed 140 pounds. What is your BMI?",
+		"1_4_1_String_Methods_Q1":"1-4-1: What would the following code print?",
+		"1_5_1_Turtle_Q1":"1-5-1: Which direction will alex move when the code below executes?",
+		"":"1-5-2: ",
+		"1_6_1_Image_Q1":"1-6-1: Which way does y increase on an image?",
+
 		"3_2_1_Mult_fill":"3-2-1: What will be printed when you click on the Run button in the code below?",
 		"3_2_2_Div_fill":"3-2-2: What will be printed when you click on the Run button in the code below?",
-		"3_2_3_Mod_fill":"3-2-3: What will be printed when you click on the Run button in the code below?"
+		"3_2_3_Mod_fill":"3-2-3: What will be printed when you click on the Run button in the code below?",
+		"4_1_2_noSpace":"4-1-2: What will be printed when the following executes?",
+		"4_2_2_Slice2":"4-2-2: What will be printed when the following executes?",
+
+		"4_3_1_s1":"4-3-1: Given the following code segment, what is the value of the string s1 after these are executed?",
+		"4_3_2_s2":"4-3-2: What is the value of s1 after the following code executes?",
 	}
 
 	sub_chapter_id_map = {
@@ -349,7 +368,17 @@ class IdConverter(object):
 		"madlib":"Making a MadLib Story",
 		"ch4_summary":"Chapter 4 - Summary",
 		"ch4_exercises":"Chapter 4 Exercises",
-		"exam3a4":"Exam Questions for Chapters 3 and 4"
+		"exam3a4":"Exam Questions for Chapters 3 and 4",
+		#CSP - Ch5
+		"names4turtles": "Assign a Name to a Turtle",
+		"FuncAndProc": "Procedures and Functions",
+		"turtleFAP": "More Turtle Procedures and Functions",
+		"multTurtles": "Single and Multiple Turtles",
+		"ch5_summary": "Chapter 5 - Summary",
+		"ch5_exercises": "Chapter 5 Exercises",
+		"house": "Bob Builds a House",
+		"changeProg": "Changing Turtle Programs"
+#CSP - Ch6
 
 	}
 	@staticmethod

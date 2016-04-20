@@ -3,6 +3,7 @@ import os
 import pygal
 import logging
 from datetime import date, timedelta
+from operator import itemgetter
 from paver.easy import sh
 
 
@@ -46,7 +47,7 @@ def index():
             "not_attempted": stats[0],
             "attemptedBy": stats[1] + stats[2] + stats[3]
             })
-
+    questions = sorted(questions, key=itemgetter("correct"), reverse=True)
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
             "id": metric.sub_chapter_label,
