@@ -1,25 +1,25 @@
 from collections import OrderedDict
 
-db.define_table('dash_problem_answers',
-  Field('timestamp','datetime'),
-  Field('sid','string'),
-  Field('event','string'),
-  Field('act','string'),
-  Field('div_id','string'),
-  Field('course_id','string'),
-  migrate='runestone_useinfo.table'
-)
+#db.define_table('dash_problem_answers',
+#  Field('timestamp','datetime'),
+#  Field('sid','string'),
+#  Field('event','string'),
+#  Field('act','string'),
+#  Field('div_id','string'),
+#  Field('course_id','string'),
+#  migrate='runestone_useinfo.table'
+#)
 
 
-db.define_table('dash_problem_user_metrics',
-  Field('timestamp','datetime'),
-  Field('sid','string'),
-  Field('event','string'),
-  Field('act','string'),
-  Field('div_id','string'),
-  Field('course_id','string'),
-  migrate='runestone_useinfo.table'
-)
+#db.define_table('dash_problem_user_metrics',
+#  Field('timestamp','datetime'),
+#  Field('sid','string'),
+#  Field('event','string'),
+#  Field('act','string'),
+#  Field('div_id','string'),
+#  Field('course_id','string'),
+#  migrate='runestone_useinfo.table'
+#)
 
 # it would be good at some point to save these to a table and
 # periodicly update them with new log entries instead of having
@@ -124,7 +124,7 @@ class UserActivityMetrics(object):
 		self.course_id = course_id
 		self.user_activities = {}
 		for user in users:
-			self.user_activities[user.username] = UserActivity()
+			self.user_activities[user.username] = UserActivity(user)
 
 	def update_metrics(self, logs):
 		for row in logs:
@@ -132,15 +132,17 @@ class UserActivityMetrics(object):
 				self.user_activities[row.sid].add_activity(row)
 
 class UserActivity(object):
-	def __init__(self):
+	def __init__(self, user):
+		self.name = "{0} {1}".format(user.first_name,user.last_name)
 		self.rows = []
 		self.page_views = []
+		self.exercise_correct
 
 	def add_activity(self, row):
 		self.rows.append(row)
 
 	def get_page_views(self):
-		return self
+		return len(self.rows)
 
 	def get_activity_stats(self):
 		return self
