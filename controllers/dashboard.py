@@ -57,7 +57,25 @@ def index():
             "unreadPercent": metric.get_not_started_percent()
             })
 
-    return dict(course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter)
+    read_data = []
+    user_activity = data_analyzer.user_activity
+    for user, activity in user_activity.user_activities.iteritems():
+        read_data.append({
+            "student":activity.name,
+            "count":activity.get_page_views()
+            })
+
+    studentactivity = [{
+    "data":read_data,
+    "name":"Sections Read"
+    },{
+    "data":read_data,
+    "name":"Exercises Correct"
+    },{
+    "data":read_data,
+    "name":"Exercises Missed"
+    }]
+    return dict(course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
 
 @auth.requires_login()
 def studentreport():

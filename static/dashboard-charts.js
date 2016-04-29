@@ -6,7 +6,7 @@ function DashboardCharts(){
         donutChart: donutChart
     }
 
-    function studentActivity() {
+    function studentActivity(data) {
         var margins = {
             top: 12,
             left: 100,
@@ -126,16 +126,17 @@ function DashboardCharts(){
             }
 
             ],
+            dataset = data,
             series = dataset.map(function (d) {
-                return d.name;
+                return d['name'];
             }),
             dataset = dataset.map(function (d) {
                 return d.data.map(function (o, i) {
                     // Structure it so that your numeric
                     // axis (the stacked amount) is y
                     return {
-                        y: o.count,
-                        x: o.student
+                        y: o['count'],
+                        x: o['student']
                     };
                 });
             }),
@@ -221,15 +222,16 @@ function DashboardCharts(){
                 .attr('class', 'axis')
                 .attr('transform', 'translate(0,' + height + ')')
                 .call(xAxis);*/
-d3.selectAll("text")
-    .filter(function(d){ return typeof(d) == "string"; })
-    .style("cursor", "pointer")
-    .on("click", function(d){
-        document.location.href = "http://www.example.com/" + d;
-    });
         svg.append('g')
             .attr('class', 'axis')
             .call(yAxis);
+        svg.selectAll("text")
+    .filter(function(d){ return typeof(d) == "string"; })
+    .style("cursor", "pointer")
+    .style("text-decoration","underline")
+    .on("click", function(d){
+        document.location.href = "studentreport?id=" + d;
+    });
     }
 
     function exerciseAttempts(data) {
