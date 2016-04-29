@@ -1,0 +1,158 @@
+{{extend 'layout.html'}}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
+<script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+<div id="dashboard">
+	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
+	{{include 'dashboard/dashboard-nav.html'}}
+	<h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
+	<div style="float: right"><b>Select Chapter</b>
+					<select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
+					  {{for chapter in chapters:}}
+					  {{if chapter['chapter_label'] == selected_chapter['chapter_label']: }}
+					  	<option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  {{else:}}
+					  	<option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  {{pass}}
+					  {{pass}}
+					</select>
+				</div>
+	<div class="col-md-7" style="">
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Overall Progression
+			</div>
+			<div class="dash-section-content">
+				<div><b>Percent of students who have...</b></div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #00CC66; float: left; margin-top: 3px; margin-right: 3px"></div> Completed Section
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCC33; float: left; margin-top: 3px; margin-right: 3px"></div> Started Section
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Not Started 
+				</div>
+				<div style="clear:both; margin-bottom: 1em;"></div>
+				{{ for section in sections: }}
+				<div style="height: 30px;">
+					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;">{{=section["text"]}}</div>
+					<div style="" class="dash-bar-container">
+						<div class="dash-bar dash-bar-correct" style="width: {{=section['readPercent']}};"> {{=section["readPercent"]}}&nbsp;</div>
+						<div class="dash-bar dash-bar-attempts" style=" width: {{=section['startedPercent']}};"> {{=section["startedPercent"]}}&nbsp;</div>
+						<div class="dash-bar dash-bar-unread" style="width: {{=section['unreadPercent']}};"> {{=section["unreadPercent"]}}&nbsp;</div>
+					</div>
+				</div>
+				{{ pass }}
+				<!--<div style="text-align:right;">
+					<a href="studentprogress">View Individual Student Progression &raquo;</a>
+				</div>-->
+
+			</div>
+		</div>
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Exercise Analytics
+			</div>
+			<div class="dash-section-content">
+				<div style="text-align: right"><b>Sort by</b>
+					<select name="exercise-sortby">
+					  <option value="missed">Missed Attempts</option>
+					  <option value="saab" selected>Corect Attempts</option>
+					  <option value="fiat">Average Attmpts</option>
+					  <option value="audi">Book Order</option>
+					</select>
+				</div>
+				<div><b>Students who were...</b></div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #00CC66; float: left; margin-top: 3px; margin-right: 3px"></div> Correct after first attempt
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCC33; float: left; margin-top: 3px; margin-right: 3px"></div> Correct after multiple attempts
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CC3300; float: left; margin-top: 3px; margin-right: 3px"></div> Never correct 
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Never attempted 
+				</div>
+				<div style="clear:both; margin-bottom: 1em;"></div>
+				<div id="question-metrics">
+				{{ for question in questions:}}
+				<div class="question-metric">
+					<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
+					<div class="question-info">
+						<b>{{=question["text"]}}</b>
+						<p>Attempted by {{=question["attemptedBy"]}} students</p>
+						<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
+					</div>
+				</div>
+				{{pass}}
+			</div>
+				<script type="text/javascript">
+					{{ for question in questions:}}
+					DashboardCharts.donutChart([{
+						type: 'never',
+						count: {{=question["not_attempted"]}}
+					},{
+						type: 'missed',
+						count: {{=question["incomplete"]}}
+					},{
+						type: 'attempted',
+						count: {{=question["correct_mult_attempt"]}}
+					},{
+						type: 'correct',
+						count: {{=question["correct"]}}
+					}],"#chart-question-{{=question['id']}}")
+					{{ pass }}
+				</script>
+				<div id="chart-overall-activity"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Recent Activity
+			</div>
+			<div class="dash-section-content">
+				<div style="text-align: right"><b>Sort by</b>
+					<select name="activity-sortby">
+					  <option value="missed" selected>Alphabetical</option>
+					  <option value="saab">Corect Attempts</option>
+					  <option value="fiat">Missed Attmpts</option>
+					  <option value="fiat">Sections Completed</option>
+					  <option value="fiat">Page Views</option>
+					  <option value="audi">Total Activity</option>
+					</select>
+					<select name="activity-timespan">
+					  <option value="saab">Today</option>
+					  <option value="fiat">3-Day Total</option>
+					  <option value="fiat" selected>7-Day Total</option>
+					  <option value="audi">14-Day Total</option>
+					</select>
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #009DD9; float: left; margin-top: 3px; margin-right: 3px"></div> Sections Completed
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #00CC66; float: left; margin-top: 3px; margin-right: 3px"></div> Correct Exercise Attempts
+				</div>
+				<div style="float: left; margin-right: 1em;">
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCC33; float: left; margin-top: 3px; margin-right: 3px"></div> Missed Exercise Attempts
+				</div>
+				<div id="studentchart" style="position:relative; clear:both;">
+					<div id="dash-chart-tooltip">
+				    	<p><span id="value">100</span>
+				    	</p>
+					</div>
+				</div>
+				<script type="text/javascript">
+					DashboardCharts.studentActivity();
+				</script>
+			</div>
+		</div>
+	</div>
+</div>
