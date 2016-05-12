@@ -880,7 +880,7 @@ def getAssessResults():
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = rows[0][5] + "::" + str(rows[0][1])
+        res = {'answer': rows[0][5], 'timestamp': str(rows[0][1]), 'correct': rows[0][6]}
         return json.dumps(res)
     elif event == "dragNdrop":
         query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
