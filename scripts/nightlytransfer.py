@@ -8,42 +8,30 @@ localengine = create_engine('postgresql://millbr02@localhost/runestoneanalysis')
 remoteengine = create_engine('postgresql://bnmnetp_courselib:{}@web407.webfaction.com/bnmnetp_courselib'.format(rspw))
 
 meta = MetaData()
-remoteuseinfo = Table('useinfo', meta, autoload=True, autoload_with=remoteengine)
-localuseinfo = Table('useinfo', meta, autoload=True, autoload_with=localengine)
-
-remoteacel = Table('acerror_log', meta, autoload=True, autoload_with=remoteengine)
-localacel = Table('acerror_log', meta, autoload=True, autoload_with=localengine)
-
-print(localuseinfo.columns.keys())
-
-# create a configured "Session" class
-Session = sessionmaker(bind=localengine)
-# create a Session
-session = Session()
-last = session.query(func.max(localuseinfo.c.id)).first()[0]
-print(last)
-
-#print(localengine.execute("select max(id) from useinfo")).first()
-
-s = select([remoteuseinfo]).where((remoteuseinfo.c.id > last))
-result = remoteengine.execute(s)
-
-for row in result:
-    newrow = {}
-    for column in localuseinfo.columns.keys():
-        newrow[column] = row[column]
-    s = localuseinfo.insert().values(**newrow)
-    localengine.execute(s)
 
 
-last = localengine.execute("select max(id) from acerror_log").first()[0]
-print(last)
-s = select([remoteacel]).where((remoteacel.c.id > last))
-result = remoteengine.execute(s)
+def mirror_table(fromeng, toeng, tablename):
+    print("Mirroring {}".format(tablename))
+    from_tbl = Table(tablename, meta, autoload=True, autoload_with=fromeng)
+    to_tbl = Table(tablename, meta, autoload=True, autoload_with=toeng)
 
-for row in result:
-    newrow = {}
-    for column in localacel.columns.keys():
-        newrow[column] = row[column]
-    s = localacel.insert().values(**newrow)
-    localengine.execute(s)
+    last = toeng.execute("select max(id) from {}".format(tablename)).first()[0]
+
+    s = select([from_tbl]).where((from_tbl.c.id > last))
+    result = fromeng.execute(s)
+
+    ct = 0
+    for row in result:
+        newrow = {}
+        for column in to_tbl.columns.keys():
+            newrow[column] = row[column]
+        s = to_tbl.insert().values(**newrow)
+        toeng.execute(s)
+        ct += 1
+
+    print("Inserted {} new rows into {}".format(ct,tablename))
+
+
+for tbl in ['useinfo','acerror_log','courses','div_ids', 'code', 'timed_exam']:
+    mirror_table(remoteengine, localengine, tbl)
+
