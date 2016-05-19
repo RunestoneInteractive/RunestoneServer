@@ -148,6 +148,7 @@ db.define_table('parsons_answers',
     Field('sid','string'),
     Field('course_name','string'),
     Field('answer','string'),
+    Field('trash','string'),
     Field('correct','boolean'),
     migrate='runestone_parsons_answers.table'
     )
