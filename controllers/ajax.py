@@ -870,44 +870,44 @@ def getAssessResults():
 
     # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
-        query = "select * from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, timestamp, correct from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""   # server doesn't have it so we load from local storage instead
-        res = {'answer': rows[0][5], 'timestamp': str(rows[0][1]), 'correct': rows[0][6]}
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
         return json.dumps(res)
     elif event == "mChoice":
-        query = "select * from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, timestamp, correct from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][5], 'timestamp': str(rows[0][1]), 'correct': rows[0][6]}
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
         return json.dumps(res)
     elif event == "dragNdrop":
-        query = "select * from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, timestamp, correct, minHeight from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][5], 'timestamp': str(rows[0][1]), 'correct': rows[0][6], 'minHeight': str(rows[0][7])}
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2], 'minHeight': str(rows[0][3])}
         return json.dumps(res)
     elif event == "clickableArea":
-        query = "select * from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, timestamp, correct from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][5], 'timestamp': str(rows[0][1]), 'correct': rows[0][6]}
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
         return json.dumps(res)
     elif event == "timedExam":
-        query = "select * from timed_exam where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select correct, incorrect, skipped, time_taken, timestamp from timed_exam where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'correct': rows[0][5], 'incorrect': rows[0][6], 'skipped': str(rows[0][7]), 'timeTaken': str(rows[0][8]), 'timestamp': str(rows[0][1])}
+        res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
         return json.dumps(res)
     elif event == "parsons":
-        query = "select * from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, trash, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][5], 'trash': rows[0][7], 'timestamp': str(rows[0][1])}
+        res = {'answer': rows[0][0], 'trash': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)
