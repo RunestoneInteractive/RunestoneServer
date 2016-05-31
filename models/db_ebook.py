@@ -113,3 +113,42 @@ db.define_table('mchoice_answers',
     Field('correct','boolean'),
     migrate='runestone_mchoice_answers.table'
     )
+
+db.define_table('fitb_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('correct','boolean'),
+    migrate='runestone_fitb_answers.table'
+    )
+db.define_table('dragndrop_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('correct','boolean'),
+    Field('minHeight','string'),
+    migrate='runestone_dragndrop_answers.table'
+    )
+db.define_table('clickablearea_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('correct','boolean'),
+    migrate='runestone_clickablearea_answers.table'
+    )
+db.define_table('parsons_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('trash','string'),
+    Field('correct','boolean'),
+    migrate='runestone_parsons_answers.table'
+    )
