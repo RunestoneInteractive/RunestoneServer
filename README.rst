@@ -29,14 +29,30 @@ Installation
 
 First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
 
-There are a couple of prerequisites you need to satisfy before you can build and use this
-eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
+1. Install lots of other dependencies
 
-You can simply install all dependencies by running the following command in main runestone directory:
+On a vanilla Ubuntu (16.04) installation you will need to do at least the following:
 
 ::
 
-    # pip install -r requirements.txt
+    sudo apt-get install python-pip
+    sudo apt-get install libfreetype6-dev
+    sudo apt-get install postgresql-common
+    sudo apt-get install libpq-dev
+    sudo apt-get install libxml2-dev libxslt1-dev
+    
+On an OS X installation I recommend you first install homebrew (http://brew.sh)  then use the brew command to install:
+
+::
+
+    brew install postgresql
+    brew install libpng
+    brew install freetype
+    
+
+There are a couple of prerequisites you need to satisfy before you can build and use this
+eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
+
 
 Note, development works well with a Python ``virtualenv``  If  you don't have root privileges on your computer I strongly recommend you install ``virtualenv`` and install all of the dependencies there.
 
@@ -56,6 +72,13 @@ After you download it, extract the zip file to some folder on your hard drive. (
 3. Get familiar with the Runestone Components, which were installed with pip. The come from https://github.com/RunestoneInteractive/RunestoneComponents and there are good quick start instructions there.
 
 4. Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.  When you make the clone you should clone it into runestone rather than the default RunestoneComponents.  All the web2py stuff is configured assuming that the application will be called runestone.
+
+You can simply install all dependencies by running the following command in main runestone directory:
+
+::
+
+    # pip install -r requirements.txt
+
 
 5. Clone the book that you want to use, **into the web2py/applications/runestone/books** directory. You can see some of the available books at https://github.com/RunestoneInteractive Again, if you might contribute back to the book, please fork the book repository first and then do a local clone onto your machine.
 
