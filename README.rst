@@ -37,7 +37,7 @@ On a vanilla Ubuntu (16.04) installation you will need to do at least the follow
 
     sudo apt-get install python-pip
     sudo apt-get install libfreetype6-dev
-    sudo apt-get install postgresql-common
+    sudo apt-get install postgresql-common postgresql postgresql-contrib
     sudo apt-get install libpq-dev
     sudo apt-get install libxml2-dev libxslt1-dev
     
@@ -87,6 +87,33 @@ You can simply install all dependencies by running the following command in main
 * Install postgreSQL (or you can try mySQL, but there may be some issues with field lengths with that.)
 
 * Create a database
+
+::
+
+    $ sudo -i -u postgres
+    $ postgres@ubuntu:~$ createuser --interactive
+    Enter name of role to add: <yournamehere>
+    Shall the new role be a superuser? (y/n) y
+
+    $ createdb --owner=<yournamehere> runestone
+    
+    $ exit
+    
+    psql runestone
+    psql (9.5.3)
+    Type "help" for help.
+
+    runestone=# \q
+    $
+
+If you did not give youself a password then you will need to edit `/etc/postgresql/9.5/main/pg_hba.conf`  In that file find the line that looks like this
+
+::
+
+    host    all             all             127.0.0.1/32            md5
+    
+change the md5 to trust and you will be good to go without password protection.  (NOT recommended for production)
+
 
 * Figure out your database connection string. It will be something like ``postgres://username:passwd@localhost/dbname''
 
