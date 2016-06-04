@@ -1,5 +1,5 @@
 Runestone Interactive Server and API
-
+====================================
 
 .. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
  :target: https://waffle.io/RunestoneInteractive/RunestoneServer
