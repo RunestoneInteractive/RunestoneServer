@@ -124,21 +124,16 @@ change the md5 to trust and you will be good to go without password protection. 
     * on windows, you will also need to edit models/0.py
         * remove the line ``from os import uname``
         * remove the section beginning ``if 'local' in uname()[1] or 'Darwin' in uname()[0]:``
-    * You may also need to put the connection string somewhere else, TBD
-    * You will need a customization to runestone/modules/chapternames.py
-        * (Note: hopefully, this will be fixed in the future so that it automatically reads from models/1.py)
-        * In chapternames.py, where it sets dburl = a connection string, put your connection string there.
-
+    * set and export environment variables for DBHOST, DBUSER, DBPASS and DBNAME
 
 * Edit /applications/runestone/books/<yourbook>/pavement.py
     * set the master_url variable for your server, if not localhost
 
-# Run web2py once, so that it will create all the tables
+7. Run web2py once, so that it will create all the tables
     * cd web2py/
     * python web2py.py
 
-# Build the book.
-
+8. Build the book.
 
 * cd web2py/applications/runestone/books/<your book>
 
@@ -152,9 +147,24 @@ change the md5 to trust and you will be good to go without password protection. 
         * cd runestone/books/<your book name>
         * mv build/<your book name> ../static/
 
-* Create an account for yourself
+Create an account for yourself
+------------------------------
+
+There are two methods you can use here. If the book you built above is thinkcspy or pythonds then there is an easy method.  If you built some other custom book then its a bit more work.
+
+The Easy Way
+````````````
+
     * restart web2py if it's not running
-    * go to runestone/appadmin
+    * go to localhost:8000/runestone
+    * click on the register button
+    
+ The Harder Way
+ ``````````````
+ 
+    * restart web2py if it's not running
+    * go to  localhost:8000/runestone/appadmin
+    
     * create a course for the book
         * insert new courses
         * course_id can be blank
@@ -162,11 +172,13 @@ change the md5 to trust and you will be good to go without password protection. 
         * date is in format 2015-08-29
         * institution doesn't matter
         * base course should be same as course name
+    
     * create an account for yourself
         * insert new auth_user
         * cohort id should be "id"
         * Course name should be the course name from above (not a number)
         * Do *not* make up a registration key or a reset password key; leave them blank
+    
     * make yourself the instructor for the course
         * insert new course_instructor
         * Course is the *number* for the course (probably 5 if you just inserted one additional course)
