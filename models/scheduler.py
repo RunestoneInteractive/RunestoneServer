@@ -7,6 +7,7 @@ import re
 from paver.easy import sh
 import logging
 from pkg_resources import resource_string, resource_filename
+from runestone.server.chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
 
 
 ################
@@ -100,8 +101,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     #
     # Build the completion database
     #
-    sys.path.insert(0,path.join(folder,'modules'))
-    from chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
+
     scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', idxname))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
