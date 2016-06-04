@@ -2,8 +2,8 @@ Runestone Interactive Server and API
 ====================================
 
 .. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
- :target: https://waffle.io/RunestoneInteractive/RunestoneServer
- :alt: 'Stories in Ready'
+   :target: https://waffle.io/RunestoneInteractive/RunestoneServer
+   :alt: 'Stories in Ready'
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
@@ -40,7 +40,7 @@ On a vanilla Ubuntu (16.04) installation you will need to do at least the follow
     sudo apt-get install postgresql-common postgresql postgresql-contrib
     sudo apt-get install libpq-dev
     sudo apt-get install libxml2-dev libxslt1-dev
-    
+
 On an OS X installation I recommend you first install homebrew (http://brew.sh)  then use the brew command to install:
 
 ::
@@ -48,7 +48,7 @@ On an OS X installation I recommend you first install homebrew (http://brew.sh) 
     brew install postgresql
     brew install libpng
     brew install freetype
-    
+
 
 There are a couple of prerequisites you need to satisfy before you can build and use this
 eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
@@ -96,9 +96,9 @@ You can simply install all dependencies by running the following command in main
     Shall the new role be a superuser? (y/n) y
 
     $ createdb --owner=<yournamehere> runestone
-    
+
     $ exit
-    
+
     psql runestone
     psql (9.5.3)
     Type "help" for help.
@@ -111,11 +111,11 @@ If you did not give youself a password then you will need to edit `/etc/postgres
 ::
 
     host    all             all             127.0.0.1/32            md5
-    
+
 change the md5 to trust and you will be good to go without password protection.  (NOT recommended for production)
 
 
-* Figure out your database connection string. It will be something like ``postgres://username:passwd@localhost/dbname''
+* Figure out your database connection string. It will be something like ``postgres://username:passwd@localhost/dbname``
 
 * Tell web2py to use that database
     * Create a file applications/runestone/models/1.py, with the following line: ``settings.database_uri = <your_connection_string>``
@@ -155,31 +155,32 @@ There are two methods you can use here. If the book you built above is thinkcspy
 The Easy Way
 ````````````
 
-    * restart web2py if it's not running
-    * go to localhost:8000/runestone
-    * click on the register button
-    
- The Harder Way
- ``````````````
- 
-    * restart web2py if it's not running
-    * go to  localhost:8000/runestone/appadmin
-    
-    * create a course for the book
-        * insert new courses
-        * course_id can be blank
-        * course name should be your book name, the directory name inside books/ (no spaces)
+* restart web2py if it's not running
+* go to localhost:8000/runestone
+* click on the register button
+
+The Harder Way
+``````````````
+
+* restart web2py if it's not running
+* go to  localhost:8000/runestone/appadmin
+
+* create a course for the book
+
+  * insert new courses
+  * course_id can be blank
+  * course name should be your book name, the directory name inside books/ (no spaces)
         * date is in format 2015-08-29
         * institution doesn't matter
         * base course should be same as course name
-    
-    * create an account for yourself
+
+* create an account for yourself
         * insert new auth_user
         * cohort id should be "id"
         * Course name should be the course name from above (not a number)
         * Do *not* make up a registration key or a reset password key; leave them blank
-    
-    * make yourself the instructor for the course
+
+make yourself the instructor for the course
         * insert new course_instructor
         * Course is the *number* for the course (probably 5 if you just inserted one additional course)
 
@@ -189,7 +190,7 @@ Documentation
 -------------
 
 Documentation for the project is on our official `documentation site <http://docs.runestoneinteractive.org>`_  This includes
-the list of dependencies you need to install in order to build the books included in the repository, or to set up 
+the list of dependencies you need to install in order to build the books included in the repository, or to set up
 a complete server environment.
 
 The Runestone Tools are not only good for authoring the textbooks contained in this site, but can also be used for:
@@ -282,4 +283,3 @@ As I mentioned up front, I'm not a windows user, But, others have figured out ho
    Now you can add a test for windows, and set your database settings accordingly.
 
 2.  In the pavement.py file we use cp to copy some files into place.  I *think* the equivalent on Windows is copy or copy.exe.
-
