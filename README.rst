@@ -50,6 +50,12 @@ On an OS X installation I recommend you first install homebrew (http://brew.sh) 
     brew install freetype
 
 
+When you install **postgresql** make sure you follow the instructions at the end of
+the install for getting the server started.  On a mac you can ignore the additional configuration
+instructions for postgres given below. For a recent homebrew just do ``brew services start postgresql``
+to start the postgres database server.  Your user will already be configured as an administrative
+user.
+
 There are a couple of prerequisites you need to satisfy before you can build and use this
 eBook. The easiest/recommended way is to use `pip <http://www.pip-installer.org/en/latest/>`_.
 
@@ -71,12 +77,14 @@ After you download it, extract the zip file to some folder on your hard drive. (
 
 3. Get familiar with the Runestone Components, which were installed with pip. The come from https://github.com/RunestoneInteractive/RunestoneComponents and there are good quick start instructions there.
 
-4. Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.  When you make the clone you should clone it into runestone rather than the default RunestoneComponents.  All the web2py stuff is configured assuming that the application will be called runestone.
+4. Clone this repository **into the web2py/applications directory**. If you might be contributing to the project, please fork this repository first and then do a local clone onto your machine, in the web2py/applications. You will contribute back to the project by making pull requests from your fork to this one.  When you make the clone you should clone it into ``runestone`` rather than the default RunestoneComponents.  All the web2py stuff is configured assuming that the application will be called runestone.
 
 You can simply install all dependencies by running the following command in main runestone directory:
 
 ::
 
+    # cd /path/to/web2py/applications
+    # git clone https://github.com/RunestoneInteractive/RunestoneServer runestone
     # pip install -r requirements.txt
 
 
@@ -84,9 +92,11 @@ You can simply install all dependencies by running the following command in main
 
 6. Set up your local database
 
-* Install postgreSQL (or you can try mySQL, but there may be some issues with field lengths with that.)
+* Configure Postgresql (or you can try mySQL, but there may be some issues with field lengths with that.)
 
 * Create a database
+
+  * for Ubuntu you will need to do the following first
 
 ::
 
@@ -94,6 +104,10 @@ You can simply install all dependencies by running the following command in main
     $ postgres@ubuntu:~$ createuser --interactive
     Enter name of role to add: <yournamehere>
     Shall the new role be a superuser? (y/n) y
+
+  * On both mac and Ubuntu you can now do the following:
+
+::
 
     $ createdb --owner=<yournamehere> runestone
 
@@ -106,7 +120,7 @@ You can simply install all dependencies by running the following command in main
     runestone=# \q
     $
 
-If you did not give youself a password then you will need to edit `/etc/postgresql/9.5/main/pg_hba.conf`  In that file find the line that looks like this
+If you did not give yourself a password then, on Ubuntu, you will need to edit `/etc/postgresql/9.5/main/pg_hba.conf`  In that file find the line that looks like this
 
 ::
 
