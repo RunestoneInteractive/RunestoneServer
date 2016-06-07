@@ -203,7 +203,7 @@ make yourself the instructor for the course
 Documentation
 -------------
 
-Documentation for the project is on our official `documentation site <http://docs.runestoneinteractive.org>`_  This includes
+Documentation for the project is on our official `documentation site <http://runestoneinteractive.org/build/html/index.html>`_  This includes
 the list of dependencies you need to install in order to build the books included in the repository, or to set up
 a complete server environment.
 
