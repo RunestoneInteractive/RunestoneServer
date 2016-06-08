@@ -245,6 +245,10 @@ request.janrain_form = janrain_form # save the form so that it can be added to t
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+db.define_table('user_courses',
+        Field('user_id','string'), #will match to the auto generated user id
+        Field('course_id','string'),
+        migrate = 'runestone_user_courses.table')
 
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
