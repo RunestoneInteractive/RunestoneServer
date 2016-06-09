@@ -25,32 +25,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../controllers/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3834">
-              <caret line="213" column="87" selection-start-line="213" selection-start-column="87" selection-end-line="213" selection-end-column="87" />
+            <state relative-caret-position="749">
+              <caret line="156" column="92" selection-start-line="156" selection-start-column="92" selection-end-line="156" selection-end-column="92" />
               <folding>
                 <element signature="e#53#64#0" expanded="true" />
-                <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
-                <marker date="1465483558457" expanded="true" signature="2755:2766" ph="SELECT missi... " />
-                <marker date="1465483558457" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
-                <marker date="1465483558457" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
-                <marker date="1465483558457" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
-                <marker date="1465483558457" expanded="true" signature="5925:5936" ph="SELECT missi... " />
-                <marker date="1465483558457" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
-                <marker date="1465483558457" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+                <marker date="1465495743010" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
+                <marker date="1465495743010" expanded="true" signature="2755:2766" ph="SELECT missi... " />
+                <marker date="1465495743010" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
+                <marker date="1465495743010" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
+                <marker date="1465495743010" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
+                <marker date="1465495743010" expanded="true" signature="5925:5936" ph="SELECT missi... " />
+                <marker date="1465495743010" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
+                <marker date="1465495743010" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="designer.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -58,8 +48,23 @@
       <file leaf-file-name="courses.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../views/default/courses.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
+            <state relative-caret-position="270">
+              <caret line="15" column="86" selection-start-line="15" selection-start-column="62" selection-end-line="15" selection-end-column="86" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#form#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#form#2;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="remove.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../views/default/remove.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -72,8 +77,8 @@
       <file leaf-file-name="user.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../views/default/user.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
+            <state relative-caret-position="18">
+              <caret line="133" column="33" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -97,8 +102,9 @@
         <option value="$PROJECT_DIR$/../static/css/custom.css" />
         <option value="$PROJECT_DIR$/../static/css/dd.css" />
         <option value="$PROJECT_DIR$/../views/default/courseremove.html" />
-        <option value="$PROJECT_DIR$/../controllers/default.py" />
         <option value="$PROJECT_DIR$/../views/default/courses.html" />
+        <option value="$PROJECT_DIR$/../views/default/remove.html" />
+        <option value="$PROJECT_DIR$/../controllers/default.py" />
       </list>
     </option>
   </component>
@@ -140,14 +146,7 @@
     </navigator>
     <panes>
       <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
+        <subPane />
       </pane>
       <pane id="Scope" />
       <pane id="Scratches" />
@@ -413,6 +412,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7f009d65-71ba-42c9-918b-a3f67cebb922" name="Default" comment="" />
@@ -425,16 +427,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="51" y="27" width="1629" height="1023" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.123495884" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12539582" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.330076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.330076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -446,6 +448,34 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.330076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12539582" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -461,14 +491,40 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#53#64#0" expanded="true" />
-            <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="2755:2766" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
-            <marker date="1465483558457" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="5925:5936" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+            <marker date="1465495743010" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="2755:2766" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
+            <marker date="1465495743010" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="5925:5936" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../views/default/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2394">
+          <caret line="133" column="33" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../controllers/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#53#64#0" expanded="true" />
+            <marker date="1465495743010" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="2755:2766" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
+            <marker date="1465495743010" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="5925:5936" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
           </folding>
         </state>
       </provider>
@@ -477,7 +533,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2250">
           <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -485,12 +540,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6714">
           <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <marker date="1464979915736" expanded="true" signature="2661:2802" ph="select date(... " />
-            <marker date="1464979915736" expanded="true" signature="20658:20840" ph="select chapt... chapters" />
-            <marker date="1464979915736" expanded="true" signature="21099:21578" ph="select usern... user_sub_chapter_progress" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -502,6 +551,7 @@
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#form#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#2;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -518,7 +568,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2394">
           <caret line="133" column="73" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="73" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -526,7 +575,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1638">
           <caret line="91" column="23" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -626,23 +674,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="169">
           <caret line="65" column="42" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../views/default/courseremove.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="18" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../views/default/courseremove.html" />
     <entry file="file://$PROJECT_DIR$/../views/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="122" column="37" selection-start-line="122" selection-start-column="37" selection-end-line="122" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -650,40 +689,40 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="451">
           <caret line="88" column="1" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/default.py">
+    <entry file="file://$PROJECT_DIR$/../controllers/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3834">
-          <caret line="213" column="87" selection-start-line="213" selection-start-column="87" selection-end-line="213" selection-end-column="87" />
-          <folding>
-            <element signature="e#53#64#0" expanded="true" />
-            <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="2755:2766" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
-            <marker date="1465483558457" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="5925:5936" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
-          </folding>
+        <state relative-caret-position="-36">
+          <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../views/default/user.html">
+    <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-          <folding />
+        <state relative-caret-position="18">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../views/default/courses.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
+        <state relative-caret-position="270">
+          <caret line="15" column="86" selection-start-line="15" selection-start-column="62" selection-end-line="15" selection-end-column="86" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#2;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../views/default/remove.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -692,24 +731,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/admin.py">
+    <entry file="file://$PROJECT_DIR$/../views/default/user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-36">
-          <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <marker date="1464979915736" expanded="true" signature="2661:2802" ph="select date(... " />
-            <marker date="1464979915736" expanded="true" signature="20658:20840" ph="select chapt... chapters" />
-            <marker date="1464979915736" expanded="true" signature="21099:21578" ph="select usern... user_sub_chapter_progress" />
-          </folding>
+        <state relative-caret-position="18">
+          <caret line="133" column="33" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
+    <entry file="file://$PROJECT_DIR$/../controllers/default.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="749">
+          <caret line="156" column="92" selection-start-line="156" selection-start-column="92" selection-end-line="156" selection-end-column="92" />
+          <folding>
+            <element signature="e#53#64#0" expanded="true" />
+            <marker date="1465495743010" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="2755:2766" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
+            <marker date="1465495743010" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
+            <marker date="1465495743010" expanded="true" signature="5925:5936" ph="SELECT missi... " />
+            <marker date="1465495743010" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465495743010" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+          </folding>
         </state>
       </provider>
     </entry>

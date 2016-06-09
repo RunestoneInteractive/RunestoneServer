@@ -147,6 +147,14 @@ def index():
         except:
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
+
+        #check number of classes, if more than 1, send to course selection, if only 1, send to book
+        courseCheck = db(db.user_courses.user_id == auth.user.id).select()
+        numCourses = 0
+        for row in courseCheck:
+            numCourses += 1
+        if numCourses == 1:
+            redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
         redirect('/%s/default/courses' % request.application)
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
@@ -221,6 +229,17 @@ def courses():
 
 
 @auth.requires_login()
+def remove():
+    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    classlist = []
+    for row in res:
+        classes = db(db.courses.id == row.course_id).select()
+        for part in classes:
+            classlist.append(part.course_name)
+    return dict(courses=classlist)
+
+
+@auth.requires_login()
 def coursechooser():
     res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
 
@@ -229,3 +248,17 @@ def coursechooser():
 
 
     redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+
+@auth.requires_login()
+def removecourse():
+    courseIdQuery = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+
+    # Check if they're about to remove their currently active course
+    authQuery = db(db.auth_user.id == auth.user.id).select()
+    for row in authQuery:
+        if row.course_name == request.args[0]:
+            session.flash = T("Sorry, you cannot remove your current active course.")
+        else:
+            db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == courseIdQuery[0].id)).delete()
+
+    redirect('/%s/default/courses' % request.application)
