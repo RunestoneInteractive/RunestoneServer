@@ -82,7 +82,8 @@
 .homeboxclass td  {color:#ff0000;}
 
 
-       
-
-
-
+.course-btn{
+	font-size: 16pt;
+	width: 25%;
+	background-color: #909090;
+}

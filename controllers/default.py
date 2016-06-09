@@ -62,8 +62,12 @@ def user():
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
-            inDB = db(db.user_courses.user_id == auth.user.id and db.user_courses.course_id == auth.user.course_id).select()
-            if inDB == None:
+            #problem is that
+            inDB = db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == auth.user.course_id)).select()
+            DBcheck = []
+            for row in inDB:
+                DBcheck.append(row)
+            if DBcheck == []:
                 db.executesql('''
                     INSERT INTO user_courses(user_id, course_id)
                     SELECT %s, %s
@@ -116,6 +120,15 @@ def index():
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
+        inDB = db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == auth.user.course_id)).select()
+        DBcheck = []
+        for row in inDB:
+            DBcheck.append(row)
+        if DBcheck == []:
+            db.executesql('''
+                    INSERT INTO user_courses(user_id, course_id)
+                    SELECT %s, %s
+                    ''' % (auth.user.id, auth.user.course_id))
         try:
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
             if db(db.user.sub_chapter_progress.user_id == auth.user.id).count() == 0:
@@ -134,7 +147,7 @@ def index():
         except:
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
-        redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
+        redirect('/%s/default/courses' % request.application)
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
 
@@ -147,7 +160,7 @@ def about():
 def ack():
     return dict()
 
-    
+
 @auth.requires_login()
 def bio():
     existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
@@ -191,3 +204,28 @@ def bios():
               'user_biography.programming_experience' : 'Text 5'}
     bios = SQLFORM.grid(q, fields=fields, headers = headers)
     return dict(bios=bios)
+
+
+@auth.requires_login()
+def courses():
+    #query courses db to get course names
+    #send course names to be rendered in page
+
+    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    classlist = []
+    for row in res:
+        classes = db(db.courses.id == row.course_id).select()
+        for part in classes:
+            classlist.append(part.course_name)
+    return dict(courses=classlist)
+
+
+@auth.requires_login()
+def coursechooser():
+    res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+
+    db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
+    db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
+
+
+    redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
