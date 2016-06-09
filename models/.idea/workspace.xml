@@ -25,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="default.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../controllers/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+            <state relative-caret-position="3834">
+              <caret line="213" column="87" selection-start-line="213" selection-start-column="87" selection-end-line="213" selection-end-column="87" />
               <folding>
                 <element signature="e#53#64#0" expanded="true" />
                 <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
@@ -45,27 +45,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="designer.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="designer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="18">
               <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../controllers/admin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-                <marker date="1464979915736" expanded="true" signature="2661:2802" ph="select date(... " />
-                <marker date="1464979915736" expanded="true" signature="20658:20840" ph="select chapt... chapters" />
-                <marker date="1464979915736" expanded="true" signature="21099:21578" ph="select usern... user_sub_chapter_progress" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -89,26 +74,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="523">
               <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="layout.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../views/layout.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="133" column="73" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dd.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../static/css/dd.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="88" column="1" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -180,40 +145,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="models" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="default" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -503,7 +434,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.330076" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -699,31 +630,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <marker date="1464979915736" expanded="true" signature="2661:2802" ph="select date(... " />
-            <marker date="1464979915736" expanded="true" signature="20658:20840" ph="select chapt... chapters" />
-            <marker date="1464979915736" expanded="true" signature="21099:21578" ph="select usern... user_sub_chapter_progress" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../views/default/courseremove.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="18" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../views/layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="122" column="37" selection-start-line="122" selection-start-column="37" selection-end-line="122" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../static/css/dd.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="88" column="1" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../controllers/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3834">
+          <caret line="213" column="87" selection-start-line="213" selection-start-column="87" selection-end-line="213" selection-end-column="87" />
+          <folding>
+            <element signature="e#53#64#0" expanded="true" />
+            <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
+            <marker date="1465483558457" expanded="true" signature="2755:2766" ph="SELECT missi... " />
+            <marker date="1465483558457" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465483558457" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
+            <marker date="1465483558457" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
+            <marker date="1465483558457" expanded="true" signature="5925:5936" ph="SELECT missi... " />
+            <marker date="1465483558457" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
+            <marker date="1465483558457" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../views/default/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="523">
+          <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -740,45 +692,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../views/default/user.html">
+    <entry file="file://$PROJECT_DIR$/../controllers/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../views/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="133" column="73" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../static/css/dd.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="88" column="1" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../controllers/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+        <state relative-caret-position="-36">
+          <caret line="377" column="46" selection-start-line="377" selection-start-column="40" selection-end-line="377" selection-end-column="46" />
           <folding>
-            <element signature="e#53#64#0" expanded="true" />
-            <marker date="1465483558457" expanded="true" signature="2690:2766" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="2755:2766" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="3236:3535" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="3341:3535" ph="SELECT missi... chapters" />
-            <marker date="1465483558457" expanded="true" signature="5860:5936" ph="INSERT INTO user_courses... " />
-            <marker date="1465483558457" expanded="true" signature="5925:5936" ph="SELECT missi... " />
-            <marker date="1465483558457" expanded="true" signature="6449:6748" ph="INSERT INTO user_sub_chapter_progress... " />
-            <marker date="1465483558457" expanded="true" signature="6554:6748" ph="SELECT missi... chapters" />
+            <element signature="e#0#19#0" expanded="true" />
+            <marker date="1464979915736" expanded="true" signature="2661:2802" ph="select date(... " />
+            <marker date="1464979915736" expanded="true" signature="20658:20840" ph="select chapt... chapters" />
+            <marker date="1464979915736" expanded="true" signature="21099:21578" ph="select usern... user_sub_chapter_progress" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../controllers/designer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -149,17 +149,20 @@ change the md5 to trust and you will be good to go without password protection. 
 
 8. Build the book.
 
-* cd web2py/applications/runestone/books/<your book>
+::
 
-* runestone build
+    $ cd web2py/applications/runestone/books/<your book>
+    $ runestone build
+    $ runestone deploy
 
-  * At the end, it should say ``trying alternative database access due to  No module named pydal`` and then, if things are working correctly, start outputting the names of the chapters.
 
-* runestone deploy
-    * If you're on windows where rsync doesn't work, here's the alternative
-        * rm -r applications/runestone/static/<your book name>
-        * cd runestone/books/<your book name>
-        * mv build/<your book name> ../static/
+* At the end of the build step it should say ``trying alternative database access due to  No module named pydal`` and then, if things are working correctly, start outputting the names of the chapters.
+
+* If you're on windows where rsync doesn't work, here's the alternative
+
+  * rm -r applications/runestone/static/<your book name>
+  * cd runestone/books/<your book name>
+  * mv build/<your book name> ../static/
 
 Create an account for yourself
 ------------------------------
