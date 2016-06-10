@@ -29,6 +29,21 @@ Installation
 
 First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
 
+1. Install and make a Python virtualenv
+
+   * Documentation here:  https://virtualenv.pypa.io/en/stable/
+   * Video here:  https://www.youtube.com/watch?v=IX-v6yvGYFg
+   * For the impatient:
+
+     ::
+   
+     $ sudo pip install virtualenv
+     $ virtualenv /path/to/home/MyEnv
+     $ source /path/to/home/MyEnv/bin/activate
+     
+   * You will need to do the last command every time you want to work on RunestoneServer.  If you have not used Python virtual environments before I strongly recommend reading the docs or watching the video
+   
+
 1. Install lots of other dependencies
 
 On a vanilla Ubuntu (16.04) installation you will need to do at least the following:
@@ -41,10 +56,11 @@ On a vanilla Ubuntu (16.04) installation you will need to do at least the follow
     sudo apt-get install libpq-dev
     sudo apt-get install libxml2-dev libxslt1-dev
 
-On an OS X installation I recommend you first install homebrew (http://brew.sh)  then use the brew command to install:
+On an OS X installation You must install Xcode and the command line tools.  Free from the app store.  Then, I recommend you install homebrew (http://brew.sh)  then run the following commands:
 
 ::
 
+    xcode-select --install
     brew install postgresql
     brew install libpng
     brew install freetype
@@ -85,6 +101,7 @@ You can simply install all dependencies by running the following command in main
 
     # cd /path/to/web2py/applications
     # git clone https://github.com/RunestoneInteractive/RunestoneServer runestone
+    # cd runestone
     # pip install -r requirements.txt
 
 
