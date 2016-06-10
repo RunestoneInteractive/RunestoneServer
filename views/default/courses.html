@@ -5,15 +5,16 @@
 
 <div class=".container">
     <div style="text-align:center;">
+        
         <h1>Course Selection</h1>
         <p>Choose your course. If you want to add a new course, click "Add Another Course" then change the course name in your profile.</p>
 {{ for course in courses: }}
             <form action="/runestone/default/coursechooser/{{=course}}" method="post">
-            <button class="ac_opt btn btn-default course-btn" type="submit" name=course value={{=course}} style="font-size: 16pt;">{{=course}}</button><br/>
+            <button class="ac_opt btn btn-default book-btn" type="submit" name=course value={{=course}} style="font-size: 16pt;">{{=course}}</button><br/>
             </form>
 {{pass}}
         <form action="/runestone/default/user/profile">
-            <button class="ac_opt btn btn-default course-btn" style="font-size: 16pt;">Add Another Course</button><br/>
+            <button class="ac_opt btn btn-default course-btn" style="font-size: 16pt;">Add Another Course</button>
         </form>
         <form action="/runestone/default/remove" method="post">
         <button class="ac_opt btn btn-default course-btn" name="remove" type="submit" style="font-size: 16pt;">Remove a Course</button>
