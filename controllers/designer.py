@@ -80,6 +80,10 @@ def build():
         db.course_instructor.insert(instructor=auth.user.id, course=cid)
         auth.user.course_id = cid
         auth.user.course_name = request.vars.projectname
+        db.executesql('''
+            INSERT INTO user_courses(user_id, course_id)
+            SELECT %s, %s
+            ''' % (auth.user.id, cid))
 
         # Create a default section for this course and add the instructor.
         sectid = db.sections.update_or_insert(name='default',course_id=cid)

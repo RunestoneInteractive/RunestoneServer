@@ -119,6 +119,10 @@
             {{ else: }}
               <li><span class='loggedinuser'>Not logged in</span></li>
             {{ pass }}
+            {{ if auth.user: }}
+            <li class="divider"></li>
+            <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
+            {{ pass }}
             <li class="divider"></li>
             <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
             <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
