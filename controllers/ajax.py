@@ -7,14 +7,13 @@ from collections import Counter
 from diff_match_patch import *
 import os, sys
 # kind of a hacky approach to import coach functions
-sys.path.insert(0,os.path.dirname(__file__))
-from coach import get_lint
+#sys.path.insert(0,os.path.dirname(__file__))
+#from coach import get_lint
 
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
-
 
 def compareAndUpdateCookieData(sid):
     if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
@@ -59,6 +58,31 @@ def hsblog():    # Human Subjects Board Log
             corr = 'T' if result == 'correct' else 'F'
             resp = responseMap.get(resp,resp)
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+    elif event == "fillb" and auth.user:
+        # Has user already submitted a correct answer for this question? If not, insert a record
+        if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
+            x,resp,result = act.split(':')
+            corr = 'T' if result == 'correct' else 'F'
+            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+
+    elif event == "dragNdrop" and auth.user:
+        if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
+            answers = request.vars.answer
+            minHeight = request.vars.minHeight
+            correct = request.vars.correct
+
+            db.dragndrop_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answers, correct=correct, course_name=course, minHeight=minHeight)
+    elif event == "clickableArea" and auth.user:
+        if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
+            correct = request.vars.correct
+            db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
+
+    elif event == "parsons" and auth.user:
+        if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
+            correct = request.vars.correct
+            answer = request.vars.answer
+            trash = request.vars.trash
+            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, trash=trash, correct=correct, course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -98,12 +122,12 @@ def runlog():    # Log errors and runs with code
     if ('to_save' not in request.vars):
         # old API
         dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
-        lintAfterSave(dbid, code, div_id, sid)
+        #lintAfterSave(dbid, code, div_id, sid)
     else:
         # new API
         if (request.vars.to_save != "False"):
             dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
-            lintAfterSave(dbid, code, div_id, sid)
+            #lintAfterSave(dbid, code, div_id, sid)
 
             # auto-save to code table
             db.code.insert(sid=sid,
@@ -832,3 +856,58 @@ def lintAfterSave(dbid, code, div_id, sid):
                                   line=g.group(4), col=g.group(5), obj=g.group(6),
                                   msg=g.group(7).replace("'", ""), source=dbid)
 
+def getAssessResults():
+    if not auth.user:
+        # can't query for user's answers if we don't know who the user is, so just load from local storage
+        return ""
+
+    course = request.vars.course
+    div_id = request.vars.div_id
+    event = request.vars.event
+    sid = auth.user.username
+
+    response.headers['content-type'] = 'application/json'
+
+    # Identify the correct event and query the database so we can load it from the server
+    if event == "fillb":
+        query = "select answer, timestamp, correct from fitb_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""   # server doesn't have it so we load from local storage instead
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        return json.dumps(res)
+    elif event == "mChoice":
+        query = "select answer, timestamp, correct from mchoice_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        return json.dumps(res)
+    elif event == "dragNdrop":
+        query = "select answer, timestamp, correct, minHeight from dragndrop_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2], 'minHeight': str(rows[0][3])}
+        return json.dumps(res)
+    elif event == "clickableArea":
+        query = "select answer, timestamp, correct from clickablearea_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        return json.dumps(res)
+    elif event == "timedExam":
+        query = "select correct, incorrect, skipped, time_taken, timestamp from timed_exam where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
+        return json.dumps(res)
+    elif event == "parsons":
+        query = "select answer, trash, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        rows = db.executesql(query)
+        if len(rows) == 0:
+            return ""
+        res = {'answer': rows[0][0], 'trash': rows[0][1], 'timestamp': str(rows[0][2])}
+        return json.dumps(res)
