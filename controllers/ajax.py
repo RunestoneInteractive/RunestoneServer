@@ -61,9 +61,9 @@ def hsblog():    # Human Subjects Board Log
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
         if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
-            x,resp,result = act.split(':')
-            corr = 'T' if result == 'correct' else 'F'
-            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+            answer = request.vars.answer
+            correct = request.vars.correct
+            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
         if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
