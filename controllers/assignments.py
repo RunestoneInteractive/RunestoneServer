@@ -114,135 +114,140 @@ def update():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db(db.assignments.id == request.get_vars.id).select().first()
 
-    form = SQLFORM(db.assignments, assignment,
-        showid = False,
-        fields=['name','points','assignment_type','threshold','released'],
-        keepvalues = True,
-        formstyle='table3cols',
-        )
+    if not assignment:
+        return redirect(URL('assignments','admin'))
 
-    form.vars.course = course.id
-    if form.process().accepted:
-        session.flash = 'form accepted'
-        return redirect(URL('assignments','update')+'?id=%d' % (form.vars.id))
-    elif form.errors:
-        response.flash = 'form has errors'
+    else:
+        form = SQLFORM(db.assignments, assignment,
+            showid = False,
+            deletable=True,
+            fields=['name','points','assignment_type','threshold','released'],
+            keepvalues = True,
+            formstyle='table3cols',
+            )
 
-    db.deadlines.section.requires = IS_IN_DB(db(db.sections.course_id == course),'sections.id','%(name)s')
-    new_deadline_form = SQLFORM(db.deadlines,
-        showid = False,
-        fields=['section','deadline'],
-        keepvalues = True,
-        formstyle='table3cols',
-        )
-    new_deadline_form.vars.assignment = assignment
-    if new_deadline_form.process().accepted:
-        session.flash = 'added new deadline'
-    elif new_deadline_form.errors:
-        response.flash = 'error adding deadline'
+        form.vars.course = course.id
+        if form.process().accepted:
+            session.flash = 'form accepted'
+            return redirect(URL('assignments','update')+'?id=%d' % (form.vars.id))
+        elif form.errors:
+            response.flash = 'form has errors'
 
-    deadlines = db(db.deadlines.assignment == assignment.id).select()
-    delete_deadline_form = FORM()
-    for deadline in deadlines:
-        deadline_label = "On %s" % (deadline.deadline)
-        if deadline.section:
-            section = db(db.sections.id == deadline.section).select().first()
-            deadline_label = deadline_label + " for %s" % (section.name)
+        db.deadlines.section.requires = IS_IN_DB(db(db.sections.course_id == course),'sections.id','%(name)s')
+        new_deadline_form = SQLFORM(db.deadlines,
+            showid = False,
+            fields=['section','deadline'],
+            keepvalues = True,
+            formstyle='table3cols',
+            )
+        new_deadline_form.vars.assignment = assignment
+        if new_deadline_form.process().accepted:
+            session.flash = 'added new deadline'
+        elif new_deadline_form.errors:
+            response.flash = 'error adding deadline'
+
+        deadlines = db(db.deadlines.assignment == assignment.id).select()
+        delete_deadline_form = FORM()
+        for deadline in deadlines:
+            deadline_label = "On %s" % (deadline.deadline)
+            if deadline.section:
+                section = db(db.sections.id == deadline.section).select().first()
+                deadline_label = deadline_label + " for %s" % (section.name)
+            delete_deadline_form.append(
+                DIV(
+                    LABEL(
+                    INPUT(_type="checkbox", _name=deadline.id, _value="delete"),
+                    deadline_label,
+                    ),
+                    _class="checkbox"
+                ))
         delete_deadline_form.append(
+            INPUT(
+                _type="submit",
+                _value="Delete Deadlines",
+                _class="btn btn-default"
+                ))
+
+        if delete_deadline_form.accepts(request,session, formname="delete_deadline_form"):
+            for var in delete_deadline_form.vars:
+                if delete_deadline_form.vars[var] == "delete":
+                    db(db.deadlines.id == var).delete()
+            session.flash = 'Deleted deadline(s)'
+            return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
+
+        problems_delete_form = FORM(
+            _method="post",
+            _action=URL('assignments','update')+'?id=%d' % (assignment.id)
+            )
+        for problem in db(db.problems.assignment == assignment.id).select(
+            db.problems.id,
+            db.problems.acid,
+            orderby=db.problems.acid):
+            problems_delete_form.append(
             DIV(
                 LABEL(
-                INPUT(_type="checkbox", _name=deadline.id, _value="delete"),
-                deadline_label,
+                INPUT(_type="checkbox", _name=problem.id, _value="delete"),
+                problem.acid,
                 ),
                 _class="checkbox"
             ))
-    delete_deadline_form.append(
-        INPUT(
-            _type="submit",
-            _value="Delete Deadlines",
-            _class="btn btn-default"
-            ))
-
-    if delete_deadline_form.accepts(request,session, formname="delete_deadline_form"):
-        for var in delete_deadline_form.vars:
-            if delete_deadline_form.vars[var] == "delete":
-                db(db.deadlines.id == var).delete()
-        session.flash = 'Deleted deadline(s)'
-        return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
-
-    problems_delete_form = FORM(
-        _method="post",
-        _action=URL('assignments','update')+'?id=%d' % (assignment.id)
-        )
-    for problem in db(db.problems.assignment == assignment.id).select(
-        db.problems.id,
-        db.problems.acid,
-        orderby=db.problems.acid):
         problems_delete_form.append(
-        DIV(
-            LABEL(
-            INPUT(_type="checkbox", _name=problem.id, _value="delete"),
-            problem.acid,
-            ),
-            _class="checkbox"
-        ))
-    problems_delete_form.append(
-        INPUT(
-            _type="submit",
-            _value="Remove Problems",
-            _class="btn btn-default"
-            ))
-    if problems_delete_form.accepts(request, session, formname="problems_delete_form"):
-        count = 0
-        for var in problems_delete_form.vars:
-            if problems_delete_form.vars[var] == "delete":
-                db(db.problems.id == var).delete()
-                count += 1
-        if count > 0:
-            session.flash = "Removed %d Problems" % (count)
-        else:
-            session.flash = "Didn't remove any problems"
-        return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
-
-
-    problem_query_form = FORM(
-        _method="post",
-        _action=URL('assignments','update')+'?id=%d' % (assignment.id)
-        )
-    problem_query_form.append(
-        INPUT(
-            _type="text",
-            _name="acid"
-            ))
-    problem_query_form.append(
-        INPUT(
-            _type="submit",
-            _value="Search"
-            ))
-    if problem_query_form.accepts(request,session,formname="problem_query_form"):
-        if 'acid' in problem_query_form.vars:
+            INPUT(
+                _type="submit",
+                _value="Remove Problems",
+                _class="btn btn-default"
+                ))
+        if problems_delete_form.accepts(request, session, formname="problems_delete_form"):
             count = 0
-            for acid in problem_query_form.vars['acid'].split(','):
-                acid = acid.replace(' ','')
-                if db(db.problems.acid == acid)(db.problems.assignment == assignment.id).select().first() == None:
+            for var in problems_delete_form.vars:
+                if problems_delete_form.vars[var] == "delete":
+                    db(db.problems.id == var).delete()
                     count += 1
-                    db.problems.insert(
-                        assignment = assignment.id,
-                        acid = acid,
-                        )
-            session.flash = "Added %d problems" % (count)
-        else:
-            session.flash = "Didn't add any problems."
-        return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
+            if count > 0:
+                session.flash = "Removed %d Problems" % (count)
+            else:
+                session.flash = "Didn't remove any problems"
+            return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
 
-    return dict(
-        assignment = assignment,
-        form = form,
-        new_deadline_form = new_deadline_form,
-        delete_deadline_form = delete_deadline_form,
-        problem_query_form = problem_query_form,
-        problems_delete_form = problems_delete_form,
-        )
+
+        problem_query_form = FORM(
+            _method="post",
+            _action=URL('assignments','update')+'?id=%d' % (assignment.id)
+            )
+        problem_query_form.append(
+            INPUT(
+                _type="text",
+                _name="acid"
+                ))
+        problem_query_form.append(
+            INPUT(
+                _type="submit",
+                _value="Search"
+                ))
+        if problem_query_form.accepts(request,session,formname="problem_query_form"):
+            if 'acid' in problem_query_form.vars:
+                count = 0
+                for acid in problem_query_form.vars['acid'].split(','):
+                    acid = acid.replace(' ','')
+                    if db(db.problems.acid == acid)(db.problems.assignment == assignment.id).select().first() == None:
+                        count += 1
+                        db.problems.insert(
+                            assignment = assignment.id,
+                            acid = acid,
+                            )
+                session.flash = "Added %d problems" % (count)
+            else:
+                session.flash = "Didn't add any problems."
+            return redirect(URL('assignments','update')+'?id=%d' % (assignment.id))
+
+        return dict(
+            assignment = assignment,
+            form = form,
+            new_deadline_form = new_deadline_form,
+            delete_deadline_form = delete_deadline_form,
+            problem_query_form = problem_query_form,
+            problems_delete_form = problems_delete_form,
+            )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grade():
