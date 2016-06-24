@@ -3,6 +3,7 @@ import os
 import pygal
 from datetime import date, timedelta
 from paver.easy import sh
+import json
 
 
 # this is for admin links
@@ -571,3 +572,133 @@ order by username;
     fig.savefig(saveName)
 
     return dict(coursename=auth.user.course_name)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def instructors():
+    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
+    courseid = sidQuery[0].id
+    sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
+    sectionsList = []
+    for row in sectionsQuery:
+        #print(row.name)
+        sectionsList.append(row.name)
+    #Now get the start date
+    dateQuery = db(db.courses.course_name == auth.user.course_name).select()
+    date = dateQuery[0].term_start_date
+    date = date.strftime("%m/%d/%Y")
+
+
+    cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
+    instructordict = {}
+    for row in cur_instructors:
+        name = db(db.auth_user.id == row.instructor).select(db.auth_user.first_name, db.auth_user.last_name)
+        for person in name:
+            instructordict[str(row.instructor)] = person.first_name + " " + person.last_name
+
+    cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
+    studentdict = {}
+    for row in cur_students:
+        person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name)
+        for identity in person:
+            name = identity.first_name + " " + identity.last_name
+            if row.user_id not in instructordict:
+                studentdict[row.user_id]= name
+
+    return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getChangeLog():
+    bookQuery = db(db.courses.course_name == auth.user.course_name).select()
+    base_course = bookQuery[0].base_course
+    #The stuff below looks messy but it's necessary because the ChangeLog.rst will not be located in the same directory as this Python file
+    #so we have to move up to find the correct log file
+    file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/'+base_course+'/ChangeLog.rst'))
+
+    logFile = file.read()
+    return str(logFile)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def backup():
+    #Begin the process of zipping up a backup file
+    #This function will put the backup book in runestone/static/bookname/backup.zip
+    import zipfile
+    bookQuery = db(db.courses.course_name == auth.user.course_name).select()
+    base_course = bookQuery[0].base_course
+    toBeZippedPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup')
+    tobeZippedDirectory = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/'+base_course)
+
+    zip = zipfile.ZipFile("%s.zip" % (toBeZippedPath), "w", zipfile.ZIP_DEFLATED)
+    abs_src = os.path.abspath(tobeZippedDirectory)
+    for dirname, subdirs, files in os.walk(tobeZippedDirectory):
+        for filename in files:
+            absname = os.path.abspath(os.path.join(dirname, filename))
+            arcname = absname[len(abs_src) + 1:]
+            zip.write(absname, arcname)
+    zip.close()
+    directoryPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup.zip')
+    return response.stream(directoryPath, attachment=True)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def grading():
+    allStudents = []
+    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
+    courseid = sidQuery[0].id
+    sectionsQuery = db(db.sections.course_id == courseid).select()
+    for section in sectionsQuery:
+        studentList = db(db.section_users.section == section.id).select()
+        for student in studentList:
+            authQuery = db(db.auth_user.id == student.auth_user).select()
+            for student in authQuery:
+               allStudents.append((student.first_name,student.last_name))
+    return json.dumps(allStudents)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def removeinstructor():
+    removed = []
+    if request.args[0] != str(auth.user.id):
+        db((db.course_instructor.instructor == request.args[0]) & (db.course_instructor.course == auth.user.course_id)).delete()
+        removed.append(True)
+        return json.dumps(removed)
+    else:
+        session.flash = T("You cannot remove yourself as an instructor.")
+        removed.append(False)
+        return json.dumps(deleted)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def addinstructor():
+    db.executesql('''
+        INSERT INTO course_instructor(course, instructor)
+        SELECT %s, %s
+        ''' % (auth.user.course_id, request.args[0]))
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def deletecourse():
+    course_name = auth.user.course_name
+    cset = db(db.courses.course_name == course_name)
+    if not cset.isempty():
+        courseid = cset.select(db.courses.id).first()
+        qset = db((db.course_instructor.course == courseid) & (db.course_instructor.instructor == auth.user.id))
+        if not qset.isempty():
+            qset.delete()
+            students = db(db.auth_user.course_id == courseid)
+            students.update(course_id=1)
+            uset=db(db.user_courses.course_id == courseid.id)
+            uset.delete()
+            db(db.courses.id == courseid).delete()
+            try:
+                shutil.rmtree(path.join('applications', request.application, 'static', course_name))
+                shutil.rmtree(path.join('applications', request.application, 'custom_courses', course_name))
+                session.clear()
+            except:
+                response.flash = 'Error, %s does not appear to exist' % course_name
+        else:
+            response.flash = 'You are not the instructor of %s' % course_name
+    else:
+        response.flash = 'course, %s, not found' % course_name
+
+    redirect(URL('default','index'))
