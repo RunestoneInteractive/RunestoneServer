@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ### required - do not delete
 import json
+import requests
 from urllib import unquote
 
 def user():
@@ -153,9 +154,9 @@ def index():
         numCourses = 0
         for row in courseCheck:
             numCourses += 1
-        if numCourses == 1:
             redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
-        redirect('/%s/default/courses' % request.application)
+        if numCourses == 1:
+            redirect('/%s/default/courses' % request.application)
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
 
@@ -262,3 +263,31 @@ def removecourse():
             db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == courseIdQuery[0].id)).delete()
 
     redirect('/%s/default/courses' % request.application)
+
+def reportabug():
+    return dict()
+
+def sendreport():
+    #these values should be changed to the credentials of a Github account in order for the bug reports to be sent.
+    USERNAME = 'USERANME'
+    PASSWORD = 'PASSWORD'
+    basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
+    if basecourse == None:
+        url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+    else:
+        url ='https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
+    reqsession = requests.Session()
+    reqsession.auth = (USERNAME, PASSWORD)
+    body = 'Error reported in course ' + request.vars['coursename'] + ' on page ' + request.vars['pagename'] + '\n' + request.vars['bugdetails']
+    issue = {'title': request.vars['bugtitle'],
+             'body': body}
+    r = reqsession.post(url, json.dumps(issue))
+    if r.status_code == 201:
+        session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
+    else:
+        session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
+        print('Response:', r.content)
+
+    print(r.status_code)
+
+    redirect('/%s/default/reportabug' % request.application)
