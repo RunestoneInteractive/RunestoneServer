@@ -39,7 +39,6 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
-    responseMap = {'0':'a', '1':'b','2':'c','3':'d','4':'e'}
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
     if event == 'timedExam' and act == 'finish':
         try:
@@ -54,16 +53,15 @@ def hsblog():    # Human Subjects Board Log
         if db((db.mchoice_answers.sid == sid) &
               (db.mchoice_answers.div_id == div_id) &
               (db.mchoice_answers.correct == 'T')).count() == 0:
-            x,resp,result = act.split(':')
-            corr = 'T' if result == 'correct' else 'F'
-            resp = responseMap.get(resp,resp)
-            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+            answer = request.vars.answer
+            correct = request.vars.correct
+            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
         if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
-            x,resp,result = act.split(':')
-            corr = 'T' if result == 'correct' else 'F'
-            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+            answer = request.vars.answer
+            correct = request.vars.correct
+            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
         if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
