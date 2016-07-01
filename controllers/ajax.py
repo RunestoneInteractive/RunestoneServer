@@ -79,8 +79,8 @@ def hsblog():    # Human Subjects Board Log
         if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
-            trash = request.vars.trash
-            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, trash=trash, correct=correct, course_name=course)
+            source = request.vars.source
+            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -903,9 +903,9 @@ def getAssessResults():
         res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
         return json.dumps(res)
     elif event == "parsons":
-        query = "select answer, trash, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, source, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][0], 'trash': rows[0][1], 'timestamp': str(rows[0][2])}
+        res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)
