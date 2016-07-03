@@ -37,8 +37,11 @@ def user():
     form = auth()
 
     if 'profile' in request.args(0):
-        sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
-        sectname = db(db.sections.id == sect).select(db.sections.name).first()
+        try:
+            sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
+            sectname = db(db.sections.id == sect).select(db.sections.name).first()
+        except:
+            sectname = None
         if sectname:
             sectname = sectname.name
         else:
