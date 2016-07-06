@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 ### required - do not delete
+import cgi
 import json
+import os
 import requests
 from urllib import unquote
 
@@ -262,6 +264,8 @@ def removecourse():
     redirect('/%s/default/courses' % request.application)
 
 def reportabug():
+    referer = request.META.get('HTTP_REFERER')
+    print(referer)
     return dict()
 
 def sendreport():
@@ -272,8 +276,8 @@ def sendreport():
 
     #these values should be changed to the credentials of a Github account in order for the bug reports to be sent.
     access_token = 'f4343a5620d93a4cabac6a2950d217c2e17c2a9f'
-    USERNAME = 'hangde01'
-    PASSWORD = 'Guid3totheGalaxy'
+    USERNAME = 'USERNAME'
+    PASSWORD = 'PASSWORD'
     if request.vars['bookerror'] == 'on':
         print('checkbox not checked')
         basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
