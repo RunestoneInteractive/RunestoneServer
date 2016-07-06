@@ -154,9 +154,9 @@ def index():
         numCourses = 0
         for row in courseCheck:
             numCourses += 1
-            redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
         if numCourses == 1:
-            redirect('/%s/default/courses' % request.application)
+            redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
+        redirect('/%s/default/courses' % request.application)
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
 
@@ -217,9 +217,6 @@ def bios():
 
 @auth.requires_login()
 def courses():
-    #query courses db to get course names
-    #send course names to be rendered in page
-
     res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
     classlist = []
     for row in res:
@@ -268,16 +265,27 @@ def reportabug():
     return dict()
 
 def sendreport():
+    print(request.vars['bookerror'])
+    for key in request.vars:
+        print(key)
+        print('key maps to', request.vars[key])
+
     #these values should be changed to the credentials of a Github account in order for the bug reports to be sent.
-    USERNAME = 'USERANME'
-    PASSWORD = 'PASSWORD'
-    basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
-    if basecourse == None:
-        url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+    access_token = 'f4343a5620d93a4cabac6a2950d217c2e17c2a9f'
+    USERNAME = 'hangde01'
+    PASSWORD = 'Guid3totheGalaxy'
+    if request.vars['bookerror'] == 'on':
+        print('checkbox not checked')
+        basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
+        if basecourse == None:
+            url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+        else:
+            url ='https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
     else:
-        url ='https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
+        url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
     reqsession = requests.Session()
-    reqsession.auth = (USERNAME, PASSWORD)
+    #reqsession.auth = (USERNAME, PASSWORD)
+    reqsession.auth = ('token', access_token)
     body = 'Error reported in course ' + request.vars['coursename'] + ' on page ' + request.vars['pagename'] + '\n' + request.vars['bugdetails']
     issue = {'title': request.vars['bugtitle'],
              'body': body}
