@@ -93,7 +93,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # Build the completion database
     #
 
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', idxname))
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', 'index.rst'))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     for root, dirs, files in os.walk(sourcedir):
