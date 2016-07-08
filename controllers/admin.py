@@ -605,7 +605,36 @@ def instructors():
             if row.user_id not in instructordict:
                 studentdict[row.user_id]= name
 
-    return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict)
+
+    #Not rebuilding
+    if not request.vars.projectname or not request.vars.startdate:
+        course = db(db.courses.course_name == auth.user.course_name).select().first()
+        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True)
+
+    #Rebuilding now
+    else:
+        # update the start date
+        course = db(db.courses.id == auth.user.course_id).select().first()
+        date = request.vars.startdate.split('/')
+        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        course.update_record(term_start_date=date)
+
+        # run_sphinx in defined in models/scheduler.py
+        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+                                                                       rvars=request.vars,
+                                                                       base_course=course.base_course,
+                                                                       application=request.application,
+                                                                       http_host=request.env.http_host))
+        uuid = row['uuid']
+
+
+        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
+
+
+        return dict(sectionInfo=sectionsList,startDate=date.isoformat(),coursename=auth.user.course_name,instructors=instructordict, students=studentdict,confirm=False,
+                    task_name=uuid,
+                    course_url=course_url)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -641,19 +670,6 @@ def backup():
     return response.stream(directoryPath, attachment=True)
 
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def grading():
-    allStudents = []
-    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
-    courseid = sidQuery[0].id
-    sectionsQuery = db(db.sections.course_id == courseid).select()
-    for section in sectionsQuery:
-        studentList = db(db.section_users.section == section.id).select()
-        for student in studentList:
-            authQuery = db(db.auth_user.id == student.auth_user).select()
-            for student in authQuery:
-               allStudents.append((student.first_name,student.last_name))
-    return json.dumps(allStudents)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

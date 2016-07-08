@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
     <!-- Begin navbar -->
@@ -154,11 +156,11 @@
     </div>
 
 
-<div class="container" style="margin-top: 60px;">
+<div id="outerTabs" class="container" style="margin-top: 60px;">
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#progress">Student Progress</a></li>
     <li><a data-toggle="tab" href="#admin">Admin</a></li>
-    <li><a data-toggle="tab" href="#grade" onclick="grading();">Grading</a></li>
+    <li><a data-toggle="tab" href="#grade">Grading</a></li>
     <li><a data-toggle="tab" href="#menu3">Editing</a></li>
     <li><a data-toggle="tab" href="#menu4">Doc</a></li>
   </ul>
@@ -177,18 +179,18 @@
 
 
 
-           <a data-toggle="tab" href="#sections" class="list-group-item">
+           <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
                 </a>
 
 
-        <a data-toggle="tab" href="#rebuild" class="list-group-item" onclick='getLog()'>
+        <a id="rebuildTab" data-toggle="tab" href="#rebuild" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
                 </a>
-        <a data-toggle="tab" href="#AddInstructor" class="list-group-item">
+        <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
                 </a>
-        <a data-toggle="tab" href="#Delete" class="list-group-item">
+        <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
                 </a>
 
@@ -265,7 +267,7 @@
       <h4>Change Log</h4>
       <div style="width:600px; border: groove; white-space: pre" id="changelog"></div>
 
-    <form name="confirm" method="POST" action="/runestone/admin/rebuildcourse">
+    <form name="confirm" method="POST" action="/runestone/admin/instructors">
       <input type="hidden" name="projectname" value="{{=coursename}}" />
       <input type="hidden" name="coursetype" value="rebuildcourse" />
       <div class="checkbox">
@@ -293,11 +295,57 @@
 
 
 
+
+
+
       <form  method="post" action="/runestone/admin/backup" style="margin-top: 16px;">
                 <input type="submit" class="btn btn-default" value="Download Backup"/>
                 </form>
 
       <div>*This will take 15-20 seconds to complete</div>
+
+
+      {{ if confirm == False: }}
+  <h3 id="title">Rebuilding course.</h3>
+  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
+  </div>
+  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
+   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
+   your newly rebuilt course.</p>
+   <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
+        gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
+       have an automatic monitoring system that lets me know by email when things get backed up.  If you have persistent
+       problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
+       Thanks for your patience.  -- Brad</p>
+  <script type="text/javascript">
+
+        $('#outerTabs a[href="#admin"]').tab('show');
+        $('#admin a[href="#rebuild"]').tab('show');
+
+
+    var iid = setInterval(function() {
+      d = { task_name:'{{ =task_name }}',
+            course_url:'{{ =course_url }}'};
+      $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+        if (data.status == "true") {
+          window.location.href = data.course_url;
+        }
+        if (data.status == "failed") {
+          clearInterval(iid);
+          $("#spinner_div").hide();
+          $("#title").text("An error occurred.");
+          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+           "Make sure you include the following traceback information:" +
+           "<pre>" + data.traceback + "</pre>");
+        }
+      });
+    }, 3000);
+  </script>
+{{ pass }}
+
 
   </div>
         </div>
@@ -411,20 +459,7 @@
     }}}
 
 
-      function grading() {
 
-
-        var obj = new XMLHttpRequest();
-        obj.open("GET", "/runestone/admin/grading", true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-
-            if (obj.readyState == 4 && obj.status == 200) {
-                res = JSON.parse(obj.responseText);
-                for (i=0;i<res.length;i++) {
-                    student = res[i];
-                }
-    }}}
 
 
 
@@ -432,8 +467,65 @@
 </script>
 
 
+<script>
+    $(document).ready(function(){
+  getLog();
+});
+</script>
+
+
+
+
+
+
+<script>
+
+$('#sectionsTab').click(function(){
+    $('#sectionsTab').css('background-color', 'gainsboro');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+    $('#rebuildTab').click(function(){
+    $('#rebuildTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+    $('#AddInstructorTab').click(function(){
+    $('#AddInstructorTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+       $('#DeleteTab').click(function(){
+    $('#DeleteTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+
+});
+
+</script>
+
 
 ​
+
+
+
+
+
+
+
+
+
+
 <script>
     function add_instructor(){
         var select = document.getElementById('addins').elements['student'];
@@ -484,4 +576,7 @@
         }
     }
 </script>
+
+
+
 </html>
