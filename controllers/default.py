@@ -264,22 +264,12 @@ def removecourse():
     redirect('/%s/default/courses' % request.application)
 
 def reportabug():
-    referer = request.META.get('HTTP_REFERER')
-    print(referer)
     return dict()
 
 def sendreport():
-    print(request.vars['bookerror'])
-    for key in request.vars:
-        print(key)
-        print('key maps to', request.vars[key])
-
-    #these values should be changed to the credentials of a Github account in order for the bug reports to be sent.
-    access_token = 'f4343a5620d93a4cabac6a2950d217c2e17c2a9f'
-    USERNAME = 'USERNAME'
-    PASSWORD = 'PASSWORD'
+    #this value should be changed to a valid Github access token that has full repo access
+    access_token = 'TOKENSTRING'
     if request.vars['bookerror'] == 'on':
-        print('checkbox not checked')
         basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
         if basecourse == None:
             url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
@@ -288,7 +278,6 @@ def sendreport():
     else:
         url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
     reqsession = requests.Session()
-    #reqsession.auth = (USERNAME, PASSWORD)
     reqsession.auth = ('token', access_token)
     body = 'Error reported in course ' + request.vars['coursename'] + ' on page ' + request.vars['pagename'] + '\n' + request.vars['bugdetails']
     issue = {'title': request.vars['bugtitle'],
@@ -298,8 +287,5 @@ def sendreport():
         session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
-        print('Response:', r.content)
-
-    print(r.status_code)
 
     redirect('/%s/default/reportabug' % request.application)
