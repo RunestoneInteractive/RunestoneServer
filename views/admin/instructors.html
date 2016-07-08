@@ -327,7 +327,7 @@
     var iid = setInterval(function() {
       d = { task_name:'{{ =task_name }}',
             course_url:'{{ =course_url }}'};
-      $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+      $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
         if (data.status == "true") {
           window.location.href = data.course_url;
         }
