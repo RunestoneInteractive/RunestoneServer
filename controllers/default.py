@@ -248,7 +248,8 @@ def coursechooser():
 
     db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
     db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
-
+    auth.user.update(course_name=request.args[0])
+    auth.user.update(course_id=res[0].id)
 
     redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
 
