@@ -504,7 +504,7 @@ $('#sectionsTab').click(function(){
 
 });
 
-       $('#DeleteTab').click(function(){
+    $('#DeleteTab').click(function(){
     $('#DeleteTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
@@ -527,14 +527,14 @@ $('#sectionsTab').click(function(){
 
 
 <script>
-    function add_instructor(){
+    function add_instructor() {
         var select = document.getElementById('addins').elements['student'];
         var index = select.selectedIndex;
         var studentid = select.options[index].value; //value gives the value, text gives the actual text
         var studentname = select.options[index].text;
 
         var obj = new XMLHttpRequest();
-        obj.open('POST','/runestone/admin/addinstructor/' + studentid, true);
+        obj.open('POST', '/runestone/admin/addinstructor/' + studentid, true);
         obj.send(JSON.stringify({newins: 'studentid'}));
         obj.onreadystatechange = function () {
             if (obj.readyState == 4 && obj.status == 200) {
@@ -546,15 +546,14 @@ $('#sectionsTab').click(function(){
                 newopt.innerHTML = studentname;
                 inslist.appendChild(newopt);
             }
-        }
+        };
     }
-​
-        function remove_instructor(){
+
+    function remove_instructor(){
         var select = document.getElementById('removeins').elements['instructor'];
         var index = select.selectedIndex;
         var studentid = select.options[index].value; //value gives the value, text gives the actual text
         var studentname = select.options[index].text;
-​
         var obj = new XMLHttpRequest();
         obj.open('POST','/runestone/admin/removeinstructor/' + studentid, true);
         obj.send(JSON.stringify({newins: 'studentid'}));
