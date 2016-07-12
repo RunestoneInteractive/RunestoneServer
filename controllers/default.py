@@ -49,8 +49,6 @@ def user():
             sectname = sectname.name
         else:
             sectname = 'default'
-        if not sect:
-            sect = 'default'
         my_extra_element = TR(LABEL('Section Name'),
                            INPUT(_name='section', value=sectname, _type='text'))
         form[0].insert(-1, my_extra_element)
@@ -137,7 +135,7 @@ def index():
                     ''' % (auth.user.id, auth.user.course_id))
         try:
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db(db.user.sub_chapter_progress.user_id == auth.user.id).count() == 0:
+            if db(db.user_sub_chapter_progress.user_id == auth.user.id).count() == 0:
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
                             db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                     db.executesql('''
@@ -145,11 +143,6 @@ def index():
                        SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
                        FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
                     ''' % (auth.user.id, auth.user.course_name))
-                # Add user to default section for course.
-                sect = db((db.sections.course_id == auth.user.course_id) & (db.sections.name == form.vars.section)).select(
-                    db.sections.id).first()
-                if sect:
-                    x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
         except:
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
