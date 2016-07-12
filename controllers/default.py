@@ -268,7 +268,9 @@ def removecourse():
     redirect('/%s/default/courses' % request.application)
 
 def reportabug():
-    return dict()
+    course = request.vars['course']
+    uri = request.vars['page']
+    return dict(course=course,uri=uri)
 
 def sendreport():
     #this value should be changed to a valid Github access token that has full repo access
