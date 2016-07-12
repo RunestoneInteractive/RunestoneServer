@@ -79,8 +79,8 @@ def hsblog():    # Human Subjects Board Log
         if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
-            trash = request.vars.trash
-            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, trash=trash, correct=correct, course_name=course)
+            source = request.vars.source
+            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -107,6 +107,8 @@ def runlog():    # Log errors and runs with code
     code = request.vars.code
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
+    pre = request.vars.prefix if request.vars.prefix else ""
+    post = request.vars.suffix if request.vars.suffix else ""
     if error_info != 'success':
         event = 'ac_error'
         act = error_info
@@ -116,15 +118,26 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
     if ('to_save' not in request.vars):
         # old API
-        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        dbid = db.acerror_log.insert(sid=sid,
+                                     div_id=div_id,
+                                     timestamp=ts,
+                                     course_id=course,
+                                     code=pre+code+post,
+                                     emessage=error_info)
         #lintAfterSave(dbid, code, div_id, sid)
     else:
         # new API
         if (request.vars.to_save != "False"):
-            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+            dbid = db.acerror_log.insert(sid=sid,
+                                         div_id=div_id,
+                                         timestamp=ts,
+                                         course_id=course,
+                                         code=pre+code+post,
+                                         emessage=error_info)
+
             #lintAfterSave(dbid, code, div_id, sid)
 
             # auto-save to code table
@@ -903,9 +916,9 @@ def getAssessResults():
         res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
         return json.dumps(res)
     elif event == "parsons":
-        query = "select answer, trash, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, source, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][0], 'trash': rows[0][1], 'timestamp': str(rows[0][2])}
+        res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)

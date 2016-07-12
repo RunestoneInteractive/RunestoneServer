@@ -60,9 +60,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             shutil.copy(path.join(confdir, 'assignments.rst'),
                         path.join(sourcedir, '_sources', 'assignments.rst'))
 
-            if os.path.exists(path.join(confdir, 'toc.rst')):
-                shutil.copy(path.join(confdir, 'toc.rst'),
-                            path.join(sourcedir, '_sources', 'toc.rst'))
 
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
@@ -76,8 +73,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         # Save copies of files that the instructor may customize
         shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
         shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
-        if os.path.exists(path.join(sourcedir,'_sources', 'toc.rst')):
-            shutil.copy(path.join(sourcedir,'_sources', 'toc.rst'),custom_dir)
 
 
     ###########
@@ -92,17 +87,13 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     except IOError as copyfail:
         logging.debug("Failed to copy build_info_file")
         logging.debug(copyfail.message)
-
-    if base_course == 'thinkcspy' or base_course == 'pip2':
-        idxname = 'toc.rst'
-    else:
         idxname = 'index.rst'
 
     #
     # Build the completion database
     #
 
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', idxname))
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', 'index.rst'))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     for root, dirs, files in os.walk(sourcedir):
