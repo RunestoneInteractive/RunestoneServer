@@ -266,8 +266,9 @@ def reportabug():
     return dict(course=course,uri=uri)
 
 def sendreport():
-    #this value should be changed to a valid Github access token that has full repo access
-    access_token = 'TOKENSTRING'
+    # settings.github_token should be set to a valid Github access token
+    # that has full repo access in models/1.py
+
     if request.vars['bookerror'] == 'on':
         basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
         if basecourse == None:
@@ -277,7 +278,7 @@ def sendreport():
     else:
         url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
     reqsession = requests.Session()
-    reqsession.auth = ('token', access_token)
+    reqsession.auth = ('token', settings.github_token)
     body = 'Error reported in course ' + request.vars['coursename'] + ' on page ' + request.vars['pagename'] + '\n' + request.vars['bugdetails']
     issue = {'title': request.vars['bugtitle'],
              'body': body}
@@ -287,4 +288,4 @@ def sendreport():
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
 
-    redirect('/%s/default/reportabug' % request.application)
+    redirect('/%s/default/' % request.application)
