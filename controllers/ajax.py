@@ -107,6 +107,8 @@ def runlog():    # Log errors and runs with code
     code = request.vars.code
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
+    pre = request.vars.prefix if request.vars.prefix else ""
+    post = request.vars.suffix if request.vars.suffix else ""
     if error_info != 'success':
         event = 'ac_error'
         act = error_info
@@ -116,15 +118,26 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
     if ('to_save' not in request.vars):
         # old API
-        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        dbid = db.acerror_log.insert(sid=sid,
+                                     div_id=div_id,
+                                     timestamp=ts,
+                                     course_id=course,
+                                     code=pre+code+post,
+                                     emessage=error_info)
         #lintAfterSave(dbid, code, div_id, sid)
     else:
         # new API
         if (request.vars.to_save != "False"):
-            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+            dbid = db.acerror_log.insert(sid=sid,
+                                         div_id=div_id,
+                                         timestamp=ts,
+                                         course_id=course,
+                                         code=pre+code+post,
+                                         emessage=error_info)
+
             #lintAfterSave(dbid, code, div_id, sid)
 
             # auto-save to code table
