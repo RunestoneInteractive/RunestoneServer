@@ -593,12 +593,18 @@ def getaggregateresults():
         return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
 
     # Yes, these two things could be done as a join.  but this **may** be better for performance
-    start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
+    if course == 'thinkcspy' or course == 'pythonds':
+        start_date = datetime.datetime.now() - datetime.timedelta(days=90)
+    else:
+        start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
-    result = db((db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course) &
-                (db.useinfo.timestamp >= start_date)
-                ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    try:
+        result = db((db.useinfo.div_id == question) &
+                    (db.useinfo.course_id == course) &
+                    (db.useinfo.timestamp >= start_date)
+                    ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    except:
+        return json.dumps([dict(answerDict={}, misc={}, emess='Sorry, the request timed out')])
 
     tdata = {}
     tot = 0
