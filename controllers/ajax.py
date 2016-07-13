@@ -104,7 +104,7 @@ def runlog():    # Log errors and runs with code
             setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
-    code = request.vars.code
+    code = request.vars.code if request.vars.code else ""
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
     pre = request.vars.prefix if request.vars.prefix else ""
