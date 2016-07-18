@@ -10,10 +10,17 @@ def schedule():
         redirect(URL('default', 'user/login'))
     else:
         dbfile = open('schedule_debug.log', 'a')
-        if auth.user.cohort_id == None:
+        if auth.user.cohort_id is None:
             session.flash = 'You must be a member of a team to schedule'
             redirect(URL('mygroup','manageGroup'))
-        dbfile.write('%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
+        if type(auth.user.cohort_id) == int:
+            dbfile.write(
+                '%s : user = %s cohort_id = %d\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
+        else:
+            dbfile.write(
+                '%s : user = %s cohort_id = %s\n' % (datetime.datetime.now(), auth.user.username, auth.user.cohort_id))
+
+
         allProgress = db((db.user_sub_chapter_progress.chapter_id == db.chapters.chapter_label) &
                          #(db.auth_user.course_name == auth.user.course_name) & #this isn't used anywhere
                          (db.chapters.id == auth.user.course_id) &
