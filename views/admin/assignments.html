@@ -1,0 +1,839 @@
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+</head>
+
+<div class="col-md-6">
+
+        <div class="col-md-6">
+
+                   <h4 style="text-align: center;">Assignment</h4>
+
+       <form action="Javascript:assignmentInfo();">
+        <select id="assignlist" class="form-control">
+            {{for assignmentid in assignments:}}
+  <option value={{=assignmentid}}>{{=assignments[assignmentid]}}</option>
+        {{pass}}
+</select>
+                <input type="submit" value="show assignment"> </br>
+
+                       <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#addAssignment">+</button>
+                    <button style="margin-top: 12px;" formaction="Javascript:remove_assignment();" class="btn">-</button>
+</form>
+
+
+
+        </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addAssignment" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Create Assignment
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form role="form" action="">
+                  <div class="form-group">
+                    <label for="name">Assignment Name</label>
+                      <input type="text" class="form-control"
+                      id="name" placeholder="Enter assignment name"/>
+                  </div>
+                      <div class="form-group">
+                    <label for="description">Description</label>
+                      <input type="text" class="form-control"
+                      id="description" placeholder="Description"/>
+                  </div>
+
+                       <div class="form-group">
+                    <label for="duedate">Due Date</label>
+                      <input type="date" class="form-control"
+                      id="duedate" />
+                  </div>
+
+
+                  <input type="button" class="btn btn-default" Value="Create" data-dismiss="modal" onClick="createAssignment(this.form)">
+                </form>
+
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+           <div id="leftpanel1" style="visibility: hidden" class="col-md-6">
+<div style="margin-top:25px;">
+  <p id="assignment_duedate">Due</p>
+<p id="totalPoints"></p></div>
+
+        </div>
+
+    
+
+        <div class="col-md-11" id="leftpanel2" style="visibility: hidden">
+
+            <div>
+                <h5>Assignment Description</h5>
+
+                <div style="border: 1px solid black;">
+                    <p id="assignment_description"></p>
+                </div>
+                </div>
+
+
+
+                <div class="col-md-12" style="margin-top: 20px">
+
+
+    <div style="margin-bottom: 50px" class="list-group">
+        <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
+
+        <div style="float:left;">
+           <button id="summative" onclick="showQuestions('summative');" data-toggle="tab" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Summative</h4>
+                </button></div>
+
+            <div style="float:left;">
+           <button id="formative" onclick="showQuestions('formative');" data-toggle="tab" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Formative</h4>
+                </button></div>
+
+
+
+            <div style="float:left;">
+           <button id="external" onclick="showQuestions('external');" data-toggle="tab" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">External</h4>
+                </button></div></div>
+
+            <div class="list-group">
+
+                <div class="list-group-item">
+                    <table id="questionTable" style="width:100%;">
+                <thead style="border: 1px solid black;">
+                    <th style="border-right: 1px solid black; text-align: center">Question</th>
+                    <th style="border-right: 1px solid black;  text-align: center">Points</th>
+                    <th style="border-right: 1px solid black;  text-align: center">Timed</th>
+                </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                </table>
+
+
+                    <div style="text-align: center">
+                        <button data-toggle="tab" href="#qbank" style="margin-top: 12px;" class="btn">+</button>
+                        <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#questionsModal" onclick="getQuestions();">-</button>
+
+                        <!-- Modal -->
+<div class="modal fade" id="questionsModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="modalHeader">
+                    Remove Question
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form action="">
+        <select id="questions_list" class="form-control">
+</select>
+                  <input type="button" class="btn btn-default" Value="Remove Question" data-dismiss="modal" onClick="remove_question();">
+
+</form>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+    </div>
+            </div>
+
+        </div>
+
+
+    <div class="col-md-6" style="border-left: solid black 1px;">
+<div class="container">
+<a data-toggle="tab" href="#qbank" class="btn btn-default">Question Bank</a>
+
+
+        <a data-toggle="tab" href="#qwrite" class="btn btn-default">Write</a>
+
+
+        <div class="tab-content">
+        <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
+
+<h5 style="text-align: center">Search Question Bank</h5>
+             <form id="qbankform" role="form" action="">
+                   <div class="form-group">
+                    <label for="term">Term</label>
+                      <input type="text" class="form-control"
+                      id="term" placeholder="Term"/>
+                  </div>
+                      <div class="form-group">
+                    <label for="chapter">Chapter</label>
+                      <input type="text" class="form-control"
+                      id="chapter" placeholder="Chapter"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="author">Author</label>
+                      <input type="text" class="form-control"
+                      id="author" placeholder="Author"/>
+                  </div>
+
+                 <div class="form-group">
+                     <label for="difficultyselector">Difficulty</label>
+                     <div id="difficultyselector">
+      <input type="radio" id="rating1" name="rating" value="1" /><label for="rating1">1</label>
+      <input type="radio" id="rating2" name="rating" value="2" /><label for="rating2">2</label>
+      <input type="radio" id="rating3" name="rating" value="3" /><label for="rating3">3</label>
+      <input type="radio" id="rating4" name="rating" value="4" /><label for="rating4">4</label>
+      <input type="radio" id="rating5" name="rating" value="5"  /><label for="rating5">5</label>
+    </div>
+                 </div>
+
+                 <div class="form-group">
+                     <label for="tags">Tags</label>
+                     <select id="tags" style="width:100%" class="js-example-basic-multiple" multiple="multiple">
+                          {{ for tag in tags: }}
+                      <option value="{{=tag}}">{{ =tag }}</option>
+                      {{ pass }}
+</select></div>
+
+
+
+                  <input type="button" class="btn btn-default" Value="Search" data-dismiss="modal" onClick="questionBank(this.form)">
+                </form>
+
+
+
+                <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
+                 <select style="text-align: center; visibility: hidden" size=10 class="list-group-item-text;" id="qbankselect">
+                    </select>
+                    <form id="questionform" style="visibility: hidden">
+                        <label for="points">Points</label>
+                        <input type="number" id="points" name="points" />
+                        <label for="timed">Timed</label>
+                         <input type="checkbox" id="timed" name="timed" value="true" />
+                        <label for="assessment_type">Type</label>
+                        <select id="assessment_type">
+                            <option value="formative">formative</option>
+                            <option value="summative">summative</option>
+                            <option value="external">external</option>
+                        </select>
+                        <input type="button" class="btn btn-default" Value="Add to Assignment" data-dismiss="modal" onClick="addToAssignment(this.form)">
+
+                    </form>
+                </div>
+
+
+    <div class="col-md-12">
+            <div class="list-group" style="width:100%; visibility: hidden;" id="questionInfo">
+                <div class="list-group-item">
+                    <div class="form-group">
+              <button style="margin-top: 12px;" class="btn">Preview</button>
+                 </div>
+                </div>
+
+                <div class="list-group-item">
+                    <p id="q_code" style="white-space: pre; overflow-x: auto;"></p>
+                </div>
+
+                <div class="list-group" style="margin-top: 20px">
+                    <div class="list-group-item">
+                        <div id="q_author"></div>
+                        <div id="q_difficulty"></div>
+                        <div id="q_tags"></div>
+                    </div>
+                       <div class="form-group">
+                    <button data-toggle="modal" data-target="#editModal" style="margin-top: 12px;" class="btn" onclick="getQuestionText();">Edit</button></div>
+
+                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+     aria-labelledby="EditQuestion" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="editModalHeader">
+                    Edit Question
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
+                <form id="editForm" action="">
+                     <div class="form-group">
+                         <label for="changename">Change Name</label>
+                         <input style="width: 100%;" id="changename" type="text" required>
+
+                         </div>
+                    <div class="form-group">
+                     <label for="difficultyselector">Change Difficulty</label>
+                     <div id="change_difficulty">
+      <input type="radio" id="r1" name="rating" value="1" /><label for="r1">1</label>
+      <input type="radio" id="r2" name="rating" value="2" /><label for="r2">2</label>
+      <input type="radio" id="r3" name="rating" value="3" /><label for="r3">3</label>
+      <input type="radio" id="r4" name="rating" value="4" /><label for="r4">4</label>
+      <input type="radio" id="r5" name="rating" value="5"  /><label for="r5">5</label>
+    </div>
+                 </div>
+                    <div class="form-group">
+                    <label for="addTags">Add Tags</label>
+
+      <select id="addTags" style="width:100%" class="js-example-basic-multiple" multiple="multiple">
+                          {{ for tag in tags: }}
+                      <option value="{{=tag}}">{{ =tag }}</option>
+                      {{ pass }}
+</select>
+                        </div>
+
+                    <div class="form-group">
+                        <label for="editRST">Edit Question</label>
+              <textarea style="white-space: pre; overflow-x: auto;" id="editRST" cols="100" name="editRST" placeholder="" rows="20"></textarea>
+
+                    </div>
+                  <input type="button" class="btn btn-default" Value="Edit Question" data-dismiss="modal" onClick="edit_question(this.form);">
+
+</form>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </div>
+    </div>
+
+
+
+
+
+            </div>
+
+
+
+<div id="qwrite" class="form-group tab-pane fade">
+        <form id="newqform">
+            <div class="col-md-12">
+            <label for="template">Template:</label><select id="template">
+                <option value="activecode">activecode</option>
+                <option value="assess">assess</option>
+                <option value="clickableArea">clickableArea</option>
+                <option value="codelens">codelens</option>
+                <option value="dragndrop">dragndrop</option>
+                <option value="parsons">pasons</option>
+                <option value="poll">poll</option>
+                <option value="reveal">reveal</option>
+                <option value="shortanswer">shortanswer</option>
+                <option value="usageAssignment">usageAssignment</option>
+            </select> <input type="button" onclick="display_write();" class="btn" value="Go">
+            </div>
+            <div id="hiddenwrite" style="visibility: hidden">
+            <div class="col-md-12">
+                <label for="qcode"></label>
+                <textarea rows="12" cols="65" form="newqform" id="qcode"></textarea>
+            </div>
+            <div class="col-md-12">
+                <label for="qname">Question Name:</label>
+                <input type="text" id="qname"/>
+                <p id="qnameerror" style="color: red"></p>
+            </div>
+            <div class="col-md-12">
+                <label>Difficulty: </label>
+                1<input type="radio" name="difficulty" id="difficulty1" value="1">
+                <input type="radio" name="difficulty" id="difficulty2" value="2">
+                <input type="radio" name="difficulty" id="difficulty3" value="3">
+                <input type="radio" name="difficulty" id="difficulty4" value="4">
+                <input type="radio" name="difficulty" id="difficulty5" value="5">5
+
+            </div>
+            <div class="col-md-12">
+                <label for="qtags">Tags:</label>
+                <input type="text" id="qtags"/>
+            </div>
+            <div class="col-md-12">
+                <label>Location:</label><select id="qchapter">
+                <option>Chapter</option>
+            </select>
+            </div>
+            <div class="col-md-12">
+                <label for="isprivate">Private</label><input type="checkbox" id="isprivate"/>
+            </div>
+            <div class="col-md-12">
+                <input type="button" class="btn" value="Preview" onclick="preview_question(this.form);"/>
+                <input type="button" class="btn btn-default" value="Done" onclick="create_question(this.form);"/>
+            </div>
+                </div>
+        </form>
+
+    </div>
+
+
+
+
+            </div>
+    </div>
+
+</div>
+
+
+
+<script>
+
+    function assignmentInfo() {
+         var select = document.getElementById('assignlist');
+        var assignmentid = select.options[select.selectedIndex].value;
+        var assignmentname = select.options[select.selectedIndex].text;
+        $('#summative').css('background-color', 'gainsboro');
+        $('#formative').css('background-color', 'transparent');
+        $('#external').css('background-color', 'transparent');
+
+
+
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/assignmentInfo/?assignmentid=' + assignmentid, true);
+        obj.send(JSON.stringify({variable: 'variable'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                var question_info = obj.responseText;
+                var res = JSON.parse(question_info);
+                var keys = [];
+                var i;
+                for (i in res) {
+                    if (res.hasOwnProperty(i) && i != 'assignment_points' && i != 'due_date' && i!=
+                    'description') {
+                        keys.push(i);
+                        }}
+                var assignment_points = res['assignment_points'];
+                var totalPoints = document.getElementById("totalPoints");
+                totalPoints.innerHTML = 'Total points: ' + assignment_points;
+
+                var duedate = res['due_date'];
+                document.getElementById('assignment_duedate').innerHTML = 'Due: ' + duedate;
+
+                var description = res['description'];
+                document.getElementById('assignment_description').innerHTML = description;
+                var tableBody = document.getElementById("tableBody");
+                $("#tableBody").empty(); //clear the table body first, before adding anything
+                for (k=0; k<keys.length; k++) {
+                    var key = keys[k];
+                    question = res[key];
+
+                    //now populate entire table but only show rows with class 'summative'
+                    var type = question['type'];
+
+                    var row = document.createElement("TR");
+                    row.setAttribute("class", type);
+                    row.setAttribute("id", question['name']);
+                    row.style.textAlign = 'center';
+                    row.style.border = '1px solid black';
+                    tableBody.appendChild(row);
+
+                    var qid = document.createElement("TD");
+                    qid.style.border = '1px solid black';
+                    var qid_data = document.createTextNode(question['name']);
+                    qid.appendChild(qid_data);
+                    row.appendChild(qid);
+
+                    var pts = document.createElement("TD");
+                    pts.style.border = '1px solid black';
+                    var pts_data = document.createTextNode(question['points']);
+                    pts.appendChild(pts_data);
+                    row.appendChild(pts);
+
+                    var timed = document.createElement("TD");
+                    timed.style.border = '1px solid black';
+                    var timed_data = document.createTextNode(question['timed']);
+
+                    timed.appendChild(timed_data);
+                    row.appendChild(timed);
+                }
+                //by default hide the formative and external questions
+                $(".formative").hide();
+                $(".external").hide();
+            }
+            var leftpanel1 = document.getElementById("leftpanel1");
+            leftpanel1.style.visibility = 'visible';
+            var leftpanel2 = document.getElementById("leftpanel2");
+            leftpanel2.style.visibility = 'visible';
+        }}
+
+</script>
+
+   <script>
+       function createAssignment(form) {
+           var name = form.name.value;
+           var description = form.description.value;
+           var duedate = form.duedate.value;
+
+           var obj = new XMLHttpRequest();
+           obj.open('POST','/runestone/admin/createAssignment/?name=' + name + '&description=' + description + '&due=' + duedate, true);
+           obj.send(JSON.stringify({name: name, description: description }));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   added = JSON.parse(obj.responseText);
+                if (added != 'ERROR') {
+                    select = document.getElementById('assignlist');
+                    newopt = document.createElement('option');
+                    newopt.value = added[name];
+                    newopt.innerHTML = name;
+                    select.appendChild(newopt);
+                    select.selectedIndex = newopt.index;
+                } else{
+                    alert('Error in creating new assignment.')
+                }
+            }
+        }
+       }
+   </script>
+
+   <script>
+       function showQuestions(type) {
+           //Show all questions in table with class matching the type passed in, hide all other questions
+           var typeToHide1;
+           var typeToHide2;
+
+           if (type == 'summative') {
+               typeToHide1 = '.formative';
+               typeToHide2 = '.external';
+           }
+
+           if (type == 'formative') {
+               typeToHide1 = '.summative';
+               typeToHide2 = '.external';
+           }
+
+           if (type == 'external') {
+               typeToHide1 = '.formative';
+               typeToHide2 = '.summative';
+           }
+           var question_type = '.' + type;
+           $(question_type).show();
+           $(typeToHide1).hide();
+           $(typeToHide2).hide();
+       }
+   </script>
+
+   <script>
+       function getQuestions() {
+             var select = document.getElementById('assignlist');
+        var assignmentid = select.options[select.selectedIndex].value;
+        var assignmentname = select.options[select.selectedIndex].text;
+           var questions_list = document.getElementById('questions_list');
+           //drop any of the questions that have been previously added to the select
+           $("#questions_list").empty();
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/getQuestions/?assignmentid=' + assignmentid, true);
+        obj.send(JSON.stringify({variable: 'variable'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                var questions = JSON.parse(obj.responseText);
+                for (i=0;i<questions.length;i++) {
+                    var option = document.createElement("option");
+                    option.text = questions[i];
+                    option.value = assignmentid;
+                    questions_list.add(option);}
+       }}}
+
+       function remove_question() {
+              var select = document.getElementById('questions_list');
+            var question_name = select.options[select.selectedIndex].text;
+           var assignment_id = select.options[select.selectedIndex].value;
+           var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, true);
+        obj.send(JSON.stringify({variable: 'variable'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                var totalPoints = document.getElementById("totalPoints");
+                totalPoints.innerHTML = 'Total points: ' + JSON.parse(obj.responseText);
+                //remove from the select dropdown and remove from the table
+                select.remove(select.selectedIndex);
+                row = document.getElementById(question_name);
+                row.parentNode.removeChild(row);}}}
+
+
+       function questionBank(form) {
+           var chapter = form.chapter.value;
+           var author = form.author.value;
+           var tags = $("#tags").select2("val");
+           var term = form.term.value;
+           var difficulty = null;
+           var difficulty_options = ['rating1','rating2','rating3','rating4','rating5'];
+           var inputs = document.getElementById('qbankform').getElementsByTagName('input');
+           for (var i = 0, length = inputs.length; i < length; i++) {
+            if (inputs[i].type == 'radio' && inputs[i].checked) {
+            difficulty = inputs[i].value;
+            }}
+
+           var obj = new XMLHttpRequest();
+           obj.open('POST','/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term, true);
+           obj.send(JSON.stringify({variable:'variable'}));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   var resp = JSON.parse(obj.responseText);
+                   var select = document.getElementById('qbankselect');
+                   var questionform = document.getElementById('questionform');
+                   $("#qbankselect").empty();
+                   for (i=0;i<resp.length;i++) {
+                        var option = document.createElement("option");
+                        option.text = resp[i];
+                        option.value = resp[i];
+                        option.onclick = getQuestionInfo;
+                        select.add(option);
+                   }
+                   if (resp.length==0) {
+                       select.style.visibility = 'hidden';
+                   questionform.style.visibility = 'hidden';
+                       var q_info = document.getElementById('questionInfo');
+                   q_info.style.visibility = 'hidden';
+                       alert("Sorry, no questions matched your search criteria.");
+
+                   }
+                   if (resp.length > 0) {
+                   select.style.visibility = 'visible';
+                   questionform.style.visibility = 'visible';}
+                   }
+               }}
+   </script>
+
+   <script>
+       function addToAssignment(form) {
+           var points = form.points.value;
+           var checked = document.getElementById('timed').checked;
+           var select = document.getElementById('qbankselect');
+           var question_name = select.options[select.selectedIndex].text;
+           var assignlist = document.getElementById('assignlist');
+           var assignmentid = assignlist.options[assignlist.selectedIndex].value;
+           var assessmentselect = document.getElementById('assessment_type');
+           var assessment_type = assessmentselect.options[assessmentselect.selectedIndex].value;
+           var obj = new XMLHttpRequest();
+           obj.open('POST','/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + checked + '&type=' + assessment_type, true);
+           obj.send(JSON.stringify({variable:'variable'}));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   var newPoints = JSON.parse(obj.responseText)[0];
+                   var q_type = JSON.parse(obj.responseText)[1];
+                   var totalPoints = document.getElementById("totalPoints");
+                    totalPoints.innerHTML = 'Total points: ' + newPoints;
+                   var tableBody = document.getElementById("tableBody");
+                    var row = document.createElement("TR");
+                    row.setAttribute("class", q_type);
+                    row.setAttribute("id", question_name);
+                    row.style.textAlign = 'center';
+                    row.style.border = '1px solid black';
+                    tableBody.appendChild(row);
+
+                    var qid = document.createElement("TD");
+                    qid.style.border = '1px solid black';
+                    var qid_data = document.createTextNode(question_name);
+                    qid.appendChild(qid_data);
+                    row.appendChild(qid);
+
+                    var pts = document.createElement("TD");
+                    pts.style.border = '1px solid black';
+                    var pts_data = document.createTextNode(points);
+                    pts.appendChild(pts_data);
+                    row.appendChild(pts);
+
+                    var timed = document.createElement("TD");
+                    timed.style.border = '1px solid black';
+                    var timed_data = document.createTextNode(checked);
+
+                    timed.appendChild(timed_data);
+                    row.appendChild(timed);
+
+                   if (q_type == 'summative') {
+                       $(".summative").show();
+                       $(".formative").hide();
+                        $(".external").hide();
+
+                       $('#summative').css('background-color', 'gainsboro');
+                        $('#formative').css('background-color','transparent');
+                        $('#external').css('background-color','transparent');
+
+                   }
+
+                   if (q_type == 'formative') {
+                       $(".formative").show();
+                       $(".summative").hide();
+                       $(".external").hide();
+
+                       $('#formative').css('background-color', 'gainsboro');
+                       $('#summative').css('background-color', 'transparent');
+                       $('#external').css('background-color', 'transparent');
+                   }
+                   if (q_type == 'external') {
+                       $(".external").show();
+                       $(".formative").hide();
+                        $(".summative").hide();
+
+                       $('#external').css('background-color', 'gainsboro');
+                        $('#summative').css('background-color','transparent');
+                        $('#formative').css('background-color','transparent');
+                   }
+
+               }
+               }
+       }
+   </script>
+
+
+   <script>
+       function getQuestionInfo() {
+              var select = document.getElementById('qbankselect');
+           var question_name = select.options[select.selectedIndex].text;
+            var assignlist = document.getElementById('assignlist');
+           var assignmentid = assignlist.options[assignlist.selectedIndex].value;
+           var obj = new XMLHttpRequest();
+           obj.open('POST','/runestone/admin/getQuestionInfo/?question=' + question_name + '&assignment=' + assignmentid, true);
+           obj.send(JSON.stringify({variable:'variable'}));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   var question_info = obj.responseText;
+                var res = JSON.parse(question_info);
+                var data = {};
+                var i;
+                for (i in res) {
+                    if (res.hasOwnProperty(i)) {
+                        data[i] = res[i];
+                        }}
+             var difficulty = data['difficulty'];
+                var code = data['code'];
+                var author = data['author'];
+                var tags = data['tags'];
+
+                   var q_difficulty = document.getElementById('q_difficulty');
+                   if (difficulty == null) {
+                   q_difficulty.innerHTML = 'Difficulty not set for this question';
+                   } else {
+                   q_difficulty.innerHTML = 'Difficulty: ' + difficulty;}
+
+                   var q_code = document.getElementById('q_code');
+                   q_code.innerHTML = code;
+
+                   var q_author = document.getElementById('q_author');
+                   if (author == null) {
+                   q_author.innerHTML = 'No author for this question';
+                   } else {
+                   q_author.innerHTML = 'Author: ' + author;}
+
+                   var q_tags = document.getElementById('q_tags');
+                   q_tags.innerHTML = 'Tags:' + tags;
+                   var q_info = document.getElementById('questionInfo');
+                   q_info.style.visibility = 'visible';
+
+       }}}
+   </script>
+
+
+
+  <script>
+      function edit_question(form) {
+           var select = document.getElementById('qbankselect');
+           var question_name = select.options[select.selectedIndex].text;
+          var tags = $("#addTags").select2("val");
+           var name = form.changename.value;
+           var difficulty = null;
+           var difficulty_options = ['r1','r2','r3','r4','r5'];
+           var inputs = document.getElementById('editForm').getElementsByTagName('input');
+           for (var i = 0, length = inputs.length; i < length; i++) {
+            if (inputs[i].type == 'radio' && inputs[i].checked) {
+            difficulty = inputs[i].value;
+            }}
+          var question_text = form.editRST.value;
+          question_text =  question_text.replace(/(\n)+/g, '%0A'); //encodes all new line characters to preserve them in query string
+
+          var obj = new XMLHttpRequest();
+          obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
+          obj.send(JSON.stringify({variable:'variable'}));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   if (obj.responseText == 'Success') {
+                       alert('You successfully edited the selected question.');
+                   }
+               }
+           }
+
+      }
+  </script>
+
+  <script>
+      function getQuestionText() {
+          var select = document.getElementById('qbankselect');
+           var question_name = select.options[select.selectedIndex].text;
+          var obj = new XMLHttpRequest();
+          obj.open('POST', '/runestone/admin/question_text?question_name=' + question_name, true);
+          obj.send(JSON.stringify({variable:'variable'}));
+           obj.onreadystatechange = function () {
+               if (obj.readyState == 4 && obj.status == 200) {
+                   var textarea = document.getElementById('editRST');
+                   textarea.innerHTML = obj.responseText;
+               }
+               }
+           }
+  </script>
+
+
+  <script type="text/javascript">
+$("#tags").select2();
+    $("#addTags").select2();
+</script>

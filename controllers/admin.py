@@ -606,11 +606,21 @@ def instructors():
                 studentdict[row.user_id]= name
 
 
+    cur_assignments = db(db.assignments.course == auth.user.course_id).select()
+    assigndict = {}
+    for row in cur_assignments:
+        assigndict[row.id] = row.name
+
+    tags = []
+    tag_query = db(db.tags).select()
+    for tag in tag_query:
+        tags.append(tag.tag_name)
+
     #Not rebuilding
     if not request.vars.projectname or not request.vars.startdate:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True)
+        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True, assignments=assigndict, tags=tags)
 
     #Rebuilding now
     else:
@@ -634,7 +644,7 @@ def instructors():
 
         return dict(sectionInfo=sectionsList,startDate=date.isoformat(),coursename=auth.user.course_name,instructors=instructordict, students=studentdict,confirm=False,
                     task_name=uuid,
-                    course_url=course_url)
+                    course_url=course_url, assignments=assigndict, tags=tags)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -718,3 +728,386 @@ def deletecourse():
         response.flash = 'course, %s, not found' % course_name
 
     redirect(URL('default','index'))
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def removeassign():
+    db(db.assignments.id == request.args[0]).delete()
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def createAssignment():
+    date_split = request.vars['due'].split('-')
+    due = datetime.date(int(date_split[0]), int(date_split[1]), int(date_split[2]))
+    try:
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
+        returndict = {request.vars['name']: newassignID}
+        return json.dumps(returndict)
+    except Exception as ex:
+        print(ex)
+        return json.dumps('ERROR')
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def assignmentInfo():
+    assignment_id = request.vars['assignmentid']
+    assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
+    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
+    allquestion_info = {}
+    allquestion_info['assignment_points'] = assignment_points
+    date = db(db.assignments.id == assignment_id).select(db.assignments.duedate).first().duedate
+    try:
+        due = date.strftime("%m/%d/%Y")
+    except:
+        due = 'No due date set for this assignment'
+    allquestion_info['due_date'] = due
+    description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
+    if description == None:
+        allquestion_info['description'] = 'No description available for this assignment'
+    else:
+        allquestion_info['description'] = description
+
+
+    try:
+        for row in assignment_questions:
+            timed = row.timed
+            try:
+                question_points = int(row.points)
+            except:
+                question_points = 0
+            question_info_query = db(db.questions.id == int(row.question_id)).select()
+            for row in question_info_query:
+                question_dict = {}
+                #question_dict['base course'] = row.base_course
+                #question_dict['chapter'] = row.chapter
+                #question_dict['author'] = row.author
+                #question_dict['difficulty'] = int(row.difficulty)
+                #question_dict['question'] = row.question
+                question_id = int(row.id)
+                question_dict['name'] = row.name
+                question_dict['timed'] = timed
+                question_dict['points'] = question_points
+                type_id = db((db.assignment_questions.question_id == question_id) & (db.assignment_questions.assignment_id == assignment_id)).select(db.assignment_questions.assessment_type).first().assessment_type
+                type = db(db.assignment_types.id == type_id).select(db.assignment_types.name).first().name
+                question_dict['type'] = type
+                allquestion_info[int(row.id)] = question_dict
+    except Exception as ex:
+        print(ex)
+
+    return json.dumps(allquestion_info)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getQuestions():
+    assignment_id = request.vars['assignmentid']
+    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
+    questions = []
+    for row in assignment_questions:
+        question_info_query = db(db.questions.id == int(row.question_id)).select()
+        for q in question_info_query:
+            questions.append(q.name)
+    return json.dumps(questions)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def removeQuestion():
+    question_name = request.vars['name']
+    assignment_id = request.vars['assignment_id']
+    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
+    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
+
+    assignment = db(db.assignments.id == int(assignment_id)).select().first()
+    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
+    new_points = int(assignment_points) - int(question_points)
+    assignment.update_record(points=new_points)
+    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
+    return json.dumps(new_points)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def questionBank():
+    tags = False
+    if request.vars['tags'] != "null":
+        tags = True
+    term = False
+    if request.vars['term'] != "":
+        term = True
+    chapter = False
+    if request.vars['chapter'] != "":
+        chapter = True
+    difficulty = False
+    if request.vars['difficulty'] != "null":
+        difficulty = True
+    author = False
+    if request.vars['author'] != "":
+        author = True
+    rows = []
+    questions = []
+    try:
+        questions_query = db(db.questions).select()
+        for question in questions_query: #Initially add all questions to the list, and then remove the rows that don't match search criteria
+            rows.append(question)
+        for row in questions_query:
+            removed_row = False
+            if term:
+                if request.vars['term'] not in row.name and request.vars['term'] not in row.question:
+                    try:
+                        rows.remove(row)
+                        removed_row = True
+                    except Exception as err:
+                        ex = err
+
+            if removed_row == False:
+                if chapter:
+                    if request.vars['chapter'] != row.chapter:
+                        try:
+                            rows.remove(row)
+                            removed_row = True
+                        except Exception as err:
+                            ex = err
+
+            if removed_row == False:
+                if difficulty:
+                    if int(request.vars['difficulty']) != row.difficulty:
+                        try:
+                            rows.remove(row)
+                            removed_row = True
+                        except Exception as err:
+                            ex = err
+
+            if removed_row == False:
+                if author:
+                    if request.vars['author'] != row.author:
+                        try:
+                            rows.remove(row)
+                            removed_row = True
+                        except Exception as err:
+                            ex = err
+
+            if removed_row == False:
+                if tags:
+                    tags_query = db(db.question_tags.question_id == row.id).select()
+                    tag_list = []
+                    for q_tag in tags_query:
+                        tag_names = db(db.tags.id == q_tag.tag_id).select()
+                        for tag_name in tag_names:
+                            tag_list.append(tag_name.tag_name)
+                    needsRemoved = False
+                    for search_tag in request.vars['tags'].split(','):
+                        if search_tag not in tag_list:
+                            needsRemoved = True
+                    if needsRemoved:
+                        try:
+                            rows.remove(row)
+                            removed_row = True
+                        except Exception as err:
+                            print(err)
+        for q_row in rows:
+            questions.append(q_row.name)
+
+    except Exception as ex:
+        print(ex)
+        return 'Error'
+    return json.dumps(questions)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def addToAssignment():
+    assignment_id = int(request.vars['assignment'])
+    question_name = request.vars['question']
+    type = request.vars['type']
+    question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
+
+    timed = request.vars['timed']
+    try:
+        points = int(request.vars['points'])
+    except:
+        points = 0
+    try:
+        type_id = db(db.assignment_types.name == type).select(db.assignment_types.id).first().id
+    except:
+        type_id = None
+    try:
+        db.assignment_questions.insert(assignment_id=assignment_id, question_id=question_id, points=points, timed=timed, assessment_type=type_id)
+        assignment = db(db.assignments.id == assignment_id).select().first()
+        assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
+        if assignment_points == None:
+            new_points = points
+        else:
+            new_points = int(assignment_points) + points
+
+        assignment.update_record(points=new_points)
+        return json.dumps([new_points,type])
+    except Exception as ex:
+        print(ex)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getQuestionInfo():
+    assignment_id = int(request.vars['assignment'])
+    question_name = request.vars['question']
+    try:
+        question_code = db((db.questions.name == question_name)).select(db.questions.question).first().question
+        question_author = db((db.questions.name == question_name)).select(db.questions.author).first().author
+        question_difficulty = db((db.questions.name == question_name)).select(db.questions.difficulty).first().difficulty
+        question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
+        tags = []
+        question_tags = db((db.question_tags.question_id == question_id)).select()
+        for row in question_tags:
+            tag_id = row.tag_id
+            tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
+            tags.append(" " + str(tag_name))
+        if question_difficulty != None:
+            returnDict = {'code':question_code, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
+        else:
+            returnDict = {'code':question_code, 'author':question_author, 'difficulty':None, 'tags': tags}
+
+        return json.dumps(returnDict)
+
+    except Exception as ex:
+        print(ex)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def edit_question():
+    vars = request.vars
+    old_qname = vars['question']
+    new_qname = vars['name']
+    try:
+        difficulty = int(vars['difficulty'])
+    except:
+        difficulty = 0
+    tags = vars['tags']
+    old_question = db(db.questions.name == old_qname).select().first()
+    author = auth.user.first_name + " " + auth.user.last_name
+    base_course = old_question.base_course
+    timestamp = datetime.datetime.now()
+    chapter = old_question.chapter
+    question_type = old_question.question_type
+    subchapter = old_question.subchapter
+
+    question = vars['questiontext']
+
+    try:
+        if new_qname != "" and new_qname != old_qname:
+            new_qid = db.questions.insert(difficulty=difficulty, question=question, name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
+            chapter=chapter, subchapter=subchapter, question_type=question_type)
+            if tags != 'null':
+                tags = tags.split(',')
+                for tag in tags:
+                    tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
+                    db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
+            return "Success"
+
+    except Exception as ex:
+        print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def question_text():
+    qname = request.vars['question_name']
+    q_text = db(db.questions.name == qname).select(db.questions.question).first().question
+    return q_text
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def searchstudents():
+    if request.args[0] == "_":
+        #seperate the students from instructors in a hopefully more efficient way
+        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
+        searchdict = {}
+        for row in cur_students:
+            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (db.course_instructor.instructor == row.user_id)).select()
+            instructorlist = []
+            for line in isinstructor:
+                instructorlist.append(line.instructor)
+            if row.user_id not in instructorlist:
+                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name,
+                                                               db.auth_user.last_name)
+                for identity in person:
+                    name = identity.first_name + " " + identity.last_name
+                    searchdict[row.user_id] = name
+
+    else:
+        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
+        searchdict = {}
+        for row in cur_students:
+            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (
+            db.course_instructor.instructor == row.user_id)).select()
+            instructorlist = []
+            for line in isinstructor:
+                instructorlist.append(line.instructor)
+            if row.user_id not in instructorlist:
+                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name)
+                for identity in person:
+                    if request.args[0] in identity.first_name or request.args[0] in identity.last_name:
+                        name = identity.first_name + " " + identity.last_name
+                        searchdict[row.user_id] = name
+
+    return json.dumps(searchdict)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def gettemplate():
+    template = request.args[0]
+    returndict = {}
+    base = ''
+    if template == 'activecode':
+        #get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'assess':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'clickableArea':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'codelens':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'dragndrop':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'parsons':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'poll':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'reveal':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'shortanswer':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+    elif template == 'usageAssignment':
+        # get the actual template and replace base with it
+        returndict['template'] = base
+
+    chapters = []
+
+    #auth.user.course_name
+    print(auth.user.course_name)
+    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
+    print(chaptersrow)
+    for row in chaptersrow:
+        chapters.append(row['chapter_name'])
+    print(chapters)
+    returndict['chapters'] = chapters
+
+    return json.dumps(returndict)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def createquestion():
+    try:
+        newqID = db.questions.insert(base_course=auth.user.course_id, name=request.vars['name'], chapter=request.vars['chapter'],
+                 author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
+                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
+
+        returndict = {request.vars['name']: newqID}
+
+        return json.dumps(returndict)
+    except Exception as ex:
+        print(ex)
+        return json.dumps('ERROR')
