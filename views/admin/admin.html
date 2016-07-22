@@ -1,0 +1,228 @@
+    <div class="col-md-3">
+        <h3 style="visibility: hidden">Admin Panel</h3>
+
+
+           <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
+                </a>
+
+
+        <a id="rebuildTab" data-toggle="tab" href="#rebuild" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
+                </a>
+        <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
+                </a>
+        <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
+                </a>
+
+        <div style="margin-top: 125px; border-top: dashed">
+
+
+
+            <form  style="margin-top: 20px;" action="/runestone/sections/newCourse" method="post">
+                <button style="text-align: center; font-size: 12pt;" class="list-group-item" type="submit">New Course</button>
+                </form>
+            </div>
+
+        </div>
+
+          <div class="tab-content">
+
+
+        <div id="sections" class="tab-pane fade">
+            <div class="col-md-3">
+        <h3 style="text-align: center">Sections</h3>
+                {{ for section in sectionInfo: }}
+         <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar" onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
+        {{pass}}
+
+
+
+
+
+         <form class="button" action="/runestone/sections/addSection" method="post" style="display: inline-block">
+             <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
+
+                <form class="button" action="/runestone/sections/remove" method="post" style="display: inline-block">
+                <input style="width: 35px; height:30px;" type="submit" value="-">
+                </form>
+
+
+
+
+                </div>
+
+
+
+
+        <div id="calendar" class="tab-pane fade">
+            <div class="col-md-3">
+            <h3 style="text-align: center">Start Date</h3>
+            <a data-toggle="tab" href="#students" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">{{=startDate}}</h4>
+                </a>
+                <form class="button" action="/runestone/sections/changeDate" method="post" style="text-align: center">
+             <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
+                </div>
+
+
+
+    <div id="students">
+        <div class="col-md-3">
+        <h3 style="text-align: center">Students</h3>
+            <div id="studentNames"></div>
+
+        <h5 id="total"></h5>
+            </div>
+
+        </div>
+
+
+</div>
+
+</div>
+        <div class="tab-pane fade" id="rebuild">
+            <div class="col-sm-3"></div>
+  <div  class="col-sm-6">
+
+      <h4 style="text-align: center">Change Log</h4>
+      <div style="border: groove; white-space: pre" id="changelog"></div>
+
+    <form name="confirm" method="POST" action="/runestone/admin/instructors">
+      <input type="hidden" name="projectname" value="{{=coursename}}" />
+      <input type="hidden" name="coursetype" value="rebuildcourse" />
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="loginreq" value="yes" checked />
+          Require a username to access this course
+        </label>
+      </div>
+
+      <div class="checkbox">
+          <label>
+            <input type="checkbox" name="python3" value="true" id="python3" checked="checked"  />
+            Use Python3 print function and true division
+         </label>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-3">
+          <label for="startdate">Course start date</label>
+          <input type="text" name="startdate" id="startdate" class="form-control"data-date-format="yyyy/mm/dd" value="{{=startDate}}" />
+        </div>
+      </div>
+      <input type="submit" class="btn btn-default" value="Rebuild Now" />
+    </form>
+
+
+
+
+
+
+      <form  method="post" action="/runestone/admin/backup" style="margin-top: 16px;">
+                <input type="submit" class="btn btn-default" value="Download Backup"/>
+                </form>
+
+      <div>*This will take 15-20 seconds to complete</div>
+
+
+      {{ if confirm == False: }}
+  <h3 id="title">Rebuilding course.</h3>
+  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
+	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
+  </div>
+  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
+   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
+   your newly rebuilt course.</p>
+   <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
+        gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
+       have an automatic monitoring system that lets me know by email when things get backed up.  If you have persistent
+       problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
+       Thanks for your patience.  -- Brad</p>
+  <script type="text/javascript">
+
+        $('#outerTabs a[href="#admin"]').tab('show');
+        $('#admin a[href="#rebuild"]').tab('show');
+
+
+    var iid = setInterval(function() {
+      d = { task_name:'{{ =task_name }}',
+            course_url:'{{ =course_url }}'};
+      $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
+        if (data.status == "true") {
+          window.location.href = data.course_url;
+        }
+        if (data.status == "failed") {
+          clearInterval(iid);
+          $("#spinner_div").hide();
+          $("#title").text("An error occurred.");
+          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+           "Make sure you include the following traceback information:" +
+           "<pre>" + data.traceback + "</pre>");
+        }
+      });
+    }, 3000);
+  </script>
+{{ pass }}
+
+
+  </div>
+        </div>
+
+
+<div id="AddInstructor" class="tab-pane fade">
+          <div class="col-md-4" style="text-align: center">
+              <h3>Remove a Current Instructor</h3>
+              <div class="list-group">
+                  <form method="POST" id="removeins" action="Javascript:remove_instructor();">
+                  <select size="10" id="instructorlist" name="instructor" class="form-control">
+                      {{ for person in instructors: }}
+                      <option value="{{=person}}">{{ =instructors[person] }}</option>
+                      {{ pass }}
+                  </select>
+                  <div style="text-align: center">
+                  <input type="submit" value="-">
+                  </div>
+                      </form>
+              </div>
+          </div>
+          <div class="col-md-4" style="text-align: center">
+              <h3>Add a New Instructor</h3>
+              <div class="list-group-item">
+                  <form>
+                    <input type="text"><input type="submit" value="Search">
+                  </form>
+                  <form id="addins" method="POST" action="Javascript:add_instructor();">
+                  <select size="10" id="studentlist" name="student" class="form-control">
+                      {{ for user in students: }}
+                      <option value="{{=user}}" >{{ =students[user] }}</option>
+                      {{ pass }}
+                  </select>
+                  <div style="text-align: center">
+                  <button id="activatorbutton" type="submit" value="+">+</button>
+                  </div>
+                      </form>
+              </div>
+          </div>
+​
+      </div>
+​
+​
+       <div id="Delete" class="tab-pane fade">
+            <div class="col-md-8">
+                <h2 style="text-align: center">Delete a Course</h2>
+                <h3 style="text-align: center">This action CANNOT BE UNDONE</h3>
+                <div style="text-align: center">
+                    <form action="/{{=request.application}}/admin/deletecourse" method="post"
+                    onsubmit="return confirm('Are you sure you want to delete this course? This will remove the course for all students and all custom assignments you have made will be deleted. This cannot be undone.')">
+                    <button type="submit" style="width: 33%; align-self: center;">Really Delete</button>
+                        </form>
+                </div>
+                <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
+            </div>
+            </div>
+          </div>

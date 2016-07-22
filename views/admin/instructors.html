@@ -1,418 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Runestone Instructor Interface</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{{extend 'layout.html'}}
 
-
-</head>
-<body>
-    <!-- Begin navbar -->
-    <div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
-
-      <div class="container">
-
-        <div class="navbar-header">
-          <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-
-          <div>
-            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
-            <a class="navbar-brand" href="/">Runestone Interactive</a>
-          </div>
-        </div>
-
-        <div class="navbar-collapse collapse navbar-ex1-collapse">
-
-          <ul class="nav navbar-nav navbar-right">
-
-            <li class="divider-vertical"></li>
-
-            <!-- social media dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
-              </a>
-              <ul class="dropdown-menu social-menu">
-                  <li>
-                    <div>
-                      <b>Runestone in social media:</b>
-                    </div>
-                    <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
-                  </li>
-
-                  <li class="divider"></li>
-                  <li>
-                    <div>
-                      <b>Help support us:</b>
-                    </div>
-                      <div>
-                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                      <input type="hidden" name="cmd" value="_s-xclick">
-                      <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-                      ">
-                      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                      </form>
-
-                    </div>
-                  </li>
-              </ul>
-            </li>
-            <!-- end social media dropdown -->
-
-            <li class="divider-vertical"></li>
-
-            <!-- user account dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
-              </a>
-              <ul class="dropdown-menu user-menu">
-                {{ if auth.user: }}
-                  <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
-                {{ else: }}
-                  <li><span class='loggedinuser'>Not logged in</span></li>
-                {{ pass }}
-                <li class="divider"></li>
-                <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
-                <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
-                <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li>
-                <li class="divider"></li>
-                <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
-                <li class="divider"></li>
-                {{ if auth.user: }}
-                  <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-                  <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-                  <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
-                  <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
-                {{ else: }}
-                  <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
-                  <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
-                {{ pass }}
-              </ul>
-            </li>
-            <!-- end user account dropdown -->
-
-            <li class="divider-vertical"></li>
-
-            <!-- help menu dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
-              </a>
-              <ul class="dropdown-menu user-menu">
-
-                <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li>
-                <li class="divider"></li>
-                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-                <li><a href='/{{=request.application}}/static/help/bugreports.html'>Report A Problem</a></li>
-              </ul>
-            </li>
-
-            <li class="divider-vertical"></li>
-
-          </ul>
-
-          <ul class="nav navbar-nav">
-
-            <li class="divider-vertical"></li>
-
-            <!-- open library dropdown -->
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="/{{=request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist</a></li>
-                <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures</a></li>
-                <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
-                <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
-                <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
-                <li><a href="/{{=request.application}}/static/pip/index.html">Programs, Information, People version 1</a></li>
-                <li><a href="/{{=request.application}}/static/pip2/index.html">Programs, Information, People version 2</a></li>
-                <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
-              </ul>
-            </li>
-
-            <li class="divider-vertical"></li>
-
-
-
-            <li class="divider-vertical"></li>
-
-          </ul>
-
-        </div>
-      </div>
-
-    </div>
 
 
 <div id="outerTabs" class="container" style="margin-top: 60px;">
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#progress">Student Progress</a></li>
     <li><a data-toggle="tab" href="#admin">Admin</a></li>
-    <li><a data-toggle="tab" href="#grade">Grading</a></li>
-    <li><a data-toggle="tab" href="#menu3">Editing</a></li>
-    <li><a data-toggle="tab" href="#menu4">Doc</a></li>
+    <li><a data-toggle="tab" href="#grading">Grading</a></li>
+    <li><a data-toggle="tab" href="#assignments">Assignments</a></li>
+    <li><a data-toggle="tab" href="#doc">Doc</a></li>
   </ul>
 
 <div class="tab-content">
-    <div id="progress" class="tab-pane fade in active">
-      <h3>HOME</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
+    <div id="progress" class="tab-pane fade in active">{{include 'admin/progress.html'}}</div>
 
-    <div id="admin" class="tab-pane fade">
-
-
-    <div class="col-md-3">
-        <h3 style="visibility: hidden">Admin Panel</h3>
+    <div id="admin" class="tab-pane fade">{{include 'admin/admin.html'}}</div>
+    <div id="assignments" class="tab-pane fade">{{include 'admin/assignments.html'}}</div>
 
 
 
-           <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
-                </a>
-
-
-        <a id="rebuildTab" data-toggle="tab" href="#rebuild" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
-                </a>
-        <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
-                </a>
-        <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
-                </a>
-
-        <div style="margin-top: 125px; border-top: dashed">
-
-
-
-            <form  style="margin-top: 20px;" action="/runestone/sections/newCourse" method="post">
-                <button style="text-align: center; font-size: 12pt;" class="list-group-item" type="submit">New Course</button>
-                </form>
             </div>
-
-        </div>
-
-          <div class="tab-content">
-
-
-        <div id="sections" class="tab-pane fade">
-            <div class="col-md-3">
-        <h3 style="text-align: center">Sections</h3>
-                {{ for section in sectionInfo: }}
-         <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar" onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
-        {{pass}}
-
-
-
-
-
-         <form class="button" action="/runestone/sections/addSection" method="post" style="display: inline-block">
-             <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
-
-                <form class="button" action="/runestone/sections/remove" method="post" style="display: inline-block">
-                <input style="width: 35px; height:30px;" type="submit" value="-">
-                </form>
-
-
-
-
-                </div>
-
-
-
-
-        <div id="calendar" class="tab-pane fade">
-            <div class="col-md-3">
-            <h3 style="text-align: center">Start Date</h3>
-            <a data-toggle="tab" href="#students" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">{{=startDate}}</h4>
-                </a>
-                <form class="button" action="/runestone/sections/changeDate" method="post" style="text-align: center">
-             <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
-                </div>
-
-
-
-    <div id="students">
-        <div class="col-md-3">
-        <h3 style="text-align: center">Students</h3>
-            <div id="studentNames"></div>
-
-        <h5 id="total"></h5>
-            </div>
-
         </div>
 
 
-</div>
-
-</div>
-        <div class="tab-pane fade" id="rebuild">
-            <div class="col-sm-3"></div>
-  <div  class="col-sm-6">
-
-      <h4>Change Log</h4>
-      <div style="width:600px; border: groove; white-space: pre" id="changelog"></div>
-
-    <form name="confirm" method="POST" action="/runestone/admin/instructors">
-      <input type="hidden" name="projectname" value="{{=coursename}}" />
-      <input type="hidden" name="coursetype" value="rebuildcourse" />
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="loginreq" value="yes" checked />
-          Require a username to access this course
-        </label>
-      </div>
-
-      <div class="checkbox">
-          <label>
-            <input type="checkbox" name="python3" value="true" id="python3" checked="checked"  />
-            Use Python3 print function and true division
-         </label>
-      </div>
-
-      <div class="form-group row">
-        <div class="col-lg-3">
-          <label for="startdate">Course start date</label>
-          <input type="text" name="startdate" id="startdate" class="form-control"data-date-format="yyyy/mm/dd" value="{{=startDate}}" />
-        </div>
-      </div>
-      <input type="submit" class="btn btn-default" value="Rebuild Now" />
-    </form>
-
-
-
-
-
-
-      <form  method="post" action="/runestone/admin/backup" style="margin-top: 16px;">
-                <input type="submit" class="btn btn-default" value="Download Backup"/>
-                </form>
-
-      <div>*This will take 15-20 seconds to complete</div>
-
-
-      {{ if confirm == False: }}
-  <h3 id="title">Rebuilding course.</h3>
-  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
-  </div>
-  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
-   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
-   your newly rebuilt course.</p>
-   <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
-        gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
-       have an automatic monitoring system that lets me know by email when things get backed up.  If you have persistent
-       problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
-       Thanks for your patience.  -- Brad</p>
-  <script type="text/javascript">
-
-        $('#outerTabs a[href="#admin"]').tab('show');
-        $('#admin a[href="#rebuild"]').tab('show');
-
-
-    var iid = setInterval(function() {
-      d = { task_name:'{{ =task_name }}',
-            course_url:'{{ =course_url }}'};
-      $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
-        if (data.status == "true") {
-          window.location.href = data.course_url;
-        }
-        if (data.status == "failed") {
-          clearInterval(iid);
-          $("#spinner_div").hide();
-          $("#title").text("An error occurred.");
-          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
-           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
-           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-           "Make sure you include the following traceback information:" +
-           "<pre>" + data.traceback + "</pre>");
-        }
-      });
-    }, 3000);
-  </script>
-{{ pass }}
-
-
-  </div>
-        </div>
-
-
-<div id="AddInstructor" class="tab-pane fade">
-          <div class="col-md-4" style="text-align: center">
-              <h3>Remove a Current Instructor</h3>
-              <div class="list-group">
-                  <form method="POST" id="removeins" action="Javascript:remove_instructor();">
-                  <select size="10" id="instructorlist" name="instructor" class="form-control">
-                      {{ for person in instructors: }}
-                      <option value="{{=person}}">{{ =instructors[person] }}</option>
-                      {{ pass }}
-                  </select>
-                  <div style="text-align: center">
-                  <input type="submit" value="-">
-                  </div>
-                      </form>
-              </div>
-          </div>
-          <div class="col-md-4" style="text-align: center">
-              <h3>Add a New Instructor</h3>
-              <div class="list-group-item">
-                  <form>
-                    <input type="text"><input type="submit" value="Search">
-                  </form>
-                  <form id="addins" method="POST" action="Javascript:add_instructor();">
-                  <select size="10" id="studentlist" name="student" class="form-control">
-                      {{ for user in students: }}
-                      <option value="{{=user}}" >{{ =students[user] }}</option>
-                      {{ pass }}
-                  </select>
-                  <div style="text-align: center">
-                  <button id="activatorbutton" type="submit" value="+">+</button>
-                  </div>
-                      </form>
-              </div>
-          </div>
-​
-      </div>
-​
-​
-       <div id="Delete" class="tab-pane fade">
-            <div class="col-md-8">
-                <h2 style="text-align: center">Delete a Course</h2>
-                <h3 style="text-align: center">This action CANNOT BE UNDONE</h3>
-                <div style="text-align: center">
-                    <form action="/{{=request.application}}/admin/deletecourse" method="post"
-                    onsubmit="return confirm('Are you sure you want to delete this course? This will remove the course for all students and all custom assignments you have made will be deleted. This cannot be undone.')">
-                    <button type="submit" style="width: 33%; align-self: center;">Really Delete</button>
-                        </form>
-                </div>
-                <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
-            </div>
-            </div>
-          </div>
-          </div>
-
-
-
-</div>
-      </div>
-
-
-
-</body>
 
 
 
@@ -546,8 +156,7 @@ $('#sectionsTab').click(function(){
                 newopt.innerHTML = studentname;
                 inslist.appendChild(newopt);
             }
-        };
-    }
+        }}
 
     function remove_instructor(){
         var select = document.getElementById('removeins').elements['instructor'];
@@ -576,6 +185,135 @@ $('#sectionsTab').click(function(){
     }
 </script>
 
+<script>
+    function remove_assignment(){
+        var select = document.getElementById('assignlist');
+        var assignmentid = select.options[select.selectedIndex].value;
+        var assignmentname = select.options[select.selectedIndex].text;
+
+        var obj = new XMLHttpRequest();
+        obj.open('POST','/runestone/admin/removeassign/' + assignmentid, true);
+        obj.send(JSON.stringify({assignid: 'assignmentid'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                select.remove(select.selectedIndex)
+            }
+        }
+    }
+</script>
 
 
-</html>
+<script>
+
+$('#summative').click(function(){
+    $('#summative').css('background-color', 'gainsboro');
+    $('#formative').css('background-color','transparent');
+    $('#external').css('background-color','transparent');
+
+
+});
+
+    $('#formative').click(function(){
+    $('#formative').css('background-color', 'gainsboro');
+    $('#summative').css('background-color','transparent');
+    $('#external').css('background-color','transparent');
+
+});
+
+    $('#external').click(function(){
+    $('#external').css('background-color', 'gainsboro');
+    $('#summative').css('background-color','transparent');
+    $('#formative').css('background-color','transparent');
+
+});
+</script>
+
+
+<script>
+
+function search_students(formdata){
+        var searchterm = formdata.searchterm.value;
+        if (searchterm == ''){
+            searchterm = '_'
+        }
+        var obj = new XMLHttpRequest();
+        obj.open('POST','/runestone/admin/searchstudents/' + searchterm, true);
+        obj.send(JSON.stringify({tosearch: 'searchterm'}));
+        obj.onreadystatechange = function() {
+            if (obj.readyState == 4 && obj.status == 200) {
+                studidlist = JSON.parse(obj.responseText);
+                var studentlist = document.getElementById('studentlist');
+                studentlist.innerHTML = '';
+                for(var key in studidlist){
+                    if(studidlist.hasOwnProperty(key)){
+                        option = document.createElement('option');
+                        option.value = key;
+                        option.innerHTML = studidlist[key];
+                        studentlist.appendChild(option)
+
+                    }
+                }
+            }
+        }
+    }
+
+function display_write(){
+        var template = document.getElementById('template');
+        var questiontype = template.options[template.selectedIndex].value;
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/gettemplate/' + questiontype, true);
+        obj.send(JSON.stringify({questiontype}));
+        obj.onreadystatechange = function() {
+            if (obj.readyState == 4 && obj.status == 200){
+                var returns = JSON.parse(obj.responseText);
+                chapters = returns['chapters'];
+                var chapterlist = document.getElementById('chapter');
+                for(i=0; i<chapters.length; i++){
+                    newoption = document.createElement('option');
+                    newoption.value = chapters[i];
+                    newoption.innerHTML = chapters[i];
+                    chapterlist.appendChild(newoption)
+                }
+            }
+        };
+
+        var hiddenwrite =document.getElementById('hiddenwrite');
+        hiddenwrite.style.visibility = 'visible';
+    }
+
+
+
+
+    function create_question(formdata){
+        var template = formdata.template.value;
+        var name = formdata.qname.value;
+        var question = formdata.qcode.value;
+        question = question.replace(/(\n)+/g, '%0A');
+        var difficulty = formdata.difficulty;
+        for(var i = 0; i < difficulty.length; i++) {
+            if(difficulty[i].checked == true) {
+                var selectedDifficulty = difficulty[i].value;
+            }
+        }
+        var tags = formdata.qtags.value;
+        var chapter = formdata.qchapter.value;
+        var isprivate = formdata.isprivate.checked;
+        var sendstring = 'template=' + template + '&name=' + name +'&question=' + question + '&difficulty=' + selectedDifficulty + '&tags=' + tags + '&chapter=' + chapter + '&isprivate=' + isprivate;
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/createquestion/?' + sendstring, true);
+        obj.send(JSON.stringify({sendstring}));
+        obj.onreadystatechange = function() {
+            if (obj.readyState == 4 && obj.status == 200){
+                iserror = JSON.parse(obj.responseText);
+                if (iserror == 'ERROR'){
+                    errortext = document.getElementById('qnameerror');
+                    errortext.innerHTML = 'Name is alerady in use. Please try a different name.'
+                } else{
+                    alert('Question created successfully');
+                }
+            }
+        }
+    }
+
+
+</script>

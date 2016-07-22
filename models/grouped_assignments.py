@@ -138,6 +138,8 @@ db.define_table('assignments',
     Field('points', 'integer'),
     Field('threshold', 'integer', default=1),
     Field('released', 'boolean'),
+    Field('description', 'text'),
+    Field('duedate','datetime'),
     format='%(name)s',
     migrate='runestone_assignments.table'
     )
