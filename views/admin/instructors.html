@@ -4,23 +4,24 @@
 
 <div id="outerTabs" class="container" style="margin-top: 60px;">
   <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#progress">Student Progress</a></li>
-    <li><a data-toggle="tab" href="#admin">Admin</a></li>
+    <li class="active" id="progresstab"><a data-toggle="tab" href="#progress">Student Progress</a></li>
+    <li><a data-toggle="tab" id="admintab" href="#admin">Admin</a></li>
     <li><a data-toggle="tab" href="#grading">Grading</a></li>
     <li><a data-toggle="tab" href="#assignments">Assignments</a></li>
     <li><a data-toggle="tab" href="#doc">Doc</a></li>
   </ul>
 
-<div class="tab-content">
-    <div id="progress" class="tab-pane fade in active">{{include 'admin/progress.html'}}</div>
+    <div class="tab-content">
 
-    <div id="admin" class="tab-pane fade">{{include 'admin/admin.html'}}</div>
-    <div id="assignments" class="tab-pane fade">{{include 'admin/assignments.html'}}</div>
+        {{ block tabcontent }}
+
+        {{ end }}
 
 
 
-            </div>
-        </div>
+
+    </div>
+</div>
 
 
 

@@ -1,4 +1,9 @@
-    <div class="col-md-3">
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+
+<div class="col-md-3">
         <h3 style="visibility: hidden">Admin Panel</h3>
 
 
@@ -226,3 +231,10 @@
             </div>
             </div>
           </div>
+
+<script>
+    $("#progresstab").removeClass("active")
+    $("#admintab").tab("show")
+</script>
+
+{{ end }}

@@ -578,6 +578,29 @@ order by username;
 def instructors():
     sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
     courseid = sidQuery[0].id
+
+
+    cur_assignments = db(db.assignments.course == auth.user.course_id).select()
+    assigndict = {}
+    for row in cur_assignments:
+        assigndict[row.id] = row.name
+
+    tags = []
+    tag_query = db(db.tags).select()
+    for tag in tag_query:
+        tags.append(tag.tag_name)
+
+        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
+
+
+        return dict(coursename=auth.user.course_name,confirm=False,
+                    course_url=course_url, assignments=assigndict, tags=tags)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def admin():
+    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
+    courseid = sidQuery[0].id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
     sectionsList = []
     for row in sectionsQuery:
@@ -605,22 +628,11 @@ def instructors():
             if row.user_id not in instructordict:
                 studentdict[row.user_id]= name
 
-
-    cur_assignments = db(db.assignments.course == auth.user.course_id).select()
-    assigndict = {}
-    for row in cur_assignments:
-        assigndict[row.id] = row.name
-
-    tags = []
-    tag_query = db(db.tags).select()
-    for tag in tag_query:
-        tags.append(tag.tag_name)
-
     #Not rebuilding
     if not request.vars.projectname or not request.vars.startdate:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True, assignments=assigndict, tags=tags)
+        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True)
 
     #Rebuilding now
     else:
@@ -642,9 +654,9 @@ def instructors():
         course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
 
 
-        return dict(sectionInfo=sectionsList,startDate=date.isoformat(),coursename=auth.user.course_name,instructors=instructordict, students=studentdict,confirm=False,
-                    task_name=uuid,
-                    course_url=course_url, assignments=assigndict, tags=tags)
+    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
+                instructors=instructordict, students=studentdict, confirm=False,
+                task_name=uuid, course_url=course_url)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
