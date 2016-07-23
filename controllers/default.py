@@ -293,4 +293,12 @@ def sendreport():
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
 
-    redirect('/%s/default/' % request.application)
+    if auth.user:
+        courseCheck = db(db.user_courses.user_id == auth.user.id).count()
+
+    if courseCheck == 1 and request.vars['coursename']:
+        redirect('/%s/static/%s/index.html' % (request.application, request.vars['coursename']))
+    elif courseCheck > 1:
+        redirect('/%s/default/courses' % request.application)
+    else:
+        redirect('/%s/default/' % request.application)
