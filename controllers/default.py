@@ -263,7 +263,12 @@ def removecourse():
 def reportabug():
     course = request.vars['course']
     uri = request.vars['page']
-    return dict(course=course,uri=uri)
+    username = 'anonymous'
+    email = 'anonymous'
+    if auth.user:
+        username = auth.user.username
+        email = auth.user.email
+    return dict(course=course,uri=uri,username=username,email=email)
 
 def sendreport():
     # settings.github_token should be set to a valid Github access token
