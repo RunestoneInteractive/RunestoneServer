@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 ### required - do not delete
+import cgi
 import json
+import os
+import requests
 from urllib import unquote
 
 def user():
@@ -46,8 +49,6 @@ def user():
             sectname = sectname.name
         else:
             sectname = 'default'
-        if not sect:
-            sect = 'default'
         my_extra_element = TR(LABEL('Section Name'),
                            INPUT(_name='section', value=sectname, _type='text'))
         form[0].insert(-1, my_extra_element)
@@ -134,7 +135,7 @@ def index():
                     ''' % (auth.user.id, auth.user.course_id))
         try:
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db(db.user.sub_chapter_progress.user_id == auth.user.id).count() == 0:
+            if db(db.user_sub_chapter_progress.user_id == auth.user.id).count() == 0:
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
                             db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                     db.executesql('''
@@ -142,11 +143,6 @@ def index():
                        SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
                        FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
                     ''' % (auth.user.id, auth.user.course_name))
-                # Add user to default section for course.
-                sect = db((db.sections.course_id == auth.user.course_id) & (db.sections.name == form.vars.section)).select(
-                    db.sections.id).first()
-                if sect:
-                    x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
         except:
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
@@ -219,9 +215,6 @@ def bios():
 
 @auth.requires_login()
 def courses():
-    #query courses db to get course names
-    #send course names to be rendered in page
-
     res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
     classlist = []
     for row in res:
@@ -266,3 +259,50 @@ def removecourse():
             db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == courseIdQuery[0].id)).delete()
 
     redirect('/%s/default/courses' % request.application)
+
+def reportabug():
+    course = request.vars['course']
+    uri = request.vars['page']
+    username = 'anonymous'
+    email = 'anonymous'
+    if auth.user:
+        username = auth.user.username
+        email = auth.user.email
+    return dict(course=course,uri=uri,username=username,email=email)
+
+def sendreport():
+    # settings.github_token should be set to a valid Github access token
+    # that has full repo access in models/1.py
+
+    if request.vars['bookerror'] == 'on':
+        basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
+        if basecourse == None:
+            url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+        else:
+            url ='https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
+    else:
+        url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
+    reqsession = requests.Session()
+    reqsession.auth = ('token', settings.github_token)
+    coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
+    pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
+    details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+
+    body = 'Error reported in course ' + coursename + ' on page ' + pagename + '\n' + details
+    issue = {'title': request.vars['bugtitle'],
+             'body': body}
+    r = reqsession.post(url, json.dumps(issue))
+    if r.status_code == 201:
+        session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
+    else:
+        session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
+
+    if auth.user:
+        courseCheck = db(db.user_courses.user_id == auth.user.id).count()
+
+    if courseCheck == 1 and request.vars['coursename']:
+        redirect('/%s/static/%s/index.html' % (request.application, request.vars['coursename']))
+    elif courseCheck > 1:
+        redirect('/%s/default/courses' % request.application)
+    else:
+        redirect('/%s/default/' % request.application)
