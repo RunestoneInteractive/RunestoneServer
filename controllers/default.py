@@ -284,7 +284,11 @@ def sendreport():
         url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
     reqsession = requests.Session()
     reqsession.auth = ('token', settings.github_token)
-    body = 'Error reported in course ' + request.vars['coursename'] + ' on page ' + request.vars['pagename'] + '\n' + request.vars['bugdetails']
+    coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
+    pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
+    details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+
+    body = 'Error reported in course ' + coursename + ' on page ' + pagename + '\n' + details
     issue = {'title': request.vars['bugtitle'],
              'body': body}
     r = reqsession.post(url, json.dumps(issue))
