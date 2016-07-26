@@ -78,8 +78,8 @@ def build():
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         db.course_instructor.insert(instructor=auth.user.id, course=cid)
-        auth.user.course_id = cid
-        auth.user.course_name = request.vars.projectname
+        auth.user.update(course_name=request.vars.projectname)  # also updates session info
+        auth.user.update(course_id=cid)
         db.executesql('''
             INSERT INTO user_courses(user_id, course_id)
             SELECT %s, %s
