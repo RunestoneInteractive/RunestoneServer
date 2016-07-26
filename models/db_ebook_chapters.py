@@ -23,7 +23,7 @@ db.define_table('user_chapter_progress',
   Field('start_date','datetime', default=datetime.datetime.now()),
   Field('end_date','datetime'),
   Field('status','integer'), #-1  - not started. 0 - active. 1 - completed
-  migrate=settings.migrate
+  migrate='runestone_user_chapter_progress.table'
 )
 
 db.define_table('user_sub_chapter_progress',
