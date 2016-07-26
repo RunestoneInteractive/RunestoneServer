@@ -297,6 +297,7 @@ def sendreport():
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
 
+    courseCheck = 0
     if auth.user:
         courseCheck = db(db.user_courses.user_id == auth.user.id).count()
 
