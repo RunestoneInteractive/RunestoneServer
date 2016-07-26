@@ -24,17 +24,23 @@ def index():
     questions = []
     sections = []
 
+    print("getting chapters for ", auth.user.course_name)
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
         selected_chapter = chapters.first()
 
+    print("making an analyzer")
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    print("loading chapter metrics")
     data_analyzer.load_chapter_metrics(selected_chapter)
+    print("loading problem metrics")
     problem_metrics = data_analyzer.problem_metrics
+    print("loading progress_metrics metrics")
     progress_metrics = data_analyzer.progress_metrics
 
+    print("starting problem_id, metric loop")
     for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
@@ -47,7 +53,10 @@ def index():
             "not_attempted": stats[0],
             "attemptedBy": stats[1] + stats[2] + stats[3]
             })
+
+    print("getting questsions")
     questions = sorted(questions, key=itemgetter("correct"), reverse=True)
+    print("starting sub_chapter loop")
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
             "id": metric.sub_chapter_label,
@@ -58,6 +67,7 @@ def index():
             })
 
     read_data = []
+    print("getting user activity")
     user_activity = data_analyzer.user_activity
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
@@ -65,6 +75,7 @@ def index():
             "count":activity.get_page_views()
             })
 
+    print("finishing")
     studentactivity = [{
     "data":read_data,
     "name":"Sections Read"

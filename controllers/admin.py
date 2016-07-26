@@ -576,7 +576,8 @@ order by username;
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def instructors():
+def assignments():
+    print("hello from assignments")
     sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
     courseid = sidQuery[0].id
 
@@ -591,10 +592,10 @@ def instructors():
     for tag in tag_query:
         tags.append(tag.tag_name)
 
-        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
+    course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
-
-        return dict(coursename=auth.user.course_name,confirm=False,
+    print("ready")
+    return dict(coursename=auth.user.course_name,confirm=False,
                     course_url=course_url, assignments=assigndict, tags=tags)
 
 

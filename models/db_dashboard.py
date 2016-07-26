@@ -136,7 +136,7 @@ class UserActivity(object):
 		self.name = "{0} {1}".format(user.first_name,user.last_name)
 		self.rows = []
 		self.page_views = []
-		self.exercise_correct
+	    # self.exercise_correct  -- cannot find any refs to this unset attr.
 
 	def add_activity(self, row):
 		self.rows.append(row)
