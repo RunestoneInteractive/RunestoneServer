@@ -32,7 +32,8 @@ pylint==1.2.1
 pyparsing==2.0.3
 python-dateutil==2.4.2
 pytz==2016.6.1
-runestone==2.5.0
+requests==2.10.0
+runestone>=2.5.0
 selenium==2.53.6
 setproctitle==1.1.10
 six==1.10.0

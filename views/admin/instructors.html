@@ -56,18 +56,6 @@
 
     }}}
 
-    function getLog() {
-
-
-        var obj = new XMLHttpRequest();
-        obj.open("GET", "/runestone/admin/getChangeLog", true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-
-            if (obj.readyState == 4 && obj.status == 200) {
-                changeLog = document.getElementById("changelog");
-                changeLog.innerHTML = obj.responseText;
-    }}}
 
 
 
@@ -78,11 +66,7 @@
 </script>
 
 
-<script>
-    $(document).ready(function(){
-  getLog();
-});
-</script>
+
 
 
 
