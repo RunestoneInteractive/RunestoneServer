@@ -750,12 +750,15 @@ def removeassign():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createAssignment():
-    date_split = request.vars['due'].split('-')
-    due = datetime.date(int(date_split[0]), int(date_split[1]), int(date_split[2]))
     try:
+        d_str = request.vars['due']
+        format_str = "%Y/%m/%d %H:%M"
+        due = datetime.datetime.strptime(d_str, format_str)
+        print(due)
         newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
+
     except Exception as ex:
         print(ex)
         return json.dumps('ERROR')
@@ -770,8 +773,9 @@ def assignmentInfo():
     allquestion_info['assignment_points'] = assignment_points
     date = db(db.assignments.id == assignment_id).select(db.assignments.duedate).first().duedate
     try:
-        due = date.strftime("%m/%d/%Y")
-    except:
+        due = date.strftime("%Y/%m/%d %H:%M")
+    except Exception as ex:
+        print(ex)
         due = 'No due date set for this assignment'
     allquestion_info['due_date'] = due
     description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
@@ -936,10 +940,12 @@ def addToAssignment():
         points = int(request.vars['points'])
     except:
         points = 0
+
     try:
         type_id = db(db.assignment_types.name == type).select(db.assignment_types.id).first().id
-    except:
-        type_id = None
+    except Exception as ex:
+        print(ex)
+
     try:
         db.assignment_questions.insert(assignment_id=assignment_id, question_id=question_id, points=points, timed=timed, assessment_type=type_id)
         assignment = db(db.assignments.id == assignment_id).select().first()
@@ -1125,3 +1131,4 @@ def createquestion():
     except Exception as ex:
         print(ex)
         return json.dumps('ERROR')
+
