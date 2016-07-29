@@ -221,8 +221,12 @@
                   </div>
                       <div class="form-group">
                     <label for="chapter">Chapter</label>
-                      <input type="text" class="form-control"
-                      id="chapter" placeholder="Chapter"/>
+                      <select class="form-control"
+                      id="chapter">
+                          {{ for chapter in chapters: }}
+                          <option value="{{=chapter}}">{{=chapter}}</option>
+                          {{ pass }}
+                      </select>
                   </div>
                   <div class="form-group">
                     <label for="author">Author</label>

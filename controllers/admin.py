@@ -595,8 +595,14 @@ def assignments():
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
     print("ready")
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
+    chapter_labels = []
+    chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
+    for row in chapters_query:
+        chapter_labels.append(row.chapter_label)
     return dict(coursename=auth.user.course_name,confirm=False,
-                    course_url=course_url, assignments=assigndict, tags=tags)
+                    course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
