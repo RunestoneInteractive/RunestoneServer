@@ -223,6 +223,7 @@
                     <label for="chapter">Chapter</label>
                       <select class="form-control"
                       id="chapter">
+                          <option selected="selected" value=""></option>
                           {{ for chapter in chapters: }}
                           <option value="{{=chapter}}">{{=chapter}}</option>
                           {{ pass }}
