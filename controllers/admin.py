@@ -595,8 +595,14 @@ def assignments():
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
     print("ready")
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
+    chapter_labels = []
+    chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
+    for row in chapters_query:
+        chapter_labels.append(row.chapter_label)
     return dict(coursename=auth.user.course_name,confirm=False,
-                    course_url=course_url, assignments=assigndict, tags=tags)
+                    course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -842,6 +848,8 @@ def removeQuestion():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
     tags = False
     if request.vars['tags'] != "null":
         tags = True
@@ -862,7 +870,8 @@ def questionBank():
     try:
         questions_query = db(db.questions).select()
         for question in questions_query: #Initially add all questions to the list, and then remove the rows that don't match search criteria
-            rows.append(question)
+            if question.base_course == base_course:
+                rows.append(question)
         for row in questions_query:
             removed_row = False
             if term:
