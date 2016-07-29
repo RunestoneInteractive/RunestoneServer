@@ -9,6 +9,9 @@ import logging
 from pkg_resources import resource_string, resource_filename
 from runestone.server.chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
 
+rslogger = logging.getLogger('web2py.app.runestone')
+rslogger.setLevel('DEBUG')
+
 
 ################
 ## This task will run as a scheduled task using the web2py scheduler.
@@ -17,10 +20,10 @@ from runestone.server.chapternames import addChapterInfoFromScheduler, findChapt
 def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_course=None):
     # workingdir is the application folder
     workingdir = folder
-    mylog = logging.getLogger('web2py.root')
     # sourcedir holds the all sources temporarily
     sourcedir = path.join(workingdir, 'build', rvars['projectname'])
 
+    rslogger.debug("Starting to build {}".format(rvars['projectname']))
 
     # create the custom_courses dir if it doesn't already exist
     if not os.path.exists(path.join(workingdir, 'custom_courses')):
@@ -82,17 +85,18 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     from paver.tasks import main as paver_main
     os.chdir(sourcedir)
     paver_main(args=["build"])
+    rslogger.debug("Finished build of {}".format(rvars['projectname']))
     try:
         shutil.copy('build_info',custom_dir)
     except IOError as copyfail:
-        logging.debug("Failed to copy build_info_file")
-        logging.debug(copyfail.message)
+        rslogger.debug("Failed to copy build_info_file")
+        rslogger.debug(copyfail.message)
         idxname = 'index.rst'
 
     #
     # Build the completion database
     #
-
+    rslogger.debug("Starting to populate chapters for {}".format(rvars['projectname']))
     scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', 'index.rst'))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
@@ -113,7 +117,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     #
 
     shutil.rmtree(sourcedir)
-
+    rslogger.debug("Completely done with {}".format(rvars['projectname']))
     donefile = open(os.path.join(custom_dir, 'done'), 'w')
     donefile.write('success')
     donefile.close()
@@ -224,7 +228,7 @@ def populateSubchapter(fpath, fn, fh, sourcedir, base_course):
     for line in fh:
         mo = div_re.match(line)
         if mo:
-            print chapter, subchapter, mo.group(1), mo.group(2)
+            #rslogger.debug("{} {} {} {}".format(chapter, subchapter, mo.group(1), mo.group(2)))
             divt = mo.group(1)
             divid = mo.group(2)
             if divt == 'actex' and divid in odd_ex_list:
