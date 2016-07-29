@@ -842,6 +842,8 @@ def removeQuestion():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
     tags = False
     if request.vars['tags'] != "null":
         tags = True
@@ -862,7 +864,8 @@ def questionBank():
     try:
         questions_query = db(db.questions).select()
         for question in questions_query: #Initially add all questions to the list, and then remove the rows that don't match search criteria
-            rows.append(question)
+            if question.base_course == base_course:
+                rows.append(question)
         for row in questions_query:
             removed_row = False
             if term:
