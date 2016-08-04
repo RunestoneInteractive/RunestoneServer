@@ -119,35 +119,21 @@ def runlog():    # Log errors and runs with code
         else:
             event = 'activecode'
     db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
-    if ('to_save' not in request.vars):
-        # old API
-        dbid = db.acerror_log.insert(sid=sid,
-                                     div_id=div_id,
-                                     timestamp=ts,
-                                     course_id=course,
-                                     code=pre+code+post,
-                                     emessage=error_info)
-        #lintAfterSave(dbid, code, div_id, sid)
-    else:
-        # new API
-        if (request.vars.to_save != "False"):
-            dbid = db.acerror_log.insert(sid=sid,
-                                         div_id=div_id,
-                                         timestamp=ts,
-                                         course_id=course,
-                                         code=pre+code+post,
-                                         emessage=error_info)
-
-            #lintAfterSave(dbid, code, div_id, sid)
-
-            # auto-save to code table
-            db.code.insert(sid=sid,
-                acid=div_id,
-                code=code,
-                emessage=error_info,
-                timestamp=ts,
-                course_id=course,
-                language=request.vars.lang)
+    dbid = db.acerror_log.insert(sid=sid,
+                                 div_id=div_id,
+                                 timestamp=ts,
+                                 course_id=course,
+                                 code=pre+code+post,
+                                 emessage=error_info)
+    #lintAfterSave(dbid, code, div_id, sid)
+    if 'to_save' in request.vars and request.vars.to_save == "True":
+        db.code.insert(sid=sid,
+            acid=div_id,
+            code=code,
+            emessage=error_info,
+            timestamp=ts,
+            course_id=course,
+            language=request.vars.lang)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
