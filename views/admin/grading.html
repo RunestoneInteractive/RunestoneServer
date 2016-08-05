@@ -1,0 +1,359 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+<div class="col-md-5" style="margin-top: 50px;">
+
+
+        <select onchange="showColumn1();" id="gradingoption1">
+            <option value="" disabled selected>Select your option</option>
+            <option value="student">student</option>
+            <option value="chapter">chapter</option>
+            <option value="assignment">assignment</option>
+        </select>
+
+        <select onchange="showColumn2();" id="gradingoption2">
+            <option  value="" disabled selected>Select your option</option>
+            <option  value="question">question</option>
+            <option value="chapter">chapter</option>
+            <option  value="assignment">assignment</option>
+        </select>
+
+        <select onchange="showColumn3();" id="gradingoption3">
+            <option value="" disabled selected>Select your option</option>
+            <option value="student">student</option>
+            <option value="question">question</option>
+        </select>
+<br><br>
+
+
+
+
+
+    <select  onchange="updateColumn2();" style="visibility: hidden; float:left" size="10" id="gradingcolumn1">
+    </select>
+
+
+    <select onchange="updateColumn3();" style="visibility: hidden; float:left" size="10" id="gradingcolumn2"></select>
+
+
+
+    <select style="visibility: hidden; float:left" size="10" id="gradingcolumn3"></select>
+
+
+    </div>
+
+<script>
+    $(".dashboardnav").removeClass("active");
+    $("#gradingtab").addClass("active");
+
+ </script>
+
+
+<script>
+    function updateColumn2() {
+           var select1 = document.getElementById("gradingoption1");
+    var val = select1.options[select1.selectedIndex].value;
+        var select = document.getElementById("gradingoption2");
+        var val2 = select.options[select.selectedIndex].value;
+        var select2 = document.getElementById("gradingcolumn1");
+        var column2 = document.getElementById("gradingcolumn2");
+        var selectedval = select2.options[select2.selectedIndex].value;
+        if (val == 'assignment' && val2 == 'question') {
+            $("#gradingcolumn2").empty();
+            var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g,'"');
+            var assignments = JSON.parse(assignmentinfo);
+            for (i=0;i<assignments[selectedval].length;i++) {
+                var q = assignments[selectedval][i];
+                var option = document.createElement("option");
+                option.text = q;
+                option.value = q;
+                column2.add(option);
+
+            }}
+
+        else if (val=='chapter' && val2 == 'question') {
+                var chapters = "{{=chapters}}".replace(/&#x27;/g,'"');
+            chapters = JSON.parse(chapters);
+            $("#gradingcolumn2").empty();
+            for (i=0;i<chapters[selectedval].length;i++) {
+                 var option = document.createElement("option");
+                option.text = chapters[selectedval][i];
+                option.value = chapters[selectedval][i];
+                column2.add(option);
+            }
+
+        }
+
+    }
+
+    function updateColumn3() {
+                 var select1 = document.getElementById("gradingoption2");
+    var val = select1.options[select1.selectedIndex].value;
+        var select = document.getElementById("gradingoption3");
+        var val2 = select.options[select.selectedIndex].value;
+        var select2 = document.getElementById("gradingcolumn2");
+        var column3 = document.getElementById("gradingcolumn3");
+        var selectedval = select2.options[select2.selectedIndex].value;
+        if (val == 'chapter' && val2 == 'question') {
+            var chapters = "{{=chapters}}".replace(/&#x27;/g,'"');
+            chapters = JSON.parse(chapters);
+            $("#gradingcolumn3").empty();
+            for (i=0;i<chapters[selectedval].length;i++) {
+                 var option = document.createElement("option");
+                option.text = chapters[selectedval][i];
+                option.value = chapters[selectedval][i];
+                column3.add(option);
+            }
+        }
+
+        else if (val == 'assignment' && val2 == 'question') {
+               $("#gradingcolumn3").empty();
+            var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g,'"');
+            var assignments = JSON.parse(assignmentinfo);
+            for (i=0;i<assignments[selectedval].length;i++) {
+                var q = assignments[selectedval][i];
+                var option = document.createElement("option");
+                option.text = q;
+                option.value = q;
+                column3.add(option);
+
+            }
+
+        }
+
+
+    }
+
+    function pickedAssignments(column) {
+
+        var pickedcolumn = document.getElementById(column);
+        $("#" + column).empty();
+            var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g,'"');
+    var assignments = JSON.parse(assignmentinfo);
+
+        for (i in assignments) {
+        var option = document.createElement("option");
+        option.text = i;
+        option.value = i;
+        pickedcolumn.add(option);
+        pickedcolumn.style.visibility = 'visible';}
+
+    }
+
+    function displayDefaultQuestion(column) {
+        var pickedcolumn = document.getElementById(column);
+        $("#" + column).empty();
+        var option = document.createElement("option");
+        option.text = '<- Choose option to see questions';
+        option.value = 'default';
+        pickedcolumn.add(option);
+        $("option[value='default']").attr("disabled", "disabled");
+        pickedcolumn.style.visibility = 'visible';
+
+
+    }
+
+
+
+    function pickedStudents(column) {
+
+         var pickedcolumn = document.getElementById(column);
+        $("#" + column).empty();
+        var students = '{{=students}}';
+    students = students.replace(/&#x27;/g,'"');
+    var studentslist = JSON.parse(students);
+    var keys = [];
+    var i;
+    for (i in studentslist) {
+        if (studentslist.hasOwnProperty(i) ) {
+            keys.push(i);
+        }}
+
+
+    for (i=0;i<keys.length;i++) {
+        var key = keys[i];
+        var option = document.createElement("option");
+        option.text = studentslist[key];
+        option.value = studentslist[key];
+        pickedcolumn.add(option);
+        pickedcolumn.style.visibility = 'visible';
+
+    }}
+
+
+    function pickedChapters(column) {
+        var pickedcolumn = document.getElementById(column);
+        $("#" + column).empty();
+        var chapters = "{{=chapters}}".replace(/&#x27;/g,'"');
+    chapters = JSON.parse(chapters);
+    var keys = [];
+    var i;
+    for (i in chapters) {
+        if (chapters.hasOwnProperty(i) ) {
+            keys.push(i);
+        }}
+    for (i=0;i<keys.length;i++) {
+        var key = keys[i];
+             var option = document.createElement("option");
+        option.text = key;
+        option.value = key;
+        pickedcolumn.add(option);
+        pickedcolumn.style.visibility = 'visible';
+
+
+    }
+
+    }
+
+
+
+    function showColumn1() {
+
+            var select1 = document.getElementById("gradingoption1");
+    var val = select1.options[select1.selectedIndex].value;
+        var select = document.getElementById("gradingoption2");
+        var val2 = select.options[select.selectedIndex].value;
+
+        $("#gradingcolumn2").empty();
+        $("#gradingcolumn3").empty();
+
+        if (val == 'assignment') {
+            if (val2 == "assignment") {
+                alert("That is not a valid combination");
+            }
+
+            else if (val2 == 'chapter') {
+                alert("That is not a valid combination");
+            }
+            else {
+
+            pickedAssignments("gradingcolumn1");}
+        }
+
+
+        else if (val == 'chapter') {
+            if (val2 == 'chapter') {
+                alert("That is not a valid combination");
+            }
+            else if (val2 == 'assignment') {
+                alert("That is not a valid combination");
+            }
+            else{
+
+            pickedChapters('gradingcolumn1');}
+        }
+
+        else if (val == 'student') {
+            if (val2 == 'question') {
+                alert("That is not a valid combination");
+            } else
+            {
+                pickedStudents('gradingcolumn1');}
+        }
+
+    }
+
+        function showColumn2() {
+
+            var select1 = document.getElementById("gradingoption2");
+    var val = select1.options[select1.selectedIndex].value;
+            var select = document.getElementById("gradingoption1");
+            var first_val = select.options[select.selectedIndex].value;
+            $("#gradingcolumn3").empty();
+
+            if (first_val == "") {
+                alert("That is not a valid combination");
+            }
+
+            else {
+        if (val == 'assignment') {
+            if (first_val == 'assignment') {
+                alert("That is not a valid combination");
+            }
+            else if (first_val == 'chapter') {
+                alert("That is not a valid combination");
+            }
+             else {
+                pickedAssignments("gradingcolumn2");
+            }
+        }
+
+        else if (val == 'chapter') {
+            if (first_val == 'assignment') {
+                alert("That is not a valid combination");
+            }
+
+            else if (first_val == 'chapter') {
+                alert("That is not a valid combination");
+            }
+            else {
+            pickedChapters('gradingcolumn2');}
+        }
+
+        else if (val == 'question') {
+            if (first_val == 'chapter') {
+            displayDefaultQuestion('gradingcolumn2');
+            }
+
+            else if (first_val == 'assignment') {
+            displayDefaultQuestion('gradingcolumn2');}
+
+            else {
+                alert("That is not a valid combination");
+            }
+        }
+
+    }}
+
+        function showColumn3() {
+
+            var select1 = document.getElementById("gradingoption3");
+    var val = select1.options[select1.selectedIndex].value;
+            var select = document.getElementById("gradingoption1");
+            var val1 = select.options[select.selectedIndex].value;
+            var select2 = document.getElementById("gradingoption2");
+            var val2 = select2.options[select2.selectedIndex].value;
+        if (val == 'question') {
+                 if (val1 == 'student' && val2 == 'chapter') {
+                     displayDefaultQuestion('gradingcolumn3');
+
+            }
+
+            else if (val1 == 'student' && val2 == 'assignment') {
+                     displayDefaultQuestion('gradingcolumn3');
+
+            }
+
+            else {
+                alert("That is not a valid combination");
+            }
+
+        }
+
+
+        else if (val == 'student') {
+
+            if (val1 == 'chapter' && val2 == 'question') {
+                pickedStudents("gradingcolumn3");
+            }
+
+            else if (val1 == 'assignment' && val2 == 'question') {
+                pickedStudents("gradingcolumn3");
+            }
+
+            else {
+                alert("That is not a valid combination");
+            }
+
+        }
+
+    }
+
+
+
+
+</script>
+
+
+{{ end }}
