@@ -1141,3 +1141,7 @@ def createquestion():
         print(ex)
         return json.dumps('ERROR')
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def questions2rst():
+    assignmentId = request.args[0]
+    questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.question_id)
