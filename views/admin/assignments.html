@@ -152,7 +152,7 @@
                     <div style="text-align: center">
                         <button data-toggle="tab" href="#qbank" style="margin-top: 12px;" class="btn">+</button>
                         <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#questionsModal" onclick="getQuestions();">-</button>
-
+                        <button class="btn" onclick="questions2Rst()">Write Assignment</button>
                         <!-- Modal -->
 <div class="modal fade" id="questionsModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -528,6 +528,11 @@
             leftpanel2.style.visibility = 'visible';
         }}
 
+        function questions2Rst() {
+            var select = document.getElementById('assignlist');
+            var assignmentid = select.options[select.selectedIndex].value;
+            $.getJSON('/runestone/admin/questions2rst/assignmentid',{},function () {alert("done")});
+        }
 </script>
 
    <script>
