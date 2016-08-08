@@ -716,10 +716,12 @@ def getChangeLog():
     base_course = bookQuery[0].base_course
     #The stuff below looks messy but it's necessary because the ChangeLog.rst will not be located in the same directory as this Python file
     #so we have to move up to find the correct log file
-    file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/'+base_course+'/ChangeLog.rst'))
-
-    logFile = file.read()
-    return str(logFile)
+    try:
+        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/' + base_course + '/ChangeLog.rst'))
+        logFile = file.read()
+        return str(logFile)
+    except:
+        return "No ChangeLog for this book\n\n\n"
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def backup():
