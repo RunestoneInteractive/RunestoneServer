@@ -531,7 +531,7 @@
         function questions2Rst() {
             var select = document.getElementById('assignlist');
             var assignmentid = select.options[select.selectedIndex].value;
-            $.getJSON('/runestone/admin/questions2rst/assignmentid',{},function () {alert("done")});
+            $.getJSON('/runestone/admin/questions2rst/'+assignmentid,{},function () {alert("done")});
         }
 </script>
 
