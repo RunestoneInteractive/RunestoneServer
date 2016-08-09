@@ -577,7 +577,6 @@ order by username;
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignments():
-    print("hello from assignments")
     sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
     courseid = sidQuery[0].id
 
@@ -757,7 +756,7 @@ def removeinstructor():
     else:
         session.flash = T("You cannot remove yourself as an instructor.")
         removed.append(False)
-        return json.dumps(deleted)
+        return json.dumps(removed)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addinstructor():
@@ -1189,4 +1188,36 @@ def createquestion():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questions2rst():
     assignmentId = request.args[0]
-    questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.question_id)
+
+    custom_dir = os.path.join('applications', request.application, 'custom_courses', auth.user.course_name)
+    assignment_folder = os.path.join(custom_dir,'assignments')
+    if not os.path.exists(assignment_folder):
+        os.mkdir(assignment_folder)
+
+    assignment_file = os.path.join(assignment_folder,'assignment_{}.rst'.format(assignmentId))
+
+    questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.id,db.questions.question, join=db.questions.on(db.assignment_questions.question_id == db.questions.id) )
+
+    assignment = db(db.assignments.id == assignmentId).select().first()
+
+    with open(assignment_file,'w') as af:
+        af.write(assignment.name+'\n')
+        af.write("="*len(assignment.name)+'\n\n')
+        af.write("**Points**: {}\n\n".format(assignment.points))
+        af.write("**Due**: {}\n\n".format(assignment.duedate))
+        af.write(assignment.description+"\n\n")
+        for q in questions:
+            af.write(q.questions.question)
+            af.write("\n\n")
+
+    assign_list = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
+
+    with open(os.path.join(custom_dir,'assignments.rst'),'w') as af:
+        af.write("Assignments\n===========\n\n")
+        af.write(".. toctree::\n\n")
+        for a in assign_list:
+            af.write("   assignments/assignment_{}.rst".format(a.id))
+
+
+
+
