@@ -9,6 +9,7 @@ db.define_table('questions',
                 Field('timestamp',type='datetime'),
                 Field('question_type',type='string'),
                 Field('is_private', type='boolean'),
+                Field('htmlsrc', type='text'),
                 migrate='runestone_questions.table')
 
 # In SQL we can manually add the constraint
