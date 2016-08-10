@@ -98,7 +98,7 @@
 
         </div>
 
-    
+
 
         <div class="col-md-11" id="leftpanel2" style="visibility: hidden">
 
@@ -447,420 +447,38 @@
 </div>
 
 
-
-<script>
-
-    function assignmentInfo() {
-         var select = document.getElementById('assignlist');
-        var assignmentid = select.options[select.selectedIndex].value;
-        var assignmentname = select.options[select.selectedIndex].text;
-        $('#summative').css('background-color', 'gainsboro');
-        $('#formative').css('background-color', 'transparent');
-        $('#external').css('background-color', 'transparent');
-
-
-
-        var obj = new XMLHttpRequest();
-        obj.open('POST', '/runestone/admin/assignmentInfo/?assignmentid=' + assignmentid, true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-            if (obj.readyState == 4 && obj.status == 200) {
-                var question_info = obj.responseText;
-                var res = JSON.parse(question_info);
-                var keys = [];
-                var i;
-                for (i in res) {
-                    if (res.hasOwnProperty(i) && i != 'assignment_points' && i != 'due_date' && i!=
-                    'description') {
-                        keys.push(i);
-                        }}
-                var assignment_points = res['assignment_points'];
-                var totalPoints = document.getElementById("totalPoints");
-                totalPoints.innerHTML = 'Total points: ' + assignment_points;
-
-                var duedate = res['due_date'];
-                document.getElementById('assignment_duedate').innerHTML = 'Due: ' + duedate;
-
-                var description = res['description'];
-                document.getElementById('assignment_description').innerHTML = description;
-                var tableBody = document.getElementById("tableBody");
-                $("#tableBody").empty(); //clear the table body first, before adding anything
-                for (k=0; k<keys.length; k++) {
-                    var key = keys[k];
-                    question = res[key];
-
-                    //now populate entire table but only show rows with class 'summative'
-                    var type = question['type'];
-
-                    var row = document.createElement("TR");
-                    row.setAttribute("class", type);
-                    row.setAttribute("id", question['name']);
-                    row.style.textAlign = 'center';
-                    row.style.border = '1px solid black';
-                    tableBody.appendChild(row);
-
-                    var qid = document.createElement("TD");
-                    qid.style.border = '1px solid black';
-                    var qid_data = document.createTextNode(question['name']);
-                    qid.appendChild(qid_data);
-                    row.appendChild(qid);
-
-                    var pts = document.createElement("TD");
-                    pts.style.border = '1px solid black';
-                    var pts_data = document.createTextNode(question['points']);
-                    pts.appendChild(pts_data);
-                    row.appendChild(pts);
-
-                    var timed = document.createElement("TD");
-                    timed.style.border = '1px solid black';
-                    var timed_data = document.createTextNode(question['timed']);
-
-                    timed.appendChild(timed_data);
-                    row.appendChild(timed);
-                }
-                //by default hide the formative and external questions
-                $(".formative").hide();
-                $(".external").hide();
-            }
-            var leftpanel1 = document.getElementById("leftpanel1");
-            leftpanel1.style.visibility = 'visible';
-            var leftpanel2 = document.getElementById("leftpanel2");
-            leftpanel2.style.visibility = 'visible';
-        }}
-
-        function questions2Rst() {
-            var select = document.getElementById('assignlist');
-            var assignmentid = select.options[select.selectedIndex].value;
-            $.getJSON('/runestone/admin/questions2rst/'+assignmentid,{},function () {alert("done")});
-        }
-</script>
-
-   <script>
-       function createAssignment(form) {
-           var name = form.name.value;
-           var description = form.description.value;
-           var duedate = form.datetimepicker.value;
-
-           var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/createAssignment/?name=' + name + '&description=' + description + '&due=' + duedate, true);
-           obj.send(JSON.stringify({name: name, description: description }));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   added = JSON.parse(obj.responseText);
-                if (added != 'ERROR') {
-                    select = document.getElementById('assignlist');
-                    newopt = document.createElement('option');
-                    newopt.value = added[name];
-                    newopt.innerHTML = name;
-                    select.appendChild(newopt);
-                    select.selectedIndex = newopt.index;
-                } else{
-                    alert('Error in creating new assignment.')
-                }
-            }
-        }
-       }
-   </script>
-
-   <script>
-       function showQuestions(type) {
-           //Show all questions in table with class matching the type passed in, hide all other questions
-           var typeToHide1;
-           var typeToHide2;
-
-           if (type == 'summative') {
-               typeToHide1 = '.formative';
-               typeToHide2 = '.external';
-           }
-
-           if (type == 'formative') {
-               typeToHide1 = '.summative';
-               typeToHide2 = '.external';
-           }
-
-           if (type == 'external') {
-               typeToHide1 = '.formative';
-               typeToHide2 = '.summative';
-           }
-           var question_type = '.' + type;
-           $(question_type).show();
-           $(typeToHide1).hide();
-           $(typeToHide2).hide();
-       }
-   </script>
-
-   <script>
-       function getQuestions() {
-             var select = document.getElementById('assignlist');
-        var assignmentid = select.options[select.selectedIndex].value;
-        var assignmentname = select.options[select.selectedIndex].text;
-           var questions_list = document.getElementById('questions_list');
-           //drop any of the questions that have been previously added to the select
-           $("#questions_list").empty();
-        var obj = new XMLHttpRequest();
-        obj.open('POST', '/runestone/admin/getQuestions/?assignmentid=' + assignmentid, true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-            if (obj.readyState == 4 && obj.status == 200) {
-                var questions = JSON.parse(obj.responseText);
-                for (i=0;i<questions.length;i++) {
-                    var option = document.createElement("option");
-                    option.text = questions[i];
-                    option.value = assignmentid;
-                    questions_list.add(option);}
-       }}}
-
-       function remove_question() {
-              var select = document.getElementById('questions_list');
-            var question_name = select.options[select.selectedIndex].text;
-           var assignment_id = select.options[select.selectedIndex].value;
-           var obj = new XMLHttpRequest();
-        obj.open('POST', '/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-            if (obj.readyState == 4 && obj.status == 200) {
-                var totalPoints = document.getElementById("totalPoints");
-                totalPoints.innerHTML = 'Total points: ' + JSON.parse(obj.responseText);
-                //remove from the select dropdown and remove from the table
-                select.remove(select.selectedIndex);
-                row = document.getElementById(question_name);
-                row.parentNode.removeChild(row);}}}
-
-
-       function questionBank(form) {
-           var chapter = form.chapter.value;
-           var author = form.author.value;
-           var tags = $("#tags").select2("val");
-           var term = form.term.value;
-           var difficulty = null;
-           var difficulty_options = ['rating1','rating2','rating3','rating4','rating5'];
-           var inputs = document.getElementById('qbankform').getElementsByTagName('input');
-           for (var i = 0, length = inputs.length; i < length; i++) {
-            if (inputs[i].type == 'radio' && inputs[i].checked) {
-            difficulty = inputs[i].value;
-            }}
-
-           var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term, true);
-           obj.send(JSON.stringify({variable:'variable'}));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   var resp = JSON.parse(obj.responseText);
-                   var select = document.getElementById('qbankselect');
-                   var questionform = document.getElementById('questionform');
-                   $("#qbankselect").empty();
-                   for (i=0;i<resp.length;i++) {
-                        var option = document.createElement("option");
-                        option.text = resp[i];
-                        option.value = resp[i];
-                        option.onclick = getQuestionInfo;
-                        select.add(option);
-                   }
-                   if (resp.length==0) {
-                       select.style.visibility = 'hidden';
-                   questionform.style.visibility = 'hidden';
-                       var q_info = document.getElementById('questionInfo');
-                   q_info.style.visibility = 'hidden';
-                       alert("Sorry, no questions matched your search criteria.");
-
-                   }
-                   if (resp.length > 0) {
-                   select.style.visibility = 'visible';
-                   questionform.style.visibility = 'visible';}
-                   }
-               }}
-   </script>
-
-   <script>
-       function addToAssignment(form) {
-           var points = form.points.value;
-           var checked = document.getElementById('timed').checked;
-           var select = document.getElementById('qbankselect');
-           var question_name = select.options[select.selectedIndex].text;
-           var assignlist = document.getElementById('assignlist');
-           var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-           var assessmentselect = document.getElementById('assessment_type');
-           var assessment_type = assessmentselect.options[assessmentselect.selectedIndex].value;
-           var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + checked + '&type=' + assessment_type, true);
-           obj.send(JSON.stringify({variable:'variable'}));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   var newPoints = JSON.parse(obj.responseText)[0];
-                   var q_type = JSON.parse(obj.responseText)[1];
-                   var totalPoints = document.getElementById("totalPoints");
-                    totalPoints.innerHTML = 'Total points: ' + newPoints;
-                   var tableBody = document.getElementById("tableBody");
-                    var row = document.createElement("TR");
-                    row.setAttribute("class", q_type);
-                    row.setAttribute("id", question_name);
-                    row.style.textAlign = 'center';
-                    row.style.border = '1px solid black';
-                    tableBody.appendChild(row);
-
-                    var qid = document.createElement("TD");
-                    qid.style.border = '1px solid black';
-                    var qid_data = document.createTextNode(question_name);
-                    qid.appendChild(qid_data);
-                    row.appendChild(qid);
-
-                    var pts = document.createElement("TD");
-                    pts.style.border = '1px solid black';
-                    var pts_data = document.createTextNode(points);
-                    pts.appendChild(pts_data);
-                    row.appendChild(pts);
-
-                    var timed = document.createElement("TD");
-                    timed.style.border = '1px solid black';
-                    var timed_data = document.createTextNode(checked);
-
-                    timed.appendChild(timed_data);
-                    row.appendChild(timed);
-
-                   if (q_type == 'summative') {
-                       $(".summative").show();
-                       $(".formative").hide();
-                        $(".external").hide();
-
-                       $('#summative').css('background-color', 'gainsboro');
-                        $('#formative').css('background-color','transparent');
-                        $('#external').css('background-color','transparent');
-
-                   }
-
-                   if (q_type == 'formative') {
-                       $(".formative").show();
-                       $(".summative").hide();
-                       $(".external").hide();
-
-                       $('#formative').css('background-color', 'gainsboro');
-                       $('#summative').css('background-color', 'transparent');
-                       $('#external').css('background-color', 'transparent');
-                   }
-                   if (q_type == 'external') {
-                       $(".external").show();
-                       $(".formative").hide();
-                        $(".summative").hide();
-
-                       $('#external').css('background-color', 'gainsboro');
-                        $('#summative').css('background-color','transparent');
-                        $('#formative').css('background-color','transparent');
-                   }
-
-               }
-               }
-       }
-   </script>
-
-
-   <script>
-       function getQuestionInfo() {
-              var select = document.getElementById('qbankselect');
-           var question_name = select.options[select.selectedIndex].text;
-            var assignlist = document.getElementById('assignlist');
-           var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-           var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/getQuestionInfo/?question=' + question_name + '&assignment=' + assignmentid, true);
-           obj.send(JSON.stringify({variable:'variable'}));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   var question_info = obj.responseText;
-                var res = JSON.parse(question_info);
-                var data = {};
-                var i;
-                for (i in res) {
-                    if (res.hasOwnProperty(i)) {
-                        data[i] = res[i];
-                        }}
-             var difficulty = data['difficulty'];
-                var code = data['code'];
-                var author = data['author'];
-                var tags = data['tags'];
-
-                   var q_difficulty = document.getElementById('q_difficulty');
-                   if (difficulty == null) {
-                   q_difficulty.innerHTML = 'Difficulty not set for this question';
-                   } else {
-                   q_difficulty.innerHTML = 'Difficulty: ' + difficulty;}
-
-                   var q_code = document.getElementById('q_code');
-                   q_code.innerHTML = code;
-
-                   var q_author = document.getElementById('q_author');
-                   if (author == null) {
-                   q_author.innerHTML = 'No author for this question';
-                   } else {
-                   q_author.innerHTML = 'Author: ' + author;}
-
-                   var q_tags = document.getElementById('q_tags');
-                   q_tags.innerHTML = 'Tags:' + tags;
-                   var q_info = document.getElementById('questionInfo');
-                   q_info.style.visibility = 'visible';
-
-       }}}
-   </script>
-
-
-
-  <script>
-      function edit_question(form) {
-           var select = document.getElementById('qbankselect');
-           var question_name = select.options[select.selectedIndex].text;
-          var tags = $("#addTags").select2("val");
-           var name = form.changename.value;
-           var difficulty = null;
-           var difficulty_options = ['r1','r2','r3','r4','r5'];
-           var inputs = document.getElementById('editForm').getElementsByTagName('input');
-           for (var i = 0, length = inputs.length; i < length; i++) {
-            if (inputs[i].type == 'radio' && inputs[i].checked) {
-            difficulty = inputs[i].value;
-            }}
-          var question_text = form.editRST.value;
-          question_text =  question_text.replace(/(\n)+/g, '%0A'); //encodes all new line characters to preserve them in query string
-
-          var obj = new XMLHttpRequest();
-          obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
-          obj.send(JSON.stringify({variable:'variable'}));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   if (obj.responseText == 'Success') {
-                       alert('You successfully edited the selected question.');
-                   }
-               }
-           }
-
-      }
-  </script>
-
-  <script>
-      function getQuestionText() {
-          var select = document.getElementById('qbankselect');
-           var question_name = select.options[select.selectedIndex].text;
-          var obj = new XMLHttpRequest();
-          obj.open('POST', '/runestone/admin/question_text?question_name=' + question_name, true);
-          obj.send(JSON.stringify({variable:'variable'}));
-           obj.onreadystatechange = function () {
-               if (obj.readyState == 4 && obj.status == 200) {
-                   var textarea = document.getElementById('editRST');
-                   textarea.innerHTML = obj.responseText;
-               }
-               }
-           }
-  </script>
-
-
-  <script type="text/javascript">
+<script type="text/javascript">
 $("#tags").select2();
     $("#addTags").select2();
 </script>
 
 <script>
-    $(".dashboardnav").removeClass("active")
-    $("#assignmentstab").addClass("active")
-</script>
+    $(".dashboardnav").removeClass("active");
+    $("#assignmentstab").addClass("active");
 
-<script>
     jQuery('#datetimepicker').datetimepicker();
+
+     $('#summative').click(function(){
+    $('#summative').css('background-color', 'gainsboro');
+    $('#formative').css('background-color','transparent');
+    $('#external').css('background-color','transparent');
+
+
+});
+
+    $('#formative').click(function(){
+    $('#formative').css('background-color', 'gainsboro');
+    $('#summative').css('background-color','transparent');
+    $('#external').css('background-color','transparent');
+
+});
+
+    $('#external').click(function(){
+    $('#external').css('background-color', 'gainsboro');
+    $('#summative').css('background-color','transparent');
+    $('#formative').css('background-color','transparent');
+
+});
 </script>
 
 {{ end }}

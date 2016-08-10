@@ -691,7 +691,8 @@ def grading():
                                                                db.auth_user.last_name)
                 for identity in person:
                     name = identity.first_name + " " + identity.last_name
-                    searchdict[str(row.user_id)] = name
+                    username = db(db.auth_user.id == int(row.user_id)).select(db.auth_user.username).first().username
+                    searchdict[str(username)] = name
 
 
         row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
@@ -705,7 +706,9 @@ def grading():
                 q_list.append(chapter_q.name)
             chapter_labels[row.chapter_label] = q_list
 
-        return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels)
+        return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name,
+
+)
     except Exception as ex:
         print(ex)
 

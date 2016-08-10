@@ -233,8 +233,44 @@
           </div>
 
 <script>
-    $(".dashboardnav").removeClass("active")
-    $("#admintab").addClass("active")
+    $(".dashboardnav").removeClass("active");
+    $("#admintab").addClass("active");
+
+    $(document).ready(function(){
+  getLog();
+});
+    $('#sectionsTab').click(function(){
+    $('#sectionsTab').css('background-color', 'gainsboro');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+    $('#rebuildTab').click(function(){
+    $('#rebuildTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+    $('#AddInstructorTab').click(function(){
+    $('#AddInstructorTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+
+});
+
+    $('#DeleteTab').click(function(){
+    $('#DeleteTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+
+});
+
 </script>
 
 
