@@ -1202,13 +1202,16 @@ def questions2rst():
     questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.id,db.questions.question, join=db.questions.on(db.assignment_questions.question_id == db.questions.id) )
 
     assignment = db(db.assignments.id == assignmentId).select().first()
+    points = assignment.points if assignment.points else 0
+    due = assignment.duedate if assignment.duedate else "None given"
+    description = assignment.description if assignment.description else "No Description"
 
     with open(assignment_file,'w') as af:
         af.write(assignment.name+'\n')
         af.write("="*len(assignment.name)+'\n\n')
-        af.write("**Points**: {}\n\n".format(assignment.points))
-        af.write("**Due**: {}\n\n".format(assignment.duedate))
-        af.write(assignment.description+"\n\n")
+        af.write("**Points**: {}\n\n".format(points))
+        af.write("**Due**: {}\n\n".format(due))
+        af.write(description+"\n\n")
         for q in questions:
             af.write(q.questions.question)
             af.write("\n\n")
@@ -1219,7 +1222,7 @@ def questions2rst():
         af.write("Assignments\n===========\n\n")
         af.write(".. toctree::\n\n")
         for a in assign_list:
-            af.write("   assignments/assignment_{}.rst".format(a.id))
+            af.write("   assignments/assignment_{}.rst\n".format(a.id))
 
 
 
