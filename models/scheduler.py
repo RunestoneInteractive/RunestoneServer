@@ -64,7 +64,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
                         path.join(sourcedir, '_sources', 'assignments.rst'))
 
             # this check should allow for backward compatibility
-            if os.path.exists(custom_dir,'assignments'):
+            if os.path.exists(os.path.join(custom_dir,'assignments')):
                 shutil.copytree(path.join(custom_dir,'assignments'),
                                 path.join(sourcedir,'_sources','assignments'))
 
