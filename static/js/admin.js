@@ -53,6 +53,31 @@ function getRightSideGradingDiv(element, acid, studentId){
 		return false;
 	}
 
+    //make an ajax call to get the htmlsrc for the given question
+    var obj = new XMLHttpRequest();
+    obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
+    obj.send(JSON.stringify({acid: acid}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            var htmlsrc = JSON.parse(obj.responseText);
+            jQuery("#questiondisplay").html(htmlsrc);
+              ACFactory.createScratchActivecode();
+    $('[data-component=activecode]').each( function(index ) {
+        if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
+            edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'));
+        }
+    });
+    if (loggedout) {
+        for (k in edList) {
+            edList[k].disableSaveLoad();}}
+
+
+
+
+        }
+
+    }
+
 
 	function save(event){
 		event.preventDefault();
@@ -91,7 +116,7 @@ function getRightSideGradingDiv(element, acid, studentId){
 
 		jQuery('#rightTitle',rightDiv).html(data.name+' <em>'+data.acid+'</em>');
 
-		jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
+		//jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
 		jQuery('#input-grade',rightDiv).val(data.grade);
 		jQuery('#input-comments',rightDiv).val(data.comment);
 
@@ -117,6 +142,20 @@ function getRightSideGradingDiv(element, acid, studentId){
       if (data.suffix_code){
          complete_code = complete_code + '\n\n#### tests ####\n' + data.suffix_code;
       }
+
+
+            //add in the student's code to the window
+          var qtab = $("div[data-component='question']");
+        var basedivid = jQuery('.ac_section',qtab).attr('id');
+        edList[basedivid].editor.setValue(complete_code);
+            setTimeout(function() {
+                edList[basedivid].editor.refresh();
+            },1500);
+
+
+
+
+
 		//createActiveCode(data.acid,complete_code,data.username);
 
         // outerdiv, acdiv, sid, initialcode, language
@@ -232,6 +271,9 @@ function updateColumn2() {
         }
 
         if (val2 != "") {
+            var lastcolval = column3.selectedIndex;
+                  if (lastcolval != -1)
+             {gradeIndividualItem(); }
         column3.style.visibility = 'visible';}
 
     }
