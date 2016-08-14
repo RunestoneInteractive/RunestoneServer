@@ -22,8 +22,8 @@ def index():
     #response.flash = "Welcome to CourseWare Manager!"
 
     basicvalues = {}
-    basicvalues["message"]=T('Welcome to CourseWare Builder')
-    basicvalues["descr"]=T('''This tool allows you to create your own courseware by choosing from a catalog of modules.
+    basicvalues["message"]=T('Build a Custom Course')
+    basicvalues["descr"]=T('''This page allows you to select a book for your own class. You will have access to all student activities in your course.
     To begin, enter a project name below.''')
     #return dict(message=T('Welcome to CourseWare Manager'))
     return basicvalues

@@ -1,0 +1,101 @@
+{{ extend "admin/instructors.html"}}
+{{ block tabcontent }}
+
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js" type="text/javascript"></script>
+<!--<script src="/{{=request.application}}/static/{{=course_id}}/_static/builtin.js" type="text/javascript"></script>-->
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/runestonebase.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/activecode.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/bookfuncs.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.js"></script>
+
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" rel="stylesheet" type="text/css"/>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+
+
+<script type="text/javascript">
+  eBookConfig.gradingURL = '{{=gradingUrl}}';
+</script>
+
+<div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
+
+
+
+     <select onchange="showColumn1();" id="gradingoption1" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+            <option value="" disabled selected>Select your option</option>
+            <option value="student">student</option>
+            <option value="chapter">chapter</option>
+            <option value="assignment">assignment</option>
+        </select>
+
+
+
+
+        <select onchange="showColumn2();" id="gradingoption2" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+            <option  value="" disabled selected>Select your option</option>
+            <option  value="question">question</option>
+            <option value="chapter">chapter</option>
+            <option  value="assignment">assignment</option>
+        </select>
+
+
+
+
+        <select onchange="showColumn3();" id="gradingoption3" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+            <option value="" disabled selected>Select your option</option>
+            <option value="student">student</option>
+            <option value="question">question</option>
+        </select>
+
+
+ <select  onchange="updateColumn2();" style="visibility: hidden; float:left; overflow-x: auto; margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn1">
+    </select>
+
+
+                <select onchange="updateColumn3();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn2"></select>
+
+
+            <select onchange="gradeIndividualItem();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn3"></select>
+<p style="visibility: hidden">This paragraph takes up some space to deal with a funky display issue of the right side lumping over onto the left</p>
+
+    </div>
+
+
+
+<div id="rightsideGradingTab" class="col-md-7" style="margin-top: 50px; visibility: hidden">
+
+    <div id="outerRightDiv">
+        <h4 id="rightTitle"></h4>
+
+        <div id="questiondisplay">Question Display</div>
+
+        <div id="gradingform">
+                <form>
+	                <label for="input-grade">Grade</label>
+	                <input id="input-grade" type="text" class="form-control" value= ""/>
+	                <label for="input-comments">Comments</label>
+	                <input id="input-comments" type="text" class="form-control" value="" />
+	                <input type="submit" value="Save Grade" class="btn btn-primary" />
+              	</form>
+                  <button class="btn btn-default next" type="button">Save and next</button></div>
+        </div>
+
+
+
+</div>
+
+<script>
+    $(".dashboardnav").removeClass("active");
+    $("#gradingtab").addClass("active");
+    var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g,'"');
+    var chapters = "{{=chapters}}".replace(/&#x27;/g,'"');
+    chapters = JSON.parse(chapters);
+    var students = '{{=students}}';
+</script>
+
+
+{{ end }}

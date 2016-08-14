@@ -378,9 +378,14 @@ pass
                                                                     total++;
                                                                 {{pass}}
                                                             {{pass}}
-                                                          
+
                                                             var result= Math.round(count*100/total);
                                                             var progress = $('#progress-{{=plan.chapters.id}}-{{=user.username}}');
+                                                            
+                                                            //don't show NAN%
+                                                            if(total == 0)
+                                                          		result = 0;
+
 															$(progress).css("width", result+"%");
 															$(progress).text(result+"%");
                                                             if(result>50)

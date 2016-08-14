@@ -30,8 +30,8 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         os.mkdir(path.join(workingdir, 'custom_courses'))
 
     # confdir holds the conf and index files
-    confdir = path.join(workingdir, 'custom_courses', rvars['projectname'])
-    custom_dir = confdir
+    custom_dir = path.join(workingdir, 'custom_courses', rvars['projectname'])
+
     if not os.path.exists(custom_dir):
         os.mkdir(custom_dir)
 
@@ -55,14 +55,18 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
         try:
             # copy the index and conf files to the sourcedir
-            shutil.copy(path.join(confdir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
-            shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
+            shutil.copy(path.join(custom_dir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
+            shutil.copy(path.join(custom_dir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
 
             # copy the assignments.rst file from confidir as it may contain assignments written
             # by the instructor
-            shutil.copy(path.join(confdir, 'assignments.rst'),
+            shutil.copy(path.join(custom_dir, 'assignments.rst'),
                         path.join(sourcedir, '_sources', 'assignments.rst'))
 
+            # this check should allow for backward compatibility
+            if os.path.exists(os.path.join(custom_dir,'assignments')):
+                shutil.copytree(path.join(custom_dir,'assignments'),
+                                path.join(sourcedir,'_sources','assignments'))
 
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,

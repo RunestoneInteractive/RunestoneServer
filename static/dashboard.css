@@ -1,0 +1,209 @@
+#dashboard {
+	font-family: Verdana;
+	font-size: 12px;
+}
+#dashboard text {
+	font-size: 0.8em;
+}
+#dashboard h1 {
+    border-bottom: 1px solid #333;
+    margin: 0;
+    padding: 0.2em;
+}
+#dashboard h2 {
+    margin: 0 0.5em;
+}
+#dashboard table {
+    border: 1px solid #333;
+    border-collapse: collapse;
+    margin: 0.5em;
+}
+#dashboard thead {
+    background-color: #e6e6e6;
+    font-weight: bold;
+    border: 1px solid #333;
+}
+#dashboard thead td {
+    border: 1px solid #333;
+}
+#dashboard tbody {
+    background-color: #f2f2f2;
+}
+#dashboard tr {
+    border-bottom: 1px solid #777;
+}
+#dashboard td {
+    padding: 0.1em 0.5em;
+}
+#dashboard .nodec tbody {
+    background-color: transparent;
+}
+#dashboard .nodec tr {
+    border: none;
+}
+#dashboard .question-metric {
+    position: relative;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+}
+#dashboard .question-metric:nth-child(even) {
+    background-color: #f3f3f3;
+}
+#dashboard .question-metric:last-child {
+    border-bottom: 1px solid #e5e5e5;
+}
+#dashboard .question-metric .donut-chart {
+    width: 100px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+#dashboard .question-metric .question-info {
+    margin-left: 105px;
+    height: 110px;
+    padding: 10px;
+    position: relative;
+}
+#dashboard .question-info .detail-link {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+}
+#dashboard #book-completion .completed{
+    color:#009900;
+}
+#dashboard #book-completion .started{
+    color:#998800;
+}
+#dashboard #book-completion .notstarted{
+    color:#333333;
+}
+#dashboard .clickable {
+    cursor: pointer;
+    font-weight: bold;
+}
+#dashboard .clickable:hover {
+    cursor: pointer;
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+#dashboard .clickable .collapse-icon {
+    background-image: url('images/collapse.png');
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+    float: right;
+}
+#dashboard .clickable.expanded {
+    background
+}
+#dashboard .completed {
+    background-image: url('images/completed.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+#dashboard .chapter {
+}
+#dashboard .chapter-detail {
+    border-left: 1px solid #e5e5e5;
+    margin-left: 0.5em;
+    margin-bottom: 1em;
+    font-weight: normal;
+}
+#dashboard .chapter-detail div{
+    margin-left: 0.5em;
+}
+#dashboard .dhide {
+    display: none;
+}
+.dash-nav {
+    background-color: #e5e5e5;
+    margin-bottom: 1em;
+    height: 40px;
+    padding-top: 5px;
+}
+.dash-title-description {
+	font-size: 0.6em;
+	color: #777777;
+}
+.dash-section-header {
+	/*background: #d7d7d7;*/
+	font-size: 14px;
+	font-weight: bold;
+    padding: 0.2em;
+    margin-bottom: 0.3em;
+    border-bottom: 1px solid #333;
+}
+.dash-section {
+    margin: 1em;
+}
+.dash-subsection {
+    margin: 1em 0;
+}
+.dash-bar {
+    height: 11px;
+    text-align: right;
+    font-size: 9px;
+    color: #ffffff;
+    float: left;
+}
+.dash-bar-container {
+    width: 100%;
+    height: 13px;
+    border: 1px solid #777;
+    background-color: #e5e5e5;
+}
+.dash-bar-correct {
+    background-color: #00CC66;
+}
+.dash-bar-attempts {
+    background-color: #CCCC33;
+}
+.dash-bar-missed {
+    background-color: #CC3300;
+}
+.dash-bar-unread {
+    background-color: #CCCCCC;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+#dash-chart-tooltip {
+    position: absolute;
+    text-align: center;
+    width: 40px;
+    height: auto;
+    padding: 3px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 2px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+#dash-chart-tooltip.hidden {
+    display: none;
+}
+#dash-chart-tooltip p {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+}

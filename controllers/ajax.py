@@ -406,6 +406,8 @@ def gethighlights():
 def updatelastpage():
     lastPageUrl = request.vars.lastPageUrl
     lastPageScrollLocation = request.vars.lastPageScrollLocation
+    if lastPageUrl is None:
+        return   # todo:  log request.vars, request.args and request.env.path_info
     course = request.vars.course
     completionFlag = request.vars.completionFlag
     lastPageChapter = lastPageUrl.split("/")[-2]
