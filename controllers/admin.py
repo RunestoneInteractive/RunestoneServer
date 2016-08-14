@@ -671,8 +671,9 @@ def grading():
     try:
         assignments = {}
         assignments_query = db(db.assignments.course == auth.user.course_id).select()
+        summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
         for row in assignments_query:
-            assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
+            assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
             questions = []
             for q in assignment_questions:
                 question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
@@ -701,7 +702,7 @@ def grading():
         chapters_query = db(db.chapters.course_id == base_course).select()
         for row in chapters_query:
             q_list = []
-            chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course)).select()
+            chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type == 'question')).select()
             for chapter_q in chapter_questions:
                 q_list.append(chapter_q.name)
             chapter_labels[row.chapter_label] = q_list
@@ -903,22 +904,55 @@ def questionBank():
     term = False
     if request.vars['term'] != "":
         term = True
-    chapter = False
+    chapterQ = None
     if request.vars['chapter'] != "":
-        chapter = True
+        chapter_label = db(db.chapters.chapter_label == request.vars['chapter']).select(db.chapters.chapter_label).first().chapter_label
+        chapterQ =  db.questions.chapter == chapter_label
     difficulty = False
     if request.vars['difficulty'] != "null":
         difficulty = True
-    author = False
+    authorQ = None
     if request.vars['author'] != "":
-        author = True
+        authorQ = db.questions.author == request.vars['author']
     rows = []
     questions = []
+    questiontype = request.vars['qtype']
+    if questiontype == 'summative':
+        questiontypeQ = db.questions.question_type == 'question'
+    else:
+        questiontypeQ = None
+    base_courseQ = db.questions.base_course == base_course
     try:
-        questions_query = db(db.questions).select()
-        for question in questions_query: #Initially add all questions to the list, and then remove the rows that don't match search criteria
-            if question.base_course == base_course:
-                rows.append(question)
+
+        if chapterQ != None and authorQ != None:
+
+            if questiontypeQ != None:
+                questions_query = db(chapterQ & authorQ & base_courseQ & questiontypeQ).select()
+            else:
+                questions_query = db(chapterQ & authorQ & base_courseQ).select()
+
+        elif chapterQ == None and authorQ != None:
+            if questiontypeQ != None:
+                questions_query = db(authorQ & base_courseQ & questiontypeQ).select()
+            else:
+                questions_query = db(authorQ & base_courseQ).select()
+
+        elif chapterQ != None and authorQ == None:
+            if questiontypeQ != None:
+                questions_query = db(chapterQ & base_courseQ & questiontypeQ).select()
+
+            else:
+                questions_query = db(chapterQ & base_courseQ).select()
+
+        else:
+            if questiontypeQ != None:
+                questions_query = db(base_courseQ & questiontypeQ).select()
+
+            else:
+                questions_query = db(base_courseQ).select()
+
+        for question in questions_query: #Initially add all questions that we can to the list, and then remove the rows that don't match search criteria
+            rows.append(question)
         for row in questions_query:
             removed_row = False
             if term:
@@ -930,26 +964,8 @@ def questionBank():
                         ex = err
 
             if removed_row == False:
-                if chapter:
-                    if request.vars['chapter'] != row.chapter:
-                        try:
-                            rows.remove(row)
-                            removed_row = True
-                        except Exception as err:
-                            ex = err
-
-            if removed_row == False:
                 if difficulty:
                     if int(request.vars['difficulty']) != row.difficulty:
-                        try:
-                            rows.remove(row)
-                            removed_row = True
-                        except Exception as err:
-                            ex = err
-
-            if removed_row == False:
-                if author:
-                    if request.vars['author'] != row.author:
                         try:
                             rows.remove(row)
                             removed_row = True
@@ -971,7 +987,6 @@ def questionBank():
                     if needsRemoved:
                         try:
                             rows.remove(row)
-                            removed_row = True
                         except Exception as err:
                             print(err)
         for q_row in rows:
@@ -988,7 +1003,7 @@ def questionBank():
 def addToAssignment():
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
-    type = request.vars['type']
+    qtype = request.vars['type']
     question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
 
     timed = request.vars['timed']
@@ -998,7 +1013,7 @@ def addToAssignment():
         points = 0
 
     try:
-        type_id = db(db.assignment_types.name == type).select(db.assignment_types.id).first().id
+        type_id = db(db.assignment_types.name == qtype).select(db.assignment_types.id).first().id
     except Exception as ex:
         print(ex)
 
@@ -1229,4 +1244,41 @@ def htmlsrc():
     acid = request.vars['acid']
     htmlsrc = db(db.questions.name  == acid).select(db.questions.htmlsrc).first().htmlsrc
     return json.dumps(htmlsrc)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def changeDate():
+    try:
+        newdate = request.vars['newdate']
+        format_str = "%Y/%m/%d %H:%M"
+        due = datetime.datetime.strptime(newdate, format_str)
+        assignmentid = int(request.vars['assignmentid'])
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        assignment.update_record(duedate=due)
+        return 'success'
+    except:
+        return 'error'
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def changeDescription():
+    try:
+        newdescription = request.vars['newdescription']
+        assignmentid = int(request.vars['assignmentid'])
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        assignment.update_record(description=newdescription)
+        return 'success'
+    except:
+        return 'error'
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getStudentCode():
+    try:
+        acid = request.vars['acid']
+        sid = request.vars['sid']
+        c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
+        return json.dumps(c.code)
+    except Exception as ex:
+        print(ex)
 
