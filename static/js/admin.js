@@ -144,13 +144,23 @@ function getRightSideGradingDiv(element, acid, studentId){
       }
 
 
-            //add in the student's code to the window
+           //make an ajax call to get the student's code
+    var obj = new XMLHttpRequest();
+    obj.open("GET", "/runestone/admin/getStudentCode/?sid=" + studentId + '&acid=' + acid, true);
+    obj.send(JSON.stringify({sid: studentId}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            var studentcode = JSON.parse(obj.responseText);
+             //add in the student's code to the window
           var qtab = $("div[data-component='question']");
         var basedivid = jQuery('.ac_section',qtab).attr('id');
-        edList[basedivid].editor.setValue(complete_code);
+        edList[basedivid].editor.setValue(studentcode);
             setTimeout(function() {
                 edList[basedivid].editor.refresh();
             },1500);
+        }}
+
+
 
 
 
@@ -1010,13 +1020,30 @@ function display_write(){
             difficulty = inputs[i].value;
             }}
 
+               var activetab;
+            var formativetab = $('#formative').hasClass('clickedtab');
+            var summativetab = $('#summative').hasClass('clickedtab');
+            var externaltab = $('#external').hasClass('clickedtab');
+
+            if (formativetab == true) {
+                activetab = 'formative';
+            }
+      else if (summativetab == true) {
+                activetab = 'summative';
+            }
+
+      else if (externaltab == true) {
+                activetab = 'external';
+            }
+
            var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term, true);
+           obj.open('POST','/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term + '&qtype=' + activetab, true);
            obj.send(JSON.stringify({variable:'variable'}));
            obj.onreadystatechange = function () {
                if (obj.readyState == 4 && obj.status == 200) {
                    var resp = JSON.parse(obj.responseText);
                    var select = document.getElementById('qbankselect');
+                   select.onchange = getQuestionInfo;
                    var questionform = document.getElementById('questionform');
                    $("#qbankselect").empty();
                    for (i=0;i<resp.length;i++) {
@@ -1048,10 +1075,25 @@ function display_write(){
            var question_name = select.options[select.selectedIndex].text;
            var assignlist = document.getElementById('assignlist');
            var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-           var assessmentselect = document.getElementById('assessment_type');
-           var assessment_type = assessmentselect.options[assessmentselect.selectedIndex].value;
+            var activetab;
+            var formativetab = $('#formative').hasClass('clickedtab');
+            var summativetab = $('#summative').hasClass('clickedtab');
+            var externaltab = $('#external').hasClass('clickedtab');
+
+            if (formativetab == true) {
+                activetab = 'formative';
+            }
+      else if (summativetab == true) {
+                activetab = 'summative';
+            }
+
+      else if (externaltab == true) {
+                activetab = 'external';
+            }
+
+
            var obj = new XMLHttpRequest();
-           obj.open('POST','/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + checked + '&type=' + assessment_type, true);
+           obj.open('POST','/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + checked + '&type=' + activetab, true);
            obj.send(JSON.stringify({variable:'variable'}));
            obj.onreadystatechange = function () {
                if (obj.readyState == 4 && obj.status == 200) {
@@ -1215,3 +1257,50 @@ function display_write(){
             var assignmentid = select.options[select.selectedIndex].value;
             $.getJSON('/runestone/admin/questions2rst/'+assignmentid,{},function () {alert("done")});
         }
+
+
+function changeDueDate(form) {
+    var newdate = form.changedate.value;
+    var select = document.getElementById('assignlist');
+    var assignmentid = select.options[select.selectedIndex].value;
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/changeDate?newdate=' + newdate + '&assignmentid=' + assignmentid, true);
+    obj.send(JSON.stringify({variable:'variable'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            if (obj.responseText == 'success') {
+                alert("Successfully changed due date");
+                document.getElementById("assignment_duedate").innerHTML = "Due: " + newdate;
+            }
+
+            else if (obj.responseText == 'error') {
+                alert("There was an error changing your due date");
+            }
+        }
+        }
+
+}
+
+
+
+function changeDescription(form) {
+    var newdescription = form.newdescription.value;
+    var select = document.getElementById('assignlist');
+    var assignmentid = select.options[select.selectedIndex].value;
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/changeDescription?newdescription=' + newdescription + '&assignmentid=' + assignmentid, true);
+    obj.send(JSON.stringify({variable:'variable'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            if (obj.responseText == 'success') {
+                alert("Successfully changed description");
+                document.getElementById("assignment_description").innerHTML = newdescription;
+            }
+
+            else if (obj.responseText == 'error') {
+                alert("There was an error changing your due date");
+            }
+        }
+        }
+
+}

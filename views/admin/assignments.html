@@ -94,7 +94,57 @@
            <div id="leftpanel1" style="visibility: hidden" class="col-md-6">
 <div style="margin-top:25px;">
   <p id="assignment_duedate">Due</p>
-<p id="totalPoints"></p></div>
+<p id="totalPoints"></p>
+    <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#changeDue">Change Date</button>
+
+
+    <div class="modal fade" id="changeDue" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    Change Assignment Due Date
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form role="form" action="">
+
+                       <div class="form-group">
+                    <label for="changedate">Due Date</label>
+                      <input id="changedate" type="text" >
+                  </div>
+
+                  <input type="button" class="btn btn-default" Value="Change" data-dismiss="modal" onClick="changeDueDate(this.form)">
+                </form>
+
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
 
         </div>
 
@@ -108,6 +158,52 @@
                 <div style="border: 1px solid black;">
                     <p id="assignment_description"></p>
                 </div>
+
+                    <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#changeDescriptionModal">Change Description</button>
+
+                    <div class="modal fade" id="changeDescriptionModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    Change Assignment Description
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form role="form" action="">
+                      <div class="form-group">
+                    <label for="newdescription">Description</label>
+                      <input type="text" class="form-control"
+                      id="newdescription" placeholder="Description"/>
+                  </div>
+
+                  <input type="button" class="btn btn-default" Value="Change" data-dismiss="modal" onClick="changeDescription(this.form)">
+                </form>
+
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
                 </div>
 
 
@@ -118,8 +214,9 @@
     <div style="margin-bottom: 50px" class="list-group">
         <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
 
+        <div id="typetabs">
         <div style="float:left;">
-           <button id="summative" onclick="showQuestions('summative');" data-toggle="tab" class="list-group-item">
+           <button id="summative" onclick="showQuestions('summative');" data-toggle="tab" class="list-group-item clickedtab">
                     <h4 style="text-align: center" class="list-group-item-heading">Summative</h4>
                 </button></div>
 
@@ -133,7 +230,7 @@
             <div style="float:left;">
            <button id="external" onclick="showQuestions('external');" data-toggle="tab" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">External</h4>
-                </button></div></div>
+                </button></div></div></div>
 
             <div class="list-group">
 
@@ -269,12 +366,7 @@
                         <input type="number" id="points" name="points" />
                         <label for="timed">Timed</label>
                          <input type="checkbox" id="timed" name="timed" value="true" />
-                        <label for="assessment_type">Type</label>
-                        <select id="assessment_type">
-                            <option value="formative">formative</option>
-                            <option value="summative">summative</option>
-                            <option value="external">external</option>
-                        </select>
+
                         <input type="button" class="btn btn-default" Value="Add to Assignment" data-dismiss="modal" onClick="addToAssignment(this.form)">
 
                     </form>
@@ -457,26 +549,38 @@ $("#tags").select2();
     $("#assignmentstab").addClass("active");
 
     jQuery('#datetimepicker').datetimepicker();
+    jQuery('#changedate').datetimepicker();
+
 
      $('#summative').click(function(){
+         $('#summative').addClass('clickedtab');
     $('#summative').css('background-color', 'gainsboro');
     $('#formative').css('background-color','transparent');
+         $('#formative').removeClass('clickedtab');
     $('#external').css('background-color','transparent');
+         $('#external').removeClass('clickedtab');
+
 
 
 });
 
     $('#formative').click(function(){
+        $('#formative').addClass('clickedtab');
     $('#formative').css('background-color', 'gainsboro');
     $('#summative').css('background-color','transparent');
+        $('#summative').removeClass('clickedtab');
     $('#external').css('background-color','transparent');
+        $('#external').removeClass('clickedtab');
 
 });
 
     $('#external').click(function(){
+        $('#external').addClass('clickedtab');
     $('#external').css('background-color', 'gainsboro');
     $('#summative').css('background-color','transparent');
+        $('#summative').removeClass('clickedtab');
     $('#formative').css('background-color','transparent');
+        $('#formative').removeClass('clickedtab');
 
 });
 </script>
