@@ -28,7 +28,7 @@
           <input type="text" class='form-control' placeholder="Page URL of the bug" name="pagename" id="pagename" value="{{=uri}}" required/>
         </div>
       </div>
-        <div class="form-group-row">
+        <div class="form-group-row" id="userinfodiv">
             <div class="col-md-12">
                 <label for="bookerror"></label>
                 <input type="checkbox" name="bookerror" id="bookerror"> Check this box if the bug is a typo, unclear passage, or other problem with the content of a book.
@@ -36,11 +36,16 @@
         </div>
         <div class="form-group">
             <div class="col-md-12">
+                <label for="useremail">My Email</label>
+                <input type="text" class="form-control" name="useremail" id="useremail" value="{{=email}}"/>
+                <label for="username">My Username</label>
+                <input type="text" class="form-control" name="username" id="username" value="{{=email}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
                 <label for="bugdetails">Bug Details</label> <br/>
-                <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required>
-My Username: {{=username}}
-My Email: {{ =email }}
-                </textarea>
+                <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required></textarea>
             </div>
         </div>
         <p>Please be as specific as possible. Include your username, the browser you are using, and any information from the Javascript Console.  Please note that username and email are important for us to contact you if we have a solution or need more information.</p>
@@ -57,6 +62,8 @@ My Email: {{ =email }}
         var bugtitle = formdata.bugtitle.value;
         var coursename = formdata.coursename.value;
         var pagename = formdata.pagename.value;
+        var username = formdata.username.value;
+        var useremail = formdata.useremail.value;
         if (bugtitle == "" ){
             var bugtitlediv = document.getElementById('bugtitlediv');
             newp = document.createElement('p');
@@ -75,6 +82,12 @@ My Email: {{ =email }}
             newp.innerHTML = 'This is a required field.';
             newp.style = 'color: red';
             pagenamediv.appendChild(newp);
+        } else if (username == "" && useremail == ""){
+            var userinfodiv = document.getElementById('userinfodiv');
+            newp = document.createElement('p');
+            newp.innerHTML = 'Either a Username or an Email address is required.';
+            newp.style = 'color: red';
+            userinfodiv.appendChild(newp)
         } else {
             document.getElementById('bugform').submit();
         }
