@@ -942,9 +942,19 @@ function display_write(){
 
 
  function showQuestions(type) {
+
+            //New functionality, clear out the right hand side, blank search with no results showing
+           $('#qbankselect').empty();
+            $('#qbankselect').css('visibility','hidden');
+                 $('#questionform').css('visibility','hidden');
+            $('#questionInfo').css('visibility','hidden');
+
+
+
            //Show all questions in table with class matching the type passed in, hide all other questions
            var typeToHide1;
            var typeToHide2;
+
 
            if (type == 'summative') {
                typeToHide1 = '.formative';
