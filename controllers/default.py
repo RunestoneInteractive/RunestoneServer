@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-### required - do no delete
+### required - do not delete
+import cgi
 import json
+import os
+import requests
 from urllib import unquote
 
 def user():
@@ -37,14 +40,15 @@ def user():
     form = auth()
 
     if 'profile' in request.args(0):
-        sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
-        sectname = db(db.sections.id == sect).select(db.sections.name).first()
+        try:
+            sect = db(db.section_users.auth_user == auth.user.id).select(db.section_users.section).first().section
+            sectname = db(db.sections.id == sect).select(db.sections.name).first()
+        except:
+            sectname = None
         if sectname:
             sectname = sectname.name
         else:
             sectname = 'default'
-        if not sect:
-            sect = 'default'
         my_extra_element = TR(LABEL('Section Name'),
                            INPUT(_name='section', value=sectname, _type='text'))
         form[0].insert(-1, my_extra_element)
@@ -62,6 +66,16 @@ def user():
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
+            #problem is that
+            inDB = db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == auth.user.course_id)).select()
+            DBcheck = []
+            for row in inDB:
+                DBcheck.append(row)
+            if DBcheck == []:
+                db.executesql('''
+                    INSERT INTO user_courses(user_id, course_id)
+                    SELECT %s, %s
+                    ''' % (auth.user.id, auth.user.course_id))
             res = db(db.chapters.course_id == auth.user.course_name)
             if res.count() > 0:
                 chapter_label = res.select().first().chapter_label
@@ -110,9 +124,18 @@ def index():
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
     else:
+        inDB = db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == auth.user.course_id)).select()
+        DBcheck = []
+        for row in inDB:
+            DBcheck.append(row)
+        if DBcheck == []:
+            db.executesql('''
+                    INSERT INTO user_courses(user_id, course_id)
+                    SELECT %s, %s
+                    ''' % (auth.user.id, auth.user.course_id))
         try:
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db(db.user.sub_chapter_progress.user_id == auth.user.id).count() == 0:
+            if db(db.user_sub_chapter_progress.user_id == auth.user.id).count() == 0:
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
                             db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                     db.executesql('''
@@ -120,15 +143,18 @@ def index():
                        SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
                        FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
                     ''' % (auth.user.id, auth.user.course_name))
-                # Add user to default section for course.
-                sect = db((db.sections.course_id == auth.user.course_id) & (db.sections.name == form.vars.section)).select(
-                    db.sections.id).first()
-                if sect:
-                    x = db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
         except:
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
-        redirect('/%s/static/%s/index.html' % (request.application,course.course_name))
+
+        #check number of classes, if more than 1, send to course selection, if only 1, send to book
+        courseCheck = db(db.user_courses.user_id == auth.user.id).select()
+        numCourses = 0
+        for row in courseCheck:
+            numCourses += 1
+        if numCourses == 1:
+            redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
+        redirect('/%s/default/courses' % request.application)
 
     cohortId = db(db.auth_user.id == auth.user.id).select(db.auth_user.cohort_id).first()
 
@@ -141,7 +167,7 @@ def about():
 def ack():
     return dict()
 
-    
+
 @auth.requires_login()
 def bio():
     existing_record = db(db.user_biography.user_id == auth.user.id).select().first()
@@ -153,7 +179,7 @@ def bio():
         upload=URL('download'),
         formstyle='table3cols',
         col3={'prefered_name': "Name you would like to be called by in class. Pronunciation hints are also welcome!",
-              'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? an expert on South American insects? going into the Peace Corps after graduation? have a company that you started last summer? have an unusual favorite color?",
+              'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? An expert on South American insects? Going into the Peace Corps after graduation? Have a company that you started last summer? Have an unusual favorite color?",
               'programming_experience': "Have you ever done any programming before? If so, please describe briefly. (Note: no prior programming experience is required for this course. I just like to know whether you have programmed before.)",
               'image': 'I use a flashcard app to help me learn student names. Please provide a recent photo. (Optional. If you have religious or privacy or other objections to providing a photo, feel free to skip this.)',
               'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?"}
@@ -185,3 +211,99 @@ def bios():
               'user_biography.programming_experience' : 'Text 5'}
     bios = SQLFORM.grid(q, fields=fields, headers = headers)
     return dict(bios=bios)
+
+
+@auth.requires_login()
+def courses():
+    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    classlist = []
+    for row in res:
+        classes = db(db.courses.id == row.course_id).select()
+        for part in classes:
+            classlist.append(part.course_name)
+    return dict(courses=classlist)
+
+
+@auth.requires_login()
+def remove():
+    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    classlist = []
+    for row in res:
+        classes = db(db.courses.id == row.course_id).select()
+        for part in classes:
+            classlist.append(part.course_name)
+    return dict(courses=classlist)
+
+
+@auth.requires_login()
+def coursechooser():
+    res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+
+    db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
+    db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
+    auth.user.update(course_name=request.args[0])
+    auth.user.update(course_id=res[0].id)
+
+    redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+
+@auth.requires_login()
+def removecourse():
+    courseIdQuery = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+
+    # Check if they're about to remove their currently active course
+    authQuery = db(db.auth_user.id == auth.user.id).select()
+    for row in authQuery:
+        if row.course_name == request.args[0]:
+            session.flash = T("Sorry, you cannot remove your current active course.")
+        else:
+            db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == courseIdQuery[0].id)).delete()
+
+    redirect('/%s/default/courses' % request.application)
+
+def reportabug():
+    course = request.vars['course']
+    uri = request.vars['page']
+    username = 'anonymous'
+    email = 'anonymous'
+    if auth.user:
+        username = auth.user.username
+        email = auth.user.email
+    return dict(course=course,uri=uri,username=username,email=email)
+
+def sendreport():
+    # settings.github_token should be set to a valid Github access token
+    # that has full repo access in models/1.py
+
+    if request.vars['bookerror'] == 'on':
+        basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
+        if basecourse == None:
+            url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+        else:
+            url ='https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
+    else:
+        url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
+    reqsession = requests.Session()
+    reqsession.auth = ('token', settings.github_token)
+    coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
+    pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
+    details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+
+    body = 'Error reported in course ' + coursename + ' on page ' + pagename + '\n' + details
+    issue = {'title': request.vars['bugtitle'],
+             'body': body}
+    r = reqsession.post(url, json.dumps(issue))
+    if r.status_code == 201:
+        session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
+    else:
+        session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
+
+    courseCheck = 0
+    if auth.user:
+        courseCheck = db(db.user_courses.user_id == auth.user.id).count()
+
+    if courseCheck == 1 and request.vars['coursename']:
+        redirect('/%s/static/%s/index.html' % (request.application, request.vars['coursename']))
+    elif courseCheck > 1:
+        redirect('/%s/default/courses' % request.application)
+    else:
+        redirect('/%s/default/' % request.application)

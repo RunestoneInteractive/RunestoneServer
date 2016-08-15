@@ -22,8 +22,8 @@ def index():
     #response.flash = "Welcome to CourseWare Manager!"
 
     basicvalues = {}
-    basicvalues["message"]=T('Welcome to CourseWare Builder')
-    basicvalues["descr"]=T('''This tool allows you to create your own courseware by choosing from a catalog of modules.
+    basicvalues["message"]=T('Build a Custom Course')
+    basicvalues["descr"]=T('''This page allows you to select a book for your own class. You will have access to all student activities in your course.
     To begin, enter a project name below.''')
     #return dict(message=T('Welcome to CourseWare Manager'))
     return basicvalues
@@ -53,7 +53,7 @@ def build():
         else:
             base_course = request.vars.coursetype
 
-        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=base_course,
                                                                        application=request.application,
@@ -78,8 +78,12 @@ def build():
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         db.course_instructor.insert(instructor=auth.user.id, course=cid)
-        auth.user.course_id = cid
-        auth.user.course_name = request.vars.projectname
+        auth.user.update(course_name=request.vars.projectname)  # also updates session info
+        auth.user.update(course_id=cid)
+        db.executesql('''
+            INSERT INTO user_courses(user_id, course_id)
+            SELECT %s, %s
+            ''' % (auth.user.id, cid))
 
         # Create a default section for this course and add the instructor.
         sectid = db.sections.update_or_insert(name='default',course_id=cid)
@@ -108,7 +112,7 @@ def build():
 
 def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
                                                                    http_host=request.env.http_host))

@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+
+{{block statusbar}}
+{{end}}
+
+
+<h1 style="text-align: center">Remove a Course</h1>
+<h3 style="text-align: center">Click your course to remove it</h3>
+<h4 style="text-align: center">This action cannot be undone</h4>
+
+
+<div class=".container">
+  <div style="text-align: center">
+  {{for course in courses:}}
+    <form action="/runestone/default/removecourse/{{=course}}" class="course-form" method="post" onsubmit="return confirm('Are you sure you want to delete this course? (Courses can be added back in the user profile)')">
+      <button class="ac_opt btn btn-default book-btn" name="course" type="submit" value={{=course}} style="font-size: 16pt;">{{=course}}</button>
+    </form>
+  {{pass}}
+  <form action="/runestone/default/courses" class="course-form" method="post">
+    <button class="ac_opt btn btn-default course-btn" name="goback" type="submit" style="font-size: 16pt;">Go Back</button>
+  </form>
+
+  </div>
+</div>

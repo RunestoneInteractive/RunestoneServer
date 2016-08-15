@@ -1,0 +1,83 @@
+{{extend 'layout.html'}}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
+<script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+
+<div id="dashboard">
+	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
+	{{include 'dashboard/dashboard-nav.html'}}
+	<h2>Gradebook</h2>
+	<div class="col-md-12">
+		<table>
+			<thead>
+				<tr>
+					<td rowspan="2">Student</td>
+					<td>Assignment #1</td>
+					<td>Assignment #2</td>
+					<td>Assignment #3</td>
+					<td>Assignment #4</td>
+					<td>Assignment #5</td>
+				</tr>
+				<tr>
+					<td>87 &darr;</td>
+					<td>84 &uarr;</td>
+					<td>n/a &uarr;</td>
+					<td>n/a &uarr;</td>
+					<td>n/a &uarr;</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Bob Brown</td>
+					<td>80</td>
+					<td>95</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Jack Jackson</td>
+					<td>85</td>
+					<td>80</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Macy Millan</td>
+					<td>90</td>
+					<td>95</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Sarah Smith</td>
+					<td>75</td>
+					<td>85</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Xu Hung</td>
+					<td>95</td>
+					<td>50</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Rachel Ru</td>
+					<td>75</td>
+					<td>80</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
