@@ -1282,3 +1282,9 @@ def getStudentCode():
     except Exception as ex:
         print(ex)
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def coursename():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    return json.dumps(row.course_name)
+
