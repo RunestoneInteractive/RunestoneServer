@@ -1,3 +1,5 @@
+import json
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def index():
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -77,3 +79,64 @@ def update():
         users = section.get_users(),
         bulk_email_form = bulk_email_form,
         )
+
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def students():
+    sectionName = request.args[0].replace('_',' ')
+    sectionIdQuery = db(db.sections.name == sectionName).select()
+    sectionId = sectionIdQuery[0].id
+    studentList = []
+    studentsQuery = db(db.section_users.section == sectionId).select()
+
+    for student in studentsQuery:
+        studentName = db(db.auth_user.id == student.auth_user).select()
+        firstName = studentName[0].first_name
+        lastName = studentName[0].last_name
+        studentList.append((firstName,lastName))
+    return json.dumps(studentList)
+
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def addSection():
+    return redirect(URL('admin','sections_create'))
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def remove():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    form = FORM(
+        DIV(
+            LABEL("Section Name", _for="section_name"),
+            INPUT(_id="section_name" ,_name="name", requires=IS_NOT_EMPTY(),_class="form-control"),
+            _class="form-group"
+            ),
+        INPUT(_type="Submit", _value="Remove Section", _class="btn"),
+        )
+    if form.accepts(request,session):
+        session.flash = T("Section Removed")
+        section = db((db.sections.name == form.vars.name) & (db.sections.course_id==course.id)).select().first()
+        if section:
+            db(db.sections.id == section.id).delete()
+        return redirect(URL('sections','managesections'))
+    return dict(
+        form = form,
+        )
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def changeDate():
+    return redirect(URL('admin','startdate'))
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getDate():
+    sectionName = request.args[0].replace('_',' ')
+    dateQuery = db(db.courses.course_name == auth.user.course_name).select()
+    date = dateQuery[0].term_start_date
+    return date
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def newCourse():
+    return redirect(URL('','designer/index.html'))
+

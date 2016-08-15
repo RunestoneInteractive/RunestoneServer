@@ -1,0 +1,132 @@
+{{extend 'layout.html'}}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
+<script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+
+<div id="dashboard">
+	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
+	{{include 'dashboard/dashboard-nav.html'}}
+	<h2>Student Report - {{=user.first_name}} {{=user.last_name}}</h2>
+	<div class="col-md-7">
+		
+		<div class="dash-section" id="book-completion">
+			<div class="dash-section-header">
+				Book Completion
+			</div>
+			<div class="dash-section-content">
+				{{ for chapter in chapters: }}
+				<div class="chapter">
+					<div class="clickable {{=chapter['status']}}">
+						{{=chapter["label"]}}
+						<div class="collapse-icon"></div>
+					</div>
+					<div class="chapter-detail dhide">
+						{{ for subchapter in chapter["subchapters"]: }}
+						<div class="{{=subchapter['status']}}">{{=subchapter["label"]}}
+						</div>
+						{{ pass }}
+					</div>
+				</div>
+				{{ pass }}
+				<script>
+				$(".chapter .clickable").click(function(){
+					$(this).toggleClass("expanded")
+					$(this).parent().children(".chapter-detail").toggleClass("dhide");
+				});
+				</script>
+			</div>
+		</div>
+		<!--<div class="dash-section">
+			<div class="dash-section-header">
+				Exercise Completion
+			</div>
+			<div class="dash-section-content">
+				<b>Parsons Problems</b>
+				<div>80% Correct</div>
+				<b>Multiple Choice</b>
+				<div>90%</div>
+				<b>Open-Ended</b>
+				<div>60%</div>
+			</div>
+		</div>-->
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Grades
+			</div>
+			<div class="dash-section-content">
+				<table width="90%">
+					<thead>
+						<tr>
+							<td>Assignment</td>
+							<td>Completed Date</td>
+							<td>Grade</td>
+							<td>Average</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Assignment #1</td>
+							<td>1/19/2016</td>
+							<td>80</td>
+							<td>76</td>
+						</tr>
+						<tr>
+							<td>Assignment #2</td>
+							<td>2/2/2016</td>
+							<td>95</td>
+							<td>84</td>
+						</tr>
+						<tr>
+							<td>Assignment #3</td>
+							<td>n/a</td>
+							<td>n/a</td>
+							<td>n/a</td>
+						</tr>
+						<tr>
+							<td>Assignment #4</td>
+							<td>n/a</td>
+							<td>n/a</td>
+							<td>n/a</td>
+						</tr>
+						<tr>
+							<td>Assignment #5</td>
+							<td>n/a</td>
+							<td>n/a</td>
+							<td>n/a</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Profile
+			</div>
+			<div class="dash-section-content">
+				<div>Username: {{=user.username}}</div>
+				<div>Email: {{=user.email}}</div>
+				<!--<div><a href="">Reset Password &raquo;</a></div>-->
+				<!--<div style="float:right;"><a href="email:">Email Student &raquo;</a></div>-->
+			</div>
+		</div>
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Recent Activity
+			</div>
+			<div class="dash-section-content">
+				<table class="nodec">
+					{{for row in activity:}}
+					<tr>
+						<td>{{=row["event"]}}</td>
+						<td>{{=row["time"]}}</td>
+					</tr>
+					{{pass}}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

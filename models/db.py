@@ -228,6 +228,16 @@ auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment thi
 
 request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
 
+db.define_table('user_courses',
+                Field('user_id', db.auth_user, ondelete='CASCADE'),
+                Field('course_id', db.courses, ondelete='CASCADE'),
+                Field('user_id', db.auth_user),
+                Field('course_id', db.courses),
+                migrate='runestone_user_courses.table')
+# For whatever reason the automatic migration of this table failed.  Need the following manual statements
+# alter table user_courses alter column user_id type integer using user_id::integer;
+# alter table user_courses alter column course_id type integer using course_id::integer;
+
 #########################################################################
 ## Define your tables below (or better in another model file) for example
 ##

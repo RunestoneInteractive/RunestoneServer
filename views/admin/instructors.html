@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+<script src="{{=URL('static', 'js/admin.js')}}"></script>
+
+
+<div id="outerTabs" class="container" style="margin-top: 60px;">
+  <ul class="nav nav-tabs">
+    <li class="dashboardnav active" id="progresstab"><a href="{{=URL(c='dashboard',f='index')}}">Student Progress</a></li>
+    <li class="dashboardnav" id="admintab"> <a href="{{=URL(c='admin',f='admin')}}">Admin</a></li>
+    <li class="dashboardnav" id="gradingtab"><a href="{{=URL(c='admin',f='grading')}}">Grading</a></li>
+    <li class="dashboardnav" id="assignmentstab"><a href="{{=URL(c='admin',f='assignments')}}">Assignments</a></li>
+    <li class="dashboardnav" id="doctab"><a href="#doc">Doc</a></li>
+  </ul>
+
+    <div class="tab-content">
+
+        {{ block tabcontent }}
+
+        {{ end }}
+
+
+
+
+    </div>
+</div>

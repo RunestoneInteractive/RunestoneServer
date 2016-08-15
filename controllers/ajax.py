@@ -39,7 +39,6 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
-    responseMap = {'0':'a', '1':'b','2':'c','3':'d','4':'e'}
     db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
     if event == 'timedExam' and act == 'finish':
         try:
@@ -54,16 +53,15 @@ def hsblog():    # Human Subjects Board Log
         if db((db.mchoice_answers.sid == sid) &
               (db.mchoice_answers.div_id == div_id) &
               (db.mchoice_answers.correct == 'T')).count() == 0:
-            x,resp,result = act.split(':')
-            corr = 'T' if result == 'correct' else 'F'
-            resp = responseMap.get(resp,resp)
-            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+            answer = request.vars.answer
+            correct = request.vars.correct
+            db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
         if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
-            x,resp,result = act.split(':')
-            corr = 'T' if result == 'correct' else 'F'
-            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=resp, correct=corr, course_name=course)
+            answer = request.vars.answer
+            correct = request.vars.correct
+            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
         if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
@@ -81,8 +79,8 @@ def hsblog():    # Human Subjects Board Log
         if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
-            trash = request.vars.trash
-            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, trash=trash, correct=correct, course_name=course)
+            source = request.vars.source
+            db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -106,9 +104,11 @@ def runlog():    # Log errors and runs with code
             setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
-    code = request.vars.code
+    code = request.vars.code if request.vars.code else ""
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
+    pre = request.vars.prefix if request.vars.prefix else ""
+    post = request.vars.suffix if request.vars.suffix else ""
     if error_info != 'success':
         event = 'ac_error'
         act = error_info
@@ -118,25 +118,22 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
-    if ('to_save' not in request.vars):
-        # old API
-        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
-        #lintAfterSave(dbid, code, div_id, sid)
-    else:
-        # new API
-        if (request.vars.to_save != "False"):
-            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
-            #lintAfterSave(dbid, code, div_id, sid)
-
-            # auto-save to code table
-            db.code.insert(sid=sid,
-                acid=div_id,
-                code=code,
-                emessage=error_info,
-                timestamp=ts,
-                course_id=course,
-                language=request.vars.lang)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
+    dbid = db.acerror_log.insert(sid=sid,
+                                 div_id=div_id,
+                                 timestamp=ts,
+                                 course_id=course,
+                                 code=pre+code+post,
+                                 emessage=error_info)
+    #lintAfterSave(dbid, code, div_id, sid)
+    if 'to_save' in request.vars and request.vars.to_save == "True":
+        db.code.insert(sid=sid,
+            acid=div_id,
+            code=code,
+            emessage=error_info,
+            timestamp=ts,
+            course_id=course,
+            language=request.vars.lang)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -409,6 +406,8 @@ def gethighlights():
 def updatelastpage():
     lastPageUrl = request.vars.lastPageUrl
     lastPageScrollLocation = request.vars.lastPageScrollLocation
+    if lastPageUrl is None:
+        return   # todo:  log request.vars, request.args and request.env.path_info
     course = request.vars.course
     completionFlag = request.vars.completionFlag
     lastPageChapter = lastPageUrl.split("/")[-2]
@@ -582,12 +581,18 @@ def getaggregateresults():
         return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
 
     # Yes, these two things could be done as a join.  but this **may** be better for performance
-    start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
+    if course == 'thinkcspy' or course == 'pythonds':
+        start_date = datetime.datetime.now() - datetime.timedelta(days=90)
+    else:
+        start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
-    result = db((db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course) &
-                (db.useinfo.timestamp >= start_date)
-                ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    try:
+        result = db((db.useinfo.div_id == question) &
+                    (db.useinfo.course_id == course) &
+                    (db.useinfo.timestamp >= start_date)
+                    ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    except:
+        return json.dumps([dict(answerDict={}, misc={}, emess='Sorry, the request timed out')])
 
     tdata = {}
     tot = 0
@@ -905,9 +910,9 @@ def getAssessResults():
         res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
         return json.dumps(res)
     elif event == "parsons":
-        query = "select answer, trash, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
+        query = "select answer, source, timestamp from parsons_answers where div_id='%s' and course_name='%s' and sid='%s' order by timestamp desc" % (div_id, course, sid)
         rows = db.executesql(query)
         if len(rows) == 0:
             return ""
-        res = {'answer': rows[0][0], 'trash': rows[0][1], 'timestamp': str(rows[0][2])}
+        res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)

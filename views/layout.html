@@ -15,7 +15,8 @@
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
-
+    <link rel="shortcut icon"
+    href="{{=URL('static','favicon.ico')}}" type="image/ico" />
     <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>    
@@ -62,7 +63,6 @@
 
       <div>
         <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
-        <a class="navbar-brand" href="/">Runestone Interactive</a>
       </div>
     </div>
 
@@ -119,18 +119,20 @@
             {{ else: }}
               <li><span class='loggedinuser'>Not logged in</span></li>
             {{ pass }}
-<!--            <li class="divider"></li>
+            {{ if auth.user: }}
+            <li class="divider"></li>
+            <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
+            {{ pass }}
+            <li class="divider"></li>
             <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
             <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
             <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li>
             <li class="divider"></li>
-            -->
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
             {{ if auth.user: }}
- <!--             <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
+              <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
               <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              -->
               <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>              
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
@@ -153,7 +155,7 @@
             <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li> 
             <li class="divider"></li>            
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-            <li><a href='/{{=request.application}}/static/help/bugreports.html'>Report A Problem</a></li>
+            <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
           </ul>
         </li>
 
@@ -164,8 +166,8 @@
       <ul class="nav navbar-nav">
 
         <li class="divider-vertical"></li>
+
         <!-- open library dropdown -->
-<!--
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu">
@@ -174,12 +176,11 @@
             <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
             <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
             <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
-            <li><a href="/{{=request.application}}/static/pip/index.html">Programs, Information, People version 1</a></li>
-            <li><a href="/{{=request.application}}/static/pip2/index.html">Programs, Information, People version 2</a></li>
+            <li><a href="/{{=request.application}}/static/pip2/index.html">Programs, Information, and People</a></li>
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>
--->
+
         <li class="divider-vertical"></li>
 
 

@@ -9,6 +9,9 @@ import logging
 from pkg_resources import resource_string, resource_filename
 from runestone.server.chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
 
+rslogger = logging.getLogger('web2py.app.runestone')
+rslogger.setLevel('DEBUG')
+
 
 ################
 ## This task will run as a scheduled task using the web2py scheduler.
@@ -17,18 +20,18 @@ from runestone.server.chapternames import addChapterInfoFromScheduler, findChapt
 def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_course=None):
     # workingdir is the application folder
     workingdir = folder
-    mylog = logging.getLogger('web2py.root')
     # sourcedir holds the all sources temporarily
     sourcedir = path.join(workingdir, 'build', rvars['projectname'])
 
+    rslogger.debug("Starting to build {}".format(rvars['projectname']))
 
     # create the custom_courses dir if it doesn't already exist
     if not os.path.exists(path.join(workingdir, 'custom_courses')):
         os.mkdir(path.join(workingdir, 'custom_courses'))
 
     # confdir holds the conf and index files
-    confdir = path.join(workingdir, 'custom_courses', rvars['projectname'])
-    custom_dir = confdir
+    custom_dir = path.join(workingdir, 'custom_courses', rvars['projectname'])
+
     if not os.path.exists(custom_dir):
         os.mkdir(custom_dir)
 
@@ -52,17 +55,18 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
         try:
             # copy the index and conf files to the sourcedir
-            shutil.copy(path.join(confdir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
-            shutil.copy(path.join(confdir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
+            shutil.copy(path.join(custom_dir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
+            shutil.copy(path.join(custom_dir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
 
             # copy the assignments.rst file from confidir as it may contain assignments written
             # by the instructor
-            shutil.copy(path.join(confdir, 'assignments.rst'),
+            shutil.copy(path.join(custom_dir, 'assignments.rst'),
                         path.join(sourcedir, '_sources', 'assignments.rst'))
 
-            if os.path.exists(path.join(confdir, 'toc.rst')):
-                shutil.copy(path.join(confdir, 'toc.rst'),
-                            path.join(sourcedir, '_sources', 'toc.rst'))
+            # this check should allow for backward compatibility
+            if os.path.exists(os.path.join(custom_dir,'assignments')):
+                shutil.copytree(path.join(custom_dir,'assignments'),
+                                path.join(sourcedir,'_sources','assignments'))
 
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
@@ -76,8 +80,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         # Save copies of files that the instructor may customize
         shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
         shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
-        if os.path.exists(path.join(sourcedir,'_sources', 'toc.rst')):
-            shutil.copy(path.join(sourcedir,'_sources', 'toc.rst'),custom_dir)
 
 
     ###########
@@ -87,22 +89,19 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     from paver.tasks import main as paver_main
     os.chdir(sourcedir)
     paver_main(args=["build"])
+    rslogger.debug("Finished build of {}".format(rvars['projectname']))
     try:
         shutil.copy('build_info',custom_dir)
     except IOError as copyfail:
-        logging.debug("Failed to copy build_info_file")
-        logging.debug(copyfail.message)
-
-    if base_course == 'thinkcspy' or base_course == 'pip2':
-        idxname = 'toc.rst'
-    else:
+        rslogger.debug("Failed to copy build_info_file")
+        rslogger.debug(copyfail.message)
         idxname = 'index.rst'
 
     #
     # Build the completion database
     #
-
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', idxname))
+    rslogger.debug("Starting to populate chapters for {}".format(rvars['projectname']))
+    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', 'index.rst'))
     addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
 
     for root, dirs, files in os.walk(sourcedir):
@@ -122,7 +121,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     #
 
     shutil.rmtree(sourcedir)
-
+    rslogger.debug("Completely done with {}".format(rvars['projectname']))
     donefile = open(os.path.join(custom_dir, 'done'), 'w')
     donefile.write('success')
     donefile.close()
@@ -233,7 +232,7 @@ def populateSubchapter(fpath, fn, fh, sourcedir, base_course):
     for line in fh:
         mo = div_re.match(line)
         if mo:
-            print chapter, subchapter, mo.group(1), mo.group(2)
+            #rslogger.debug("{} {} {} {}".format(chapter, subchapter, mo.group(1), mo.group(2)))
             divt = mo.group(1)
             divid = mo.group(2)
             if divt == 'actex' and divid in odd_ex_list:
