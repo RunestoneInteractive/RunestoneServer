@@ -1291,3 +1291,30 @@ def coursename():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     return json.dumps(row.course_name)
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def indexrst():
+    try:
+        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+        course_name = row.course_name
+        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'))
+        filetxt = file.read()
+    except Exception as ex:
+        print(ex)
+        filetxt = "Sorry, no index.rst file could be found"
+    return json.dumps(filetxt)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def editindexrst():
+    try:
+        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+        course_name = row.course_name
+        newtext = request.vars['newtext']
+        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'),'w')
+        file.write(newtext)
+        file.close()
+        print(request.vars)
+        return 'ok'
+    except Exception as ex:
+        print(ex)
+

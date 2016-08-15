@@ -48,6 +48,7 @@ function gradeIndividualItem() {
 }
 
 
+
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
         alert("Can't grade without a URL");
@@ -786,7 +787,7 @@ function create_question(formdata) {
     var template = formdata.template.value;
     var name = formdata.qname.value;
     var question = formdata.qcode.value;
-    question = question.replace(/(\n)+/g, '%0A');
+        question = question.replace(/(\r\n|\n|\r)/gm, '%0A');
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
         if (difficulty[i].checked == true) {
@@ -1223,7 +1224,7 @@ function edit_question(form) {
         }
     }
     var question_text = form.editRST.value;
-    question_text = question_text.replace(/(\n)+/g, '%0A'); //encodes all new line characters to preserve them in query string
+          question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
 
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
@@ -1305,4 +1306,17 @@ function changeDescription(form) {
         }
     }
 
+}
+
+function edit_indexrst(form) {
+    var newtext = form.editIndex.value;
+    newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/editindexrst?newtext=' + newtext, true);
+    obj.send(JSON.stringify({variable:'variable'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            alert("Successfully edited index.rst");
+
+        }}
 }

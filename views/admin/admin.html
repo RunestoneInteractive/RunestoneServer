@@ -21,6 +21,9 @@
         <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
                 </a>
+      <a id="changeIndexTab" data-toggle="tab" href="#changeIndex" class="list-group-item">
+                    <h4 style="text-align: center" class="list-group-item-heading">Edit Index</h4>
+                </a>
 
         <div style="margin-top: 125px; border-top: dashed">
 
@@ -229,6 +232,23 @@
                 <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
             </div>
             </div>
+
+                      <div id="changeIndex" class="tab-pane fade">
+            <div class="col-md-3">
+                                <form id="editIndexRST" action="">
+                    <div class="form-group">
+                        <label for="editIndex">Edit index.rst</label>
+              <textarea style="white-space: pre; overflow-x: auto;" id="editIndex" cols="100" name="editIndex" placeholder="" rows="20"></textarea>
+
+                    </div>
+                  <input type="button" class="btn btn-default" Value="Submit" data-dismiss="modal" onClick="edit_indexrst(this.form);">
+
+</form>
+
+                </div>
+
+
+</div>
           </div>
 
 <script>
@@ -243,6 +263,7 @@
     $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
+        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -251,6 +272,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
+        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -259,6 +281,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
+        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -267,6 +290,25 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
+        $('#changeIndexTab').css('background-color','transparent');
+
+});
+
+        $('#changeIndexTab').click(function(){
+    $('#changeIndexTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+        $('#DeleteTab').css('background-color','transparent');
+            var obj = new XMLHttpRequest();
+        obj.open('GET','/runestone/admin/indexrst/', true);
+        obj.send(JSON.stringify({avariable: 'avariable'}));
+        obj.onreadystatechange = function() {
+            if (obj.readyState == 4 && obj.status == 200) {
+                filetext = JSON.parse(obj.responseText);
+                 var textarea = document.getElementById('editIndex');
+                   textarea.innerHTML = filetext;
+            }}
 
 });
 
