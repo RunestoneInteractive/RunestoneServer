@@ -24,6 +24,10 @@ def index():
     questions = []
     sections = []
 
+    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
+        session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
+        return redirect(URL('admin','admin'))
+
     print("getting chapters for ", auth.user.course_name)
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
