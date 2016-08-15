@@ -138,6 +138,7 @@ class UserActivityMetrics(object):
 class UserActivity(object):
     def __init__(self, user):
         self.name = "{0} {1}".format(user.first_name,user.last_name)
+        self.username = user.username
         self.rows = []
         self.page_views = []
         # self.exercise_correct  -- cannot find any refs to this unset attr.
@@ -157,7 +158,10 @@ class UserActivityChapterProgress(object):
         for chapter in chapters:
             self.chapters[chapter.chapter_label] = UserActivitySubChapterProgress(chapter)
         for sub_chapter in sub_chapter_progress:
-            self.chapters[sub_chapter.chapter_id].add_progress(sub_chapter)
+            try:
+                self.chapters[sub_chapter.chapter_id].add_progress(sub_chapter)
+            except KeyError:
+                rslogger.debug("Key Error for {}".format(sub_chapter.chapter_id))
 
 class UserActivitySubChapterProgress(object):
     def __init__(self, chapter):
