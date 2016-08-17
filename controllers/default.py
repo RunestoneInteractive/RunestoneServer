@@ -5,6 +5,7 @@ import json
 import os
 import requests
 from urllib import unquote
+from urllib2 import HTTPError
 
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
@@ -36,8 +37,11 @@ def user():
                     course_name = url_parts[i+1]
                     db.auth_user.course_id.default = course_name
                     break
-
-    form = auth()
+    try:
+        form = auth()
+    except HTTPError:
+        session.flash = "Sorry, that service failed.  Try a different service or file a bug"
+        redirect(URL('default', 'index'))
 
     if 'profile' in request.args(0):
         try:
