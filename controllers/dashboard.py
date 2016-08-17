@@ -75,8 +75,8 @@ def index():
     user_activity = data_analyzer.user_activity
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
-            "student":activity.username,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
-            "sid":activity.name,
+            "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
+            "sid":activity.username,
             "count":activity.get_page_views()
             })
 

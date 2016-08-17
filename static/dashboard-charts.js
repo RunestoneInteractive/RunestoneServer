@@ -16,13 +16,16 @@ function DashboardCharts(){
         width = 400 - margins.left - margins.right,
         height = (20 * 24) - margins.top - margins.bottom,
         dataset = data,
+        nameMap = {},
         series = dataset.map(function (d) {
             return d['name'];
         }),
+
             dataset = dataset.map(function (d) {
                 return d.data.map(function (o, i) {
                     // Structure it so that your numeric
                     // axis (the stacked amount) is y
+                    nameMap[o['student']] = o['sid'];
                     return {
                         y: o['count'],
                         x: o['student']
@@ -119,7 +122,7 @@ function DashboardCharts(){
     .style("cursor", "pointer")
     .style("text-decoration","underline")
     .on("click", function(d){
-        document.location.href = "studentreport?id=" + d;
+       document.location.href = "studentreport?id=" + nameMap[d];
     });
     }
 
