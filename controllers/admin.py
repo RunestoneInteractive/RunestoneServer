@@ -1028,7 +1028,7 @@ def addToAssignment():
             new_points = int(assignment_points) + points
 
         assignment.update_record(points=new_points)
-        return json.dumps([new_points,type_id])
+        return json.dumps([new_points,qtype])
     except Exception as ex:
         print(ex)
 
