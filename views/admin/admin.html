@@ -1,7 +1,8 @@
 {{ extend "admin/instructors.html"}}
 
 {{ block tabcontent }}
-
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
 <div class="col-md-3">
         <h3 style="visibility: hidden">Admin Panel</h3>
@@ -118,7 +119,7 @@
       <div class="form-group row">
         <div class="col-lg-3">
           <label for="startdate">Course start date</label>
-          <input type="text" name="startdate" id="startdate" class="form-control"data-date-format="yyyy/mm/dd" value="{{=startDate}}" />
+          <input type="text" name="startdate" id="startdate" value="{{=startDate}}" />
         </div>
       </div>
       <input type="submit" class="btn btn-default" value="Rebuild Now" />
@@ -254,6 +255,8 @@
 <script>
     $(".dashboardnav").removeClass("active");
     $("#admintab").addClass("active");
+        $('#startdate').datepicker();
+
 
     $(document).ready(function(){
   getLog();

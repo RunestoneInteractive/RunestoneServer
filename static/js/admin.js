@@ -81,8 +81,10 @@ function getRightSideGradingDiv(element, acid, studentId) {
     }
 
 
+
     function save(event) {
         event.preventDefault();
+        var divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -91,7 +93,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             type: "POST",
             dataType: "JSON",
             data: {
-                acid: acid,
+                acid: divid,
                 sid: studentId,
                 grade: grade,
                 comment: comment,
@@ -119,8 +121,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
         jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em>');
 
         //jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
-        jQuery('#input-grade', rightDiv).val(data.grade);
-        jQuery('#input-comments', rightDiv).val(data.comment);
 
         if (data.file_includes) {
             // create divids for any files they might need
@@ -146,9 +146,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         }
 
 
+
         // outerdiv, acdiv, sid, initialcode, language
 
-        ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, complete_code, data.lang);
 
         jQuery('form', rightDiv).submit(save);
         jQuery('.next', rightDiv).click(function (event) {
@@ -168,9 +168,48 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         });
         jQuery('#' + data.id).focus();
+
+
+
+        var divid;
+        setTimeout(function(){
+            divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+        jQuery.ajax({
+        url: eBookConfig.gradingURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            acid: divid,
+            sid: studentId,
+        },
+        success: function () {
+            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+            var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
+    obj.send(JSON.stringify({newins: 'studentid'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            var resp = obj.responseText;
+            var newdata = JSON.parse(resp);
+            jQuery('#input-grade', rightDiv).val(newdata['grade']);
+            jQuery('#input-comments', rightDiv).val(newdata['comments']);
+        }}
+
+
+        }
+        });
+
+
+},500);
+
+
+
     }
 
+
+
     element.addClass("loading");
+
     jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
@@ -183,6 +222,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
             show(data);
         }
     });
+
+
+
 }
 
 
