@@ -291,8 +291,9 @@ def sendreport():
     coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
     pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
     details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+    userinfo = request.vars['username'] + ' ' + request.vars['useremail']
 
-    body = 'Error reported in course ' + coursename + ' on page ' + pagename + '\n' + details
+    body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],
              'body': body}
     r = reqsession.post(url, json.dumps(issue))
