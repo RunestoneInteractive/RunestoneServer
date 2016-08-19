@@ -611,12 +611,12 @@ def admin():
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
     sectionsList = []
     for row in sectionsQuery:
-        #print(row.name)
         sectionsList.append(row.name)
     #Now get the start date
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
+
 
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
@@ -645,8 +645,9 @@ def admin():
     else:
         # update the start date
         course = db(db.courses.id == auth.user.course_id).select().first()
-        date = request.vars.startdate.split('/')
-        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
+        due = request.vars.startdate
+        format_str = "%m/%d/%Y"
+        date = datetime.datetime.strptime(due, format_str).date()
         course.update_record(term_start_date=date)
 
         # run_sphinx in defined in models/scheduler.py
@@ -1027,7 +1028,7 @@ def addToAssignment():
             new_points = int(assignment_points) + points
 
         assignment.update_record(points=new_points)
-        return json.dumps([new_points,type])
+        return json.dumps([new_points,qtype])
     except Exception as ex:
         print(ex)
 
@@ -1282,6 +1283,50 @@ def getStudentCode():
         sid = request.vars['sid']
         c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
         return json.dumps(c.code)
+    except Exception as ex:
+        print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def getGradeComments():
+    try:
+        acid = request.vars['acid']
+        sid = request.vars['sid']
+        c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
+        return json.dumps({'grade':c.grade, 'comments':c.comment})
+    except Exception as ex:
+        print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def coursename():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    return json.dumps(row.course_name)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def indexrst():
+    try:
+        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+        course_name = row.course_name
+        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'))
+        filetxt = file.read()
+    except Exception as ex:
+        print(ex)
+        filetxt = "Sorry, no index.rst file could be found"
+    return json.dumps(filetxt)
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def editindexrst():
+    try:
+        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+        course_name = row.course_name
+        newtext = request.vars['newtext']
+        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'),'w')
+        file.write(newtext)
+        file.close()
+        print(request.vars)
+        return 'ok'
     except Exception as ex:
         print(ex)
 

@@ -123,10 +123,11 @@
             <li class="divider"></li>
             <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
             {{ pass }}
+            <!---
             <li class="divider"></li>
             <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
             <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
-            <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li>
+            <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
             <li class="divider"></li>
             <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
             <li class="divider"></li>
@@ -167,6 +168,7 @@
 
         <li class="divider-vertical"></li>
 
+        {{ if request.controller == "default":}}
         <!-- open library dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
@@ -180,7 +182,9 @@
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>
-
+          {{ else: }}
+          <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
+          {{ pass }}
         <li class="divider-vertical"></li>
 
 
@@ -214,7 +218,7 @@
         {{ pass }}
       </p>
       <p>
-        &copy; Copyright 2014 Brad Miller, David Ranum
+        &copy; Copyright 2012 -- 2016 Brad Miller and Runestone contributors
       </p>
     </div>
   </footer>

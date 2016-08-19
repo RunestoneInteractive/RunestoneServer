@@ -1,4 +1,6 @@
-{{extend 'layout.html'}}
+{{extend 'admin/instructors.html'}}
+
+{{ block tabcontent }}
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -7,7 +9,6 @@
 
 <div id="dashboard">
 	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
-	{{include 'dashboard/dashboard-nav.html'}}
 	<h2>Student Report - {{=user.first_name}} {{=user.last_name}}</h2>
 	<div class="col-md-7">
 		
@@ -130,3 +131,5 @@
 		</div>
 	</div>
 </div>
+
+{{ end }}

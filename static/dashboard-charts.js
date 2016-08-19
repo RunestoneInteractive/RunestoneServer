@@ -14,126 +14,18 @@ function DashboardCharts(){
             bottom: 24
         },
         width = 400 - margins.left - margins.right,
-            height = (10 * 24) - margins.top - margins.bottom,
-            
-            dataset = [{
-                data: [{
-                    student: 'Bob Brown',
-                    count: 4
-                }, {
-                    student: 'Jack Jackson',
-                    count: 10
-                }, {
-                    student: 'Macy Millan',
-                    count: 7
-                }, {
-                    student: 'Sarah Smith',
-                    count: 7
-                }, {
-                    student: 'Xu Hung',
-                    count: 4
-                }, {
-                    student: 'Rachel Ru',
-                    count: 8
-                }, {
-                    student: 'John Hendrick',
-                    count: 6
-                }, {
-                    student: 'Nick Collans',
-                    count: 5
-                }, {
-                    student: 'Tim Collans',
-                    count: 2
-                }, {
-                    student: 'Gina Kidder',
-                    count: 7
-                }],
-                name: 'Sections Read'
-            }, {
-                data: [{
-                    student: 'Bob Brown',
-                    id: 'bbrown',
-                    count: 11
-                }, {
-                    student: 'Jack Jackson',
-                    id: 'bbrown',
-                    count: 13
-                }, {
-                    student: 'Macy Millan',
-                    id: 'bbrown',
-                    count: 17
-                }, {
-                    student: 'Sarah Smith',
-                    id: 'bbrown',
-                    count: 9
-                }, {
-                    student: 'Xu Hung',
-                    id: 'bbrown',
-                    count: 4
-                }, {
-                    student: 'Rachel Ru',
-                    id: 'bbrown',
-                    count: 17
-                }, {
-                    student: 'John Hendrick',
-                    id: 'bbrown',
-                    count: 13
-                }, {
-                    student: 'Nick Collans',
-                    id: 'bbrown',
-                    count: 12
-                }, {
-                    student: 'Tim Collans',
-                    count: 9
-                }, {
-                    student: 'Gina Kidder',
-                    count: 7
-                }],
-                name: 'Exercises Correct'
-            }, {
-                data: [{
-                    student: 'Bob Brown',
-                    count: 3
-                }, {
-                    student: 'Jack Jackson',
-                    count: 6
-                }, {
-                    student: 'Macy Millan',
-                    count: 1
-                }, {
-                    student: 'Sarah Smith',
-                    count: 4
-                }, {
-                    student: 'Xu Hung',
-                    count: 0
-                }, {
-                    student: 'Rachel Ru',
-                    count: 2
-                }, {
-                    student: 'John Hendrick',
-                    count: 1
-                }, {
-                    student: 'Nick Collans',
-                    count: 3
-                }, {
-                    student: 'Tim Collans',
-                    count: 5
-                }, {
-                    student: 'Gina Kidder',
-                    count: 8
-                }],
-                name: 'Exercises Missed'
-            }
+        height = (20 * 24) - margins.top - margins.bottom,
+        dataset = data,
+        nameMap = {},
+        series = dataset.map(function (d) {
+            return d['name'];
+        }),
 
-            ],
-            dataset = data,
-            series = dataset.map(function (d) {
-                return d['name'];
-            }),
             dataset = dataset.map(function (d) {
                 return d.data.map(function (o, i) {
                     // Structure it so that your numeric
                     // axis (the stacked amount) is y
+                    nameMap[o['student']] = o['sid'];
                     return {
                         y: o['count'],
                         x: o['student']
@@ -143,7 +35,7 @@ function DashboardCharts(){
             stack = d3.layout.stack();
 
         stack(dataset);
-
+        height = (dataset[0].length * 24) - margins.top - margins.bottom;
         var dataset = dataset.map(function (group) {
             return group.map(function (d) {
                 // Invert the x and y values, and y0 becomes x0
@@ -230,7 +122,7 @@ function DashboardCharts(){
     .style("cursor", "pointer")
     .style("text-decoration","underline")
     .on("click", function(d){
-        document.location.href = "studentreport?id=" + d;
+       document.location.href = "studentreport?id=" + nameMap[d];
     });
     }
 

@@ -48,6 +48,7 @@ function gradeIndividualItem() {
 }
 
 
+
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
         alert("Can't grade without a URL");
@@ -80,8 +81,10 @@ function getRightSideGradingDiv(element, acid, studentId) {
     }
 
 
+
     function save(event) {
         event.preventDefault();
+        var divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -90,7 +93,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             type: "POST",
             dataType: "JSON",
             data: {
-                acid: acid,
+                acid: divid,
                 sid: studentId,
                 grade: grade,
                 comment: comment,
@@ -118,8 +121,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
         jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em>');
 
         //jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
-        jQuery('#input-grade', rightDiv).val(data.grade);
-        jQuery('#input-comments', rightDiv).val(data.comment);
 
         if (data.file_includes) {
             // create divids for any files they might need
@@ -145,9 +146,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         }
 
 
+
         // outerdiv, acdiv, sid, initialcode, language
 
-        ACFactory.addActiveCodeToDiv(data.acid, data.acid + "_" + data.username, data.username, complete_code, data.lang);
 
         jQuery('form', rightDiv).submit(save);
         jQuery('.next', rightDiv).click(function (event) {
@@ -167,9 +168,48 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         });
         jQuery('#' + data.id).focus();
+
+
+
+        var divid;
+        setTimeout(function(){
+            divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+        jQuery.ajax({
+        url: eBookConfig.gradingURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            acid: divid,
+            sid: studentId,
+        },
+        success: function () {
+            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+            var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
+    obj.send(JSON.stringify({newins: 'studentid'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            var resp = obj.responseText;
+            var newdata = JSON.parse(resp);
+            jQuery('#input-grade', rightDiv).val(newdata['grade']);
+            jQuery('#input-comments', rightDiv).val(newdata['comments']);
+        }}
+
+
+        }
+        });
+
+
+},500);
+
+
+
     }
 
+
+
     element.addClass("loading");
+
     jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
@@ -182,6 +222,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
             show(data);
         }
     });
+
+
+
 }
 
 
@@ -786,7 +829,7 @@ function create_question(formdata) {
     var template = formdata.template.value;
     var name = formdata.qname.value;
     var question = formdata.qcode.value;
-    question = question.replace(/(\n)+/g, '%0A');
+        question = question.replace(/(\r\n|\n|\r)/gm, '%0A');
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
         if (difficulty[i].checked == true) {
@@ -1223,7 +1266,7 @@ function edit_question(form) {
         }
     }
     var question_text = form.editRST.value;
-    question_text = question_text.replace(/(\n)+/g, '%0A'); //encodes all new line characters to preserve them in query string
+          question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
 
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
@@ -1305,4 +1348,17 @@ function changeDescription(form) {
         }
     }
 
+}
+
+function edit_indexrst(form) {
+    var newtext = form.editIndex.value;
+    newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/editindexrst?newtext=' + newtext, true);
+    obj.send(JSON.stringify({variable:'variable'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            alert("Successfully edited index.rst");
+
+        }}
 }

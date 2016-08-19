@@ -24,6 +24,10 @@ def index():
     questions = []
     sections = []
 
+    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
+        session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
+        return redirect(URL('admin','admin'))
+
     print("getting chapters for ", auth.user.course_name)
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
@@ -71,7 +75,8 @@ def index():
     user_activity = data_analyzer.user_activity
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
-            "student":activity.name,
+            "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
+            "sid":activity.username,
             "count":activity.get_page_views()
             })
 
