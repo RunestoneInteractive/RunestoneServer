@@ -45,7 +45,15 @@
         <div class="form-group">
             <div class="col-md-12">
                 <label for="bugdetails">Bug Details</label> <br/>
+                {{if ticket:}}
+                <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required>
+Please describe what you were doing that led up to this error:
+
+---------------- Traceback --------------
+{{=ticket}}</textarea>
+                {{ else:}}
                 <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required></textarea>
+                {{ pass }}
             </div>
         </div>
         <p>Please be as specific as possible. Include your username, the browser you are using, and any information from the Javascript Console.  Please note that username and email are important for us to contact you if we have a solution or need more information.</p>

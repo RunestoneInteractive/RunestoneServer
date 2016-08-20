@@ -6,7 +6,7 @@ import os
 import requests
 from urllib import unquote
 from urllib2 import HTTPError
-
+from gluon.restricted import RestrictedError
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
@@ -219,6 +219,7 @@ def bios():
 
 @auth.requires_login()
 def courses():
+    print 10/0
     res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
     classlist = []
     for row in res:
@@ -265,14 +266,27 @@ def removecourse():
     redirect('/%s/default/courses' % request.application)
 
 def reportabug():
+    path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
     uri = request.vars['page']
     username = 'anonymous'
     email = 'anonymous'
+    code = None
+    ticket = None
+    pagerequest = None
+    if request.vars.code:
+        code = request.vars.code
+        ticket = request.vars.ticket.split('/')[1]
+        uri = request.vars.requested_uri
+        error = RestrictedError()
+        error.load(request, request.application, os.path.join(path,ticket))
+        ticket = error.traceback
+
     if auth.user:
         username = auth.user.username
         email = auth.user.email
-    return dict(course=course,uri=uri,username=username,email=email)
+        course = auth.user.course_name
+    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
 
 def sendreport():
     # settings.github_token should be set to a valid Github access token
