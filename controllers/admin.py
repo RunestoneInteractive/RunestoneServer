@@ -673,7 +673,11 @@ def grading():
         assignments = {}
         assignments_query = db(db.assignments.course == auth.user.course_id).select()
         summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
+
+        assignmentids = {}
+
         for row in assignments_query:
+            assignmentids[row.name] = int(row.id)
             assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
             questions = []
             for q in assignment_questions:
@@ -707,8 +711,7 @@ def grading():
             for chapter_q in chapter_questions:
                 q_list.append(chapter_q.name)
             chapter_labels[row.chapter_label] = q_list
-
-        return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name,
+        return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name, assignmentids = assignmentids
 
 )
     except Exception as ex:
@@ -1329,4 +1332,16 @@ def editindexrst():
         return 'ok'
     except Exception as ex:
         print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def releasegrades():
+    try:
+        assignmentid = request.vars['assignmentid']
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        assignment.update_record(released=True)
+        return "Success"
+    except Exception as ex:
+        print(ex)
+
 
