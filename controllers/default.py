@@ -219,7 +219,6 @@ def bios():
 
 @auth.requires_login()
 def courses():
-    print 10/0
     res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
     classlist = []
     for row in res:
