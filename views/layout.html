@@ -19,7 +19,7 @@
     href="{{=URL('static','favicon.ico')}}" type="image/ico" />
     <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
-    <script src="{{=URL('static', 'js/web2py.js')}}"></script>    
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-3.0.0/js/bootstrap.min.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
     <script type="text/javascript" src="{{=URL('static', 'js/dd.js')}}"></script>
@@ -134,7 +134,7 @@
             {{ if auth.user: }}
               <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
               <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>              
+              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
               <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
@@ -153,8 +153,8 @@
           </a>
           <ul class="dropdown-menu user-menu">
 
-            <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li> 
-            <li class="divider"></li>            
+            <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li>
+            <li class="divider"></li>
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
             <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
           </ul>
@@ -182,8 +182,10 @@
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>
-          {{ else: }}
+          {{ elif auth.user: }}
           <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
+          {{ else: }}
+          <li><a href="/{{=request.application}}/default">Login</a></li>
           {{ pass }}
         <li class="divider-vertical"></li>
 
