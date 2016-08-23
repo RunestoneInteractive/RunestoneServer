@@ -104,6 +104,8 @@ function getRightSideGradingDiv(element, acid, studentId) {
     function save(event) {
         event.preventDefault();
         var divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+        if (divid == undefined) {
+            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -193,6 +195,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var divid;
         setTimeout(function(){
             divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+            if (divid == undefined) {
+            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
+
         jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
@@ -204,15 +209,50 @@ function getRightSideGradingDiv(element, acid, studentId) {
         success: function () {
             //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
+    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
     obj.send(JSON.stringify({newins: 'studentid'}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var resp = obj.responseText;
             var newdata = JSON.parse(resp);
-            jQuery('#input-grade', rightDiv).val(newdata['grade']);
-            jQuery('#input-comments', rightDiv).val(newdata['comments']);
+            if (newdata != "Error") {
+                jQuery('#input-grade', rightDiv).val(newdata['grade']);
+            jQuery('#input-comments', rightDiv).val(newdata['comments']);}
         }}
+
+
+
+
+            var myobj = new XMLHttpRequest();
+    myobj.open('GET', '/runestone/admin/checkQType?acid=' + divid + '&sid=' + studentId, true);
+    myobj.send(JSON.stringify({newins: 'studentid'}));
+    myobj.onreadystatechange = function () {
+        if (myobj.readyState == 4 && myobj.status == 200) {
+            var answer = myobj.responseText;
+          if (answer == "null") {
+                jQuery("#shortanswerresponse").empty();
+                //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+            }
+
+            else {
+                //manually show the answer now
+                answer = JSON.parse(answer);
+                jQuery("#shortanswerresponse").empty();
+                var answerheader = $("<b>Student's Answer</b> <br>")
+                jQuery("#shortanswerresponse").append(answerheader);
+                jQuery("#shortanswerresponse").append(answer);
+                $('#shortanswerresponse').css('display', 'inline');
+                $('#shortanswerresponse').css('margin-bottom', '50px');
+                $('#shortanswerresponse').css('background-color', '##fefce7');
+
+
+
+
+            }
+
+        }
+    }
+
 
 
         }
