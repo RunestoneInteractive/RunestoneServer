@@ -243,7 +243,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
                 jQuery("#shortanswerresponse").append(answer);
                 $('#shortanswerresponse').css('display', 'inline');
                 $('#shortanswerresponse').css('margin-bottom', '50px');
-                $('#shortanswerresponse').css('background-color', '##fefce7');
+                $('#shortanswerresponse').css('background-color', '#fefce7');
 
 
 
