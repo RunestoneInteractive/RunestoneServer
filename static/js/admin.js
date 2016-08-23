@@ -835,15 +835,15 @@ function display_write() {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var returns = JSON.parse(obj.responseText);
-            chapters = returns['chapters'];
-            var chapterlist = document.getElementById('chapter');
-            for (i = 0; i < chapters.length; i++) {
-                newoption = document.createElement('option');
-                newoption.value = chapters[i];
-                newoption.innerHTML = chapters[i];
-                chapterlist.appendChild(newoption)
-            }
+            tplate = returns['template'];
+            $("#qcode").text(tplate);
         }
+        $.each(returns['chapters'], function (i, item) {
+            $('#qchapter').append($('<option>', {
+                value: item,
+                text: item
+            }));
+        });
     };
 
     var hiddenwrite = document.getElementById('hiddenwrite');

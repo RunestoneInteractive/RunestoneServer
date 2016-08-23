@@ -4,7 +4,7 @@ import pygal
 from datetime import date, timedelta
 from paver.easy import sh
 import json
-
+from runestone import cmap
 
 # this is for admin links
 # use auth.requires_membership('manager')
@@ -1145,44 +1145,12 @@ def searchstudents():
 def gettemplate():
     template = request.args[0]
     returndict = {}
-    base = ''
-    if template == 'activecode':
-        #get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'assess':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'clickableArea':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'codelens':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'dragndrop':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'parsons':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'poll':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'reveal':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'shortanswer':
-        # get the actual template and replace base with it
-        returndict['template'] = base
-    elif template == 'usageAssignment':
-        # get the actual template and replace base with it
-        returndict['template'] = base
+    base = '.. question:: <insertid>\n'
+
+    returndict['template'] = base + cmap.get(template,'').__doc__.replace('\n', '\n   ')
 
     chapters = []
-
-    #auth.user.course_name
-    print(auth.user.course_name)
     chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
-    print(chaptersrow)
     for row in chaptersrow:
         chapters.append(row['chapter_name'])
     print(chapters)
