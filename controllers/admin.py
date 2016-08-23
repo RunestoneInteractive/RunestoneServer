@@ -669,50 +669,51 @@ def admin():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
-    try:
-        assignments = {}
-        assignments_query = db(db.assignments.course == auth.user.course_id).select()
-        summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
-        for row in assignments_query:
-            assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
-            questions = []
-            for q in assignment_questions:
-                question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
-                questions.append(question_name)
-            assignments[row.name] = questions
 
-        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
-        searchdict = {}
-        for row in cur_students:
-            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (db.course_instructor.instructor == row.user_id)).select()
-            instructorlist = []
-            for line in isinstructor:
-                instructorlist.append(line.instructor)
-            if row.user_id not in instructorlist:
-                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name,
+    assignments = {}
+    assignments_query = db(db.assignments.course == auth.user.course_id).select()
+    summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
+
+    assignmentids = {}
+
+    for row in assignments_query:
+        assignmentids[row.name] = int(row.id)
+        assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
+        questions = []
+        for q in assignment_questions:
+            question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
+            questions.append(question_name)
+        assignments[row.name] = questions
+
+    cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
+    searchdict = {}
+    for row in cur_students:
+        isinstructor = db((db.course_instructor.course == auth.user.course_id) & (db.course_instructor.instructor == row.user_id)).select()
+        instructorlist = []
+        for line in isinstructor:
+            instructorlist.append(line.instructor)
+        if row.user_id not in instructorlist:
+            person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name,
                                                                db.auth_user.last_name)
-                for identity in person:
-                    name = identity.first_name + " " + identity.last_name
-                    username = db(db.auth_user.id == int(row.user_id)).select(db.auth_user.username).first().username
-                    searchdict[str(username)] = name
+            for identity in person:
+                name = identity.first_name + " " + identity.last_name
+                username = db(db.auth_user.id == int(row.user_id)).select(db.auth_user.username).first().username
+                searchdict[str(username)] = name
 
 
-        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-        base_course = row.base_course
-        chapter_labels = {}
-        chapters_query = db(db.chapters.course_id == base_course).select()
-        for row in chapters_query:
-            q_list = []
-            chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type == 'question')).select()
-            for chapter_q in chapter_questions:
-                q_list.append(chapter_q.name)
-            chapter_labels[row.chapter_label] = q_list
-
-        return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name,
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
+    chapter_labels = {}
+    chapters_query = db(db.chapters.course_id == base_course).select()
+    for row in chapters_query:
+        q_list = []
+        chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type == 'question')).select()
+        for chapter_q in chapter_questions:
+            q_list.append(chapter_q.name)
+        chapter_labels[row.chapter_label] = q_list
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name, assignmentids = assignmentids
 
 )
-    except Exception as ex:
-        print(ex)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getChangeLog():
@@ -1325,8 +1326,19 @@ def editindexrst():
         file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'),'w')
         file.write(newtext)
         file.close()
-        print(request.vars)
         return 'ok'
     except Exception as ex:
         print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def releasegrades():
+    try:
+        assignmentid = request.vars['assignmentid']
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        assignment.update_record(released=True)
+        return "Success"
+    except Exception as ex:
+        print(ex)
+
 

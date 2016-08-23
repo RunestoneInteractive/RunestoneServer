@@ -1,6 +1,25 @@
 function gradeIndividualItem() {
     var select3 = document.getElementById("gradingoption3");
     var colType = select3.options[select3.selectedIndex].value;
+
+        var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+        var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    release_button = document.getElementById("releasebutton");
+
+
+    if (col1val == 'assignment' | col2val == 'assignment') {
+        //show the release grades button
+        release_button.style.visibility = 'visible';
+    }
+
+    else {
+        //hide the release grades button
+        release_button.style.visibility = 'hidden';
+    }
+
     var select = document.getElementById("gradingcolumn3");
     var val = select.options[select.selectedIndex].value;
     var rightSideDiv = $('#rightsideGradingTab');
@@ -311,6 +330,8 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
+       release_button = document.getElementById("releasebutton");
+    release_button.style.visibility = 'visible';
 
     for (i in assignments) {
         var option = document.createElement("option");
@@ -397,6 +418,10 @@ function showColumn1() {
     var val2 = select.options[select.selectedIndex].value;
     var val = select1.options[select1.selectedIndex].value;
 
+    release_button = document.getElementById("releasebutton");
+    release_button.style.visibility = 'hidden';
+
+
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
@@ -477,6 +502,7 @@ function showColumn2() {
     var select3 = document.getElementById('gradingoption3');
     select3.selectedIndex = 0;
     $("#gradingcolumn3").empty();
+
 
     if (first_val == "") {
         select1.selectedIndex = 0;
@@ -1361,4 +1387,56 @@ function edit_indexrst(form) {
             alert("Successfully edited index.rst");
 
         }}
+}
+
+
+
+
+function release_grades() {
+          var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+        var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    var assignment = null;
+
+    if (col1val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+
+        }
+
+        else {
+            alert("Please choose an assignment first");
+        }
+    }
+
+    else if (col2val == 'assignment') {
+
+        var assignmentcolumn = document.getElementById("gradingcolumn2");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+
+        }
+
+        else {
+            alert("Please choose an assignment first");
+        }
+
+    }
+
+    if (assignment != null) {
+        //go release the grades now
+        var ids = JSON.parse(assignmentids);
+        var assignmentid = ids[assignment];
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid, true);
+        obj.send(JSON.stringify({variable: 'variable'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                alert("Grades released");
+            }
+        }
+    }
 }
