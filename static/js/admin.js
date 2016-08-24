@@ -1,6 +1,25 @@
 function gradeIndividualItem() {
     var select3 = document.getElementById("gradingoption3");
     var colType = select3.options[select3.selectedIndex].value;
+
+        var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+        var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    release_button = document.getElementById("releasebutton");
+
+
+    if (col1val == 'assignment' | col2val == 'assignment') {
+        //show the release grades button
+        release_button.style.visibility = 'visible';
+    }
+
+    else {
+        //hide the release grades button
+        release_button.style.visibility = 'hidden';
+    }
+
     var select = document.getElementById("gradingcolumn3");
     var val = select.options[select.selectedIndex].value;
     var rightSideDiv = $('#rightsideGradingTab');
@@ -85,6 +104,8 @@ function getRightSideGradingDiv(element, acid, studentId) {
     function save(event) {
         event.preventDefault();
         var divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+        if (divid == undefined) {
+            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -174,6 +195,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var divid;
         setTimeout(function(){
             divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
+            if (divid == undefined) {
+            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
+
         jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
@@ -185,15 +209,50 @@ function getRightSideGradingDiv(element, acid, studentId) {
         success: function () {
             //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
+    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
     obj.send(JSON.stringify({newins: 'studentid'}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var resp = obj.responseText;
             var newdata = JSON.parse(resp);
-            jQuery('#input-grade', rightDiv).val(newdata['grade']);
-            jQuery('#input-comments', rightDiv).val(newdata['comments']);
+            if (newdata != "Error") {
+                jQuery('#input-grade', rightDiv).val(newdata['grade']);
+            jQuery('#input-comments', rightDiv).val(newdata['comments']);}
         }}
+
+
+
+
+            var myobj = new XMLHttpRequest();
+    myobj.open('GET', '/runestone/admin/checkQType?acid=' + divid + '&sid=' + studentId, true);
+    myobj.send(JSON.stringify({newins: 'studentid'}));
+    myobj.onreadystatechange = function () {
+        if (myobj.readyState == 4 && myobj.status == 200) {
+            var answer = myobj.responseText;
+          if (answer == "null") {
+                jQuery("#shortanswerresponse").empty();
+                //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+            }
+
+            else {
+                //manually show the answer now
+                answer = JSON.parse(answer);
+                jQuery("#shortanswerresponse").empty();
+                var answerheader = $("<b>Student's Answer</b> <br>")
+                jQuery("#shortanswerresponse").append(answerheader);
+                jQuery("#shortanswerresponse").append(answer);
+                $('#shortanswerresponse').css('display', 'inline');
+                $('#shortanswerresponse').css('margin-bottom', '50px');
+                $('#shortanswerresponse').css('background-color', '#fefce7');
+
+
+
+
+            }
+
+        }
+    }
+
 
 
         }
@@ -311,6 +370,8 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
+       release_button = document.getElementById("releasebutton");
+    release_button.style.visibility = 'visible';
 
     for (i in assignments) {
         var option = document.createElement("option");
@@ -397,6 +458,10 @@ function showColumn1() {
     var val2 = select.options[select.selectedIndex].value;
     var val = select1.options[select1.selectedIndex].value;
 
+    release_button = document.getElementById("releasebutton");
+    release_button.style.visibility = 'hidden';
+
+
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
@@ -477,6 +542,7 @@ function showColumn2() {
     var select3 = document.getElementById('gradingoption3');
     select3.selectedIndex = 0;
     $("#gradingcolumn3").empty();
+
 
     if (first_val == "") {
         select1.selectedIndex = 0;
@@ -809,15 +875,15 @@ function display_write() {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var returns = JSON.parse(obj.responseText);
-            chapters = returns['chapters'];
-            var chapterlist = document.getElementById('chapter');
-            for (i = 0; i < chapters.length; i++) {
-                newoption = document.createElement('option');
-                newoption.value = chapters[i];
-                newoption.innerHTML = chapters[i];
-                chapterlist.appendChild(newoption)
-            }
+            tplate = returns['template'];
+            $("#qcode").text(tplate);
         }
+        $.each(returns['chapters'], function (i, item) {
+            $('#qchapter').append($('<option>', {
+                value: item,
+                text: item
+            }));
+        });
     };
 
     var hiddenwrite = document.getElementById('hiddenwrite');
@@ -1361,4 +1427,56 @@ function edit_indexrst(form) {
             alert("Successfully edited index.rst");
 
         }}
+}
+
+
+
+
+function release_grades() {
+          var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+        var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    var assignment = null;
+
+    if (col1val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+
+        }
+
+        else {
+            alert("Please choose an assignment first");
+        }
+    }
+
+    else if (col2val == 'assignment') {
+
+        var assignmentcolumn = document.getElementById("gradingcolumn2");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+
+        }
+
+        else {
+            alert("Please choose an assignment first");
+        }
+
+    }
+
+    if (assignment != null) {
+        //go release the grades now
+        var ids = JSON.parse(assignmentids);
+        var assignmentid = ids[assignment];
+        var obj = new XMLHttpRequest();
+        obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid, true);
+        obj.send(JSON.stringify({variable: 'variable'}));
+        obj.onreadystatechange = function () {
+            if (obj.readyState == 4 && obj.status == 200) {
+                alert("Grades released");
+            }
+        }
+    }
 }
