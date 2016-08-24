@@ -1258,13 +1258,15 @@ def getStudentCode():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getGradeComments():
-    try:
-        acid = request.vars['acid']
-        sid = request.vars['sid']
-        c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
+
+    acid = request.vars['acid']
+    sid = request.vars['sid']
+    c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
+    if c != None:
         return json.dumps({'grade':c.grade, 'comments':c.comment})
-    except Exception as ex:
-        print(ex)
+    else:
+        return json.dumps("Error")
+
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1308,5 +1310,19 @@ def releasegrades():
         return "Success"
     except Exception as ex:
         print(ex)
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def checkQType():
+    acid = request.vars['acid']
+    sid = request.vars['sid']
+    answer = None
+    useinfoquery = db((db.useinfo.div_id == acid) & (db.useinfo.sid == sid)).select(db.useinfo.event, db.useinfo.act).first()
+    if useinfoquery != None:
+        if useinfoquery.event == 'shortanswer':
+            answer = useinfoquery.act
+
+    return json.dumps(answer)
+
 
 
