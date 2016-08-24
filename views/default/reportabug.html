@@ -10,25 +10,25 @@
 <div class="col-md-7">
     <form name="bugform" id="bugform" action="/{{=request.application}}/{{=request.controller}}/sendreport" method="post">
         <div class="form-group row">
-        <div class="col-md-4">
+        <div class="col-md-4" id="bugtitlediv">
           <label for="bugtitle">Bug Title</label>
           <input type="text" class='form-control' name="bugtitle" id="bugtitle" required/>
         </div>
       </div>
         <p>Enter a short title that summarises the bug</p>
         <div class="form-group row">
-        <div class="col-md-4">
+        <div class="col-md-4" id="coursenamediv">
           <label for="coursename">Course Name</label>
-          <input type="text" class='form-control' placeholder="thinkcspy, pythonds, or other" name="coursename" id="coursename" value="{{=course}}"required/>
+          <input type="text" class='form-control' placeholder="thinkcspy, pythonds, or other" name="coursename" id="coursename" value="{{=course}}" required/>
         </div>
       </div>
-       <div class="form-group row">
+       <div class="form-group row" id="pagenamediv">
         <div class="col-md-4">
           <label for="pagename">Page URL</label>
           <input type="text" class='form-control' placeholder="Page URL of the bug" name="pagename" id="pagename" value="{{=uri}}" required/>
         </div>
       </div>
-        <div class="form-group-row">
+        <div class="form-group-row" id="userinfodiv">
             <div class="col-md-12">
                 <label for="bookerror"></label>
                 <input type="checkbox" name="bookerror" id="bookerror"> Check this box if the bug is a typo, unclear passage, or other problem with the content of a book.
@@ -36,18 +36,68 @@
         </div>
         <div class="form-group">
             <div class="col-md-12">
+                <label for="useremail">My Email</label>
+                <input type="text" class="form-control" name="useremail" id="useremail" value="{{=email}}"/>
+                <label for="username">My Username</label>
+                <input type="text" class="form-control" name="username" id="username" value="{{=username}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
                 <label for="bugdetails">Bug Details</label> <br/>
+                {{if ticket:}}
                 <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required>
-My Username: {{=username}}
-My Email: {{ =email }}
-                </textarea>
+Please describe what you were doing that led up to this error:
+
+---------------- Traceback --------------
+{{=ticket}}</textarea>
+                {{ else:}}
+                <textarea rows="4" cols="50" form="bugform" name="bugdetails" id="bugdetails" required></textarea>
+                {{ pass }}
             </div>
         </div>
         <p>Please be as specific as possible. Include your username, the browser you are using, and any information from the Javascript Console.  Please note that username and email are important for us to contact you if we have a solution or need more information.</p>
         <div class="form-group row">
              <div class="col-md-4">
-                <input type="submit" class="btn btn-default" value="Submit" />
+                <input type="button" class="btn btn-default" onclick="check_filled(this.form)" value="Submit" />
                  </div>
             </div>
     </form>
 </div>
+
+<script>
+    function check_filled(formdata){
+        var bugtitle = formdata.bugtitle.value;
+        var coursename = formdata.coursename.value;
+        var pagename = formdata.pagename.value;
+        var username = formdata.username.value;
+        var useremail = formdata.useremail.value;
+        if (bugtitle == "" ){
+            var bugtitlediv = document.getElementById('bugtitlediv');
+            newp = document.createElement('p');
+            newp.innerHTML = 'This is a required field.';
+            newp.style = 'color: red';
+            bugtitlediv.appendChild(newp);
+        } else if (coursename == "None" || coursename == "") {
+            var coursenamediv = document.getElementById('coursenamediv');
+            newp = document.createElement('p');
+            newp.innerHTML = 'This is a required field.';
+            newp.style = 'color: red';
+            coursenamediv.appendChild(newp);
+        } else if (pagename == "None" || pagename == ""){
+            var pagenamediv = document.getElementById('pagenamediv');
+            newp = document.createElement('p');
+            newp.innerHTML = 'This is a required field.';
+            newp.style = 'color: red';
+            pagenamediv.appendChild(newp);
+        } else if (username == "" && useremail == ""){
+            var userinfodiv = document.getElementById('userinfodiv');
+            newp = document.createElement('p');
+            newp.innerHTML = 'Either a Username or an Email address is required.';
+            newp.style = 'color: red';
+            userinfodiv.appendChild(newp)
+        } else {
+            document.getElementById('bugform').submit();
+        }
+    }
+</script>

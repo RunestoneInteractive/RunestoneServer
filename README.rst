@@ -282,6 +282,10 @@ I have begun a project to document the `Runestone Interactive <http://docs.runes
 
 * How to write your own extension for Runestone Interactive
 
+Enable Bug Reporting on Github
+------------------------------
+
+The Runestone server now has a controller to allow users to enter bug reports without needing a github account.  But for this to work you will need to configure ``settings.github_token`` in ``models/1.py``
 
 Creating Your Own Textbook
 --------------------------

@@ -5,7 +5,8 @@ import json
 import os
 import requests
 from urllib import unquote
-
+from urllib2 import HTTPError
+from gluon.restricted import RestrictedError
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
@@ -36,8 +37,11 @@ def user():
                     course_name = url_parts[i+1]
                     db.auth_user.course_id.default = course_name
                     break
-
-    form = auth()
+    try:
+        form = auth()
+    except HTTPError:
+        session.flash = "Sorry, that service failed.  Try a different service or file a bug"
+        redirect(URL('default', 'index'))
 
     if 'profile' in request.args(0):
         try:
@@ -261,14 +265,27 @@ def removecourse():
     redirect('/%s/default/courses' % request.application)
 
 def reportabug():
+    path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
     uri = request.vars['page']
     username = 'anonymous'
     email = 'anonymous'
+    code = None
+    ticket = None
+    pagerequest = None
+    if request.vars.code:
+        code = request.vars.code
+        ticket = request.vars.ticket.split('/')[1]
+        uri = request.vars.requested_uri
+        error = RestrictedError()
+        error.load(request, request.application, os.path.join(path,ticket))
+        ticket = error.traceback
+
     if auth.user:
         username = auth.user.username
         email = auth.user.email
-    return dict(course=course,uri=uri,username=username,email=email)
+        course = auth.user.course_name
+    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
 
 def sendreport():
     # settings.github_token should be set to a valid Github access token
@@ -287,8 +304,9 @@ def sendreport():
     coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
     pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
     details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+    userinfo = request.vars['username'] + ' ' + request.vars['useremail']
 
-    body = 'Error reported in course ' + coursename + ' on page ' + pagename + '\n' + details
+    body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],
              'body': body}
     r = reqsession.post(url, json.dumps(issue))
