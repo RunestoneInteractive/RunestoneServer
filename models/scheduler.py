@@ -32,8 +32,17 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # confdir holds the conf and index files
     custom_dir = path.join(workingdir, 'custom_courses', rvars['projectname'])
 
+
     if not os.path.exists(custom_dir):
         os.mkdir(custom_dir)
+
+    # if there is a leftover donefile from a previous call to rebuild, delete it.
+    # At the end of this function call, that donefile will be recreated.
+    donefile = open(os.path.join(custom_dir, 'done'), 'w')
+    if os.path.exists(donefile):
+        os.remove(donefile)
+
+
 
     # ## check for base_course  if base_course == None
     ### read conf.py and look for How to Think to determine coursetype

@@ -701,7 +701,6 @@ def getSphinxBuildStatus():
     row = scheduler.task_status(task_name)
 
     if os.path.exists(confdir):
-        os.remove(confdir)
         try:
             db(db.scheduler_run.task_id == row.id).update(status='COMPLETED')
             db(db.scheduler_task.id == row.id).update(status='COMPLETED')
