@@ -27,6 +27,7 @@
         <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
         gets backed up or even temporarily stuck.  I will get things going again as quick as I can.
         Thanks for your patience.  -- Brad</p>
+<<<<<<< HEAD
   <script type="text/javascript">
     var iid = setInterval(function() {
       d = { task_name:'{{ =task_name }}',
@@ -52,6 +53,33 @@
       });
     }, 3000);
   </script>
+=======
+      <script type="text/javascript">
+        var iid = setInterval(function() {
+          d = { task_name:'{{ =task_name }}',
+                course_url:'{{ =course_url }}'};
+          $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+            if (data.status == "COMPLETED"){
+              window.location.href = data.course_url;
+            }
+            else if (data.status == "RUNNING"){
+              window.build_status = "started"
+               $("#message").html('The course build has started.');
+            }
+            else if (data.status == "failed") {
+              clearInterval(iid);
+              $("#spinner_div").hide();
+              $("#title").text("An error occurred.");
+              $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+               "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+               "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+               "Make sure you include the following traceback information:" +
+               "<pre>" + data.traceback + "</pre>");
+            }
+          });
+        }, 3000);
+      </script>
+>>>>>>> master
 
   {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
