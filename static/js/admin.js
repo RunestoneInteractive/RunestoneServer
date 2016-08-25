@@ -466,18 +466,32 @@ function showColumn1() {
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
     $("#gradingoption2").empty();
+    $("#gradingoption3").empty();
 
     if (val == 'assignment') {
+        var option = document.createElement("option");
+        option.text = 'question';
+        option.value = 'question';
         var defaultOption = document.createElement("option");
         defaultOption.text = "Select your option";
         defaultOption.value = '';
         select.add(defaultOption);
+        select.add(option);
         $("option[value='']").attr("disabled", "disabled");
 
-        var option = document.createElement("option");
-        option.text = 'question';
-        option.value = 'question';
-        select.add(option);
+
+
+        var third_default_opt = document.createElement("option");
+        third_default_opt.text = 'Select your option';
+        third_default_opt.value = '';
+        select3.add(third_default_opt);
+        $("option[value='']").attr("disabled", "disabled");
+
+        var studentopt = document.createElement("option");
+        studentopt.text = 'student';
+        studentopt.text = 'student';
+        select3.add(studentopt);
+
 
         pickedAssignments("gradingcolumn1");
     }
@@ -495,6 +509,18 @@ function showColumn1() {
         option.text = 'question';
         option.value = 'question';
         select.add(option);
+
+        var third_default_opt = document.createElement("option");
+        third_default_opt.text = 'Select your option';
+        third_default_opt.value = '';
+        select3.add(third_default_opt);
+        $("option[value='']").attr("disabled", "disabled");
+
+        var studentopt = document.createElement("option");
+        studentopt.text = 'student';
+        studentopt.text = 'student';
+        select3.add(studentopt);
+
 
 
         pickedChapters('gradingcolumn1');
