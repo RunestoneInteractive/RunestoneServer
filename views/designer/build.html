@@ -14,7 +14,8 @@
     <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
 	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
     </div>
-    <p id="message">Your course is being prepared for you. This may take several minutes to complete.
+<p id="message">Your course will be built. This message will update once the rebuild starts. If it never updates, please ask the server administrator to check that a web2py scheduler is running. </p>
+  <p id = "message2"> This may take several minutes to complete.
      When the course is finished you will be redirected to your new course.  Because you
      created the course you are set up as the instructor.</p>
 
@@ -26,29 +27,31 @@
         <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
         gets backed up or even temporarily stuck.  I will get things going again as quick as I can.
         Thanks for your patience.  -- Brad</p>
-    <script type="text/javascript">
-      var iid = setInterval(function() {
-        d = {
-             task_name:'{{ =task_name }}',
-             course_url:'{{ =course_url }}'
-            };
-        $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
-          if (data.status == "true") {
-            window.location.href = data.course_url;
-          }
-          if (data.status == "failed") {
-            clearInterval(iid);
-            $("#spinner_div").hide();
-            $("#title").text("An error occurred.");
-            $("#message").html("An error occurred while building this course. Please check that you entered a valid project name. " +
-                "Project names must not contain spaces or symbols. If you are sure you have entered a valid project name, please " +
-                "submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-                "Make sure you include the following traceback information:" +
-                "<pre>" + data.traceback + "</pre>");
-          }
-        });
-      }, 3000)
-    </script>
+  <script type="text/javascript">
+    var iid = setInterval(function() {
+      d = { task_name:'{{ =task_name }}',
+            course_url:'{{ =course_url }}'};
+      $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+        if (data.status == "COMPLETED"){
+          window.location.href = data.course_url;
+        }
+        else if (data.status == "RUNNING"){
+          window.build_status = "started"
+           $("#message").html('The course build has started.');
+        }
+        else if (data.status == "failed") {
+          clearInterval(iid);
+          $("#spinner_div").hide();
+          $("#title").text("An error occurred.");
+          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+           "Make sure you include the following traceback information:" +
+           "<pre>" + data.traceback + "</pre>");
+        }
+      });
+    }, 3000);
+  </script>
 
   {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.

@@ -47,8 +47,10 @@
   <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
 	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
   </div>
-  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
-   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
+  <p id="message">Your course will be rebuilt. This message will update once the rebuild starts. If it never updates, please ask the server administrator to check that a web2py scheduler is running. </p>
+  <p id = "message2">This may take several minutes to complete.
+   <b>Please do not refresh the page.</b>
+      When the rebuild is finished, you will be redirected to
    your newly rebuilt course.</p>
    <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
         gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
@@ -56,15 +58,18 @@
        problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
        Thanks for your patience.  -- Brad</p>
   <script type="text/javascript">
-    
     var iid = setInterval(function() {
       d = { task_name:'{{ =task_name }}',
             course_url:'{{ =course_url }}'};
       $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
-        if (data.status == "true") {
+        if (data.status == "COMPLETED"){
           window.location.href = data.course_url;
         }
-        if (data.status == "failed") {
+        else if (data.status == "RUNNING"){
+          window.build_status = "started"
+           $("#message").html('The rebuild has started.');
+        }
+        else if (data.status == "failed") {
           clearInterval(iid);
           $("#spinner_div").hide();
           $("#title").text("An error occurred.");

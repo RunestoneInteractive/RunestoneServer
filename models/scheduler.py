@@ -36,11 +36,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     if not os.path.exists(custom_dir):
         os.mkdir(custom_dir)
 
-    # if there is a leftover donefile from a previous call to rebuild, delete it.
-    # At the end of this function call, that donefile will be recreated.
-    donefile = open(os.path.join(custom_dir, 'done'), 'w')
-    if os.path.exists(donefile):
-        os.remove(donefile)
+    # # if there is a leftover donefile from a previous call to rebuild, delete it.
+    # # At the end of this function call, that donefile will be recreated.
+    # donefile = os.path.join(custom_dir, 'done')
+    # if os.path.exists(donefile):
+    #     os.remove(donefile)
 
 
 
@@ -131,9 +131,9 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
     shutil.rmtree(sourcedir)
     rslogger.debug("Completely done with {}".format(rvars['projectname']))
-    donefile = open(os.path.join(custom_dir, 'done'), 'w')
-    donefile.write('success')
-    donefile.close()
+    # donefile = open(os.path.join(custom_dir, 'done'), 'w')
+    # donefile.write('success')
+    # donefile.close()
 
 
 def makePavement(http_host, rvars, sourcedir, base_course):

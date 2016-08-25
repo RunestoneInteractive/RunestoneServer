@@ -693,34 +693,19 @@ def getSphinxBuildStatus():
     task_name = request.vars.task_name
     course_url = request.vars.course_url
 
-    courseid = course_url.replace('/'+request.application+'/static/','')
-    courseid = courseid.replace('/index.html', '')
-    confdir = os.path.join(os.getcwd(), 'applications', request.application, 'custom_courses', courseid, 'done')
-
-
-    row = scheduler.task_status(task_name)
-
-    if os.path.exists(confdir):
-        try:
-            db(db.scheduler_run.task_id == row.id).update(status='COMPLETED')
-            db(db.scheduler_task.id == row.id).update(status='COMPLETED')
-        except:
-            pass
-        return dict(status='true', course_url=course_url)
-
-    st = row['status']
-
     response.headers['content-type'] = 'application/json'
-    if st == 'COMPLETED':
-        status = 'true'
-        return json.dumps(dict(status=status, course_url=course_url))
-    elif st == 'RUNNING' or st == 'QUEUED' or st == 'ASSIGNED':
-        status = 'false'
-        return json.dumps(dict(status=status, course_url=course_url))
-    else:  # task failed
-        status = 'failed'
-        tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
-        return json.dumps(dict(status=status, traceback=tb))
+    results = {'course_url': course_url}
+    row = scheduler.task_status(task_name)
+    if row:
+        if row['status'] in ['QUEUED', 'ASSIGNED','RUNNING', 'COMPLETED']:
+            results['status'] = row['status']
+        else:  # task failed
+            results['status'] = 'failed'
+            tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
+            results['traceback']=tb
+    else:
+        results['status'] = 'failed'
+    return json.dumps(results)
 
 def getassignmentgrade():
     response.headers['content-type'] = 'application/json'
