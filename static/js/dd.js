@@ -76,8 +76,8 @@ function buildSuccess(data,status,ignore) {
              course_url:data.course_url
             };
         $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(retdata) {
-            if (retdata.status == "true") {
-                window.location.href = retdata.course_url;
+            if (retdata.status == "COMPLETED"){
+              window.location.href = data.course_url;
             }
             if (retdata.status == "failed") {
                 clearInterval(iid);

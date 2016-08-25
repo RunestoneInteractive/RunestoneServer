@@ -159,7 +159,7 @@
       d = { task_name:'{{ =task_name }}',
             course_url:'{{ =course_url }}'};
       $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
-        if (data.status == "true") {
+        if (data.status == "COMPLETED"){
           window.location.href = data.course_url;
         }
         if (data.status == "failed") {
