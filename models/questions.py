@@ -10,7 +10,6 @@ db.define_table('questions',
                 Field('question_type',type='string'),
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
-                Field('gradeable_div', type='string'),
                 migrate='runestone_questions.table')
 
 # In SQL we can manually add the constraint
