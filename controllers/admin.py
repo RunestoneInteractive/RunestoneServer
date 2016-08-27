@@ -711,7 +711,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name, assignmentids = assignmentids
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), autogradingUrl = URL('assignments', 'autograde'),course_id = auth.user.course_name, assignmentids = assignmentids
 
 )
 

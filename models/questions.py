@@ -11,6 +11,7 @@ db.define_table('questions',
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
                 Field('gradeable_div', type='string'),
+                Field('grading_type', type='string'),
                 migrate='runestone_questions.table')
 
 # In SQL we can manually add the constraint
@@ -19,6 +20,18 @@ try:
     db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
 except:
     pass
+
+db.define_table('question_grades',
+    # This table records grades on individual gradeable items
+    Field('sid', type='string', notnull=True),
+    Field('course_name',type='string', notnull=True),
+    Field('div_id', type = 'string', notnull=True),
+    Field('useinfo_id', db.useinfo), # the particular useinfo run that was graded
+    Field('score', type='double'),
+    Field('comment', type = 'text'),
+    migrate='runestone_question_grades.table',
+    )
+
 
 db.define_table('tags',
                 Field('tag_name', type='string', unique=True),

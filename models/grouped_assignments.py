@@ -498,6 +498,7 @@ db.define_table('problems',
     )
 
 db.define_table('grades',
+    # This table records grades on whole assignments, not individual questions
     Field('auth_user', db.auth_user),
     Field('assignment', db.assignments),
     Field('score', 'double'),
