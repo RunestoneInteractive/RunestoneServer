@@ -19,6 +19,7 @@
 
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
@@ -62,7 +63,17 @@
             <select onchange="gradeIndividualItem();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn3"></select>
 <p style="visibility: hidden">This paragraph takes up some space to deal with a funky display issue of the right side lumping over onto the left</p>
 
-                    <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="release_grades();">Release Grades</button>
+
+            <div id="autogradingform" style="text-align: center; visibility: hidden;">
+                    <form>
+                        <input id = "enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline"  class="list-group-item"  checked>Only check work submitted before assignment deadline<br>
+                        <input type = "submit" value = "Autograde" />
+                        <!--<button id="autogradebutton"  class="list-group-item" onclick="autoGrade();">Autograde</button>-->
+                    </form>
+            </div>
+
+
+            <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="release_grades();">Release Grades</button>
 
 
     </div>
