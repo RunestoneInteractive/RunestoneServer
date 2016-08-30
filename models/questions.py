@@ -10,7 +10,7 @@ db.define_table('questions',
                 Field('question_type',type='string'),
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
-                migrate='runestone_questions.table')
+                Field('autograde', type='text'),                migrate='runestone_questions.table')
 
 # In SQL we can manually add the constraint
 # alter table questions add constraint name_bc_unique UNIQUE(name, base_course);
