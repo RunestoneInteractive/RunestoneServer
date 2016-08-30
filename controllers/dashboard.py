@@ -6,6 +6,9 @@ from datetime import date, timedelta
 from operator import itemgetter
 from paver.easy import sh
 
+logger = logging.getLogger("web2py.root")
+logger.setLevel(logging.DEBUG)
+
 
 # this is for admin links
 # use auth.requires_membership('manager')
@@ -28,23 +31,23 @@ def index():
         session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
         return redirect(URL('admin','admin'))
 
-    print("getting chapters for ", auth.user.course_name)
+    logging.debug("getting chapters for {}".format(auth.user.course_name))
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
         selected_chapter = chapters.first()
 
-    print("making an analyzer")
+    logging.debug("making an analyzer")
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    print("loading chapter metrics")
+    logging.debug("loading chapter metrics")
     data_analyzer.load_chapter_metrics(selected_chapter)
-    print("loading problem metrics")
+    logging.debug("loading problem metrics")
     problem_metrics = data_analyzer.problem_metrics
-    print("loading progress_metrics metrics")
+    logging.debug("loading progress_metrics metrics")
     progress_metrics = data_analyzer.progress_metrics
 
-    print("starting problem_id, metric loop")
+    logging.debug("starting problem_id, metric loop")
     for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
@@ -58,9 +61,9 @@ def index():
             "attemptedBy": stats[1] + stats[2] + stats[3]
             })
 
-    print("getting questsions")
+    logging.debug("getting questsions")
     questions = sorted(questions, key=itemgetter("correct"), reverse=True)
-    print("starting sub_chapter loop")
+    logging.debug("starting sub_chapter loop")
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
             "id": metric.sub_chapter_label,
@@ -71,7 +74,7 @@ def index():
             })
 
     read_data = []
-    print("getting user activity")
+    logging.debug("getting user activity")
     user_activity = data_analyzer.user_activity
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
@@ -80,7 +83,7 @@ def index():
             "count":activity.get_page_views()
             })
 
-    print("finishing")
+    logging.debug("finishing")
     studentactivity = [{
     "data":read_data,
     "name":"Sections Read"
