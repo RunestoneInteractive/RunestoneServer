@@ -74,6 +74,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         return false;
     }
 
+
     //make an ajax call to get the htmlsrc for the given question
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
@@ -103,9 +104,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
     function save(event) {
         event.preventDefault();
-        var divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
-        if (divid == undefined) {
-            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
+
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -114,7 +113,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             type: "POST",
             dataType: "JSON",
             data: {
-                acid: divid,
+                acid: acid,
                 sid: studentId,
                 grade: grade,
                 comment: comment,
@@ -194,22 +193,19 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         var divid;
         setTimeout(function(){
-            divid = $( "div[data-component='question']").find('.ac_section.alert.alert-warning').attr('id');
-            if (divid == undefined) {
-            divid = $( "div[data-component='question']").find('[data-component]').attr('id');}
 
         jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
         dataType: "JSON",
         data: {
-            acid: divid,
+            acid: acid,
             sid: studentId,
         },
         success: function () {
             //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
-    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + divid + '&sid=' + studentId, true);
+    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
     obj.send(JSON.stringify({newins: 'studentid'}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
@@ -224,7 +220,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 
             var myobj = new XMLHttpRequest();
-    myobj.open('GET', '/runestone/admin/checkQType?acid=' + divid + '&sid=' + studentId, true);
+    myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
     myobj.send(JSON.stringify({newins: 'studentid'}));
     myobj.onreadystatechange = function () {
         if (myobj.readyState == 4 && myobj.status == 200) {
