@@ -482,6 +482,31 @@ def _autograde_one_ac(course_name, sid, question, points, deadline):
         useinfo_id = id
     )
 
+def _autograde_one_visited(course_name, sid, question, points, deadline):
+    # look in useinfo, to see if visited (before deadline)
+    # sid matches auth_user.username, not auth_user.id
+    query =  (db.useinfo.div_id == question.name) & (db.useinfo.sid == sid)
+    if deadline:
+        query = query & (db.useinfo.timestamp < deadline)
+    visit = db(query).select().first()
+
+    if visit:
+        score = points
+    else:
+        score = 0
+
+    db.question_grades.update_or_insert(
+        ((db.question_grades.sid == sid) &
+         (db.question_grades.course_name == course_name) &
+         (db.question_grades.div_id == question.name)
+         ),
+        sid=sid,
+        course_name=course_name,
+        div_id=question.name,
+        score = score,
+        comment = "autograded"
+    )
+
 def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None):
     print "autograding", assignment_id, sid, qname, deadline
     # get the question object
@@ -494,19 +519,56 @@ def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=No
         _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=True)
     elif question.autograde == 'last_answer':
         _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=False)
+    elif question.autograde == 'visited':
+        _autograde_one_visited(course_name, sid, question, points, deadline)
     else:
         print "skipping"
+
+def _compute_assignment_total(student, assignment):
+    # student is a row, containing id and username
+    # assignment is a row, containing name and id and points and threshold
+    # Get all question_grades for this sid/assignment_id
+    # Retrieve from question_grades table  with right sids and div_ids
+    # sid is really a username, so look it up in auth_user
+    # div_id is found in questions; questions are associated with assignments, which have assignment_id
+    print(student.id, assignment.id)
+    query =  (db.question_grades.sid == student.username) \
+             & (db.question_grades.div_id == db.questions.name) \
+             & (db.questions.id == db.assignment_questions.question_id) \
+             & (db.assignment_questions.assignment_id == assignment.id)
+    scores = db(query).select(db.question_grades.score)
+    # Sum them up; if threshold, compute total based on threshold
+    print len(scores)
+    total = sum([row.score for row in scores])
+    print total
+    if assignment.threshold:
+        if total >= assignment.threshold:
+            score = assignment.points
+        else:
+            score = 0
+    else:
+        score = total
+
+    # Write the sum to the grades table
+    # grades table expects row ids for auth_user and assignment
+    db.grades.update_or_insert(
+        ((db.grades.auth_user == student.id) &
+         (db.grades.assignment == assignment.id)),
+        auth_user = student.id,
+        assignment = assignment.id,
+        score=score)
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
     ### This endpoint is hit to autograde one or all students or questions for an assignment
 
     assignment_name = request.vars.assignment
-    lookup = db(db.assignments.name == assignment_name).select()
-    if lookup:
-        assignment_id = lookup[0].id
+    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        assignment_id = assignment.id
     else:
-        return json.dumps({'success':False, 'message':"Select an assignment before trying to autgrade."})
+        return json.dumps({'success':False, 'message':"Select an assignment before trying to autograde."})
 
     sid = request.vars.get('sid', None)
     qname = request.vars.get('question', None)
@@ -514,7 +576,7 @@ def autograde():
 
     if enforce_deadline:
         # get the deadline associated with the assignment
-        deadline = lookup[0].duedate
+        deadline = assignment.duedate
     else:
         deadline = None
     if sid:
@@ -524,7 +586,7 @@ def autograde():
         # get all student usernames for this course
         student_rows = db((db.user_courses.course_id == auth.user.course_id) &
                           (db.user_courses.user_id == db.auth_user.id)
-                          ).select(db.auth_user.username)
+                          ).select(db.auth_user.username, db.auth_user.id)
         sids = [row.username for row in student_rows]
 
     if qname:
@@ -544,6 +606,11 @@ def autograde():
         for s in sids:
             _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline)
             count += 1
+
+    if not qname:
+        # compute total score for the assignment for each sid
+        for student in student_rows:
+            _compute_assignment_total(student, assignment)
 
     return json.dumps({'message': "autograded {} items".format(count)})
 
