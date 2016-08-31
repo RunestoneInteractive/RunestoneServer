@@ -410,6 +410,42 @@ def detail():
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )
 
+def _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p):
+    # Look in mchoice_answers table for results of first or last run before deadline
+
+    # sid matches auth_user.username, not auth_user.id
+    query = ((db.mchoice_answers.sid == sid) & \
+            (db.mchoice_answers.div_id == question.name) \
+             )
+
+    if deadline:
+        query = query & (db.mchoice_answers.timestamp < deadline)
+    if first_p:
+        #use first answer
+        answer = db(query).select(orderby=db.mchoice_answers.timestamp).first()
+    else:
+        #use last answer
+        answer = db(query).select(orderby=~db.mchoice_answers.timestamp).first()
+
+    score = 0
+    print answer
+    if answer and answer.correct:
+        score = points
+    else:
+        score = 0
+
+    db.question_grades.update_or_insert(
+        ((db.question_grades.sid == sid) &
+         (db.question_grades.course_name == course_name) &
+         (db.question_grades.div_id == question.name)
+         ),
+        sid=sid,
+        course_name=course_name,
+        div_id=question.name,
+        score = score,
+        comment = "autograded"
+    )
+
 def _autograde_one_ac(course_name, sid, question, points, deadline):
     # Look in code table for results of last run before deadline
 
@@ -452,8 +488,12 @@ def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=No
     question = db(db.questions.name == qname).select().first()
 
     # dispatch on grading_type; if none specified, can't autograde
-    if question.grading_type == 'unittest':
+    if question.autograde == 'unittest':
         _autograde_one_ac(course_name, sid, question, points, deadline)
+    elif question.autograde == 'first_answer':
+        _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=True)
+    elif question.autograde == 'last_answer':
+        _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=False)
     else:
         print "skipping"
 
