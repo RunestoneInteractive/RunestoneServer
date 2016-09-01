@@ -509,6 +509,16 @@ def _autograde_one_visited(course_name, sid, question, points, deadline):
 
 def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None):
     print "autograding", assignment_id, sid, qname, deadline
+
+    # if previously manually graded, don't overwrite
+    existing = db((db.question_grades.sid == sid) \
+       & (db.question_grades.course_name == course_name) \
+       & (db.question_grades.div_id == qname) \
+       ).select().first()
+    if existing and (existing.comment != "autograded"):
+        # print "skipping; previously manually graded, comment = {}".format(existing.comment)
+        return
+
     # get the question object
     question = db(db.questions.name == qname).select().first()
 
@@ -522,7 +532,8 @@ def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=No
     elif question.autograde == 'visited':
         _autograde_one_visited(course_name, sid, question, points, deadline)
     else:
-        print "skipping"
+        # print "skipping; autograde = {}".format(question.autograde)
+        pass
 
 def _compute_assignment_total(student, assignment):
     # student is a row, containing id and username
