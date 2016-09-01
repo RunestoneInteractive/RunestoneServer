@@ -918,40 +918,25 @@ def questionBank():
         authorQ = db.questions.author == request.vars['author']
     rows = []
     questions = []
-    questiontype = request.vars['qtype']
-    if questiontype == 'summative':
-        questiontypeQ = db.questions.question_type == 'question'
-    else:
-        questiontypeQ = None
+
     base_courseQ = db.questions.base_course == base_course
     try:
 
         if chapterQ != None and authorQ != None:
 
-            if questiontypeQ != None:
-                questions_query = db(chapterQ & authorQ & base_courseQ & questiontypeQ).select()
-            else:
-                questions_query = db(chapterQ & authorQ & base_courseQ).select()
+            questions_query = db(chapterQ & authorQ & base_courseQ).select()
 
         elif chapterQ == None and authorQ != None:
-            if questiontypeQ != None:
-                questions_query = db(authorQ & base_courseQ & questiontypeQ).select()
-            else:
-                questions_query = db(authorQ & base_courseQ).select()
+
+            questions_query = db(authorQ & base_courseQ).select()
 
         elif chapterQ != None and authorQ == None:
-            if questiontypeQ != None:
-                questions_query = db(chapterQ & base_courseQ & questiontypeQ).select()
 
-            else:
-                questions_query = db(chapterQ & base_courseQ).select()
+            questions_query = db(chapterQ & base_courseQ).select()
 
         else:
-            if questiontypeQ != None:
-                questions_query = db(base_courseQ & questiontypeQ).select()
 
-            else:
-                questions_query = db(base_courseQ).select()
+            questions_query = db(base_courseQ).select()
 
         for question in questions_query: #Initially add all questions that we can to the list, and then remove the rows that don't match search criteria
             rows.append(question)
@@ -1215,7 +1200,7 @@ def questions2rst():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
-    htmlsrc = db(db.questions.name  == acid).select(db.questions.htmlsrc).first().htmlsrc
+    htmlsrc = db(db.questions.name == acid).select(db.questions.htmlsrc).first().htmlsrc
     return json.dumps(htmlsrc)
 
 
