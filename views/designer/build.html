@@ -14,7 +14,8 @@
     <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
 	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
     </div>
-    <p id="message">Your course is being prepared for you. This may take several minutes to complete.
+<p id="message">Your course will be built. This message will update once the rebuild starts. If it never updates, please ask the server administrator to check that a web2py scheduler is running. </p>
+  <p id = "message2"> This may take several minutes to complete.
      When the course is finished you will be redirected to your new course.  Because you
      created the course you are set up as the instructor.</p>
 
@@ -26,29 +27,31 @@
         <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
         gets backed up or even temporarily stuck.  I will get things going again as quick as I can.
         Thanks for your patience.  -- Brad</p>
-    <script type="text/javascript">
-      var iid = setInterval(function() {
-        d = {
-             task_name:'{{ =task_name }}',
-             course_url:'{{ =course_url }}'
-            };
-        $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
-          if (data.status == "true") {
-            window.location.href = data.course_url;
-          }
-          if (data.status == "failed") {
-            clearInterval(iid);
-            $("#spinner_div").hide();
-            $("#title").text("An error occurred.");
-            $("#message").html("An error occurred while building this course. Please check that you entered a valid project name. " +
-                "Project names must not contain spaces or symbols. If you are sure you have entered a valid project name, please " +
-                "submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-                "Make sure you include the following traceback information:" +
-                "<pre>" + data.traceback + "</pre>");
-          }
-        });
-      }, 3000)
-    </script>
+      <script type="text/javascript">
+        var iid = setInterval(function() {
+          d = { task_name:'{{ =task_name }}',
+                course_url:'{{ =course_url }}'};
+          $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
+            if (data.status == "COMPLETED"){
+              window.location.href = data.course_url;
+            }
+            else if (data.status == "RUNNING"){
+              window.build_status = "started"
+               $("#message").html('The course build has started.');
+            }
+            else if (data.status == "failed") {
+              clearInterval(iid);
+              $("#spinner_div").hide();
+              $("#title").text("An error occurred.");
+              $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
+               "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
+               "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
+               "Make sure you include the following traceback information:" +
+               "<pre>" + data.traceback + "</pre>");
+            }
+          });
+        }, 3000);
+      </script>
 
   {{ else: }}
     Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
@@ -57,56 +60,7 @@
 
 {{ else: }}
 
-  <h4>Module Index</h4>
-
-  <div id="boxA" class="homeboxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
-    {{dragitemidx = 0}}
-
-    {{ for item in moddata.keys(): }}
-
-      {{dragitemidx = dragitemidx + 1}}
-      {{idstr = str(item)}}
-      <div id="{{=idstr}}" data-filename="{{=moddata[item][2]}}" class="word" draggable="true" onclick="showDetails({{=item}})" ondragstart="drag(event)">
-
-        <a onmouseover='this.style.cursor="pointer" ' onfocus='this.blur();' onclick="document.getElementById('PopUp{{=idstr}}').style.display = 'block' " >{{=moddata[item][0]}}</a>
-    	  <div id='PopUp{{=idstr}}' style='display: none; position: absolute; left: 500px; top: 100px; border: solid black 1px; padding: 10px; background-color: rgb(255,255,225); text-align: justify; font-size: 12px; width: 135px;'>
-    	    {{=moddata[item][1]}}
-    	    <br />
-    	    <div style='text-align: right;'><a onmouseover='this.style.cursor="pointer" ' style='font-size: 12px;' onfocus='this.blur();' onclick="document.getElementById('PopUp{{=idstr}}').style.display = 'none' " >Close</a></div>
-    	  </div>
-      </div>
-
-    {{ pass }}
-
-  </div>
-
-  <h4>Choose topics for...</h4>
-  <h4>{{=pname}}</h4>
-
-  <button type="button" class='btn btn-default' onclick="addModBlock()">+</button>
-
-  <button type="button" class='btn btn-default' onclick="unhide_img('spinner'); buildIndexFile('{{=pname}}','{{=startdate}}', '{{=loginreq}}')">Create Course</button>
-
-  <div id="chapterboxes">
-    <div id="box1" class="boxclass" ondrop="drop(event)" ondragover="allowDrop(event)">
-      <input id="title" type="text" placeholder="Your section title here" name="label" />
-    </div>
-  </div>
-
-  <div id="spinner_div" style="align: center; display: none;">
-    <h3 id="title">Building your course.</h3>
-    <p id="message">Your course is being prepared for you.  This may take several minutes to complete. <b>Please do not refresh the page.</b> When the course is finished you will be redirected to your new course.  Because you created the course you are set up as the instructor.</p>
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif" style="display: none;">
-  </div>
-
-  <script type="text/javascript">
-	  function unhide_img(id) {
-      var d = document.getElementById('spinner_div');
-      d.style.display = "block";
-		  var i = document.getElementById('spinner');
-		  i.style.display = "block";
-	  }
-	</script>
+    mess variable should be set. If you are seeing this, please report the error to the server administrator
 
 {{ pass }}
 
