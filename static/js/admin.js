@@ -66,7 +66,97 @@ function gradeIndividualItem() {
     }
 }
 
+function getSelectedGradingColumn(type){
+    //gradingoption1 has contents of picker for type of stuff in column (e.g., assignment, student)
+    //gradingcolumn1 has contents of column (e.g., actual assignments)
+    var opt1 = document.getElementById("gradingoption1");
+    var col1Type = opt1.options[opt1.selectedIndex].value;
 
+    var opt2 = document.getElementById("gradingoption2");
+    var col2Type = opt2.options[opt2.selectedIndex].value;
+
+    var opt3 = document.getElementById("gradingoption3");
+    var col3type = opt3.options[opt3.selectedIndex].value;
+
+    if (col1Type == type){
+        col = document.getElementById("gradingcolumn1");
+    }
+    else if (col2Type == type){
+        col = document.getElementById("gradingcolumn2");
+    }
+    else if (col3type == type){
+        col = document.getElementById("gradingcolumn3");
+    }
+    else {
+        col = null;
+    }
+    return col;
+}
+
+function getSelectedItem(type){
+    var col = getSelectedGradingColumn(type);
+
+    if (col == null){
+        return null;
+    }
+    if (type == "student"){
+        if (col.selectedIndex != -1) {
+            // they've selected an item; get the id associated with it
+            id_diction = JSON.parse(students)
+            var item = col.options[col.selectedIndex].value;
+            for (var key in id_diction) {
+                // one of these should match, since an item was selected!
+                if (id_diction[key] == item) {
+                    var id = key;
+                }
+            }
+            return id;
+        }
+        else {
+            return null;
+        }
+    }
+    else if (type == "assignment"){
+        if (col.selectedIndex != -1) {
+            // they've selected an assignment; return that assignment name
+            return col.options[col.selectedIndex].value;
+        }
+        else {
+            return null;
+        }
+    }
+    else if (type == "question"){
+        if (col.selectedIndex != -1) {
+            // they've selected a question; return that question name
+            return col.options[col.selectedIndex].value;
+        }
+        else {
+            return null;
+        }
+    }
+}
+
+function autoGrade(){
+    var assignment = getSelectedItem("assignment")
+    var question = getSelectedItem("question")
+    var studentID = getSelectedItem("student")
+    var enforceDeadline = $('#enforceDeadline').is(':checked')
+    jQuery.ajax({
+        url: eBookConfig.autogradingURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+            question: question,
+            sid: studentID,
+            enforceDeadline: enforceDeadline
+        },
+        success: function (retdata) {
+            alert(retdata.message);
+        }
+    });
+
+}
 
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
@@ -368,6 +458,7 @@ function pickedAssignments(column) {
     var assignments = JSON.parse(assignmentinfo);
        release_button = document.getElementById("releasebutton");
     release_button.style.visibility = 'visible';
+    autograde_form.style.visibility = 'visible';
 
     for (i in assignments) {
         var option = document.createElement("option");
@@ -456,8 +547,12 @@ function showColumn1() {
 
     release_button = document.getElementById("releasebutton");
     release_button.style.visibility = 'hidden';
-
-
+    autograde_form = document.getElementById("autogradingform");
+    autograde_form.style.visibility = 'hidden';
+    $('#autogradingform').submit(function () {
+        autoGrade();
+        return false;
+    });
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();

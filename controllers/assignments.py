@@ -410,6 +410,103 @@ def detail():
         massGradingURL = URL('assignments', 'mass_grade_problem'),
         )
 
+def _autograde_one_ac(course_name, sid, question, points, deadline):
+    # Look in code table for results of last run before deadline
+
+    # sid matches auth_user.username, not auth_user.id
+
+    query = ((db.useinfo.course_id == course_name) & \
+            (db.useinfo.div_id == question.name) & \
+            (db.useinfo.sid == sid) & \
+            (db.useinfo.event == 'unittest'))
+
+    if deadline:
+        query = query & (db.useinfo.timestamp < deadline)
+
+    most_recent = db(query).select(orderby=~db.useinfo.timestamp).first()
+
+    score = 0
+    id = None
+    if most_recent:
+        pct_correct = int(most_recent.act.split(':')[1])
+        if pct_correct == 100:
+            score = points
+        id = most_recent.id
+
+    db.question_grades.update_or_insert(
+        ((db.question_grades.sid == sid) &
+         (db.question_grades.course_name == course_name) &
+         (db.question_grades.div_id == question.name)
+         ),
+        sid=sid,
+        course_name=course_name,
+        div_id=question.name,
+        score = score,
+        comment = "autograded",
+        useinfo_id = id
+    )
+
+def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None):
+    print "autograding", assignment_id, sid, qname, deadline
+    # get the question object
+    question = db(db.questions.name == qname).select().first()
+
+    # dispatch on grading_type; if none specified, can't autograde
+    if question.grading_type == 'unittest':
+        _autograde_one_ac(course_name, sid, question, points, deadline)
+    else:
+        print "skipping"
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def autograde():
+    ### This endpoint is hit to autograde one or all students or questions for an assignment
+
+    assignment_name = request.vars.assignment
+    lookup = db(db.assignments.name == assignment_name).select()
+    if lookup:
+        assignment_id = lookup[0].id
+    else:
+        return json.dumps({'success':False, 'message':"Select an assignment before trying to autgrade."})
+
+    sid = request.vars.get('sid', None)
+    qname = request.vars.get('question', None)
+    enforce_deadline = request.vars.get('enforceDeadline', None)
+
+    if enforce_deadline:
+        # get the deadline associated with the assignment
+        deadline = lookup[0].duedate
+    else:
+        deadline = None
+    if sid:
+        # look up username from row id which is passed in
+        sids = [db(db.auth_user.id == sid).select().first().username]
+    else:
+        # get all student usernames for this course
+        student_rows = db((db.user_courses.course_id == auth.user.course_id) &
+                          (db.user_courses.user_id == db.auth_user.id)
+                          ).select(db.auth_user.username)
+        sids = [row.username for row in student_rows]
+
+    if qname:
+        questions_query = db(
+            (db.assignment_questions.assignment_id == assignment_id) &
+            (db.assignment_questions.question_id == db.questions.id) &
+            (db.questions.name == qname)
+            ).select(db.questions.name, db.assignment_questions.points)
+        questions = [(row.questions.name, row.assignment_questions.points) for row in questions_query]
+    else:
+        # get all qids and point values for this assignment
+        questions_query = db((db.assignment_questions.assignment_id == assignment_id) & (db.assignment_questions.question_id == db.questions.id)).select(db.questions.name, db.assignment_questions.points)
+        questions = [(row.questions.name, row.assignment_questions.points) for row in questions_query]
+
+    count = 0
+    for (qdiv, points) in questions:
+        for s in sids:
+            _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline)
+            count += 1
+
+    return json.dumps({'message': "autograded {} items".format(count)})
+
 import json
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def problem():
