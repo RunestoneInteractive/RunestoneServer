@@ -42,16 +42,17 @@ class ProblemMetrics(object):
             self.user_responses[user.username] = UserResponse(user)
 
     def add_data_point(self, row):
-        answer = row.act.split(':')
-        choice = answer[1]
-        correct = answer[2] == "correct"
-        if choice == "":
-            choice = "(empty)"
+        if ':' in row.act:
+            answer = row.act.split(':')
+            choice = answer[1]
+            correct = answer[2] == "correct"
+            if choice == "":
+                choice = "(empty)"
 
-        self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
+            self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
 
-        if row.sid in self.user_responses:
-            self.user_responses[row.sid].add_response(choice, correct)
+            if row.sid in self.user_responses:
+                self.user_responses[row.sid].add_response(choice, correct)
 
     def user_response_stats(self):
         correct = 0
@@ -328,7 +329,7 @@ class DashboardDataAnalyzer(object):
 
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
-# to support all books.	
+# to support all books.
 class IdConverter(object):
     problem_id_map = {
         "pre_1":"Pretest-1: What will be the values in x, y, and z after the following lines of code execute?",
@@ -403,5 +404,3 @@ class IdConverter(object):
     @staticmethod
     def sub_chapter_label_to_text(sub_chapter_label):
         return IdConverter.sub_chapter_id_map.get(sub_chapter_label, sub_chapter_label)
-
-
