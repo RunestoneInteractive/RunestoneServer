@@ -2,6 +2,7 @@ from os import path
 import os
 import shutil
 import sys
+import json
 
 
 # controller for "Progress Page" as well as List/create assignments
@@ -591,8 +592,12 @@ def autograde():
     else:
         deadline = None
     if sid:
-        # look up username from row id which is passed in
-        sids = [db(db.auth_user.id == sid).select().first().username]
+        # sid which is passed in is a username, not a row id
+        student_rows = db((db.user_courses.course_id == auth.user.course_id) &
+                          (db.user_courses.user_id == db.auth_user.id) &
+                          (db.auth_user.username == sid)
+                          ).select(db.auth_user.username, db.auth_user.id)
+        sids = [row.username for row in student_rows]
     else:
         # get all student usernames for this course
         student_rows = db((db.user_courses.course_id == auth.user.course_id) &
@@ -625,9 +630,96 @@ def autograde():
 
     return json.dumps({'message': "autograded {} items".format(count)})
 
-import json
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def record_grade():
+    if 'acid' not in request.vars or 'sid' not in request.vars:
+        return json.dumps({'success':False, 'message':"Need problem and user."})
+
+    score_str = request.vars.get('grade', 0)
+    if score_str == "":
+        score = 0
+    else:
+        score = float(score_str)
+    comment = request.vars.get('comment', None)
+    if score_str != "" or ('comment' in request.vars and comment != ""):
+        db.question_grades.update_or_insert((\
+            (db.question_grades.sid == request.vars['sid']) \
+            & (db.question_grades.div_id == request.vars['acid']) \
+            & (db.question_grades.course_name == auth.user.course_name) \
+            ),
+            sid = request.vars['sid'],
+            div_id = request.vars['acid'],
+            course_name = auth.user.course_name,
+            score = score,
+            comment = comment)
+        return json.dumps({'response': 'replaced'})
+    else:
+        return json.dumps({'response': 'not replaced'})
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_problem():
+    if 'acid' not in request.vars or 'sid' not in request.vars:
+        return json.dumps({'success':False, 'message':"Need problem and user."})
+
+    user = db(db.auth_user.username == request.vars.sid).select().first()
+    if not user:
+        return json.dumps({'success':False, 'message':"User does not exist. Sorry!"})
+
+    res = {
+        'id':"%s-%d" % (request.vars.acid, user.id),
+        'acid':request.vars.acid,
+        'sid':user.id,
+        'username':user.username,
+        'name':"%s %s" % (user.first_name, user.last_name),
+        'code': ""
+    }
+
+    # get code from last timestamped record
+    # null timestamps come out at the end, so the one we want could be in the middle, whether we sort in reverse order or regular; ugh
+    # solution: the last one by id order should be the last timestamped one, as we only create ones without timestamp during grading, and then only if there is no existing record
+
+    # get the deadline associated with the assignment
+    assignment_name = request.vars.assignment
+    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    deadline = assignment.duedate
+    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
+    if request.vars.enforceDeadline == "true" and deadline:
+        query = query & (db.code.timestamp < deadline)
+    c = db(query).select(orderby = db.code.id).last()
+
+    if c:
+        res['code'] = c.code
+
+    # add prefixes, suffix_code and files that are available
+    # retrieve the db record
+    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
+
+    if source and c and c.code:
+        def get_source(acid):
+            r = db.source_code(acid=acid)
+            if r:
+                return r.main_code
+            else:
+                return ""
+        if source.includes:
+            # strip off "data-include"
+            txt = source.includes[len("data-include="):]
+            included_divs = [x.strip() for x in txt.split(',') if x != '']
+            # join together code for each of the includes
+            res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
+            #print res['includes']
+        if source.suffix_code:
+            res['suffix_code'] = source.suffix_code
+            #print source.suffix_code
+
+        file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
+        res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
+    return json.dumps(res)
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def problem():
+    ### For backward compatibility with old grading interface; shouldn't be used after transition
     ### This endpoint is hit either to update (if 'grade' and 'comment' are in request.vars)
     ### Or just to get the current state of the grade for this acid (if not present)
     if 'acid' not in request.vars or 'sid' not in request.vars:
@@ -655,52 +747,8 @@ def problem():
                 comment = request.vars.comment,
                 )
             c = db.code(id)
-  
-    res = {
-        'id':"%s-%d" % (request.vars.acid, user.id),
-        'acid':request.vars.acid,
-        'sid':user.id,
-        'username':user.username,
-        'name':"%s %s" % (user.first_name, user.last_name),
-    }
-    
-    if c:
-        # return the existing code, grade, and comment
-        res['code'] = c.code
-        res['grade'] = c.grade
-        res['comment'] = c.comment
-        res['lang'] = c.language
-    else:
-        # default: return grade of 0.0 if nothing exists
-        res['code'] = ""
-        res['grade'] = 0.0
-        res['comment'] = ""
-    
-    # add prefixes, suffix_code and files that are available
-    # retrieve the db record
-    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
 
-    if source and c and c.code:
-        def get_source(acid):
-            r = db.source_code(acid=acid)
-            if r:
-                return r.main_code
-            else:
-                return ""
-        if source.includes:
-            # strip off "data-include"
-            txt = source.includes[len("data-include="):]
-            included_divs = [x.strip() for x in txt.split(',') if x != '']
-            # join together code for each of the includes
-            res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
-            #print res['includes']
-        if source.suffix_code:
-            res['suffix_code'] = source.suffix_code
-            #print source.suffix_code
-        
-        file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
-        res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
-    return json.dumps(res)
+    return get_problem()
 
 def mass_grade_problem():
     if 'csv' not in request.vars or 'acid' not in request.vars:
