@@ -536,11 +536,7 @@ function showColumn1() {
     release_button.style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    $('#autogradingform').submit(function (event) {
-        event.preventDefault();
-        autoGrade();
-        return false;
-    });
+
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
