@@ -21,6 +21,11 @@
   eBookConfig.gradingURL = '{{=gradingUrl}}';
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
   eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
+  $('#autogradingform').submit(function (event) {
+    event.preventDefault();
+    autoGrade();
+    return false;
+});
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
@@ -69,7 +74,8 @@
                     <form>
                         <input id = "enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline"  class="list-group-item"  checked>Only check work submitted before assignment deadline<br>
                         <input type = "submit" value = "Autograde" />
-                        <!--<button id="autogradebutton"  class="list-group-item" onclick="autoGrade();">Autograde</button>-->
+                        <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
+
                     </form>
             </div>
 
@@ -103,6 +109,7 @@
 
 
 
+
 </div>
 
 <script>
@@ -113,6 +120,11 @@
     chapters = JSON.parse(chapters);
     var students = '{{=students}}';
     var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g,'"');
+    $('#autogradingform').submit(function (event) {
+        event.preventDefault();
+        autoGrade();
+        return false;
+    });
 </script>
 
 
