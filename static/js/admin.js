@@ -199,7 +199,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
         jQuery.ajax({
-            url: eBookConfig.gradingURL,
+            url: eBookConfig.gradeRecordingUrl,
             type: "POST",
             dataType: "JSON",
             data: {
@@ -284,84 +284,71 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var divid;
         setTimeout(function(){
 
-        jQuery.ajax({
-        url: eBookConfig.gradingURL,
-        type: "POST",
-        dataType: "JSON",
-        data: {
-            acid: acid,
-            sid: studentId,
-        },
-        success: function () {
-            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+//        jQuery.ajax({
+//        url: eBookConfig.gradeRecordingUrl,
+//        type: "POST",
+//        dataType: "JSON",
+//        data: {
+//            acid: acid,
+//            sid: studentId,
+//        },
+//        success: function () {
+//            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
-    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
-    obj.send(JSON.stringify({newins: 'studentid'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var resp = obj.responseText;
-            var newdata = JSON.parse(resp);
-            if (newdata != "Error") {
-                jQuery('#input-grade', rightDiv).val(newdata['grade']);
-            jQuery('#input-comments', rightDiv).val(newdata['comments']);}
-        }}
+            obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
+            obj.send(JSON.stringify({newins: 'studentid'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    var resp = obj.responseText;
+                    var newdata = JSON.parse(resp);
+                    if (newdata != "Error") {
+                        jQuery('#input-grade', rightDiv).val(newdata['grade']);
+                    jQuery('#input-comments', rightDiv).val(newdata['comments']);}
+                }}
 
 
 
 
             var myobj = new XMLHttpRequest();
-    myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
-    myobj.send(JSON.stringify({newins: 'studentid'}));
-    myobj.onreadystatechange = function () {
-        if (myobj.readyState == 4 && myobj.status == 200) {
-            var answer = myobj.responseText;
-          if (answer == "null") {
-                jQuery("#shortanswerresponse").empty();
-                //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+            myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
+            myobj.send(JSON.stringify({newins: 'studentid'}));
+            myobj.onreadystatechange = function () {
+                if (myobj.readyState == 4 && myobj.status == 200) {
+                    var answer = myobj.responseText;
+                    if (answer == "null") {
+                        jQuery("#shortanswerresponse").empty();
+                        //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+                    }
+
+                    else {
+                        //manually show the answer now
+                        answer = JSON.parse(answer);
+                        jQuery("#shortanswerresponse").empty();
+                        var answerheader = $("<b>Student's Answer</b> <br>")
+                        jQuery("#shortanswerresponse").append(answerheader);
+                        jQuery("#shortanswerresponse").append(answer);
+                        $('#shortanswerresponse').css('display', 'inline');
+                        $('#shortanswerresponse').css('margin-bottom', '50px');
+                        $('#shortanswerresponse').css('background-color', '#fefce7');
+                    }
+                }
             }
-
-            else {
-                //manually show the answer now
-                answer = JSON.parse(answer);
-                jQuery("#shortanswerresponse").empty();
-                var answerheader = $("<b>Student's Answer</b> <br>")
-                jQuery("#shortanswerresponse").append(answerheader);
-                jQuery("#shortanswerresponse").append(answer);
-                $('#shortanswerresponse').css('display', 'inline');
-                $('#shortanswerresponse').css('margin-bottom', '50px');
-                $('#shortanswerresponse').css('background-color', '#fefce7');
-
-
-
-
-            }
-
-        }
+        },250);
     }
-
-
-
-        }
-        });
-
-
-},500);
-
-
-
-    }
-
-
 
     element.addClass("loading");
+    var assignment = getSelectedItem("assignment")
+    var enforceDeadline = $('#enforceDeadline').is(':checked')
 
     jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
         dataType: "JSON",
         data: {
+            assignment: assignment,
             acid: acid,
             sid: studentId,
+            enforceDeadline: enforceDeadline
         },
         success: function (data) {
             show(data);
@@ -549,7 +536,8 @@ function showColumn1() {
     release_button.style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    $('#autogradingform').submit(function () {
+    $('#autogradingform').submit(function (event) {
+        event.preventDefault();
         autoGrade();
         return false;
     });
