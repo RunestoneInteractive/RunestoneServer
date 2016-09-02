@@ -166,7 +166,7 @@ def listassessments():
 #    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 #    q = db( (db.useinfo.div_id == request.vars.id) & (db.useinfo.course_id == course.course_name) )
 #    res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
-#    
+#
 #    currentSid = res[0].sid
 #    currentAnswers = []
 #    answerDict = {}
@@ -177,7 +177,7 @@ def listassessments():
 #        answer = row.act.split(':')[1]
 #        answerDict[answer] = answerDict.get(answer,0) + 1
 #        totalAnswers += 1
-#        
+#
 #        if row.sid == currentSid:
 #            currentAnswers.append(answer)
 #            if row.act.split(':')[2] == 'correct':
@@ -186,14 +186,14 @@ def listassessments():
 #            currentAnswers.sort()
 #            resultList.append((currentSid,currentAnswers))
 #            currentAnswers = [row.act.split(':')[1]]
-#            
+#
 #            currentSid = row.sid
 #
-#    
-#    
+#
+#
 #    currentAnswers.sort()
 #    resultList.append((currentSid,currentAnswers))
-#    
+#
 #    return dict(reslist=resultList, answerDict=answerDict, correct=correct)
 
 
@@ -277,7 +277,7 @@ def studentactivity():
                     orderby=count)
 
     return dict(grid=res,course_id=course.course_name)
-    
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def startdate():
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -303,7 +303,7 @@ def rebuildcourse():
         date = request.vars.startdate.split('/')
         date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
         course.update_record(term_start_date=date)
-        
+
         # run_sphinx in defined in models/scheduler.py
         row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
@@ -324,10 +324,10 @@ def buildmodulelist():
     import os.path
     import re
     db.modules.truncate()
-    
+
     def procrst(arg, dirname, names):
         rstfiles = [x for x in names if '.rst' in x]
-        
+
         for rf in rstfiles:
             found = 0
             openrf = open(os.path.abspath(os.path.join(dirname,rf)))
@@ -347,10 +347,10 @@ def buildmodulelist():
                                   pathtofile=os.path.join(dirs[-1],rf))
 
 
-    
-    
+
+
     os.path.walk(os.path.join(request.folder,'source'),procrst,None)
-    
+
     session.flash = 'Module Database Rebuild Finished'
     redirect('/%s/admin'%request.application)
 
@@ -900,6 +900,7 @@ def removeQuestion():
 def questionBank():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
+
     tags = False
     if request.vars['tags'] != "null":
         tags = True
@@ -1130,9 +1131,9 @@ def searchstudents():
 def gettemplate():
     template = request.args[0]
     returndict = {}
-    base = '.. question:: <insertid>\n'
+    base = ''
 
-    returndict['template'] = base + cmap.get(template,'').__doc__.replace('\n', '\n   ')
+    returndict['template'] = base + cmap.get(template,'').__doc__
 
     chapters = []
     chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
@@ -1146,8 +1147,10 @@ def gettemplate():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createquestion():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
     try:
-        newqID = db.questions.insert(base_course=auth.user.course_id, name=request.vars['name'], chapter=request.vars['chapter'],
+        newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
 
@@ -1308,6 +1311,3 @@ def checkQType():
             answer = useinfoquery.act
 
     return json.dumps(answer)
-
-
-
