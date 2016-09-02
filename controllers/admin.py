@@ -900,6 +900,7 @@ def removeQuestion():
 def questionBank():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
+
     tags = False
     if request.vars['tags'] != "null":
         tags = True
@@ -1146,8 +1147,10 @@ def gettemplate():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createquestion():
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    base_course = row.base_course
     try:
-        newqID = db.questions.insert(base_course=auth.user.course_id, name=request.vars['name'], chapter=request.vars['chapter'],
+        newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
 
