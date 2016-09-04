@@ -66,7 +66,97 @@ function gradeIndividualItem() {
     }
 }
 
+function getSelectedGradingColumn(type){
+    //gradingoption1 has contents of picker for type of stuff in column (e.g., assignment, student)
+    //gradingcolumn1 has contents of column (e.g., actual assignments)
+    var opt1 = document.getElementById("gradingoption1");
+    var col1Type = opt1.options[opt1.selectedIndex].value;
 
+    var opt2 = document.getElementById("gradingoption2");
+    var col2Type = opt2.options[opt2.selectedIndex].value;
+
+    var opt3 = document.getElementById("gradingoption3");
+    var col3type = opt3.options[opt3.selectedIndex].value;
+
+    if (col1Type == type){
+        col = document.getElementById("gradingcolumn1");
+    }
+    else if (col2Type == type){
+        col = document.getElementById("gradingcolumn2");
+    }
+    else if (col3type == type){
+        col = document.getElementById("gradingcolumn3");
+    }
+    else {
+        col = null;
+    }
+    return col;
+}
+
+function getSelectedItem(type){
+    var col = getSelectedGradingColumn(type);
+
+    if (col == null){
+        return null;
+    }
+    if (type == "student"){
+        if (col.selectedIndex != -1) {
+            // they've selected an item; get the id associated with it
+            id_diction = JSON.parse(students)
+            var item = col.options[col.selectedIndex].value;
+            for (var key in id_diction) {
+                // one of these should match, since an item was selected!
+                if (id_diction[key] == item) {
+                    var id = key;
+                }
+            }
+            return id;
+        }
+        else {
+            return null;
+        }
+    }
+    else if (type == "assignment"){
+        if (col.selectedIndex != -1) {
+            // they've selected an assignment; return that assignment name
+            return col.options[col.selectedIndex].value;
+        }
+        else {
+            return null;
+        }
+    }
+    else if (type == "question"){
+        if (col.selectedIndex != -1) {
+            // they've selected a question; return that question name
+            return col.options[col.selectedIndex].value;
+        }
+        else {
+            return null;
+        }
+    }
+}
+
+function autoGrade(){
+    var assignment = getSelectedItem("assignment")
+    var question = getSelectedItem("question")
+    var studentID = getSelectedItem("student")
+    var enforceDeadline = $('#enforceDeadline').is(':checked')
+    jQuery.ajax({
+        url: eBookConfig.autogradingURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+            question: question,
+            sid: studentID,
+            enforceDeadline: enforceDeadline
+        },
+        success: function (retdata) {
+            alert(retdata.message);
+        }
+    });
+
+}
 
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
@@ -109,7 +199,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
         jQuery.ajax({
-            url: eBookConfig.gradingURL,
+            url: eBookConfig.gradeRecordingUrl,
             type: "POST",
             dataType: "JSON",
             data: {
@@ -194,84 +284,71 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var divid;
         setTimeout(function(){
 
-        jQuery.ajax({
-        url: eBookConfig.gradingURL,
-        type: "POST",
-        dataType: "JSON",
-        data: {
-            acid: acid,
-            sid: studentId,
-        },
-        success: function () {
-            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+//        jQuery.ajax({
+//        url: eBookConfig.gradeRecordingUrl,
+//        type: "POST",
+//        dataType: "JSON",
+//        data: {
+//            acid: acid,
+//            sid: studentId,
+//        },
+//        success: function () {
+//            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
-    obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
-    obj.send(JSON.stringify({newins: 'studentid'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var resp = obj.responseText;
-            var newdata = JSON.parse(resp);
-            if (newdata != "Error") {
-                jQuery('#input-grade', rightDiv).val(newdata['grade']);
-            jQuery('#input-comments', rightDiv).val(newdata['comments']);}
-        }}
+            obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
+            obj.send(JSON.stringify({newins: 'studentid'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    var resp = obj.responseText;
+                    var newdata = JSON.parse(resp);
+                    if (newdata != "Error") {
+                        jQuery('#input-grade', rightDiv).val(newdata['grade']);
+                    jQuery('#input-comments', rightDiv).val(newdata['comments']);}
+                }}
 
 
 
 
             var myobj = new XMLHttpRequest();
-    myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
-    myobj.send(JSON.stringify({newins: 'studentid'}));
-    myobj.onreadystatechange = function () {
-        if (myobj.readyState == 4 && myobj.status == 200) {
-            var answer = myobj.responseText;
-          if (answer == "null") {
-                jQuery("#shortanswerresponse").empty();
-                //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+            myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
+            myobj.send(JSON.stringify({newins: 'studentid'}));
+            myobj.onreadystatechange = function () {
+                if (myobj.readyState == 4 && myobj.status == 200) {
+                    var answer = myobj.responseText;
+                    if (answer == "null") {
+                        jQuery("#shortanswerresponse").empty();
+                        //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
+                    }
+
+                    else {
+                        //manually show the answer now
+                        answer = JSON.parse(answer);
+                        jQuery("#shortanswerresponse").empty();
+                        var answerheader = $("<b>Student's Answer</b> <br>")
+                        jQuery("#shortanswerresponse").append(answerheader);
+                        jQuery("#shortanswerresponse").append(answer);
+                        $('#shortanswerresponse').css('display', 'inline');
+                        $('#shortanswerresponse').css('margin-bottom', '50px');
+                        $('#shortanswerresponse').css('background-color', '#fefce7');
+                    }
+                }
             }
-
-            else {
-                //manually show the answer now
-                answer = JSON.parse(answer);
-                jQuery("#shortanswerresponse").empty();
-                var answerheader = $("<b>Student's Answer</b> <br>")
-                jQuery("#shortanswerresponse").append(answerheader);
-                jQuery("#shortanswerresponse").append(answer);
-                $('#shortanswerresponse').css('display', 'inline');
-                $('#shortanswerresponse').css('margin-bottom', '50px');
-                $('#shortanswerresponse').css('background-color', '#fefce7');
-
-
-
-
-            }
-
-        }
+        },250);
     }
-
-
-
-        }
-        });
-
-
-},500);
-
-
-
-    }
-
-
 
     element.addClass("loading");
+    var assignment = getSelectedItem("assignment")
+    var enforceDeadline = $('#enforceDeadline').is(':checked')
 
     jQuery.ajax({
         url: eBookConfig.gradingURL,
         type: "POST",
         dataType: "JSON",
         data: {
+            assignment: assignment,
             acid: acid,
             sid: studentId,
+            enforceDeadline: enforceDeadline
         },
         success: function (data) {
             show(data);
@@ -368,6 +445,7 @@ function pickedAssignments(column) {
     var assignments = JSON.parse(assignmentinfo);
        release_button = document.getElementById("releasebutton");
     release_button.style.visibility = 'visible';
+    autograde_form.style.visibility = 'visible';
 
     for (i in assignments) {
         var option = document.createElement("option");
@@ -456,7 +534,8 @@ function showColumn1() {
 
     release_button = document.getElementById("releasebutton");
     release_button.style.visibility = 'hidden';
-
+    autograde_form = document.getElementById("autogradingform");
+    autograde_form.style.visibility = 'hidden';
 
 
     $("#gradingcolumn2").empty();

@@ -32,6 +32,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # confdir holds the conf and index files
     custom_dir = path.join(workingdir, 'custom_courses', rvars['projectname'])
 
+
     if not os.path.exists(custom_dir):
         os.mkdir(custom_dir)
 
@@ -122,9 +123,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
     shutil.rmtree(sourcedir)
     rslogger.debug("Completely done with {}".format(rvars['projectname']))
-    donefile = open(os.path.join(custom_dir, 'done'), 'w')
-    donefile.write('success')
-    donefile.close()
 
 
 def makePavement(http_host, rvars, sourcedir, base_course):
