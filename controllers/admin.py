@@ -711,8 +711,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'problem'), course_id = auth.user.course_name, assignmentids = assignmentids
-
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), course_id = auth.user.course_name, assignmentids = assignmentids
 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1249,9 +1248,13 @@ def getGradeComments():
 
     acid = request.vars['acid']
     sid = request.vars['sid']
-    c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
+
+    c =  db((db.question_grades.sid == sid) \
+             & (db.question_grades.div_id == acid) \
+             & (db.question_grades.course_name == auth.user.course_name)\
+            ).select().first()
     if c != None:
-        return json.dumps({'grade':c.grade, 'comments':c.comment})
+        return json.dumps({'grade':c.score, 'comments':c.comment})
     else:
         return json.dumps("Error")
 
