@@ -749,7 +749,51 @@ def problem():
                 )
             c = db.code(id)
 
-    return get_problem()
+    res = {
+        'id':"%s-%d" % (request.vars.acid, user.id),
+        'acid':request.vars.acid,
+        'sid':user.id,
+        'username':user.username,
+        'name':"%s %s" % (user.first_name, user.last_name),
+    }
+
+    if c:
+        # return the existing code, grade, and comment
+        res['code'] = c.code
+        res['grade'] = c.grade
+        res['comment'] = c.comment
+        res['lang'] = c.language
+    else:
+        # default: return grade of 0.0 if nothing exists
+        res['code'] = ""
+        res['grade'] = 0.0
+        res['comment'] = ""
+
+    # add prefixes, suffix_code and files that are available
+    # retrieve the db record
+    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
+
+    if source and c and c.code:
+        def get_source(acid):
+            r = db.source_code(acid=acid)
+            if r:
+                return r.main_code
+            else:
+                return ""
+        if source.includes:
+            # strip off "data-include"
+            txt = source.includes[len("data-include="):]
+            included_divs = [x.strip() for x in txt.split(',') if x != '']
+            # join together code for each of the includes
+            res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
+            #print res['includes']
+        if source.suffix_code:
+            res['suffix_code'] = source.suffix_code
+            #print source.suffix_code
+
+        file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
+        res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
+    return json.dumps(res)
 
 def mass_grade_problem():
     if 'csv' not in request.vars or 'acid' not in request.vars:
