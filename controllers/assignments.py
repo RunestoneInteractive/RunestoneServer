@@ -47,8 +47,8 @@ def index():
     for t in grade.assignment_type_grades:
         for a in t.assignments:
             if (not a.released) or (not a.score):
-                a.form = SQLFORM(db.grades, 
-                                 record=a.grade_record, 
+                a.form = SQLFORM(db.grades,
+                                 record=a.grade_record,
                                  submit_button = 'change my projected grade',
                                  fields = ['projected'],
                                  showid = False
@@ -57,8 +57,8 @@ def index():
                 if a.form.process(formname=a.assignment_name + str(a.assignment_id)).accepted:
                     a.projected = float(request.vars.projected)
                     response.flash = 'projected grade updated'
-            
-        
+
+
     return dict(
 #        types = assignment_types,
         student = student,
@@ -409,6 +409,7 @@ def detail():
         median_score = median_score,
         gradingUrl = URL('assignments', 'problem'),
         massGradingURL = URL('assignments', 'mass_grade_problem'),
+        gradeRecordingUrl = URL('assignments', 'record_grade'),
         )
 
 def _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p):
@@ -681,8 +682,14 @@ def get_problem():
 
     # get the deadline associated with the assignment
     assignment_name = request.vars.assignment
+    if not assignment_name:
+        assignment_name = request.vars.id
+
     assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    deadline = assignment.duedate
+    try:
+        deadline = assignment.duedate
+    except:
+        deadline = None
     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
@@ -758,7 +765,7 @@ def mass_grade_problem():
         cells = row.split(",")
         if len(cells) < 2:
             continue
-        
+
         email = cells[0]
         if cells[1]=="":
             cells[1]=0
@@ -842,7 +849,7 @@ def download():
     field_names = ['Lastname','Firstname','Email','Total']
     type_names = []
     assignment_names = []
-    
+
     assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
     rows = [CourseGrade(user = student, course=course, assignment_types = assignment_types).csv(type_names, assignment_names) for student in students]
     response.view='generic.csv'
@@ -862,4 +869,3 @@ def newtype():
         return redirect(URL('admin', 'index'))
 
     return dict(form=form)
-
