@@ -937,7 +937,21 @@ function create_question(formdata) {
     var assignmentname = select.options[select.selectedIndex].text;
 
     var template = formdata.template.value;
-    var name = formdata.qname.value;
+
+
+    var qcode = formdata.qcode.value;
+    var lines = qcode.split('\n');
+for(var i = 0;i < lines.length;i++){
+    if (lines[i] != "") {
+        var line = lines[i];
+var match = line.split(/.. \w*:: /);
+        var name = match[1];
+        break
+
+    }
+}
+
+
     var question = formdata.qcode.value;
         question = question.replace(/(\r\n|\n|\r)/gm, '%0A');
     var difficulty = formdata.difficulty;
