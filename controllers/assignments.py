@@ -681,7 +681,7 @@ def get_problem():
     # solution: the last one by id order should be the last timestamped one, as we only create ones without timestamp during grading, and then only if there is no existing record
 
     # get the deadline associated with the assignment
-     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
+    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
     c = db(query).select(orderby = db.code.id).last()
