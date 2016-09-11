@@ -104,7 +104,6 @@ def user():
 
     if 'login' in request.args(0):
         # add info text re: using local auth. CSS styled to match text on Janrain form
-        print(form[0][0])
         sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
         usernamewarn = TR(TD('Your username is NOT your email address', _colspan='3') )
         form[0][0].insert(0, usernamewarn)
