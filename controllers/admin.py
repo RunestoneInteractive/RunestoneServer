@@ -23,6 +23,10 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
+    if not row:
+        session.flash = "You must be registered for a course to access this page"
+        redirect(URL(c="default"))
+
     if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
@@ -553,7 +557,6 @@ order by username;
     final = np.matrix(statmat)
     ht = int(ceil(len(snames)/4.0)+1)
     wt = int(ceil(len(xlabs)/4.0)+1)
-    print "figsize, wt, ht = ", wt, ht, len(snames), len(xlabs)
     fig,ax = plt.subplots(figsize=(wt,ht))
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
