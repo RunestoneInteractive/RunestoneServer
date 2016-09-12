@@ -470,7 +470,7 @@ def _autograde_one_ac(course_name, sid, question, points, deadline):
     score = 0
     id = None
     if most_recent:
-        pct_correct = int(most_recent.act.split(':')[1])
+        pct_correct = float(most_recent.act.split(':')[1])
         if pct_correct == 100:
             score = points
         id = most_recent.id
