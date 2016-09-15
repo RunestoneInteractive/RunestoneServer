@@ -47,7 +47,7 @@ def hsblog():    # Human Subjects Board Log
                              time_taken=int(request.vars.time), timestamp=ts,
                              div_id=div_id)
         except:
-            logger.debug('failed to insert')
+            logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
     if event == 'mChoice' and auth.user:
         # has user already submitted a correct answer for this question?
         if db((db.mchoice_answers.sid == sid) &
