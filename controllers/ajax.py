@@ -50,8 +50,11 @@ def hsblog():    # Human Subjects Board Log
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
                              time_taken=int(request.vars.time), timestamp=ts,
                              div_id=div_id)
-        except:
+        except Exception as e:
             logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
+            logger.debug('correct {} incorrect {} skipped {} time {}'.format(request.vars.correct, request.vars.incorrect, request.vars.skipped, request.vars.time))
+            logger.debug('Error: {}'.format(e.message))
+
     if event == 'mChoice' and auth.user:
         # has user already submitted a correct answer for this question?
         if db((db.mchoice_answers.sid == sid) &
