@@ -1032,7 +1032,6 @@ var match = line.split(/.. \w*:: /);
 
 
     var question = formdata.qcode.value;
-    question = question.replace(/(\r\n|\n|\r)/gm, '%0A');
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
         if (difficulty[i].checked == true) {
