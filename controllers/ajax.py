@@ -377,10 +377,15 @@ def savehighlight():
 def deletehighlight():
     uniqueId = request.vars.uniqueId
 
-    if uniqueId:
-        db(db.user_highlights.id == uniqueId).update(is_active = 0)
-    else:
-        logging.debug('uniqueId is None')
+    if auth.user:
+        try:
+            db(db.user_highlights.id == uniqueId).update(is_active=0)
+        except:
+            logging.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
+            return json.dumps({'success': False, 'message':'invalid id for highlighted text'})
+
+        return json.dumps({"success":True})
+
 
 def gethighlights():
     """
