@@ -561,6 +561,8 @@ def getStudentResults(question):
             currentAnswers = []
 
             for row in res:
+                if ':' not in row.act:
+                    continue  # skip this row
                 answer = row.act.split(':')[1]
 
                 if row.sid == currentSid:
