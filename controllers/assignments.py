@@ -434,7 +434,6 @@ def _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p
         answer = db(query).select(orderby=~db.mchoice_answers.timestamp).first()
 
     score = 0
-    print answer
     if answer and answer.correct:
         score = points
     else:
@@ -513,8 +512,8 @@ def _autograde_one_visited(course_name, sid, question, points, deadline):
         comment = "autograded"
     )
 
-def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None):
-    print "autograding", assignment_id, sid, qname, deadline
+def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None, autograde=None):
+    # print "autograding", assignment_id, sid, qname, deadline, autograde
 
     # if previously manually graded, don't overwrite
     existing = db((db.question_grades.sid == sid) \
@@ -529,13 +528,13 @@ def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=No
     question = db(db.questions.name == qname).select().first()
 
     # dispatch on grading_type; if none specified, can't autograde
-    if question.autograde == 'unittest':
+    if autograde == 'unittest':
         _autograde_one_ac(course_name, sid, question, points, deadline)
-    elif question.autograde == 'first_answer':
+    elif autograde == 'first_answer':
         _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=True)
-    elif question.autograde == 'last_answer':
+    elif autograde == 'last_answer':
         _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=False)
-    elif question.autograde == 'visited':
+    elif autograde == 'visited':
         _autograde_one_visited(course_name, sid, question, points, deadline)
     else:
         # print "skipping; autograde = {}".format(question.autograde)
@@ -555,9 +554,7 @@ def _compute_assignment_total(student, assignment):
              & (db.assignment_questions.assignment_id == assignment.id)
     scores = db(query).select(db.question_grades.score)
     # Sum them up; if threshold, compute total based on threshold
-    print len(scores)
     total = sum([row.score for row in scores])
-    print total
     if assignment.threshold:
         if total >= assignment.threshold:
             score = assignment.points
@@ -619,13 +616,13 @@ def autograde():
         questions = [(row.questions.name, row.assignment_questions.points) for row in questions_query]
     else:
         # get all qids and point values for this assignment
-        questions_query = db((db.assignment_questions.assignment_id == assignment_id) & (db.assignment_questions.question_id == db.questions.id)).select(db.questions.name, db.assignment_questions.points)
-        questions = [(row.questions.name, row.assignment_questions.points) for row in questions_query]
+        questions_query = db((db.assignment_questions.assignment_id == assignment_id) & (db.assignment_questions.question_id == db.questions.id)).select(db.questions.name, db.assignment_questions.points, db.assignment_questions.autograde)
+        questions = [(row.questions.name, row.assignment_questions.points, row.assignment_questions.autograde) for row in questions_query]
 
     count = 0
-    for (qdiv, points) in questions:
+    for (qdiv, points, autograde) in questions:
         for s in sids:
-            _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline)
+            _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline, autograde = autograde)
             count += 1
 
     if not qname:
