@@ -23,6 +23,10 @@ def index():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
+    if not row:
+        session.flash = "You must be registered for a course to access this page"
+        redirect(URL(c="default"))
+
     if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
@@ -553,7 +557,6 @@ order by username;
     final = np.matrix(statmat)
     ht = int(ceil(len(snames)/4.0)+1)
     wt = int(ceil(len(xlabs)/4.0)+1)
-    print "figsize, wt, ht = ", wt, ht, len(snames), len(xlabs)
     fig,ax = plt.subplots(figsize=(wt,ht))
     cmap = colors.ListedColormap(['orange', 'green', 'white'])
 
@@ -1148,12 +1151,20 @@ def gettemplate():
 def createquestion():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
+    tab = request.vars['tab']
+    typeid = db(db.assignment_types.name == tab).select(db.assignment_types.id).first().id
+    assignmentid = int(request.vars['assignmentid'])
+    points = int(request.vars['points'])
+    timed = request.vars['timed']
+
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
 
-        returndict = {request.vars['name']: newqID}
+        assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points, assessment_type=typeid)
+
+        returndict = {request.vars['name']: newqID, 'timed':timed, 'points': points}
 
         return json.dumps(returndict)
     except Exception as ex:
