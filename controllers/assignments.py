@@ -3,6 +3,10 @@ import os
 import shutil
 import sys
 import json
+import logging
+
+logger = logging.getLogger("web2py.root")
+logger.setLevel(logging.DEBUG)
 
 
 # controller for "Progress Page" as well as List/create assignments
@@ -466,7 +470,7 @@ def _autograde_one_ac(course_name, sid, question, points, deadline):
     score = 0
     id = None
     if most_recent:
-        pct_correct = int(most_recent.act.split(':')[1])
+        pct_correct = float(most_recent.act.split(':')[1])
         if pct_correct == 100:
             score = points
         id = most_recent.id
@@ -736,7 +740,13 @@ def problem():
     c = db((db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)).select(orderby = db.code.id).last()
     if 'grade' in request.vars and 'comment' in request.vars:
         # update grade
-        grade = float(request.vars.grade)
+        try:
+            grade = float(request.vars.grade)
+        except:
+            grade = 0.0
+            logger.debug("failed to convert {} to float".format(request.vars.grade))
+            session.flash = "Grade must be a float 0.0 is recorded"
+
         comment = request.vars.comment
         if c:
             c.update_record(grade=grade, comment=comment)

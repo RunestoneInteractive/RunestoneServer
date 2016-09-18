@@ -176,7 +176,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             //ACFactory.createScratchActivecode();
             $('[data-component=activecode]').each(function (index) {
                 if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true});
+                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:true});
                 }
             });
             if (loggedout) {
@@ -993,10 +993,45 @@ function display_write() {
 
 
 function create_question(formdata) {
+
+
+    var activetab;
+    var formativetab = $('#formative').hasClass('clickedtab');
+    var summativetab = $('#summative').hasClass('clickedtab');
+    var externaltab = $('#external').hasClass('clickedtab');
+
+    if (formativetab == true) {
+        activetab = 'formative';
+    }
+    else if (summativetab == true) {
+        activetab = 'summative';
+    }
+
+    else if (externaltab == true) {
+        activetab = 'external';
+    }
+
+    var select = document.getElementById('assignlist');
+    var assignmentid = select.options[select.selectedIndex].value;
+    var assignmentname = select.options[select.selectedIndex].text;
+
     var template = formdata.template.value;
-    var name = formdata.qname.value;
+
+
+    var qcode = formdata.qcode.value;
+    var lines = qcode.split('\n');
+for(var i = 0;i < lines.length;i++){
+    if (lines[i] != "") {
+        var line = lines[i];
+var match = line.split(/.. \w*:: /);
+        var name = match[1];
+        break
+
+    }
+}
+
+
     var question = formdata.qcode.value;
-        question = question.replace(/(\r\n|\n|\r)/gm, '%0A');
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
         if (difficulty[i].checked == true) {
@@ -1006,21 +1041,61 @@ function create_question(formdata) {
     var tags = formdata.qtags.value;
     var chapter = formdata.qchapter.value;
     var isprivate = formdata.isprivate.checked;
-    var sendstring = 'template=' + template + '&name=' + name + '&question=' + question + '&difficulty=' + selectedDifficulty + '&tags=' + tags + '&chapter=' + chapter + '&isprivate=' + isprivate;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/createquestion/?' + sendstring, true);
-    obj.send();
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            iserror = JSON.parse(obj.responseText);
+    var points = formdata.createpoints.value;
+    var timed = formdata.createtimed.checked;
+
+    data = {
+        'template' : template,
+        'name' : name,
+        'question' : question,
+        'difficulty' : selectedDifficulty,
+        'tags' : tags,
+        'chapter' : chapter,
+        'isprivate' : isprivate,
+        'tab' : activetab,
+        'assignmentid' : assignmentid,
+        'points' : points,
+        'timed' : timed
+    }
+    url = '/runestone/admin/createquestion'
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
             if (iserror == 'ERROR') {
                 errortext = document.getElementById('qnameerror');
                 errortext.innerHTML = 'Name is alerady in use. Please try a different name.'
             } else {
                 alert('Question created successfully');
+                var newPoints = iserror['points'];
+                var q_type = activetab;
+                var totalPoints = document.getElementById("totalPoints");
+                totalPoints.innerHTML = 'Total points: ' + newPoints;
+                var tableBody = document.getElementById("tableBody");
+                var row = document.createElement("TR");
+                row.setAttribute("class", q_type);
+                row.setAttribute("id", name);
+                row.style.textAlign = 'center';
+                row.style.border = '1px solid black';
+                tableBody.appendChild(row);
+
+                var qid = document.createElement("TD");
+                qid.style.border = '1px solid black';
+                var qid_data = document.createTextNode(name);
+                qid.appendChild(qid_data);
+                row.appendChild(qid);
+
+                var pts = document.createElement("TD");
+                pts.style.border = '1px solid black';
+                var pts_data = document.createTextNode(points);
+                pts.appendChild(pts_data);
+                row.appendChild(pts);
+
+                var time = document.createElement("TD");
+                time.style.border = '1px solid black';
+                var time_data = document.createTextNode(timed);
+
+                time.appendChild(time_data);
+                row.appendChild(time);
             }
-        }
-    }
+        }, 'json');
 }
 
 
@@ -1031,6 +1106,7 @@ function assignmentInfo() {
     $('#summative').css('background-color', 'gainsboro');
     $('#formative').css('background-color', 'transparent');
     $('#external').css('background-color', 'transparent');
+    $('#rightSection').css('visibility','visible');
 
 
     var obj = new XMLHttpRequest();
