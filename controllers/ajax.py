@@ -589,6 +589,7 @@ def getaggregateresults():
     if not auth.user:
         return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
 
+    is_instructor = verifyInstructorStatus(course,auth.user.id)
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     if course == 'thinkcspy' or course == 'pythonds':
         start_date = datetime.datetime.now() - datetime.timedelta(days=90)
@@ -637,7 +638,7 @@ def getaggregateresults():
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and verifyInstructorStatus(course,auth.user.id):  #auth.has_membership('instructor', auth.user.id):
+    if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 
