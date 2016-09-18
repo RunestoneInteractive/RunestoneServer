@@ -502,6 +502,7 @@ db.define_table('grades',
     Field('auth_user', db.auth_user),
     Field('assignment', db.assignments),
     Field('score', 'double'),
+    Field('manual_total', 'boolean'),
     Field('projected', 'double'),
     migrate='runestone_grades.table',
     )
