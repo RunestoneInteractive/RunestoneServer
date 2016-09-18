@@ -39,6 +39,10 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
+    tt = request.vars.time
+    if not tt:
+        tt = 0
+
     try:
         db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
     except:
@@ -48,7 +52,7 @@ def hsblog():    # Human Subjects Board Log
         try:
             db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
-                             time_taken=int(request.vars.time), timestamp=ts,
+                             time_taken=int(tt), timestamp=ts,
                              div_id=div_id)
         except Exception as e:
             logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
