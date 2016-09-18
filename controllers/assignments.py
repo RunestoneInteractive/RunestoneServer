@@ -541,13 +541,18 @@ def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=No
         pass
 
 def _compute_assignment_total(student, assignment):
+    # return the computed score and the manual score if there is one; if no manual score, save computed score
     # student is a row, containing id and username
     # assignment is a row, containing name and id and points and threshold
+
     # Get all question_grades for this sid/assignment_id
     # Retrieve from question_grades table  with right sids and div_ids
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
-    print(student.id, assignment.id)
+
+    # print(student.id, assignment.id)
+
+    # compute the score
     query =  (db.question_grades.sid == student.username) \
              & (db.question_grades.div_id == db.questions.name) \
              & (db.questions.id == db.assignment_questions.question_id) \
@@ -563,15 +568,91 @@ def _compute_assignment_total(student, assignment):
     else:
         score = total
 
-    # Write the sum to the grades table
-    # grades table expects row ids for auth_user and assignment
-    db.grades.update_or_insert(
-        ((db.grades.auth_user == student.id) &
-         (db.grades.assignment == assignment.id)),
-        auth_user = student.id,
-        assignment = assignment.id,
-        score=score)
+    grade = db(
+        (db.grades.auth_user == student.id) &
+        (db.grades.assignment == assignment.id)).select().first()
 
+    if grade and grade.manual_total:
+        # don't save it; return the calculated and the previous manual score
+        return score, grade.score
+    else:
+        # Write the score to the grades table
+        db.grades.update_or_insert(
+            ((db.grades.auth_user == student.id) &
+             (db.grades.assignment == assignment.id)),
+            auth_user = student.id,
+            assignment = assignment.id,
+            score=score)
+        return score, None
+
+def _get_students(course_id, sid = None):
+    if sid:
+        # sid which is passed in is a username, not a row id
+        student_rows = db((db.user_courses.course_id == course_id) &
+                          (db.user_courses.user_id == db.auth_user.id) &
+                          (db.auth_user.username == sid)
+                          ).select(db.auth_user.username, db.auth_user.id)
+    else:
+        # get all student usernames for this course
+        student_rows = db((db.user_courses.course_id == course_id) &
+                          (db.user_courses.user_id == db.auth_user.id)
+                          ).select(db.auth_user.username, db.auth_user.id)
+    return student_rows
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def record_assignment_score():
+    score = request.vars.get('score', None)
+    assignment_name = request.vars.assignment
+    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        assignment_id = assignment.id
+    else:
+        return json.dumps({'success':False, 'message':"Select an assignment before trying to calculate totals."})
+
+    if score:
+        # Write the score to the grades table
+        # grades table expects row ids for auth_user and assignment
+        sname = request.vars.get('sid', None)
+        sid = db((db.auth_user.username == sname)).select(db.auth_user.id).first().id
+        db.grades.update_or_insert(
+            ((db.grades.auth_user == sid) &
+            (db.grades.assignment == assignment_id)),
+            auth_user = sid,
+            assignment = assignment_id,
+            score=score,
+            manual_total=True
+        )
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def calculate_totals():
+    assignment_name = request.vars.assignment
+    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        assignment_id = assignment.id
+    else:
+        return json.dumps({'success':False, 'message':"Select an assignment before trying to calculate totals."})
+
+    sid = request.vars.get('sid', None)
+
+    student_rows = _get_students(auth.user.course_id, sid)
+
+    results = {'success':True}
+    if sid:
+        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment)
+        results['message'] = "Total for {} is {}".format(sid, computed_total)
+        results['computed_score'] = computed_total
+        results['manual_score'] = manual_score
+    else:
+        # compute total score for the assignment for each sid; also saves in DB unless manual value saved
+        scores = [_compute_assignment_total(student, assignment)[0] for student in student_rows]
+        results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
+            len(scores),
+            max(scores),
+            min(scores),
+            sum(scores)/float(len(scores))
+        )
+
+    return json.dumps(results)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
@@ -593,27 +674,17 @@ def autograde():
         deadline = assignment.duedate
     else:
         deadline = None
-    if sid:
-        # sid which is passed in is a username, not a row id
-        student_rows = db((db.user_courses.course_id == auth.user.course_id) &
-                          (db.user_courses.user_id == db.auth_user.id) &
-                          (db.auth_user.username == sid)
-                          ).select(db.auth_user.username, db.auth_user.id)
-        sids = [row.username for row in student_rows]
-    else:
-        # get all student usernames for this course
-        student_rows = db((db.user_courses.course_id == auth.user.course_id) &
-                          (db.user_courses.user_id == db.auth_user.id)
-                          ).select(db.auth_user.username, db.auth_user.id)
-        sids = [row.username for row in student_rows]
+
+    student_rows = _get_students(auth.user.course_id, sid)
+    sids = [row.username for row in student_rows]
 
     if qname:
         questions_query = db(
             (db.assignment_questions.assignment_id == assignment_id) &
             (db.assignment_questions.question_id == db.questions.id) &
             (db.questions.name == qname)
-            ).select(db.questions.name, db.assignment_questions.points)
-        questions = [(row.questions.name, row.assignment_questions.points) for row in questions_query]
+            ).select(db.questions.name, db.assignment_questions.points, db.assignment_questions.autograde)
+        questions = [(row.questions.name, row.assignment_questions.points, row.assignment_questions.autograde) for row in questions_query]
     else:
         # get all qids and point values for this assignment
         questions_query = db((db.assignment_questions.assignment_id == assignment_id) & (db.assignment_questions.question_id == db.questions.id)).select(db.questions.name, db.assignment_questions.points, db.assignment_questions.autograde)
@@ -625,12 +696,10 @@ def autograde():
             _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline, autograde = autograde)
             count += 1
 
-    if not qname:
-        # compute total score for the assignment for each sid
-        for student in student_rows:
-            _compute_assignment_total(student, assignment)
-
     return json.dumps({'message': "autograded {} items".format(count)})
+
+
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():

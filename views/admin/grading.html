@@ -20,12 +20,9 @@
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
-  eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
-  $('#autogradingform').submit(function (event) {
-    event.preventDefault();
-    autoGrade();
-    return false;
-});
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+  eBookConfig.setTotalURL = '{{=setTotalURL}}';
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
@@ -79,6 +76,21 @@
                     </form>
             </div>
 
+            <div id="calculateTotalsForm" style="text-align: center; visibility: hidden;">
+                    <form>
+                        <input type = "submit" value = "Calculate Totals" />
+                    </form>
+            </div>
+
+            <div id="assignmentTotalform" style="text-align: center; visibility: hidden;">
+                    <form>
+                        <label for="computed-total-score">computed score</label>
+                        <input id="computed-total-score" type="text" class="form-control" value= ""/>
+                        <label for="manual-total-score">manual score</label>
+                        <input id="manual-total-score" type="text" class="form-control" value= ""/>
+                        <input type="submit" value="Save Manual Total" />
+                    </form>
+             </div>
 
             <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="release_grades();">Release Grades</button>
 
@@ -109,7 +121,6 @@
 
 
 
-
 </div>
 
 <script>
@@ -125,6 +136,17 @@
         autoGrade();
         return false;
     });
+    $('#calculateTotalsForm').submit(function (event) {
+        event.preventDefault();
+        calculateTotals();
+        return false;
+    });
+    $('#assignmentTotalform').submit(function (event) {
+        event.preventDefault();
+        saveManualTotal();
+        return false;
+    });
+
 </script>
 
 
