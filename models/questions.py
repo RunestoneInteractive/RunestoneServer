@@ -15,10 +15,10 @@ db.define_table('questions',
 
 # In SQL we can manually add the constraint
 # alter table questions add constraint name_bc_unique UNIQUE(name, base_course);
-try:
-    db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
-except:
-    pass
+# try:
+#     db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
+# except:
+#     pass
 
 db.define_table('tags',
                 Field('tag_name', type='string', unique=True),
@@ -34,6 +34,7 @@ db.define_table('assignment_questions',
                 Field('question_id', db.questions),
                 Field('points', type='integer'),
                 Field('timed', type='boolean'),
+                Field('autograde', type='string'),
                 Field('assessment_type', db.assignment_types,
                       requires=IS_EMPTY_OR(IS_IN_DB(db, 'assignment_types.id', '%(name)s'))),
                 migrate='runestone_assignment_questions.table')
