@@ -277,7 +277,7 @@ class UserLogCategorizer(object):
             return "{0} {1}".format("Attempted Parsons", div_id)
         elif (event == 'mChoice') | (event == 'fillb'):
             answer = action.split(':')
-            if answer[2] == 'correct':
+            if action.count(':') == 2 and answer[2] == 'correct':
                 return "{0} {1}".format("Solved", div_id)
             return "{0} {1}".format("Attempted", div_id)
         return "{0} {1}".format(event, div_id)

@@ -20,13 +20,19 @@
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
+  $('#autogradingform').submit(function (event) {
+    event.preventDefault();
+    autoGrade();
+    return false;
+});
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
 
 
 
-     <select onchange="showColumn1();" id="gradingoption1" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+     <select required onchange="showColumn1();" id="gradingoption1" style="margin-bottom: 10px; margin-right: 5px; width:30%">
             <option value="" disabled selected>Select your option</option>
             <option value="student">student</option>
             <option value="chapter">chapter</option>
@@ -36,7 +42,7 @@
 
 
 
-        <select onchange="showColumn2();" id="gradingoption2" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+        <select required onchange="showColumn2();" id="gradingoption2" style="margin-bottom: 10px; margin-right: 5px; width:30%">
             <option  value="" disabled selected>Select your option</option>
             <option  value="question">question</option>
             <option value="chapter">chapter</option>
@@ -46,7 +52,7 @@
 
 
 
-        <select onchange="showColumn3();" id="gradingoption3" style="margin-bottom: 10px; margin-right: 5px; width:30%">
+        <select required onchange="showColumn3();" id="gradingoption3" style="margin-bottom: 10px; margin-right: 5px; width:30%">
             <option value="" disabled selected>Select your option</option>
             <option value="student">student</option>
             <option value="question">question</option>
@@ -68,7 +74,8 @@
                     <form>
                         <input id = "enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline"  class="list-group-item"  checked>Only check work submitted before assignment deadline<br>
                         <input type = "submit" value = "Autograde" />
-                        <!--<button id="autogradebutton"  class="list-group-item" onclick="autoGrade();">Autograde</button>-->
+                        <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
+
                     </form>
             </div>
 
@@ -102,6 +109,7 @@
 
 
 
+
 </div>
 
 <script>
@@ -112,6 +120,11 @@
     chapters = JSON.parse(chapters);
     var students = '{{=students}}';
     var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g,'"');
+    $('#autogradingform').submit(function (event) {
+        event.preventDefault();
+        autoGrade();
+        return false;
+    });
 </script>
 
 

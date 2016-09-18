@@ -9,7 +9,7 @@ import datetime
 
 ## if SSL/HTTPS is properly configured and you want all HTTP requests to
 ## be redirected to HTTPS, uncomment the line below:
-# request.requires_https()
+# request.requires_htps()
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
@@ -129,10 +129,10 @@ class IS_COURSE_ID:
         return (value, self.e)
 
 class HAS_NO_DOTS:
-    def __init__(self, error_message='Your username may not contain a . or \' or space or any other special characters just letters and numbers'):
+    def __init__(self, error_message='Your username may not contain a \' or space or any other special characters just letters and numbers'):
         self.e = error_message
     def __call__(self, value):
-        if "." not in value and "'" not in value and " " not in value:
+        if "'" not in value and " " not in value:
             return (value, None)
         return (value, self.e)
     def formatter(self, value):
