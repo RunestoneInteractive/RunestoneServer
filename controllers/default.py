@@ -125,7 +125,7 @@ def call(): return service()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    if 'boguscourse' in course.course_name:
+    if not course or 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
