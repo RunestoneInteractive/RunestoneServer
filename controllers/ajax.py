@@ -137,7 +137,7 @@ def runlog():    # Log errors and runs with code
                                  code=pre+code+post,
                                  emessage=error_info)
     #lintAfterSave(dbid, code, div_id, sid)
-    if 'to_save' in request.vars and request.vars.to_save == "True":
+    if 'to_save' in request.vars and request.vars.to_save == "True" or request.vars.to_save == "true":
         db.code.insert(sid=sid,
             acid=div_id,
             code=code,
