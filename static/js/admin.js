@@ -30,7 +30,7 @@ function gradeIndividualItem() {
         if (s_column.selectedIndex != -1) {
             //make sure they've selected a student from column 1
            var student = s_column.options[s_column.selectedIndex].value;
-            var student_dict = JSON.parse(students);
+            var student_dict = students;
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
                     var sid = key;
@@ -51,7 +51,7 @@ function gradeIndividualItem() {
         if (q_column.selectedIndex != -1) {
             //make sure they've selected a question from column 1
             var question = q_column.options[q_column.selectedIndex].value;
-            var student_dict = JSON.parse(students);
+            var student_dict = students;
             for (var key in student_dict) {
                 if (student_dict[key] == val) {
                     var sid = key;
@@ -102,7 +102,7 @@ function getSelectedItem(type){
     if (type == "student"){
         if (col.selectedIndex != -1) {
             // they've selected an item; get the id associated with it
-            id_diction = JSON.parse(students)
+            id_diction = students
             var item = col.options[col.selectedIndex].value;
             for (var key in id_diction) {
                 // one of these should match, since an item was selected!
@@ -526,8 +526,8 @@ function pickedStudents(column) {
 
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
-    students = students.replace(/&#x27;/g, '"');
-    var studentslist = JSON.parse(students);
+    // students = students.replace(/&#x27;/g, '"');
+    var studentslist = students;
     var keys = [];
     var i;
     for (i in studentslist) {
@@ -881,6 +881,18 @@ function showColumn3() {
 
 }
 
+function getCourseStudents(){
+    jQuery.ajax({
+        url: eBookConfig.getCourseStudentsURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {},
+        success: function (retdata) {
+            students = retdata;
+        }
+    });
+}
+
 
 function getStudents(sectionName) {
     var section = sectionName;
@@ -894,7 +906,7 @@ function getStudents(sectionName) {
     obj.onreadystatechange = function () {
 
         if (obj.readyState == 4 && obj.status == 200) {
-            students = JSON.parse(obj.responseText);
+            var students = JSON.parse(obj.responseText);
             for (i = 0; i < students.length; i++) {
                 studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + students[i][0] + " " + students[i][1] + '</h4> </a>';
 
@@ -911,6 +923,8 @@ function getStudents(sectionName) {
         }
     }
 }
+
+
 
 function getLog() {
 
