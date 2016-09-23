@@ -720,11 +720,12 @@ def getSphinxBuildStatus():
         if row['status'] in ['QUEUED', 'ASSIGNED','RUNNING', 'COMPLETED']:
             results['status'] = row['status']
         else:  # task failed
-            results['status'] = 'failed'
+            results['status'] = row['status']
             tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
             results['traceback']=tb
     else:
         results['status'] = 'failed'
+        results['info'] = 'no row'
     return json.dumps(results)
 
 def getassignmentgrade():
@@ -734,35 +735,67 @@ def getassignmentgrade():
 
     divid = request.vars.div_id
 
-    result = db(
-        (db.code.sid == auth.user.username) &
-        (db.code.acid == db.problems.acid) &
-        (db.problems.assignment == db.assignments.id) &
-        (db.assignments.released == True) &
-        (db.code.acid == divid)
-        ).select(
-            db.code.grade,
-            db.code.comment,
-            orderby=~db.code.timestamp
-        ).first()
-
     ret = {
         'grade':"Not graded yet",
         'comment': "No Comments",
         'avg': 'None',
         'count': 'None',
     }
+
+    # check that the assignment is released
+    #
+    a_q = db(
+        (db.assignments.released == True) &
+        (db.assignments.course == auth.user.course_id) &
+        (db.assignment_questions.assignment_id == db.assignments.id) &
+        (db.assignment_questions.question_id == db.questions.id) &
+        (db.questions.name == divid)
+    ).select(db.assignments.released, db.assignments.id, db.assignment_questions.points).first()
+    print a_q
+    if not a_q:
+        return json.dumps([ret])
+    # try new way that we store scores and comments
+
+    # divid is a question; find question_grades row
+    result = db(
+        (db.question_grades.sid == auth.user.username) &
+        (db.question_grades.course_name == auth.user.course_name) &
+        (db.question_grades.div_id == divid)
+    ).select(db.question_grades.score, db.question_grades.comment).first()
+    print result
     if result:
-        ret['grade'] = result.grade
+        # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
+        ret['version'] = 2
+        ret['grade'] = result.score
+        ret['max'] = a_q.assignment_questions.points
         if result.comment:
             ret['comment'] = result.comment
 
-        query = '''select avg(grade), count(grade)
-                   from code where acid='%s';''' % (divid)
+    else:
+        # fall back on old way; eventually will deprecate this
+        result = db(
+            (db.code.sid == auth.user.username) &
+            (db.code.acid == db.problems.acid) &
+            (db.problems.assignment == db.assignments.id) &
+            (db.assignments.released == True) &
+            (db.code.acid == divid)
+            ).select(
+                db.code.grade,
+                db.code.comment,
+                orderby=~db.code.timestamp
+            ).first()
 
-        rows = db.executesql(query)
-        ret['avg'] = rows[0][0]
-        ret['count'] = rows[0][1]
+        if result:
+            ret['grade'] = result.grade
+            if result.comment:
+                ret['comment'] = result.comment
+
+            query = '''select avg(grade), count(grade)
+                       from code where acid='%s';''' % (divid)
+
+            rows = db.executesql(query)
+            ret['avg'] = rows[0][0]
+            ret['count'] = rows[0][1]
 
     return json.dumps([ret])
 

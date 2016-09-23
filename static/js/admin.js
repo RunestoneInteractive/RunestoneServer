@@ -152,11 +152,61 @@ function autoGrade(){
             enforceDeadline: enforceDeadline
         },
         success: function (retdata) {
+            $('#assignmentTotalform').css('visibility', 'hidden');
             alert(retdata.message);
         }
     });
-
 }
+
+function calculateTotals(){
+    var assignment = getSelectedItem("assignment")
+    var question = getSelectedItem("question")
+    var studentID = getSelectedItem("student")
+    $('#assignmentTotalform').css('visibility', 'hidden');
+    jQuery.ajax({
+        url: eBookConfig.calcTotalsURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+            question: question,
+            sid: studentID
+        },
+        success: function (retdata) {
+            if (retdata.computed_score != null) {
+                // show the form for setting it manually
+                $('#assignmentTotalform').css('visibility', 'visible');
+                // populate it with data from retdata
+                $('#computed-total-score').val(retdata.computed_score);
+                $('#manual-total-score').val(retdata.manual_score);
+            }
+            else{
+                alert(retdata.message);
+            }
+        }
+    });
+}
+
+function saveManualTotal(){
+    var assignment = getSelectedItem("assignment")
+    var studentID = getSelectedItem("student")
+    jQuery.ajax({
+        url: eBookConfig.setTotalURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+            sid: studentID,
+            score: $('#manual-total-score').val(),
+        },
+        success: function (retdata) {
+            if (!retdata.success){
+                alert(retdata.message);
+            }
+        }
+    });
+}
+
 
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
@@ -446,6 +496,7 @@ function pickedAssignments(column) {
        release_button = document.getElementById("releasebutton");
     release_button.style.visibility = 'visible';
     autograde_form.style.visibility = 'visible';
+    calc_totals_form.style.visibility = 'visible';
 
     for (i in assignments) {
         var option = document.createElement("option");
@@ -536,7 +587,8 @@ function showColumn1() {
     release_button.style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-
+    calc_totals_form = document.getElementById("calculateTotalsForm");
+    calc_totals_form.style.visibility = 'hidden';
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
