@@ -125,7 +125,7 @@ def call(): return service()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    if 'boguscourse' in course.course_name:
+    if not course or 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
@@ -245,12 +245,14 @@ def remove():
 def coursechooser():
     res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
 
-    db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
-    db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
-    auth.user.update(course_name=request.args[0])
-    auth.user.update(course_id=res[0].id)
-
-    redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+    if len(res) > 0:
+        db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
+        db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
+        auth.user.update(course_name=request.args[0])
+        auth.user.update(course_id=res[0].id)
+        redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+    else:
+        redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
 
 @auth.requires_login()
 def removecourse():

@@ -7,7 +7,7 @@ from operator import itemgetter
 from paver.easy import sh
 
 logger = logging.getLogger("web2py.root")
-logger.setLevel(logger.debug)
+logger.setLevel(logging.DEBUG)
 
 
 # this is for admin links

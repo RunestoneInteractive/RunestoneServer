@@ -39,6 +39,10 @@ def hsblog():    # Human Subjects Board Log
     event = request.vars.event
     course = request.vars.course
     ts = datetime.datetime.now()
+    tt = request.vars.time
+    if not tt:
+        tt = 0
+
     try:
         db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
     except:
@@ -48,7 +52,7 @@ def hsblog():    # Human Subjects Board Log
         try:
             db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
-                             time_taken=int(request.vars.time), timestamp=ts,
+                             time_taken=int(tt), timestamp=ts,
                              div_id=div_id)
         except Exception as e:
             logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
@@ -133,14 +137,15 @@ def runlog():    # Log errors and runs with code
                                  code=pre+code+post,
                                  emessage=error_info)
     #lintAfterSave(dbid, code, div_id, sid)
-    if 'to_save' in request.vars and request.vars.to_save == "True":
-        db.code.insert(sid=sid,
-            acid=div_id,
-            code=code,
-            emessage=error_info,
-            timestamp=ts,
-            course_id=course,
-            language=request.vars.lang)
+    if auth.user:
+        if 'to_save' in request.vars and (request.vars.to_save == "True" or request.vars.to_save == "true"):
+            db.code.insert(sid=sid,
+                acid=div_id,
+                code=code,
+                emessage=error_info,
+                timestamp=ts,
+                course_id=course,
+                language=request.vars.lang)
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
@@ -376,10 +381,15 @@ def savehighlight():
 def deletehighlight():
     uniqueId = request.vars.uniqueId
 
-    if uniqueId:
-        db(db.user_highlights.id == uniqueId).update(is_active = 0)
-    else:
-        logging.debug('uniqueId is None')
+    if auth.user:
+        try:
+            db(db.user_highlights.id == uniqueId).update(is_active=0)
+        except:
+            logging.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
+            return json.dumps({'success': False, 'message':'invalid id for highlighted text'})
+
+        return json.dumps({"success":True})
+
 
 def gethighlights():
     """
@@ -560,6 +570,8 @@ def getStudentResults(question):
             currentAnswers = []
 
             for row in res:
+                if ':' not in row.act:
+                    continue  # skip this row
                 answer = row.act.split(':')[1]
 
                 if row.sid == currentSid:
@@ -586,6 +598,7 @@ def getaggregateresults():
     if not auth.user:
         return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
 
+    is_instructor = verifyInstructorStatus(course,auth.user.id)
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     if course == 'thinkcspy' or course == 'pythonds':
         start_date = datetime.datetime.now() - datetime.timedelta(days=90)
@@ -634,7 +647,7 @@ def getaggregateresults():
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and verifyInstructorStatus(course,auth.user.id):  #auth.has_membership('instructor', auth.user.id):
+    if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
         resultList = getStudentResults(question)
         returnDict['reslist'] = resultList
 

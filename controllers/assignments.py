@@ -761,8 +761,12 @@ def get_problem():
 
     # get the deadline associated with the assignment
     assignment_name = request.vars.assignment
-    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    deadline = assignment.duedate
+    if assignment_name and auth.user.course_id:
+        assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+        deadline = assignment.duedate
+    else:
+        deadline = None
+
     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
