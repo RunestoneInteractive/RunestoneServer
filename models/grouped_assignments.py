@@ -430,7 +430,11 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
             (db.assignment_questions.question_id == db.questions.id) &
             (db.assignment_questions.assignment_id == assignment.id)
         ).select(
-            db.question_grades.ALL
+            db.question_grades.score,
+            db.question_grades.comment,
+            db.question_grades.div_id,
+            db.assignment_questions.points,
+            orderby = db.assignment_questions.id
         )
         scores = [score(
             points = g.score,

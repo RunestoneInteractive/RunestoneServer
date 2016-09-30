@@ -1225,7 +1225,11 @@ def questions2rst():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
-    htmlsrc = db(db.questions.name == acid).select(db.questions.htmlsrc).first().htmlsrc
+    htmlsrc = db(
+        (db.questions.name == acid) &
+        (db.questions.base_course == db.courses.base_course) &
+        (db.courses.course_name == auth.user.course_name)
+         ).select(db.questions.htmlsrc).first().htmlsrc
     return json.dumps(htmlsrc)
 
 
