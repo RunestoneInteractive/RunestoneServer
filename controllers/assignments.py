@@ -755,10 +755,6 @@ def get_problem():
         'code': ""
     }
 
-    # get code from last timestamped record
-    # null timestamps come out at the end, so the one we want could be in the middle, whether we sort in reverse order or regular; ugh
-    # solution: the last one by id order should be the last timestamped one, as we only create ones without timestamp during grading, and then only if there is no existing record
-
     # get the deadline associated with the assignment
     assignment_name = request.vars.assignment
     if assignment_name and auth.user.course_id:
@@ -767,7 +763,7 @@ def get_problem():
     else:
         deadline = None
 
-    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid)
+    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_name)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
     c = db(query).select(orderby = db.code.id).last()
