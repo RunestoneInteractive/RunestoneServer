@@ -421,8 +421,10 @@ function updateColumn2() {
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
         var assignments = JSON.parse(assignmentinfo);
-        for (i = 0; i < assignments[selectedval].length; i++) {
-            var q = assignments[selectedval][i];
+        var assignment_names = assignments[selectedval];
+        assignment_names.sort()
+        for (i = 0; i < assignment_names.length; i++) {
+            var q = assignment_names[i];
             var option = document.createElement("option");
             option.text = q;
             option.value = q;
@@ -498,15 +500,18 @@ function pickedAssignments(column) {
     autograde_form.style.visibility = 'visible';
     calc_totals_form.style.visibility = 'visible';
 
-    for (i in assignments) {
+    var keys = Object.keys(assignments);
+    keys.sort();
+    for (var i=0; i<keys.length; i++){
         var option = document.createElement("option");
-        option.text = i;
-        option.value = i;
+        var key = keys[i];
+        option.text = key;
+        option.value = key;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
     }
-
 }
+
 
 function displayDefaultQuestion(column) {
     var pickedcolumn = document.getElementById(column);
@@ -559,6 +564,7 @@ function pickedChapters(column) {
             keys.push(i);
         }
     }
+
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
         var option = document.createElement("option");
