@@ -19,10 +19,13 @@
 
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
-  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
   eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
   eBookConfig.setTotalURL = '{{=setTotalURL}}';
+  eBookConfig.getCourseStudentsURL = '{{=getCourseStudentsURL}}';
+  // load the students dictionary once the page loads
+  $(getCourseStudents)
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
@@ -129,7 +132,7 @@
     var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g,'"');
     var chapters = "{{=chapters}}".replace(/&#x27;/g,'"');
     chapters = JSON.parse(chapters);
-    var students = '{{=students}}';
+    var students = null;
     var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g,'"');
     $('#autogradingform').submit(function (event) {
         event.preventDefault();

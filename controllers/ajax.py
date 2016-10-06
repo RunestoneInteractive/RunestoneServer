@@ -219,24 +219,23 @@ def gethist():
     """
     codetbl = db.code
     acid = request.vars.acid
-    sid = request.vars.sid
 
-    if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None))
+    if request.vars.sid:
+        sid = request.vars.sid
+    elif auth.user.username:
+        sid = auth.user.username
     else:
-        if auth.user:
-            query = ((codetbl.sid == auth.user.username) & (codetbl.acid == acid) & (codetbl.timestamp != None))
-        else:
-            query = None
+        sid = None
+
+    course_name = auth.user.course_name
 
     res = {}
-    if query:
-        result = db(query)
+    if sid:
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.course_id == course_name) & (codetbl.timestamp != None))
         res['acid'] = acid
-        if sid:
-            res['sid'] = sid
+        res['sid'] = sid
         # get the code they saved in chronological order; id order gets that for us
-        r = result.select(orderby=codetbl.id)
+        r = db(query).select(orderby=codetbl.id)
         res['history'] = [row.code for row in r]
         res['timestamps'] = [row.timestamp.isoformat() for row in r]
 

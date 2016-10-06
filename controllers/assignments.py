@@ -42,6 +42,15 @@ def index():
         )
 
     assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
+    if '506' in auth.user.course_name:
+        types_to_use = ['Lecture Prep', 'problem_set', 'reading_response']
+    elif '106' in auth.user.course_name:
+        types_to_use = ['Lecture Prep', 'lecture_waiver', 'lecture_attendance', 'problem_set', 'reading_response']
+    else:
+        types_to_use == 'all'
+
+    if types_to_use != 'all':
+        assignment_types = [a_t for a_t in assignment_types if a_t.name in types_to_use]
     grade = CourseGrade(user = student, course=course, assignment_types = assignment_types)
     last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
 

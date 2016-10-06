@@ -53,7 +53,7 @@
                               {{ preclass_time = row.db_row.time(user=student, preclass=True)}}
                               <p>You spent {{= "%.1f" % (time/60.0)}} minutes on these activities, {{= "%.1f" % (preclass_time/60.0)}} minutes before the class.</p>
                               <p>You completed {{=len(completed_problems)}} activities, {{=len(preclass_completed_problems)}} before the class.</p>
-                              <p>You needed 20 minutes or {{=row.db_row.threshold}} activities before the class to get credit for the assignment, except for the first few sessions when we accepted later participation.</p>
+                              <p>You needed {{=row.db_row.threshold}} activities before the class session to get credit for the assignment.</p>
                               {{ pass }}
                            <ul class="list-group">
                               {{for problem in problems:}}
