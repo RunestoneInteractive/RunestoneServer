@@ -162,10 +162,11 @@ db.define_table('assignments',
     )
 
 class score(object):
-    def __init__(self, acid=None, points=0, comment="", user=None):
+    def __init__(self, acid=None, points=0, max_points = 0, comment="", user=None):
         self.acid = acid
         self.user = user
         self.points = points
+        self.max_points = max_points
         if type(self.points) not in [float, int]:
             # would be nice to flag error here
             self.points = 0 
