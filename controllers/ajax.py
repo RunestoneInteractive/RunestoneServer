@@ -227,11 +227,11 @@ def gethist():
     else:
         sid = None
 
-    course_name = auth.user.course_name
+    course_id = auth.user.course_id
 
     res = {}
     if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.course_id == course_name) & (codetbl.timestamp != None))
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.course_id == course_id) & (codetbl.timestamp != None))
         res['acid'] = acid
         res['sid'] = sid
         # get the code they saved in chronological order; id order gets that for us
