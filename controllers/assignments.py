@@ -657,8 +657,8 @@ def calculate_totals():
         zipped = zip(student_rows, scores)
         over_max = ["{} {}: {}".format(z[0].first_name, z[0].last_name, z[1]) for z in zipped if z[1] > assignment.points]
         results['message'] = "Calculated totals for {} students\n\tpossible: {}\n\tmax: {}\n\tmin: {}\n\tmean: {}\n\tover max {}".format(
-            assignment.points,
             len(scores),
+            assignment.points,
             max(scores),
             min(scores),
             sum(scores)/float(len(scores)),
@@ -682,7 +682,7 @@ def autograde():
     qname = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
 
-    if enforce_deadline:
+    if enforce_deadline != "false":
         # get the deadline associated with the assignment
         deadline = assignment.duedate
     else:
