@@ -396,74 +396,42 @@ def assignment_get_scores(assignment, problem=None, user=None, section_id=None, 
         pass
     elif problem:
         # get grades for this acid for all users
-        grades = db(
-            (db.question_grades.course_name == auth.user.course_name) &
-            (db.question_grades.div_id == problem)).select(
-            db.question_grades.ALL
-        )
-        scores = [score(
-            points = g.score,
-            comment = g.comment,
-            acid = problem,
-            user = auth.user.id
-        ) for g in grades]
-        # grades = db(db.code.sid == db.auth_user.username)(db.code.acid == problem).select(
-        #     db.code.ALL,
-        #     db.auth_user.ALL,
-        #     orderby= db.code.sid | db.code.id
-        #     )
-        # # keep only last grade for each user (for this problem)
-        # last_grades = extract_last_grades(grades, lambda g: g. auth_user.id)
-        # for g in last_grades:
-        #     scores.append(score(
-        #         points=g.code.grade,
-        #         comment= g.code.comment,
-        #         acid=problem,
-        #         user=g.auth_user,
-        #         ))
+        grades = db(db.code.sid == db.auth_user.username)(db.code.acid == problem).select(
+            db.code.ALL,
+            db.auth_user.ALL,
+            orderby= db.code.sid | db.code.id
+            )
+        # keep only last grade for each user (for this problem)
+        last_grades = extract_last_grades(grades, lambda g: g. auth_user.id)
+        for g in last_grades:
+            scores.append(score(
+                points=g.code.grade,
+                comment= g.code.comment,
+                acid=problem,
+                user=g.auth_user,
+                ))
     elif user:
         # get grades for individual components of this assignment
-        grades = db(
-            (db.question_grades.course_name == auth.user.course_name) &
-            (db.question_grades.sid == user.username) &
-            (db.question_grades.div_id == db.questions.name) &
-            (db.assignment_questions.question_id == db.questions.id) &
-            (db.assignment_questions.assignment_id == assignment.id)
-        ).select(
-            db.question_grades.score,
-            db.question_grades.comment,
-            db.question_grades.div_id,
-            db.assignment_questions.points,
-            orderby = db.assignment_questions.id
-        )
-        scores = [score(
-            points = g.score,
-            comment = g.comment,
-            acid = g.div_id,
-            user = auth.user.id
-        ) for g in grades]
-        #
-        #
-        # q = db(db.problems.acid == db.code.acid)
-        # q = q(db.problems.assignment == assignment.id)
-        # q = q(db.code.sid == user.username)
-        # grades = q.select(
-        #    db.code.acid,
-        #    db.code.grade,
-        #    db.code.comment,
-        #    db.code.timestamp,
-        #    orderby = db.code.acid | db.code.id
-        #    )
-        # # keep only last grade for each problem (for this user)
-        # last_grades = extract_last_grades(grades, lambda g: g.acid)
-        # for g in last_grades:
-        #     scores.append(
-        #         score(
-        #            points=g.grade,
-        #            comment=g.comment,
-        #            acid=g.acid,
-        #            user=user
-        #         ))
+        q = db(db.problems.acid == db.code.acid)
+        q = q(db.problems.assignment == assignment.id)
+        q = q(db.code.sid == user.username)
+        grades = q.select(
+           db.code.acid,
+           db.code.grade,
+           db.code.comment,
+           db.code.timestamp,
+           orderby = db.code.acid | db.code.id
+           )
+        # keep only last grade for each problem (for this user)
+        last_grades = extract_last_grades(grades, lambda g: g.acid)
+        for g in last_grades:
+            scores.append(
+                score(
+                   points=g.grade,
+                   comment=g.comment,
+                   acid=g.acid,
+                   user=user
+                ))
     else:
         # for all users: grades for all assignments, not for individual problems
         grades = db(db.grades.assignment == assignment.id).select(db.grades.ALL)
