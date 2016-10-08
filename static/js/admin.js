@@ -226,7 +226,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             //ACFactory.createScratchActivecode();
             $('[data-component=activecode]').each(function (index) {
                 if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:True});
+                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:true});
                 }
             });
             if (loggedout) {
