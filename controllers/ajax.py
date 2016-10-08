@@ -144,7 +144,7 @@ def runlog():    # Log errors and runs with code
                 code=code,
                 emessage=error_info,
                 timestamp=ts,
-                course_id=course,
+                course_id=auth.user.course_id,
                 language=request.vars.lang)
 
     response.headers['content-type'] = 'application/json'

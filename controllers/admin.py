@@ -95,7 +95,7 @@ def listassignments():
     course = db(db.courses.id == auth.user.course_id).select().first()
     if sid:
         q = db((db.code.sid == sid)
-             & (db.code.course_id == course.course_name)
+             & (db.code.course_id == course.id)
              & (db.code.timestamp >= course.term_start_date))
     else:
         q = db((db.code.course_id == auth.user.course_id)
