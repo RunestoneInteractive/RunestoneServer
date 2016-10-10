@@ -222,7 +222,7 @@ def gethist():
 
     if request.vars.sid:
         sid = request.vars.sid
-        course_id = db(db.auth_user.username == sid).select(db.auth_user.course_id).first()
+        course_id = db(db.auth_user.username == sid).select(db.auth_user.course_id).first().course_id
     elif auth.user:
         sid = auth.user.username
         course_id = auth.user.course_id
