@@ -308,7 +308,9 @@ def sendreport():
     coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
     pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
     details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
-    userinfo = request.vars['username'] + ' ' + request.vars['useremail']
+    uname = request.vars['username'] if request.vars['username'] else "anonymous"
+    uemail = request.vars['useremail'] if request.vars['useremail'] else "no_email"
+    userinfo =  uname + ' ' + uemail
 
     body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],
