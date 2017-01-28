@@ -294,6 +294,9 @@ def reportabug():
 def sendreport():
     # settings.github_token should be set to a valid Github access token
     # that has full repo access in models/1.py
+    if request.vars['nospam'] != '42':
+        session.flash = 'Report rejected you are not human'
+        redirect('/%s/default/' % request.application)
 
     if request.vars['bookerror'] == 'on':
         basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
