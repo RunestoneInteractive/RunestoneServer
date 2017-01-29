@@ -268,6 +268,7 @@ def removecourse():
 
     redirect('/%s/default/courses' % request.application)
 
+@auth.requires_login()
 def reportabug():
     path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
@@ -291,6 +292,7 @@ def reportabug():
         course = auth.user.course_name
     return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
 
+@auth.requires_login()
 def sendreport():
     # settings.github_token should be set to a valid Github access token
     # that has full repo access in models/1.py
