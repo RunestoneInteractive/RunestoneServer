@@ -268,7 +268,7 @@ def removecourse():
 
     redirect('/%s/default/courses' % request.application)
 
-@auth.requires_login()
+
 def reportabug():
     path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
@@ -278,6 +278,8 @@ def reportabug():
     code = None
     ticket = None
     pagerequest = None
+    registered_user = False
+
     if request.vars.code:
         code = request.vars.code
         ticket = request.vars.ticket.split('/')[1]
@@ -290,7 +292,9 @@ def reportabug():
         username = auth.user.username
         email = auth.user.email
         course = auth.user.course_name
-    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
+        registered_user = True
+
+    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket, registered_user=registered_user)
 
 @auth.requires_login()
 def sendreport():

@@ -6,7 +6,10 @@
 <p>I can’t login, I can reset my password, but after that I can’t login again! This is definitely one of the most reported bugs. However in almost 100% of the cases so far, the problem is that you are using your email address as your username. When you registered you created a username, this is what you must use to login, not your email. IF you really are using the username you made and still having login problems then I want to hear from you.</p>
 <p>Very often, problems with activecode or exercises can be resolved by reloading your page a couple of times, or by clearing your cache.</p>
 <p>OK, now you are still running into some problem. Telling me that X does not work doesn’t really help. interactivepython.org gets over 30,000 pageviews a day from people around the world. So most of the time when someone says “X does not work” it does in fact work fine for most people. This does not make it your fault, it just means I need more information to try to make sense of what is going on. Fill out the following form to submit an error report on Github so that I can fix the problem.</p>
+<p>Only registered users can use this form to report a problem. You may also report
+    a problem directly on our <a href="https://github.com/RunestoneInteractive/RunestoneComponents/issues">github issues page</a>.  This is actually preferred as it allows you to easily track the issue.  But if you don't have a github account or don't want to mess with it this is an option. </p>
 
+{{if registered_user: }}
 <div class="col-md-7">
     <form name="bugform" id="bugform" action="/{{=request.application}}/{{=request.controller}}/sendreport" method="post">
         <div class="form-group row">
@@ -56,9 +59,6 @@ Please describe what you were doing that led up to this error:
                 {{ pass }}
             </div>
         </div>
-        <p>Please be as specific as possible. Include your username, the browser you are using, and any information from the Javascript Console.  Please note that username and email are important for us to contact you if we have a solution or need more information.</p>
-        <label for="humtest">I am a human:  what is seven times six (as an integer)</label>
-        <input type="text" class="form-control" name="nospam" id="humtest" value=""/>
 
         <div class="form-group row">
              <div class="col-md-4">
@@ -104,3 +104,4 @@ Please describe what you were doing that led up to this error:
         }
     }
 </script>
+{{pass}}
