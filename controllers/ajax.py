@@ -144,7 +144,7 @@ def runlog():    # Log errors and runs with code
                 code=code,
                 emessage=error_info,
                 timestamp=ts,
-                course_id=course,
+                course_id=auth.user.course_id,
                 language=request.vars.lang)
 
     response.headers['content-type'] = 'application/json'
@@ -222,16 +222,17 @@ def gethist():
 
     if request.vars.sid:
         sid = request.vars.sid
-    elif auth.user.username:
+        course_id = db(db.auth_user.username == sid).select(db.auth_user.course_id).first().course_id
+    elif auth.user:
         sid = auth.user.username
+        course_id = auth.user.course_id
     else:
         sid = None
-
-    course_name = auth.user.course_name
+        course_id = None
 
     res = {}
     if sid:
-        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.course_id == course_name) & (codetbl.timestamp != None))
+        query = ((codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.course_id == course_id) & (codetbl.timestamp != None))
         res['acid'] = acid
         res['sid'] = sid
         # get the code they saved in chronological order; id order gets that for us

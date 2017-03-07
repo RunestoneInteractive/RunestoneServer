@@ -268,6 +268,7 @@ def removecourse():
 
     redirect('/%s/default/courses' % request.application)
 
+
 def reportabug():
     path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
@@ -277,6 +278,8 @@ def reportabug():
     code = None
     ticket = None
     pagerequest = None
+    registered_user = False
+
     if request.vars.code:
         code = request.vars.code
         ticket = request.vars.ticket.split('/')[1]
@@ -289,11 +292,17 @@ def reportabug():
         username = auth.user.username
         email = auth.user.email
         course = auth.user.course_name
-    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
+        registered_user = True
 
+    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket, registered_user=registered_user)
+
+@auth.requires_login()
 def sendreport():
     # settings.github_token should be set to a valid Github access token
     # that has full repo access in models/1.py
+    if request.vars['nospam'] != '42':
+        session.flash = 'Report rejected you are not human'
+        redirect('/%s/default/' % request.application)
 
     if request.vars['bookerror'] == 'on':
         basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
@@ -308,7 +317,9 @@ def sendreport():
     coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
     pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
     details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
-    userinfo = request.vars['username'] + ' ' + request.vars['useremail']
+    uname = request.vars['username'] if request.vars['username'] else "anonymous"
+    uemail = request.vars['useremail'] if request.vars['useremail'] else "no_email"
+    userinfo =  uname + ' ' + uemail
 
     body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],

@@ -62,7 +62,6 @@ auth.settings.retrieve_password_captcha	= False
 
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
-  Field('course_id','string'),
   Field('course_name', 'string', unique=True),
   Field('term_start_date', 'date'),
   Field('institution', 'string'),
