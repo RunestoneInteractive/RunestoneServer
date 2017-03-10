@@ -287,6 +287,10 @@ class DashboardDataAnalyzer(object):
         self.course_id = course_id
 
     def load_chapter_metrics(self, chapter):
+        if not chapter:
+            rslogger.debug("chapter not set, abort!")
+            return
+
         self.db_chapter = chapter
         #go get all the course data... in the future the post processing
         #should probably be stored and only new data appended.
