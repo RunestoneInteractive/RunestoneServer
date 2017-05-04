@@ -101,7 +101,7 @@ class CourseGrade(object):
 
         
     def points(self, projected = False, potential = False):
-        return sum([t.points(projected, potential) for t in self.assignment_type_grades])
+        return sum([t.points(projected, potential) or 0 for t in self.assignment_type_grades])
     
     def csv(self, type_names, assignment_names):
         # pass the row dictionary and fields_names into the csv method for the components, which will accumulate extra values and field names
