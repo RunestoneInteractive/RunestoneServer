@@ -108,8 +108,20 @@
 {{pass}}
 
 <div class='col-md-6'>
-    <div class="alert alert-danger"><strong>Down Time Alert:  </strong>Due to circumstances beyond our control runestone
-    will be unavailable from 1200 - 1500 UTC on May 17 (7AM-10AM CDT).</div>
+    <div class="alert alert-danger"><p><strong>Down Time Update:  </strong>We are still recovering from the forced migration.</p>
+        <h3>What works:</h3>
+        <ul>
+            <li>Static serving of all of your course pages.</li>
+            <li>Logging in</li>
+            <li>The APIs are working so your students can save code and other logging functions will work</li>
+        </ul>
+
+        <h3>What is still broken</h3>
+        <ul>
+            <li>Any access to the instructor interface</li>
+            <li>Building a new course</li>
+        </ul>
+    </div>
   <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
   <div id="loginexp">
     <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
