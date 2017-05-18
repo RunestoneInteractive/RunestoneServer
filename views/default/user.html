@@ -108,19 +108,17 @@
 {{pass}}
 
 <div class='col-md-6'>
-    <div class="alert alert-danger"><p><strong>Down Time Update:  </strong>We are still recovering from the forced migration.</p>
+    <div class="alert alert-success"><p><strong>All Systems Go:  </strong>I think we are recovered from the forced migration.</p>
         <h3>What works:</h3>
         <ul>
             <li>Static serving of all of your course pages.</li>
-            <li>Logging in</li>
+            <li>Logging in/registration</li>
             <li>The APIs are working so your students can save code and other logging functions will work</li>
+            <li>Access to the instructor interface</li>
+            <li>Building and rebuilding courses</li>
         </ul>
-
-        <h3>What is still broken</h3>
-        <ul>
-            <li>Any access to the instructor interface</li>
-            <li>Building a new course</li>
-        </ul>
+        <h3>If you find something broken</h3>
+        <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
     </div>
   <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
   <div id="loginexp">
