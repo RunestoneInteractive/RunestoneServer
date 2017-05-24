@@ -163,6 +163,7 @@ change the md5 to trust and you will be good to go without password protection. 
 7. Run web2py once, so that it will create all the tables
     * cd web2py/
     * python web2py.py
+    * Then you must access http://localhost:8000/runestone one time so that the models load and create the tables in the database.
 
 8. Build the book.
 

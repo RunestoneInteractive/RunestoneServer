@@ -108,8 +108,18 @@
 {{pass}}
 
 <div class='col-md-6'>
-    <div class="alert alert-danger"><strong>Down Time Alert:  </strong>Due to circumstances beyond our control runestone
-    will be unavailable from 1200 - 1500 UTC on May 17 (7AM-10AM CDT).</div>
+    <div class="alert alert-success"><p><strong>All Systems Go:  </strong>I think we are recovered from the forced migration.</p>
+        <h3>What works:</h3>
+        <ul>
+            <li>Static serving of all of your course pages.</li>
+            <li>Logging in/registration</li>
+            <li>The APIs are working so your students can save code and other logging functions will work</li>
+            <li>Access to the instructor interface</li>
+            <li>Building and rebuilding courses</li>
+        </ul>
+        <h3>If you find something broken</h3>
+        <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
+    </div>
   <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
   <div id="loginexp">
     <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
@@ -161,6 +171,10 @@
      What is Runestone? How can you use and contribute to what we offer? To learn more about this project, <a href="http://interactivepython.org/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
 
   <h2>Support Us</h2>
+  <div class="alert alert-info"><strong>Thank You! </strong>
+  Many thanks to the Minnesota State University Moorhead CS department for a generous donation to keep Runestone development active and all of these resources free.
+  Please consider having your own school or department do likewise.
+  </div>
   <p>This project is Open Source, but it does take time and resources.
      Especially as our popularity has grown we have server costs.  We
      were also able to make great progress during the Summer of 2013
