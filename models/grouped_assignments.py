@@ -8,13 +8,16 @@ class AssignmentGrade(object):
     def __init__(self, released, score, projected, assignment_score, assignment_id, assignment_name, grade_record, row):
         self.released = released
         self.score = score
-        self.projected = projected 
-        self.assignment_score = assignment_score
+        self.projected = projected
+        try:
+            self.assignment_score = int(assignment_score)
+        except:
+            self.assignment_score = 0
         self.assignment_id = assignment_id
         self.assignment_name = assignment_name
         self.grade_record = grade_record
         self.db_row = row
-        
+
     def points(self, projected = False, potential = False):
         # potential gives max points for the assignment
         # projected gives actual score if it's been released, else projected
@@ -30,14 +33,14 @@ class AssignmentGrade(object):
                 return 0
         else:
             return 0
-        
+
     def csv(self, row, type_name, assignment_names):
         # add values to row dictionary and field names to lists as needed
         name = type_name + '_' + self.assignment_name
         if name not in assignment_names:
             assignment_names.append(name)
-        row[name] = self.points()   
-        
+        row[name] = self.points()
+
 
 class AssignmentTypeGrade(object):
     """Grade of one user for a collection of assignments,"""
@@ -45,7 +48,7 @@ class AssignmentTypeGrade(object):
         self.assignments = []
         self.name = assignment_type.name
         self.grade_type = assignment_type.grade_type
-        
+
         try:
             self.weight = assignment_type.weight
         except:
@@ -61,12 +64,12 @@ class AssignmentTypeGrade(object):
         try:
             self.assignments_dropped = int(assignment_type.assignments_dropped)
         except:
-            self.assignments_dropped = 0 
-    
+            self.assignments_dropped = 0
+
         assignments = db((db.assignments.course == course.id)
-                         & (db.assignments.assignment_type == assignment_type.id)                      
+                         & (db.assignments.assignment_type == assignment_type.id)
                          ).select(orderby = db.assignments.name)
-        
+
         for row in assignments:
             # get or create the grade object for this user for this assignment row
             grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
@@ -77,14 +80,14 @@ class AssignmentTypeGrade(object):
                                  projected = 0)
             grade = db.grades((db.grades.assignment == row.id) & (db.grades.auth_user == user.id))
             # add the AssignmentGrade to t
-            self.assignments.append(AssignmentGrade(row.released, grade.score, grade.projected, row.points, row.id, row.name, grade, row))            
-    
+            self.assignments.append(AssignmentGrade(row.released, grade.score, grade.projected, row.points, row.id, row.name, grade, row))
+
     def points(self, projected = False, potential = False):
         vals = [a.points(projected, potential) for a in self.assignments]
         vals.sort()
         # drop the self.assignments_dropped lowest values
         return sum(vals[self.assignments_dropped:])
-    
+
     def csv(self, row, type_names, assignment_names):
         # add values to row dictionary and field names to lists as needed
         if self.name not in type_names:
@@ -99,10 +102,10 @@ class CourseGrade(object):
         self.student = user
         self.course = course
 
-        
+
     def points(self, projected = False, potential = False):
         return sum([t.points(projected, potential) or 0 for t in self.assignment_type_grades])
-    
+
     def csv(self, type_names, assignment_names):
         # pass the row dictionary and fields_names into the csv method for the components, which will accumulate extra values and field names
         row = {}
@@ -168,7 +171,7 @@ class score(object):
         self.points = points
         if type(self.points) not in [float, int]:
             # would be nice to flag error here
-            self.points = 0 
+            self.points = 0
         self.comment = comment
 
     def truncated_acid(self):
@@ -222,7 +225,7 @@ def get_engagement_time(assignment, user, preclass, all_problem_sets = False, al
         if preclass:
             dl = get_deadline(assignment, user)
             if dl:
-                q = q(db.useinfo.timestamp < dl)       
+                q = q(db.useinfo.timestamp < dl)
     activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
     sessions = []
     THRESH = 300
@@ -230,7 +233,7 @@ def get_engagement_time(assignment, user, preclass, all_problem_sets = False, al
     for activity in activities:
         if not prev:
             # first activity; start a session for it
-            sessions.append(Session(activity.timestamp))            
+            sessions.append(Session(activity.timestamp))
         elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
             # close previous session; set its end time be previous activity's time, plus 30 seconds
             sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
@@ -254,7 +257,7 @@ def assignment_get_use_scores(assignment, problem=None, user=None, section_id=No
         if preclass:
             dl = get_deadline(assignment, user)
             if dl:
-                q = q(db.useinfo.timestamp < dl)       
+                q = q(db.useinfo.timestamp < dl)
         attempted_problems = q.select(db.problems.acid)
         for problem in db(db.problems.assignment == assignment.id).select(db.problems.acid):
 #            if ".html" in problem.acid:
@@ -336,7 +339,7 @@ def get_all_times_and_activity_counts(course):
                 ret[nm+"_activities_pre_deadline"] = count(self.assignments[a], pre_deadline=True)
                 ret[nm+"_max_act"] = act_per_ass[a]
             return ret
-            
+
     students = db(db.auth_user.course_id == course.id).select(db.auth_user.registration_id, db.auth_user.username)
     all_user_data = {}
     for student in students:
@@ -473,7 +476,7 @@ def assignment_set_grade(assignment, user):
     else:
         # they got the points they earned
         points = sum([p.points for p in assignment.scores(user=user)])
-        
+
     db.grades.insert(
         auth_user=user.id,
         assignment=assignment.id,
