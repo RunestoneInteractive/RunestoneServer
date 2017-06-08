@@ -9,7 +9,7 @@ class AssignmentGrade(object):
         self.released = released
         self.score = score
         self.projected = projected
-        try: assignment_score:
+        try:
             self.assignment_score = int(assignment_score)
         except:
             self.assignment_score = 0
@@ -33,7 +33,7 @@ class AssignmentGrade(object):
                 return 0
         else:
             return 0
-        
+
     def csv(self, row, type_name, assignment_names):
         # add values to row dictionary and field names to lists as needed
         name = type_name + '_' + self.assignment_name
