@@ -1,4 +1,5 @@
-{{extend 'layout.html'}}
+{{extend 'admin/instructors.html'}}
+{{ block tabcontent }}
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -14,21 +15,35 @@
 			<thead>
 				<tr>
 					<td rowspan="2">Student</td>
-					<td>Assignment #1</td>
+					{{for assignment in assignments:}}
+						<td>{{=assignment['name']}}</td>
+					{{pass}}
+<!-- 					<td>Assignment #1</td>
 					<td>Assignment #2</td>
 					<td>Assignment #3</td>
 					<td>Assignment #4</td>
-					<td>Assignment #5</td>
+					<td>Assignment #5</td> -->
 				</tr>
 				<tr>
-					<td>87 &darr;</td>
+					{{for averagegrade in averagerow:}}
+						<td>{{=averagegrade}}</td>
+					{{pass}}
+<!-- 					<td>87 &darr;</td>
 					<td>84 &uarr;</td>
 					<td>n/a &uarr;</td>
 					<td>n/a &uarr;</td>
-					<td>n/a &uarr;</td>
+					<td>n/a &uarr;</td> -->
 				</tr>
 			</thead>
 			<tbody>
+				{{for row in gradetable:}}
+					<tr>
+						{{for item in row:}}
+							<td>{{=item}}</td>
+						{{pass}}
+					</tr>
+				{{pass}}
+<!-- 
 				<tr>
 					<td>Bob Brown</td>
 					<td>80</td>
@@ -76,8 +91,15 @@
 					<td></td>
 					<td></td>
 					<td></td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
 	</div>
+	{{for row in gradetable:}}
+		<h1>{{=row}}</option>
+	{{pass}}
+	{{for assignment in assignments:}}
+		<h1>{{=assignment['points']}}
+	{{pass}}
 </div>
+{{end}}

@@ -31,6 +31,8 @@ def index():
         session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
         return redirect(URL('admin','admin'))
 
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     logger.debug("getting chapters for {}".format(auth.user.course_name))
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
@@ -94,7 +96,7 @@ def index():
     "data":read_data,
     "name":"Exercises Missed"
     }]
-    return dict(course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
+    return dict(assignments=assignments, course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
 
 @auth.requires_login()
 def studentreport():
@@ -117,8 +119,46 @@ def studentprogress():
 def grades():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
+    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.id)
+    students = db(db.auth_user.course_id == course.id).select()
+    grades = db(db.grades).select()
 
-    return dict(course_name=auth.user.course_name)
+    query = "select first_name, last_name, name, score, points, assignments.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) order by last_name, first_name, assignments.id;"
+    rows = db.executesql(query)
+
+    gradetable = []
+    averagerow = ['n/a']*len(assignments)
+    #now make the tuples match the rows in the table
+    currentrow=0
+    for stuudent in students:
+        studentrow = []
+        studentrow.append(rows[currentrow][0] + " " + rows[currentrow][1])
+        for assignment in assignments:
+            try:
+                if rows[currentrow][5] == assignment['id']:
+                        studentrow.append(100 * rows[currentrow][3]/rows[currentrow][4])
+                        currentrow += 1
+                else:
+                    studentrow.append('n/a')
+            except:
+                studentrow.append('n/a')
+        gradetable.append(studentrow)
+
+    for assignment in range(len(assignments)):
+        available = False
+        averagegrade = 0
+        for student in gradetable:
+            if student[assignment] != "n/a":
+                averagegrade = averagegrade + student[assignment + 1]
+                available = True
+        if available:
+            averagegrade = averagegrade/len(students)
+            averagerow[assignment] = averagegrade
+    print(averagerow)
+
+
+
+    return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
@@ -148,3 +188,7 @@ def exercisemetrics():
             })
 
     return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+
+@auth.requires_login()
+def assignmentgrades():
+    return dict(course_name=auth.user.course_name)
