@@ -331,6 +331,40 @@ class DashboardDataAnalyzer(object):
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
         self.problem_metrics.update_metrics(self.logs)
 
+    def load_assignment_metrics(self, username):
+        self.assignments = []
+        res = db(db.assignments.course == self.course_id)\
+                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate)
+        for aRow in res:
+            self.assignments.append(aRow.as_dict())
+
+        self.grades = {}
+        for assign in self.assignments:
+            row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
+                    .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
+
+            if row.records:             # If the row has a result
+                rl = row.as_list()      # List of dictionaries
+
+                s = 0.0
+                for userEntry in rl:
+                    self.grades[assign["name"]] = {}
+                    s += userEntry["grades"]["score"]
+
+                    if userEntry["auth_user"]["username"] == username:
+                        self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+                    else:
+                        self.grades[assign["name"]]["score"] = "N/A"
+
+                average = s/len(userEntry)
+                self.grades[assign["name"]]["class_average"] = average
+                self.grades[assign["name"]]["due_date"] = assign["duedate"]
+
+            else:
+                self.grades[assign["name"]] = {"score":"N/A",
+                                               "class_average":"N/A",
+                                               "due_date":assign["duedate"]}
+
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
 # to support all books.
