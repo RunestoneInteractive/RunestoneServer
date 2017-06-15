@@ -122,15 +122,15 @@ def grades():
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.id)
     students = db(db.auth_user.course_id == course.id).select(orderby=(db.auth_user.last_name, db.auth_user.first_name))
     grades = db(db.grades).select()
-
-    query = "select first_name, last_name, name, score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) order by last_name, first_name, assignments.id;"
-    rows = db.executesql(query)
-    
+    query = "select first_name, last_name, name, score, points, assignments.id, auth_user.id, assignments.course from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' order by last_name, first_name, assignments.id;"
+    rows = db.executesql(query, [course['id']])
     gradetable = []
     averagerow = []
     #now make the query result match the rows in the table
     currentrow=0
     for student in students:
+        print(student['first_name'])
+        print(rows[currentrow][7], course['id'])
         studentrow = []
         studentrow.append(student['first_name'] + " " + student['last_name'])
         for assignment in assignments:
@@ -141,6 +141,7 @@ def grades():
                 else:
                     studentrow.append('n/a')
             except:
+                print('meh')
                 studentrow.append('n/a')
         gradetable.append(studentrow)
 
