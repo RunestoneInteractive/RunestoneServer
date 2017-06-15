@@ -120,22 +120,26 @@ def grades():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.id)
-    students = db(db.auth_user.course_id == course.id).select()
+    students = db(db.auth_user.course_id == course.id).select(orderby=(db.auth_user.last_name, db.auth_user.first_name))
     grades = db(db.grades).select()
 
-    query = "select first_name, last_name, name, score, points, assignments.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) order by last_name, first_name, assignments.id;"
+    query = "select first_name, last_name, name, score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) order by last_name, first_name, assignments.id;"
     rows = db.executesql(query)
+    print(rows)
+    
 
     gradetable = []
     averagerow = []
-    #now make the tuples match the rows in the table
+    #now make the query result match the rows in the table
     currentrow=0
-    for stuudent in students:
+    for student in students:
         studentrow = []
-        studentrow.append(rows[currentrow][0] + " " + rows[currentrow][1])
+        studentrow.append(student['first_name'] + " " + student['last_name'])
+        #studentrow.append(rows[currentrow][0] + " " + rows[currentrow][1])
+        print(studentrow)
         for assignment in assignments:
             try:
-                if rows[currentrow][5] == assignment['id']:
+                if rows[currentrow][5] == assignment['id'] and rows[currentrow][6] == student['id']:
                         studentrow.append(100 * rows[currentrow][3]/rows[currentrow][4])
                         currentrow += 1
                 else:
@@ -143,6 +147,8 @@ def grades():
             except:
                 studentrow.append('n/a')
         gradetable.append(studentrow)
+
+    #Then build the average row for the table
 
     for col in range(1, len(assignments)+1):
         applicable = False
