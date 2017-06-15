@@ -127,6 +127,7 @@ def grades():
     rows = db.executesql(query)
 
     gradetable = []
+    averagerow = []
     #now make the tuples match the rows in the table
     currentrow=0
     for stuudent in students:
@@ -143,16 +144,24 @@ def grades():
                 studentrow.append('n/a')
         gradetable.append(studentrow)
 
-    # for col in range(len(students)):
-    #     average = 0
-    #     for grade in range(len(assignments)):
-    #         if gradetable[col+1][grade]
+    for col in range(1, len(assignments)+1):
+        applicable = False
+        average = 0
+        for grade in range(len(students)):
+            if gradetable[grade][col] != 'n/a':
+                print(gradetable[grade][col])
+                average += gradetable[grade][col]
+                applicable = True
+        if applicable:
+            averagerow.append(average/len(students))
+        else:
+            averagerow.append('n/a')
 
 
 
 
 
-    return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable)
+    return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)

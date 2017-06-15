@@ -25,11 +25,14 @@
 					<td>Assignment #5</td> -->
 				</tr>
 				<tr>
-					<td>87 &darr;</td>
+					{{for average in averagerow:}}
+						<td>{{=average}}</td>
+					{{pass}}
+<!-- 					<td>87 &darr;</td>
 					<td>84 &uarr;</td>
 					<td>n/a &uarr;</td>
 					<td>n/a &uarr;</td>
-					<td>n/a &uarr;</td>
+					<td>n/a &uarr;</td> -->
 				</tr>
 			</thead>
 			<tbody>
@@ -92,11 +95,12 @@
 			</tbody>
 		</table>
 	</div>
+<!-- 	<h1>{{=averagerow}}</h1>
 	{{for row in gradetable:}}
 		<h1>{{=row}}</option>
 	{{pass}}
 	{{for assignment in assignments:}}
 		<h1>{{=assignment['points']}}
-	{{pass}}
+	{{pass}} -->
 </div>
 {{end}}
