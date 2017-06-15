@@ -125,9 +125,7 @@ def grades():
 
     query = "select first_name, last_name, name, score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) order by last_name, first_name, assignments.id;"
     rows = db.executesql(query)
-    print(rows)
     
-
     gradetable = []
     averagerow = []
     #now make the query result match the rows in the table
@@ -135,8 +133,6 @@ def grades():
     for student in students:
         studentrow = []
         studentrow.append(student['first_name'] + " " + student['last_name'])
-        #studentrow.append(rows[currentrow][0] + " " + rows[currentrow][1])
-        print(studentrow)
         for assignment in assignments:
             try:
                 if rows[currentrow][5] == assignment['id'] and rows[currentrow][6] == student['id']:
@@ -152,20 +148,18 @@ def grades():
 
     for col in range(1, len(assignments)+1):
         applicable = False
+        averagedivide = len(students)
         average = 0
         for grade in range(len(students)):
             if gradetable[grade][col] != 'n/a':
-                print(gradetable[grade][col])
                 average += gradetable[grade][col]
                 applicable = True
+            else:
+                averagedivide = averagedivide - 1
         if applicable:
-            averagerow.append(average/len(students))
+            averagerow.append(average/averagedivide)
         else:
             averagerow.append('n/a')
-
-
-
-
 
     return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
