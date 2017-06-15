@@ -124,8 +124,7 @@ def grades():
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
-    grades = db(db.grades).select()
-    query = "select first_name, last_name, name, score, points, assignments.id, auth_user.id, assignments.course from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' order by last_name, first_name, assignments.id;"
+    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' order by last_name, first_name, assignments.id;"
     rows = db.executesql(query, [course['id']])
     gradetable = []
     averagerow = []
@@ -136,8 +135,8 @@ def grades():
         studentrow.append(student.first_name + " " + student.last_name)
         for assignment in assignments:
             try:
-                if rows[currentrow][5] == assignment['id'] and rows[currentrow][6] == student.id:
-                        studentrow.append(100 * rows[currentrow][3]/rows[currentrow][4])
+                if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id:
+                        studentrow.append(100 * rows[currentrow][0]/rows[currentrow][1])
                         currentrow += 1
                 else:
                     studentrow.append('n/a')
@@ -145,7 +144,6 @@ def grades():
                 print('meh')
                 studentrow.append('n/a')
         gradetable.append(studentrow)
-
 
     #Then build the average row for the table
 
