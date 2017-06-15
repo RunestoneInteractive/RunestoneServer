@@ -335,6 +335,7 @@ class DashboardDataAnalyzer(object):
         self.assignments = []
         res = db(db.assignments.course == self.course_id)\
                 .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate)
+                # ^ Get assignments from DB
         for aRow in res:
             self.assignments.append(aRow.as_dict())
 
@@ -342,6 +343,7 @@ class DashboardDataAnalyzer(object):
         for assign in self.assignments:
             row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
                     .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
+                    # ^ Get grades for assignment
 
             if row.records:             # If the row has a result
                 rl = row.as_list()      # List of dictionaries
@@ -349,21 +351,21 @@ class DashboardDataAnalyzer(object):
                 s = 0.0
                 for userEntry in rl:
                     self.grades[assign["name"]] = {}
-                    s += userEntry["grades"]["score"]
+                    s += userEntry["grades"]["score"]   # Calculating average
 
-                    if userEntry["auth_user"]["username"] == username:
+                    if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
                         self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
                     else:
-                        self.grades[assign["name"]]["score"] = "N/A"
+                        self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
 
                 average = s/len(userEntry)
                 self.grades[assign["name"]]["class_average"] = average
-                self.grades[assign["name"]]["due_date"] = assign["duedate"].date()
+                self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 
-            else:
+            else:           # The row has no result --> the query returned empty
                 self.grades[assign["name"]] = {"score":"N/A",
                                                "class_average":"N/A",
-                                               "due_date":assign["duedate"].date()}
+                                               "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
 
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
