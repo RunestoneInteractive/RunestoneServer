@@ -358,12 +358,12 @@ class DashboardDataAnalyzer(object):
 
                 average = s/len(userEntry)
                 self.grades[assign["name"]]["class_average"] = average
-                self.grades[assign["name"]]["due_date"] = assign["duedate"]
+                self.grades[assign["name"]]["due_date"] = assign["duedate"].date()
 
             else:
                 self.grades[assign["name"]] = {"score":"N/A",
                                                "class_average":"N/A",
-                                               "due_date":assign["duedate"]}
+                                               "due_date":assign["duedate"].date()}
 
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
