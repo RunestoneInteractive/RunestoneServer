@@ -124,8 +124,8 @@ def grades():
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
-    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' order by last_name, first_name, assignments.id;"
-    rows = db.executesql(query, [course['id']])
+    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.id;"
+    rows = db.executesql(query, [course['id'], course['id']])
     gradetable = []
     averagerow = []
     #now make the query result match the rows in the table
