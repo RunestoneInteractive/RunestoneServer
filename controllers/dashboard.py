@@ -126,8 +126,16 @@ def grades():
     ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
     query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.id;"
     rows = db.executesql(query, [course['id'], course['id']])
-    gradetable = []
+
+    gradetable = []  
     averagerow = []
+
+    cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
+    instructorlist = []
+    for instructor in cur_instructors:
+        instructorlist.append(instructor.instructor)
+    print(instructorlist)
+
     #now make the query result match the rows in the table
     currentrow=0
     for student in students:
@@ -154,11 +162,12 @@ def grades():
         for grade in range(len(students)):
             if gradetable[grade][col] != 'n/a':
                 average += gradetable[grade][col]
+                gradetable[grade][col] = str(round(gradetable[grade][col], 2))
                 applicable = True
             else:
                 averagedivide = averagedivide - 1
         if applicable:
-            averagerow.append(average/averagedivide)
+            averagerow.append(str(round(average/averagedivide, 2)))
         else:
             averagerow.append('n/a')
 
