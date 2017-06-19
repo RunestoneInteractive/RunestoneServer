@@ -66,8 +66,11 @@ db.define_table('courses',
   Field('term_start_date', 'date'),
   Field('institution', 'string'),
   Field('base_course', 'string'),
+  Field('python3', type='boolean', default=True),
+  Field('login_required', type='boolean', default=True),
   migrate='runestone_courses.table'
 )
+
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
     db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
