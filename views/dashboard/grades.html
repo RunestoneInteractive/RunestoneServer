@@ -36,11 +36,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{for row in gradetable:}}
+				{{for row in range(len(gradetable)):}}
 					<tr>
-						{{for item in row:}}
-							{{if item != 'n/a':}}
-								<td>{{=item}}</td>
+						{{for item in range(len(gradetable[row])):}}
+							{{if item != 0 and gradetable[row][item] != 'n/a':}}
+								<td><a href="questiongrades?sid={{=students[row]['id']}}&assignment_id={{=assignments[item-1]['id']}}" style="display:block; color:blue;">{{=gradetable[row][item]}}</a></td>
+							{{elif item == 0:}}
+								<td>{{=gradetable[row][item]}}
 							{{else:}}
 								<td></td>
 							{{pass}}

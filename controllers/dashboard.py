@@ -124,11 +124,12 @@ def grades():
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
-    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.id;"
+    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where points is not null and assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.id;"
     rows = db.executesql(query, [course['id'], course['id']])
 
     gradetable = []  
     averagerow = []
+    print(assignments[0]['id'])
 
     #now use the query result to form the rows in the table
     currentrow=0
@@ -137,7 +138,7 @@ def grades():
         studentrow.append(student.first_name + " " + student.last_name)
         for assignment in assignments:
             try:
-                if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id:
+                if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id and rows[currentrow][1] != None:
                         studentrow.append(100 * rows[currentrow][0]/rows[currentrow][1])
                         currentrow += 1
                 else:
@@ -166,6 +167,14 @@ def grades():
             averagerow.append('n/a')
 
     return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
+
+def questiongrades():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    assignment = db(db.assignments.id == request.vars.assignment_id)(db.assignments.course == course.id).select().first()
+    student_id = request.vars.sid
+    print(assignment)
+    print(student_id)
+    return dict(course_name=auth.user.course_name)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
