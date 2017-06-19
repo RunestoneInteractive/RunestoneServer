@@ -130,13 +130,7 @@ def grades():
     gradetable = []  
     averagerow = []
 
-    cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
-    instructorlist = []
-    for instructor in cur_instructors:
-        instructorlist.append(instructor.instructor)
-    print(instructorlist)
-
-    #now make the query result match the rows in the table
+    #now use the query result to form the rows in the table
     currentrow=0
     for student in students:
         studentrow = []
@@ -148,8 +142,8 @@ def grades():
                         currentrow += 1
                 else:
                     studentrow.append('n/a')
-            except:
-                print('meh')
+
+            except:  #This exception should only trigger when the bottom right slot in the table has a grade of 'n/a'
                 studentrow.append('n/a')
         gradetable.append(studentrow)
 
