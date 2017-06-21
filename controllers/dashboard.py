@@ -119,12 +119,12 @@ def studentprogress():
 def grades():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.id)
+    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=(db.assignments.duedate, db.assignments.id))
     students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
-    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where points is not null and assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.id;"
+    query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where points is not null and assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.duedate, assignments.id;"
     rows = db.executesql(query, [course['id'], course['id']])
 
     gradetable = []  
