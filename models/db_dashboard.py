@@ -392,7 +392,7 @@ class IdConverter(object):
 
     sub_chapter_id_map = {
         #CSP - Ch1
-        "studentBook": "This Book is for Stuents",
+        "studentBook": "This Book is for Students",
         "pretest": "Pretest",
         "computeNumbers": "Compute with Numbers",
         "computeWords": "Compute with Words",
