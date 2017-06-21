@@ -1,6 +1,5 @@
 from os import path
 import os
-import pygal
 from datetime import date, timedelta
 from paver.easy import sh
 import json
@@ -31,62 +30,8 @@ def index():
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
             redirect(URL(c="default"))
-    cwd = os.getcwd()
-    try:
-        os.chdir(path.join('applications',request.application,'books',row.base_course))
-        master_build = sh("git describe --long", capture=True)[:-1]
-        with open('build_info','w') as bc:
-            bc.write(master_build)
-            bc.write("\n")
-    except:
-        master_build = ""
-    finally:
-        os.chdir(cwd)
 
-    try:
-        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
-        mbf = open(mbf_path,'r')
-        last_build = os.path.getmtime(mbf_path)
-        my_build = mbf.read()[:-1]
-        mbf.close()
-    except:
-        my_build = ""
-        last_build = 0
-
-    my_vers = 0
-    mst_vers = 0
-    rebuild_notice = path.join('applications',request.application,'REBUILD')
-    if os.path.exists(rebuild_notice):
-        rebuild_post = os.path.getmtime(rebuild_notice)
-        if rebuild_post > last_build:
-            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-    elif master_build and my_build:
-        mst_vers,mst_bld,mst_hsh = master_build.split('-')
-        my_vers,my_bld,my_hsh = my_build.split('-')
-        if my_vers != mst_vers:
-            response.flash = "Updates available, consider rebuilding"
-
-    # Now build the activity bar chart
-    bar_chart = pygal.Bar(disable_xml_declaration=True, explicit_size=True,
-                          show_legend=False, height=400, width=400,
-                          style=pygal.style.TurquoiseStyle)
-    bar_chart.title = 'Class Activities'
-    bar_chart.x_labels = []
-    counts = []
-
-    d = date.today() - timedelta(days=10)
-    query = '''select date(timestamp) xday, count(*)  ycount from useinfo where timestamp > '%s' and course_id = '%s' group by date(timestamp) order by xday''' % (d, row.course_name)
-    rows = db.executesql(query)
-    for row in rows:
-        bar_chart.x_labels.append(str(row[0]))
-        counts.append(row[1])
-
-    bar_chart.add('Class', counts)
-    chart = bar_chart.render()
-
-
-    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers,
-                mst_vers=mst_vers, bchart=chart, course_name=auth.user.course_name)
+    redirect(URL("admin","admin"))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -620,6 +565,42 @@ def admin():
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
 
+    cwd = os.getcwd()
+    try:
+        os.chdir(path.join('applications',request.application,'books',row.base_course))
+        master_build = sh("git describe --long", capture=True)[:-1]
+        with open('build_info','w') as bc:
+            bc.write(master_build)
+            bc.write("\n")
+    except:
+        master_build = ""
+    finally:
+        os.chdir(cwd)
+
+    try:
+        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
+        mbf = open(mbf_path,'r')
+        last_build = os.path.getmtime(mbf_path)
+        my_build = mbf.read()[:-1]
+        mbf.close()
+    except:
+        my_build = ""
+        last_build = 0
+
+    my_vers = 0
+    mst_vers = 0
+    rebuild_notice = path.join('applications',request.application,'REBUILD')
+    if os.path.exists(rebuild_notice):
+        rebuild_post = os.path.getmtime(rebuild_notice)
+        if rebuild_post > last_build:
+            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
+    elif master_build and my_build:
+        mst_vers,mst_bld,mst_hsh = master_build.split('-')
+        my_vers,my_bld,my_hsh = my_build.split('-')
+        if my_vers != mst_vers:
+            response.flash = "Updates available, consider rebuilding"
+
+#    return dict(, course_name=auth.user.course_name)
 
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
@@ -642,7 +623,13 @@ def admin():
     if not request.vars.projectname or not request.vars.startdate:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True)
+        return dict(sectionInfo=sectionsList,startDate=date,
+                    coursename=auth.user.course_name,
+                    instructors=instructordict, students=studentdict,
+                    curr_start_date=curr_start_date, confirm=True,
+                    build_info=my_build, master_build=master_build, my_vers=my_vers,
+                    mst_vers=mst_vers
+                    )
 
     #Rebuilding now
     else:
