@@ -42,17 +42,15 @@ class ProblemMetrics(object):
             self.user_responses[user.username] = UserResponse(user)
 
     def add_data_point(self, row):
-        if ':' in row.act:
-            answer = row.act.split(':')
-            choice = answer[1]
-            correct = answer[2] == "correct"
-            if choice == "":
-                choice = "(empty)"
+        correct = row.correct
+        choice = row.answer
+        if choice == "":
+            choice = "(empty)"
 
-            self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
+        self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
 
-            if row.sid in self.user_responses:
-                self.user_responses[row.sid].add_response(choice, correct)
+        if row.sid in self.user_responses:
+            self.user_responses[row.sid].add_response(choice, correct)
 
     def user_response_stats(self):
         correct = 0
@@ -113,13 +111,16 @@ class CourseProblemMetrics(object):
         self.problems = {}
         self.users = users
 
-    def update_metrics(self, logs):
-        for row in logs:
-            if row.event == "mChoice" or row.event == "fillb":
+    def update_metrics(self, course_name):
+        mcans = db(db.mchoice_answers.course_name==course_name).select()
+        fbans = db(db.fitb_answers.course_name==course_name).select()
+        def add_problems(result_set):
+            for row in result_set:
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
-
                 self.problems[row.div_id].add_data_point(row)
+        add_problems(mcans)
+        add_problems(fbans)
 
     def retrieve_chapter_problems(self):
         return self
@@ -305,7 +306,7 @@ class DashboardDataAnalyzer(object):
         #self.divs = db(db.div_ids).select(db.div_ids.div_id)
         #print self.divs
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
-        self.problem_metrics.update_metrics(self.logs)
+        self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
         self.user_activity.update_metrics(self.logs)
         self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)

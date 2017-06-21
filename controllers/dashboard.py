@@ -1,6 +1,5 @@
 from os import path
 import os
-import pygal
 import logging
 from datetime import date, timedelta
 from operator import itemgetter
