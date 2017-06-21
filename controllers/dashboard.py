@@ -171,10 +171,12 @@ def grades():
 def questiongrades():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db(db.assignments.id == request.vars.assignment_id)(db.assignments.course == course.id).select().first()
-    student_id = request.vars.sid
-    print(assignment)
-    print(student_id)
-    return dict(course_name=auth.user.course_name)
+    sid = request.vars.sid
+    student = db(db.auth_user.username == sid).select(db.auth_user.first_name, db.auth_user.last_name)
+    query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
+    rows = db.executesql(query, [assignment['id'], sid])
+    print(student[0])
+    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)

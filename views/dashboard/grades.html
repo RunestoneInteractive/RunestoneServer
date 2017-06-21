@@ -7,11 +7,8 @@
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
-
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
-
-
 
 <style>
 	#grades {
@@ -51,7 +48,7 @@
 					<tr>
 						{{for item in range(len(gradetable[row])):}}
 							{{if item != 0 and gradetable[row][item] != 'n/a':}}
-								<td><a href="questiongrades?sid={{=students[row]['id']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}</a></td>
+								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}</a></td>
 							{{elif item == 0:}}
 								<td>{{=gradetable[row][item]}}
 							{{else:}}
