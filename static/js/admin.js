@@ -1674,6 +1674,24 @@ function edit_indexrst(form) {
         }}
 }
 
+var toc = null;
+function get_toc(){
+    if (toc == null){
+        // This has to be a synchronous call because we have to set assignment_release_states
+        // before going on to later code that uses it
+        jQuery.ajax({
+        url: eBookConfig.get_tocURL,
+        type: "POST",
+        dataType: "JSON",
+        async: false,
+        success: function (retdata) {
+            toc = retdata;
+        }
+        });
+    }
+    return toc;
+}
+
 function get_assignment_release_states(){
     if (assignment_release_states == null){
         // This has to be a synchronous call because we have to set assignment_release_states

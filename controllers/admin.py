@@ -5,6 +5,9 @@ from datetime import date, timedelta
 from paver.easy import sh
 import json
 from runestone import cmap
+import logging
+logger = logging.getLogger("web2py.root")
+logger.setLevel(logging.DEBUG)
 
 # this is for admin links
 # use auth.requires_membership('manager')
@@ -726,7 +729,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), course_id = auth.user.course_name, assignmentids = assignmentids
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), get_tocURL = URL('admin', 'get_toc_and_questions'), course_id = auth.user.course_name, assignmentids = assignmentids
 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1337,6 +1340,46 @@ def get_assignment_release_states():
     try:
         assignments_query = db(db.assignments.course == auth.user.course_id).select()
         return json.dumps({row.name: row.released for row in assignments_query})
+    except Exception as ex:
+        print ex
+        return json.dumps({})
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_toc_and_questions():
+    # return a dictionary with a nested dictionary representing everything the
+    # picker will need in the instructor's assignment authoring tab
+
+    # Format is documented at https://www.jstree.com/docs/json/
+    try:
+        # First get the chapters associated with the current course, and insert them into the tree
+        # Recurse, with each chapter:
+        #   -- get the subchapters associated with it, and insert into the subdictionary
+        #   -- Recurse; with each subchapter:
+        #      -- get the divs associated with it, and insert into the sub-sub-dictionary
+
+        tree = {}
+        tree['text'] = 'Table of Contents'
+        tree['children'] = []
+        chapters_query = db(db.chapters.course_id == auth.user.course_name).select()
+        for ch in chapters_query:
+            ch_info = {}
+            tree['children'].append(ch_info)
+            ch_info['text'] = ch.chapter_name
+            ch_info['children'] = []
+            subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select()
+            for sub_ch in subchapters_query:
+                sub_ch_info = {}
+                ch_info['children'].append(sub_ch_info)
+                sub_ch_info['text'] = sub_ch.sub_chapter_name
+                sub_ch_info['children'] = []
+                questions_query = db((db.questions.base_course == auth.user.course_name) & \
+                                  (db.questions.chapter == ch.chapter_name) & \
+                                  (db.questions.subchapter == sub_ch.sub_chapter_name)).select()
+                for question in questions_query:
+                    q_info = {}
+                    q_info['text'] = q_info.name
+                    sub_ch_info['children'].append(q_info)
+        return json.dumps(tree)
     except Exception as ex:
         print ex
         return json.dumps({})
