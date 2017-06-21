@@ -40,7 +40,7 @@ def index():
 
     logger.debug("making an analyzer")
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    logger.debug("loading chapter metrics")
+    logger.debug("loading chapter metrics for course {}".format(auth.user.course_name))
     data_analyzer.load_chapter_metrics(selected_chapter)
     logger.debug("loading problem metrics")
     problem_metrics = data_analyzer.problem_metrics
