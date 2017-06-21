@@ -1,6 +1,7 @@
 from gluon.storage import Storage
+from platform import uname
+
 settings = Storage()
-from os import uname
 
 settings.migrate = True
 settings.migprefix = 'runestonebeta_'
@@ -33,4 +34,4 @@ elif 'webfaction' in uname()[1]:
 elif 'luther' in uname()[1]:
     settings.database_uri = 'sqlite://storage.sqlite'
 else:
-    raise RuntimeError('Host unknown, settings not configured')
+    print('Host unknown, default settings.database_uri not configured.')
