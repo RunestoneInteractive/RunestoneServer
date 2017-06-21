@@ -478,8 +478,10 @@ def _autograde_one_ac(course_name, sid, question, points, deadline):
     score = 0
     id = None
     if most_recent:
+        # second element is the percentage of tests that passed
         pct_correct = float(most_recent.act.split(':')[1])
         if pct_correct == 100:
+            # have to get *all* tests to pass in order to get any credit
             score = points
         id = most_recent.id
 
@@ -499,6 +501,8 @@ def _autograde_one_ac(course_name, sid, question, points, deadline):
 def _autograde_one_visited(course_name, sid, question, points, deadline):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
+    # useinfo.div_id can either be a string for a pathname for a subchapter, or it can be
+    # a div_id for an activecode. ??Are multiple choice and parsons, etc. also recorded??
     query =  (db.useinfo.div_id == question.name) & (db.useinfo.sid == sid)
     if deadline:
         query = query & (db.useinfo.timestamp < deadline)

@@ -1,3 +1,5 @@
+var assignment_release_states = null;
+
 function gradeIndividualItem() {
     var select3 = document.getElementById("gradingoption3");
     var colType = select3.options[select3.selectedIndex].value;
@@ -7,18 +9,8 @@ function gradeIndividualItem() {
 
         var col2 = document.getElementById("gradingoption2");
     var col2val = col2.options[col2.selectedIndex].value;
-    release_button = document.getElementById("releasebutton");
 
-
-    if (col1val == 'assignment' | col2val == 'assignment') {
-        //show the release grades button
-        release_button.style.visibility = 'visible';
-    }
-
-    else {
-        //hide the release grades button
-        release_button.style.visibility = 'hidden';
-    }
+    set_release_button();
 
     var select = document.getElementById("gradingcolumn3");
     var val = select.options[select.selectedIndex].value;
@@ -418,6 +410,9 @@ function updateColumn2() {
     var select2 = document.getElementById("gradingcolumn1");
     var column2 = document.getElementById("gradingcolumn2");
     var selectedval = select2.options[select2.selectedIndex].value;
+    if (val == 'assignment'){
+        set_release_button();
+    }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
         var assignments = JSON.parse(assignmentinfo);
@@ -495,8 +490,7 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
-       release_button = document.getElementById("releasebutton");
-    release_button.style.visibility = 'visible';
+    set_release_button();
     autograde_form.style.visibility = 'visible';
     calc_totals_form.style.visibility = 'visible';
 
@@ -589,8 +583,7 @@ function showColumn1() {
     var val2 = select.options[select.selectedIndex].value;
     var val = select1.options[select1.selectedIndex].value;
 
-    release_button = document.getElementById("releasebutton");
-    release_button.style.visibility = 'hidden';
+    set_release_button();
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
     calc_totals_form = document.getElementById("calculateTotalsForm");
@@ -1678,14 +1671,71 @@ function edit_indexrst(form) {
         }}
 }
 
+function get_assignment_release_states(){
+    if (assignment_release_states == null){
+        jQuery.ajax({
+        url: eBookConfig.get_assignment_release_statesURL,
+        type: "POST",
+        dataType: "JSON",
+        success: function (retdata) {
+            assignment_release_states = retdata;
+        }
+        });
+    }
+}
 
+function set_release_button() {
 
-
-function release_grades() {
-          var col1 = document.getElementById("gradingoption1");
+    // first find out if there is an assignment selected
+    var col1 = document.getElementById("gradingoption1");
     var col1val = col1.options[col1.selectedIndex].value;
 
-        var col2 = document.getElementById("gradingoption2");
+    var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    var assignment = null;
+
+    if (col1val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+        }
+    }
+
+    else if (col2val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn2");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+        }
+    }
+
+    // change the release button appropriately
+    // var release_button = document.getElementById("releasebutton");
+    var relase_button = $(release_button)
+    if (assignment == null) {
+        //hide the release grades button
+        release_button.css("visibility", "hidden");
+    }
+
+    else{
+        release_button.css("visibility", "visible");
+        // see whether grades are currently live for this assignment
+        get_assignment_release_states()
+        var release_state = assignment_release_states[assignment]
+        // If so, set the button text appropriately
+        if (release_state == "live"){
+            release_button.text("Hide Grades from Students for Selected Assignment");
+        }
+        else{
+            release_button.text("Release Grades to Students for Selected Assignment");
+        }
+    }
+}
+
+function toggle_release_grades() {
+    var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+    var col2 = document.getElementById("gradingoption2");
     var col2val = col2.options[col2.selectedIndex].value;
     var assignment = null;
 
@@ -1717,14 +1767,30 @@ function release_grades() {
 
     if (assignment != null) {
         //go release the grades now
+        get_assignment_release_states()
+        release_state = assignment_release_states[assignment];
         var ids = JSON.parse(assignmentids);
         var assignmentid = ids[assignment];
         var obj = new XMLHttpRequest();
-        obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid, true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-            if (obj.readyState == 4 && obj.status == 200) {
-                alert("Grades released");
+        if (release_state == "live"){
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=hidden', true);
+            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    assignment_release_states[assignment] = null;
+                    alert("Grades are now hidden from students for " + assignment);
+                }
+            }
+        }
+
+        else{
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=live', true);
+            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    assignment_release_states[assignment] = "live";
+                    alert("Grades are now visible to students for " + assignment);
+                }
             }
         }
     }

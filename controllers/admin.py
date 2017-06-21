@@ -726,7 +726,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), course_id = auth.user.course_name, assignmentids = assignmentids
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), course_id = auth.user.course_name, assignmentids = assignmentids
 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1323,12 +1323,23 @@ def editindexrst():
 def releasegrades():
     try:
         assignmentid = request.vars['assignmentid']
+        released = request.vars['released']
         assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(released=True)
+        assignment.update_record(released=released)
         return "Success"
     except Exception as ex:
         print(ex)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_assignment_release_states():
+    # return a dictionary with the release status of whether grades have been
+    # released for each of the assignments for the current course
+    try:
+        assignments_query = db(db.assignments.course == auth.user.course_id).select()
+        return json.dumps({row.name: row.released for row in assignments_query})
+    except Exception as ex:
+        print ex
+        return json.dumps({})
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def checkQType():

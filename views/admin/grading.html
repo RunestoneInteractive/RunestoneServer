@@ -24,6 +24,7 @@
   eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
   eBookConfig.setTotalURL = '{{=setTotalURL}}';
   eBookConfig.getCourseStudentsURL = '{{=getCourseStudentsURL}}';
+  eBookConfig.get_assignment_release_statesURL = '{{=get_assignment_release_statesURL}}';
   // load the students dictionary once the page loads
   $(getCourseStudents)
 </script>
@@ -95,8 +96,7 @@
                     </form>
              </div>
 
-            <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="release_grades();">Release Grades</button>
-
+            <button id="releasebutton" released = "false" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="toggle_release_grades();">Release Grades</button>
 
     </div>
 
