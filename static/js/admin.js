@@ -1133,7 +1133,7 @@ var match = line.split(/.. \w*:: /);
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
             if (iserror == 'ERROR') {
                 errortext = document.getElementById('qnameerror');
-                errortext.innerHTML = 'Name is alerady in use. Please try a different name.'
+                errortext.innerHTML = 'Name is already in use. Please try a different name.'
             } else {
                 alert('Question created successfully');
                 var newPoints = iserror['points'];

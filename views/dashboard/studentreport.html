@@ -11,7 +11,7 @@
 	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
 	<h2>Student Report - {{=user.first_name}} {{=user.last_name}}</h2>
 	<div class="col-md-7">
-		
+
 		<div class="dash-section" id="book-completion">
 			<div class="dash-section-header">
 				Book Completion
@@ -61,42 +61,20 @@
 					<thead>
 						<tr>
 							<td>Assignment</td>
-							<td>Completed Date</td>
+							<td>Due Date</td>
 							<td>Grade</td>
 							<td>Average</td>
 						</tr>
 					</thead>
 					<tbody>
+						{{ for k in sorted(assignments.keys()): }}
 						<tr>
-							<td>Assignment #1</td>
-							<td>1/19/2016</td>
-							<td>80</td>
-							<td>76</td>
+							<td>{{=k}}</td>
+							<td>{{=assignments[k]["due_date"]}}</td>
+							<td>{{=assignments[k]["score"]}}</td>
+							<td>{{=assignments[k]["class_average"]}}</td>
 						</tr>
-						<tr>
-							<td>Assignment #2</td>
-							<td>2/2/2016</td>
-							<td>95</td>
-							<td>84</td>
-						</tr>
-						<tr>
-							<td>Assignment #3</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
-						<tr>
-							<td>Assignment #4</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
-						<tr>
-							<td>Assignment #5</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
+						{{ pass }}
 					</tbody>
 				</table>
 			</div>

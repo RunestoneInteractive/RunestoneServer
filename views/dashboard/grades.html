@@ -1,83 +1,74 @@
-{{extend 'layout.html'}}
+{{extend 'admin/instructors.html'}}
+{{ block tabcontent }}
+
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
+
+<style>
+	#grades {
+    	width: 80em;
+    	overflow-x: auto;
+    	white-space: nowrap;
+	}
+</style>
+
 <div id="dashboard">
 	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
 	{{include 'dashboard/dashboard-nav.html'}}
-	<h2>Gradebook</h2>
-	<div class="col-md-12">
-		<table>
+	<h2>Gradebook</h2> 
+	<button id="export" data-export="export">Download Gradebook</button>
+	<div id="grades" class="col-md-12">
+		<table id="gradebook">
+			<!-- Jquery plugin uses the caption of a table to name the downloaded file -->
+			<caption style="display:none;">{{=course_name}}_Gradebook</caption>
 			<thead>
 				<tr>
-					<td rowspan="2">Student</td>
-					<td>Assignment #1</td>
-					<td>Assignment #2</td>
-					<td>Assignment #3</td>
-					<td>Assignment #4</td>
-					<td>Assignment #5</td>
+					<td>Student</td>
+					{{for assignment in assignments:}}
+						<td>{{=assignment['name']}}</td>
+					{{pass}}
 				</tr>
+
 				<tr>
-					<td>87 &darr;</td>
-					<td>84 &uarr;</td>
-					<td>n/a &uarr;</td>
-					<td>n/a &uarr;</td>
-					<td>n/a &uarr;</td>
+					<td>Class Average</td>
+					{{for average in averagerow:}}
+						<td>{{=average}}</td>
+					{{pass}}
 				</tr>
 			</thead>
+
 			<tbody>
-				<tr>
-					<td>Bob Brown</td>
-					<td>80</td>
-					<td>95</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>Jack Jackson</td>
-					<td>85</td>
-					<td>80</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>Macy Millan</td>
-					<td>90</td>
-					<td>95</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>Sarah Smith</td>
-					<td>75</td>
-					<td>85</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>Xu Hung</td>
-					<td>95</td>
-					<td>50</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>Rachel Ru</td>
-					<td>75</td>
-					<td>80</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
+				{{for row in range(len(gradetable)):}}
+					<tr>
+						{{for item in range(len(gradetable[row])):}}
+							{{if item != 0 and gradetable[row][item] != 'n/a':}}
+								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}</a></td>
+							{{elif item == 0:}}
+								<td>{{=gradetable[row][item]}}
+							{{else:}}
+								<td></td>
+							{{pass}}
+						{{pass}}
+					</tr>
+				{{pass}}
 			</tbody>
+
 		</table>
 	</div>
 </div>
+
+<script>
+    $(function(){
+        $("#export").click(function(){
+            $("#gradebook").tableToCSV();
+        });
+    });
+</script>
+
+{{end}}
