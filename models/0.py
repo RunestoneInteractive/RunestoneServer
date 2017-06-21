@@ -1,6 +1,7 @@
 from gluon.storage import Storage
+from platform import uname
+
 settings = Storage()
-from os import uname
 
 settings.migrate = True
 settings.migprefix = 'runestonebeta_'
