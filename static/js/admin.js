@@ -451,6 +451,9 @@ function updateColumn3() {
     var select2 = document.getElementById("gradingcolumn2");
     var column3 = document.getElementById("gradingcolumn3");
     var selectedval = select2.options[select2.selectedIndex].value;
+    if (val == 'assignment'){
+        set_release_button();
+    }
     if (val == 'chapter' && val2 == 'question') {
         $("#gradingcolumn3").empty();
         for (i = 0; i < chapters[selectedval].length; i++) {
@@ -1673,10 +1676,13 @@ function edit_indexrst(form) {
 
 function get_assignment_release_states(){
     if (assignment_release_states == null){
+        // This has to be a synchronous call because we have to set assignment_release_states
+        // before going on to later code that uses it
         jQuery.ajax({
         url: eBookConfig.get_assignment_release_statesURL,
         type: "POST",
         dataType: "JSON",
+        async: false,
         success: function (retdata) {
             assignment_release_states = retdata;
         }
@@ -1710,23 +1716,23 @@ function set_release_button() {
 
     // change the release button appropriately
     // var release_button = document.getElementById("releasebutton");
-    var relase_button = $(release_button)
+    var release_button = $('#releasebutton');
     if (assignment == null) {
         //hide the release grades button
-        release_button.css("visibility", "hidden");
+        release_button.css('visibility', 'hidden');
     }
 
     else{
-        release_button.css("visibility", "visible");
+        release_button.css('visibility', 'visible');
         // see whether grades are currently live for this assignment
-        get_assignment_release_states()
-        var release_state = assignment_release_states[assignment]
+        get_assignment_release_states();
+        var release_state = assignment_release_states[assignment];
         // If so, set the button text appropriately
-        if (release_state == "live"){
-            release_button.text("Hide Grades from Students for Selected Assignment");
+        if (release_state == true){
+            release_button.text("Hide Grades from Students for " + assignment);
         }
         else{
-            release_button.text("Release Grades to Students for Selected Assignment");
+            release_button.text("Release Grades to Students for " + assignment);
         }
     }
 }
@@ -1772,26 +1778,29 @@ function toggle_release_grades() {
         var ids = JSON.parse(assignmentids);
         var assignmentid = ids[assignment];
         var obj = new XMLHttpRequest();
-        if (release_state == "live"){
-            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=hidden', true);
+        if (release_state == true){
+            // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
+            assignment_release_states[assignment] = null;
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=no', true);
             obj.send(JSON.stringify({variable: 'variable'}));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
-                    assignment_release_states[assignment] = null;
                     alert("Grades are now hidden from students for " + assignment);
                 }
             }
         }
 
         else{
-            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=live', true);
+            // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
+            assignment_release_states[assignment] = true;
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=yes', true);
             obj.send(JSON.stringify({variable: 'variable'}));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
-                    assignment_release_states[assignment] = "live";
                     alert("Grades are now visible to students for " + assignment);
                 }
             }
         }
+        set_release_button();
     }
 }

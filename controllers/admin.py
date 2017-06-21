@@ -1323,7 +1323,7 @@ def editindexrst():
 def releasegrades():
     try:
         assignmentid = request.vars['assignmentid']
-        released = request.vars['released']
+        released = (request.vars['released'] == 'yes')
         assignment = db(db.assignments.id == assignmentid).select().first()
         assignment.update_record(released=released)
         return "Success"
