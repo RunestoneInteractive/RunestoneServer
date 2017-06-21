@@ -37,12 +37,12 @@
 					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCC33; float: left; margin-top: 3px; margin-right: 3px"></div> Started Section
 				</div>
 				<div style="float: left; margin-right: 1em;">
-					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Not Started 
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Not Started
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				{{ for section in sections: }}
 				<div style="height: 30px;">
-					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;">{{=section["text"]}}</div>
+					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="../static/{{=course_name}}/{{=selected_chapter['chapter_name']}}/{{=section['text']}}.html">{{=section["text"]}}</a></div>
 					<div style="" class="dash-bar-container">
 						<div class="dash-bar dash-bar-correct" style="width: {{=section['readPercent']}};"> {{=section["readPercent"]}}&nbsp;</div>
 						<div class="dash-bar dash-bar-attempts" style=" width: {{=section['startedPercent']}};"> {{=section["startedPercent"]}}&nbsp;</div>
@@ -77,10 +77,10 @@
 					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCC33; float: left; margin-top: 3px; margin-right: 3px"></div> Correct after multiple attempts
 				</div>
 				<div style="float: left; margin-right: 1em;">
-					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CC3300; float: left; margin-top: 3px; margin-right: 3px"></div> Never correct 
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CC3300; float: left; margin-top: 3px; margin-right: 3px"></div> Never correct
 				</div>
 				<div style="float: left; margin-right: 1em;">
-					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Never attempted 
+					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #CCCCCC; float: left; margin-top: 3px; margin-right: 3px"></div> Never attempted
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				<div id="question-metrics">
