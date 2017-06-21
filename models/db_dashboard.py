@@ -42,17 +42,15 @@ class ProblemMetrics(object):
             self.user_responses[user.username] = UserResponse(user)
 
     def add_data_point(self, row):
-        if ':' in row.act:
-            answer = row.act.split(':')
-            choice = answer[1]
-            correct = answer[2] == "correct"
-            if choice == "":
-                choice = "(empty)"
+        correct = row.correct
+        choice = row.answer
+        if choice == "":
+            choice = "(empty)"
 
-            self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
+        self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
 
-            if row.sid in self.user_responses:
-                self.user_responses[row.sid].add_response(choice, correct)
+        if row.sid in self.user_responses:
+            self.user_responses[row.sid].add_response(choice, correct)
 
     def user_response_stats(self):
         correct = 0
@@ -113,13 +111,16 @@ class CourseProblemMetrics(object):
         self.problems = {}
         self.users = users
 
-    def update_metrics(self, logs):
-        for row in logs:
-            if row.event == "mChoice" or row.event == "fillb":
+    def update_metrics(self, course_name):
+        mcans = db(db.mchoice_answers.course_name==course_name).select()
+        fbans = db(db.fitb_answers.course_name==course_name).select()
+        def add_problems(result_set):
+            for row in result_set:
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
-
                 self.problems[row.div_id].add_data_point(row)
+        add_problems(mcans)
+        add_problems(fbans)
 
     def retrieve_chapter_problems(self):
         return self
@@ -305,7 +306,7 @@ class DashboardDataAnalyzer(object):
         #self.divs = db(db.div_ids).select(db.div_ids.div_id)
         #print self.divs
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
-        self.problem_metrics.update_metrics(self.logs)
+        self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
         self.user_activity.update_metrics(self.logs)
         self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)
@@ -330,6 +331,42 @@ class DashboardDataAnalyzer(object):
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
         self.problem_metrics.update_metrics(self.logs)
+
+    def load_assignment_metrics(self, username):
+        self.assignments = []
+        res = db(db.assignments.course == self.course_id)\
+                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate)
+                # ^ Get assignments from DB
+        for aRow in res:
+            self.assignments.append(aRow.as_dict())
+
+        self.grades = {}
+        for assign in self.assignments:
+            row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
+                    .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
+                    # ^ Get grades for assignment
+
+            if row.records:             # If the row has a result
+                rl = row.as_list()      # List of dictionaries
+
+                s = 0.0
+                for userEntry in rl:
+                    self.grades[assign["name"]] = {}
+                    s += userEntry["grades"]["score"]   # Calculating average
+
+                    if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
+                        self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+                    else:
+                        self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
+
+                average = s/len(userEntry)
+                self.grades[assign["name"]]["class_average"] = average
+                self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
+
+            else:           # The row has no result --> the query returned empty
+                self.grades[assign["name"]] = {"score":"N/A",
+                                               "class_average":"N/A",
+                                               "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
 
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
@@ -356,7 +393,7 @@ class IdConverter(object):
 
     sub_chapter_id_map = {
         #CSP - Ch1
-        "studentBook": "This Book is for Stuents",
+        "studentBook": "This Book is for Students",
         "pretest": "Pretest",
         "computeNumbers": "Compute with Numbers",
         "computeWords": "Compute with Words",

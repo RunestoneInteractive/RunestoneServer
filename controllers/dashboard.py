@@ -1,6 +1,5 @@
 from os import path
 import os
-import pygal
 import logging
 from datetime import date, timedelta
 from operator import itemgetter
@@ -102,6 +101,7 @@ def index():
 def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.get_vars["id"])
+    data_analyzer.load_assignment_metrics(request.get_vars["id"])
 
     chapters = []
     for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
@@ -111,7 +111,8 @@ def studentreport():
             "subchapters": chapter.get_sub_chapter_progress()
             })
     activity = data_analyzer.formatted_activity.activities
-    return dict(course_name=auth.user.course_name,user=data_analyzer.user, chapters=chapters, activity=activity)
+
+    return dict(course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 def studentprogress():
     return dict(course_name=auth.user.course_name)

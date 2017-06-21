@@ -101,6 +101,7 @@ db.define_table('timed_exam',
     Field('incorrect','integer'),
     Field('skipped','integer'),
     Field('time_taken','integer'),
+    Field('reset','boolean'),
     migrate='runestone_timed_exam.table'
     )
 
