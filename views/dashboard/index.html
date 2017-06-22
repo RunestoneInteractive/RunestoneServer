@@ -43,7 +43,7 @@
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				{{ for section in sections: }}
 				<div style="height: 30px;">
-					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="../static/{{=course_name}}/{{=selected_chapter['chapter_name']}}/{{=section['text']}}.html">{{=section["text"]}}</a></div>
+					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="../static/{{=course_name}}/{{=selected_chapter['chapter_label']}}/{{=section['text']}}.html">{{=section["text"]}}</a></div>
 					<div style="" class="dash-bar-container">
 						<div class="dash-bar dash-bar-correct" style="width: {{=section['readPercent']}};"> {{=section["readPercent"]}}&nbsp;</div>
 						<div class="dash-bar dash-bar-attempts" style=" width: {{=section['startedPercent']}};"> {{=section["startedPercent"]}}&nbsp;</div>
@@ -85,15 +85,23 @@
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				<div id="question-metrics">
+				{{ chapterIndex = 0 }}
 				{{ for question in questions:}}
-				<div class="question-metric">
-					<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
-					<div class="question-info">
-						<b>{{=question["text"]}}</b>
-						<p>Attempted by {{=question["attemptedBy"]}} students</p>
-						<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
+					{{ nums = question["text"].split("n")[1].split("_") }}
+					{{ if nums[0] > chapterIndex: }}
+						<div style="clear:both; font-size:1.2em; font-weight: bold; margin: .5em;">
+							{{ =chapters[int(nums[0])].chapter_name }}:
+						</div>
+						{{ chapterIndex = nums[0] }}
+					{{ pass }}
+					<div class="question-metric">
+						<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
+						<div class="question-info" style="">
+							<b>{{=question["text"]}}</b>
+							<p>Attempted by {{=question["attemptedBy"]}} students</p>
+							<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
+						</div>
 					</div>
-				</div>
 				{{pass}}
 			</div>
 				<script type="text/javascript">
