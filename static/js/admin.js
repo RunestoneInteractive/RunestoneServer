@@ -223,7 +223,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             jQuery("#questiondisplay").html(htmlsrc);
-            //ACFactory.createScratchActivecode();
             $('[data-component=activecode]').each(function (index) {
                 if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
                     edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:true});
@@ -1335,9 +1334,9 @@ function preview_question(form){
     var code = $(form.qcode).val();
     var data = {'code': JSON.stringify(code)};
     $.post('/runestone/ajax/preview_question', data, function(result, status) {
-            alert(result)
+            renderRunestoneComponent(JSON.parse(result), "component-preview")
         }
-    )
+    );
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
     // a sphinx project, run sphinx, and send back the generated index file
@@ -1737,3 +1736,34 @@ function release_grades() {
         }
     }
 }
+
+
+
+function renderRunestoneComponent(componentSrc, whereDiv) {
+    /**
+     *  The easy part is adding the componentSrc to the existing div.
+     *  The tedious part is calling the right functions to turn the
+     *  source into the actual component.
+     */
+    
+    jQuery(`#${whereDiv}`).html(componentSrc);
+
+    edList = [];
+    mcList = [];
+    $('[data-component=activecode]').each(function (index) {
+        if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
+            edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), { graderactive: false, python3:true});
+        }
+    });
+
+    $("[data-component=multiplechoice]").each(function (index) {    // MC
+        var opts = {"orig": this, 'useRunestoneServices':false};
+        mcList[this.id] = new MultipleChoice(opts);
+    });
+
+}
+
+$('#component-preview').on('DOMNodeInserted','[data-component=multiplechoice]', function() {
+        var opts = {"orig": this, 'useRunestoneServices':eBookConfig.useRunestoneServices};
+            mcList = new MultipleChoice(opts);
+    });
