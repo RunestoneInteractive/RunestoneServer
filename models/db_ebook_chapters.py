@@ -2,18 +2,18 @@ import datetime
 
 # table of all book chapters
 db.define_table('chapters',
-  Field('chapter_name','string'),
+  Field('chapter_name','string'), # can have spaces in it, for human consumption
   Field('course_id','string'), # references courses(course_name)
-  Field('chapter_label','string'), #Approximate number of days, aggregated based on sub chapters
+  Field('chapter_label','string'), #no spaces, actual filename path
   migrate='runestone_chapters.table'
 )
 
 # table of sub chapters
 db.define_table('sub_chapters',
-  Field('sub_chapter_name','string'),
+  Field('sub_chapter_name','string'), # can have spaces in it, for human consumption
   Field('chapter_id','reference chapters'),
   Field('sub_chapter_length','integer'),
-  Field('sub_chapter_label','string'), #Average Time it takes people to complete this subchapter, maybe calculated using a weekly batchjob
+  Field('sub_chapter_label','string'), # no spaces, actual filename path
   migrate='runestone_sub_chapters.table'
 )
 

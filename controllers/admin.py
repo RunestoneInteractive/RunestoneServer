@@ -1364,23 +1364,19 @@ def get_toc_and_questions():
         #   -- Recurse; with each subchapter:
         #      -- get the divs associated with it, and insert into the sub-sub-dictionary
 
-        question_picker = {}
-        question_picker['text'] = 'Browse to select questions to assign'
-        question_picker['children'] = []
-        reading_picker = {}  # this one doesn't include the questions, but otherwise the same
-        reading_picker['text'] = 'Browse to select chapters to assign'
-        reading_picker['children'] = []
+        question_picker = []
+        reading_picker = []  # this one doesn't include the questions, but otherwise the same
         chapters_query = db((db.chapters.course_id == db.courses.base_course) &
                             (db.courses.course_name == auth.user.course_name)).select()
         for ch in chapters_query:
             q_ch_info = {}
-            question_picker['children'].append(q_ch_info)
+            question_picker.append(q_ch_info)
             q_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             q_ch_info['text'] = ch.chapters.chapter_name
             q_ch_info['children'] = []
             # copy same stuff for reading picker
             r_ch_info = {}
-            reading_picker['children'].append(r_ch_info)
+            reading_picker.append(r_ch_info)
             r_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             r_ch_info['text'] = ch.chapters.chapter_name
             r_ch_info['children'] = []
@@ -1400,8 +1396,8 @@ def get_toc_and_questions():
 
                 # include another level for questions only in the question picker
                 questions_query = db((db.questions.base_course == auth.user.course_name) & \
-                                  (db.questions.chapter == ch.chapters.chapter_name) & \
-                                  (db.questions.subchapter == sub_ch.sub_chapter_name)).select()
+                                  (db.questions.chapter == ch.chapters.chapter_label) & \
+                                  (db.questions.subchapter == sub_ch.sub_chapter_label)).select()
                 for question in questions_query:
                     q_info = {}
                     q_info['text'] = question.name
