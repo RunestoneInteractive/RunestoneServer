@@ -1372,6 +1372,7 @@ def get_toc_and_questions():
                 ch_info['children'].append(sub_ch_info)
                 sub_ch_info['text'] = sub_ch.sub_chapter_name
                 sub_ch_info['children'] = []
+                sub_ch_info['children'].append('Read the subchapter')
                 questions_query = db((db.questions.base_course == auth.user.course_name) & \
                                   (db.questions.chapter == ch.chapter_name) & \
                                   (db.questions.subchapter == sub_ch.sub_chapter_name)).select()
