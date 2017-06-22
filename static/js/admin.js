@@ -1674,9 +1674,9 @@ function edit_indexrst(form) {
         }}
 }
 
-var toc = null;
-function get_toc(){
-    if (toc == null){
+var tocs = null;
+function get_tocs(){
+    if (tocs == null){
         // This has to be a synchronous call because we have to set assignment_release_states
         // before going on to later code that uses it
         jQuery.ajax({
@@ -1685,11 +1685,19 @@ function get_toc(){
         dataType: "JSON",
         async: false,
         success: function (retdata) {
-            toc = retdata;
+            tocs = retdata;
         }
         });
     }
-    return toc;
+    return tocs;
+}
+
+function get_reading_toc(){
+    return get_tocs().reading_picker
+}
+
+function get_questions_toc(){
+    return get_tocs().question_picker
 }
 
 function get_assignment_release_states(){

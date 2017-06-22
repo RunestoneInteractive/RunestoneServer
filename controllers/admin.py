@@ -606,8 +606,16 @@ def assignments():
     chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
-    return dict(coursename=auth.user.course_name,confirm=False,
-                    course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
+    return dict(coursename=auth.user.course_name,
+                confirm=False,
+                course_url=course_url,
+                assignments=assigndict,
+                tags=tags,
+                chapters=chapter_labels,
+                get_tocURL=URL('admin', 'get_toc_and_questions'),
+                get_assignmentURL=URL('admin', 'get_assignment'),
+                save_assignmentURL=URL('admin', 'save_assignment')
+                )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -729,7 +737,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), get_tocURL = URL('admin', 'get_toc_and_questions'), course_id = auth.user.course_name, assignmentids = assignmentids
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), course_id = auth.user.course_name, assignmentids = assignmentids
 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1350,40 +1358,69 @@ def get_toc_and_questions():
     # picker will need in the instructor's assignment authoring tab
 
     # Format is documented at https://www.jstree.com/docs/json/
-    try:
+    #try:
         # First get the chapters associated with the current course, and insert them into the tree
         # Recurse, with each chapter:
         #   -- get the subchapters associated with it, and insert into the subdictionary
         #   -- Recurse; with each subchapter:
         #      -- get the divs associated with it, and insert into the sub-sub-dictionary
 
-        tree = {}
-        tree['text'] = 'Table of Contents'
-        tree['children'] = []
+        question_picker = {}
+        question_picker['text'] = 'Browse to select questions to assign'
+        question_picker['children'] = []
+        reading_picker = {}  # this one doesn't include the questions, but otherwise the same
+        reading_picker['text'] = 'Browse to select chapters to assign'
+        reading_picker['children'] = []
         chapters_query = db(db.chapters.course_id == auth.user.course_name).select()
         for ch in chapters_query:
-            ch_info = {}
-            tree['children'].append(ch_info)
-            ch_info['text'] = ch.chapter_name
-            ch_info['children'] = []
+            q_ch_info = {}
+            question_picker['children'].append(q_ch_info)
+            q_ch_info['id'] = "chapter:{}".format(ch.id)
+            q_ch_info['text'] = ch.chapter_name
+            q_ch_info['children'] = []
+            # copy same stuff for reading picker
+            r_ch_info = {}
+            reading_picker['children'].append(r_ch_info)
+            r_ch_info['id'] = "chapter:{}".format(ch.id)
+            r_ch_info['text'] = ch.chapter_name
+            r_ch_info['children'] = []
             subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select()
             for sub_ch in subchapters_query:
-                sub_ch_info = {}
-                ch_info['children'].append(sub_ch_info)
-                sub_ch_info['text'] = sub_ch.sub_chapter_name
-                sub_ch_info['children'] = []
-                sub_ch_info['children'].append('Read the subchapter')
+                q_sub_ch_info = {}
+                q_ch_info['children'].append(q_sub_ch_info)
+                q_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
+                q_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                q_sub_ch_info['children'] = []
+                # copy same stuff for reading picker
+                r_sub_ch_info = {}
+                r_ch_info['children'].append(r_sub_ch_info)
+                r_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
+                r_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                r_sub_ch_info['children'] = []
+
+                # include another level for questions only in the question picker
                 questions_query = db((db.questions.base_course == auth.user.course_name) & \
                                   (db.questions.chapter == ch.chapter_name) & \
                                   (db.questions.subchapter == sub_ch.sub_chapter_name)).select()
                 for question in questions_query:
                     q_info = {}
-                    q_info['text'] = q_info.name
-                    sub_ch_info['children'].append(q_info)
-        return json.dumps(tree)
-    except Exception as ex:
-        print ex
-        return json.dumps({})
+                    q_info['text'] = question.name
+                    q_info['id'] = "question:{}".format(question.id)
+                    q_sub_ch_info['children'].append(q_info)
+        return json.dumps({'reading_picker': reading_picker,
+                          'question_picker': question_picker})
+    # except Exception as ex:
+    #     print ex
+    #     return json.dumps({})
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_assignment():
+    return json.dumps("sorry, get_assignment not implemented yet")
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def save_assignment():
+    return json.dumps("sorry, save_assignment not implemented yet")
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def checkQType():
