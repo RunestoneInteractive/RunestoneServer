@@ -1833,6 +1833,9 @@ function toggle_release_grades() {
 
 // Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
 $(function () {
+    tree_json = get_questions_toc();
+    console.log(tree_json);
+    //get_reading_toc();
     var tqp = $('#tree-question-picker');
     tqp.jstree({
         // Configure the checkbox plugin.
@@ -1851,40 +1854,7 @@ $(function () {
         ],
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
         "core" : {
-            "data" : [
-                {
-                    "text" : "Root item",
-                    "state" : {
-                        "opened" : true,
-                    },
-                    "children" : [
-                        {
-                            "text" : "Item 1",
-                            "state" : {
-                                "opened" : true,
-                            },
-                            "children" : [
-                                {
-                                    "id": "div_id_1.1",
-                                    "text" : "Subitem 1.1",
-                                }, {
-                                    "id": "div_id_1.2",
-                                    "text" : "Subitem 1.2",
-                                }
-                            ],
-                        }, {
-                            "text" : "Item 2",
-                            "state" : {
-                                "opened" : true,
-                            },
-                            "children" : [
-                                "Subitem 2.1",
-                                "Subitem 2.2",
-                            ],
-                        },
-                    ],
-                },
-            ],
+            "data" : tree_json,
         },
     });
     // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
