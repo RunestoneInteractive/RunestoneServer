@@ -1830,3 +1830,105 @@ function toggle_release_grades() {
         set_release_button();
     }
 }
+
+// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
+$(function () {
+    var tqp = $('#tree-question-picker');
+    tqp.jstree({
+        // Configure the checkbox plugin.
+        "checkbox" : {
+            // This prevents the selection from including all auto-checked nodes, which I find distracting.
+            "keep_selected_style" : false,
+            // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
+            "whole_node" : false,
+            // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
+            "tie_selection" : false,
+        },
+        // Enable `plugins <https://www.jstree.com/plugins/>`_.
+        "plugins" : [
+            "checkbox",
+            "search",
+        ],
+        // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
+        "core" : {
+            "data" : [
+                {
+                    "text" : "Root item",
+                    "state" : {
+                        "opened" : true,
+                    },
+                    "children" : [
+                        {
+                            "text" : "Item 1",
+                            "state" : {
+                                "opened" : true,
+                            },
+                            "children" : [
+                                {
+                                    "id": "div_id_1.1",
+                                    "text" : "Subitem 1.1",
+                                }, {
+                                    "id": "div_id_1.2",
+                                    "text" : "Subitem 1.2",
+                                }
+                            ],
+                        }, {
+                            "text" : "Item 2",
+                            "state" : {
+                                "opened" : true,
+                            },
+                            "children" : [
+                                "Subitem 2.1",
+                                "Subitem 2.2",
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    });
+    // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
+
+    // Set up for searching. Copied from the search plugin example.
+    var to = false;
+    $('#search-tree-question-picker').keyup(function () {
+        if (to) {
+            clearTimeout(to);
+        }
+        to = setTimeout(function () {
+            var v = $('#search-tree-question-picker').val();
+            tqp.jstree(true).search(v);
+        }, 250);
+    });
+
+    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree%20Event&f=select_node.jstree>`_.
+    tqp.on('select_node.jstree', function(event, data) {
+        console.log('select_node');
+        // If this is a question (a leaf node), then preview it.
+        if (!data.instance.is_parent(data.node)) {
+            console.log(data.node.id);
+        }
+    });
+    // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=check_node.jstree>`_.
+    tqp.on('check_node.jstree', function(event, data) {
+        console.log('check_node');
+        walk_jstree(data.instance, data.node, function(instance, node) {
+            console.log(node.id)
+        });
+    });
+    // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=uncheck_node.jstree>`_.
+    tqp.on('uncheck_node.jstree', function(event, data) {
+        console.log('uncheck_node');
+        walk_jstree(data.instance, data.node, function(instance, node) {
+            console.log(node.id)
+        });
+    });
+});
+
+// Given a jstree node, invoke f on node and all its children.
+function walk_jstree(instance, node, f) {
+    f(instance, node);
+    $(node.children).each(function(index, value) {
+        walk_jstree(instance, instance.get_node(value), f);
+    });
+}

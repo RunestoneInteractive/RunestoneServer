@@ -14,6 +14,9 @@
 
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
 
+    <link rel="stylesheet" href="{{=URL('static', 'js/jstree_themes/default/style.min.css')}}" />
+    <script src="{{=URL('static', 'js/jstree.min.js')}}"></script>
+
     <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
 </head>
 
@@ -305,15 +308,20 @@
         </div>
 
 
-    <div id="rightSection" class="col-md-6" style="border-left: solid black 1px; visibility: hidden;">
+    <div id="rightSection" class="col-md-6" style="border-left: solid black 1px; " xtra="visibility: hidden;">
 <div class="container">
-<a data-toggle="tab" href="#qbank" class="btn btn-default">Question Bank</a>
-
-
-        <a data-toggle="tab" href="#qwrite" class="btn btn-default">Write</a>
+<a data-toggle="tab" href="#qbrowse" class="btn btn-default">Browse</a>
+<a data-toggle="tab" href="#qbank" class="btn btn-default">Search</a>
+<a data-toggle="tab" href="#qwrite" class="btn btn-default">Write</a>
 
 
         <div class="tab-content">
+        <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
+            <input type="text" id="search-tree-question-picker">
+            <div id="tree-question-picker">
+            </div>
+        </div>
+
         <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
 
 <h5 style="text-align: center">Search Question Bank</h5>
