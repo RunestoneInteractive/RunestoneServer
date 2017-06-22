@@ -63,7 +63,7 @@ def index():
             })
 
     logger.debug("getting questsions")
-    questions = sorted(questions, key=itemgetter("correct"), reverse=True)
+    questions = sorted(questions, key=itemgetter("id"))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
@@ -95,6 +95,7 @@ def index():
     "data":read_data,
     "name":"Exercises Missed"
     }]
+    logger.debug(sections)
     return dict(assignments=assignments, course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
 
 @auth.requires_login()
@@ -174,7 +175,7 @@ def questiongrades():
     assignment = db(db.assignments.id == request.vars.assignment_id)(db.assignments.course == course.id).select().first()
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(db.auth_user.first_name, db.auth_user.last_name)
-    
+
     query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
     rows = db.executesql(query, [assignment['id'], sid])
 
