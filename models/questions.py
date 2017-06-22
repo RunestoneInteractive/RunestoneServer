@@ -1,8 +1,8 @@
 db.define_table('questions',
                 Field('base_course', type='string', notnull=True),
                 Field('name', type='string', notnull=True),
-                Field('chapter', type='string'),
-                Field('subchapter', type='string'),
+                Field('chapter', type='string'),  # matches chapter_label, not name
+                Field('subchapter', type='string'), # matches sub_chapter_label, not name
                 Field('author', type='string'),
                 Field('difficulty', type='integer'),
                 Field('question', type='text'),
