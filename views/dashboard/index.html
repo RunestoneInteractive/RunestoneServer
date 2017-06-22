@@ -43,7 +43,7 @@
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				{{ for section in sections: }}
 				<div style="height: 30px;">
-					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="../static/{{=course_name}}/{{=selected_chapter['chapter_name']}}/{{=section['text']}}.html">{{=section["text"]}}</a></div>
+					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="../static/{{=course_name}}/{{=selected_chapter['chapter_label']}}/{{=section['text']}}.html">{{=section["text"]}}</a></div>
 					<div style="" class="dash-bar-container">
 						<div class="dash-bar dash-bar-correct" style="width: {{=section['readPercent']}};"> {{=section["readPercent"]}}&nbsp;</div>
 						<div class="dash-bar dash-bar-attempts" style=" width: {{=section['startedPercent']}};"> {{=section["startedPercent"]}}&nbsp;</div>

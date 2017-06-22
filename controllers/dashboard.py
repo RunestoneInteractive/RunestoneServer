@@ -128,7 +128,7 @@ def grades():
     query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where points is not null and assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.duedate, assignments.id;"
     rows = db.executesql(query, [course['id'], course['id']])
 
-    gradetable = []  
+    gradetable = []
     averagerow = []
     print(assignments[0]['id'])
 
