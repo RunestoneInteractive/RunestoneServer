@@ -1,6 +1,7 @@
 {{extend 'admin/instructors.html'}}
 {{ block tabcontent }}
 
+
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -9,6 +10,8 @@
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
+
+
 
 <style>
 	#grades {
@@ -50,7 +53,7 @@
 							{{if item != 0 and gradetable[row][item] != 'n/a':}}
 								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}</a></td>
 							{{elif item == 0:}}
-								<td>{{=gradetable[row][item]}}
+								<td>{{=gradetable[row][item]}}</td>
 							{{else:}}
 								<td></td>
 							{{pass}}
@@ -69,6 +72,9 @@
             $("#gradebook").tableToCSV();
         });
     });
+
 </script>
+
+
 
 {{end}}
