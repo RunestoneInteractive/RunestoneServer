@@ -957,3 +957,17 @@ def getAssessResults():
             return ""
         res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)
+
+
+def preview_question():
+    code = json.loads(request.vars.code)
+    print(code)
+    with open("applications/runestone/build/preview/_sources/index.rst", "w") as ixf:
+        ixf.write(code)
+
+    res = os.system('applications/runestone/scripts/build_preview.sh')
+    if res == 0:
+        with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
+            return json.dumps(ixf.read())
+
+    return json.dumps(res)

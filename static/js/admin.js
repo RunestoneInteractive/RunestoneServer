@@ -1330,6 +1330,20 @@ function getQuestions() {
     }
 }
 
+function preview_question(form){
+
+    var code = $(form.qcode).val();
+    var data = {'code': JSON.stringify(code)};
+    $.post('/runestone/ajax/preview_question', data, function(result, status) {
+            alert(result)
+        }
+    )
+    // get the text as above
+    // send the text to an ajax endpoint that will insert it into
+    // a sphinx project, run sphinx, and send back the generated index file
+    // this generated index can then be displayed...
+
+}
 
 function remove_question() {
     var select = document.getElementById('questions_list');
