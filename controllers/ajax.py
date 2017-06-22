@@ -6,6 +6,8 @@ import uuid
 from collections import Counter
 from diff_match_patch import *
 import os, sys
+from lxml import html
+
 # kind of a hacky approach to import coach functions
 #sys.path.insert(0,os.path.dirname(__file__))
 #from coach import get_lint
@@ -968,6 +970,19 @@ def preview_question():
     res = os.system('applications/runestone/scripts/build_preview.sh')
     if res == 0:
         with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
-            return json.dumps(ixf.read())
+            src = ixf.read()
+            tree = html.fromstring(src)
+            component = tree.cssselect(".ac_section")
+            if len(component) > 0:
+                ctext = html.tostring(component[0])
+            else:
+                component = tree.cssselect(".system-message")
+                if len(component) > 0:
+                    ctext = html.tostring(component[0])
+                    print "error - ", ctext
+                else:
+                    ctext = "Unknown error occurred"
+
+            return json.dumps(ctext)
 
     return json.dumps(res)

@@ -89,7 +89,10 @@ pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
-
+#
+# Set keep_warnings to true so that warnings show up in text
+#
+keep_warnings = True
 
 # -- Options for HTML output ---------------------------------------------------
 
