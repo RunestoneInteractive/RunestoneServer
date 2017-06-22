@@ -613,7 +613,7 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 get_tocURL=URL('admin', 'get_toc_and_questions'),
-                get_assignmentURL=URL('admin', 'assignmentInfo'),
+                get_assignmentURL=URL('admin', 'get_assignment'),
                 save_assignmentURL=URL('admin', 'save_assignment')
                 )
 
@@ -1395,13 +1395,14 @@ def get_toc_and_questions():
                 r_sub_ch_info['children'] = []
 
                 # include another level for questions only in the question picker
-                questions_query = db((db.questions.base_course == auth.user.course_name) & \
+                questions_query = db((db.courses.course_name == auth.user.course_name) & \
+                                     (db.questions.base_course == db.courses.base_course) & \
                                   (db.questions.chapter == ch.chapters.chapter_label) & \
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select()
                 for question in questions_query:
                     q_info = {}
-                    q_info['text'] = question.name
-                    q_info['id'] = question.name
+                    q_info['text'] = question.questions.name
+                    q_info['id'] = question.questions.name
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
                           'question_picker': question_picker})
@@ -1412,6 +1413,56 @@ def get_toc_and_questions():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment():
     return json.dumps("sorry, get_assignment not implemented yet")
+
+
+    assignment_id = request.vars['assignmentid']
+    assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
+    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
+    allquestion_info = {}
+    allquestion_info['assignment_points'] = assignment_points
+    date = db(db.assignments.id == assignment_id).select(db.assignments.duedate).first().duedate
+    try:
+        due = date.strftime("%Y/%m/%d %H:%M")
+    except Exception as ex:
+        print(ex)
+        due = 'No due date set for this assignment'
+    allquestion_info['due_date'] = due
+    description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
+    if description == None:
+        allquestion_info['description'] = 'No description available for this assignment'
+    else:
+        allquestion_info['description'] = description
+
+    try:
+        for row in assignment_questions:
+            timed = row.timed
+            try:
+                question_points = int(row.points)
+            except:
+                question_points = 0
+            question_info_query = db(db.questions.id == int(row.question_id)).select()
+            for row in question_info_query:
+                question_dict = {}
+                # question_dict['base course'] = row.base_course
+                # question_dict['chapter'] = row.chapter
+                # question_dict['author'] = row.author
+                # question_dict['difficulty'] = int(row.difficulty)
+                # question_dict['question'] = row.question
+                question_id = int(row.id)
+                question_dict['name'] = row.name
+                question_dict['timed'] = timed
+                question_dict['points'] = question_points
+                type_id = db((db.assignment_questions.question_id == question_id) & (
+                db.assignment_questions.assignment_id == assignment_id)).select(
+                    db.assignment_questions.assessment_type).first().assessment_type
+                type = db(db.assignment_types.id == type_id).select(db.assignment_types.name).first().name
+                question_dict['type'] = type
+                allquestion_info[int(row.id)] = question_dict
+    except Exception as ex:
+        print(ex)
+
+    return json.dumps(allquestion_info)
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def save_assignment():
