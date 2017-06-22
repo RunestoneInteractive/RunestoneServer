@@ -130,7 +130,6 @@ def grades():
 
     gradetable = []  
     averagerow = []
-    print(assignments[0]['id'])
 
     #now use the query result to form the rows in the table
     currentrow=0
@@ -178,7 +177,7 @@ def questiongrades():
     query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
     rows = db.executesql(query, [assignment['id'], sid])
 
-    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows)
+    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
