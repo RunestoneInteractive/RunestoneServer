@@ -7,6 +7,7 @@
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+<script src="../static/js/sorttable.js"></script>
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
@@ -27,26 +28,28 @@
 	<h2>Gradebook</h2> 
 	<button id="export" data-export="export">Download Gradebook</button>
 	<div id="grades" class="col-md-12">
-		<table id="gradebook">
+		<table id="gradebook" class="sortable">
+
 			<!-- Jquery plugin uses the caption of a table to name the downloaded file -->
 			<caption style="display:none;">{{=course_name}}_Gradebook</caption>
-			<thead>
+
+			<thead style="cursor: pointer;">
 				<tr>
 					<td>Student</td>
 					{{for assignment in assignments:}}
 						<td>{{=assignment['name']}}</td>
 					{{pass}}
 				</tr>
+			</thead>
 
-				<tr>
+			<tbody>
+				<tr bgcolor="lightgray">
 					<td>Class Average</td>
 					{{for average in averagerow:}}
 						<td>{{=average}}</td>
 					{{pass}}
 				</tr>
-			</thead>
 
-			<tbody>
 				{{for row in range(len(gradetable)):}}
 					<tr>
 						{{for item in range(len(gradetable[row])):}}

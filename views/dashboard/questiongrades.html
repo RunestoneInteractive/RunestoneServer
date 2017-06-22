@@ -5,15 +5,16 @@
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
-<script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+
+<script src="../static/js/sorttable.js"></script>
 
 <div id="dashboard">
 	<h2 style="text-align:center;">{{=assignment['name']}}</h2>
 	<h2>Report for {{=student[0]['first_name']}} {{=student[0]['last_name']}}</h2> 
 
 	<div id="questions" class="col-md-12">
-		<table>
-			<thead>
+		<table class="sortable">
+			<thead style="cursor: pointer;">
 				<tr>
 					<td>Question</td>
 					<td>Student's Score</td>
