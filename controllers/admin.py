@@ -1401,7 +1401,7 @@ def get_toc_and_questions():
                 for question in questions_query:
                     q_info = {}
                     q_info['text'] = question.name
-                    q_info['id'] = "question:{}".format(question.id)
+                    q_info['id'] = question.name
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
                           'question_picker': question_picker})
