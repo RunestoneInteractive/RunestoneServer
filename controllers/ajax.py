@@ -6,6 +6,8 @@ import uuid
 from collections import Counter
 from diff_match_patch import *
 import os, sys
+from lxml import html
+
 # kind of a hacky approach to import coach functions
 #sys.path.insert(0,os.path.dirname(__file__))
 #from coach import get_lint
@@ -968,3 +970,30 @@ def getAssessResults():
             return ""
         res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)
+
+
+def preview_question():
+    code = json.loads(request.vars.code)
+    print(code)
+    with open("applications/runestone/build/preview/_sources/index.rst", "w") as ixf:
+        ixf.write(code)
+
+    res = os.system('applications/runestone/scripts/build_preview.sh')
+    if res == 0:
+        with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
+            src = ixf.read()
+            tree = html.fromstring(src)
+            component = tree.cssselect(".runestone")
+            if len(component) > 0:
+                ctext = html.tostring(component[0])
+            else:
+                component = tree.cssselect(".system-message")
+                if len(component) > 0:
+                    ctext = html.tostring(component[0])
+                    print "error - ", ctext
+                else:
+                    ctext = "Unknown error occurred"
+
+            return json.dumps(ctext)
+
+    return json.dumps(res)
