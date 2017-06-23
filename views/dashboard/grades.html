@@ -12,47 +12,56 @@
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
 
+
 <div id="dashboard">
 	<h1>{{=course_name}}</h1>
-	{{include 'dashboard/dashboard-nav.html'}}
 	<h2>Gradebook</h2> 
+	<div>
+		<label for="studentsearch">Filter by Student</label>
+		<input type="text" id="studentsearch" onkeyup="searchStudent()" placeholder="Name of student..">
+		<label for="assignmentsearch">Filter by Assignment</label>
+		<input type="text" id="assignmentsearch" onkeyup="searchAssignment()" placeholder="Name of assignment..">
+	</div>
 	<button id="export" data-export="export">Download Gradebook</button>
 	<div id="grades" class="col-md-12" style="width:80em; overflow-x:auto; white-space:nowrap;">
+
 		<table id="gradebook" class="sortable">
 
 			<!-- Jquery plugin uses the caption of a table to name the downloaded file -->
 			<caption style="display:none;">{{=course_name}}_Gradebook</caption>
 
 			<thead style="cursor: pointer;">
-				<tr>
-					<td>Student</td>
+				<tr id = "head">
+					<td id="leaveAlone">Student</td>
 					{{for assignment in assignments:}}
-						<td>{{=assignment['name']}}</td>
+						<td class="headrow">{{=assignment['name']}}</td>
 					{{pass}}
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr bgcolor="lightgray">
+				<tr bgcolor="lightgray" id="classaverage">
 					<td>Class Average</td>
-					{{for average in averagerow:}}
-						{{if average == 'n/a':}}
-							<td>{{=average}}</td>
+					{{for average in range(len(averagerow)):}}
+
+<!-- 						This if statement is to determine if a percent sign is needed in the average row. -->
+						{{if averagerow[average] == 'n/a':}}
+							<td class="{{=assignments[average]['name']}}">{{=averagerow[average]}}</td>
 						{{else:}}
-							<td>{{=average}}%</td>
+							<td class="{{=assignments[average]['name']}}">{{=averagerow[average]}}%</td>
 						{{pass}}
 					{{pass}}
 				</tr>
 
 				{{for row in range(len(gradetable)):}}
-					<tr>
+					<tr class="search">
 						{{for item in range(len(gradetable[row])):}}
 							{{if item != 0 and gradetable[row][item] != 'n/a':}}
-								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
+								<td class="{{=assignments[item-1]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
 							{{elif item == 0:}}
-								<td>{{=gradetable[row][item]}}</td>
+								<td class="roguecol">{{=gradetable[row][item]}}</td>
 							{{else:}}
-								<td></td>
+								<td class="{{=assignments[item-1]['name']}}"></td>
 							{{pass}}
 						{{pass}}
 					</tr>
@@ -70,8 +79,56 @@
         });
     });
 
+
+    function searchStudent() {
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("studentsearch");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("gradebook");
+		tr = table.querySelectorAll('.search');
+		for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[0];
+		    if (td) {
+		      	if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		       		tr[i].style.display = "";
+		      	} else {
+		        	tr[i].style.display = "none";
+		      	}
+		  	}       
+		}
+	}
+
+	function searchAssignment() {
+		var input, filter, tds, tablehead, i, j, rogue;
+		input = document.getElementById("assignmentsearch");
+	    filter = input.value.toUpperCase();
+	    tablehead = document.getElementById("head");
+	    tablehead = tablehead.getElementsByTagName("td");
+
+	    for (i = 0; i < tablehead.length; i++) {
+	    	if (tablehead[i].id != "leaveAlone") {
+	    		console.log(tablehead[i].innerHTML)
+
+	    		// Because sorting adds a span to the innerHTML of the head td's
+	    		rogue = tablehead[i].innerHTML.split('<span id="sorttable_sort');
+	    		console.log(rogue[0])
+		    	tds = document.getElementsByClassName(rogue[0]); 
+		    	if (tablehead[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+		    		tablehead[i].style.display = "";
+		    		for (j = 0; j < tds.length; j ++) {
+		    			tds[j].style.display = "";
+		    		}
+			    	
+		    	} else {
+		    		tablehead[i].style.display = "none";
+		    		for (j = 0; j < tds.length; j ++) {
+		    			tds[j].style.display = "none";
+		    		}	
+		    	}
+		    }
+	    }
+	}
+
 </script>
-
-
 
 {{end}}
