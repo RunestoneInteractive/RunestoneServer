@@ -1700,6 +1700,14 @@ function get_questions_toc(){
     return get_tocs().question_picker
 }
 
+function get_assignment_contents(assignid, success){
+    jQuery.getJSON(
+        eBookConfig.get_assignmentURL,
+        {'assignmentid': assignid},
+        success
+    )
+}
+
 function get_assignment_release_states(){
     if (assignment_release_states == null){
         // This has to be a synchronous call because we have to set assignment_release_states
