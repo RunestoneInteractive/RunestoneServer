@@ -67,26 +67,26 @@ def index():
             response.flash = "Updates available, consider rebuilding"
 
     # Now build the activity bar chart
-    bar_chart = pygal.Bar(disable_xml_declaration=True, explicit_size=True,
-                          show_legend=False, height=400, width=400,
-                          style=pygal.style.TurquoiseStyle)
-    bar_chart.title = 'Class Activities'
-    bar_chart.x_labels = []
-    counts = []
-
-    d = date.today() - timedelta(days=10)
-    query = '''select date(timestamp) xday, count(*)  ycount from useinfo where timestamp > '%s' and course_id = '%s' group by date(timestamp) order by xday''' % (d, row.course_name)
-    rows = db.executesql(query)
-    for row in rows:
-        bar_chart.x_labels.append(str(row[0]))
-        counts.append(row[1])
-
-    bar_chart.add('Class', counts)
-    chart = bar_chart.render()
+    # bar_chart = pygal.Bar(disable_xml_declaration=True, explicit_size=True,
+    #                       show_legend=False, height=400, width=400,
+    #                       style=pygal.style.TurquoiseStyle)
+    # bar_chart.title = 'Class Activities'
+    # bar_chart.x_labels = []
+    # counts = []
+    #
+    # d = date.today() - timedelta(days=10)
+    # query = '''select date(timestamp) xday, count(*)  ycount from useinfo where timestamp > '%s' and course_id = '%s' group by date(timestamp) order by xday''' % (d, row.course_name)
+    # rows = db.executesql(query)
+    # for row in rows:
+    #     bar_chart.x_labels.append(str(row[0]))
+    #     counts.append(row[1])
+    #
+    # bar_chart.add('Class', counts)
+    # chart = bar_chart.render()
 
 
     return dict(build_info=my_build, master_build=master_build, my_vers=my_vers,
-                mst_vers=mst_vers, bchart=chart, course_name=auth.user.course_name)
+                mst_vers=mst_vers, bchart=None, course_name=auth.user.course_name)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
