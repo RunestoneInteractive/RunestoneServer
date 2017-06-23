@@ -97,8 +97,12 @@
 					<div class="question-metric">
 						<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
 						<div class="question-info" style="">
-							<b>{{=question["text"]}}</b>
-							<p>Attempted by {{=question["attemptedBy"]}} students</p>
+                            {{ if "chapter" in question.keys(): }}
+							<a style="color: #333;" href="../static/{{=course_name}}/{{=question['chapter']}}/{{=question['sub_chapter']}}.html"><b>{{=question["text"]}}</b></a>
+                            {{ else: }}
+                            <b>{{=question["text"]}}</b>
+                            {{ pass }}
+                            <p>Attempted by {{=question["attemptedBy"]}} students</p>
 							<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
 						</div>
 					</div>

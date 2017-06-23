@@ -65,6 +65,7 @@
     height: 110px;
     padding: 10px;
     position: relative;
+	width: 200px;
 }
 #dashboard .question-info .detail-link {
     position: absolute;

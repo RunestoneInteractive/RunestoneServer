@@ -48,7 +48,18 @@ def hsblog():    # Human Subjects Board Log
     except:
         logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
-    if event == 'timedExam' and act == 'finish':
+    if event == 'timedExam' and (act == 'finish' or act == 'reset'):
+        if act == 'reset':
+            try:
+                db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
+                                 incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
+                                 time_taken=int(tt), timestamp=ts,
+                                 div_id=div_id, reset=True)
+            except Exception as e:
+                logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
+                logger.debug('correct {} incorrect {} skipped {} time {} reset {}'.format(request.vars.correct, request.vars.incorrect, request.vars.skipped, request.vars.time, request.vars.reset))
+                logger.debug('Error: {}'.format(e.message))
+
         try:
             db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
