@@ -166,7 +166,7 @@ def grades():
         else:
             averagerow.append('n/a')
 
-    return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
+    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
 def questiongrades():
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -177,7 +177,7 @@ def questiongrades():
     query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
     rows = db.executesql(query, [assignment['id'], sid])
 
-    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
+    return dict(course_id=auth.user.course_id, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
