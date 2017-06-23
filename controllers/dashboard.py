@@ -95,7 +95,7 @@ def index():
     "data":read_data,
     "name":"Exercises Missed"
     }]
-    return dict(assignments=assignments, course_name=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
+    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
 
 @auth.requires_login()
 def studentreport():

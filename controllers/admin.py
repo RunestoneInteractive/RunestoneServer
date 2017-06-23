@@ -275,7 +275,7 @@ def admin():
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
         return dict(sectionInfo=sectionsList,startDate=date,
-                    coursename=auth.user.course_name,
+                    coursename=auth.user.course_name, course_id=auth.user.course_name,
                     instructors=instructordict, students=studentdict,
                     curr_start_date=curr_start_date, confirm=True,
                     build_info=my_build, master_build=master_build, my_vers=my_vers,
