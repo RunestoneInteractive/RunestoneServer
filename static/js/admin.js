@@ -1750,20 +1750,15 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
 
     edList = [];
     mcList = [];
-    $('[data-component=activecode]').each(function (index) {
-        if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-            edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), { graderactive: false, python3:true});
-        }
-    });
+    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let opt = {}
+    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
+    opt.lang = $(opt.orig).data('lang')
+    opt.useRunestoneServices =false;
+    opt.graderactive = false;
+    opt.python3 = true;
 
-    $("[data-component=multiplechoice]").each(function (index) {    // MC
-        var opts = {"orig": this, 'useRunestoneServices':false};
-        mcList[this.id] = new MultipleChoice(opts);
-    });
+    component_factory[componentKind](opt)
 
 }
 
-$('#component-preview').on('DOMNodeInserted','[data-component=multiplechoice]', function() {
-        var opts = {"orig": this, 'useRunestoneServices':eBookConfig.useRunestoneServices};
-            mcList = new MultipleChoice(opts);
-    });
