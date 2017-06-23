@@ -46,6 +46,7 @@
     border-left: 1px solid #e5e5e5;
     border-right: 1px solid #e5e5e5;
     border-top: 1px solid #e5e5e5;
+	float: left;
 }
 #dashboard .question-metric:nth-child(even) {
     background-color: #f3f3f3;

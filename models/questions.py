@@ -29,6 +29,9 @@ db.define_table('question_tags',
                 Field('tag_id', db.tags),
                 migrate='runestone_question_tags.table')
 
+## assignment <--> questions is a many-to-many relation. This table associates them
+## points and how it's autograded are properties of a particular use of a question in an assignment,
+## so that different instructors (assignments) can have a different way of doing it.
 db.define_table('assignment_questions',
                 Field('assignment_id', db.assignments),
                 Field('question_id', db.questions),

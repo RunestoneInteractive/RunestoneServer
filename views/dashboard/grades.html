@@ -1,56 +1,56 @@
 {{extend 'admin/instructors.html'}}
 {{ block tabcontent }}
 
+
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
+<script src="../static/js/sorttable.js"></script>
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="{{=URL('static', 'js/jquery.tabletoCSV.js')}}"></script>
 
-<style>
-	#grades {
-    	width: 80em;
-    	overflow-x: auto;
-    	white-space: nowrap;
-	}
-</style>
-
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Spring 2016 Instructor Dashboard</span></h1>
+	<h1>{{=course_name}}</h1>
 	{{include 'dashboard/dashboard-nav.html'}}
 	<h2>Gradebook</h2> 
 	<button id="export" data-export="export">Download Gradebook</button>
-	<div id="grades" class="col-md-12">
-		<table id="gradebook">
+	<div id="grades" class="col-md-12" style="width:80em; overflow-x:auto; white-space:nowrap;">
+		<table id="gradebook" class="sortable">
+
 			<!-- Jquery plugin uses the caption of a table to name the downloaded file -->
 			<caption style="display:none;">{{=course_name}}_Gradebook</caption>
-			<thead>
+
+			<thead style="cursor: pointer;">
 				<tr>
 					<td>Student</td>
 					{{for assignment in assignments:}}
 						<td>{{=assignment['name']}}</td>
 					{{pass}}
 				</tr>
-
-				<tr>
-					<td>Class Average</td>
-					{{for average in averagerow:}}
-						<td>{{=average}}</td>
-					{{pass}}
-				</tr>
 			</thead>
 
 			<tbody>
+				<tr bgcolor="lightgray">
+					<td>Class Average</td>
+					{{for average in averagerow:}}
+						{{if average == 'n/a':}}
+							<td>{{=average}}</td>
+						{{else:}}
+							<td>{{=average}}%</td>
+						{{pass}}
+					{{pass}}
+				</tr>
+
 				{{for row in range(len(gradetable)):}}
 					<tr>
 						{{for item in range(len(gradetable[row])):}}
 							{{if item != 0 and gradetable[row][item] != 'n/a':}}
-								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}</a></td>
+								<td><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
 							{{elif item == 0:}}
-								<td>{{=gradetable[row][item]}}
+								<td>{{=gradetable[row][item]}}</td>
 							{{else:}}
 								<td></td>
 							{{pass}}
@@ -69,6 +69,9 @@
             $("#gradebook").tableToCSV();
         });
     });
+
 </script>
+
+
 
 {{end}}

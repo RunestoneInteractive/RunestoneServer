@@ -63,7 +63,7 @@ def index():
             })
 
     logger.debug("getting questsions")
-    questions = sorted(questions, key=itemgetter("correct"), reverse=True)
+    questions = sorted(questions, key=itemgetter("id"))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
@@ -128,9 +128,8 @@ def grades():
     query = "select score, points, assignments.id, auth_user.id from auth_user join grades on (auth_user.id = grades.auth_user) join assignments on (grades.assignment = assignments.id) where points is not null and assignments.course = '%s' and auth_user.id in (select user_id from user_courses where course_id = '%s') order by last_name, first_name, assignments.duedate, assignments.id;"
     rows = db.executesql(query, [course['id'], course['id']])
 
-    gradetable = []  
+    gradetable = []
     averagerow = []
-    print(assignments[0]['id'])
 
     #now use the query result to form the rows in the table
     currentrow=0
@@ -174,10 +173,11 @@ def questiongrades():
     assignment = db(db.assignments.id == request.vars.assignment_id)(db.assignments.course == course.id).select().first()
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(db.auth_user.first_name, db.auth_user.last_name)
+
     query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
     rows = db.executesql(query, [assignment['id'], sid])
-    print(student[0])
-    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows)
+
+    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
