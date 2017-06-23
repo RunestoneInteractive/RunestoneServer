@@ -6,7 +6,7 @@
   eBookConfig.get_tocURL = '{{=get_tocURL}}';
   eBookConfig.get_assignmentURL = '{{=get_assignmentURL}}';
   eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
-
+  eBookConfig.get_HTML_for_questionURL = '{{=get_HTML_for_questionURL}}';
 </script>
 
 <head>
@@ -18,10 +18,17 @@
     <link rel="stylesheet" href="{{=URL('static', 'js/jstree_themes/default/style.min.css')}}" />
     <script src="{{=URL('static', 'js/jstree.min.js')}}"></script>
 
+    <link rel="stylesheet" href="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.css')}}" />
+    <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-en-US.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-editable.min.js')}}"></script>
+
+
     <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
 </head>
 
-<div class="col-md-6">
+<a id="assignment-div-collapse" href="#assignment-div" data-toggle="collapse">Collapsible</a>
+<div class="col-md-6" id="assignment-div">
 
         <div class="col-md-6">
 
@@ -247,11 +254,11 @@
 
                 <div class="list-group-item">
                     <table id="questionTable" style="width:100%;">
-                <thead style="border: 1px solid black;">
-                    <th style="border-right: 1px solid black; text-align: center">Question</th>
-                    <th style="border-right: 1px solid black;  text-align: center">Points</th>
-                    <th style="border-right: 1px solid black;  text-align: center">Timed</th>
-                </thead>
+                <thead style="border: 1px solid black;"><tr>
+                    <th data-field="question" style="border-right: 1px solid black; text-align: center">Question</th>
+                    <th data-field="points" style="border-right: 1px solid black;  text-align: center">Points</th>
+                    <th data-field="timed" style="border-right: 1px solid black;  text-align: center">Timed</th>
+                </tr></thead>
                         <tbody id="tableBody">
                         </tbody>
                 </table>
@@ -311,7 +318,7 @@
 
     <div id="rightSection" class="col-md-6" style="border-left: solid black 1px; " xtra="visibility: hidden;">
 <div class="container">
-<a data-toggle="tab" href="#qbrowse" class="btn btn-default">Browse</a>
+<a data-toggle="tab" id="browse-button" href="#qbrowse" class="btn btn-default">Browse</a>
 <a data-toggle="tab" href="#qbank" class="btn btn-default">Search</a>
 <a data-toggle="tab" href="#qwrite" class="btn btn-default">Write</a>
 
@@ -391,7 +398,7 @@
 
     <div class="col-md-12">
             <div class="list-group" style="width:100%; visibility: hidden;" id="questionInfo">
-                <div class="list-group-item">
+                <div class="list-group-item" id="component-preview">
                     <div class="form-group">
               <button style="margin-top: 12px;" class="btn">Preview</button>
                  </div>
@@ -562,12 +569,11 @@
 </div>
 
 
-<script type="text/javascript">
-$("#tags").select2();
-    $("#addTags").select2();
-</script>
 
-<script>
+<script type="text/javascript">
+    $("#tags").select2();
+    $("#addTags").select2();
+
     $(".dashboardnav").removeClass("active");
     $("#assignmentstab").addClass("active");
 
@@ -575,37 +581,124 @@ $("#tags").select2();
     jQuery('#changedate').datetimepicker();
 
 
-     $('#summative').click(function(){
-         $('#summative').addClass('clickedtab');
-    $('#summative').css('background-color', 'gainsboro');
-    $('#formative').css('background-color','transparent');
-         $('#formative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-         $('#external').removeClass('clickedtab');
-
-
-
-});
-
-    $('#formative').click(function(){
-        $('#formative').addClass('clickedtab');
-    $('#formative').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-        $('#summative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-        $('#external').removeClass('clickedtab');
-
-});
-
-    $('#external').click(function(){
-        $('#external').addClass('clickedtab');
-    $('#external').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-        $('#summative').removeClass('clickedtab');
-    $('#formative').css('background-color','transparent');
+    $('#summative').click(function() {
+        $('#summative').addClass('clickedtab');
+        $('#summative').css('background-color', 'gainsboro');
+        $('#formative').css('background-color','transparent');
         $('#formative').removeClass('clickedtab');
+        $('#external').css('background-color','transparent');
+        $('#external').removeClass('clickedtab');
+    });
+
+    $('#formative').click(function() {
+        $('#formative').addClass('clickedtab');
+        $('#formative').css('background-color', 'gainsboro');
+        $('#summative').css('background-color','transparent');
+        $('#summative').removeClass('clickedtab');
+        $('#external').css('background-color','transparent');
+        $('#external').removeClass('clickedtab');
+    });
+
+    $('#external').click(function() {
+        $('#external').addClass('clickedtab');
+        $('#external').css('background-color', 'gainsboro');
+        $('#summative').css('background-color','transparent');
+        $('#summative').removeClass('clickedtab');
+        $('#formative').css('background-color','transparent');
+        $('#formative').removeClass('clickedtab');
+    });
+
+// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
+$(function () {
+    tree_json = get_questions_toc();
+    //get_reading_toc();
+    var tqp = $('#tree-question-picker');
+    tqp.jstree({
+        // Configure the checkbox plugin.
+        "checkbox" : {
+            // This prevents the selection from including all auto-checked nodes, which I find distracting.
+            "keep_selected_style" : false,
+            // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
+            "whole_node" : false,
+            // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
+            "tie_selection" : false,
+        },
+        // Enable `plugins <https://www.jstree.com/plugins/>`_.
+        "plugins" : [
+            "checkbox",
+            "search",
+        ],
+        // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
+        "core" : {
+            "data" : tree_json,
+        },
+    });
+    // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
+
+    // Provide a flag to use to ignore events caused when loading the table data in.
+    tqp.jstree(true).ignore_check = false;
+
+    // Set up for searching. Copied from the search plugin example.
+    var to = false;
+    $('#search-tree-question-picker').keyup(function () {
+        if (to) {
+            clearTimeout(to);
+        }
+        to = setTimeout(function () {
+            var v = $('#search-tree-question-picker').val();
+            tqp.jstree(true).search(v);
+        }, 250);
+    });
+
+    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree%20Event&f=select_node.jstree>`_.
+    tqp.on('select_node.jstree', function(event, data) {
+        console.log('select_node');
+        // If this is a question (a leaf node), then preview it.
+        if (!data.instance.is_parent(data.node)) {
+            // Request the preview HTML from the server.
+            console.log(data.node.id);
+            $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
+                // TODO: Call Brad's preview function with the data.
+                console.log(html_src);
+            });
+        }
+    });
+    // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=check_node.jstree>`_.
+    tqp.on('check_node.jstree', function(event, data) {
+        if (!data.instance.ignore_check) {
+            console.log('check_node');
+            walk_jstree(data.instance, data.node, function(instance, node) {
+                // Add each checked item to the assignment list with default values.
+                addToAssignmentRaw(node.id, 1, false, 'formative');
+            });
+        }
+    });
+    // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=uncheck_node.jstree>`_.
+    tqp.on('uncheck_node.jstree', function(event, data) {
+        if (!data.instance.ignore_check) {
+            console.log('uncheck_node');
+            walk_jstree(data.instance, data.node, function(instance, node) {
+                console.log(node.id);
+            });
+        }
+    });
 
 });
+
+// Given a jstree node, invoke f on node and all its children.
+function walk_jstree(instance, node, f) {
+    f(instance, node);
+    $(node.children).each(function(index, value) {
+        walk_jstree(instance, instance.get_node(value), f);
+    });
+}
+
+// Set up the table.
+$('#questionTable').bootstrapTable();
+
+// For easier debug.
+$('#assignment-div-collapse').click();
+$('#browse-button').click();
 </script>
 
 {{ end }}

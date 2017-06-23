@@ -1201,45 +1201,39 @@ function assignmentInfo() {
 
             var description = res['description'];
             document.getElementById('assignment_description').innerHTML = description;
-            var tableBody = document.getElementById("tableBody");
-            $("#tableBody").empty(); //clear the table body first, before adding anything
+
+            // Get the question tree picker.
+            var tqp = $('#tree-question-picker').jstree();
+            // Ignore these checks in the picker, since it's loading existing data, not user interaction.
+            tqp.ignore_check = true;
+            // Clear all checks initially.
+            tqp.uncheck_all();
+
+            // Clear the bootstrap table.
+            var bst = $('#questionTable');
+            bst.bootstrapTable('removeAll');
             for (k = 0; k < keys.length; k++) {
                 var key = keys[k];
                 question = res[key];
 
                 //now populate entire table but only show rows with class 'summative'
                 var type = question['type'];
+                var name = question['name'];
+                var points = question['points'];
+                var timed = question['timed'];
+                bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
 
-                var row = document.createElement("TR");
-                row.setAttribute("class", type);
-                row.setAttribute("id", question['name']);
-                row.style.textAlign = 'center';
-                row.style.border = '1px solid black';
-                tableBody.appendChild(row);
-
-                var qid = document.createElement("TD");
-                qid.style.border = '1px solid black';
-                var qid_data = document.createTextNode(question['name']);
-                qid.appendChild(qid_data);
-                row.appendChild(qid);
-
-                var pts = document.createElement("TD");
-                pts.style.border = '1px solid black';
-                var pts_data = document.createTextNode(question['points']);
-                pts.appendChild(pts_data);
-                row.appendChild(pts);
-
-                var timed = document.createElement("TD");
-                timed.style.border = '1px solid black';
-                var timed_data = document.createTextNode(question['timed']);
-
-                timed.appendChild(timed_data);
-                row.appendChild(timed);
+                // Check this question in the question tree picker.
+                tqp.check_node(tqp.get_node(name));
             }
             //by default hide the formative and external questions
             $(".formative").hide();
             $(".external").hide();
+
+            // Future checks come from the user.
+            tqp.ignore_check = false;
         }
+
         var leftpanel1 = document.getElementById("leftpanel1");
         leftpanel1.style.visibility = 'visible';
         var leftpanel2 = document.getElementById("leftpanel2");
@@ -1337,19 +1331,14 @@ function remove_question() {
     var select = document.getElementById('questions_list');
     var question_name = select.options[select.selectedIndex].text;
     var assignment_id = select.options[select.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var totalPoints = document.getElementById("totalPoints");
-            totalPoints.innerHTML = 'Total points: ' + JSON.parse(obj.responseText);
-            //remove from the select dropdown and remove from the table
-            select.remove(select.selectedIndex);
-            row = document.getElementById(question_name);
-            row.parentNode.removeChild(row);
-        }
-    }
+    $.getJSON('/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+        var totalPoints = document.getElementById("totalPoints");
+        totalPoints.innerHTML = 'Total points: ' + response_JSON;
+        //remove from the select dropdown and remove from the table
+        select.remove(select.selectedIndex);
+        row = document.getElementById(question_name);
+        row.parentNode.removeChild(row);
+    });
 }
 
 
@@ -1422,8 +1411,6 @@ function addToAssignment(form) {
     var checked = document.getElementById('timed').checked;
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
-    var assignlist = document.getElementById('assignlist');
-    var assignmentid = assignlist.options[assignlist.selectedIndex].value;
     var activetab;
     var formativetab = $('#formative').hasClass('clickedtab');
     var summativetab = $('#summative').hasClass('clickedtab');
@@ -1441,74 +1428,48 @@ function addToAssignment(form) {
     }
 
 
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + checked + '&type=' + activetab, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var newPoints = JSON.parse(obj.responseText)[0];
-            var q_type = JSON.parse(obj.responseText)[1];
-            var totalPoints = document.getElementById("totalPoints");
-            totalPoints.innerHTML = 'Total points: ' + newPoints;
-            var tableBody = document.getElementById("tableBody");
-            var row = document.createElement("TR");
-            row.setAttribute("class", q_type);
-            row.setAttribute("id", question_name);
-            row.style.textAlign = 'center';
-            row.style.border = '1px solid black';
-            tableBody.appendChild(row);
+    addToAssignmentRaw(question_name, points, checked, activetab);
+}
 
-            var qid = document.createElement("TD");
-            qid.style.border = '1px solid black';
-            var qid_data = document.createTextNode(question_name);
-            qid.appendChild(qid_data);
-            row.appendChild(qid);
+function addToAssignmentRaw(question_name, points, timed, type) {
+    var assignlist = document.getElementById('assignlist');
+    var assignmentid = assignlist.options[assignlist.selectedIndex].value;
+    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + timed + '&type=' + type, {variable: 'variable'}).done(function (response_JSON) {
+        console.log(points);
+        var newPoints = response_JSON[0];
+        var q_type = response_JSON[1];
+        $('#questionTable').bootstrapTable('append', [{'question' : question_name, 'points' : points, 'timed' : timed}]);
 
-            var pts = document.createElement("TD");
-            pts.style.border = '1px solid black';
-            var pts_data = document.createTextNode(points);
-            pts.appendChild(pts_data);
-            row.appendChild(pts);
+        if (q_type == 'summative') {
+            $(".summative").show();
+            $(".formative").hide();
+            $(".external").hide();
 
-            var timed = document.createElement("TD");
-            timed.style.border = '1px solid black';
-            var timed_data = document.createTextNode(checked);
-
-            timed.appendChild(timed_data);
-            row.appendChild(timed);
-
-            if (q_type == 'summative') {
-                $(".summative").show();
-                $(".formative").hide();
-                $(".external").hide();
-
-                $('#summative').css('background-color', 'gainsboro');
-                $('#formative').css('background-color', 'transparent');
-                $('#external').css('background-color', 'transparent');
-
-            }
-
-            if (q_type == 'formative') {
-                $(".formative").show();
-                $(".summative").hide();
-                $(".external").hide();
-
-                $('#formative').css('background-color', 'gainsboro');
-                $('#summative').css('background-color', 'transparent');
-                $('#external').css('background-color', 'transparent');
-            }
-            if (q_type == 'external') {
-                $(".external").show();
-                $(".formative").hide();
-                $(".summative").hide();
-
-                $('#external').css('background-color', 'gainsboro');
-                $('#summative').css('background-color', 'transparent');
-                $('#formative').css('background-color', 'transparent');
-            }
+            $('#summative').css('background-color', 'gainsboro');
+            $('#formative').css('background-color', 'transparent');
+            $('#external').css('background-color', 'transparent');
 
         }
-    }
+
+        if (q_type == 'formative') {
+            $(".formative").show();
+            $(".summative").hide();
+            $(".external").hide();
+
+            $('#formative').css('background-color', 'gainsboro');
+            $('#summative').css('background-color', 'transparent');
+            $('#external').css('background-color', 'transparent');
+        }
+        if (q_type == 'external') {
+            $(".external").show();
+            $(".formative").hide();
+            $(".summative").hide();
+
+            $('#external').css('background-color', 'gainsboro');
+            $('#summative').css('background-color', 'transparent');
+            $('#formative').css('background-color', 'transparent');
+        }
+    });
 }
 
 
@@ -1839,74 +1800,4 @@ function toggle_release_grades() {
     }
 }
 
-// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
-$(function () {
-    tree_json = get_questions_toc();
-    console.log(tree_json);
-    //get_reading_toc();
-    var tqp = $('#tree-question-picker');
-    tqp.jstree({
-        // Configure the checkbox plugin.
-        "checkbox" : {
-            // This prevents the selection from including all auto-checked nodes, which I find distracting.
-            "keep_selected_style" : false,
-            // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
-            "whole_node" : false,
-            // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
-            "tie_selection" : false,
-        },
-        // Enable `plugins <https://www.jstree.com/plugins/>`_.
-        "plugins" : [
-            "checkbox",
-            "search",
-        ],
-        // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
-        "core" : {
-            "data" : tree_json,
-        },
-    });
-    // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
 
-    // Set up for searching. Copied from the search plugin example.
-    var to = false;
-    $('#search-tree-question-picker').keyup(function () {
-        if (to) {
-            clearTimeout(to);
-        }
-        to = setTimeout(function () {
-            var v = $('#search-tree-question-picker').val();
-            tqp.jstree(true).search(v);
-        }, 250);
-    });
-
-    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree%20Event&f=select_node.jstree>`_.
-    tqp.on('select_node.jstree', function(event, data) {
-        console.log('select_node');
-        // If this is a question (a leaf node), then preview it.
-        if (!data.instance.is_parent(data.node)) {
-            console.log(data.node.id);
-        }
-    });
-    // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=check_node.jstree>`_.
-    tqp.on('check_node.jstree', function(event, data) {
-        console.log('check_node');
-        walk_jstree(data.instance, data.node, function(instance, node) {
-            console.log(node.id)
-        });
-    });
-    // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=uncheck_node.jstree>`_.
-    tqp.on('uncheck_node.jstree', function(event, data) {
-        console.log('uncheck_node');
-        walk_jstree(data.instance, data.node, function(instance, node) {
-            console.log(node.id)
-        });
-    });
-});
-
-// Given a jstree node, invoke f on node and all its children.
-function walk_jstree(instance, node, f) {
-    f(instance, node);
-    $(node.children).each(function(index, value) {
-        walk_jstree(instance, instance.get_node(value), f);
-    });
-}
