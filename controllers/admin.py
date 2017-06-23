@@ -1,6 +1,6 @@
 from os import path
 import os
-import pygal
+
 from datetime import date, timedelta
 from paver.easy import sh
 import json
@@ -603,7 +603,7 @@ def assignments():
     chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
-    return dict(coursename=auth.user.course_name,confirm=False,
+    return dict(coursename=auth.user.course_name,confirm=False, course_id = auth.user.course_name,
                     course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
 
 
@@ -726,7 +726,7 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), course_id = auth.user.course_name, assignmentids = assignmentids
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), course_id = auth.user.course_name, assignmentids = assignmentids
 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1225,7 +1225,11 @@ def questions2rst():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
-    htmlsrc = db(db.questions.name == acid).select(db.questions.htmlsrc).first().htmlsrc
+    htmlsrc = db(
+        (db.questions.name == acid) &
+        (db.questions.base_course == db.courses.base_course) &
+        (db.courses.course_name == auth.user.course_name)
+         ).select(db.questions.htmlsrc).first().htmlsrc
     return json.dumps(htmlsrc)
 
 
@@ -1319,12 +1323,23 @@ def editindexrst():
 def releasegrades():
     try:
         assignmentid = request.vars['assignmentid']
+        released = (request.vars['released'] == 'yes')
         assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(released=True)
+        assignment.update_record(released=released)
         return "Success"
     except Exception as ex:
         print(ex)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_assignment_release_states():
+    # return a dictionary with the release status of whether grades have been
+    # released for each of the assignments for the current course
+    try:
+        assignments_query = db(db.assignments.course == auth.user.course_id).select()
+        return json.dumps({row.name: row.released for row in assignments_query})
+    except Exception as ex:
+        print ex
+        return json.dumps({})
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def checkQType():

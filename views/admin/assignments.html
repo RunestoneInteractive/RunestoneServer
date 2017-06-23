@@ -1,14 +1,7 @@
 {{extend 'admin/instructors.html'}}
 
+
 {{ block tabcontent }}
-<head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
-
-    <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
-</head>
 
 <div class="col-md-6">
 
@@ -532,8 +525,12 @@
                 <input type="button" class="btn btn-default" value="Done" onclick="create_question(this.form);"/>
             </div>
 
+
                 </div>
         </form>
+
+    </div>
+    <div id="component-preview">
 
     </div>
 
