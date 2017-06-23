@@ -1,6 +1,6 @@
 from os import path
 import os
-import pygal
+
 from datetime import date, timedelta
 from paver.easy import sh
 import json
@@ -603,7 +603,7 @@ def assignments():
     chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
-    return dict(coursename=auth.user.course_name,confirm=False,
+    return dict(coursename=auth.user.course_name,confirm=False, course_id = auth.user.course_name,
                     course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
 
 
