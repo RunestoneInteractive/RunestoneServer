@@ -968,7 +968,7 @@ def questionBank():
         for row in questions_query:
             removed_row = False
             if term:
-                if request.vars['term'] not in row.name and request.vars['term'] not in row.question:
+                if request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question:
                     try:
                         rows.remove(row)
                         removed_row = True
@@ -1013,16 +1013,23 @@ def questionBank():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addToAssignment():
+    # add one question to the assignment
+    # perhaps this should be able to add_or_update
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
     qtype = request.vars['type']
     question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
 
-    timed = request.vars['timed']
+    # deprecated; we don't use this as a property of assignment_question
+    # timed = request.vars['timed']
+
+    # Have to use try/except here instead of request.vars.get in case the points is '',
+    # which doesn't convert to int
     try:
         points = int(request.vars['points'])
     except:
         points = 0
+    autograde = request.vars.get('autograde')
 
     try:
         type_id = db(db.assignment_types.name == qtype).select(db.assignment_types.id).first().id
@@ -1030,7 +1037,11 @@ def addToAssignment():
         print(ex)
 
     try:
-        db.assignment_questions.insert(assignment_id=assignment_id, question_id=question_id, points=points, timed=timed, assessment_type=type_id)
+        db.assignment_questions.insert(assignment_id=assignment_id,
+                                       question_id=question_id,
+                                       points=points,
+                                       assessment_type=type_id,
+                                       autograde=autograde)
         assignment = db(db.assignments.id == assignment_id).select().first()
         assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
         if assignment_points == None:
@@ -1412,56 +1423,54 @@ def get_toc_and_questions():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment():
-    return json.dumps("sorry, get_assignment not implemented yet")
-
-
     assignment_id = request.vars['assignmentid']
-    assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
-    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
-    allquestion_info = {}
-    allquestion_info['assignment_points'] = assignment_points
-    date = db(db.assignments.id == assignment_id).select(db.assignments.duedate).first().duedate
+    # Assemble the assignment-level properties
+    assignment_data = {}
+    assignment_row = db(db.assignments.id == assignment_id).select().first()
+    assignment_data['assignment_points'] = assignment_row.points
     try:
-        due = date.strftime("%Y/%m/%d %H:%M")
+        assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
         print(ex)
-        due = 'No due date set for this assignment'
-    allquestion_info['due_date'] = due
-    description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
-    if description == None:
-        allquestion_info['description'] = 'No description available for this assignment'
-    else:
-        allquestion_info['description'] = description
+        assignment_data['due_date'] = None
+    assignment_data['description'] = assignment_row.description
+    assignment_data['threshold'] = assignment_row.threshold
+    assignment_data['readings_autograder'] = assignment_row.readings_autograder
 
-    try:
-        for row in assignment_questions:
-            timed = row.timed
-            try:
-                question_points = int(row.points)
-            except:
-                question_points = 0
-            question_info_query = db(db.questions.id == int(row.question_id)).select()
-            for row in question_info_query:
-                question_dict = {}
-                # question_dict['base course'] = row.base_course
-                # question_dict['chapter'] = row.chapter
-                # question_dict['author'] = row.author
-                # question_dict['difficulty'] = int(row.difficulty)
-                # question_dict['question'] = row.question
-                question_id = int(row.id)
-                question_dict['name'] = row.name
-                question_dict['timed'] = timed
-                question_dict['points'] = question_points
-                type_id = db((db.assignment_questions.question_id == question_id) & (
-                db.assignment_questions.assignment_id == assignment_id)).select(
-                    db.assignment_questions.assessment_type).first().assessment_type
-                type = db(db.assignment_types.id == type_id).select(db.assignment_types.name).first().name
-                question_dict['type'] = type
-                allquestion_info[int(row.id)] = question_dict
-    except Exception as ex:
-        print(ex)
+    # Still need to get:
+    #  -- timed properties of assignment
+    #  (See https://github.com/RunestoneInteractive/RunestoneServer/issues/930)
 
-    return json.dumps(allquestion_info)
+    # Assemble the readings (subchapters) that are part of the assignment
+    a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
+                  (db.assignment_questions.question_id == db.questions.id) &
+                  (db.questions.question_type == 'page')
+                  ).select()
+    pages_data = []
+    for row in a_q_rows:
+        pages_data.append(dict(
+            name = row.questions.name,
+            points = row.assignment_questions.points,
+            autograde = row.assignment_questions.autograde
+        ))
+
+    # Assemble the questions that are part of the assignment
+    a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
+                  (db.assignment_questions.question_id == db.questions.id) &
+                  (db.assignment_questions.reading_assignment == None)
+                  ).select()
+    #return json.dumps(db._lastsql)
+    questions_data = []
+    for row in a_q_rows:
+        questions_data.append(dict(
+            name = row.questions.name,
+            points = row.assignment_questions.points,
+            autograde = row.assignment_questions.autograde
+        ))
+
+    return json.dumps(dict(assignment_data=assignment_data,
+                           pages_data=pages_data,
+                           questions_data=questions_data))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
