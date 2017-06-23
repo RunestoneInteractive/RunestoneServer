@@ -668,8 +668,10 @@ $(function () {
         if (!data.instance.ignore_check) {
             console.log('check_node');
             walk_jstree(data.instance, data.node, function(instance, node) {
-                // Add each checked item to the assignment list with default values.
-                addToAssignmentRaw(node.id, 1, false, 'formative');
+                if (!instance.is_parent(node)) {
+                    // Add each checked item to the assignment list with default values.
+                    addToAssignmentRaw(node.id, 1, false, 'formative');
+                }
             });
         }
     });
