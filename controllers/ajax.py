@@ -972,7 +972,7 @@ def preview_question():
         with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
             src = ixf.read()
             tree = html.fromstring(src)
-            component = tree.cssselect(".ac_section")
+            component = tree.cssselect(".runestone")
             if len(component) > 0:
                 ctext = html.tostring(component[0])
             else:
