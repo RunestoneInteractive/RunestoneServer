@@ -51,12 +51,13 @@ def hsblog():    # Human Subjects Board Log
         logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
     if event == 'timedExam' and (act == 'finish' or act == 'reset'):
+        logger.debug(act)
         if act == 'reset':
             try:
                 db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                                  incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
                                  time_taken=int(tt), timestamp=ts,
-                                 div_id=div_id, reset=True)
+                                 div_id=div_id, reset='T')
             except Exception as e:
                 logger.debug('failed to insert a timed exam record for {} in {} : {}'.format(sid, course, div_id))
                 logger.debug('correct {} incorrect {} skipped {} time {} reset {}'.format(request.vars.correct, request.vars.incorrect, request.vars.skipped, request.vars.time, request.vars.reset))
@@ -971,6 +972,20 @@ def getAssessResults():
         res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
         return json.dumps(res)
 
+def checkTimedReset():
+    if auth.user:
+        user = auth.user.username
+    else:
+        return json.dumps({"canReset":False})
+
+    divId = request.vars.div_id
+    course = request.vars.course
+    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select()
+
+    if rows:        # If there was a scored exam
+        return json.dumps({"canReset":False})
+    else:
+        return json.dumps({"canReset":True})
 
 def preview_question():
     code = json.loads(request.vars.code)
