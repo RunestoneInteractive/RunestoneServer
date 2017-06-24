@@ -11,24 +11,23 @@
 
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
+    <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
 
     <link rel="stylesheet" href="{{=URL('static', 'js/jstree_themes/default/style.min.css')}}" />
     <script src="{{=URL('static', 'js/jstree.min.js')}}"></script>
 
     <link rel="stylesheet" href="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.css')}}" />
+    <link rel="stylesheet" href="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/css/bootstrap-editable.css')}}" />
     <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.js')}}"></script>
     <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-en-US.min.js')}}"></script>
     <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-editable.min.js')}}"></script>
-
-
-    <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/js/bootstrap-editable.js')}}"></script>
 </head>
 
-<a id="assignment-div-collapse" href="#assignment-div" data-toggle="collapse">Collapsible</a>
-<div class="col-md-6" id="assignment-div">
+<div class="col-md-6">
 
         <div class="col-md-6">
 
@@ -40,7 +39,7 @@
   <option value={{=assignmentid}}>{{=assignments[assignmentid]}}</option>
         {{pass}}
 </select>
-                <input type="submit" value="show assignment"> </br>
+                <input type="submit" class="btn" value="show assignment"> </br>
 
                        <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#addAssignment">+</button>
                     <button style="margin-top: 12px;" formaction="Javascript:remove_assignment();" class="btn">-</button>
@@ -232,31 +231,17 @@
     <div style="margin-bottom: 50px" class="list-group">
         <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
 
-        <div id="typetabs">
-        <div style="float:left;">
-           <button id="summative" onclick="showQuestions('summative');" data-toggle="tab" class="list-group-item clickedtab">
-                    <h4 style="text-align: center" class="list-group-item-heading">Summative</h4>
-                </button></div>
-
-            <div style="float:left;">
-           <button id="formative" onclick="showQuestions('formative');" data-toggle="tab" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Formative</h4>
-                </button></div>
-
-
-
-            <div style="float:left;">
-           <button id="external" onclick="showQuestions('external');" data-toggle="tab" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">External</h4>
-                </button></div></div></div>
-
             <div class="list-group">
 
                 <div class="list-group-item">
-                    <table id="questionTable" style="width:100%;">
+                <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration
+                    -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+                    -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+                -->
+                    <table id="questionTable" style="width:100%;" data-unique-id="question">
                 <thead style="border: 1px solid black;"><tr>
                     <th data-field="question" style="border-right: 1px solid black; text-align: center">Question</th>
-                    <th data-field="points" style="border-right: 1px solid black;  text-align: center">Points</th>
+                    <th data-field="points" data-editable="true" style="border-right: 1px solid black;  text-align: center">Points</th>
                     <th data-field="timed" style="border-right: 1px solid black;  text-align: center">Timed</th>
                 </tr></thead>
                         <tbody id="tableBody">
@@ -654,7 +639,7 @@ $(function () {
     tqp.on('select_node.jstree', function(event, data) {
         console.log('select_node');
         // If this is a question (a leaf node), then preview it.
-        if (!data.instance.is_parent(data.node)) {
+        if (jstree_node_is_question(data.instance, data.node)) {
             // Request the preview HTML from the server.
             console.log(data.node.id);
             $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
@@ -666,26 +651,42 @@ $(function () {
     // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=check_node.jstree>`_.
     tqp.on('check_node.jstree', function(event, data) {
         if (!data.instance.ignore_check) {
-            console.log('check_node');
             walk_jstree(data.instance, data.node, function(instance, node) {
-                if (!instance.is_parent(node)) {
+                if (jstree_node_is_question(instance, node)) {
                     // Add each checked item to the assignment list with default values.
-                    addToAssignmentRaw(node.id, 1, false, 'formative');
+                    updateAssignmentRaw(node.id, 1, false, 'formative');
                 }
             });
         }
     });
     // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=uncheck_node.jstree>`_.
     tqp.on('uncheck_node.jstree', function(event, data) {
+        console.log('uncheck_node');
         if (!data.instance.ignore_check) {
-            console.log('uncheck_node');
             walk_jstree(data.instance, data.node, function(instance, node) {
-                console.log(node.id);
+                if (jstree_node_is_question(instance, node)) {
+                    remove_question_raw(node.id);
+                }
             });
         }
     });
-
 });
+
+// Given a jstree node, determine if it's an exercise or not.
+function jstree_node_is_question(instance, node) {
+    // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children.
+    var subchapter_node = instance.get_parent(node);
+    // A root node returns ``#`` for its parent.
+    if (subchapter_node === '#') {
+        return false;
+    }
+    var chapter_node = instance.get_parent(subchapter_node);
+    if (chapter_node === '#') {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 // Given a jstree node, invoke f on node and all its children.
 function walk_jstree(instance, node, f) {
@@ -695,8 +696,15 @@ function walk_jstree(instance, node, f) {
     });
 }
 
-// Set up the table.
-$('#questionTable').bootstrapTable();
+// Set up the `bootstrap table`_.
+$('#questionTable').bootstrapTable({
+    // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+    // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
+    onEditableSave : function(field, row, oldValue, html_element) {
+        console.log('New value of ' + row['question'] + ' is ' + row[field] + '.');
+        updateAssignmentRaw(row['question'], row['points'], row['timed'], 'formative');
+    },
+});
 
 // For easier debug.
 $('#assignment-div-collapse').click();
