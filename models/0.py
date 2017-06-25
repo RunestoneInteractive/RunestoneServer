@@ -33,6 +33,6 @@ elif 'webfaction' in uname()[1]:
     settings.database_uri = 'postgres://a_fake_database'
 elif 'luther' in uname()[1]:
     settings.database_uri = 'sqlite://storage.sqlite'
-else
+else:
     pass
     ## settings.database_uri will be set in 1.py if not one of those special cases
