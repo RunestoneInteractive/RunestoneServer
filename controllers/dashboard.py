@@ -1,7 +1,7 @@
 from os import path
 import os
 import logging
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from operator import itemgetter
 from paver.easy import sh
 
@@ -75,14 +75,22 @@ def index():
             })
 
     read_data = []
+    recent_data = []
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
+
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
             "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
             "sid":activity.username,
             "count":activity.get_page_views()
             })
+
+        recent_data.append({
+            "student":activity.name,  
+            "sid":activity.username,
+            "count":activity.get_recent_page_views()
+            }) 
 
     logger.debug("finishing")
     studentactivity = [{
@@ -95,7 +103,19 @@ def index():
     "data":read_data,
     "name":"Exercises Missed"
     }]
-    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
+
+    recentactivity = [{
+    "data":recent_data,
+    "name":"Sections Read"
+    },{
+    "data":recent_data,
+    "name":"Exercises Correct"
+    },{
+    "data":recent_data,
+    "name":"Exercises Missed"
+    }]
+
+    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
 
 @auth.requires_login()
 def studentreport():
