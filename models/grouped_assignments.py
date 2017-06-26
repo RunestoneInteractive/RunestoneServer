@@ -159,7 +159,7 @@ db.define_table('assignments',
                                                                                   # questions portion
     Field('name', 'string'),
     Field('points', 'integer'),
-    Field('threshold', 'integer', default=1),   # for reading portion of assignment; if earn above this threshold,
+    Field('threshold', 'integer', default=0),   # for reading portion of assignment; if earn above this threshold,
                                                 # get full credit (from points field of assignment;
                                                 # 0 means not using threshold
     Field('readings_autograder', 'text', default = 'interact'),       # for reading portion,
