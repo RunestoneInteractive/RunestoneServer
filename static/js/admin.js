@@ -215,7 +215,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             jQuery("#questiondisplay").html(htmlsrc);
-            //ACFactory.createScratchActivecode();
             $('[data-component=activecode]').each(function (index) {
                 if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
                     edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:false});
@@ -1266,6 +1265,20 @@ function getQuestions() {
     }
 }
 
+function preview_question(form){
+
+    var code = $(form.qcode).val();
+    var data = {'code': JSON.stringify(code)};
+    $.post('/runestone/ajax/preview_question', data, function(result, status) {
+            renderRunestoneComponent(JSON.parse(result), "component-preview")
+        }
+    );
+    // get the text as above
+    // send the text to an ajax endpoint that will insert it into
+    // a sphinx project, run sphinx, and send back the generated index file
+    // this generated index can then be displayed...
+
+}
 
 function remove_question() {
     var select = document.getElementById('questions_list');
@@ -1691,4 +1704,28 @@ function toggle_release_grades() {
     }
 }
 
+
+
+function renderRunestoneComponent(componentSrc, whereDiv) {
+    /**
+     *  The easy part is adding the componentSrc to the existing div.
+     *  The tedious part is calling the right functions to turn the
+     *  source into the actual component.
+     */
+    
+    jQuery(`#${whereDiv}`).html(componentSrc);
+
+    edList = [];
+    mcList = [];
+    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let opt = {}
+    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
+    opt.lang = $(opt.orig).data('lang')
+    opt.useRunestoneServices =false;
+    opt.graderactive = false;
+    opt.python3 = true;
+
+    component_factory[componentKind](opt)
+
+}
 
