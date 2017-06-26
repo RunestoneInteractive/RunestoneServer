@@ -169,7 +169,8 @@
 
 					function getActivity(recent) {
 						chart = document.getElementById("studentchart");
-						chart.innerHTML = "";
+
+						chart.innerHTML = '<div id="dash-chart-tooltip"><p><span id="value">100</span></p></div>';
 						if (recent) {
 							DashboardCharts.studentActivity({{response.write(recentactivity,escape=False)}});
 						} else {
