@@ -1149,8 +1149,15 @@ function create_question(formdata) {
 
 
 function assignmentInfo() {
+    // If no assignment is selected, hide all assignment-related panels.
     var select = document.getElementById('assignlist');
-    // TODO: If no assignment is selected, clear the table and tree picker.
+    if (select.selectedIndex === -1) {
+        $('#rightSection').css('visibility', 'hidden');
+        $('#leftpanel1').css('visibility', 'hidden');
+        $('#leftpanel2').css('visibility', 'hidden');
+        return;
+    }
+
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
     $('#rightSection').css('visibility','visible');
