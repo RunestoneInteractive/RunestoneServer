@@ -209,7 +209,7 @@ def assignments():
                 assignments=assigndict,
                 tags=tags,
                 chapters=chapter_labels,
-                get_tocURL=URL('admin', 'get_toc_and_questions'),
+                toc=_get_toc_and_questions(),
                 get_assignmentURL=URL('admin', 'get_assignment'),
                 save_assignmentURL=URL('admin', 'save_assignment'),
                 get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
@@ -1002,8 +1002,7 @@ def get_assignment_release_states():
         print ex
         return json.dumps({})
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def get_toc_and_questions():
+def _get_toc_and_questions():
     # return a dictionary with a nested dictionary representing everything the
     # picker will need in the instructor's assignment authoring tab
 

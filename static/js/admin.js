@@ -1002,7 +1002,8 @@ function remove_assignment() {
     obj.send(JSON.stringify({assignid: 'assignmentid'}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
-            select.remove(select.selectedIndex)
+            select.remove(select.selectedIndex);
+            assignmentInfo();
         }
     }
 }
@@ -1149,6 +1150,7 @@ function create_question(formdata) {
 
 function assignmentInfo() {
     var select = document.getElementById('assignlist');
+    // TODO: If no assignment is selected, clear the table and tree picker.
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
     $('#rightSection').css('visibility','visible');
@@ -1197,7 +1199,8 @@ function assignmentInfo() {
                 var type = question['type'];
                 var name = question['name'];
                 var points = question['points'];
-                var timed = question['timed'];
+                // TODO: I always get ``null`` from the server. What's the expected format?
+                var timed = question['timed'] ? 'True' : 'False';
                 bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
 
                 // Check this question in the question tree picker.
@@ -1234,6 +1237,7 @@ function createAssignment(form) {
                 newopt.innerHTML = name;
                 select.appendChild(newopt);
                 select.selectedIndex = newopt.index;
+                assignmentInfo();
             } else {
                 alert('Error in creating new assignment.')
             }
@@ -1241,29 +1245,6 @@ function createAssignment(form) {
     }
 }
 
-
-function getQuestions() {
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    var assignmentname = select.options[select.selectedIndex].text;
-    var questions_list = document.getElementById('questions_list');
-    //drop any of the questions that have been previously added to the select
-    $("#questions_list").empty();
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getQuestions/?assignmentid=' + assignmentid, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var questions = JSON.parse(obj.responseText);
-            for (i = 0; i < questions.length; i++) {
-                var option = document.createElement("option");
-                option.text = questions[i];
-                option.value = assignmentid;
-                questions_list.add(option);
-            }
-        }
-    }
-}
 
 function preview_question(form){
 
@@ -1278,12 +1259,6 @@ function preview_question(form){
     // a sphinx project, run sphinx, and send back the generated index file
     // this generated index can then be displayed...
 
-}
-
-function remove_question() {
-    var select = document.getElementById('questions_list');
-    var question_name = select.options[select.selectedIndex].text;
-    remove_question_raw(question_name);
 }
 
 function remove_question_raw(question_name) {
@@ -1363,16 +1338,18 @@ function addToAssignment(form) {
 
 function updateAssignmentRaw(question_name, points, timed, type) {
     var assignmentid = getAssignmentId();
-    // TODO: need to get the add endpoint updated to do an update.
-    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + timed + '&type=' + type, {variable: 'variable'}).done(function (response_JSON) {
+    // This endpoint actually does an update.
+    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + (timed === 'True' ? true : false) + '&type=' + type, {variable: 'variable'}).done(function (response_JSON) {
         var total_points = response_JSON[0];
         var q_type = response_JSON[1];
+        var totalPointsElement = document.getElementById("totalPoints");
+        totalPointsElement.innerHTML = 'Total points: ' + total_points;
         // See if this question already exists in the table.
         var bst = $('#questionTable');
-        console.log(bst.bootstrapTable('getRowByUniqueId', question_name));
-        // TODO: Only append if this row doesn't exist.
-        bst.bootstrapTable('append', [{'question' : question_name, 'points' : points, 'timed' : timed}]);
-
+        if (bst.bootstrapTable('getRowByUniqueId', question_name) === null) {
+            // Only append if this row doesn't exist.
+            bst.bootstrapTable('append', [{'question' : question_name, 'points' : points, 'timed' : timed}]);
+        }
     });
 }
 
@@ -1539,32 +1516,6 @@ function edit_indexrst(form) {
         }}
 }
 
-var tocs = null;
-function get_tocs(){
-    if (tocs == null){
-        // This has to be a synchronous call because we have to set assignment_release_states
-        // before going on to later code that uses it
-        jQuery.ajax({
-        url: eBookConfig.get_tocURL,
-        type: "POST",
-        dataType: "JSON",
-        async: false,
-        success: function (retdata) {
-            tocs = retdata;
-        }
-        });
-    }
-    return tocs;
-}
-
-function get_reading_toc(){
-    return get_tocs().reading_picker
-}
-
-function get_questions_toc(){
-    return get_tocs().question_picker
-}
-
 function get_assignment_contents(assignid, success){
     jQuery.getJSON(
         eBookConfig.get_assignmentURL,
@@ -1712,7 +1663,7 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
-    
+
     jQuery(`#${whereDiv}`).html(componentSrc);
 
     edList = [];

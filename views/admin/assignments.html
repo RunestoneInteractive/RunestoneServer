@@ -4,11 +4,14 @@
 {{ block tabcontent }}
 
 <script type="text/javascript">
-  eBookConfig.get_tocURL = '{{=get_tocURL}}';
   eBookConfig.get_assignmentURL = '{{=get_assignmentURL}}';
   eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
   eBookConfig.get_HTML_for_questionURL = '{{=get_HTML_for_questionURL}}';
+  <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
+  eBookConfig.toc = {{=XML(toc)}};
 </script>
+
+
 
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
@@ -34,17 +37,13 @@
 
                    <h4 style="text-align: center;">Assignment</h4>
 
-       <form action="Javascript:assignmentInfo();">
-        <select id="assignlist" class="form-control">
+        <select id="assignlist" class="form-control" onchange="assignmentInfo();">
             {{for assignmentid in assignments:}}
   <option value={{=assignmentid}}>{{=assignments[assignmentid]}}</option>
         {{pass}}
 </select>
-                <input type="submit" class="btn" value="show assignment"> </br>
-
                        <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#addAssignment">+</button>
                     <button style="margin-top: 12px;" formaction="Javascript:remove_assignment();" class="btn">-</button>
-</form>
 
 
 
@@ -238,12 +237,15 @@
                 <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration
                     -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
                     -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+                    -   Specify that the ``timed`` column should be edited by a select drop-down, and provide values for the drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
+                    -   Add a delete column with a button.
                 -->
                     <table id="questionTable" style="width:100%;" data-unique-id="question">
-                <thead style="border: 1px solid black;"><tr>
-                    <th data-field="question" style="border-right: 1px solid black; text-align: center">Question</th>
-                    <th data-field="points" data-editable="true" style="border-right: 1px solid black;  text-align: center">Points</th>
-                    <th data-field="timed" style="border-right: 1px solid black;  text-align: center">Timed</th>
+                <thead><tr>
+                    <th data-field="question">Question</th>
+                    <th data-field="points" data-editable="true">Points</th>
+                    <th data-field="timed" data-editable="true" data-editable-type="select" data-editable-source="[{value: 'True', text: 'True'}, {value: 'False', text: 'False'}]">Timed</th>
+                    <th data-field="delete" data-events="deleteEvent" data-formatter="deleteFormatter">Delete</th>
                 </tr></thead>
                         <tbody id="tableBody">
                         </tbody>
@@ -251,48 +253,8 @@
 
 
                     <div style="text-align: center">
-                        <button data-toggle="tab" href="#qbank" style="margin-top: 12px;" class="btn">+</button>
-                        <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#questionsModal" onclick="getQuestions();">-</button>
                         <button class="btn" onclick="questions2Rst()">Write Assignment</button>
                         <!-- Modal -->
-<div class="modal fade" id="questionsModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="modalHeader">
-                    Remove Question
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <form action="">
-        <select id="questions_list" class="form-control">
-</select>
-                  <input type="button" class="btn btn-default" Value="Remove Question" data-dismiss="modal" onClick="remove_question();">
-
-</form>
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
                     </div>
                 </div>
             </div>
@@ -600,8 +562,6 @@
 
 // Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
 $(function () {
-    tree_json = get_questions_toc();
-    //get_reading_toc();
     var tqp = $('#tree-question-picker');
     tqp.jstree({
         // Configure the checkbox plugin.
@@ -620,7 +580,7 @@ $(function () {
         ],
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
         "core" : {
-            "data" : tree_json,
+            "data" : eBookConfig.toc.question_picker,
         },
     });
     // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
@@ -659,14 +619,13 @@ $(function () {
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_is_question(instance, node)) {
                     // Add each checked item to the assignment list with default values.
-                    updateAssignmentRaw(node.id, 1, false, 'formative');
+                    updateAssignmentRaw(node.id, 1, 'False', 'formative');
                 }
             });
         }
     });
     // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree%20Event&f=uncheck_node.jstree>`_.
     tqp.on('uncheck_node.jstree', function(event, data) {
-        console.log('uncheck_node');
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_is_question(instance, node)) {
@@ -711,8 +670,31 @@ $('#questionTable').bootstrapTable({
     },
 });
 
-// For easier debug.
-$('#assignment-div-collapse').click();
+// Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
+function deleteFormatter(value, row, index) {
+    return [
+        '<a class="remove" href="javascript:void(0)" title="Remove">',
+        '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>'
+    ].join('');
+}
+
+function timedFormatter(value, row, index) {
+    return [
+        'True?'
+    ].join('');
+}
+
+// Copied from ``operateEvents`` in an example_.
+window.deleteEvent = {
+    'click .remove': function (e, value, row, index) {
+        // Unchecking the question in the tree picker also deletes it from the database and table.
+        $('#tree-question-picker').jstree(true).uncheck_node(row['question']);
+    },
+};
+
+// Display the first assignment and the browser when the page opens.
+assignmentInfo();
 $('#browse-button').click();
 </script>
 
