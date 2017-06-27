@@ -158,7 +158,7 @@ db.define_table('assignments',
                                                                                   # include reading portion and
                                                                                   # questions portion
     Field('name', 'string'),
-    Field('points', 'integer'),
+    Field('points', 'integer'),  # max possible points on the assignment, cached sum of assignment_question points
     Field('threshold', 'integer'),              # for reading portion of assignment; if earn above this threshold,
                                                 # get full credit (from points field of assignment;
                                                 # 0 or null means not using threshold
