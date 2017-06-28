@@ -52,15 +52,29 @@ def index():
     for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
-        questions.append({
-            "id": problem_id,
-            "text": metric.problem_text,
-            "correct": stats[2],
-            "correct_mult_attempt": stats[3],
-            "incomplete": stats[1],
-            "not_attempted": stats[0],
-            "attemptedBy": stats[1] + stats[2] + stats[3]
-            })
+        if data_analyzer.questions[problem_id]:
+            entry = {
+                "id": problem_id,
+                "text": metric.problem_text,
+                "chapter": data_analyzer.questions[problem_id].chapter,
+                "sub_chapter": data_analyzer.questions[problem_id].subchapter,
+                "correct": stats[2],
+                "correct_mult_attempt": stats[3],
+                "incomplete": stats[1],
+                "not_attempted": stats[0],
+                "attemptedBy": stats[1] + stats[2] + stats[3]
+                }
+        else:
+            entry = {
+                "id": problem_id,
+                "text": metric.problem_text,
+                "correct": stats[2],
+                "correct_mult_attempt": stats[3],
+                "incomplete": stats[1],
+                "not_attempted": stats[0],
+                "attemptedBy": stats[1] + stats[2] + stats[3]
+                }
+        questions.append(entry)
 
     logger.debug("getting questsions")
     questions = sorted(questions, key=itemgetter("id"))
