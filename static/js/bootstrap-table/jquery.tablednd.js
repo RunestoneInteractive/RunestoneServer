@@ -548,7 +548,7 @@ jQuery.tableDnD = {
         this.dragObject = null;
         // Call the onDrop method if there is one
         config.onDrop
-            && this.originalOrder != this.currentOrder()
+            //&& this.originalOrder != this.currentOrder()
             && $(droppedRow).hide().fadeIn('fast')
             && config.onDrop(this.currentTable, droppedRow);
 
@@ -615,7 +615,7 @@ jQuery.tableDnD = {
             return {error: { code: 500, message: "Not a valid table."}};
         if (!table.id && !config.serializeParamName)
             return {error: { code: 500, message: "No serializable unique id provided."}};
-        
+
         rows      = config.autoCleanRelations
                         && table.rows
                         || $.makeArray(table.rows);

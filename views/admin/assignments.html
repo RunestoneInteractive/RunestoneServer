@@ -503,6 +503,27 @@ $('#questionTable').bootstrapTable({
         console.log('New value of ' + row['question'] + ' is ' + row[field] + '.');
         updateAssignmentRaw(row['question'], row['points'], row['timed'], 'formative');
     },
+    // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event.
+    //onReorderRow : function(rows) {
+    //    var [dragRow, droppedAfterRow] = rows;
+    //    console.log(dragRow);
+    //    console.log(droppedAfterRow);
+    //    var data = $('#questionTable').bootstrapTable('getData');
+    //    $(data).each(function (index, val) {
+    //        console.log(val['question']);
+    //    });
+    //},
+    // This will be called multiple times. Record the beginning row of the drag.
+    onReorderRowsDrag : function(table, row) {
+        table.dragRowIndex = $(row).attr('data-index');
+        table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
+    },
+    onReorderRowsDrop : function(table, row) {
+        dropRowIndex = $(row).attr('data-index');
+        if (table.dragRowIndex !== dropRowIndex) {
+            console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
+        }
+    },
 });
 
 // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.

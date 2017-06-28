@@ -1206,7 +1206,6 @@ function assignmentInfo() {
             bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
 
             // Check this question in the question tree picker.
-            console.log(tqp.get_node(name));
             tqp.check_node(tqp.get_node(name));
         }
 
