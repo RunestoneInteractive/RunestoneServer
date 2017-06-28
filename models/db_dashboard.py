@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import logging
+from datetime import datetime, timedelta
 
 rslogger = logging.getLogger('web2py.app.runestone')
 rslogger.setLevel('DEBUG')
@@ -149,7 +150,18 @@ class UserActivity(object):
         self.rows.append(row)
 
     def get_page_views(self):
+        # returns page views for all time
         return len(self.rows)
+
+    def get_recent_page_views(self):
+        # returns page views for the last 7 days
+        recentViewCount = 0
+        current = len(self.rows) - 1
+        while current >= 0 and self.rows[current]['timestamp'] >= datetime.now() - timedelta(days=7):
+            recentViewCount += 1
+            current = current - 1
+        return recentViewCount
+
 
     def get_activity_stats(self):
         return self

@@ -128,10 +128,12 @@
 	<div class="col-md-5">
 		<div class="dash-section">
 			<div class="dash-section-header">
-				Recent Activity
+				Class Activity
+				<button id="allTime" onclick="getActivity(false)" disabled>All Time</button>
+				<button id="lastWeek" onclick="getActivity(true);">Last 7 Days</button>
 			</div>
 			<div class="dash-section-content">
-				<!--<div style="text-align: right"><b>Sort by</b>
+				<!-- <div style="text-align: right"><b>Sort by</b>
 					<select name="activity-sortby">
 					  <option value="missed" selected>Alphabetical</option>
 					  <option value="saab">Corect Attempts</option>
@@ -146,7 +148,7 @@
 					  <option value="fiat" selected>7-Day Total</option>
 					  <option value="audi">14-Day Total</option>
 					</select>
-				</div>-->
+				</div> -->
 				<div style="float: left; margin-right: 1em;">
 					<div style="height: 10px; width: 10px; border: 1px solid #333; background-color: #009DD9; float: left; margin-top: 3px; margin-right: 3px"></div> Sections Completed
 				</div>
@@ -164,6 +166,20 @@
 				</div>
 				<script type="text/javascript">
 					DashboardCharts.studentActivity({{response.write(studentactivity,escape=False)}});
+
+					function getActivity(recent) {
+						chart = document.getElementById("studentchart");
+						chart.innerHTML = '<div id="dash-chart-tooltip"><p><span id="value">100</span></p></div>';
+						if (recent) {
+							DashboardCharts.studentActivity({{response.write(recentactivity,escape=False)}});
+							document.getElementById("lastWeek").disabled = true;
+							document.getElementById("allTime").disabled = false;
+						} else {
+							DashboardCharts.studentActivity({{response.write(studentactivity,escape=False)}});
+							document.getElementById("lastWeek").disabled = false;
+							document.getElementById("allTime").disabled = true;
+						}
+					}
 				</script>
 			</div>
 		</div>
