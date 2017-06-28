@@ -1160,69 +1160,59 @@ function assignmentInfo() {
 
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
-    $('#rightSection').css('visibility','visible');
+    $('#rightSection').css('visibility', 'visible');
+    $("#leftpanel1").css('visibility', 'visible');
+    $("#leftpanel2").css('visibility', 'visible');
 
-
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/assignmentInfo/?assignmentid=' + assignmentid, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var question_info = obj.responseText;
-            var res = JSON.parse(question_info);
-            var keys = [];
-            var i;
-            for (i in res) {
-                if (res.hasOwnProperty(i) && i != 'assignment_points' && i != 'due_date' && i !=
-                    'description') {
-                    keys.push(i);
-                }
+    $.getJSON('/runestone/admin/assignmentInfo/?assignmentid=' + assignmentid, {variable: 'variable'}).done(function (res) {
+        var keys = [];
+        var i;
+        for (i in res) {
+            if (res.hasOwnProperty(i) && i != 'assignment_points' && i != 'due_date' && i !=
+                'description') {
+                keys.push(i);
             }
-            var assignment_points = res['assignment_points'];
-            var totalPoints = document.getElementById("totalPoints");
-            totalPoints.innerHTML = 'Total points: ' + assignment_points;
+        }
+        var assignment_points = res['assignment_points'];
+        var totalPoints = document.getElementById("totalPoints");
+        totalPoints.innerHTML = 'Total points: ' + assignment_points;
 
-            var duedate = res['due_date'];
-            document.getElementById('assignment_duedate').innerHTML = 'Due: ' + duedate;
+        var duedate = res['due_date'];
+        document.getElementById('assignment_duedate').innerHTML = 'Due: ' + duedate;
 
-            var description = res['description'];
-            document.getElementById('assignment_description').innerHTML = description;
+        var description = res['description'];
+        document.getElementById('assignment_description').innerHTML = description;
 
-            // Get the question tree picker.
-            var tqp = $('#tree-question-picker').jstree();
-            // Ignore these checks in the picker, since it's loading existing data, not user interaction.
-            tqp.ignore_check = true;
-            // Clear all checks initially.
-            tqp.uncheck_all();
+        // Get the question tree picker.
+        var tqp = $('#tree-question-picker').jstree(true);
+        // Ignore these checks in the picker, since it's loading existing data, not user interaction.
+        tqp.ignore_check = true;
+        // Clear all checks initially.
+        tqp.uncheck_all();
 
-            // Clear the bootstrap table.
-            var bst = $('#questionTable');
-            bst.bootstrapTable('removeAll');
-            for (k = 0; k < keys.length; k++) {
-                var key = keys[k];
-                question = res[key];
+        // Clear the bootstrap table.
+        var bst = $('#questionTable');
+        bst.bootstrapTable('removeAll');
+        for (k = 0; k < keys.length; k++) {
+            var key = keys[k];
+            question = res[key];
 
-                // Populate entire table.
-                var type = question['type'];
-                var name = question['name'];
-                var points = question['points'];
-                // TODO: I always get ``null`` from the server. What's the expected format?
-                var timed = question['timed'] ? 'True' : 'False';
-                bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
+            // Populate entire table.
+            var type = question['type'];
+            var name = question['name'];
+            var points = question['points'];
+            // TODO: I always get ``null`` from the server. What's the expected format?
+            var timed = question['timed'] ? 'True' : 'False';
+            bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
 
-                // Check this question in the question tree picker.
-                tqp.check_node(tqp.get_node(name));
-            }
-
-            // Future checks come from the user.
-            tqp.ignore_check = false;
+            // Check this question in the question tree picker.
+            console.log(tqp.get_node(name));
+            tqp.check_node(tqp.get_node(name));
         }
 
-        var leftpanel1 = document.getElementById("leftpanel1");
-        leftpanel1.style.visibility = 'visible';
-        var leftpanel2 = document.getElementById("leftpanel2");
-        leftpanel2.style.visibility = 'visible';
-    }
+        // Future checks come from the user.
+        tqp.ignore_check = false;
+    });
 }
 
 
