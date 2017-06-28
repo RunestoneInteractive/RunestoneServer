@@ -89,7 +89,7 @@ def user():
                        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
                        SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
                        FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
-                    ''' % (auth.user.id, auth.user.course_name))
+                    ''', (auth.user.id, auth.user.course_name))
             else:
                 session.flash = 'This course is not set up for tracking progress'
             # Add user to default section for course.

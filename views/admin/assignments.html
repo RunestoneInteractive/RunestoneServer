@@ -1,611 +1,525 @@
 {{extend 'admin/instructors.html'}}
-
 {{ block tabcontent }}
 
 <script type="text/javascript">
-  eBookConfig.get_tocURL = '{{=get_tocURL}}';
   eBookConfig.get_assignmentURL = '{{=get_assignmentURL}}';
   eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
-
+  eBookConfig.get_HTML_for_questionURL = '{{=get_HTML_for_questionURL}}';
+  <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
+  eBookConfig.toc = {{=XML(toc)}};
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js">
 </script>
 
-<head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<link href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" rel="stylesheet" type="text/css">
+<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}">
+</script>
 
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
+<link href="{{=URL('static', 'js/jstree_themes/default/style.min.css')}}" rel="stylesheet">
+<script src="{{=URL('static', 'js/jstree.min.js')}}">
+</script>
 
-    <link rel="stylesheet" href="{{=URL('static', 'js/jstree_themes/default/style.min.css')}}" />
-    <script src="{{=URL('static', 'js/jstree.min.js')}}"></script>
-
-    <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
-</head>
+<link href="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/css/bootstrap-editable.css')}}" rel="stylesheet">
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-en-US.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-editable.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/js/bootstrap-editable.js')}}">
+</script>
 
 <div class="col-md-6">
-
-        <div class="col-md-6">
-
-                   <h4 style="text-align: center;">Assignment</h4>
-
-       <form action="Javascript:assignmentInfo();">
-        <select id="assignlist" class="form-control">
-            {{for assignmentid in assignments:}}
-  <option value={{=assignmentid}}>{{=assignments[assignmentid]}}</option>
-        {{pass}}
-</select>
-                <input type="submit" value="show assignment"> </br>
-
-                       <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#addAssignment">+</button>
-                    <button style="margin-top: 12px;" formaction="Javascript:remove_assignment();" class="btn">-</button>
-</form>
-
-
-
-        </div>
-
-
+  <h4 style="text-align: center;">Assignment</h4>
+  <select class="form-control" id="assignlist" onchange="assignmentInfo();">
+    {{ for assignmentid in assignments: }}
+    <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
+    {{ pass }}
+  </select>
+  <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
+  <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+</div>
 
 <!-- Modal -->
-<div class="modal fade" id="addAssignment" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    Create Assignment
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <form role="form" action="">
-                  <div class="form-group">
-                    <label for="name">Assignment Name</label>
-                      <input type="text" class="form-control"
-                      id="name" placeholder="Enter assignment name"/>
-                  </div>
-                      <div class="form-group">
-                    <label for="description">Description</label>
-                      <input type="text" class="form-control"
-                      id="description" placeholder="Description"/>
-                  </div>
-
-                       <div class="form-group">
-                    <label for="datetimepicker">Due Date</label>
-                      <input id="datetimepicker" type="text" >
-                  </div>
-
-
-                  <input type="button" class="btn btn-default" Value="Create" data-dismiss="modal" onClick="createAssignment(this.form)">
-                </form>
-
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-           <div id="leftpanel1" style="visibility: hidden" class="col-md-6">
-<div style="margin-top:25px;">
-  <p id="assignment_duedate">Due</p>
-<p id="totalPoints"></p>
-    <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#changeDue">Change Date</button>
-
-
-    <div class="modal fade" id="changeDue" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title">
-                    Change Assignment Due Date
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <form role="form" action="">
-
-                       <div class="form-group">
-                    <label for="changedate">Due Date</label>
-                      <input id="changedate" type="text" >
-                  </div>
-
-                  <input type="button" class="btn btn-default" Value="Change" data-dismiss="modal" onClick="changeDueDate(this.form)">
-                </form>
-
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-</div>
-
-
-
-
-        </div>
-
-
-
-        <div class="col-md-11" id="leftpanel2" style="visibility: hidden">
-
-            <div>
-                <h5>Assignment Description</h5>
-
-                <div style="border: 1px solid black;">
-                    <p id="assignment_description"></p>
-                </div>
-
-                    <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#changeDescriptionModal">Change Description</button>
-
-                    <div class="modal fade" id="changeDescriptionModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title">
-                    Change Assignment Description
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <form role="form" action="">
-                      <div class="form-group">
-                    <label for="newdescription">Description</label>
-                      <input type="text" class="form-control"
-                      id="newdescription" placeholder="Description"/>
-                  </div>
-
-                  <input type="button" class="btn btn-default" Value="Change" data-dismiss="modal" onClick="changeDescription(this.form)">
-                </form>
-
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-                </div>
-
-
-
-                <div class="col-md-12" style="margin-top: 20px">
-
-
-    <div style="margin-bottom: 50px" class="list-group">
-        <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
-
-        <div id="typetabs">
-        <div style="float:left;">
-           <button id="summative" onclick="showQuestions('summative');" data-toggle="tab" class="list-group-item clickedtab">
-                    <h4 style="text-align: center" class="list-group-item-heading">Summative</h4>
-                </button></div>
-
-            <div style="float:left;">
-           <button id="formative" onclick="showQuestions('formative');" data-toggle="tab" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Formative</h4>
-                </button></div>
-
-
-
-            <div style="float:left;">
-           <button id="external" onclick="showQuestions('external');" data-toggle="tab" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">External</h4>
-                </button></div></div></div>
-
-            <div class="list-group">
-
-                <div class="list-group-item">
-                    <table id="questionTable" style="width:100%;">
-                <thead style="border: 1px solid black;">
-                    <th style="border-right: 1px solid black; text-align: center">Question</th>
-                    <th style="border-right: 1px solid black;  text-align: center">Points</th>
-                    <th style="border-right: 1px solid black;  text-align: center">Timed</th>
-                </thead>
-                        <tbody id="tableBody">
-                        </tbody>
-                </table>
-
-
-                    <div style="text-align: center">
-                        <button data-toggle="tab" href="#qbank" style="margin-top: 12px;" class="btn">+</button>
-                        <button style="margin-top: 12px;" class="btn" data-toggle="modal" data-target="#questionsModal" onclick="getQuestions();">-</button>
-                        <button class="btn" onclick="questions2Rst()">Write Assignment</button>
-                        <!-- Modal -->
-<div class="modal fade" id="questionsModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="modalHeader">
-                    Remove Question
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <form action="">
-        <select id="questions_list" class="form-control">
-</select>
-                  <input type="button" class="btn btn-default" Value="Remove Question" data-dismiss="modal" onClick="remove_question();">
-
-</form>
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-                    </div>
-                </div>
-            </div>
-    </div>
-            </div>
-
-        </div>
-
-
-    <div id="rightSection" class="col-md-6" style="border-left: solid black 1px; " xtra="visibility: hidden;">
-<div class="container">
-<a data-toggle="tab" href="#qbrowse" class="btn btn-default">Browse</a>
-<a data-toggle="tab" href="#qbank" class="btn btn-default">Search</a>
-<a data-toggle="tab" href="#qwrite" class="btn btn-default">Write</a>
-
-
-        <div class="tab-content">
-        <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
-            <input type="text" id="search-tree-question-picker">
-            <div id="tree-question-picker">
-            </div>
-        </div>
-
-        <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
-
-<h5 style="text-align: center">Search Question Bank</h5>
-             <form id="qbankform" role="form" action="">
-                   <div class="form-group">
-                    <label for="term">Term</label>
-                      <input type="text" class="form-control"
-                      id="term" placeholder="Term"/>
-                  </div>
-                      <div class="form-group">
-                    <label for="chapter">Chapter</label>
-                      <select class="form-control"
-                      id="chapter">
-                          <option selected="selected" value=""></option>
-                          {{ for chapter in chapters: }}
-                          <option value="{{=chapter}}">{{=chapter}}</option>
-                          {{ pass }}
-                      </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="author">Author</label>
-                      <input type="text" class="form-control"
-                      id="author" placeholder="Author"/>
-                  </div>
-
-                 <div class="form-group">
-                     <label for="difficultyselector">Difficulty</label>
-                     <div id="difficultyselector">
-      <input type="radio" id="rating1" name="rating" value="1" /><label for="rating1">1</label>
-      <input type="radio" id="rating2" name="rating" value="2" /><label for="rating2">2</label>
-      <input type="radio" id="rating3" name="rating" value="3" /><label for="rating3">3</label>
-      <input type="radio" id="rating4" name="rating" value="4" /><label for="rating4">4</label>
-      <input type="radio" id="rating5" name="rating" value="5"  /><label for="rating5">5</label>
-    </div>
-                 </div>
-
-                 <div class="form-group">
-                     <label for="tags">Tags</label>
-                     <select id="tags" style="width:100%" class="js-example-basic-multiple" multiple="multiple">
-                          {{ for tag in tags: }}
-                      <option value="{{=tag}}">{{ =tag }}</option>
-                      {{ pass }}
-</select></div>
-
-
-
-                  <input type="button" class="btn btn-default" Value="Search" data-dismiss="modal" onClick="questionBank(this.form)">
-                </form>
-
-
-
-                <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
-                 <select style="text-align: center; visibility: hidden" size=10 class="list-group-item-text;" id="qbankselect">
-                    </select>
-                    <form id="questionform" style="visibility: hidden">
-                        <label for="points">Points</label>
-                        <input type="number" id="points" name="points" />
-                        <label for="timed">Timed</label>
-                         <input type="checkbox" id="timed" name="timed" value="true" />
-
-                        <input type="button" class="btn btn-default" Value="Add to Assignment" data-dismiss="modal" onClick="addToAssignment(this.form)">
-
-                    </form>
-                </div>
-
-
-    <div class="col-md-12">
-            <div class="list-group" style="width:100%; visibility: hidden;" id="questionInfo">
-                <div class="list-group-item">
-                    <div class="form-group">
-              <button style="margin-top: 12px;" class="btn">Preview</button>
-                 </div>
-                </div>
-
-                <div class="list-group-item">
-                    <p id="q_code" style="white-space: pre; overflow-x: auto;"></p>
-                </div>
-
-                <div class="list-group" style="margin-top: 20px">
-                    <div class="list-group-item">
-                        <div id="q_author"></div>
-                        <div id="q_difficulty"></div>
-                        <div id="q_tags"></div>
-                    </div>
-                       <div class="form-group">
-                    <button data-toggle="modal" data-target="#editModal" style="margin-top: 12px;" class="btn" onclick="getQuestionText();">Edit</button></div>
-
-                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
-     aria-labelledby="EditQuestion" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="editModalHeader">
-                    Edit Question
-                </h4>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
-                <form id="editForm" action="">
-                     <div class="form-group">
-                         <label for="changename">Change Name</label>
-                         <input style="width: 100%;" id="changename" type="text" required>
-
-                         </div>
-                    <div class="form-group">
-                     <label for="difficultyselector">Change Difficulty</label>
-                     <div id="change_difficulty">
-      <input type="radio" id="r1" name="rating" value="1" /><label for="r1">1</label>
-      <input type="radio" id="r2" name="rating" value="2" /><label for="r2">2</label>
-      <input type="radio" id="r3" name="rating" value="3" /><label for="r3">3</label>
-      <input type="radio" id="r4" name="rating" value="4" /><label for="r4">4</label>
-      <input type="radio" id="r5" name="rating" value="5"  /><label for="r5">5</label>
-    </div>
-                 </div>
-                    <div class="form-group">
-                    <label for="addTags">Add Tags</label>
-
-      <select id="addTags" style="width:100%" class="js-example-basic-multiple" multiple="multiple">
-                          {{ for tag in tags: }}
-                      <option value="{{=tag}}">{{ =tag }}</option>
-                      {{ pass }}
-</select>
-                        </div>
-
-                    <div class="form-group">
-                        <label for="editRST">Edit Question</label>
-              <textarea style="white-space: pre; overflow-x: auto;" id="editRST" cols="100" name="editRST" placeholder="" rows="20"></textarea>
-
-                    </div>
-                  <input type="button" class="btn btn-default" Value="Edit Question" data-dismiss="modal" onClick="edit_question(this.form);">
-
-</form>
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-                </div>
-            </div>
-    </div>
-
-
-
-
-
-            </div>
-
-
-
-<div id="qwrite" class="form-group tab-pane fade">
-        <form id="newqform">
-            <div class="col-md-12">
-            <label for="template">Template:</label><select id="template">
-                <option value="activecode">activecode</option>
-                <option value="mchoice">multiple choice</option>
-                <option value="clickablearea">clickable area</option>
-                <option value="codelens">codelens</option>
-                <option value="dragndrop">drag and drop</option>
-                <option value="parsons">pasons</option>
-                <option value="fillintheblank">fill in the blank</option>
-                <option value="poll">poll</option>
-                <option value="reveal">reveal</option>
-                <option value="shortanswer">short answer</option>
-                <option value="usageAssignment">usageAssignment</option>
-            </select> <input type="button" onclick="display_write();" class="btn" value="Go">
-            </div>
-            <div id="hiddenwrite" style="visibility: hidden">
-            <div class="col-md-12">
-                <label for="qcode"></label>
-                <textarea rows="12" cols="65" form="newqform" id="qcode"></textarea>
-            </div>
-            <div class="col-md-12">
-
-                <p id="qnameerror" style="color: red"></p>
-            </div>
-            <div class="col-md-12">
-                <label>Difficulty: </label>
-                1<input type="radio" name="difficulty" id="difficulty1" value="1" checked="checked">
-                <input type="radio" name="difficulty" id="difficulty2" value="2">
-                <input type="radio" name="difficulty" id="difficulty3" value="3">
-                <input type="radio" name="difficulty" id="difficulty4" value="4">
-                <input type="radio" name="difficulty" id="difficulty5" value="5">5
-
-            </div>
-            <div class="col-md-12">
-                <label for="qtags">Tags:</label>
-                <input type="text" id="qtags"/>
-            </div>
-            <div class="col-md-12">
-                <label>Location:</label><select id="qchapter">
-                <option>Chapter</option>
-            </select>
-            </div>
-            <div class="col-md-12">
-                <label for="isprivate">Private</label><input type="checkbox" id="isprivate"/>
-            </div>
-                  <div class="col-md-12">
-                           <label for="createpoints">Points</label>
-                        <input type="number" id="createpoints" name="points" />
-                        <label for="createtimed">Timed</label>
-                         <input type="checkbox" id="createtimed" name="timed" value="true" />
-                </div>
-            <div class="col-md-12">
-                <input type="button" class="btn" value="Preview" onclick="preview_question(this.form);"/>
-                <input type="button" class="btn btn-default" value="Done" onclick="create_question(this.form);"/>
-            </div>
-
-                </div>
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="addAssignment" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
+      </div><!-- Modal Body -->
+      <div class="modal-body">
+        <form action="" role="form">
+          <div class="form-group">
+            <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label> <input class="form-control" id="description" placeholder="Description" type="text">
+          </div>
+          <div class="form-group">
+            <label for="datetimepicker">Due Date</label> <input id="datetimepicker" type="text">
+          </div><input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
         </form>
-
+      </div><!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+      </div>
     </div>
-
-
-
-
-            </div>
-    </div>
-
+  </div>
 </div>
 
+<div class="col-md-6" id="leftpanel1" style="visibility: hidden">
+  <div style="margin-top:25px;">
+    <p id="assignment_duedate">Due</p>
+    <p id="totalPoints"></p><button class="btn" data-target="#changeDue" data-toggle="modal" style="margin-top: 12px;">Change Date</button>
+    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDue" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Change Assignment Due Date</h4>
+          </div><!-- Modal Body -->
+          <div class="modal-body">
+            <form action="" role="form">
+              <div class="form-group">
+                <label for="changedate">Due Date</label> <input id="changedate" type="text">
+              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDueDate(this.form)" type="button" value="Change">
+            </form>
+          </div><!-- Modal Footer -->
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="col-md-11" id="leftpanel2" style="visibility: hidden">
+  <div>
+    <h5>Assignment Description</h5>
+    <div style="border: 1px solid black;">
+      <p id="assignment_description"></p>
+    </div><button class="btn" data-target="#changeDescriptionModal" data-toggle="modal" style="margin-top: 12px;">Change Description</button>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDescriptionModal" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Change Assignment Description</h4>
+          </div><!-- Modal Body -->
+          <div class="modal-body">
+            <form action="" role="form">
+              <div class="form-group">
+                <label for="newdescription">Description</label> <input class="form-control" id="newdescription" placeholder="Description" type="text">
+              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDescription(this.form)" type="button" value="Change">
+            </form>
+          </div><!-- Modal Footer -->
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-md-12" style="margin-top: 20px">
+    <div class="list-group" style="margin-bottom: 50px">
+      <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
+      <div class="list-group">
+        <div class="list-group-item">
+          <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration
+                    -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+                    -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+                    -   Specify that the ``timed`` column should be edited by a select drop-down, and provide values for the drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
+                    -   Add a delete column with a button.
+                -->
+          <table data-unique-id="question" id="questionTable" style="width:100%;">
+            <thead>
+              <tr>
+                <th data-field="question">Question</th>
+                <th data-editable="true" data-field="points">Points</th>
+                <th data-editable="true" data-editable-source="[{value: 'True', text: 'True'}, {value: 'False', text: 'False'}]" data-editable-type="select" data-field="timed">Timed</th>
+                <th data-events="deleteEvent" data-field="delete" data-formatter="deleteFormatter">Delete</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div style="text-align: center">
+            <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6" id="rightSection" style="border-left: solid black 1px;" xtra="visibility: hidden;">
+  <div class="container">
+    <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a> <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a> <a class="btn btn-default" data-toggle="tab" href="#qwrite">Write</a>
+    <div class="tab-content">
+      <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
+        <input id="search-tree-question-picker" type="text">
+        <div id="tree-question-picker"></div>
+      </div>
+      <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
+        <h5 style="text-align: center">Search Question Bank</h5>
+        <form action="" id="qbankform" name="qbankform" role="form">
+          <div class="form-group">
+            <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
+          </div>
+          <div class="form-group">
+            <label for="chapter">Chapter</label> <select class="form-control" id="chapter">
+              <option selected="selected" value=""></option>
+              {{ for chapter in chapters: }}
+              <option value="{{=chapter}}">{{=chapter}}</option>
+              {{ pass }}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
+          </div>
+          <div class="form-group">
+            <label for="difficultyselector">Difficulty</label>
+            <div id="difficultyselector">
+              <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tags">Tags</label>
+            <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
+              {{ for tag in tags: }}
+              <option value="{{=tag}}">{{ =tag }}</option>
+              {{ pass }}
+            </select>
+          </div><input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
+        </form>
+        <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
+          <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
+          </select>
+          <form id="questionform" name="questionform" style="visibility: hidden">
+            <label for="points">Points</label> <input id="points" name="points" type="number"> <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true"> <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
+          </form>
+        </div>
+        <div class="col-md-12">
+          <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
+            <div class="list-group-item" id="component-preview">
+              <div class="form-group">
+                <button class="btn" style="margin-top: 12px;">Preview</button>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <p id="q_code" style="white-space: pre; overflow-x: auto;"></p>
+            </div>
+            <div class="list-group" style="margin-top: 20px">
+              <div class="list-group-item">
+                <div id="q_author"></div>
+                <div id="q_difficulty"></div>
+                <div id="q_tags"></div>
+              </div>
+              <div class="form-group">
+                <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
+              </div>
+              <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+                      <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
+                    </div><!-- Modal Body -->
+                    <div class="modal-body">
+                      <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
+                      <form action="" id="editForm" name="editForm">
+                        <div class="form-group">
+                          <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
+                        </div>
+                        <div class="form-group">
+                          <label for="difficultyselector">Change Difficulty</label>
+                          <div id="change_difficulty">
+                            <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="addTags">Add Tags</label>
+                          <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
+                            {{ for tag in tags: }}
+                            <option value="{{=tag}}">{{ =tag }}</option>
+                            {{ pass }}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="editRST">Edit Question</label>
+                          <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
+                        </div><input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
+                      </form>
+                    </div><!-- Modal Footer -->
+                    <div class="modal-footer">
+                      <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group tab-pane fade" id="qwrite">
+        <form id="newqform" name="newqform">
+          <div class="col-md-12">
+            <label for="template">Template:</label><select id="template">
+              <option value="activecode">
+                activecode
+              </option>
+              <option value="mchoice">
+                multiple choice
+              </option>
+              <option value="clickablearea">
+                clickable area
+              </option>
+              <option value="codelens">
+                codelens
+              </option>
+              <option value="dragndrop">
+                drag and drop
+              </option>
+              <option value="parsons">
+                pasons
+              </option>
+              <option value="fillintheblank">
+                fill in the blank
+              </option>
+              <option value="poll">
+                poll
+              </option>
+              <option value="reveal">
+                reveal
+              </option>
+              <option value="shortanswer">
+                short answer
+              </option>
+              <option value="usageAssignment">
+                usageAssignment
+              </option>
+            </select> <input class="btn" onclick="display_write();" type="button" value="Go">
+          </div>
+          <div id="hiddenwrite" style="visibility: hidden">
+            <div class="col-md-12">
+              <label for="qcode"></label>
+              <textarea cols="65" form="newqform" id="qcode" rows="12"></textarea>
+            </div>
+            <div class="col-md-12">
+              <p id="qnameerror" style="color: red"></p>
+            </div>
+            <div class="col-md-12">
+              <label>Difficulty:</label> 1<input checked="checked" id="difficulty1" name="difficulty" type="radio" value="1"> <input id="difficulty2" name="difficulty" type="radio" value="2"> <input id="difficulty3" name="difficulty" type="radio" value="3"> <input id="difficulty4" name="difficulty" type="radio" value="4"> <input id="difficulty5" name="difficulty" type="radio" value="5">5
+            </div>
+            <div class="col-md-12">
+              <label for="qtags">Tags:</label> <input id="qtags" type="text">
+            </div>
+            <div class="col-md-12">
+              <label>Location:</label><select id="qchapter">
+                <option>
+                  Chapter
+                </option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label for="isprivate">Private</label><input id="isprivate" type="checkbox">
+            </div>
+            <div class="col-md-12">
+              <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
+            </div>
+            <div class="col-md-12">
+              <input class="btn" onclick="preview_question(this.form);" type="button" value="Preview"> <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="component-preview"></div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
 $("#tags").select2();
-    $("#addTags").select2();
-</script>
+$("#addTags").select2();
 
-<script>
-    $(".dashboardnav").removeClass("active");
-    $("#assignmentstab").addClass("active");
+$(".dashboardnav").removeClass("active");
+$("#assignmentstab").addClass("active");
 
-    jQuery('#datetimepicker').datetimepicker();
-    jQuery('#changedate').datetimepicker();
+jQuery('#datetimepicker').datetimepicker();
+jQuery('#changedate').datetimepicker();
 
 
-     $('#summative').click(function(){
-         $('#summative').addClass('clickedtab');
+$('#summative').click(function() {
+    $('#summative').addClass('clickedtab');
     $('#summative').css('background-color', 'gainsboro');
     $('#formative').css('background-color','transparent');
-         $('#formative').removeClass('clickedtab');
+    $('#formative').removeClass('clickedtab');
     $('#external').css('background-color','transparent');
-         $('#external').removeClass('clickedtab');
-
-
-
+    $('#external').removeClass('clickedtab');
 });
 
-    $('#formative').click(function(){
-        $('#formative').addClass('clickedtab');
+$('#formative').click(function() {
+    $('#formative').addClass('clickedtab');
     $('#formative').css('background-color', 'gainsboro');
     $('#summative').css('background-color','transparent');
-        $('#summative').removeClass('clickedtab');
+    $('#summative').removeClass('clickedtab');
     $('#external').css('background-color','transparent');
-        $('#external').removeClass('clickedtab');
-
+    $('#external').removeClass('clickedtab');
 });
 
-    $('#external').click(function(){
-        $('#external').addClass('clickedtab');
+$('#external').click(function() {
+    $('#external').addClass('clickedtab');
     $('#external').css('background-color', 'gainsboro');
     $('#summative').css('background-color','transparent');
-        $('#summative').removeClass('clickedtab');
+    $('#summative').removeClass('clickedtab');
     $('#formative').css('background-color','transparent');
-        $('#formative').removeClass('clickedtab');
-
+    $('#formative').removeClass('clickedtab');
 });
+
+// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
+$(function () {
+  var tqp = $('#tree-question-picker');
+  tqp.jstree({
+      // Configure the checkbox plugin.
+      "checkbox" : {
+          // This prevents the selection from including all auto-checked nodes, which I find distracting.
+          "keep_selected_style" : false,
+          // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
+          "whole_node" : false,
+          // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
+          "tie_selection" : false,
+      },
+      // Enable `plugins <https://www.jstree.com/plugins/>`_.
+      "plugins" : [
+          "checkbox",
+          "search",
+      ],
+      // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
+      "core" : {
+          "data" : eBookConfig.toc.question_picker,
+      },
+  });
+  // Can also populate from JSON -- see `docs <https://www.jstree.com/api/#/?q=(&f=_parse_model_from_json(d [, p, ps])>`__.
+
+  // Provide a flag to use to ignore events caused when loading the table data in.
+  tqp.jstree(true).ignore_check = false;
+
+  // Set up for searching. Copied from the search plugin example.
+  var to = false;
+  $('#search-tree-question-picker').keyup(function () {
+      if (to) {
+          clearTimeout(to);
+      }
+      to = setTimeout(function () {
+          var v = $('#search-tree-question-picker').val();
+          tqp.jstree(true).search(v);
+      }, 250);
+  });
+
+  // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
+  tqp.on('select_node.jstree', function(event, data) {
+      console.log('select_node');
+      // If this is a question (a leaf node), then preview it.
+      if (jstree_node_is_question(data.instance, data.node)) {
+          // Request the preview HTML from the server.
+          console.log(data.node.id);
+          $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
+              // TODO: Call Brad's preview function with the data.
+              console.log(html_src);
+          });
+      }
+  });
+  // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
+  tqp.on('check_node.jstree', function(event, data) {
+      if (!data.instance.ignore_check) {
+          walk_jstree(data.instance, data.node, function(instance, node) {
+              if (jstree_node_is_question(instance, node)) {
+                  // Add each checked item to the assignment list with default values.
+                  updateAssignmentRaw(node.id, 1, 'False', 'formative');
+              }
+          });
+      }
+  });
+  // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
+  tqp.on('uncheck_node.jstree', function(event, data) {
+      if (!data.instance.ignore_check) {
+          walk_jstree(data.instance, data.node, function(instance, node) {
+              if (jstree_node_is_question(instance, node)) {
+                  remove_question_raw(node.id);
+              }
+          });
+      }
+  });
+});
+
+// Given a jstree node, determine if it's an exercise or not.
+function jstree_node_is_question(instance, node) {
+  // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children.
+  var subchapter_node = instance.get_parent(node);
+  // A root node returns ``#`` for its parent.
+  if (subchapter_node === '#') {
+      return false;
+  }
+  var chapter_node = instance.get_parent(subchapter_node);
+  if (chapter_node === '#') {
+      return false;
+  } else {
+      return true;
+  }
+}
+
+// Given a jstree node, invoke f on node and all its children.
+function walk_jstree(instance, node, f) {
+  f(instance, node);
+  $(node.children).each(function(index, value) {
+      walk_jstree(instance, instance.get_node(value), f);
+  });
+}
+
+// Set up the `bootstrap table`_.
+$('#questionTable').bootstrapTable({
+  // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+  // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
+  onEditableSave : function(field, row, oldValue, html_element) {
+      console.log('New value of ' + row['question'] + ' is ' + row[field] + '.');
+      updateAssignmentRaw(row['question'], row['points'], row['timed'], 'formative');
+  },
+});
+
+// Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
+function deleteFormatter(value, row, index) {
+  return [
+      '<a class="remove" href="javascript:void(0)" title="Remove">',
+      '<i class="glyphicon glyphicon-remove"><\/i>',
+      '<\/a>'
+  ].join('');
+}
+
+function timedFormatter(value, row, index) {
+  return [
+      'True?'
+  ].join('');
+}
+
+// Copied from ``operateEvents`` in an example_.
+window.deleteEvent = {
+  'click .remove': function (e, value, row, index) {
+      // Unchecking the question in the tree picker also deletes it from the database and table.
+      $('#tree-question-picker').jstree(true).uncheck_node(row['question']);
+  },
+};
+
+// Display the first assignment and the browser when the page opens.
+assignmentInfo();
+$('#browse-button').click();
 </script>
 
 {{ end }}
