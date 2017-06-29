@@ -146,6 +146,7 @@ function autoGrade(){
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
             alert(retdata.message);
+            calculateTotals();
         }
     });
 }
@@ -494,7 +495,6 @@ function pickedAssignments(column) {
     var assignments = JSON.parse(assignmentinfo);
     set_release_button();
     autograde_form.style.visibility = 'visible';
-    calc_totals_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
@@ -588,8 +588,6 @@ function showColumn1() {
     set_release_button();
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    calc_totals_form = document.getElementById("calculateTotalsForm");
-    calc_totals_form.style.visibility = 'hidden';
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
@@ -1826,7 +1824,7 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
-    
+
     jQuery(`#${whereDiv}`).html(componentSrc);
 
     edList = [];
@@ -1842,4 +1840,3 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
     component_factory[componentKind](opt)
 
 }
-

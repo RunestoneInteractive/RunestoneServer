@@ -1,7 +1,7 @@
 from os import path
 import os
 import logging
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from operator import itemgetter
 from paver.easy import sh
 
@@ -52,15 +52,29 @@ def index():
     for problem_id, metric in problem_metrics.problems.iteritems():
         stats = metric.user_response_stats()
 
-        questions.append({
-            "id": problem_id,
-            "text": metric.problem_text,
-            "correct": stats[2],
-            "correct_mult_attempt": stats[3],
-            "incomplete": stats[1],
-            "not_attempted": stats[0],
-            "attemptedBy": stats[1] + stats[2] + stats[3]
-            })
+        if data_analyzer.questions[problem_id]:
+            entry = {
+                "id": problem_id,
+                "text": metric.problem_text,
+                "chapter": data_analyzer.questions[problem_id].chapter,
+                "sub_chapter": data_analyzer.questions[problem_id].subchapter,
+                "correct": stats[2],
+                "correct_mult_attempt": stats[3],
+                "incomplete": stats[1],
+                "not_attempted": stats[0],
+                "attemptedBy": stats[1] + stats[2] + stats[3]
+                }
+        else:
+            entry = {
+                "id": problem_id,
+                "text": metric.problem_text,
+                "correct": stats[2],
+                "correct_mult_attempt": stats[3],
+                "incomplete": stats[1],
+                "not_attempted": stats[0],
+                "attemptedBy": stats[1] + stats[2] + stats[3]
+                }
+        questions.append(entry)
 
     logger.debug("getting questsions")
     questions = sorted(questions, key=itemgetter("id"))
@@ -75,14 +89,22 @@ def index():
             })
 
     read_data = []
+    recent_data = []
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
+
     for user, activity in user_activity.user_activities.iteritems():
         read_data.append({
             "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
             "sid":activity.username,
             "count":activity.get_page_views()
             })
+
+        recent_data.append({
+            "student":activity.name,  
+            "sid":activity.username,
+            "count":activity.get_recent_page_views()
+            }) 
 
     logger.debug("finishing")
     studentactivity = [{
@@ -95,7 +117,19 @@ def index():
     "data":read_data,
     "name":"Exercises Missed"
     }]
-    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity)
+
+    recentactivity = [{
+    "data":recent_data,
+    "name":"Sections Read"
+    },{
+    "data":recent_data,
+    "name":"Exercises Correct"
+    },{
+    "data":recent_data,
+    "name":"Exercises Missed"
+    }]
+
+    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
 
 @auth.requires_login()
 def studentreport():
@@ -166,7 +200,7 @@ def grades():
         else:
             averagerow.append('n/a')
 
-    return dict(course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
+    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
 def questiongrades():
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -177,7 +211,7 @@ def questiongrades():
     query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
     rows = db.executesql(query, [assignment['id'], sid])
 
-    return dict(course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
+    return dict(course_id=auth.user.course_id, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
