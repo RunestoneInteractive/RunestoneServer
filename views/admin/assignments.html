@@ -66,7 +66,8 @@
           </div>
           <div class="form-group">
             <label for="datetimepicker">Due Date</label> <input id="datetimepicker" type="text">
-          </div><input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
+          </div>
+          <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
         </form>
       </div><!-- Modal Footer -->
       <div class="modal-footer">
@@ -205,13 +206,17 @@
               <option value="{{=tag}}">{{ =tag }}</option>
               {{ pass }}
             </select>
-          </div><input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
+          </div>
+          <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
         </form>
         <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
           <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
           </select>
           <form id="questionform" name="questionform" style="visibility: hidden">
-            <label for="points">Points</label> <input id="points" name="points" type="number"> <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true"> <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
+            <label for="points">Points</label>
+            <input id="points" name="points" type="number">
+            <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
+            <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
           </form>
         </div>
         <div class="col-md-12">
@@ -264,7 +269,8 @@
                         <div class="form-group">
                           <label for="editRST">Edit Question</label>
                           <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
-                        </div><input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
+                        </div>
+                        <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
                       </form>
                     </div><!-- Modal Footer -->
                     <div class="modal-footer">
@@ -344,7 +350,8 @@
               <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
             </div>
             <div class="col-md-12">
-              <input class="btn" onclick="preview_question(this.form);" type="button" value="Preview"> <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
+              <input class="btn" onclick="preview_question(this.form);" type="button" value="Preview">
+              <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
             </div>
           </div>
         </form>
@@ -459,7 +466,7 @@ $(function () {
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_is_question(instance, node)) {
-                    remove_question_raw(node.id);
+                    remove_question(node.id);
                 }
             });
         }

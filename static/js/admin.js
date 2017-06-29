@@ -927,6 +927,7 @@ function getStudents(sectionName) {
 
 
 
+// TODO: This function is also defined in admin.html. ???
 function getLog() {
 
 
@@ -992,6 +993,9 @@ function remove_instructor() {
 }
 
 
+// *************************
+// Assignments tab functions
+// *************************
 function remove_assignment() {
     var select = document.getElementById('assignlist');
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1009,6 +1013,7 @@ function remove_assignment() {
 }
 
 
+ // TODO: This function isn't used anywhere that I can see. Remove it?
 function search_students(formdata) {
     var searchterm = formdata.searchterm.value;
     if (searchterm == '') {
@@ -1035,6 +1040,7 @@ function search_students(formdata) {
     }
 }
 
+// Called when the "Write" button is clicked.
 function display_write() {
     var template = document.getElementById('template');
     var questiontype = template.options[template.selectedIndex].value;
@@ -1060,9 +1066,8 @@ function display_write() {
 }
 
 
+// Called when the "Done" button of the "Write" dialog is clicked.
 function create_question(formdata) {
-
-
     var activetab = 'formative';
     var select = document.getElementById('assignlist');
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1148,6 +1153,7 @@ function create_question(formdata) {
 }
 
 
+// Given a selected assignment, retrieve it from the server then display it.
 function assignmentInfo() {
     // If no assignment is selected, hide all assignment-related panels.
     var select = document.getElementById('assignlist');
@@ -1227,6 +1233,7 @@ function appendToQuestionTable(name, points, timed) {
 }
 
 
+// Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
     var description = form.description.value;
@@ -1254,6 +1261,7 @@ function createAssignment(form) {
 }
 
 
+// Called by the "Preview" button of the "Write" panel.
 function preview_question(form){
 
     var code = $(form.qcode).val();
@@ -1269,7 +1277,34 @@ function preview_question(form){
 
 }
 
-function remove_question_raw(question_name) {
+
+// Render a question in the provided div?
+function renderRunestoneComponent(componentSrc, whereDiv) {
+    /**
+     *  The easy part is adding the componentSrc to the existing div.
+     *  The tedious part is calling the right functions to turn the
+     *  source into the actual component.
+     */
+
+    jQuery(`#${whereDiv}`).html(componentSrc);
+
+    edList = [];
+    mcList = [];
+    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let opt = {}
+    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
+    opt.lang = $(opt.orig).data('lang')
+    opt.useRunestoneServices =false;
+    opt.graderactive = false;
+    opt.python3 = true;
+
+    component_factory[componentKind](opt)
+
+}
+
+
+// Called to remove a question from an assignment.
+function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON('/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
@@ -1281,6 +1316,7 @@ function remove_question_raw(question_name) {
 }
 
 
+// Called by the "Search" button in the "Search question bank" panel.
 function questionBank(form) {
     var chapter = form.chapter.value;
     var author = form.author.value;
@@ -1335,6 +1371,7 @@ function getAssignmentId() {
 }
 
 
+// Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
 function addToAssignment(form) {
     var points = form.points.value;
     var checked = document.getElementById('timed').checked;
@@ -1344,6 +1381,7 @@ function addToAssignment(form) {
     updateAssignmentRaw(question_name, points, checked, 'formative');
 }
 
+// Update an assignment.
 function updateAssignmentRaw(question_name, points, timed, type) {
     var assignmentid = getAssignmentId();
     // This endpoint actually does an update.
@@ -1362,6 +1400,7 @@ function updateAssignmentRaw(question_name, points, timed, type) {
 }
 
 
+// When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
 function getQuestionInfo() {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
@@ -1413,6 +1452,7 @@ function getQuestionInfo() {
 }
 
 
+// Called inside the "Write Assignment" panel?
 function edit_question(form) {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
@@ -1443,6 +1483,7 @@ function edit_question(form) {
 }
 
 
+// More preview panel functionality I don't understand.
 function getQuestionText() {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
@@ -1457,6 +1498,7 @@ function getQuestionText() {
     }
 }
 
+// More preview panel functionality I don't understand.
 function questions2Rst() {
     var select = document.getElementById('assignlist');
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1466,6 +1508,7 @@ function questions2Rst() {
 }
 
 
+// Change the due date. TODO: This isn't used anywhere. It should be!
 function changeDueDate(form) {
     var newdate = form.changedate.value;
     var select = document.getElementById('assignlist');
@@ -1488,7 +1531,7 @@ function changeDueDate(form) {
 
 }
 
-
+// Change the description of an assignment. TODO.
 function changeDescription(form) {
     var newdescription = form.newdescription.value;
     var select = document.getElementById('assignlist');
@@ -1511,6 +1554,8 @@ function changeDescription(form) {
 
 }
 
+
+// TODO: I have no idea what this does. It's not used.
 function edit_indexrst(form) {
     var newtext = form.editIndex.value;
     newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
@@ -1532,6 +1577,10 @@ function get_assignment_contents(assignid, success){
     )
 }
 
+// ***********
+// Grading tab
+// ***********
+// Return whether the assignment has been released for grading.
 function get_assignment_release_states(){
     if (assignment_release_states == null){
         // This has to be a synchronous call because we have to set assignment_release_states
@@ -1548,6 +1597,7 @@ function get_assignment_release_states(){
     }
 }
 
+// Update the release button in the grading panel?
 function set_release_button() {
 
     // first find out if there is an assignment selected
@@ -1661,30 +1711,5 @@ function toggle_release_grades() {
         }
         set_release_button();
     }
-}
-
-
-
-function renderRunestoneComponent(componentSrc, whereDiv) {
-    /**
-     *  The easy part is adding the componentSrc to the existing div.
-     *  The tedious part is calling the right functions to turn the
-     *  source into the actual component.
-     */
-
-    jQuery(`#${whereDiv}`).html(componentSrc);
-
-    edList = [];
-    mcList = [];
-    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
-    let opt = {}
-    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
-    opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices =false;
-    opt.graderactive = false;
-    opt.python3 = true;
-
-    component_factory[componentKind](opt)
-
 }
 
