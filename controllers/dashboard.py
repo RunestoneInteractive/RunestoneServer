@@ -146,7 +146,7 @@ def studentreport():
             })
     activity = data_analyzer.formatted_activity.activities
 
-    return dict(course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(course_name=auth.user.course_name, course_id=auth.user.course_id, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 def studentprogress():
     return dict(course_name=auth.user.course_name)
