@@ -139,13 +139,14 @@
       <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
       <div class="list-group">
         <div class="list-group-item">
-          <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration
-                    -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
-                    -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
-                    -   Specify that the ``timed`` column should be edited by a select drop-down, and provide values for the drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
-                    -   Add a delete column with a button.
-                    -   Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
-                -->
+          <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
+
+              -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+              -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+              -   Specify that the ``timed`` column should be edited by a select drop-down, and provide values for the drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
+              -   Add a delete column with a button.
+              -   Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
+          -->
           <table id="questionTable" data-unique-id="question" data-reorderable-rows="true" style="width:100%;">
             <thead>
               <tr>
@@ -503,16 +504,13 @@ $('#questionTable').bootstrapTable({
         console.log('New value of ' + row['question'] + ' is ' + row[field] + '.');
         updateAssignmentRaw(row['question'], row['points'], row['timed'], 'formative');
     },
-    // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event.
-    //onReorderRow : function(rows) {
-    //    var [dragRow, droppedAfterRow] = rows;
-    //    console.log(dragRow);
-    //    console.log(droppedAfterRow);
-    //    var data = $('#questionTable').bootstrapTable('getData');
-    //    $(data).each(function (index, val) {
-    //        console.log(val['question']);
-    //    });
-    //},
+     // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
+    ///onReorderRow : function(rows) {
+    ///    var [dragRow, droppedAfterRow] = rows;
+    ///    console.log(dragRow);
+    ///    console.log(droppedAfterRow);
+    ///    var data = $('#questionTable').bootstrapTable('getData');
+    ///},
     // This will be called multiple times. Record the beginning row of the drag.
     onReorderRowsDrag : function(table, row) {
         table.dragRowIndex = $(row).attr('data-index');
@@ -520,9 +518,7 @@ $('#questionTable').bootstrapTable({
     },
     onReorderRowsDrop : function(table, row) {
         dropRowIndex = $(row).attr('data-index');
-        if (table.dragRowIndex !== dropRowIndex) {
-            console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
-        }
+        console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
     },
 });
 

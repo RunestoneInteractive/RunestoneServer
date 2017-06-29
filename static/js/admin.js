@@ -1203,7 +1203,7 @@ function assignmentInfo() {
             var points = question['points'];
             // TODO: I always get ``null`` from the server. What's the expected format?
             var timed = question['timed'] ? 'True' : 'False';
-            bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed}]);
+            appendToQuestionTable(name, points, timed);
 
             // Check this question in the question tree picker.
             tqp.check_node(tqp.get_node(name));
@@ -1212,6 +1212,18 @@ function assignmentInfo() {
         // Future checks come from the user.
         tqp.ignore_check = false;
     });
+
+    $.getJSON(eBookConfig.get_assignmentURL, {'assignmentid': assignmentid}, function (data) {
+        console.log(data);
+    });
+}
+
+
+// Append a row to the question table.
+function appendToQuestionTable(name, points, timed) {
+    // Setting and ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+    var bst = $('#questionTable');
+    bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed, _id : ('question_table_' + name)}]);
 }
 
 
@@ -1344,7 +1356,7 @@ function updateAssignmentRaw(question_name, points, timed, type) {
         var bst = $('#questionTable');
         if (bst.bootstrapTable('getRowByUniqueId', question_name) === null) {
             // Only append if this row doesn't exist.
-            bst.bootstrapTable('append', [{'question' : question_name, 'points' : points, 'timed' : timed}]);
+            appendToQuestionTable(name, points, timed);
         }
     });
 }
