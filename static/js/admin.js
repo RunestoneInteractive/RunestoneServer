@@ -1170,24 +1170,13 @@ function assignmentInfo() {
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
 
-    $.getJSON('/runestone/admin/assignmentInfo/?assignmentid=' + assignmentid, {variable: 'variable'}).done(function (res) {
-        var keys = [];
-        var i;
-        for (i in res) {
-            if (res.hasOwnProperty(i) && i != 'assignment_points' && i != 'due_date' && i !=
-                'description') {
-                keys.push(i);
-            }
-        }
-        var assignment_points = res['assignment_points'];
-        var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = 'Total points: ' + assignment_points;
+    $.getJSON(eBookConfig.get_assignmentURL, {'assignmentid': assignmentid}, function (data) {
+        console.log(data);
 
-        var duedate = res['due_date'];
-        document.getElementById('assignment_duedate').innerHTML = 'Due: ' + duedate;
-
-        var description = res['description'];
-        document.getElementById('assignment_description').innerHTML = description;
+        assignmentData = data['assignment_data'];
+        $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
+        $('#assignment_duedate').html('Due: ' + assignmentData['due_date']);
+        $('#assignment_description').html(assignmentData['description']);
 
         // Get the question tree picker.
         var tqp = $('#tree-question-picker').jstree(true);
@@ -1199,18 +1188,10 @@ function assignmentInfo() {
         // Clear the bootstrap table.
         var bst = $('#questionTable');
         bst.bootstrapTable('removeAll');
-        for (k = 0; k < keys.length; k++) {
-            var key = keys[k];
-            question = res[key];
-
-            // Populate entire table.
-            var type = question['type'];
-            var name = question['name'];
-            var points = question['points'];
-            // TODO: I always get ``null`` from the server. What's the expected format?
-            var timed = question['timed'] ? 'True' : 'False';
-            appendToQuestionTable(name, points, timed);
-
+        for (let question of data['questions_data']) {
+            // Put the qeustion in the table.
+            let name = question['name'];
+            appendToQuestionTable(name, question['points'], question['autograde']);
             // Check this question in the question tree picker.
             tqp.check_node(tqp.get_node(name));
         }
@@ -1218,18 +1199,14 @@ function assignmentInfo() {
         // Future checks come from the user.
         tqp.ignore_check = false;
     });
-
-    $.getJSON(eBookConfig.get_assignmentURL, {'assignmentid': assignmentid}, function (data) {
-        console.log(data);
-    });
 }
 
 
 // Append a row to the question table.
-function appendToQuestionTable(name, points, timed) {
+function appendToQuestionTable(name, points, autograde) {
     // Setting and ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
     var bst = $('#questionTable');
-    bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'timed' : timed, _id : ('question_table_' + name)}]);
+    bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'autograde' : autograde, _id : ('question_table_' + name)}]);
 }
 
 
@@ -1374,18 +1351,17 @@ function getAssignmentId() {
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
 function addToAssignment(form) {
     var points = form.points.value;
-    var checked = document.getElementById('timed').checked;
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, checked, 'formative');
+    updateAssignmentRaw(question_name, points, '');
 }
 
 // Update an assignment.
-function updateAssignmentRaw(question_name, points, timed, type) {
+function updateAssignmentRaw(question_name, points, autograde) {
     var assignmentid = getAssignmentId();
     // This endpoint actually does an update.
-    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=' + (timed === 'True' ? true : false) + '&type=' + type, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=false&type=formative', {variable: 'variable'}).done(function (response_JSON) {
         var total_points = response_JSON[0];
         var q_type = response_JSON[1];
         var totalPointsElement = document.getElementById("totalPoints");
@@ -1394,7 +1370,7 @@ function updateAssignmentRaw(question_name, points, timed, type) {
         var bst = $('#questionTable');
         if (bst.bootstrapTable('getRowByUniqueId', question_name) === null) {
             // Only append if this row doesn't exist.
-            appendToQuestionTable(name, points, timed);
+            appendToQuestionTable(question_name, points, '');
         }
     });
 }

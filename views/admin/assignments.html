@@ -110,14 +110,17 @@
     <h5>Assignment Description</h5>
     <div style="border: 1px solid black;">
       <p id="assignment_description"></p>
-    </div><button class="btn" data-target="#changeDescriptionModal" data-toggle="modal" style="margin-top: 12px;">Change Description</button>
-
+    </div>
+    <button class="btn" data-target="#changeDescriptionModal" data-toggle="modal" style="margin-top: 12px;">Change Description</button>
     <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDescriptionModal" role="dialog" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+            <button class="close" data-dismiss="modal" type="button">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
             <h4 class="modal-title">Change Assignment Description</h4>
           </div><!-- Modal Body -->
           <div class="modal-body">
@@ -153,7 +156,25 @@
               <tr>
                 <th data-field="question">Question</th>
                 <th data-editable="true" data-field="points">Points</th>
-                <th data-editable="true" data-editable-source="[{value: 'True', text: 'True'}, {value: 'False', text: 'False'}]" data-editable-type="select" data-field="timed">Timed</th>
+                <th data-editable="true" data-editable-source=
+                    "[
+                        {
+                            value: '',
+                            text: 'None',
+                        }, {
+                            value: 'unittest',
+                            text: 'Unit test',
+                        }, {
+                            value: 'first_answer',
+                            text: 'First answer',
+                        }, {
+                            value: 'last_answer',
+                            text: 'Last answer',
+                        }, {
+                            value: 'visited',
+                            text: 'Visited',
+                        },
+                    ]" data-editable-type="select" data-field="autograde">Auto-grade</th>
                 <th data-events="deleteEvent" data-field="delete" data-formatter="deleteFormatter">Delete</th>
               </tr>
             </thead>
@@ -456,7 +477,7 @@ $(function () {
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_is_question(instance, node)) {
                     // Add each checked item to the assignment list with default values.
-                    updateAssignmentRaw(node.id, 1, 'False', 'formative');
+                    updateAssignmentRaw(node.id, 1, '');
                 }
             });
         }
@@ -509,7 +530,7 @@ $('#questionTable').bootstrapTable({
     // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
     onEditableSave : function(field, row, oldValue, html_element) {
         console.log('New value of ' + row['question'] + ' is ' + row[field] + '.');
-        updateAssignmentRaw(row['question'], row['points'], row['timed'], 'formative');
+        updateAssignmentRaw(row['question'], row['points'], row['autograde']);
     },
      // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
     ///onReorderRow : function(rows) {
