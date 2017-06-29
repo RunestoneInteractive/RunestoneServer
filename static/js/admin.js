@@ -415,7 +415,6 @@ function updateColumn2() {
     var select2 = document.getElementById("gradingcolumn1");
     var column2 = document.getElementById("gradingcolumn2");
     var selectedval = select2.options[select2.selectedIndex].value;
-    console.log(select2.selectedIndex)
     if (val == 'assignment'){
         set_release_button();
         if (getSelectedItem('student') != null) {
