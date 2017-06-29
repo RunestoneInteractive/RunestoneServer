@@ -1,82 +1,92 @@
 {{extend 'layout.html'}}
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 
-<h1>{{=student.first_name}} {{=student.last_name}}</h1>
-<div class="row">
-	<div class="col-md-8">
-		{{ if last_action: }}
-		<p class="last_action"><em>Last Action: {{=last_action.timestamp}}</em></p>
-		{{ pass }}
-	</div>
-	<div class="col-md-8">
-	   For problem sets or exams that have not been graded yet, you can enter a projected number of points for yourself, which will be combined with your actual points from graded assignments to let you project your final point total for the course.
-	</div>
-	<div class="col-md-4">
-		<h3>Course Points</h3>
-		<div class="row" style="text-align:center;">
-			<div class="col-md-6"><strong>Projected</strong></div>
-			<div class="col-md-3">Current</div>
-			<div class="col-md-3">Maximum</div>
+<div id="dashboard">
+	<h1>{{=student.first_name}} {{=student.last_name}}</h1>
+	<h2>Student Progress for {{=course_name}}</h2>
+	<div class="col-md-7">
+
+		<div class="dash-section" id="book-completion">
+			<div class="dash-section-header">
+				Book Completion
+			</div>
+			<div class="dash-section-content">
+				{{ for chapter in chapters: }}
+				<div class="chapter">
+					<div class="clickable {{=chapter['status']}}">
+						{{=chapter["label"]}}
+						<div class="collapse-icon"></div>
+					</div>
+					<div class="chapter-detail dhide">
+						{{ for subchapter in chapter["subchapters"]: }}
+						<div class="{{=subchapter['status']}}">{{=subchapter["label"]}}
+						</div>
+						{{ pass }}
+					</div>
+				</div>
+				{{ pass }}
+				<script>
+				$(".chapter .clickable").click(function(){
+					$(this).toggleClass("expanded")
+					$(this).parent().children(".chapter-detail").toggleClass("dhide");
+				});
+				</script>
+			</div>
 		</div>
-		<div class="row" style="text-align:center;">
-			<div class="col-md-6"><strong><span class="hidden">Projected Points:</span> {{=grade.points(projected=True)}}</strong></div>
-			<div class="col-md-3"><span class="hidden">Current Points:</span> {{=grade.points()}}</div>
-			<div class="col-md-3"><span class="hidden">Max Points:</span> {{=grade.points(potential=True)}}</div>
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Grades
+			</div>
+			<div class="dash-section-content">
+				<table width="90%">
+					<thead>
+						<tr>
+							<td>Assignment</td>
+							<td>Due Date</td>
+							<td>Grade</td>
+							<td>Average</td>
+						</tr>
+					</thead>
+					<tbody>
+						{{ for k in sorted(assignments.keys()): }}
+						<tr>
+							<td>{{=k}}</td>
+							<td>{{=assignments[k]["due_date"]}}</td>
+							<td>{{=assignments[k]["score"]}}</td>
+							<td>{{=assignments[k]["class_average"]}}</td>
+						</tr>
+						{{ pass }}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Profile
+			</div>
+			<div class="dash-section-content">
+				<div>Username: {{=user.username}}</div>
+				<div>Email: {{=user.email}}</div>
+			</div>
+		</div>
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Recent Activity
+			</div>
+			<div class="dash-section-content">
+				<table class="nodec">
+					{{for row in activity:}}
+					<tr>
+						<td>{{=row["event"]}}</td>
+						<td>{{=row["time"]}}</td>
+					</tr>
+					{{pass}}
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="panel-group" id="assignments">
-{{ for type in grade.assignment_type_grades: }}
-	<h2>{{=type.name}}</h2>
-	<div class="row">
-		<div class="col-md-8">
-<p class="grade"><strong>{{=type.points()}} </strong> points earned so far; max of {{=type.points(potential=True)}}; projected {{=type.points(projected=True)}}; 
-   {{if type.assignments_dropped > 0:}}{{=type.assignments_dropped}} lowest grades dropped{{pass}}
-   </p>
-			{{for row in type.assignments:}}
-		    <div class="panel panel-default">
-				<div class="panel-heading">
-               <a data-toggle="collapse" data-parent="#assignments" href="#assignment-{{=row.assignment_id}}">
-                  {{=row.assignment_name}}
-               </a>
-               {{=row.points(potential=True)}} points possible
-					<div class="pull-right">
-					   {{if row.released: }}
-			            <strong>{{=row.points()}} </strong> points earned
-                     <div id="assignment-{{=row.assignment_id}}" class="panel-collapse collapse">
-                        <div class="panel-body">
-                           {{ problems = row.db_row.scores(user = student, preclass=False)}}
-                           {{ completed_problems = [p for p in problems if p.points > 0]}}
-                           {{ preclass_problems = row.db_row.scores(user = student, preclass=True)}}
-                           {{ preclass_completed_problems = [p for p in preclass_problems if p.points > 0]}}
-                           {{ if type.grade_type == 'use':}}
-                              {{ time = row.db_row.time(user=student, preclass=False)}}
-                              {{ preclass_time = row.db_row.time(user=student, preclass=True)}}
-                              <p>You spent {{= "%.1f" % (time/60.0)}} minutes on these activities, {{= "%.1f" % (preclass_time/60.0)}} minutes before the class.</p>
-                              <p>You completed {{=len(completed_problems)}} activities, {{=len(preclass_completed_problems)}} before the class.</p>
-                              <p>You needed {{=row.db_row.threshold}} activities before the class session to get credit for the assignment.</p>
-                              {{ pass }}
-                           <ul class="list-group">
-                              {{for problem in problems:}}
-                                 <li class="list-group-item">
-                                    <span class="badge">{{=problem.points}}</span>
-                                    <h4>{{=problem.truncated_acid()}}</h4>
-                                    {{if problem.comment:}}
-                                    <p>{{=problem.comment}}</p>
-                                    {{pass}}
-                                 </li>
-                              {{pass}}
-                           </ul>
-      
-                        </div>
-                     </div>
-					   {{else: }}
-                     {{=row.form}}
-					   {{pass}}
-				   </div>
-				</div>
-			</div><!-- end .panel -->
-		   {{pass}} <!-- end loop over assignments -->
-		</div>
-	</div>
 {{ pass }}  <!-- end loop over types -->
 </div><!-- end #assignments -->

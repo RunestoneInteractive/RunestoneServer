@@ -101,10 +101,10 @@ def index():
             })
 
         recent_data.append({
-            "student":activity.name,  
+            "student":activity.name,
             "sid":activity.username,
             "count":activity.get_recent_page_views()
-            }) 
+            })
 
     logger.debug("finishing")
     studentactivity = [{
@@ -146,7 +146,7 @@ def studentreport():
             })
     activity = data_analyzer.formatted_activity.activities
 
-    return dict(course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(course_id=auth.user.course_id, course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 def studentprogress():
     return dict(course_name=auth.user.course_name)
