@@ -993,6 +993,19 @@ function remove_instructor() {
 }
 
 
+function edit_indexrst(form) {
+    var newtext = form.editIndex.value;
+    newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/editindexrst?newtext=' + newtext, true);
+    obj.send(JSON.stringify({variable:'variable'}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            alert("Successfully edited index.rst");
+
+        }}
+}
+
 // *************************
 // Assignments tab functions
 // *************************
@@ -1360,7 +1373,7 @@ function addToAssignment(form) {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde) {
     var assignmentid = getAssignmentId();
-    // This endpoint actually does an update.
+    // TODO: This endpoint does an add, not an update. Need it fixed.
     $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=false&type=formative', {variable: 'variable'}).done(function (response_JSON) {
         var total_points = response_JSON[0];
         var q_type = response_JSON[1];
@@ -1370,7 +1383,7 @@ function updateAssignmentRaw(question_name, points, autograde) {
         var bst = $('#questionTable');
         if (bst.bootstrapTable('getRowByUniqueId', question_name) === null) {
             // Only append if this row doesn't exist.
-            appendToQuestionTable(question_name, points, '');
+            appendToQuestionTable(question_name, points, autograde);
         }
     });
 }
@@ -1484,7 +1497,7 @@ function questions2Rst() {
 }
 
 
-// Change the due date. TODO: This isn't used anywhere. It should be!
+// Change the due date.
 function changeDueDate(form) {
     var newdate = form.changedate.value;
     var select = document.getElementById('assignlist');
@@ -1507,7 +1520,7 @@ function changeDueDate(form) {
 
 }
 
-// Change the description of an assignment. TODO.
+// Change the description of an assignment.
 function changeDescription(form) {
     var newdescription = form.newdescription.value;
     var select = document.getElementById('assignlist');
@@ -1530,28 +1543,6 @@ function changeDescription(form) {
 
 }
 
-
-// TODO: I have no idea what this does. It's not used.
-function edit_indexrst(form) {
-    var newtext = form.editIndex.value;
-    newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/editindexrst?newtext=' + newtext, true);
-    obj.send(JSON.stringify({variable:'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            alert("Successfully edited index.rst");
-
-        }}
-}
-
-function get_assignment_contents(assignid, success){
-    jQuery.getJSON(
-        eBookConfig.get_assignmentURL,
-        {'assignmentid': assignid},
-        success
-    )
-}
 
 // ***********
 // Grading tab
