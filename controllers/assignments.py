@@ -767,7 +767,7 @@ def get_problem():
     else:
         deadline = None
 
-    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_name)
+    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
     c = db(query).select(orderby = db.code.id).last()
