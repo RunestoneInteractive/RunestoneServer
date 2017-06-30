@@ -46,6 +46,7 @@
     border-left: 1px solid #e5e5e5;
     border-right: 1px solid #e5e5e5;
     border-top: 1px solid #e5e5e5;
+	float: left;
 }
 #dashboard .question-metric:nth-child(even) {
     background-color: #f3f3f3;
@@ -64,6 +65,7 @@
     height: 110px;
     padding: 10px;
     position: relative;
+	width: 200px;
 }
 #dashboard .question-info .detail-link {
     position: absolute;
@@ -117,6 +119,10 @@
 }
 #dashboard .dhide {
     display: none;
+}
+#dashboard .scroll {
+	 overflow-y: auto;
+	 max-height: 500px;
 }
 .dash-nav {
     background-color: #e5e5e5;

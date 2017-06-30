@@ -1,3 +1,5 @@
+var assignment_release_states = null;
+
 function gradeIndividualItem() {
     var select3 = document.getElementById("gradingoption3");
     var colType = select3.options[select3.selectedIndex].value;
@@ -7,18 +9,8 @@ function gradeIndividualItem() {
 
         var col2 = document.getElementById("gradingoption2");
     var col2val = col2.options[col2.selectedIndex].value;
-    release_button = document.getElementById("releasebutton");
 
-
-    if (col1val == 'assignment' | col2val == 'assignment') {
-        //show the release grades button
-        release_button.style.visibility = 'visible';
-    }
-
-    else {
-        //hide the release grades button
-        release_button.style.visibility = 'hidden';
-    }
+    set_release_button();
 
     var select = document.getElementById("gradingcolumn3");
     var val = select.options[select.selectedIndex].value;
@@ -45,6 +37,11 @@ function gradeIndividualItem() {
     }
 
     else if (colType == 'student') {
+        if (col1val == 'assignment' && getSelectedItem('assignment') != null) {
+            calculateTotals()
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
         //we know the question must come from column 2 now
         document.getElementById("rightsideGradingTab").style.visibility = 'visible';
         var q_column = document.getElementById("gradingcolumn2");
@@ -154,6 +151,7 @@ function autoGrade(){
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
             alert(retdata.message);
+            calculateTotals();
         }
     });
 }
@@ -205,7 +203,7 @@ function saveManualTotal(){
             }
         }
     });
-}
+} 
 
 
 function getRightSideGradingDiv(element, acid, studentId) {
@@ -222,23 +220,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
-            jQuery("#questiondisplay").html(htmlsrc);
-            //ACFactory.createScratchActivecode();
-            $('[data-component=activecode]').each(function (index) {
-                if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:false});
-                }
-            });
-            if (loggedout) {
-                for (k in edList) {
-                    edList[k].disableSaveLoad();
-                }
-            }
-
-
+            //jQuery("#questiondisplay").html(htmlsrc);
+            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
         }
 
-    }
+    };
 
 
 
@@ -418,6 +404,14 @@ function updateColumn2() {
     var select2 = document.getElementById("gradingcolumn1");
     var column2 = document.getElementById("gradingcolumn2");
     var selectedval = select2.options[select2.selectedIndex].value;
+    if (val == 'assignment'){
+        set_release_button();
+        if (getSelectedItem('student') != null) {
+            calculateTotals();
+        } else {
+             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
+    }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
         var assignments = JSON.parse(assignmentinfo);
@@ -443,6 +437,15 @@ function updateColumn2() {
         }
 
     }
+
+    else if (val == 'student') {
+        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
+            calculateTotals();
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
+    }
+
     if (val2 != "") {
         column2.style.visibility = 'visible';
     }
@@ -456,6 +459,14 @@ function updateColumn3() {
     var select2 = document.getElementById("gradingcolumn2");
     var column3 = document.getElementById("gradingcolumn3");
     var selectedval = select2.options[select2.selectedIndex].value;
+    if (val == 'assignment'){
+        set_release_button();
+        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
+            calculateTotals();
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
+    }
     if (val == 'chapter' && val2 == 'question') {
         $("#gradingcolumn3").empty();
         for (i = 0; i < chapters[selectedval].length; i++) {
@@ -493,12 +504,11 @@ function updateColumn3() {
 function pickedAssignments(column) {
 
     var pickedcolumn = document.getElementById(column);
+
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
-       release_button = document.getElementById("releasebutton");
-    release_button.style.visibility = 'visible';
+    set_release_button();
     autograde_form.style.visibility = 'visible';
-    calc_totals_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
@@ -509,7 +519,9 @@ function pickedAssignments(column) {
         option.value = key;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
+
     }
+
 }
 
 
@@ -589,12 +601,10 @@ function showColumn1() {
     var val2 = select.options[select.selectedIndex].value;
     var val = select1.options[select1.selectedIndex].value;
 
-    release_button = document.getElementById("releasebutton");
-    release_button.style.visibility = 'hidden';
+    set_release_button();
+    document.getElementById('assignmentTotalform').style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    calc_totals_form = document.getElementById("calculateTotalsForm");
-    calc_totals_form.style.visibility = 'hidden';
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
@@ -748,6 +758,7 @@ function showColumn2() {
             option.text = 'question';
             option.value = 'question';
             select3.add(option);
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
 
 
             if (first_val == 'assignment') {
@@ -1336,6 +1347,20 @@ function getQuestions() {
     }
 }
 
+function preview_question(form){
+
+    var code = $(form.qcode).val();
+    var data = {'code': JSON.stringify(code)};
+    $.post('/runestone/ajax/preview_question', data, function(result, status) {
+            renderRunestoneComponent(JSON.parse(result), "component-preview")
+        }
+    );
+    // get the text as above
+    // send the text to an ajax endpoint that will insert it into
+    // a sphinx project, run sphinx, and send back the generated index file
+    // this generated index can then be displayed...
+
+}
 
 function remove_question() {
     var select = document.getElementById('questions_list');
@@ -1678,14 +1703,74 @@ function edit_indexrst(form) {
         }}
 }
 
+function get_assignment_release_states(){
+    if (assignment_release_states == null){
+        // This has to be a synchronous call because we have to set assignment_release_states
+        // before going on to later code that uses it
+        jQuery.ajax({
+        url: eBookConfig.get_assignment_release_statesURL,
+        type: "POST",
+        dataType: "JSON",
+        async: false,
+        success: function (retdata) {
+            assignment_release_states = retdata;
+        }
+        });
+    }
+}
 
+function set_release_button() {
 
-
-function release_grades() {
-          var col1 = document.getElementById("gradingoption1");
+    // first find out if there is an assignment selected
+    var col1 = document.getElementById("gradingoption1");
     var col1val = col1.options[col1.selectedIndex].value;
 
-        var col2 = document.getElementById("gradingoption2");
+    var col2 = document.getElementById("gradingoption2");
+    var col2val = col2.options[col2.selectedIndex].value;
+    var assignment = null;
+
+    if (col1val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+        }
+    }
+
+    else if (col2val == 'assignment') {
+        var assignmentcolumn = document.getElementById("gradingcolumn2");
+        if (assignmentcolumn.selectedIndex != -1) {
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+        }
+    }
+
+    // change the release button appropriately
+    // var release_button = document.getElementById("releasebutton");
+    var release_button = $('#releasebutton');
+    if (assignment == null) {
+        //hide the release grades button
+        release_button.css('visibility', 'hidden');
+    }
+
+    else{
+        release_button.css('visibility', 'visible');
+        // see whether grades are currently live for this assignment
+        get_assignment_release_states();
+        var release_state = assignment_release_states[assignment];
+        // If so, set the button text appropriately
+        if (release_state == true){
+            release_button.text("Hide Grades from Students for " + assignment);
+        }
+        else{
+            release_button.text("Release Grades to Students for " + assignment);
+        }
+    }
+}
+
+function toggle_release_grades() {
+    var col1 = document.getElementById("gradingoption1");
+    var col1val = col1.options[col1.selectedIndex].value;
+
+    var col2 = document.getElementById("gradingoption2");
     var col2val = col2.options[col2.selectedIndex].value;
     var assignment = null;
 
@@ -1717,15 +1802,68 @@ function release_grades() {
 
     if (assignment != null) {
         //go release the grades now
+        get_assignment_release_states()
+        release_state = assignment_release_states[assignment];
         var ids = JSON.parse(assignmentids);
         var assignmentid = ids[assignment];
         var obj = new XMLHttpRequest();
-        obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid, true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-            if (obj.readyState == 4 && obj.status == 200) {
-                alert("Grades released");
+        if (release_state == true){
+            // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
+            assignment_release_states[assignment] = null;
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=no', true);
+            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    alert("Grades are now hidden from students for " + assignment);
+                }
             }
         }
+
+        else{
+            // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
+            assignment_release_states[assignment] = true;
+            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=yes', true);
+            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.onreadystatechange = function () {
+                if (obj.readyState == 4 && obj.status == 200) {
+                    alert("Grades are now visible to students for " + assignment);
+                }
+            }
+        }
+        set_release_button();
     }
+}
+
+
+
+function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
+    /**
+     *  The easy part is adding the componentSrc to the existing div.
+     *  The tedious part is calling the right functions to turn the
+     *  source into the actual component.
+     */
+
+    jQuery(`#${whereDiv}`).html(componentSrc);
+
+    edList = [];
+    mcList = [];
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
+    let opt = {}
+    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
+    opt.lang = $(opt.orig).data('lang')
+    opt.useRunestoneServices = false;
+    opt.graderactive = false;
+    opt.python3 = true;
+    if (typeof moreOpts !== 'undefined') {
+        for (let key in moreOpts) {
+            opt[key] = moreOpts[key]
+        }
+    }
+
+    if (typeof component_factory === 'undefined') {
+        alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
+    } else {
+        component_factory[componentKind](opt)
+        }
+
 }
