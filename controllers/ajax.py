@@ -107,6 +107,11 @@ def hsblog():    # Human Subjects Board Log
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
+    elif event == "shortanswer" and auth.user:
+        # for shortanswers just keep the latest?? -- the history will be in useinfo
+        db.shortanswer_answers.update_or_insert((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course),
+            sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course)
+
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
@@ -973,6 +978,10 @@ def getAssessResults():
         if len(rows) == 0:
             return ""
         res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
+        return json.dumps(res)
+    elif event == "shortanswer":
+        row = db((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course)).select().first()
+        res = {'text': row.answer, 'timestamp': row.timestamp}
         return json.dumps(res)
 
 def checkTimedReset():
