@@ -304,7 +304,8 @@ def admin():
         course.update_record(term_start_date=date)
 
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(course_id=course.id,
+                                                                       folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,
@@ -315,9 +316,9 @@ def admin():
         course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
 
 
-    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
+    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name, course_id=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url)
+                task_name=uuid, course_url=course_url, course_id=course.id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():

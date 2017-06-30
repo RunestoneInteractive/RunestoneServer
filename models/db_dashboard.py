@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import logging
+from datetime import datetime, timedelta
 
 rslogger = logging.getLogger('web2py.app.runestone')
 rslogger.setLevel('DEBUG')
@@ -149,7 +150,18 @@ class UserActivity(object):
         self.rows.append(row)
 
     def get_page_views(self):
+        # returns page views for all time
         return len(self.rows)
+
+    def get_recent_page_views(self):
+        # returns page views for the last 7 days
+        recentViewCount = 0
+        current = len(self.rows) - 1
+        while current >= 0 and self.rows[current]['timestamp'] >= datetime.now() - timedelta(days=7):
+            recentViewCount += 1
+            current = current - 1
+        return recentViewCount
+
 
     def get_activity_stats(self):
         return self
@@ -311,6 +323,9 @@ class DashboardDataAnalyzer(object):
         self.user_activity.update_metrics(self.logs)
         self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)
         self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
+        self.questions = {}
+        for i in self.problem_metrics.problems.keys():
+            self.questions[i] = db(db.questions.name == i).select(db.questions.chapter, db.questions.subchapter).first()
 
     def load_user_metrics(self, username):
         self.username = username

@@ -34,4 +34,5 @@ elif 'webfaction' in uname()[1]:
 elif 'luther' in uname()[1]:
     settings.database_uri = 'sqlite://storage.sqlite'
 else:
-    print('Host unknown, default settings.database_uri not configured.')
+    pass
+    ## settings.database_uri will be set in 1.py if not one of those special cases

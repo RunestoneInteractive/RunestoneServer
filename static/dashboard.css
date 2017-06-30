@@ -65,6 +65,7 @@
     height: 110px;
     padding: 10px;
     position: relative;
+	width: 200px;
 }
 #dashboard .question-info .detail-link {
     position: absolute;
@@ -118,6 +119,10 @@
 }
 #dashboard .dhide {
     display: none;
+}
+#dashboard .scroll {
+	 overflow-y: auto;
+	 max-height: 500px;
 }
 .dash-nav {
     background-color: #e5e5e5;
