@@ -215,22 +215,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
-            jQuery("#questiondisplay").html(htmlsrc);
-            $('[data-component=activecode]').each(function (index) {
-                if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:false});
-                }
-            });
-            if (loggedout) {
-                for (k in edList) {
-                    edList[k].disableSaveLoad();
-                }
-            }
-
-
+            //jQuery("#questiondisplay").html(htmlsrc);
+            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
         }
 
-    }
+    };
 
 
 
@@ -1818,7 +1807,7 @@ function toggle_release_grades() {
 
 
 
-function renderRunestoneComponent(componentSrc, whereDiv) {
+function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     /**
      *  The easy part is adding the componentSrc to the existing div.
      *  The tedious part is calling the right functions to turn the
@@ -1829,14 +1818,23 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
 
     edList = [];
     mcList = [];
-    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {}
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
     opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices =false;
+    opt.useRunestoneServices = false;
     opt.graderactive = false;
     opt.python3 = true;
+    if (typeof moreOpts !== 'undefined') {
+        for (let key in moreOpts) {
+            opt[key] = moreOpts[key]
+        }
+    }
 
-    component_factory[componentKind](opt)
+    if (typeof component_factory === 'undefined') {
+        alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
+    } else {
+        component_factory[componentKind](opt)
+        }
 
 }

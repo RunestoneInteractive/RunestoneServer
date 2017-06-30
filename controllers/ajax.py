@@ -924,7 +924,10 @@ def getAssessResults():
     course = request.vars.course
     div_id = request.vars.div_id
     event = request.vars.event
-    sid = auth.user.username
+    if request.vars.sid:   # retrieving results for grader
+        sid = request.vars.sid
+    else:
+        sid = auth.user.username
 
     response.headers['content-type'] = 'application/json'
 
