@@ -303,7 +303,7 @@ def admin():
         course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
 
 
-    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
+    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name, course_id=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
                 task_name=uuid, course_url=course_url)
 
