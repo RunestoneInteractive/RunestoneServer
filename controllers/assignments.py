@@ -604,12 +604,12 @@ def _get_students(course_id, sid = None):
         student_rows = db((db.user_courses.course_id == course_id) &
                           (db.user_courses.user_id == db.auth_user.id) &
                           (db.auth_user.username == sid)
-                          ).select(db.auth_user.username, db.auth_user.id)
+                          ).select(db.auth_user.username, db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name)
     else:
         # get all student usernames for this course
         student_rows = db((db.user_courses.course_id == course_id) &
                           (db.user_courses.user_id == db.auth_user.id)
-                          ).select(db.auth_user.username, db.auth_user.id)
+                          ).select(db.auth_user.username, db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name)
     return student_rows
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -658,11 +658,15 @@ def calculate_totals():
     else:
         # compute total score for the assignment for each sid; also saves in DB unless manual value saved
         scores = [_compute_assignment_total(student, assignment)[0] for student in student_rows]
-        results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
+        zipped = zip(student_rows, scores)
+        over_max = ["{} {}: {}".format(z[0].first_name, z[0].last_name, z[1]) for z in zipped if z[1] > assignment.points]
+        results['message'] = "Calculated totals for {} students\n\tpossible: {}\n\tmax: {}\n\tmin: {}\n\tmean: {}\n\tover max {}".format(
             len(scores),
+            assignment.points,
             max(scores),
             min(scores),
-            sum(scores)/float(len(scores))
+            sum(scores)/float(len(scores)),
+            over_max
         )
 
     return json.dumps(results)
@@ -682,7 +686,7 @@ def autograde():
     qname = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
 
-    if enforce_deadline:
+    if enforce_deadline != "false":
         # get the deadline associated with the assignment
         deadline = assignment.duedate
     else:
