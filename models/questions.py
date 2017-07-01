@@ -41,5 +41,5 @@ db.define_table('assignment_questions',
                 Field('which_to_grade', type='string'), # oneof: first_answer, last_answer, or best_answer
                 Field('reading_assignment', type='boolean'), # so we can differentiate reading part of an assignment from the questions to be embedded on the assignment page
                 Field('assessment_type', db.assignment_types,
-                      requires=IS_EMPTY_OR(IS_IN_DB(db, 'assignment_types.id', '%(name)s'))),
+                      requires=IS_EMPTY_OR(IS_IN_DB(db, 'assignment_types.id', '%(name)s'))),   # deprecated; shouldn't be property of assignment_question
                 migrate='runestone_assignment_questions.table')
