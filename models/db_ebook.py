@@ -153,3 +153,12 @@ db.define_table('parsons_answers',
     Field('correct','boolean'),
     migrate='runestone_parsons_answers.table'
     )
+
+db.define_table('shortanswer_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    migrate='runestone_shortanswer_answers.table'
+    )

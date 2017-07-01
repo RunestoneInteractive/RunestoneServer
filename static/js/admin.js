@@ -346,34 +346,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
                     jQuery('#input-comments', rightDiv).val(newdata['comments']);}
                 }}
-
-
-
-
-            var myobj = new XMLHttpRequest();
-            myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
-            myobj.send(JSON.stringify({newins: 'studentid'}));
-            myobj.onreadystatechange = function () {
-                if (myobj.readyState == 4 && myobj.status == 200) {
-                    var answer = myobj.responseText;
-                    if (answer == "null") {
-                        jQuery("#shortanswerresponse").empty();
-                        //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
-                    }
-
-                    else {
-                        //manually show the answer now
-                        answer = JSON.parse(answer);
-                        jQuery("#shortanswerresponse").empty();
-                        var answerheader = $("<b>Student's Answer</b> <br>")
-                        jQuery("#shortanswerresponse").append(answerheader);
-                        jQuery("#shortanswerresponse").append(answer);
-                        $('#shortanswerresponse').css('display', 'inline');
-                        $('#shortanswerresponse').css('margin-bottom', '50px');
-                        $('#shortanswerresponse').css('background-color', '#fefce7');
-                    }
-                }
-            }
         },250);
     }
 
