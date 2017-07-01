@@ -8,6 +8,38 @@ import logging
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
+AUTOGRADE_POSSIBLE_VALUES = dict(
+    clickablearea=[],
+    external=[],
+    fillintheblank=['all_or_nothing', 'pct_correct', 'interact'],
+    activecode=['all_or_nothing', 'pct_correct', 'interact'],
+    actex=['all_or_nothing', 'pct_correct', 'interact'],
+    dragndrop=['all_or_nothing', 'pct_correct', 'interact'],
+    shortanswer=['all_or_nothing', 'pct_correct', 'interact'],
+    mchoice=['all_or_nothing', 'pct_correct', 'interact'],
+    codelens=['all_or_nothing', 'pct_correct', 'interact'],
+    parsonsprob=['all_or_nothing', 'pct_correct', 'interact'],
+    video=['interact'],
+    poll=['interact'],
+    page=['interact']
+)
+
+WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
+    clickablearea=[],
+    external=[],
+    fillintheblank=['first_answer', 'last_answer', 'best_answer'],
+    activecode=['first_answer', 'last_answer', 'best_answer'],
+    actex=['first_answer', 'last_answer', 'best_answer'],
+    dragndrop=['first_answer', 'last_answer', 'best_answer'],
+    shortanswer=['first_answer', 'last_answer', 'best_answer'],
+    mchoice=['first_answer', 'last_answer', 'best_answer'],
+    codelens=['first_answer', 'last_answer', 'best_answer'],
+    parsonsprob=['first_answer', 'last_answer', 'best_answer'],
+    video=[],
+    poll=[],
+    page=[]
+)
+
 # create a simple index to provide a page of links
 # - re build the book
 # - list assignments
@@ -316,7 +348,7 @@ def admin():
         course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
 
 
-    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name, course_id=auth.user.course_name,
+    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
                 task_name=uuid, course_url=course_url, course_id=course.id)
 
@@ -1008,6 +1040,7 @@ def _get_toc_and_questions():
     # picker will need in the instructor's assignment authoring tab
 
     # Format is documented at https://www.jstree.com/docs/json/
+
     #try:
         # First get the chapters associated with the current course, and insert them into the tree
         # Recurse, with each chapter:
@@ -1051,9 +1084,13 @@ def _get_toc_and_questions():
                                   (db.questions.chapter == ch.chapters.chapter_label) & \
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select()
                 for question in questions_query:
-                    q_info = {}
-                    q_info['text'] = question.questions.name
-                    q_info['id'] = question.questions.name
+                    q_info = dict(
+                        text = question.questions.name,
+                        id = question.questions.name,
+                        question_type = question.questions.question_type,
+                        autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[question.questions.question_type],
+                        which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[question.questions.question_type]
+                    )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
                           'question_picker': question_picker})
