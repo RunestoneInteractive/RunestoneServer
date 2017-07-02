@@ -161,7 +161,8 @@ db.define_table('assignments',
     Field('points', 'integer'),
     Field('threshold', 'integer'),              # for reading portion of assignment; if earn above this threshold,
                                                 # get full credit (from points field of assignment;
-                                                # 0 means not using threshold
+                                                # 0 or null means not using threshold
+    Field('points_to_award'),  # points to award if using threshold and student exceeded threshold
     Field('readings_autograder', 'text', default = 'interact'),       # for reading portion,
                                                 # assignment-level variable that will control
                                                 # autograding of reading preps.

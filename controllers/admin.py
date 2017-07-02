@@ -738,7 +738,8 @@ def getQuestionInfo():
         question_code = db((db.questions.name == question_name)).select(db.questions.question).first().question
         question_author = db((db.questions.name == question_name)).select(db.questions.author).first().author
         question_difficulty = db((db.questions.name == question_name)).select(db.questions.difficulty).first().difficulty
-        question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
+        #question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
+        question_id = _get_question_id(question_name, auth.user.course_id)
         tags = []
         question_tags = db((db.question_tags.question_id == question_id)).select()
         for row in question_tags:
@@ -1149,15 +1150,20 @@ def get_assignment():
 def save_assignment():
     # This endpoint is for saving (insert or update) an assignment's top-level information, without any
     # questions or readings that might be part of the assignment
+    # Should return the id of the assignment, if one is not passed in
 
     # The following fields must be provided in request.vars (see modesl/grouped_assignments.py for model definition):
+    # -- assignment_id (if it's an existing assignment; if none provided, then we insert a new assignment)
     # -- name
     # -- description
     # -- points
     # -- threshold
+    # -- points_to_award (should be non-null only if threshold is non-zero)
     # -- readings_autograder
     # -- duedate
-    print "saving assignment"
+
+    assignment_id = request.vars.get('assignment_id')
+
     try:
         d_str = request.vars['due']
         format_str = "%Y/%m/%d %H:%M"
@@ -1165,21 +1171,32 @@ def save_assignment():
     except:
         due = null
     try:
-        newassignID = db.assignments.update_or_insert(
-            (db.assignments.course==auth.user.course_id) & (db.assignments.name==request.vars['name']),
-            course = auth.user.course_id,
-            name = request.vars['name'],
-            description = request.vars['description'],
-            points = request.vars['points'],
-            threshold = request.vars['threshold'],
-            readings_autograder = request.vars['readings_autograder'],
-            duedate=due,
-        )
-        return json.dumps("SUCCESS")
+        if assignment_id:
+            db(db.assignments.id == assignment_id).update(
+                course=auth.user.course_id,
+                name=request.vars['name'],
+                description=request.vars['description'],
+                points=request.vars['points'],
+                threshold=request.vars['threshold'],
+                points_to_award=request.vars['points_to_award'],
+                readings_autograder=request.vars['readings_autograder'],
+                duedate=due,
+            )
+        else:
+            assignment_id = db.assignments.insert(
+                course = auth.user.course_id,
+                name = request.vars['name'],
+                description = request.vars['description'],
+                points = request.vars['points'],
+                threshold = request.vars['threshold'],
+                points_to_award = request.vars['points_to_award'],
+                readings_autograder = request.vars['readings_autograder'],
+                duedate=due,
+            )
+        return {request.vars['name']: assignment_id}
     except Exception as ex:
         print(ex)
         return json.dumps('ERROR')
-
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1198,9 +1215,8 @@ def add__or_update_assignment_question():
     # This assumes that question will always be in DB already, before an assignment_question is created
     # That means that chapters and subchapters need to be added to questions table when added to chapters and
     # subchapters tables, in RunestoneComponents
-    question = db((db.questions.name == question_name)).select().first()
-    question_id = question.id
-    question_type = question.question_type
+    question_id = _get_question_id(question_name, auth.user.course_id)
+    question_type = db.questions[question_id].question_type
 
     if question_type == 'page':
         reading_assignment = 'T'
@@ -1227,29 +1243,67 @@ def add__or_update_assignment_question():
             which_to_grade = which_to_grade,
             reading_assignment = reading_assignment
         )
-        return json.dumps("SUCCESS")
+        total = _set_assignment_max_points(assignment_id)
+        return json.dumps({'total': total})
     except Exception as ex:
         print(ex)
         return json.dumps("Error")
+
+def _get_question_id(question_name, course_id):
+    return int(db((db.questions.name == question_name) &
+              (db.questions.base_course == db.courses.base_course) &
+              (db.courses.id == course_id)
+              ).select(db.questions.id).first().id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def delete_assignment_question():
     ## Deletes one assignment_question
-    print "deleting"
     try:
         question_name = request.vars['name']
-        assignment_id = request.vars['assignment_id']
-        question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-        db((db.assignment_questions.assignment_id == int(assignment_id)) & \
-           (db.assignment_questions.question_id == int(question_id))).delete()
-        return json.dumps("Success")
+        assignment_id = int(request.vars['assignment_id'])
+        question_id = _get_question_id(question_name, auth.user.course_id)
+        db((db.assignment_questions.assignment_id == assignment_id) & \
+           (db.assignment_questions.question_id == question_id)).delete()
+        total = _set_assignment_max_points(assignment_id)
+        return json.dumps({'total': total})
     except Exception as ex:
         print(ex)
         return json.dumps("Error")
 
+def _set_assignment_max_points(assignment_id):
+    """Called after a change to assignment questions.
+    Recalculate the total, save it in the assignment row
+    and return it."""
+    sum_op = db.assignment_questions.points.sum()
+    total = db(db.assignment_questions.assignment_id == assignment_id).select(sum_op).first()[sum_op]
+    db(db.assignments.id == assignment_id).update(
+        points=total
+    )
+    return total
+
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def reorder_assignment_questions():
-    return json.dumps("sorry, reorder_assignment_questions not implemented yet")
+    """Called when the questions are reordered in the instructor assignments interface.
+    request.vars must include:
+    -- names: a list of strings for question_names
+    -- assignment_id: a database record id
+
+    The names list should be a list of *all* assignment_questions of that type (i.e., all that have the
+    boolean reading_assignment flag set to True, or all that have it set to False).
+    We will reassign sorting_priorities to all of them.
+    """
+    question_names = request.vars['names']  # a list of question_names
+    assignment_id = int(request.vars['assignment_id'])
+
+    i = 0
+    for name in question_names:
+        i += 1
+        question_id = _get_question_id(name, auth.user.course_id)
+        db((db.assignment_questions.question_id==question_id) & \
+           (db.assignment_questions.assignment_id == assignment_id)
+           .update(sorting_priority = i))
+    return json.dumps("Reordered in DB")
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def checkQType():
