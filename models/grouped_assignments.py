@@ -158,10 +158,11 @@ db.define_table('assignments',
                                                                                   # include reading portion and
                                                                                   # questions portion
     Field('name', 'string'),
-    Field('points', 'integer'),
+    Field('points', 'integer'),  # max possible points on the assignment, cached sum of assignment_question points
     Field('threshold', 'integer', default=0),   # for reading portion of assignment; if earn above this threshold,
                                                 # get full credit (from points field of assignment;
                                                 # 0 or null means not using threshold
+    Field('points_to_award'),  # points to award if using threshold and student exceeded threshold
     Field('readings_autograder', 'text', default = 'interact'),       # for reading portion,
                                                 # assignment-level variable that will control
                                                 # autograding of reading preps.
