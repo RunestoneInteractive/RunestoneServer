@@ -145,6 +145,7 @@ function autoGrade(){
         },
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
+            calculateTotals();
             alert(retdata.message);
         }
     });
@@ -466,7 +467,6 @@ function pickedAssignments(column) {
     var assignments = JSON.parse(assignmentinfo);
     set_release_button();
     autograde_form.style.visibility = 'visible';
-    calc_totals_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
@@ -560,8 +560,6 @@ function showColumn1() {
     set_release_button();
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    calc_totals_form = document.getElementById("calculateTotalsForm");
-    calc_totals_form.style.visibility = 'hidden';
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();

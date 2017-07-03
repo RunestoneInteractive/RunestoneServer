@@ -38,7 +38,7 @@ db.define_table('assignment_questions',
                 Field('points', type='integer'),
                 Field('timed', type='boolean'), #deprecated; should be a property of the assignment
                 Field('autograde', type='string'), # oneof: null, all_or_nothing, pct_correct
-                Field('which_to_grade', type='string'), # oneof: first_answer, last_answer, or best_answer
+                Field('which_to_grade', type='string'), # oneof: first_answer, last_answer, last_answer_before_deadline, or best_answer
                 Field('reading_assignment', type='boolean'), # so we can differentiate reading part of an assignment from the questions to be embedded on the assignment page
                                                              # Also use this when it's an mchoice or parsons that's within a subchapter, not to be embeddedon the assignment page
                 Field('sorting_priority', type='integer'), #determines sort order of questions when displaying
