@@ -150,6 +150,7 @@ function autoGrade(){
         },
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
+            calculateTotals();
             alert(retdata.message);
             calculateTotals();
         }

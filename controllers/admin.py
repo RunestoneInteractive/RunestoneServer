@@ -8,33 +8,35 @@ import logging
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
+ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
     clickablearea=[],
     external=[],
-    fillintheblank=['all_or_nothing', 'pct_correct', 'interact'],
-    activecode=['all_or_nothing', 'pct_correct', 'interact'],
-    actex=['all_or_nothing', 'pct_correct', 'interact'],
-    dragndrop=['all_or_nothing', 'pct_correct', 'interact'],
-    shortanswer=['all_or_nothing', 'pct_correct', 'interact'],
-    mchoice=['all_or_nothing', 'pct_correct', 'interact'],
-    codelens=['all_or_nothing', 'pct_correct', 'interact'],
-    parsonsprob=['all_or_nothing', 'pct_correct', 'interact'],
+    fillintheblank=ALL_AUTOGRADE_OPTIONS,
+    activecode=ALL_AUTOGRADE_OPTIONS,
+    actex=ALL_AUTOGRADE_OPTIONS,
+    dragndrop=ALL_AUTOGRADE_OPTIONS,
+    shortanswer=ALL_AUTOGRADE_OPTIONS,
+    mchoice=ALL_AUTOGRADE_OPTIONS,
+    codelens=ALL_AUTOGRADE_OPTIONS,
+    parsonsprob=ALL_AUTOGRADE_OPTIONS,
     video=['interact'],
     poll=['interact'],
     page=['interact']
 )
 
+ALL_WHICH_OPTIONS = ['first_answer', 'last_answer', 'best_answer']
 WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     clickablearea=[],
     external=[],
-    fillintheblank=['first_answer', 'last_answer', 'best_answer'],
-    activecode=['first_answer', 'last_answer', 'best_answer'],
-    actex=['first_answer', 'last_answer', 'best_answer'],
-    dragndrop=['first_answer', 'last_answer', 'best_answer'],
-    shortanswer=['first_answer', 'last_answer', 'best_answer'],
-    mchoice=['first_answer', 'last_answer', 'best_answer'],
-    codelens=['first_answer', 'last_answer', 'best_answer'],
-    parsonsprob=['first_answer', 'last_answer', 'best_answer'],
+    fillintheblank=ALL_WHICH_OPTIONS,
+    activecode=ALL_WHICH_OPTIONS,
+    actex=ALL_WHICH_OPTIONS,
+    dragndrop=ALL_WHICH_OPTIONS,
+    shortanswer=ALL_WHICH_OPTIONS,
+    mchoice=ALL_WHICH_OPTIONS,
+    codelens=ALL_WHICH_OPTIONS,
+    parsonsprob=ALL_WHICH_OPTIONS,
     video=[],
     poll=[],
     page=[]

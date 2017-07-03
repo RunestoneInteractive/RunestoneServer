@@ -388,133 +388,147 @@ def detail():
         gradeRecordingUrl = URL('assignments', 'record_grade'),
         )
 
-def _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p):
-    # Look in mchoice_answers table for results of first or last run before deadline
+def _score_from_pct_correct(pct_correct, points, autograde):
+    # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
+    if autograde == 'interact' or autograde == 'visited':
+        return points
+    elif autograde == 'pct_correct':
+        # prorate credit based on percentage correct
+        return int(round((pct_correct * points)/100.0))
+    elif autograde == 'all_or_nothing' or autograde == 'unittest':
+        # 'unittest' is legacy, now deprecated
+        # have to get *all* tests to pass in order to get any credit
+        if pct_correct == 100:
+            return points
+        else:
+            return 0
 
-    # sid matches auth_user.username, not auth_user.id
-    query = ((db.mchoice_answers.sid == sid) & \
-            (db.mchoice_answers.div_id == question.name) \
-             )
+def _score_one_code_run(row, points, autograde):
+    # row is one row from useinfo table
+    # second element of act is the percentage of tests that passed
+    try:
+        (ignore, pct, ignore, passed, ignore, failed) = row.act.split(':')
+        pct_correct = 100 * float(passed)/(int(failed) + int(passed))
+    except:
+        pct_correct = 0 # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
+    return _score_from_pct_correct(pct_correct, points, autograde)
 
+def _score_one_mchoice(row, points, autograde):
+    # row is from mchoice_answers
+    ## It appears that the mchoice_answers is only storing a binary correct_or_not
+    ## If that is updated to store a pct_correct, the next few lines can change
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct,_correct, points, autograde)
+
+def _score_one_interaction(row, points, autograde):
+    # row is from useinfo
+    if row:
+        return points
+    else:
+        return 0
+
+def scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.mchoice_answers.course_name == course_name) & \
+            (db.mchoice_answers.sid == sid) & \
+            (db.mchoice_answers.div_id == question_name) \
+            )
     if deadline:
         query = query & (db.mchoice_answers.timestamp < deadline)
-    if first_p:
-        #use first answer
-        answer = db(query).select(orderby=db.mchoice_answers.timestamp).first()
-    else:
-        #use last answer
-        answer = db(query).select(orderby=~db.mchoice_answers.timestamp).first()
+    return db(query).select(orderby=db.mchoice_answers.timestamp)
 
-    score = 0
-    if answer and answer.correct:
-        score = points
-    else:
-        score = 0
-
-    db.question_grades.update_or_insert(
-        ((db.question_grades.sid == sid) &
-         (db.question_grades.course_name == course_name) &
-         (db.question_grades.div_id == question.name)
-         ),
-        sid=sid,
-        course_name=course_name,
-        div_id=question.name,
-        score = score,
-        comment = "autograded"
-    )
-
-def _autograde_one_ac(course_name, sid, question, points, deadline):
-    # Look in code table for results of last run before deadline
-
-    # sid matches auth_user.username, not auth_user.id
-
-    query = ((db.useinfo.course_id == course_name) & \
-            (db.useinfo.div_id == question.name) & \
-            (db.useinfo.sid == sid) & \
-            (db.useinfo.event == 'unittest'))
-
-    if deadline:
-        query = query & (db.useinfo.timestamp < deadline)
-
-    most_recent = db(query).select(orderby=~db.useinfo.timestamp).first()
-
-    score = 0
-    id = None
-    if most_recent:
-        # second element is the percentage of tests that passed
-        pct_correct = float(most_recent.act.split(':')[1])
-        if pct_correct == 100:
-            # have to get *all* tests to pass in order to get any credit
-            score = points
-        id = most_recent.id
-
-    db.question_grades.update_or_insert(
-        ((db.question_grades.sid == sid) &
-         (db.question_grades.course_name == course_name) &
-         (db.question_grades.div_id == question.name)
-         ),
-        sid=sid,
-        course_name=course_name,
-        div_id=question.name,
-        score = score,
-        comment = "autograded",
-        useinfo_id = id
-    )
-
-def _autograde_one_visited(course_name, sid, question, points, deadline):
+def scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
-    # useinfo.div_id can either be a string for a pathname for a subchapter, or it can be
-    # a div_id for an activecode. ??Are multiple choice and parsons, etc. also recorded??
-    query =  (db.useinfo.div_id == question.name) & (db.useinfo.sid == sid)
+    query = ((db.useinfo.course_id == course_name) & \
+            (db.useinfo.div_id == div_id) & \
+            (db.useinfo.sid == sid))
+    if event_filter:
+        query = query & (db.useinfo.event == event_filter)
     if deadline:
         query = query & (db.useinfo.timestamp < deadline)
-    visit = db(query).select().first()
+    return db(query).select(orderby=db.useinfo.timestamp)
 
-    if visit:
-        score = points
-    else:
-        score = 0
+def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
+    # print "autograding", assignment_id, sid, question_name, deadline, autograde
 
-    db.question_grades.update_or_insert(
-        ((db.question_grades.sid == sid) &
-         (db.question_grades.course_name == course_name) &
-         (db.question_grades.div_id == question.name)
-         ),
-        sid=sid,
-        course_name=course_name,
-        div_id=question.name,
-        score = score,
-        comment = "autograded"
-    )
-
-def _autograde_one_q(course_name, assignment_id, sid, qname, points, deadline=None, autograde=None):
-    # print "autograding", assignment_id, sid, qname, deadline, autograde
+    if not autograde:
+        return
 
     # if previously manually graded, don't overwrite
     existing = db((db.question_grades.sid == sid) \
        & (db.question_grades.course_name == course_name) \
-       & (db.question_grades.div_id == qname) \
+       & (db.question_grades.div_id == question_name) \
        ).select().first()
     if existing and (existing.comment != "autograded"):
         # print "skipping; previously manually graded, comment = {}".format(existing.comment)
         return
 
-    # get the question object
-    question = db(db.questions.name == qname).select().first()
 
-    # dispatch on grading_type; if none specified, can't autograde
-    if autograde == 'unittest':
-        _autograde_one_ac(course_name, sid, question, points, deadline)
-    elif autograde == 'first_answer':
-        _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=True)
-    elif autograde == 'last_answer':
-        _autograde_one_mchoice(course_name, sid, question, points, deadline, first_p=False)
-    elif autograde == 'visited':
-        _autograde_one_visited(course_name, sid, question, points, deadline)
+    # For all question types, and values of which_to_grade, we have the same basic structure:
+    # 1. Query the appropriate table to get rows representing student responses
+    # 2. Apply a scoring function to the first, last, or all rows
+    #   2a. if scoring 'best_answer', take the max score
+    #   Note that the scoring function will take the autograde parameter as an input, which might
+    #      affect how the score is determined.
+
+    # get the results from the right table, and choose the scoring function
+    if question_type in ['activecode', 'actex']:
+        if autograde in ['pct_correct', 'all_or_nothing', 'unittest']:
+            event_filter = 'unittest'
+        else:
+            event_filter = None
+        results = scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
+        scoring_fn = _score_one_code_run
+    elif question_type == 'mchoice':
+        results = scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_mchoice
+    elif question_type == 'page':
+        results = scorable_useinfos(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_interaction
     else:
-        # print "skipping; autograde = {}".format(question.autograde)
-        pass
+        print "skipping; autograde = {}".format(autograde)
+        return
+
+    # use query results and the scoring function
+    if results:
+        if which_to_grade in ['first_answer', 'last_answer', None]:
+            # get single row
+            if which_to_grade == 'first_answer':
+                row = results.first()
+            elif which_to_grade == 'last_answer':
+                row = results.last()
+            else:
+                # default is last
+                row = results.last()
+            # extract its score and id
+            id = row.id
+            score = scoring_fn(row, points, autograde)
+        elif which_to_grade == 'best_answer':
+            # score all rows and take the best one
+            best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
+            id = best_row.id
+            score = scoring_fn(best_row)
+    else:
+        # no results found, score is 0, not attributed to any row
+        id = None
+        score = 0
+
+    # Save the score
+    db.question_grades.update_or_insert(
+        ((db.question_grades.sid == sid) &
+         (db.question_grades.course_name == course_name) &
+         (db.question_grades.div_id == question_name)
+         ),
+        sid=sid,
+        course_name=course_name,
+        div_id=question_name,
+        score = score,
+        comment = "autograded",
+        useinfo_id = id
+    )
 
 def _compute_assignment_total(student, assignment):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
@@ -642,10 +656,9 @@ def autograde():
         return json.dumps({'success':False, 'message':"Select an assignment before trying to autograde."})
 
     sid = request.vars.get('sid', None)
-    qname = request.vars.get('question', None)
+    question_name = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
-
-    if enforce_deadline:
+    if enforce_deadline == 'true':
         # get the deadline associated with the assignment
         deadline = assignment.duedate
     else:
@@ -654,22 +667,27 @@ def autograde():
     student_rows = _get_students(auth.user.course_id, sid)
     sids = [row.username for row in student_rows]
 
-    if qname:
+    if question_name:
         questions_query = db(
             (db.assignment_questions.assignment_id == assignment_id) &
             (db.assignment_questions.question_id == db.questions.id) &
-            (db.questions.name == qname)
-            ).select(db.questions.name, db.assignment_questions.points, db.assignment_questions.autograde)
-        questions = [(row.questions.name, row.assignment_questions.points, row.assignment_questions.autograde) for row in questions_query]
+            (db.questions.name == question_name)
+            ).select()
     else:
         # get all qids and point values for this assignment
-        questions_query = db((db.assignment_questions.assignment_id == assignment_id) & (db.assignment_questions.question_id == db.questions.id)).select(db.questions.name, db.assignment_questions.points, db.assignment_questions.autograde)
-        questions = [(row.questions.name, row.assignment_questions.points, row.assignment_questions.autograde) for row in questions_query]
+        questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
+                             (db.assignment_questions.question_id == db.questions.id)).select()
+    questions = [(row.questions.name,
+                  row.assignment_questions.points,
+                  row.assignment_questions.autograde,
+                  row.assignment_questions.which_to_grade,
+                  row.questions.question_type) for row in questions_query]
 
     count = 0
-    for (qdiv, points, autograde) in questions:
+    for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
-            _autograde_one_q(auth.user.course_name, assignment_id, s, qdiv, points, deadline=deadline, autograde = autograde)
+            _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
+                             deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
             count += 1
 
     return json.dumps({'message': "autograded {} items".format(count)})
