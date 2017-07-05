@@ -14,13 +14,10 @@ def index():
     if not auth.user:
         session.flash = "Please Login"
         return redirect(URL('default','index'))
-    if 'sid' not in request.vars and verifyInstructorStatus(auth.user.course_name, auth.user):
-        return redirect(URL('assignments','admin'))
     if 'sid' not in request.vars:
-        return redirect(URL('assignments','index') + '?sid=%d' % (auth.user.id))
-    if str(auth.user.id) != request.vars.sid and not verifyInstructorStatus(auth.user.course_name, auth.user):
-        return redirect(URL('assignments','index'))
-    student = db(db.auth_user.id == request.vars.sid).select(
+        return redirect(URL('assignments','index') + '?sid=%s' % (auth.user.username))
+
+    student = db(db.auth_user.username == request.vars.sid).select(
         db.auth_user.id,
         db.auth_user.username,
         db.auth_user.first_name,
@@ -30,54 +27,20 @@ def index():
     if not student:
         return redirect(URL('assignments','index'))
 
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    assignments = db(db.assignments.id == db.grades.assignment)
-    assignments = assignments(db.assignments.course == course.id)
-    assignments = assignments(db.grades.auth_user == student.id)
-    assignments = assignments(db.assignments.released == True)
-    assignments = assignments.select(
-        db.assignments.ALL,
-        db.grades.ALL,
-        orderby = db.assignments.name,
-        )
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer.load_user_metrics(request.get_vars["sid"])
+    data_analyzer.load_assignment_metrics(request.get_vars["sid"])
 
-    assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    if '506' in auth.user.course_name:
-        types_to_use = ['Lecture Prep', 'problem_set', 'reading_response']
-    elif '106' in auth.user.course_name:
-        types_to_use = ['Lecture Prep', 'lecture_waiver', 'lecture_attendance', 'problem_set', 'reading_response']
-    else:
-        types_to_use = 'all'
+    chapters = []
+    for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
+        chapters.append({
+            "label": chapter.chapter_label,
+            "status": chapter.status_text(),
+            "subchapters": chapter.get_sub_chapter_progress()
+            })
+    activity = data_analyzer.formatted_activity.activities
 
-    if types_to_use != 'all':
-        assignment_types = [a_t for a_t in assignment_types if a_t.name in types_to_use]
-    grade = CourseGrade(user = student, course=course, assignment_types = assignment_types)
-    last_action = db(db.useinfo.sid == student.username)(db.useinfo.course_id == course.course_name).select(orderby=~db.useinfo.timestamp).first()
-
-    # add forms for all of the individual grades that are student-projected, because not yet released or no grade row at all yet
-    # use http://web2py.com/books/default/chapter/29/07/forms-and-validators, see section on multiple forms on one page
-
-    for t in grade.assignment_type_grades:
-        for a in t.assignments:
-            if (not a.released) or (not a.score):
-                a.form = SQLFORM(db.grades,
-                                 record=a.grade_record,
-                                 submit_button = 'change my projected grade',
-                                 fields = ['projected'],
-                                 showid = False
-                                 )
-                # still need to figure out how to get the right values for inserting; perhaps we should do the insertion on fetching, if the record didn't exist.
-                if a.form.process(formname=a.assignment_name + str(a.assignment_id)).accepted:
-                    a.projected = float(request.vars.projected)
-                    response.flash = 'projected grade updated'
-
-
-    return dict(
-#        types = assignment_types,
-        student = student,
-        grade = grade,
-        last_action = last_action,
-        )
+    return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
@@ -767,7 +730,7 @@ def get_problem():
     else:
         deadline = None
 
-    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_name)
+    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline)
     c = db(query).select(orderby = db.code.id).last()

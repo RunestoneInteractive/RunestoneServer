@@ -37,6 +37,11 @@ function gradeIndividualItem() {
     }
 
     else if (colType == 'student') {
+        if (col1val == 'assignment' && getSelectedItem('assignment') != null) {
+            calculateTotals()
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
         //we know the question must come from column 2 now
         document.getElementById("rightsideGradingTab").style.visibility = 'visible';
         var q_column = document.getElementById("gradingcolumn2");
@@ -146,6 +151,7 @@ function autoGrade(){
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
             alert(retdata.message);
+            calculateTotals();
         }
     });
 }
@@ -197,7 +203,7 @@ function saveManualTotal(){
             }
         }
     });
-}
+} 
 
 
 function getRightSideGradingDiv(element, acid, studentId) {
@@ -214,22 +220,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
-            jQuery("#questiondisplay").html(htmlsrc);
-            $('[data-component=activecode]').each(function (index) {
-                if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
-                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:false});
-                }
-            });
-            if (loggedout) {
-                for (k in edList) {
-                    edList[k].disableSaveLoad();
-                }
-            }
-
-
+            //jQuery("#questiondisplay").html(htmlsrc);
+            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
         }
 
-    }
+    };
 
 
 
@@ -346,34 +341,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
                     jQuery('#input-comments', rightDiv).val(newdata['comments']);}
                 }}
-
-
-
-
-            var myobj = new XMLHttpRequest();
-            myobj.open('GET', '/runestone/admin/checkQType?acid=' + acid + '&sid=' + studentId, true);
-            myobj.send(JSON.stringify({newins: 'studentid'}));
-            myobj.onreadystatechange = function () {
-                if (myobj.readyState == 4 && myobj.status == 200) {
-                    var answer = myobj.responseText;
-                    if (answer == "null") {
-                        jQuery("#shortanswerresponse").empty();
-                        //do nothing else, it wasn't a short answer question and the answer should already automatically be loaded
-                    }
-
-                    else {
-                        //manually show the answer now
-                        answer = JSON.parse(answer);
-                        jQuery("#shortanswerresponse").empty();
-                        var answerheader = $("<b>Student's Answer</b> <br>")
-                        jQuery("#shortanswerresponse").append(answerheader);
-                        jQuery("#shortanswerresponse").append(answer);
-                        $('#shortanswerresponse').css('display', 'inline');
-                        $('#shortanswerresponse').css('margin-bottom', '50px');
-                        $('#shortanswerresponse').css('background-color', '#fefce7');
-                    }
-                }
-            }
         },250);
     }
 
@@ -411,6 +378,11 @@ function updateColumn2() {
     var selectedval = select2.options[select2.selectedIndex].value;
     if (val == 'assignment'){
         set_release_button();
+        if (getSelectedItem('student') != null) {
+            calculateTotals();
+        } else {
+             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
     }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
@@ -437,6 +409,15 @@ function updateColumn2() {
         }
 
     }
+
+    else if (val == 'student') {
+        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
+            calculateTotals();
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
+    }
+
     if (val2 != "") {
         column2.style.visibility = 'visible';
     }
@@ -452,6 +433,11 @@ function updateColumn3() {
     var selectedval = select2.options[select2.selectedIndex].value;
     if (val == 'assignment'){
         set_release_button();
+        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
+            calculateTotals();
+        } else {
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        }
     }
     if (val == 'chapter' && val2 == 'question') {
         $("#gradingcolumn3").empty();
@@ -490,11 +476,11 @@ function updateColumn3() {
 function pickedAssignments(column) {
 
     var pickedcolumn = document.getElementById(column);
+
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
     set_release_button();
     autograde_form.style.visibility = 'visible';
-    calc_totals_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
@@ -505,7 +491,9 @@ function pickedAssignments(column) {
         option.value = key;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
+
     }
+
 }
 
 
@@ -586,10 +574,9 @@ function showColumn1() {
     var val = select1.options[select1.selectedIndex].value;
 
     set_release_button();
+    document.getElementById('assignmentTotalform').style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
-    calc_totals_form = document.getElementById("calculateTotalsForm");
-    calc_totals_form.style.visibility = 'hidden';
 
     $("#gradingcolumn2").empty();
     $("#gradingcolumn3").empty();
@@ -743,6 +730,7 @@ function showColumn2() {
             option.text = 'question';
             option.value = 'question';
             select3.add(option);
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
 
 
             if (first_val == 'assignment') {
@@ -1269,7 +1257,7 @@ function preview_question(form){
 
 
 // Render a question in the provided div?
-function renderRunestoneComponent(componentSrc, whereDiv) {
+function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     /**
      *  The easy part is adding the componentSrc to the existing div.
      *  The tedious part is calling the right functions to turn the
@@ -1280,15 +1268,24 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
 
     edList = [];
     mcList = [];
-    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {}
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
     opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices =false;
+    opt.useRunestoneServices = false;
     opt.graderactive = false;
     opt.python3 = true;
+    if (typeof moreOpts !== 'undefined') {
+        for (let key in moreOpts) {
+            opt[key] = moreOpts[key]
+        }
+    }
 
-    component_factory[componentKind](opt)
+    if (typeof component_factory === 'undefined') {
+        alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
+    } else {
+        component_factory[componentKind](opt)
+        }
 
 }
 
