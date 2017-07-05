@@ -1239,7 +1239,7 @@ function preview_question(form){
 
 
 // Render a question in the provided div?
-function renderRunestoneComponent(componentSrc, whereDiv) {
+function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     /**
      *  The easy part is adding the componentSrc to the existing div.
      *  The tedious part is calling the right functions to turn the
@@ -1250,15 +1250,24 @@ function renderRunestoneComponent(componentSrc, whereDiv) {
 
     edList = [];
     mcList = [];
-    let componentKind = $($('#component-preview [data-component]')[0]).data('component')
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {}
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
     opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices =false;
+    opt.useRunestoneServices = false;
     opt.graderactive = false;
     opt.python3 = true;
+    if (typeof moreOpts !== 'undefined') {
+        for (let key in moreOpts) {
+            opt[key] = moreOpts[key]
+        }
+    }
 
-    component_factory[componentKind](opt)
+    if (typeof component_factory === 'undefined') {
+        alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
+    } else {
+        component_factory[componentKind](opt)
+        }
 
 }
 
