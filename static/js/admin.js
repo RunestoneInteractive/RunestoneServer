@@ -37,11 +37,6 @@ function gradeIndividualItem() {
     }
 
     else if (colType == 'student') {
-        if (col1val == 'assignment' && getSelectedItem('assignment') != null) {
-            calculateTotals()
-        } else {
-            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        }
         //we know the question must come from column 2 now
         document.getElementById("rightsideGradingTab").style.visibility = 'visible';
         var q_column = document.getElementById("gradingcolumn2");
@@ -152,7 +147,6 @@ function autoGrade(){
             $('#assignmentTotalform').css('visibility', 'hidden');
             calculateTotals();
             alert(retdata.message);
-            calculateTotals();
         }
     });
 }
@@ -204,7 +198,7 @@ function saveManualTotal(){
             }
         }
     });
-} 
+}
 
 
 function getRightSideGradingDiv(element, acid, studentId) {
@@ -221,11 +215,22 @@ function getRightSideGradingDiv(element, acid, studentId) {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
-            //jQuery("#questiondisplay").html(htmlsrc);
-            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
+            jQuery("#questiondisplay").html(htmlsrc);
+            $('[data-component=activecode]').each(function (index) {
+                if ($(this.parentNode).data("component") !== "timedAssessment") {   // If this element exists within a timed component, don't render it here
+                    edList[this.id] = ACFactory.createActiveCode(this, $(this).data('lang'), {sid: studentId, graderactive: true, python3:false});
+                }
+            });
+            if (loggedout) {
+                for (k in edList) {
+                    edList[k].disableSaveLoad();
+                }
+            }
+
+
         }
 
-    };
+    }
 
 
 
@@ -379,11 +384,6 @@ function updateColumn2() {
     var selectedval = select2.options[select2.selectedIndex].value;
     if (val == 'assignment'){
         set_release_button();
-        if (getSelectedItem('student') != null) {
-            calculateTotals();
-        } else {
-             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        }
     }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
@@ -410,15 +410,6 @@ function updateColumn2() {
         }
 
     }
-
-    else if (val == 'student') {
-        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
-            calculateTotals();
-        } else {
-            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        }
-    }
-
     if (val2 != "") {
         column2.style.visibility = 'visible';
     }
@@ -434,11 +425,6 @@ function updateColumn3() {
     var selectedval = select2.options[select2.selectedIndex].value;
     if (val == 'assignment'){
         set_release_button();
-        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
-            calculateTotals();
-        } else {
-            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        }
     }
     if (val == 'chapter' && val2 == 'question') {
         $("#gradingcolumn3").empty();
@@ -477,7 +463,6 @@ function updateColumn3() {
 function pickedAssignments(column) {
 
     var pickedcolumn = document.getElementById(column);
-
     $("#" + column).empty();
     var assignments = JSON.parse(assignmentinfo);
     set_release_button();
@@ -492,9 +477,7 @@ function pickedAssignments(column) {
         option.value = key;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
-
     }
-
 }
 
 
@@ -575,7 +558,6 @@ function showColumn1() {
     var val = select1.options[select1.selectedIndex].value;
 
     set_release_button();
-    document.getElementById('assignmentTotalform').style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
 
@@ -731,7 +713,6 @@ function showColumn2() {
             option.text = 'question';
             option.value = 'question';
             select3.add(option);
-            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
 
 
             if (first_val == 'assignment') {
