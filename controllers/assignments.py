@@ -389,7 +389,6 @@ def detail():
 		)
 
 def _score_from_pct_correct(pct_correct, points, autograde):
-	print(autograde)
 	# ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
 	if autograde == 'interact' or autograde == 'visited':
 		return points
@@ -442,7 +441,7 @@ def _score_one_parsons(row, points, autograde):
 		pct_correct = 0
 	return _score_from_pct_correct(pct_correct, points, autograde)
 
-def scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
+def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
 	query = ((db.mchoice_answers.course_name == course_name) & \
 			(db.mchoice_answers.sid == sid) & \
 			(db.mchoice_answers.div_id == question_name) \
@@ -451,7 +450,7 @@ def scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
 		query = query & (db.mchoice_answers.timestamp < deadline)
 	return db(query).select(orderby=db.mchoice_answers.timestamp)
 
-def scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
+def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
 	# look in useinfo, to see if visited (before deadline)
 	# sid matches auth_user.username, not auth_user.id
 	query = ((db.useinfo.course_id == course_name) & \
@@ -473,7 +472,6 @@ def _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
 	return db(query).select(orderby=db.parsons_answers.timestamp)
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
-	autograde = 'all_or_nothing'
 	# print "autograding", assignment_id, sid, question_name, deadline, autograde
 
 	if not autograde:
@@ -502,13 +500,13 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
 			event_filter = 'unittest'
 		else:
 			event_filter = None
-		results = scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
+		results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
 		scoring_fn = _score_one_code_run
 	elif question_type == 'mchoice':
-		results = scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
+		results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
 		scoring_fn = _score_one_mchoice
 	elif question_type == 'page':
-		results = scorable_useinfos(course_name, sid, question_name, points, deadline)
+		results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
 		scoring_fn = _score_one_interaction
 	elif question_type == 'parsonsprob':
 		results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
@@ -710,7 +708,6 @@ def autograde():
 
 	count = 0
 	for (qdiv, points, autograde, which_to_grade, question_type) in questions:
-		print(autograde)
 		for s in sids:
 			_autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
 							 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
