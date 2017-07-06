@@ -1176,7 +1176,7 @@ def save_assignment():
         format_str = "%Y/%m/%d %H:%M"
         due = datetime.datetime.strptime(d_str, format_str)
     except:
-        due = null
+        due = None
     try:
         if assignment_id:
             db(db.assignments.id == assignment_id).update(
