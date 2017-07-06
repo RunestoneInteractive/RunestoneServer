@@ -441,6 +441,15 @@ def _score_one_parsons(row, points, autograde):
 		pct_correct = 0
 	return _score_from_pct_correct(pct_correct, points, autograde)
 
+def _score_one_fitb(row, points, autograde):
+	# row is from fitb_answers
+	if row.correct:
+		pct_correct = 100
+	else:
+		pct_correct = 0
+	return _score_from_pct_correct(pct_correct, points, autograde)
+
+
 def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
 	query = ((db.mchoice_answers.course_name == course_name) & \
 			(db.mchoice_answers.sid == sid) & \
@@ -471,9 +480,17 @@ def _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
 		query = query & (db.parsons_answers.timestamp < deadline)
 	return db(query).select(orderby=db.parsons_answers.timestamp)
 
+def _scorable_fitb_answers(course_name, sid, question_name, points, deadline):
+	query = ((db.fitb_answers.course_name == course_name) & \
+			(db.fitb_answers.sid == sid) & \
+			(db.fitb_answers.div_id == question_name) \
+			)
+	if deadline:
+		query = query & (db.fitb_answers.timestamp < deadline)
+	return db(query).select(orderby=db.fitb_answers.timestamp)
+
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
 	# print "autograding", assignment_id, sid, question_name, deadline, autograde
-
 	if not autograde:
 		return
 
@@ -511,6 +528,9 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
 	elif question_type == 'parsonsprob':
 		results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
 		scoring_fn = _score_one_parsons
+	elif question_type == 'fillintheblank':
+		results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline)
+		scoring_fn = _score_one_fitb
 	else:
 		print "skipping; autograde = {}".format(autograde)
 		return
