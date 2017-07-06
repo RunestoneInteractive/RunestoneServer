@@ -222,7 +222,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             //jQuery("#questiondisplay").html(htmlsrc);
-            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
+            var enforceDeadline = $('#enforceDeadline').is(':checked');
+            var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
+            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl});
         }
 
     };

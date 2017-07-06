@@ -114,6 +114,9 @@
     chapters = JSON.parse(chapters);
     var students = null;
     var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g,'"');
+    var assignment_deadlines = "{{=assignment_deadlines}}".replace(/&#x27;/g,'"');
+    assignment_deadlines = JSON.parse(assignment_deadlines);
+
     $('#autogradingform').submit(function (event) {
         event.preventDefault();
         autoGrade();
