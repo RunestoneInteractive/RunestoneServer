@@ -352,7 +352,7 @@ def admin():
 
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url)
+                task_name=uuid, course_url=course_url, course_id=auth.user.course_id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
