@@ -353,6 +353,7 @@ def admin():
                 instructors=instructordict, students=studentdict, confirm=False,
                 task_name=uuid, course_url=course_url, course_id=auth.user.course_name)
 
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
     cur_students = db(
