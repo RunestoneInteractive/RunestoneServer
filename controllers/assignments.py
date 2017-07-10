@@ -449,6 +449,22 @@ def _score_one_fitb(row, points, autograde):
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
+def _score_one_clickablearea(row, points, autograde):
+    # row is from clickablearea_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_dragndrop(row, points, autograde):
+    # row is from dragndrop_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
 
 def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
     query = ((db.mchoice_answers.course_name == course_name) & \
@@ -488,6 +504,24 @@ def _scorable_fitb_answers(course_name, sid, question_name, points, deadline):
     if deadline:
         query = query & (db.fitb_answers.timestamp < deadline)
     return db(query).select(orderby=db.fitb_answers.timestamp)
+
+def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.clickablearea_answers.course_name == course_name) & \
+            (db.clickablearea_answers.sid == sid) & \
+            (db.clickablearea_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.clickablearea_answers.timestamp < deadline)
+    return db(query).select(orderby=db.clickablearea_answers.timestamp)
+
+def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.dragndrop_answers.course_name == course_name) & \
+            (db.dragndrop_answers.sid == sid) & \
+            (db.dragndrop_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.dragndrop_answers.timestamp < deadline)
+    return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
     # print "autograding", assignment_id, sid, question_name, deadline, autograde
@@ -531,6 +565,12 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
     elif question_type == 'fillintheblank':
         results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_fitb
+    elif question_type == 'clickablearea':
+        results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_clickablearea
+    elif question_type == 'dragndrop':
+        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_dragndrop
     else:
         print "skipping; autograde = {}".format(autograde)
         return
