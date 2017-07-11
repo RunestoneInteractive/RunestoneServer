@@ -1126,32 +1126,7 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            var tableBody = document.getElementById("tableBody");
-            var row = document.createElement("TR");
-            row.setAttribute("class", q_type);
-            row.setAttribute("id", name);
-            row.style.textAlign = 'center';
-            row.style.border = '1px solid black';
-            tableBody.appendChild(row);
-
-            var qid = document.createElement("TD");
-            qid.style.border = '1px solid black';
-            var qid_data = document.createTextNode(name);
-            qid.appendChild(qid_data);
-            row.appendChild(qid);
-
-            var pts = document.createElement("TD");
-            pts.style.border = '1px solid black';
-            var pts_data = document.createTextNode(points);
-            pts.appendChild(pts_data);
-            row.appendChild(pts);
-
-            var time = document.createElement("TD");
-            time.style.border = '1px solid black';
-            var time_data = document.createTextNode(timed);
-
-            time.appendChild(time_data);
-            row.appendChild(time);
+            updateAssignmentRaw(name, points, 'interact');
         }
     }, 'json');
 }
@@ -1183,7 +1158,7 @@ function assignmentInfo() {
         $('#assignment_description').html(assignmentData['description']);
 
         // Get the question tree picker.
-        var tqp = $('#tree-question-picker').jstree(true);
+        var tqp = question_picker.jstree(true);
         // Ignore these checks in the picker, since it's loading existing data, not user interaction.
         tqp.ignore_check = true;
         // Clear all checks initially.
@@ -1301,9 +1276,9 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('/runestone/admin/delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = 'Total points: ' + response_JSON;
+        totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
         question_table.bootstrapTable('removeByUniqueId', question_name);
     });
@@ -1380,10 +1355,7 @@ function updateAssignmentRaw(question_name, points, autograde) {
     console.log(autograde);
     // TODO: This endpoint does an add, not an update. Need it fixed.
     $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde' + autograde, {variable: 'variable'}).done(function (response_JSON) {
-        var total_points = response_JSON[0];
-        var q_type = response_JSON[1];
-        var totalPointsElement = document.getElementById("totalPoints");
-        totalPointsElement.innerHTML = 'Total points: ' + total_points;
+        $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
             // Only append if this row doesn't exist.

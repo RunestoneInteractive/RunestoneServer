@@ -586,22 +586,6 @@ def getQuestions():
     return json.dumps(questions)
 
 
-# Deprecated, replaced by delete_assignment_question
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def removeQuestion():
-    return delete_assignment_question()
-    question_name = request.vars['name']
-    assignment_id = request.vars['assignment_id']
-    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
-
-    assignment = db(db.assignments.id == int(assignment_id)).select().first()
-    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
-    new_points = int(assignment_points) - int(question_points)
-    assignment.update_record(points=new_points)
-    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
-    return json.dumps(new_points)
-
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
