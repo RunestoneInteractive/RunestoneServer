@@ -926,6 +926,8 @@ def getAssessResults():
         return json.dumps(res)
     elif event == "shortanswer":
         row = db((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course)).select().first()
+        if not row or len(row) == 0:
+            return ""
         res = {'answer': row.answer, 'timestamp': str(row.timestamp)}
         return json.dumps(res)
 
