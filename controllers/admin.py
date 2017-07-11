@@ -244,7 +244,6 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
-                get_assignmentURL=URL('admin', 'get_assignment'),
                 save_assignmentURL=URL('admin', 'save_assignment'),
                 get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
                 )
