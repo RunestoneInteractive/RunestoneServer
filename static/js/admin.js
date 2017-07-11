@@ -1185,7 +1185,7 @@ function appendToQuestionTable(name, points, autograde) {
     // Setting and ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
     var _id = 'question_table_' + name;
     console.log(autograde);
-    autograde = 'interact';
+//    autograde = 'interact';
     question_table.bootstrapTable('append', [{
         'question' : name,
         'points' : points,
@@ -1354,7 +1354,7 @@ function updateAssignmentRaw(question_name, points, autograde) {
     var assignmentid = getAssignmentId();
     console.log(autograde);
     // TODO: This endpoint does an add, not an update. Need it fixed.
-    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde' + autograde, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde, {variable: 'variable'}).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
