@@ -204,7 +204,7 @@ function saveManualTotal(){
             }
         }
     });
-} 
+}
 
 
 function getRightSideGradingDiv(element, acid, studentId) {
@@ -222,7 +222,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             //jQuery("#questiondisplay").html(htmlsrc);
-            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true});
+            var enforceDeadline = $('#enforceDeadline').is(':checked');
+            var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
+            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl});
         }
 
     };
@@ -1124,32 +1126,7 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            var tableBody = document.getElementById("tableBody");
-            var row = document.createElement("TR");
-            row.setAttribute("class", q_type);
-            row.setAttribute("id", name);
-            row.style.textAlign = 'center';
-            row.style.border = '1px solid black';
-            tableBody.appendChild(row);
-
-            var qid = document.createElement("TD");
-            qid.style.border = '1px solid black';
-            var qid_data = document.createTextNode(name);
-            qid.appendChild(qid_data);
-            row.appendChild(qid);
-
-            var pts = document.createElement("TD");
-            pts.style.border = '1px solid black';
-            var pts_data = document.createTextNode(points);
-            pts.appendChild(pts_data);
-            row.appendChild(pts);
-
-            var time = document.createElement("TD");
-            time.style.border = '1px solid black';
-            var time_data = document.createTextNode(timed);
-
-            time.appendChild(time_data);
-            row.appendChild(time);
+            updateAssignmentRaw(name, points, 'interact');
         }
     }, 'json');
 }
@@ -1172,7 +1149,7 @@ function assignmentInfo() {
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
 
-    $.getJSON(eBookConfig.get_assignmentURL, {'assignmentid': assignmentid}, function (data) {
+    $.getJSON('/runestone/admin/get_assignment', {'assignmentid': assignmentid}, function (data) {
         console.log(data);
 
         assignmentData = data['assignment_data'];
@@ -1181,15 +1158,14 @@ function assignmentInfo() {
         $('#assignment_description').html(assignmentData['description']);
 
         // Get the question tree picker.
-        var tqp = $('#tree-question-picker').jstree(true);
+        var tqp = question_picker.jstree(true);
         // Ignore these checks in the picker, since it's loading existing data, not user interaction.
         tqp.ignore_check = true;
         // Clear all checks initially.
         tqp.uncheck_all();
 
         // Clear the bootstrap table.
-        var bst = $('#questionTable');
-        bst.bootstrapTable('removeAll');
+        question_table.bootstrapTable('removeAll');
         for (let question of data['questions_data']) {
             // Put the qeustion in the table.
             let name = question['name'];
@@ -1207,10 +1183,16 @@ function assignmentInfo() {
 // Append a row to the question table.
 function appendToQuestionTable(name, points, autograde) {
     // Setting and ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
-    var bst = $('#questionTable');
-    bst.bootstrapTable('append', [{'question' : name, 'points' : points, 'autograde' : autograde, _id : ('question_table_' + name)}]);
+    var _id = 'question_table_' + name;
+    console.log(autograde);
+    autograde = 'interact';
+    question_table.bootstrapTable('append', [{
+        'question' : name,
+        'points' : points,
+        'autograde' : autograde,
+        '_id' : _id,
+    }]);
 }
-
 
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
@@ -1294,12 +1276,11 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('/runestone/admin/removeQuestion/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('/runestone/admin/delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = 'Total points: ' + response_JSON;
+        totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
-        var bst = $('#questionTable');
-        bst.bootstrapTable('removeByUniqueId', question_name);
+        question_table.bootstrapTable('removeByUniqueId', question_name);
     });
 }
 
@@ -1371,15 +1352,12 @@ function addToAssignment(form) {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde) {
     var assignmentid = getAssignmentId();
+    console.log(autograde);
     // TODO: This endpoint does an add, not an update. Need it fixed.
-    $.getJSON('/runestone/admin/addToAssignment/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&timed=false&type=formative', {variable: 'variable'}).done(function (response_JSON) {
-        var total_points = response_JSON[0];
-        var q_type = response_JSON[1];
-        var totalPointsElement = document.getElementById("totalPoints");
-        totalPointsElement.innerHTML = 'Total points: ' + total_points;
+    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde' + autograde, {variable: 'variable'}).done(function (response_JSON) {
+        $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table.
-        var bst = $('#questionTable');
-        if (bst.bootstrapTable('getRowByUniqueId', question_name) === null) {
+        if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
             // Only append if this row doesn't exist.
             appendToQuestionTable(question_name, points, autograde);
         }

@@ -244,7 +244,6 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
-                get_assignmentURL=URL('admin', 'get_assignment'),
                 save_assignmentURL=URL('admin', 'save_assignment'),
                 get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
                 )
@@ -338,8 +337,7 @@ def admin():
         course.update_record(term_start_date=date)
 
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(course_id=course.id,
-                                                                       folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,
@@ -352,7 +350,8 @@ def admin():
 
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url)
+                task_name=uuid, course_url=course_url, course_id=auth.user.course_name)
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
@@ -375,6 +374,7 @@ def grading():
     summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
 
     assignmentids = {}
+    assignment_deadlines = {}
 
     for row in assignments_query:
         assignmentids[row.name] = int(row.id)
@@ -384,6 +384,7 @@ def grading():
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
             questions.append(question_name)
         assignments[row.name] = questions
+        assignment_deadlines[row.name] = row.duedate.isoformat()
 
     cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
     searchdict = {}
@@ -411,8 +412,12 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'), course_id = auth.user.course_name, assignmentids = assignmentids
-)
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'),
+                autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'),
+                calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'),
+                getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
+                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines
+                )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getChangeLog():
@@ -580,22 +585,6 @@ def getQuestions():
             questions.append(q.name)
     return json.dumps(questions)
 
-
-# Deprecated, replaced by delete_assignment_question
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def removeQuestion():
-    return delete_assignment_question()
-    question_name = request.vars['name']
-    assignment_id = request.vars['assignment_id']
-    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
-
-    assignment = db(db.assignments.id == int(assignment_id)).select().first()
-    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
-    new_points = int(assignment_points) - int(question_points)
-    assignment.update_record(points=new_points)
-    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
-    return json.dumps(new_points)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
@@ -1171,7 +1160,7 @@ def save_assignment():
         format_str = "%Y/%m/%d %H:%M"
         due = datetime.datetime.strptime(d_str, format_str)
     except:
-        due = null
+        due = None
     try:
         if assignment_id:
             db(db.assignments.id == assignment_id).update(
