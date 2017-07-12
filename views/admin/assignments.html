@@ -491,6 +491,12 @@ function walk_jstree(instance, node, f) {
     });
 }
 
+// Given an editable element (a hyperlink) in a bootstrap table, return the data for its containing row.
+function row_from_editable(editable_element) {
+    // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
+    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
+    return question_table.bootstrapTable('getData')[row_index];
+}
 
 var question_table = $('#questionTable');
 // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
@@ -517,23 +523,43 @@ question_table.bootstrapTable({
             // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
             editable: {
                 source: function () {
-                    // Update the menu for this item. (Can't set this when configuring the table -- I don't know why, but it doesn't work.)
-                    //
-                    // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
-                    var row_index = $(this).parentsUntil('tbody').last().attr('data-index');
-                    var question = question_table.bootstrapTable('getData')[row_index]['question'];
+                    // Update the menu for this item.
+                    var row = row_from_editable(this);
                     // Determine the appropriate menu for this question. First, find its autograde values in the tree.
-                    var autograde_values = question_picker.jstree(true).get_node(question).original.autograde_possible_values;
                     // Map these to the format necessary for a select control.
                     var ui = {all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'};
                     var select_source = [];
-                    for (let val of autograde_values) {
+                    for (let val of row['autograde_possible_values']) {
                         select_source.push({value: val, text: ui[val]});
                     }
                     return select_source;
                 },
             },
             editableType: 'select',
+        }, {
+            field: 'autograde_possible_values',
+            visible: false,
+        }, {
+            field: 'which_to_grade',
+            title: 'Which to grade',
+            editable: {
+                source: function () {
+                    // Update the menu for this item.
+                    var row = row_from_editable(this);
+                    // Determine the appropriate menu for this question. First, find its autograde values in the tree.
+                    // Map these to the format necessary for a select control.
+                    var ui = {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'};
+                    var select_source = [];
+                    for (let val of row['which_to_grade_possible_values']) {
+                        select_source.push({value: val, text: ui[val]});
+                    }
+                    return select_source;
+                }
+            },
+            editableType: 'select',
+        }, {
+            field: 'which_to_grade_possible_values',
+            visible: false,
         }, {
             // Add a delete column with a button.
             field: 'delete',
@@ -558,7 +584,7 @@ question_table.bootstrapTable({
     // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
     // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
     onEditableSave : function(field, row, oldValue, html_element) {
-        updateAssignmentRaw(row['question'], row['points'], row['autograde']);
+        updateAssignmentRaw(row['question'], row['points'], row['autograde'], row['which_to_grade']);
     },
      // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
     ///onReorderRow : function(rows) {

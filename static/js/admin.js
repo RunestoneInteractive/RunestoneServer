@@ -1169,7 +1169,7 @@ function assignmentInfo() {
         for (let question of data['questions_data']) {
             // Put the qeustion in the table.
             let name = question['name'];
-            appendToQuestionTable(name, question['points'], question['autograde']);
+            appendToQuestionTable(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']);
             // Check this question in the question tree picker.
             tqp.check_node(tqp.get_node(name));
         }
@@ -1181,15 +1181,16 @@ function assignmentInfo() {
 
 
 // Append a row to the question table.
-function appendToQuestionTable(name, points, autograde) {
-    // Setting and ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
-    console.log(autograde);
-//    autograde = 'interact';
     question_table.bootstrapTable('append', [{
         'question' : name,
         'points' : points,
         'autograde' : autograde,
+        'autograde_possible_values': autograde_possible_values,
+        'which_to_grade': which_to_grade,
+        'which_to_grade_possible_values': which_to_grade_possible_values,
+        // Setting an ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
         '_id' : _id,
     }]);
 }
@@ -1350,16 +1351,19 @@ function addToAssignment(form) {
 }
 
 // Update an assignment.
-function updateAssignmentRaw(question_name, points, autograde) {
+function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    console.log(autograde);
-    // TODO: This endpoint does an add, not an update. Need it fixed.
-    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde + '&which_to_grade=' + which_to_grade, {variable: 'variable'}).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table.
+        // See if this question already exists in the table. Only append if it doesn't exist.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
-            // Only append if this row doesn't exist.
-            appendToQuestionTable(question_name, points, autograde);
+            // Provide defaults if autograde / which_to_grade isn't set.
+            var autograde_possible_values = response_JSON['autograde_possible_values'];
+            autograde = autograde || autograde_possible_values[0];
+            var which_to_grade_possible_values = response_JSON['which_to_grade_possible_values'];
+            which_to_grade = which_to_grade || which_to_grade_possible_values[0];
+
+            appendToQuestionTable(question_name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values);
         }
     });
 }
