@@ -350,38 +350,18 @@ jQuery('#datetimepicker').datetimepicker();
 jQuery('#changedate').datetimepicker();
 
 
-$('#summative').click(function() {
-    $('#summative').addClass('clickedtab');
-    $('#summative').css('background-color', 'gainsboro');
-    $('#formative').css('background-color','transparent');
-    $('#formative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-    $('#external').removeClass('clickedtab');
-});
-
-$('#formative').click(function() {
-    $('#formative').addClass('clickedtab');
-    $('#formative').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-    $('#summative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-    $('#external').removeClass('clickedtab');
-});
-
-$('#external').click(function() {
-    $('#external').addClass('clickedtab');
-    $('#external').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-    $('#summative').removeClass('clickedtab');
-    $('#formative').css('background-color','transparent');
-    $('#formative').removeClass('clickedtab');
-});
-
-
-var question_picker = $('#tree-question-picker');
 // Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
-$(function () {
-    question_picker.jstree({
+function configure_tree_picker(
+    // A jQuery object (usually a ``div``) which will hold the tree picker.
+    picker,
+    // Data to populate the tree with.
+    picker_data,
+    // A jQuery object (usually an ``input``) used to search the tree.
+    picker_search_input,
+    // The depth of a leaf node.
+    leaf_depth) {
+
+    picker.jstree({
         // Configure the checkbox plugin.
         "checkbox" : {
             // This prevents the selection from including all auto-checked nodes, which I find distracting.
@@ -398,83 +378,71 @@ $(function () {
         ],
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
         "core" : {
-            "data" : eBookConfig.toc.question_picker,
+            "data" : picker_data,
         },
     });
 
     // Provide a flag to use to ignore events caused when loading the table data in.
-    question_picker.jstree(true).ignore_check = false;
+    picker.jstree(true).ignore_check = false;
 
     // Set up for searching. Copied from the search plugin example.
     var to = false;
-    var search_question_picker = $('#search-tree-question-picker');
-    search_question_picker.keyup(function () {
+    picker_search_input.keyup(function () {
         if (to) {
             clearTimeout(to);
         }
         to = setTimeout(function () {
-            var v = search_question_picker.val();
-            question_picker.jstree(true).search(v);
+            var v = picker_search_input.val();
+            picker.jstree(true).search(v);
         }, 250);
     });
 
-    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
-    question_picker.on('select_node.jstree', function(event, data) {
-        console.log('select_node');
-        // If this is a question (a leaf node), then preview it.
-        if (jstree_node_is_question(data.instance, data.node)) {
-            // Request the preview HTML from the server.
-            console.log(data.node.id);
-            $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
-                // TODO: I get nothing or errors for many question types. ???
-                console.log(html_src);
-                renderRunestoneComponent(html_src, "component-preview")
-            });
-        }
-    });
     // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
-    question_picker.on('check_node.jstree', function(event, data) {
+    picker.on('check_node.jstree', function(event, data) {
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_is_question(instance, node)) {
+                if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    updateAssignmentRaw(node.id, 1, '');
+                    updateAssignmentRaw(node.id, 1, '', '');
                 }
             });
         }
     });
+
     // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
-    question_picker.on('uncheck_node.jstree', function(event, data) {
+    picker.on('uncheck_node.jstree', function(event, data) {
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_is_question(instance, node)) {
+                if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
                     remove_question(node.id);
                 }
             });
         }
     });
+}
 
-    question_picker.on('ready.jstree', function(event, data) {
-        // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
-        assignmentInfo();
-        $('#browse-button').click();
-    });
+var question_picker = $('#tree-question-picker');
+configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3);
+question_picker.on('ready.jstree', function(event, data) {
+    // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
+    assignmentInfo();
+    $('#browse-button').click();
+});
+// Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
+question_picker.on('select_node.jstree', function(event, data) {
+    // If this is a question (a leaf node), then preview it.
+    if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
+        // Request the preview HTML from the server.
+        $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
+            renderRunestoneComponent(html_src, "component-preview")
+        });
+    }
 });
 
-// Given a jstree node, determine if it's an exercise or not.
-function jstree_node_is_question(instance, node) {
-    // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children.
-    var subchapter_node = instance.get_parent(node);
-    // A root node returns ``#`` for its parent.
-    if (subchapter_node === '#') {
-        return false;
-    }
-    var chapter_node = instance.get_parent(subchapter_node);
-    if (chapter_node === '#') {
-        return false;
-    } else {
-        return true;
-    }
+// Given a jstree node, return its depth in the tree.
+function jstree_node_depth(instance, node) {
+    // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children. Instead, find the length of the `path to this node <https://www.jstree.com/api/#/?f=get_path(obj [, glue, ids])>`_.
+    return instance.get_path(node).length;
 }
 
 // Given a jstree node, invoke f on node and all its children.
@@ -570,7 +538,7 @@ question_table.bootstrapTable({
                  // Copied from ``operateEvents`` in an example_.
                 'click .question_table_remove': function (e, value, row, index) {
                     // Unchecking the question in the tree picker also deletes it from the database and table.
-                    question_picker.jstree(true).uncheck_node(row['question']);
+                    picker.jstree(true).uncheck_node(row['question']);
                 },
             },
        },
