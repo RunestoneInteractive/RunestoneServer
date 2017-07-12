@@ -725,27 +725,27 @@ def addToAssignment():
 def getQuestionInfo():
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
-    try:
-        question_code = db((db.questions.name == question_name)).select(db.questions.question).first().question
-        question_author = db((db.questions.name == question_name)).select(db.questions.author).first().author
-        question_difficulty = db((db.questions.name == question_name)).select(db.questions.difficulty).first().difficulty
-        #question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
-        question_id = _get_question_id(question_name, auth.user.course_id)
-        tags = []
-        question_tags = db((db.question_tags.question_id == question_id)).select()
-        for row in question_tags:
-            tag_id = row.tag_id
-            tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
-            tags.append(" " + str(tag_name))
-        if question_difficulty != None:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
-        else:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':None, 'tags': tags}
+    base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
+    row = db((db.questions.name == question_name) & (db.questions.base_course == base_course)).select().first()
 
-        return json.dumps(returnDict)
+    question_code = row.question
+    htmlsrc = row.htmlsrc
+    question_author = row.author
+    question_difficulty = row.difficulty
+    question_id = row.id
 
-    except Exception as ex:
-        print(ex)
+    tags = []
+    question_tags = db((db.question_tags.question_id == question_id)).select()
+    for row in question_tags:
+        tag_id = row.tag_id
+        tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
+        tags.append(" " + str(tag_name))
+    if question_difficulty != None:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
+    else:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':None, 'tags': tags}
+
+    return json.dumps(returnDict)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def edit_question():

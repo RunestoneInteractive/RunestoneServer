@@ -1404,8 +1404,8 @@ function getQuestionInfo() {
                 q_difficulty.innerHTML = 'Difficulty: ' + difficulty;
             }
 
-            var q_code = document.getElementById('q_code');
-            q_code.innerHTML = code;
+
+            renderRunestoneComponent(data['htmlsrc'], "component-preview")
 
             var q_author = document.getElementById('q_author');
             if (author == null) {
