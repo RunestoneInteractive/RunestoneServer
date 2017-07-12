@@ -912,7 +912,7 @@ def htmlsrc():
         (db.questions.base_course == db.courses.base_course) &
         (db.courses.course_name == auth.user.course_name)
          ).select(db.questions.htmlsrc).first().htmlsrc
-    return json.dumps(htmlsrc)
+    return json.dumps(unicode(htmlsrc))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
