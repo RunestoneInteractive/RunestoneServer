@@ -244,7 +244,6 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
-                get_assignmentURL=URL('admin', 'get_assignment'),
                 save_assignmentURL=URL('admin', 'save_assignment'),
                 get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
                 )
@@ -586,22 +585,6 @@ def getQuestions():
             questions.append(q.name)
     return json.dumps(questions)
 
-
-# Deprecated, replaced by delete_assignment_question
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def removeQuestion():
-    return delete_assignment_question()
-    question_name = request.vars['name']
-    assignment_id = request.vars['assignment_id']
-    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
-
-    assignment = db(db.assignments.id == int(assignment_id)).select().first()
-    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
-    new_points = int(assignment_points) - int(question_points)
-    assignment.update_record(points=new_points)
-    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
-    return json.dumps(new_points)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
@@ -1092,9 +1075,7 @@ def _get_toc_and_questions():
                     q_info = dict(
                         text = question.questions.name,
                         id = question.questions.name,
-                        question_type = question.questions.question_type,
-                        autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[question.questions.question_type],
-                        which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[question.questions.question_type]
+                        question_type = question.questions.question_type
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
@@ -1147,7 +1128,10 @@ def get_assignment():
         questions_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
-            autograde = row.assignment_questions.autograde
+            autograde = row.assignment_questions.autograde,
+            which_to_grade = row.assignment_questions.which_to_grade,
+            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
         ))
 
     return json.dumps(dict(assignment_data=assignment_data,
@@ -1252,7 +1236,11 @@ def add__or_update_assignment_question():
             reading_assignment = reading_assignment
         )
         total = _set_assignment_max_points(assignment_id)
-        return json.dumps({'total': total})
+        return json.dumps(dict(
+            total = total,
+            autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+        ))
     except Exception as ex:
         print(ex)
         return json.dumps("Error")
