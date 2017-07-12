@@ -1075,9 +1075,7 @@ def _get_toc_and_questions():
                     q_info = dict(
                         text = question.questions.name,
                         id = question.questions.name,
-                        question_type = question.questions.question_type,
-                        autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[question.questions.question_type],
-                        which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[question.questions.question_type]
+                        question_type = question.questions.question_type
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
@@ -1130,7 +1128,10 @@ def get_assignment():
         questions_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
-            autograde = row.assignment_questions.autograde
+            autograde = row.assignment_questions.autograde,
+            which_to_grade = row.assignment_questions.which_to_grade,
+            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
         ))
 
     return json.dumps(dict(assignment_data=assignment_data,
@@ -1235,7 +1236,11 @@ def add__or_update_assignment_question():
             reading_assignment = reading_assignment
         )
         total = _set_assignment_max_points(assignment_id)
-        return json.dumps({'total': total})
+        return json.dumps(dict(
+            total = total,
+            autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+        ))
     except Exception as ex:
         print(ex)
         return json.dumps("Error")
