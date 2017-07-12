@@ -1272,7 +1272,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     edList = [];
     mcList = [];
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
-    let opt = {}
+    let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
     opt.lang = $(opt.orig).data('lang')
     opt.useRunestoneServices = false;
@@ -1287,9 +1287,12 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     if (typeof component_factory === 'undefined') {
         alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
     } else {
-        component_factory[componentKind](opt)
+        if (!component_factory[componentKind]) {
+            jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
+        } else {
+            component_factory[componentKind](opt)
         }
-
+    }
 }
 
 
