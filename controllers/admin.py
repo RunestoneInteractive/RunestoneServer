@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
-ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
+ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
     clickablearea=[],
     external=[],

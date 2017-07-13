@@ -137,6 +137,28 @@
     </div>
   </div>
 
+  <div class="col-md-6" style="border-left: solid black 1px;">
+    <form action="" id="readings-form">
+      <label for="readings-threshold">Threshold: </label>
+      <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
+
+      <label for="readings-points-to-award">Points to award: </label>
+      <input class="form-control" id="readings-points-to-award" name="points_to_award" type="text"><br>
+
+      <label for="readings-autograder">Autograder: </label>
+      <select class="form-control" id="readings-autograder" name="readings_autograder">
+        <option value="manual">Manual</option>
+        <option value="all_or_nothing">All or nothing</option>
+        <option value="pct_correct">% correct</option>
+        <option value="interact">User interaction</option>
+      </select>
+      <input class="btn btn-default" onclick="update_readings_grading(this.form)" type="button" value="Save">
+    </form>
+  </div>
+
+
+  <table id="readingsTable" style="width:100%;">
+  </table>
   <input id="search-tree-readings-picker" type="text">
   <div id="tree-readings-picker"></div>
 
@@ -171,7 +193,8 @@
             <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
           </div>
           <div class="form-group">
-            <label for="chapter">Chapter</label> <select class="form-control" id="chapter">
+            <label for="chapter">Chapter</label>
+            <select class="form-control" id="chapter">
               <option selected="selected" value=""></option>
               {{ for chapter in chapters: }}
               <option value="{{=chapter}}">{{=chapter}}</option>
@@ -363,10 +386,11 @@ function configure_tree_picker(
     picker_search_input,
     // The depth of a leaf node.
     leaf_depth,
-    // The function to call when a leaf node is checked. It's passed the ID of the leaf node.
+    // The function to call when a leaf node is checked. It's passed the leaf node.
     checked_func,
-    // The function to call when a leaf node is unchecked. It's passed the ID of the leaf node.
+    // The function to call when a leaf node is unchecked. It's passed the leaf node.
     unchecked_func) {
+
 
     picker.jstree({
         // Configure the checkbox plugin.
@@ -410,7 +434,7 @@ function configure_tree_picker(
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    checked_func(node.id);
+                    checked_func(node);
                 }
             });
         }
@@ -421,7 +445,7 @@ function configure_tree_picker(
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
-                    unchecked_func(node.id);
+                    unchecked_func(node);
                 }
             });
         }
@@ -430,8 +454,10 @@ function configure_tree_picker(
 
 var question_picker = $('#tree-question-picker');
 configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
-    function (question_id) { updateAssignmentRaw(question_id, 1, '', ''); },
-    remove_question);
+    // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
+    function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'last_answer'); },
+    function (node) { remove_question(node.id) }
+);
 question_picker.on('ready.jstree', function(event, data) {
     // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
     assignmentInfo();
@@ -450,8 +476,23 @@ question_picker.on('select_node.jstree', function(event, data) {
 
 var readings_picker = $('#tree-readings-picker');
 configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
-    function (question_id) { console.log('checked', question_id); },
-    function (question_id) { console.log('unchecked', question_id); });
+    function (node) {
+        $.getJSON(eBookConfig.baseUrl + 'add__or_update_assignment_question', {
+            assignment: getAssignmentId(),
+            question: node.id,
+        }).done(function (resposne_JSON) {
+            readings_table.bootstrapTable('append', [{
+                chapter: readings_picker.jstree(true).get_node(node.parent).text,
+                subchapter: node.text,
+                subchapter_id: node.id,
+            }]);
+        });
+    },
+    function (node) {
+        console.log('unchecked', node.id);
+        remove_reading(node.id);
+    }
+);
 
 
 // Given a jstree node, return its depth in the tree.
@@ -514,7 +555,7 @@ question_table.bootstrapTable({
             // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
             editable: {
                 source: function () {
-                    return menu_from_editable(this, {all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
+                    return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
                 },
             },
             editableType: 'select',
@@ -584,7 +625,72 @@ question_table.bootstrapTable({
         console.log(question_array);
         $.getJSON(eBookConfig.baseUrl + 'reorder_assignment_questions', {
             assignment_id: getAssignmentId(),
-            names: question_array
+            names: question_array,
+        });
+    },
+});
+
+
+var readings_table = $('#readingsTable');
+// This is a `bootstrap table`_. Configuration:
+readings_table.bootstrapTable({
+    // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+    uniqueId: 'question',
+    // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
+    reorderableRows: true,
+    // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+    columns : [
+        {
+            field: 'chapter',
+            title: 'Chapter',
+        }, {
+            field: 'subchapter',
+            title: 'Subchapter',
+        }, {
+            // Hide the subchapter ID.
+            field: 'subchapter_id',
+            visible: false,
+        }, {
+            // Add a delete column with a button.
+            field: 'delete',
+            title: 'Delete',
+            formatter: function (value, row, index) {
+                // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
+                return [
+                    '<a class="readings_table_remove" href="javascript:void(0)" title="Remove">',
+                    '<i class="glyphicon glyphicon-remove"><\/i>',
+                    '<\/a>'
+                ].join('');
+            },
+            events: {
+                 // Copied from ``operateEvents`` in an example_.
+                'click .readings_table_remove': function (e, value, row, index) {
+                    // Unchecking the question in the tree picker also deletes it from the database and table.
+                    readings_picker.jstree(true).uncheck_node(row['subchapter_id']);
+                },
+            },
+       },
+    ],
+    // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+    //
+    // This will be called multiple times. Record the beginning row of the drag.
+    onReorderRowsDrag : function(table, row) {
+        table.dragRowIndex = $(row).attr('data-index');
+        table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['subchapter_id'];
+    },
+    onReorderRowsDrop : function(table, row) {
+        dropRowIndex = $(row).attr('data-index');
+        console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
+        // Create an array of question names in the order they appear in the table.
+        var question_array = [];
+        for (let value of question_table.bootstrapTable('getData')) {
+            question_array.push(value['subchapter_id']);
+        }
+        // Send it to the server.
+        console.log(question_array);
+        $.getJSON(eBookConfig.baseUrl + 'reorder_assignment_questions', {
+            assignment_id: getAssignmentId(),
+            names: question_array,
         });
     },
 });

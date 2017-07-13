@@ -1187,7 +1187,7 @@ function assignmentInfo() {
         for (let readings_data of data['pages_data']) {
             trp.check_node(trp.get_node(readings_data));
         }
-        trp.ignore_check = true;
+        trp.ignore_check = false;
     });
 }
 
@@ -1300,6 +1300,15 @@ function remove_question(question_name) {
     });
 }
 
+// Remove a reading from an assignment.
+function remove_reading(reading_id) {
+    $.getJSON(eBookConfig.bookUrl + 'delete_assignment_question', {
+        assignment_id: getAssignmentId(),
+        name: reading_id,
+    }).done(function (response_JSON) {
+        readings_table.bootstrapTable('removeByUniqueId', reading_id);
+    });
+}
 
 // Called by the "Search" button in the "Search question bank" panel.
 function questionBank(form) {
@@ -1372,13 +1381,9 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
-            // Provide defaults if autograde / which_to_grade isn't set.
-            var autograde_possible_values = response_JSON['autograde_possible_values'];
-            autograde = autograde || autograde_possible_values[0];
-            var which_to_grade_possible_values = response_JSON['which_to_grade_possible_values'];
-            which_to_grade = which_to_grade || which_to_grade_possible_values[0];
-
-            appendToQuestionTable(question_name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values);
+            appendToQuestionTable(question_name, points, autograde,
+                response_JSON['autograde_possible_values'], which_to_grade,
+                response_JSON['which_to_grade_possible_values']);
         }
     });
 }
@@ -1536,6 +1541,12 @@ function changeDescription(form) {
         }
     }
 
+}
+
+
+// Update the grading parameters used for a reading assignment.
+function update_readings_grading(form) {
+    $.getJSON('save_assignment', $(form).serialize());
 }
 
 
