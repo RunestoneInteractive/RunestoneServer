@@ -1072,6 +1072,9 @@ function display_write() {
 
 // Called when the "Done" button of the "Write" dialog is clicked.
 function create_question(formdata) {
+    if (! confirm("Have you previewed your question?")) {
+        return;
+    }
     var activetab = 'formative';
     var select = document.getElementById('assignlist');
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1079,7 +1082,7 @@ function create_question(formdata) {
     var template = formdata.template.value;
     var qcode = formdata.qcode.value;
     var lines = qcode.split('\n');
-
+    var htmlsrc = formdata.qrawhtml.value;
     for(var i = 0; i < lines.length; i++) {
         if (lines[i] != "") {
             var line = lines[i];
@@ -1113,7 +1116,8 @@ function create_question(formdata) {
         'tab' : activetab,
         'assignmentid' : assignmentid,
         'points' : points,
-        'timed' : timed
+        'timed' : timed,
+        'htmlsrc' : htmlsrc
     }
     url = '/runestone/admin/createquestion'
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
@@ -1229,7 +1233,9 @@ function preview_question(form){
     var code = $(form.qcode).val();
     var data = {'code': JSON.stringify(code)};
     $.post('/runestone/ajax/preview_question', data, function(result, status) {
-            renderRunestoneComponent(JSON.parse(result), "component-preview")
+            let code = JSON.parse(result);
+            $(form.qrawhtml).val(code); // store the un-rendered html for submission
+            renderRunestoneComponent(code, "component-preview")
         }
     );
     // get the text as above

@@ -857,7 +857,8 @@ def createquestion():
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
+                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
+                 is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
         assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points, assessment_type=typeid)
 
