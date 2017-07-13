@@ -403,6 +403,7 @@ def _score_from_pct_correct(pct_correct, points, autograde):
         else:
             return 0
 
+
 def _score_one_code_run(row, points, autograde):
     # row is one row from useinfo table
     # second element of act is the percentage of tests that passed
@@ -421,7 +422,7 @@ def _score_one_mchoice(row, points, autograde):
         pct_correct = 100
     else:
         pct_correct = 0
-    return _score_from_pct_correct(pct,_correct, points, autograde)
+    return _score_from_pct_correct(pct_correct, points, autograde)
 
 def _score_one_interaction(row, points, autograde):
     # row is from useinfo
@@ -430,7 +431,50 @@ def _score_one_interaction(row, points, autograde):
     else:
         return 0
 
-def scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
+def _score_one_parsons(row, points, autograde):
+    # row is from parsons_answers
+    # Much like mchoice, parsons_answers currently stores a binary correct value
+    # So much like in _score_one_mchoice, the next lines can be altered if a pct_correct value is added to parsons_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_fitb(row, points, autograde):
+    # row is from fitb_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_clickablearea(row, points, autograde):
+    # row is from clickablearea_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_dragndrop(row, points, autograde):
+    # row is from dragndrop_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_codelens(row, points, autograde):
+    # row is from codelens_answers
+    if row.correct:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+
+def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
     query = ((db.mchoice_answers.course_name == course_name) & \
             (db.mchoice_answers.sid == sid) & \
             (db.mchoice_answers.div_id == question_name) \
@@ -439,7 +483,7 @@ def scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
         query = query & (db.mchoice_answers.timestamp < deadline)
     return db(query).select(orderby=db.mchoice_answers.timestamp)
 
-def scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
+def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
     query = ((db.useinfo.course_id == course_name) & \
@@ -451,9 +495,54 @@ def scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter =
         query = query & (db.useinfo.timestamp < deadline)
     return db(query).select(orderby=db.useinfo.timestamp)
 
+def _scorable_parsons_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.parsons_answers.course_name == course_name) & \
+            (db.parsons_answers.sid == sid) & \
+            (db.parsons_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.parsons_answers.timestamp < deadline)
+    return db(query).select(orderby=db.parsons_answers.timestamp)
+
+def _scorable_fitb_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.fitb_answers.course_name == course_name) & \
+            (db.fitb_answers.sid == sid) & \
+            (db.fitb_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.fitb_answers.timestamp < deadline)
+    return db(query).select(orderby=db.fitb_answers.timestamp)
+
+def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.clickablearea_answers.course_name == course_name) & \
+            (db.clickablearea_answers.sid == sid) & \
+            (db.clickablearea_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.clickablearea_answers.timestamp < deadline)
+    return db(query).select(orderby=db.clickablearea_answers.timestamp)
+
+def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.dragndrop_answers.course_name == course_name) & \
+            (db.dragndrop_answers.sid == sid) & \
+            (db.dragndrop_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.dragndrop_answers.timestamp < deadline)
+    return db(query).select(orderby=db.dragndrop_answers.timestamp)
+
+def _scorable_codelens_answers(course_name, sid, question_name, points, deadline):
+    query = ((db.codelens_answers.course_name == course_name) & \
+            (db.codelens_answers.sid == sid) & \
+            (db.codelens_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.codelens_answers.timestamp < deadline)
+
+    return db(query).select(orderby=db.codelens_answers.timestamp)
+
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
     # print "autograding", assignment_id, sid, question_name, deadline, autograde
-
     if not autograde:
         return
 
@@ -480,14 +569,30 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             event_filter = 'unittest'
         else:
             event_filter = None
-        results = scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
-        results = scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
-        results = scorable_useinfos(course_name, sid, question_name, points, deadline)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_interaction
+    elif question_type == 'parsonsprob':
+        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_parsons
+    elif question_type == 'fillintheblank':
+        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_fitb
+    elif question_type == 'clickablearea':
+        results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_clickablearea
+    elif question_type == 'dragndrop':
+        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_dragndrop
+    elif question_type == 'codelens':
+        results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
+        scoring_fn = _score_one_codelens
+
     else:
         print "skipping; autograde = {}".format(autograde)
         return
