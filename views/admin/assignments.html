@@ -2,8 +2,8 @@
 {{ block tabcontent }}
 
 <script type="text/javascript">
+  eBookConfig.baseUrl = '{{=baseUrl}}';
   eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
-  eBookConfig.get_HTML_for_questionURL = '{{=get_HTML_for_questionURL}}';
   <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
   eBookConfig.toc = {{=XML(toc)}};
 </script>
@@ -135,8 +135,11 @@
         </div>
       </div>
     </div>
-
   </div>
+
+  <input id="search-tree-readings-picker" type="text">
+  <div id="tree-readings-picker"></div>
+
   <div class="col-md-12" style="margin-top: 20px">
     <div class="list-group" style="margin-bottom: 50px">
       <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
@@ -359,7 +362,11 @@ function configure_tree_picker(
     // A jQuery object (usually an ``input``) used to search the tree.
     picker_search_input,
     // The depth of a leaf node.
-    leaf_depth) {
+    leaf_depth,
+    // The function to call when a leaf node is checked. It's passed the ID of the leaf node.
+    checked_func,
+    // The function to call when a leaf node is unchecked. It's passed the ID of the leaf node.
+    unchecked_func) {
 
     picker.jstree({
         // Configure the checkbox plugin.
@@ -401,9 +408,9 @@ function configure_tree_picker(
     picker.on('check_node.jstree', function(event, data) {
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
+                if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    updateAssignmentRaw(node.id, 1, '', '');
+                    checked_func(node.id);
                 }
             });
         }
@@ -413,8 +420,8 @@ function configure_tree_picker(
     picker.on('uncheck_node.jstree', function(event, data) {
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
-                    remove_question(node.id);
+                if (jstree_node_depth(instance, node) == leaf_depth) {
+                    unchecked_func(node.id);
                 }
             });
         }
@@ -422,7 +429,9 @@ function configure_tree_picker(
 }
 
 var question_picker = $('#tree-question-picker');
-configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3);
+configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
+    function (question_id) { updateAssignmentRaw(question_id, 1, '', ''); },
+    remove_question);
 question_picker.on('ready.jstree', function(event, data) {
     // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
     assignmentInfo();
@@ -431,13 +440,19 @@ question_picker.on('ready.jstree', function(event, data) {
 // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
 question_picker.on('select_node.jstree', function(event, data) {
     // If this is a question (a leaf node), then preview it.
-    if (jstree_node_depth(data.instance, data.node) == leaf_depth) {
+    if (jstree_node_depth(data.instance, data.node) == 3) {
         // Request the preview HTML from the server.
-        $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
+        $.getJSON(eBookConfig.baseUrl + 'htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
             renderRunestoneComponent(html_src, "component-preview")
         });
     }
 });
+
+var readings_picker = $('#tree-readings-picker');
+configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
+    function (question_id) { console.log('checked', question_id); },
+    function (question_id) { console.log('unchecked', question_id); });
+
 
 // Given a jstree node, return its depth in the tree.
 function jstree_node_depth(instance, node) {
@@ -453,11 +468,25 @@ function walk_jstree(instance, node, f) {
     });
 }
 
-// Given an editable element (a hyperlink) in a bootstrap table, return the data for its containing row.
-function row_from_editable(editable_element) {
+// Given an editable element (a hyperlink) in the questions table, return the menu data for it.
+function menu_from_editable(
+    // The editable jQuery element which needs a menu.
+    editable_element,
+    // A dict which translates from values from the DB to user-friendly labels.
+    ui,
+    // The key to the row which gives allowable values from which to create a menu.
+    row_key) {
+
     // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
     var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
-    return question_table.bootstrapTable('getData')[row_index];
+    var row = question_table.bootstrapTable('getData')[row_index];
+    // Determine the appropriate menu for this question. First, find its autograde values in the tree.
+    // Map these to the format necessary for a select control.
+    var select_source = [];
+    for (let val of row[row_key]) {
+        select_source.push({value: val, text: ui[val]});
+    }
+    return select_source;
 }
 
 var question_table = $('#questionTable');
@@ -485,16 +514,7 @@ question_table.bootstrapTable({
             // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
             editable: {
                 source: function () {
-                    // Update the menu for this item.
-                    var row = row_from_editable(this);
-                    // Determine the appropriate menu for this question. First, find its autograde values in the tree.
-                    // Map these to the format necessary for a select control.
-                    var ui = {all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'};
-                    var select_source = [];
-                    for (let val of row['autograde_possible_values']) {
-                        select_source.push({value: val, text: ui[val]});
-                    }
-                    return select_source;
+                    return menu_from_editable(this, {all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
                 },
             },
             editableType: 'select',
@@ -507,15 +527,7 @@ question_table.bootstrapTable({
             editable: {
                 source: function () {
                     // Update the menu for this item.
-                    var row = row_from_editable(this);
-                    // Determine the appropriate menu for this question. First, find its autograde values in the tree.
-                    // Map these to the format necessary for a select control.
-                    var ui = {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'};
-                    var select_source = [];
-                    for (let val of row['which_to_grade_possible_values']) {
-                        select_source.push({value: val, text: ui[val]});
-                    }
-                    return select_source;
+                    return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values');
                 }
             },
             editableType: 'select',
@@ -538,7 +550,7 @@ question_table.bootstrapTable({
                  // Copied from ``operateEvents`` in an example_.
                 'click .question_table_remove': function (e, value, row, index) {
                     // Unchecking the question in the tree picker also deletes it from the database and table.
-                    picker.jstree(true).uncheck_node(row['question']);
+                    question_picker.jstree(true).uncheck_node(row['question']);
                 },
             },
        },
@@ -563,6 +575,17 @@ question_table.bootstrapTable({
     onReorderRowsDrop : function(table, row) {
         dropRowIndex = $(row).attr('data-index');
         console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
+        // Create an array of question names in the order they appear in the table.
+        var question_array = [];
+        for (let value of question_table.bootstrapTable('getData')) {
+            question_array.push(value['question']);
+        }
+        // Send it to the server.
+        console.log(question_array);
+        $.getJSON(eBookConfig.baseUrl + 'reorder_assignment_questions', {
+            assignment_id: getAssignmentId(),
+            names: question_array
+        });
     },
 });
 

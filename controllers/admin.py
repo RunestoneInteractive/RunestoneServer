@@ -245,7 +245,8 @@ def assignments():
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
                 save_assignmentURL=URL('admin', 'save_assignment'),
-                get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
+                # Provide just the base path to admin endpoints -- give URL a one-char endpoint, then remove it.
+                baseUrl=URL('x')[:-1],
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1289,16 +1290,16 @@ def reorder_assignment_questions():
     boolean reading_assignment flag set to True, or all that have it set to False).
     We will reassign sorting_priorities to all of them.
     """
-    question_names = request.vars['names']  # a list of question_names
+    question_names = request.vars['names[]']  # a list of question_names
     assignment_id = int(request.vars['assignment_id'])
 
     i = 0
     for name in question_names:
         i += 1
         question_id = _get_question_id(name, auth.user.course_id)
-        db((db.assignment_questions.question_id==question_id) & \
-           (db.assignment_questions.assignment_id == assignment_id)
-           .update(sorting_priority = i))
+        db((db.assignment_questions.question_id == question_id) &
+           (db.assignment_questions.assignment_id == assignment_id)) \
+           .update(sorting_priority = i)
     return json.dumps("Reordered in DB")
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

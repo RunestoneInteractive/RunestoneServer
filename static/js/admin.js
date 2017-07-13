@@ -1157,6 +1157,8 @@ function assignmentInfo() {
         $('#assignment_duedate').html('Due: ' + assignmentData['due_date']);
         $('#assignment_description').html(assignmentData['description']);
 
+        // Update the questions
+        ///====================
         // Get the question tree picker.
         var tqp = question_picker.jstree(true);
         // Ignore these checks in the picker, since it's loading existing data, not user interaction.
@@ -1176,6 +1178,16 @@ function assignmentInfo() {
 
         // Future checks come from the user.
         tqp.ignore_check = false;
+
+        // Update the readings
+        ///===================
+        var trp = readings_picker.jstree(true);
+        trp.ignore_check = true;
+        trp.uncheck_all();
+        for (let readings_data of data['pages_data']) {
+            trp.check_node(trp.get_node(readings_data));
+        }
+        trp.ignore_check = true;
     });
 }
 
