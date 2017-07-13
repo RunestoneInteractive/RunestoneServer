@@ -100,6 +100,13 @@ def hsblog():    # Human Subjects Board Log
             answer = request.vars.answer
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
+            
+    elif event == "codelensq" and auth.user:
+    	if db((db.codelens_answers.sid == sid) & (db.codelens_answers.div_id == div_id) & (db.codelens_answers.correct == 'T')).count() == 0:
+    		correct = request.vars.correct
+    		answer = request.vars.answer
+    		source = request.vars.source
+    		db.codelens_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     elif event == "shortanswer" and auth.user:
         # for shortanswers just keep the latest?? -- the history will be in useinfo
