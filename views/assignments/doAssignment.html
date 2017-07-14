@@ -166,7 +166,7 @@
 	var cheating = document.getElementById('htmlblock').innerHTML;
 
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
-	// a console.log({{=test}}) (or '{{=test}}') would only give an unexpected token error
+	// a console.log of the test variable would only give an unexpected token error
 	// pulling test from the script element provides the string that javascript recognizes
 	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
 
