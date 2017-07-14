@@ -1113,7 +1113,7 @@ def get_assignment():
     a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
                   (db.assignment_questions.question_id == db.questions.id) &
                   (db.questions.question_type == 'page')
-                  ).select()
+                  ).select(orderby=db.assignment_questions.sorting_priority)
     pages_data = []
     for row in a_q_rows:
         pages_data.append(dict(
@@ -1231,6 +1231,7 @@ def add__or_update_assignment_question():
     which_to_grade = request.vars.get('which_to_grade')
 
     try:
+        # save the assignment_question
         db.assignment_questions.update_or_insert(
             (db.assignment_questions.assignment_id==assignment_id) & (db.assignment_questions.question_id==question_id),
             assignment_id = assignment_id,
@@ -1251,10 +1252,28 @@ def add__or_update_assignment_question():
         return json.dumps("Error")
 
 def _get_question_id(question_name, course_id):
-    return int(db((db.questions.name == question_name) &
+    question = db((db.questions.name == question_name) &
               (db.questions.base_course == db.courses.base_course) &
               (db.courses.id == course_id)
-              ).select(db.questions.id).first().id)
+              ).select(db.questions.id).first()
+    if question:
+        return int(question.id)
+    else:
+        # insert the question object since it doesn't exist yet; must be a page
+        base_course = db(
+            (db.courses.id == course_id)
+            ).select(db.courses.base_course).first().base_course
+        id = db.questions.insert(
+                name = question_name,
+                base_course = base_course,
+                question_type = 'page'
+        )
+        return int(id)
+
+    # return int(db((db.questions.name == question_name) &
+    #           (db.questions.base_course == db.courses.base_course) &
+    #           (db.courses.id == course_id)
+    #           ).select(db.questions.id).first().id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def delete_assignment_question():
