@@ -56,7 +56,7 @@ def hsblog():    # Human Subjects Board Log
             r = 'T'
         else:
             r = None
-            
+
         try:
             db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
@@ -911,11 +911,11 @@ def getAssessResults():
         res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
         return json.dumps(res)
     elif event == "timedExam":
-        query = "select correct, incorrect, skipped, time_taken, timestamp from timed_exam where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
+        query = "SELECT correct, incorrect, skipped, time_taken, timestamp, reset FROM timed_exam WHERE div_id=%s AND course_name=%s AND sid=%s ORDER BY timestamp DESC"
         rows = db.executesql(query, (div_id, course, sid))
         if len(rows) == 0:
             return ""
-        res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
+        res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4]), 'reset': str(rows[0][5])}
         return json.dumps(res)
     elif event == "parsons":
         query = "select answer, source, timestamp from parsons_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
@@ -939,10 +939,13 @@ def checkTimedReset():
 
     divId = request.vars.div_id
     course = request.vars.course
-    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select()
+    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select(orderby=~db.timed_exam.timestamp).first()
 
     if rows:        # If there was a scored exam
-        return json.dumps({"canReset":False})
+        if rows.reset == True:
+            return json.dumps({"canReset":True})
+        else:
+            return json.dumps({"canReset":False})
     else:
         return json.dumps({"canReset":True})
 
