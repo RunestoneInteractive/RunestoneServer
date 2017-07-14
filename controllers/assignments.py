@@ -1082,3 +1082,36 @@ def newtype():
         return redirect(URL('admin', 'index'))
 
     return dict(form=form)
+
+def doAssignment():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default','index'))
+
+
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    assignment_id = request.vars.assignment_id
+    assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
+    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, orderby=db.assignment_questions.sorting_priority)
+    test=""
+    readings = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == 'T')).select(orderby=db.assignment_questions.sorting_priority)
+    print(readings)
+    for q in questions_html:
+        if q['htmlsrc'] != None:
+            test = test + q['htmlsrc']
+
+    # This next line is to render images
+    test = test.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questions_html=questions_html, test=test)
+
+def chooseAssignment():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default','index'))
+
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    print(course)
+    assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.assignment_type)
+    print(assignments)
+    return(dict(assignments=assignments))
+
