@@ -514,9 +514,11 @@ def removeassign():
 def createAssignment():
     try:
         d_str = request.vars['due']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(d_str, format_str)
-        print(due)
+        if d_str:
+            format_str = "%Y/%m/%d %H:%M"
+            due = datetime.datetime.strptime(d_str, format_str)
+        else:
+            due = None
         newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
@@ -1093,6 +1095,7 @@ def get_assignment():
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
+    print "here", assignment_row.duedate
     try:
         assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
@@ -1123,7 +1126,7 @@ def get_assignment():
     a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
                   (db.assignment_questions.question_id == db.questions.id) &
                   (db.assignment_questions.reading_assignment == None)
-                  ).select()
+                  ).select(orderby=db.assignment_questions.sorting_priority)
     #return json.dumps(db._lastsql)
     questions_data = []
     for row in a_q_rows:
@@ -1293,7 +1296,6 @@ def reorder_assignment_questions():
     """
     question_names = request.vars['names[]']  # a list of question_names
     assignment_id = int(request.vars['assignment_id'])
-
     i = 0
     for name in question_names:
         i += 1
@@ -1301,6 +1303,7 @@ def reorder_assignment_questions():
         db((db.assignment_questions.question_id == question_id) &
            (db.assignment_questions.assignment_id == assignment_id)) \
            .update(sorting_priority = i)
+
     return json.dumps("Reordered in DB")
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
