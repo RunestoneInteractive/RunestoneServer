@@ -469,7 +469,7 @@ question_picker.on('select_node.jstree', function(event, data) {
     // If this is a question (a leaf node), then preview it.
     if (jstree_node_depth(data.instance, data.node) == 3) {
         // Request the preview HTML from the server.
-        $.getJSON(eBookConfig.baseUrl + 'htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
+        $.getJSON('htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
             renderRunestoneComponent(html_src, "component-preview")
         });
     }
@@ -477,20 +477,17 @@ question_picker.on('select_node.jstree', function(event, data) {
 
 var readings_picker = $('#tree-readings-picker');
 configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
+    // Called when a node is checked.
     function (node) {
-        $.getJSON(eBookConfig.baseUrl + 'add__or_update_assignment_question', {
+        $.getJSON('add__or_update_assignment_question', {
             assignment: getAssignmentId(),
-            question: node.id,
+            question: node.id
         }).done(function (resposne_JSON) {
-            readings_table.bootstrapTable('append', [{
-                chapter: readings_picker.jstree(true).get_node(node.parent).text,
-                subchapter: node.text,
-                subchapter_id: node.id,
-            }]);
+            appendToReadingsTable(node.id);
         });
     },
+    // Called when a node is unchecked.
     function (node) {
-        console.log('unchecked', node.id);
         remove_reading(node.id);
     }
 );
@@ -619,12 +616,12 @@ question_table.bootstrapTable({
         console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
         // Create an array of question names in the order they appear in the table.
         var question_array = [];
-        for (let value of question_table.bootstrapTable('getData')) {
+        for (let value of $(table).bootstrapTable('getData')) {
             question_array.push(value['question']);
         }
         // Send it to the server.
         console.log(question_array);
-        $.getJSON(eBookConfig.baseUrl + 'reorder_assignment_questions', {
+        $.getJSON('reorder_assignment_questions', {
             assignment_id: getAssignmentId(),
             names: question_array,
         });
@@ -635,8 +632,8 @@ question_table.bootstrapTable({
 var readings_table = $('#readingsTable');
 // This is a `bootstrap table`_. Configuration:
 readings_table.bootstrapTable({
-    // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
-    uniqueId: 'question',
+    // Select the ``subchapter_id`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+    uniqueId: 'subchapter_id',
     // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
     reorderableRows: true,
     // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
@@ -684,12 +681,12 @@ readings_table.bootstrapTable({
         console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
         // Create an array of question names in the order they appear in the table.
         var question_array = [];
-        for (let value of question_table.bootstrapTable('getData')) {
+        for (let value of $(table).bootstrapTable('getData')) {
             question_array.push(value['subchapter_id']);
         }
         // Send it to the server.
         console.log(question_array);
-        $.getJSON(eBookConfig.baseUrl + 'reorder_assignment_questions', {
+        $.getJSON('reorder_assignment_questions', {
             assignment_id: getAssignmentId(),
             names: question_array,
         });

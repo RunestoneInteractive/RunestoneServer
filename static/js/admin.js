@@ -1153,9 +1153,7 @@ function assignmentInfo() {
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
 
-    $.getJSON('/runestone/admin/get_assignment', {'assignmentid': assignmentid}, function (data) {
-        console.log(data);
-
+    $.getJSON('get_assignment', {'assignmentid': assignmentid}, function (data) {
         assignmentData = data['assignment_data'];
         $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
         $('#assignment_duedate').html('Due: ' + assignmentData['due_date']);
@@ -1188,13 +1186,27 @@ function assignmentInfo() {
         var trp = readings_picker.jstree(true);
         trp.ignore_check = true;
         trp.uncheck_all();
+
         for (let readings_data of data['pages_data']) {
-            trp.check_node(trp.get_node(readings_data));
+            id = readings_data['name'];
+            trp.check_node(trp.get_node(id));
+            appendToReadingsTable(id)
         }
         trp.ignore_check = false;
     });
 }
 
+
+// Append a row to the readings table given the ID of the reading.
+function appendToReadingsTable(readings_id) {
+    // Find this node in the tree.
+    var node = readings_picker.jstree(true).get_node(readings_id);
+    readings_table.bootstrapTable('append', [{
+        chapter: readings_picker.jstree(true).get_node(node.parent).text,
+        subchapter: node.text,
+        subchapter_id: node.id,
+    }]);
+}
 
 // Append a row to the question table.
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
@@ -1298,7 +1310,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('/runestone/admin/delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
         totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
@@ -1308,7 +1320,7 @@ function remove_question(question_name) {
 
 // Remove a reading from an assignment.
 function remove_reading(reading_id) {
-    $.getJSON(eBookConfig.bookUrl + 'delete_assignment_question', {
+    $.getJSON('delete_assignment_question', {
         assignment_id: getAssignmentId(),
         name: reading_id,
     }).done(function (response_JSON) {

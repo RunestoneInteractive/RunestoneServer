@@ -1047,28 +1047,24 @@ def _get_toc_and_questions():
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
-            q_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             q_ch_info['text'] = ch.chapters.chapter_name
             q_ch_info['children'] = []
             # copy same stuff for reading picker
             r_ch_info = {}
             reading_picker.append(r_ch_info)
-            r_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             r_ch_info['text'] = ch.chapters.chapter_name
             r_ch_info['children'] = []
             subchapters_query = db(db.sub_chapters.chapter_id == ch.chapters.id).select()
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
                 q_ch_info['children'].append(q_sub_ch_info)
-                q_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
                 q_sub_ch_info['text'] = sub_ch.sub_chapter_name
                 q_sub_ch_info['children'] = []
                 # copy same stuff for reading picker
                 r_sub_ch_info = {}
                 r_ch_info['children'].append(r_sub_ch_info)
-                r_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
+                r_sub_ch_info['id'] = "{}/{}".format(ch.chapters.chapter_name, sub_ch.sub_chapter_name)
                 r_sub_ch_info['text'] = sub_ch.sub_chapter_name
-                r_sub_ch_info['children'] = []
 
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
