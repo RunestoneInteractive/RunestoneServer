@@ -244,9 +244,6 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
-                save_assignmentURL=URL('admin', 'save_assignment'),
-                # Provide just the base path to admin endpoints -- give URL a one-char endpoint, then remove it.
-                baseUrl=URL('x')[:-1],
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -519,7 +516,7 @@ def createAssignment():
             due = datetime.datetime.strptime(d_str, format_str)
         else:
             due = None
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'])
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
@@ -920,32 +917,6 @@ def htmlsrc():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDate():
-    try:
-        newdate = request.vars['newdate']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(newdate, format_str)
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(duedate=due)
-        return 'success'
-    except:
-        return 'error'
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDescription():
-    try:
-        newdescription = request.vars['newdescription']
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(description=newdescription)
-        return 'success'
-    except:
-        return 'error'
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getStudentCode():
     try:
         acid = request.vars['acid']
@@ -1099,6 +1070,7 @@ def get_assignment():
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
     assignment_data['threshold'] = assignment_row.threshold
+    assignment_data['points_to_award'] = assignment_row.points_to_award
     assignment_data['readings_autograder'] = assignment_row.readings_autograder
 
     # Still need to get:
@@ -1141,15 +1113,13 @@ def get_assignment():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def save_assignment():
-    # This endpoint is for saving (insert or update) an assignment's top-level information, without any
+    # This endpoint is for saving (updating) an assignment's top-level information, without any
     # questions or readings that might be part of the assignment
     # Should return the id of the assignment, if one is not passed in
 
     # The following fields must be provided in request.vars (see modesl/grouped_assignments.py for model definition):
     # -- assignment_id (if it's an existing assignment; if none provided, then we insert a new assignment)
-    # -- name
     # -- description
-    # -- points
     # -- threshold
     # -- points_to_award (should be non-null only if threshold is non-zero)
     # -- readings_autograder
@@ -1164,28 +1134,14 @@ def save_assignment():
     except:
         due = None
     try:
-        if assignment_id:
-            db(db.assignments.id == assignment_id).update(
-                course=auth.user.course_id,
-                name=request.vars['name'],
-                description=request.vars['description'],
-                points=request.vars['points'],
-                threshold=request.vars['threshold'],
-                points_to_award=request.vars['points_to_award'],
-                readings_autograder=request.vars['readings_autograder'],
-                duedate=due,
-            )
-        else:
-            assignment_id = db.assignments.insert(
-                course = auth.user.course_id,
-                name = request.vars['name'],
-                description = request.vars['description'],
-                points = request.vars['points'],
-                threshold = request.vars['threshold'],
-                points_to_award = request.vars['points_to_award'],
-                readings_autograder = request.vars['readings_autograder'],
-                duedate=due,
-            )
+        db(db.assignments.id == assignment_id).update(
+            course=auth.user.course_id,
+            description=request.vars['description'],
+            threshold=request.vars['threshold'],
+            points_to_award=request.vars['points_to_award'],
+            readings_autograder=request.vars['readings_autograder'],
+            duedate=due,
+        )
         return {request.vars['name']: assignment_id}
     except Exception as ex:
         print(ex)

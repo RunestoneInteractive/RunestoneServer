@@ -1148,7 +1148,6 @@ function assignmentInfo() {
     }
 
     var assignmentid = select.options[select.selectedIndex].value;
-    var assignmentname = select.options[select.selectedIndex].text;
     $('#rightSection').css('visibility', 'visible');
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
@@ -1156,8 +1155,11 @@ function assignmentInfo() {
     $.getJSON('get_assignment', {'assignmentid': assignmentid}, function (data) {
         assignmentData = data['assignment_data'];
         $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
-        $('#assignment_duedate').html('Due: ' + assignmentData['due_date']);
-        $('#assignment_description').html(assignmentData['description']);
+        $('#datetimepicker').val(assignmentData['due_date']);
+        $('#assignment_description').val(assignmentData['description']);
+        $('#readings-threshold').val(assignmentData['threshold']);
+        $('#readings-points-to-award').val(assignmentData['points_to_award']);
+        $('#readings-autograder').val(assignmentData['readings_autograder']);
 
         // Update the questions
         ///====================
@@ -1226,11 +1228,9 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
-    var description = form.description.value;
-    var duedate = form.datetimepicker.value;
 
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name + '&description=' + description + '&due=' + duedate, true);
+    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
     obj.send(JSON.stringify({name: name, description: description}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
@@ -1538,33 +1538,9 @@ function changeDueDate(form) {
 
 }
 
-// Change the description of an assignment.
-function changeDescription(form) {
-    var newdescription = form.newdescription.value;
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/changeDescription?newdescription=' + newdescription + '&assignmentid=' + assignmentid, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            if (obj.responseText == 'success') {
-                alert("Successfully changed description");
-                document.getElementById("assignment_description").innerHTML = newdescription;
-            }
-
-            else if (obj.responseText == 'error') {
-                alert("There was an error changing your due date");
-            }
-        }
-    }
-
-}
-
-
 // Update the grading parameters used for a reading assignment.
 function update_readings_grading(form) {
-    $.getJSON('save_assignment', $(form).serialize());
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
 }
 
 

@@ -2,8 +2,6 @@
 {{ block tabcontent }}
 
 <script type="text/javascript">
-  eBookConfig.baseUrl = '{{=baseUrl}}';
-  eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
   <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
   eBookConfig.toc = {{=XML(toc)}};
 </script>
@@ -60,12 +58,6 @@
           <div class="form-group">
             <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
-          <div class="form-group">
-            <label for="description">Description</label> <input class="form-control" id="description" placeholder="Description" type="text">
-          </div>
-          <div class="form-group">
-            <label for="datetimepicker">Due Date</label> <input id="datetimepicker" type="text">
-          </div>
           <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
         </form>
       </div><!-- Modal Footer -->
@@ -76,69 +68,16 @@
   </div>
 </div>
 
-<div class="col-md-6" id="leftpanel1" style="visibility: hidden">
-  <div style="margin-top:25px;">
-    <p id="assignment_duedate">Due</p>
-    <p id="totalPoints"></p><button class="btn" data-target="#changeDue" data-toggle="modal" style="margin-top: 12px;">Change Date</button>
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDue" role="dialog" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Change Assignment Due Date</h4>
-          </div><!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" role="form">
-              <div class="form-group">
-                <label for="changedate">Due Date</label> <input id="changedate" type="text">
-              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDueDate(this.form)" type="button" value="Change">
-            </form>
-          </div><!-- Modal Footer -->
-          <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="col-md-11" id="leftpanel2" style="visibility: hidden">
-  <div>
-    <h5>Assignment Description</h5>
-    <div style="border: 1px solid black;">
-      <p id="assignment_description"></p>
-    </div>
-    <button class="btn" data-target="#changeDescriptionModal" data-toggle="modal" style="margin-top: 12px;">Change Description</button>
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDescriptionModal" role="dialog" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <h4 class="modal-title">Change Assignment Description</h4>
-          </div><!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" role="form">
-              <div class="form-group">
-                <label for="newdescription">Description</label> <input class="form-control" id="newdescription" placeholder="Description" type="text">
-              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDescription(this.form)" type="button" value="Change">
-            </form>
-          </div><!-- Modal Footer -->
-          <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="col-md-6" style="border-left: solid black 1px;">
     <form action="" id="readings-form">
+      <label for="datetimepicker">Due Date</label>
+      <input id="datetimepicker" name="due" type="text"><br>
+
+      <label for="assignment_description">Description: </label>
+      <input class="form-control" id="assignment_description" name="description" type="text"><br>
+
       <label for="readings-threshold">Threshold: </label>
       <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
 
@@ -167,8 +106,8 @@
       <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
       <div class="list-group">
         <div class="list-group-item">
-          <table id="questionTable" style="width:100%;">
-          </table>
+          <span id="totalPoints"></span><br>
+          <table id="questionTable" style="width:100%;"></table>
           <div style="text-align: center">
             <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
           </div>
@@ -374,7 +313,6 @@ $(".dashboardnav").removeClass("active");
 $("#assignmentstab").addClass("active");
 
 jQuery('#datetimepicker').datetimepicker();
-jQuery('#changedate').datetimepicker();
 
 
 // Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
@@ -607,20 +545,18 @@ question_table.bootstrapTable({
     ///    var data = question_table.bootstrapTable('getData');
     ///},
     // This will be called multiple times. Record the beginning row of the drag.
-    onReorderRowsDrag : function(table, row) {
+    onReorderRowsDrag: function(table, row) {
         table.dragRowIndex = $(row).attr('data-index');
         table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
     },
-    onReorderRowsDrop : function(table, row) {
+    onReorderRowsDrop: function(table, row) {
         dropRowIndex = $(row).attr('data-index');
-        console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
         // Create an array of question names in the order they appear in the table.
         var question_array = [];
         for (let value of $(table).bootstrapTable('getData')) {
             question_array.push(value['question']);
         }
         // Send it to the server.
-        console.log(question_array);
         $.getJSON('reorder_assignment_questions', {
             assignment_id: getAssignmentId(),
             names: question_array,
@@ -672,11 +608,12 @@ readings_table.bootstrapTable({
     // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
     //
     // This will be called multiple times. Record the beginning row of the drag.
-    onReorderRowsDrag : function(table, row) {
+    onReorderRowsDrag: function(table, row) {
         table.dragRowIndex = $(row).attr('data-index');
         table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['subchapter_id'];
+        console.log(table.dragRowId);
     },
-    onReorderRowsDrop : function(table, row) {
+    onReorderRowsDrop: function(table, row) {
         dropRowIndex = $(row).attr('data-index');
         console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
         // Create an array of question names in the order they appear in the table.
