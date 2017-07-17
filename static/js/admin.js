@@ -1158,7 +1158,13 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde + '&which_to_grade=' + which_to_grade, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('add__or_update_assignment_question', {
+        question: question_name,
+        assignment: assignmentid,
+        points: points,
+        autograde: autograde,
+        which_to_grade: which_to_grade
+    }).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
