@@ -1,138 +1,23 @@
-{{extend 'layout.html'}}
-<html>
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{{extend 'admin/instructors.html'}}
 
-    
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/clickable.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/codemirror.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/activecode.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/datafile.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/pytutor.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/modal-basic.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/video.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/codemirror.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/livecode.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/tabbedstuff.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/dragndrop.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/poll.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/fitb.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/parsons.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/lib/prettify.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/jquery-ui-1.10.3.custom.min.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/user-highlights.css" type="text/css" />
-    <link rel="stylesheet" href="../static/{{=course_name}}/_static/runestone-custom-sphinx-bootstrap.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '3.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/runestonebase.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/underscore.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/doctools.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/clickable.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timedclickable.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.highlight.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/bookfuncs.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/codemirror.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/xml.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/css.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/htmlmixed.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/python.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/javascript.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/activecode.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/skulpt.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/skulpt-stdlib.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/clike.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timed_activecode.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/skulpt.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/skulpt-stdlib.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/datafile.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/d3.v2.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.ba-bbq.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/pytutor.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/codelens.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/animationbase.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/livecode.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/clike.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/tabbedstuff.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/dragndrop.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timeddnd.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/poll.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/fitb.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timedfitb.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/shortanswer.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timed_shortanswer.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/mchoice.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timedmc.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timed.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/lib/prettify.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/lib/hammer.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/parsons.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/timedparsons.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/reveal.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery-ui-1.10.3.custom.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery-fix.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/bootstrap-sphinx.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/waypoints.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/rangy-core.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/rangy-textrange.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/rangy-cssclassapplier.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/user-highlights.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.idle-timer.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/processing-1.4.1.min.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery.hotkey.js"></script>
-    <script type="text/javascript" src="../static/{{=course_name}}/_static/jquery-migrate-1.2.1.min.js"></script>
-    <link rel="index" title="Index" href="../static/{{=course_name}}/genindex.html" />
-    <link rel="search" title="Search" href="../static/{{=course_name}}/search.html" />
+{{block tabcontent}}
+
+<script>
+	$('#hideId').css('display','none');
+</script>
 
 <script type="text/javascript">
   eBookConfig = {};
-  eBookConfig.host = 'http://localhost:8000' ? 'http://localhost:8000' : 'http://127.0.0.1:8000';
-  eBookConfig.app = eBookConfig.host+'/runestone';
+  eBookConfig.host = 'http://{{=request.env.http_host}}';
+  eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
   eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
   eBookConfig.course = "{{=course['course_name']}}";
   eBookConfig.logLevel = 10;
   eBookConfig.loginRequired = true;
-  eBookConfig.build_info = "3.7.2";
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
-  eBookConfig.python3 = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
-  eBookConfig.runestone_version = '2.7.14';
 </script>
-
-<div id="fb-root"></div>
-<script>
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
-
-</head>
-
-<body>
-
-
-
 
 <div id='part1'>
 	<h1 style='text-align:center'>{{=assignment['name']}}</h1>
@@ -153,6 +38,7 @@
 		{{for q in questioninfo:}}
 			<div class='oneq' id='{{=count}}'>
 				<h3>{{=q[1]}}/{{=q[2]}}</h3>
+				<p>{{=q[3]}}</p>
 				<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
 			</div>
 			{{count += 1}}
@@ -161,32 +47,23 @@
 	</div>
 </div>
 
-
-
-
-
-
-<script id="htmlblock" type="text/html">{{=questioninfo}}</script>
 <script>
+	//console.log(document.getElementsByClassName('nav nav-tabs'))
 	// This script renders the html into elements in the DOM
 	// And because storing the html in a JSON object wasn't working well, the html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
+	
 
-	var cheating = document.getElementById('htmlblock').innerHTML;
-	var questionHtmlCode = document.getElementsByClassName("htmlblock")
-	var individualq = document.getElementsByClassName("oneq")
+	var questionHtmlCode = document.getElementsByClassName("htmlblock");
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
-	// a console.log of the test variable would only give an unexpected token error
-	// pulling test from the script element provides the string that javascript recognizes
+	// a console.log of the html string within the questioninfo array would only give an unexpected token error
+	// pulling the html strings from the script element provides the string that javascript recognizes
 	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
-
-
-	//var $div = $('#questions');
 
 	// The htmlDecode is needed to unescape the html that the server has sent. 
 	// because only unescaped html gets rendered as html elements
 
 	function htmlDecode(input){
-  		var e = document.createElement('div');
+  		let e = document.createElement('div');
   		e.innerHTML = input;
   		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 	}
@@ -200,5 +77,5 @@
 	}
 
 </script>
-</body>
-</html>
+{{end}}
+

@@ -4,6 +4,16 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
+
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
+
+
+
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
 <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
 <script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
@@ -35,7 +45,7 @@
 
 <div id="outerTabs" class="container" style="margin-top: 10px;">
   <h3 id="coursename" style="text-align: center">{{=auth.user.course_name}}</h3>
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" id="hideId">
     <li class="dashboardnav active" id="progresstab"><a href="{{=URL(c='dashboard',f='index')}}">Student Progress</a></li>
     <li class="dashboardnav" id="admintab"> <a href="{{=URL(c='admin',f='admin')}}">Admin</a></li>
     <li class="dashboardnav" id="gradingtab"><a href="{{=URL(c='admin',f='grading')}}">Grading</a></li>
