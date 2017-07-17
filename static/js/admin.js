@@ -1000,6 +1000,144 @@ function edit_indexrst(form) {
 // *************************
 // Assignments tab functions
 // *************************
+// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
+function configure_tree_picker(
+    // A jQuery object (usually a ``div``) which will hold the tree picker.
+    picker,
+    // Data to populate the tree with.
+    picker_data,
+    // A jQuery object (usually an ``input``) used to search the tree.
+    picker_search_input,
+    // The depth of a leaf node.
+    leaf_depth,
+    // The function to call when a leaf node is checked. It's passed the leaf node.
+    checked_func,
+    // The function to call when a leaf node is unchecked. It's passed the leaf node.
+    unchecked_func) {
+
+
+    picker.jstree({
+        // Configure the checkbox plugin.
+        "checkbox" : {
+            // This prevents the selection from including all auto-checked nodes, which I find distracting.
+            "keep_selected_style" : false,
+            // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
+            "whole_node" : false,
+            // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
+            "tie_selection" : false,
+        },
+        // Enable `plugins <https://www.jstree.com/plugins/>`_.
+        "plugins" : [
+            "checkbox",
+            "search",
+        ],
+        // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
+        "core" : {
+            "data" : picker_data,
+        },
+    });
+
+    // Provide a flag to use to ignore events caused when loading the table data in.
+    picker.jstree(true).ignore_check = false;
+
+    // Set up for searching. Copied from the search plugin example.
+    var to = false;
+    picker_search_input.keyup(function () {
+        if (to) {
+            clearTimeout(to);
+        }
+        to = setTimeout(function () {
+            var v = picker_search_input.val();
+            picker.jstree(true).search(v);
+        }, 250);
+    });
+
+    // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
+    picker.on('check_node.jstree', function(event, data) {
+        if (!data.instance.ignore_check) {
+            walk_jstree(data.instance, data.node, function(instance, node) {
+                if (jstree_node_depth(instance, node) == leaf_depth) {
+                    // Add each checked item to the assignment list with default values.
+                    checked_func(node);
+                }
+            });
+        }
+    });
+
+    // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
+    picker.on('uncheck_node.jstree', function(event, data) {
+        if (!data.instance.ignore_check) {
+            walk_jstree(data.instance, data.node, function(instance, node) {
+                if (jstree_node_depth(instance, node) == leaf_depth) {
+                    unchecked_func(node);
+                }
+            });
+        }
+    });
+}
+
+// Given a jstree node, return its depth in the tree.
+function jstree_node_depth(instance, node) {
+    // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children. Instead, find the length of the `path to this node <https://www.jstree.com/api/#/?f=get_path(obj [, glue, ids])>`_.
+    return instance.get_path(node).length;
+}
+
+// Given a jstree node, invoke f on node and all its children.
+function walk_jstree(instance, node, f) {
+    f(instance, node);
+    $(node.children).each(function(index, value) {
+        walk_jstree(instance, instance.get_node(value), f);
+    });
+}
+
+// Given an editable element (a hyperlink) in the questions table, return the menu data for it.
+function menu_from_editable(
+    // The editable jQuery element which needs a menu.
+    editable_element,
+    // A dict which translates from values from the DB to user-friendly labels.
+    ui,
+    // The key to the row which gives allowable values from which to create a menu.
+    row_key) {
+
+    // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
+    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
+    var row = question_table.bootstrapTable('getData')[row_index];
+    // Determine the appropriate menu for this question. First, find its autograde values in the tree.
+    // Map these to the format necessary for a select control.
+    var select_source = [];
+    for (let val of row[row_key]) {
+        select_source.push({value: val, text: ui[val]});
+    }
+    return select_source;
+}
+
+
+// Invoked by the "Create" button of the "Create Assignment" dialog.
+function createAssignment(form) {
+    var name = form.name.value;
+
+    var obj = new XMLHttpRequest();
+    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
+    obj.send(JSON.stringify({name: name, description: description}));
+    obj.onreadystatechange = function () {
+        if (obj.readyState == 4 && obj.status == 200) {
+            added = JSON.parse(obj.responseText);
+            if (added != 'ERROR') {
+                select = document.getElementById('assignlist');
+                newopt = document.createElement('option');
+                newopt.value = added[name];
+                newopt.innerHTML = name;
+                select.appendChild(newopt);
+                select.selectedIndex = newopt.index;
+                assignmentInfo();
+            } else {
+                alert('Error in creating new assignment.')
+            }
+        }
+    }
+}
+
+// Triggered by the ``-`` button on the assignments tab.
 function remove_assignment() {
     var select = document.getElementById('assignlist');
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1017,122 +1155,25 @@ function remove_assignment() {
 }
 
 
- // TODO: This function isn't used anywhere that I can see. Remove it?
-function search_students(formdata) {
-    var searchterm = formdata.searchterm.value;
-    if (searchterm == '') {
-        searchterm = '_'
-    }
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/searchstudents/' + searchterm, true);
-    obj.send(JSON.stringify({tosearch: 'searchterm'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            studidlist = JSON.parse(obj.responseText);
-            var studentlist = document.getElementById('studentlist');
-            studentlist.innerHTML = '';
-            for (var key in studidlist) {
-                if (studidlist.hasOwnProperty(key)) {
-                    option = document.createElement('option');
-                    option.value = key;
-                    option.innerHTML = studidlist[key];
-                    studentlist.appendChild(option)
-
-                }
-            }
+// Update an assignment.
+function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
+    var assignmentid = getAssignmentId();
+    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde + '&which_to_grade=' + which_to_grade, {variable: 'variable'}).done(function (response_JSON) {
+        $('#totalPoints').html('Total points: ' + response_JSON['total']);
+        // See if this question already exists in the table. Only append if it doesn't exist.
+        if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
+            appendToQuestionTable(question_name, points, autograde,
+                response_JSON['autograde_possible_values'], which_to_grade,
+                response_JSON['which_to_grade_possible_values']);
         }
-    }
-}
-
-// Called when the "Write" button is clicked.
-function display_write() {
-    var template = document.getElementById('template');
-    var questiontype = template.options[template.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/gettemplate/' + questiontype, true);
-    obj.send();
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var returns = JSON.parse(obj.responseText);
-            tplate = returns['template'];
-            $("#qcode").text(tplate);
-        }
-        $.each(returns['chapters'], function (i, item) {
-            $('#qchapter').append($('<option>', {
-                value: item,
-                text: item
-            }));
-        });
-    };
-
-    var hiddenwrite = document.getElementById('hiddenwrite');
-    hiddenwrite.style.visibility = 'visible';
+    });
 }
 
 
-// Called when the "Done" button of the "Write" dialog is clicked.
-function create_question(formdata) {
-    if (! confirm("Have you previewed your question?")) {
-        return;
-    }
-    var activetab = 'formative';
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    var assignmentname = select.options[select.selectedIndex].text;
-    var template = formdata.template.value;
-    var qcode = formdata.qcode.value;
-    var lines = qcode.split('\n');
-    var htmlsrc = formdata.qrawhtml.value;
-    for(var i = 0; i < lines.length; i++) {
-        if (lines[i] != "") {
-            var line = lines[i];
-            var match = line.split(/.. \w*:: /);
-            var name = match[1];
-            break;
-        }
-    }
-
-    var question = formdata.qcode.value;
-    var difficulty = formdata.difficulty;
-    for (var i = 0; i < difficulty.length; i++) {
-        if (difficulty[i].checked == true) {
-            var selectedDifficulty = difficulty[i].value;
-        }
-    }
-    var tags = formdata.qtags.value;
-    var chapter = formdata.qchapter.value;
-    var isprivate = formdata.isprivate.checked;
-    var points = formdata.createpoints.value;
-    var timed = formdata.createtimed.checked;
-
-    data = {
-        'template' : template,
-        'name' : name,
-        'question' : question,
-        'difficulty' : selectedDifficulty,
-        'tags' : tags,
-        'chapter' : chapter,
-        'isprivate' : isprivate,
-        'tab' : activetab,
-        'assignmentid' : assignmentid,
-        'points' : points,
-        'timed' : timed,
-        'htmlsrc' : htmlsrc
-    }
-    url = '/runestone/admin/createquestion'
-    jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror == 'ERROR') {
-            errortext = document.getElementById('qnameerror');
-            errortext.innerHTML = 'Name is already in use. Please try a different name.'
-        } else {
-            alert('Question created successfully');
-            var newPoints = iserror['points'];
-            var q_type = activetab;
-            var totalPoints = document.getElementById("totalPoints");
-            totalPoints.innerHTML = 'Total points: ' + newPoints;
-            updateAssignmentRaw(name, points, 'interact');
-        }
-    }, 'json');
+// Return the assignment id based on the value selected in the ``assignlist`` item.
+function getAssignmentId() {
+    var assignlist = document.getElementById('assignlist');
+    return assignlist.options[assignlist.selectedIndex].value;
 }
 
 
@@ -1225,29 +1266,121 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
     }]);
 }
 
-// Invoked by the "Create" button of the "Create Assignment" dialog.
-function createAssignment(form) {
-    var name = form.name.value;
+// Update the grading parameters used for a reading assignment.
+function update_readings_grading(form) {
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+}
 
+// Remove a reading from an assignment.
+function remove_reading(reading_id) {
+    $.getJSON('delete_assignment_question', {
+        assignment_id: getAssignmentId(),
+        name: reading_id,
+    }).done(function (response_JSON) {
+        readings_table.bootstrapTable('removeByUniqueId', reading_id);
+    });
+}
+
+// Called to remove a question from an assignment.
+function remove_question(question_name) {
+    var assignment_id = getAssignmentId();
+    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+        var totalPoints = document.getElementById("totalPoints");
+        totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
+        // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
+        question_table.bootstrapTable('removeByUniqueId', question_name);
+    });
+}
+
+// Called when the "Write" button is clicked.
+function display_write() {
+    var template = document.getElementById('template');
+    var questiontype = template.options[template.selectedIndex].value;
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
-    obj.send(JSON.stringify({name: name, description: description}));
+    obj.open('POST', '/runestone/admin/gettemplate/' + questiontype, true);
+    obj.send();
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
-            added = JSON.parse(obj.responseText);
-            if (added != 'ERROR') {
-                select = document.getElementById('assignlist');
-                newopt = document.createElement('option');
-                newopt.value = added[name];
-                newopt.innerHTML = name;
-                select.appendChild(newopt);
-                select.selectedIndex = newopt.index;
-                assignmentInfo();
-            } else {
-                alert('Error in creating new assignment.')
-            }
+            var returns = JSON.parse(obj.responseText);
+            tplate = returns['template'];
+            $("#qcode").text(tplate);
+        }
+        $.each(returns['chapters'], function (i, item) {
+            $('#qchapter').append($('<option>', {
+                value: item,
+                text: item
+            }));
+        });
+    };
+
+    var hiddenwrite = document.getElementById('hiddenwrite');
+    hiddenwrite.style.visibility = 'visible';
+}
+
+
+// Called when the "Done" button of the "Write" dialog is clicked.
+function create_question(formdata) {
+    if (! confirm("Have you previewed your question?")) {
+        return;
+    }
+    var activetab = 'formative';
+    var select = document.getElementById('assignlist');
+    var assignmentid = select.options[select.selectedIndex].value;
+    var assignmentname = select.options[select.selectedIndex].text;
+    var template = formdata.template.value;
+    var qcode = formdata.qcode.value;
+    var lines = qcode.split('\n');
+    var htmlsrc = formdata.qrawhtml.value;
+    for(var i = 0; i < lines.length; i++) {
+        if (lines[i] != "") {
+            var line = lines[i];
+            var match = line.split(/.. \w*:: /);
+            var name = match[1];
+            break;
         }
     }
+
+    var question = formdata.qcode.value;
+    var difficulty = formdata.difficulty;
+    for (var i = 0; i < difficulty.length; i++) {
+        if (difficulty[i].checked == true) {
+            var selectedDifficulty = difficulty[i].value;
+        }
+    }
+    var tags = formdata.qtags.value;
+    var chapter = formdata.qchapter.value;
+    var isprivate = formdata.isprivate.checked;
+    var points = formdata.createpoints.value;
+    var timed = formdata.createtimed.checked;
+
+    data = {
+        'template' : template,
+        'name' : name,
+        'question' : question,
+        'difficulty' : selectedDifficulty,
+        'tags' : tags,
+        'chapter' : chapter,
+        'isprivate' : isprivate,
+        'tab' : activetab,
+        'assignmentid' : assignmentid,
+        'points' : points,
+        'timed' : timed,
+        'htmlsrc' : htmlsrc
+    }
+    url = '/runestone/admin/createquestion'
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
+        if (iserror == 'ERROR') {
+            errortext = document.getElementById('qnameerror');
+            errortext.innerHTML = 'Name is already in use. Please try a different name.'
+        } else {
+            alert('Question created successfully');
+            var newPoints = iserror['points'];
+            var q_type = activetab;
+            var totalPoints = document.getElementById("totalPoints");
+            totalPoints.innerHTML = 'Total points: ' + newPoints;
+            updateAssignmentRaw(name, points, 'pct_correct', 'last_answer');
+        }
+    }, 'json');
 }
 
 
@@ -1270,7 +1403,7 @@ function preview_question(form){
 }
 
 
-// Render a question in the provided div?
+// Render a question in the provided div.
 function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     /**
      *  The easy part is adding the componentSrc to the existing div.
@@ -1306,27 +1439,6 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 }
 
-
-// Called to remove a question from an assignment.
-function remove_question(question_name) {
-    var assignment_id = getAssignmentId();
-    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
-        var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
-        // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
-        question_table.bootstrapTable('removeByUniqueId', question_name);
-    });
-}
-
-// Remove a reading from an assignment.
-function remove_reading(reading_id) {
-    $.getJSON('delete_assignment_question', {
-        assignment_id: getAssignmentId(),
-        name: reading_id,
-    }).done(function (response_JSON) {
-        readings_table.bootstrapTable('removeByUniqueId', reading_id);
-    });
-}
 
 // Called by the "Search" button in the "Search question bank" panel.
 function questionBank(form) {
@@ -1376,13 +1488,6 @@ function questionBank(form) {
     }
 }
 
-// Return the assignment id based on the value selected in the ``assignlist`` item.
-function getAssignmentId() {
-    var assignlist = document.getElementById('assignlist');
-    return assignlist.options[assignlist.selectedIndex].value;
-}
-
-
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
 function addToAssignment(form) {
     var points = form.points.value;
@@ -1391,21 +1496,6 @@ function addToAssignment(form) {
 
     updateAssignmentRaw(question_name, points, '');
 }
-
-// Update an assignment.
-function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
-    var assignmentid = getAssignmentId();
-    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde + '&which_to_grade=' + which_to_grade, {variable: 'variable'}).done(function (response_JSON) {
-        $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table. Only append if it doesn't exist.
-        if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
-            appendToQuestionTable(question_name, points, autograde,
-                response_JSON['autograde_possible_values'], which_to_grade,
-                response_JSON['which_to_grade_possible_values']);
-        }
-    });
-}
-
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
 function getQuestionInfo() {
@@ -1514,34 +1604,6 @@ function questions2Rst() {
     });
 }
 
-
-// Change the due date.
-function changeDueDate(form) {
-    var newdate = form.changedate.value;
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/changeDate?newdate=' + newdate + '&assignmentid=' + assignmentid, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            if (obj.responseText == 'success') {
-                alert("Successfully changed due date");
-                document.getElementById("assignment_duedate").innerHTML = "Due: " + newdate;
-            }
-
-            else if (obj.responseText == 'error') {
-                alert("There was an error changing your due date");
-            }
-        }
-    }
-
-}
-
-// Update the grading parameters used for a reading assignment.
-function update_readings_grading(form) {
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
-}
 
 
 // ***********
