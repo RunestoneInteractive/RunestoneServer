@@ -1090,19 +1090,38 @@ def doAssignment():
 
 
     course = db(db.courses.id == auth.user.course_id).select().first()
+    print(auth.user)
     assignment_id = request.vars.assignment_id
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
-    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, orderby=db.assignment_questions.sorting_priority)
-    test=""
+    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+    test=[]
     readings = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == 'T')).select(orderby=db.assignment_questions.sorting_priority)
-    print(readings)
+    questions_scores = db((db.assignment_questions.assignment_id == assignment.id) & \
+                    (db.assignment_questions.question_id == db.questions.id) & \
+                    (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
+                    (db.question_grades.sid == auth.user.username) & \
+                    (db.question_grades.div_id == db.questions.name)).select(db.questions.id, db.question_grades.score, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
+
+    currentqScore = 0
+   
     for q in questions_html:
-        if q['htmlsrc'] != None:
-            test = test + q['htmlsrc']
+        if q.htmlsrc != None:
+            q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+            try:
+                if q.id == questions_scores[currentqScore]['questions'].id:
+                    questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points]
+                    currentqScore += 1
+                else:
+                    questioninfo  = [q.htmlsrc, '', '']
+            except:
+                # There are still questions, but no more recorded grades
+                questioninfo  = [q.htmlsrc, '', '']
+                
+            test.append(questioninfo)
 
     # This next line is to render images
-    test = test.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questions_html=questions_html, test=test)
+    #test = test.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questions_html=questions_html, questioninfo=test)
 
 def chooseAssignment():
     if not auth.user:

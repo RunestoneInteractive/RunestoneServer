@@ -149,6 +149,14 @@
 	<div id='readings'>
 	</div>
 	<div id='questions'>
+		{{count=0}}
+		{{for q in questioninfo:}}
+			<div class='oneq' id='{{=count}}'>
+				<h3>{{=q[1]}}/{{=q[2]}}</h3>
+				<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+			</div>
+			{{count += 1}}
+		{{pass}}
 	
 	</div>
 </div>
@@ -158,21 +166,21 @@
 
 
 
-<script id="htmlblock" type="text/html">{{=test}}</script>
+<script id="htmlblock" type="text/html">{{=questioninfo}}</script>
 <script>
 	// This script renders the html into elements in the DOM
 	// And because storing the html in a JSON object wasn't working well, the html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
 	var cheating = document.getElementById('htmlblock').innerHTML;
-
+	var questionHtmlCode = document.getElementsByClassName("htmlblock")
+	var individualq = document.getElementsByClassName("oneq")
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the test variable would only give an unexpected token error
 	// pulling test from the script element provides the string that javascript recognizes
 	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
 
-	console.log(cheating);
 
-	var $div = $('#questions');
+	//var $div = $('#questions');
 
 	// The htmlDecode is needed to unescape the html that the server has sent. 
 	// because only unescaped html gets rendered as html elements
@@ -183,9 +191,13 @@
   		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 	}
 
-	var unescapedhtml = htmlDecode(cheating);
-	var change = $.parseHTML(unescapedhtml);
-	$div.append(change)
+
+	for (let i=0; i<questionHtmlCode.length; i++) {
+		let $div = $('#' + i);
+		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
+		let change = $.parseHTML(unescapedhtml);
+		$div.append(change);
+	}
 
 </script>
 </body>
