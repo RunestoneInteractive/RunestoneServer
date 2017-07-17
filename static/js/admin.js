@@ -1244,10 +1244,13 @@ function assignmentInfo() {
 function appendToReadingsTable(readings_id) {
     // Find this node in the tree.
     var node = readings_picker.jstree(true).get_node(readings_id);
+    var _id = 'readings_table_' + node.id;
     readings_table.bootstrapTable('append', [{
         chapter: readings_picker.jstree(true).get_node(node.parent).text,
         subchapter: node.text,
         subchapter_id: node.id,
+        // Set an `ID for the row`_.
+        _id: _id,
     }]);
 }
 
@@ -1255,14 +1258,14 @@ function appendToReadingsTable(readings_id) {
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
-        'question' : name,
-        'points' : points,
-        'autograde' : autograde,
-        'autograde_possible_values': autograde_possible_values,
-        'which_to_grade': which_to_grade,
-        'which_to_grade_possible_values': which_to_grade_possible_values,
-        // Setting an ID for the row is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
-        '_id' : _id,
+        question: name,
+        points: points,
+        autograde: autograde,
+        autograde_possible_values: autograde_possible_values,
+        which_to_grade: which_to_grade,
+        which_to_grade_possible_values: which_to_grade_possible_values,
+        // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+        _id: _id,
     }]);
 }
 

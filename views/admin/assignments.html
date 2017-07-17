@@ -502,18 +502,17 @@ $(function () {
         onReorderRowsDrag: function(table, row) {
             table.dragRowIndex = $(row).attr('data-index');
             table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['subchapter_id'];
-            console.log(table.dragRowId);
         },
         onReorderRowsDrop: function(table, row) {
             dropRowIndex = $(row).attr('data-index');
-            console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
+            // For debug if needed later.
+            ///console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
             // Create an array of question names in the order they appear in the table.
             var question_array = [];
             for (let value of $(table).bootstrapTable('getData')) {
                 question_array.push(value['subchapter_id']);
             }
             // Send it to the server.
-            console.log(question_array);
             $.getJSON('reorder_assignment_questions', {
                 assignment_id: getAssignmentId(),
                 names: question_array,
