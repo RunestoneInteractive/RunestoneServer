@@ -22,7 +22,6 @@
 
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
-
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/clickable.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/activecode.css" type="text/css" />
@@ -56,19 +55,30 @@
 			{{else:}}
 				Points: {{=assignment['points']}}</span></h2>
 			{{pass}}
-	<div style='background-color:lightblue; margin-left:2cm; margin-right:2cm;'>
-		<p style='margin-left:0.5cm; margin-right:0.5cm;'>{{=assignment['description']}}</p>
+	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
 	<div id='readings'>
 	</div>
 	<div id='questions'>
 		{{count=0}}
-		{{for q in questioninfo:}}
-			<div class='oneq' id='{{=count}}'>
-				<h3>{{=q[1]}}/{{=q[2]}}</h3>
-				<p>{{=q[3]}}</p>
-				<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
-			</div>
+		{{for q in questioninfo:}}	
+				{{ if q[1] != '':}}
+					<div style='float:right; width:30%;'>
+					<h4 style='text-align:center;'>Points: {{=q[1]}} / {{=q[2]}}</h4>
+					<p style='margin-left:2%;'>Comment: {{=q[3]}}</p>
+					</div><span>
+					<div class='oneq' id='{{=count}}' style='width:70%;'>
+						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+					</div></span>
+				{{ else: }}
+					<div style='float:right; width:10%;'>
+					<h5 style='text-align:center;'>Not yet graded</h5>
+					</div><span>
+					<div class='oneq' id='{{=count}}' style='width:90%;'>
+						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+					</div></span>
+				{{pass}}
 			{{count += 1}}
 		{{pass}}
 	
