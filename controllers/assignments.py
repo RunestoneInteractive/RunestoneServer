@@ -543,6 +543,8 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
     # print "autograding", assignment_id, sid, question_name, deadline, autograde
+
+    autograde='all_or_nothing'
     if not autograde:
         return
 
@@ -1101,6 +1103,12 @@ def doAssignment():
                     (db.question_grades.sid == auth.user.username) & \
                     (db.question_grades.div_id == db.questions.name)).select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
 
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer.load_user_metrics(auth.user.username)
+    data_analyzer.load_assignment_metrics(auth.user.username)
+
+    releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
+
     currentqScore = 0
    
     for q in questions_html:
@@ -1108,7 +1116,7 @@ def doAssignment():
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
-                if q.id == questions_scores[currentqScore]['questions'].id:
+                if q.id == questions_scores[currentqScore]['questions'].id  and releasedScoreCheck != 'N/A':
                     questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
                     currentqScore += 1
                 else:

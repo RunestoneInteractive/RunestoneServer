@@ -7,18 +7,26 @@
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
+
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timeddnd.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedclickable.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_activecode.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedfitb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_shortanswer.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedmc.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedparsons.js"></script>
+
+
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/javascript.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/clike.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/codelens.js"></script>
-
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/htmlmixed.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/css.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/xml.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
-
 
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
@@ -27,6 +35,9 @@
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/activecode.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/fitb.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
+
 
 
 <script>
@@ -65,7 +76,7 @@
 		{{for q in questioninfo:}}	
 				{{ if q[1] != '':}}
 					<div style='float:right; width:30%;'>
-					<h4 style='text-align:center;'>Points: {{=q[1]}} / {{=q[2]}}</h4>
+					<h4 style='text-align:center;'>Score: {{=q[1]}} / {{=q[2]}}</h4>
 					<p style='margin-left:2%;'>Comment: {{=q[3]}}</p>
 					</div><span>
 					<div class='oneq' id='{{=count}}' style='width:70%;'>
