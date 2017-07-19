@@ -76,7 +76,7 @@
 		<h3>Readings</h3>
 		<ul>
 			{{chapter = readings[0][0]}}
-			<a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[0][1]}}"><li>{{=readings[0][0]}}</li></a>
+			<a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[0][1]}}"><li class='toctree-l1'>{{=readings[0][0]}}</li></a>
 			<ul>
 			{{for reading in readings:}}
 				{{if reading[0] != chapter:}}
@@ -147,9 +147,9 @@
 		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
 		let change = $.parseHTML(unescapedhtml);
 		$div.append(change);
- 		let divscripts = unescapedhtml.replace(/<script/ig, '<div class="i-script"').replace(/<\/script/ig, '</div');
-        divscripts = $.parseHTML(divscripts);
-        let jscripts = $(divscripts).find('.i-script').addBack().filter('.i-script').detach();
+ 		// let divscripts = unescapedhtml.replace(/<script/ig, '<div class="i-script"').replace(/<\/script/ig, '</div');
+   //      divscripts = $.parseHTML(divscripts);
+   //      let jscripts = $(divscripts).find('.i-script').addBack().filter('.i-script').detach();
         // $div.html(divscripts);
         // jscripts.each(function(i,script){
         console.log(jscripts);

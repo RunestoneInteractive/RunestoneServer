@@ -1129,7 +1129,6 @@ def doAssignment():
     currentqScore = 0
    
     for q in questions_html:
-        print(q.htmlsrc)
         if q.htmlsrc != None:
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
