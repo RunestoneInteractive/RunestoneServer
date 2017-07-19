@@ -1094,9 +1094,14 @@ def doAssignment():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
-    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
-    test=[]
-    readings = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == 'T')).select(orderby=db.assignment_questions.sorting_priority)
+    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
+                        (db.assignment_questions.question_id == db.questions.id) & \
+                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+
+    readings = db((db.assignment_questions.assignment_id == assignment.id) & \
+                (db.assignment_questions.question_id == db.questions.id) & \
+                (db.assignment_questions.reading_assignment == 'T')).select(db.questions.base_course, db.questions.name, orderby=db.assignment_questions.sorting_priority)
+
     questions_scores = db((db.assignment_questions.assignment_id == assignment.id) & \
                     (db.assignment_questions.question_id == db.questions.id) & \
                     (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
@@ -1106,8 +1111,20 @@ def doAssignment():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(auth.user.username)
     data_analyzer.load_assignment_metrics(auth.user.username)
-
+    print(readings)
     releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
+
+    test = []
+    readinglist = []
+
+    for r in readings:
+        chapterSections = r.name.split('/')
+        if len(chapterSections) < 2:
+            chapterSections.append('')
+        chapterPath = (chapterSections[0] + '/toctree.html').replace(' ', '')
+        sectionPath = (r.name + '.html').replace(' ', '')
+        readinglist.append([chapterSections[0], chapterPath, chapterSections[1], sectionPath])
+
 
     currentqScore = 0
    
@@ -1127,7 +1144,7 @@ def doAssignment():
 
             test.append(questioninfo)
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questions_html=questions_html, questioninfo=test, course_id=auth.user.course_name)
+    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=test, course_id=auth.user.course_name, readings=readinglist)
 
 def chooseAssignment():
     if not auth.user:
@@ -1139,4 +1156,3 @@ def chooseAssignment():
     assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.assignment_type)
     print(assignments)
     return(dict(assignments=assignments))
-

@@ -69,9 +69,28 @@
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
-	<div id='readings'>
+	<div id='readings' style='margin-left:15%;'>
+		<h3>Readings</h3>
+		<ul>
+			{{chapter = readings[0][0]}}
+			<a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[0][1]}}"><li>{{=readings[0][0]}}</li></a>
+			<ul>
+			{{for reading in readings:}}
+				{{if reading[0] != chapter:}}
+					</ul>
+					<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[1]}}"><li>{{=reading[0]}}</li></a>
+					<ul>
+						<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[3]}}"><li>{{=reading[2]}}</li></a>
+				{{else:}}
+					<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[3]}}"><li>{{=reading[2]}}</li></a>
+				{{pass}}
+				{{chapter = reading[0]}}
+			{{pass}}
+			</ul>
+		</ul>
 	</div>
 	<div id='questions'>
+	<h3 style='text-align:center;'>Questions</h3>
 		{{count=0}}
 		{{for q in questioninfo:}}	
 				{{ if q[1] != '':}}
