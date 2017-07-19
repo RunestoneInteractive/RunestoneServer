@@ -168,6 +168,19 @@ Installation
    
    * At the end of the build step it should say ``trying alternative database access due to  No module named pydal`` and then, if things are working correctly, start outputting the names of the chapters.
 
+#. Additional Steps for TextBook as a Service (Build your Own Course)
+
+This step is somewhat optional even for developers, depending on what you are working on. But if you want to be able to click on the build a course button you'll need to do the following.
+
+    ::
+
+        $ cd web2py
+        $ cp applications/runestone/scripts/start .
+        $ cp applications/runestone/scripts/run_scheduler.py .
+
+Now you will want to edit the start script according to your setup.  Then use the start script to start web2py and the scheduler together.  Do not just run `python web2py.py` directly.
+
+
 Create an account for yourself
 ------------------------------
 

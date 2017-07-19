@@ -2,9 +2,6 @@
 {{ block tabcontent }}
 
 <script type="text/javascript">
-  eBookConfig.get_assignmentURL = '{{=get_assignmentURL}}';
-  eBookConfig.save_assignmentURL = '{{=save_assignmentURL}}';
-  eBookConfig.get_HTML_for_questionURL = '{{=get_HTML_for_questionURL}}';
   <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
   eBookConfig.toc = {{=XML(toc)}};
 </script>
@@ -61,12 +58,6 @@
           <div class="form-group">
             <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
-          <div class="form-group">
-            <label for="description">Description</label> <input class="form-control" id="description" placeholder="Description" type="text">
-          </div>
-          <div class="form-group">
-            <label for="datetimepicker">Due Date</label> <input id="datetimepicker" type="text">
-          </div>
           <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
         </form>
       </div><!-- Modal Footer -->
@@ -77,91 +68,46 @@
   </div>
 </div>
 
-<div class="col-md-6" id="leftpanel1" style="visibility: hidden">
-  <div style="margin-top:25px;">
-    <p id="assignment_duedate">Due</p>
-    <p id="totalPoints"></p><button class="btn" data-target="#changeDue" data-toggle="modal" style="margin-top: 12px;">Change Date</button>
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDue" role="dialog" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Change Assignment Due Date</h4>
-          </div><!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" role="form">
-              <div class="form-group">
-                <label for="changedate">Due Date</label> <input id="changedate" type="text">
-              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDueDate(this.form)" type="button" value="Change">
-            </form>
-          </div><!-- Modal Footer -->
-          <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="col-md-11" id="leftpanel2" style="visibility: hidden">
-  <div>
-    <h5>Assignment Description</h5>
-    <div style="border: 1px solid black;">
-      <p id="assignment_description"></p>
-    </div>
-    <button class="btn" data-target="#changeDescriptionModal" data-toggle="modal" style="margin-top: 12px;">Change Description</button>
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="changeDescriptionModal" role="dialog" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <button class="close" data-dismiss="modal" type="button">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <h4 class="modal-title">Change Assignment Description</h4>
-          </div><!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" role="form">
-              <div class="form-group">
-                <label for="newdescription">Description</label> <input class="form-control" id="newdescription" placeholder="Description" type="text">
-              </div><input class="btn btn-default" data-dismiss="modal" onclick="changeDescription(this.form)" type="button" value="Change">
-            </form>
-          </div><!-- Modal Footer -->
-          <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
+  <div class="col-md-6" style="border-left: solid black 1px;">
+    <form action="" id="readings-form">
+      <label for="datetimepicker">Due Date</label>
+      <input id="datetimepicker" name="due" type="text"><br>
+
+      <label for="assignment_description">Description: </label>
+      <input class="form-control" id="assignment_description" name="description" type="text"><br>
+
+      <label for="readings-threshold">Threshold: </label>
+      <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
+
+      <label for="readings-points-to-award">Points to award: </label>
+      <input class="form-control" id="readings-points-to-award" name="points_to_award" type="text"><br>
+
+      <label for="readings-autograder">Autograder: </label>
+      <select class="form-control" id="readings-autograder" name="readings_autograder">
+        <option value="manual">Manual</option>
+        <option value="all_or_nothing">All or nothing</option>
+        <option value="pct_correct">% correct</option>
+        <option value="interact">User interaction</option>
+      </select>
+      <input class="btn btn-default" onclick="update_readings_grading(this.form)" type="button" value="Save">
+    </form>
   </div>
+
+
+  <table id="readingsTable" style="width:100%;">
+  </table>
+  <input id="search-tree-readings-picker" type="text">
+  <div id="tree-readings-picker"></div>
+
   <div class="col-md-12" style="margin-top: 20px">
     <div class="list-group" style="margin-bottom: 50px">
       <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
       <div class="list-group">
         <div class="list-group-item">
-          <!-- This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
-
-              -   Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
-              -   Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
-              -   Specify that the ``timed`` column should be edited by a select drop-down, and provide values for the drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
-              -   Add a delete column with a button.
-              -   Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
-          -->
-          <table id="questionTable" data-unique-id="question" data-reorderable-rows="true" style="width:100%;">
-            <thead>
-              <tr>
-                <th data-field="question">Question</th>
-                <th data-editable="true" data-field="points">Points</th>
-                <th data-editable="true" data-editable-source="[{value: '', text: 'None'}, {value: 'unittest', text: 'Unit test'}, {value: 'first_answer', text: 'First answer'}, {value: 'last_answer', text: 'Last answer'}, {value: 'visited', text: 'Visited'}]" data-editable-type="select" data-field="autograde">Auto-grade</th>
-                <th data-events="deleteEvent" data-field="delete" data-formatter="deleteFormatter">Delete</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-          </table>
+          <span id="totalPoints"></span><br>
+          <table id="questionTable" style="width:100%;"></table>
           <div style="text-align: center">
             <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
           </div>
@@ -186,7 +132,8 @@
             <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
           </div>
           <div class="form-group">
-            <label for="chapter">Chapter</label> <select class="form-control" id="chapter">
+            <label for="chapter">Chapter</label>
+            <select class="form-control" id="chapter">
               <option selected="selected" value=""></option>
               {{ for chapter in chapters: }}
               <option value="{{=chapter}}">{{=chapter}}</option>
@@ -224,14 +171,6 @@
         </div>
         <div class="col-md-12">
           <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
-            <div class="list-group-item" id="component-preview">
-              <div class="form-group">
-                <button class="btn" style="margin-top: 12px;">Preview</button>
-              </div>
-            </div>
-            <div class="list-group-item">
-              <p id="q_code" style="white-space: pre; overflow-x: auto;"></p>
-            </div>
             <div class="list-group" style="margin-top: 20px">
               <div class="list-group-item">
                 <div id="q_author"></div>
@@ -352,203 +291,235 @@
             <div class="col-md-12">
               <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
             </div>
+              <input type="hidden" id="qrawhtml" name="qrawhtml" value="">
             <div class="col-md-12">
-              <input class="btn" onclick="preview_question(this.form);" type="button" value="Preview">
+              <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Preview">
               <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
             </div>
           </div>
         </form>
       </div>
-      <div id="component-preview"></div>
     </div>
   </div>
 </div>
+<div class="col-md-6" id="previewside">
+      <div id="component-preview"></div>
+</div>
 <script type="text/javascript">
-$("#tags").select2();
-$("#addTags").select2();
 
-$(".dashboardnav").removeClass("active");
-$("#assignmentstab").addClass("active");
-
-jQuery('#datetimepicker').datetimepicker();
-jQuery('#changedate').datetimepicker();
-
-
-$('#summative').click(function() {
-    $('#summative').addClass('clickedtab');
-    $('#summative').css('background-color', 'gainsboro');
-    $('#formative').css('background-color','transparent');
-    $('#formative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-    $('#external').removeClass('clickedtab');
-});
-
-$('#formative').click(function() {
-    $('#formative').addClass('clickedtab');
-    $('#formative').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-    $('#summative').removeClass('clickedtab');
-    $('#external').css('background-color','transparent');
-    $('#external').removeClass('clickedtab');
-});
-
-$('#external').click(function() {
-    $('#external').addClass('clickedtab');
-    $('#external').css('background-color', 'gainsboro');
-    $('#summative').css('background-color','transparent');
-    $('#summative').removeClass('clickedtab');
-    $('#formative').css('background-color','transparent');
-    $('#formative').removeClass('clickedtab');
-});
-
-// Initialize the `jsTree <https://www.jstree.com/>`_ question picker.
+var question_picker = $('#tree-question-picker');
+var readings_picker = $('#tree-readings-picker');
+var question_table = $('#questionTable');
+var readings_table = $('#readingsTable');
+// Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
 $(function () {
-    var tqp = $('#tree-question-picker');
-    tqp.jstree({
-        // Configure the checkbox plugin.
-        "checkbox" : {
-            // This prevents the selection from including all auto-checked nodes, which I find distracting.
-            "keep_selected_style" : false,
-            // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
-            "whole_node" : false,
-            // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
-            "tie_selection" : false,
-        },
-        // Enable `plugins <https://www.jstree.com/plugins/>`_.
-        "plugins" : [
-            "checkbox",
-            "search",
-        ],
-        // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
-        "core" : {
-            "data" : eBookConfig.toc.question_picker,
-        },
-    });
+    $("#tags").select2();
+    $("#addTags").select2();
 
-    // Provide a flag to use to ignore events caused when loading the table data in.
-    tqp.jstree(true).ignore_check = false;
+    $(".dashboardnav").removeClass("active");
+    $("#assignmentstab").addClass("active");
 
-    // Set up for searching. Copied from the search plugin example.
-    var to = false;
-    $('#search-tree-question-picker').keyup(function () {
-        if (to) {
-            clearTimeout(to);
-        }
-        to = setTimeout(function () {
-            var v = $('#search-tree-question-picker').val();
-            tqp.jstree(true).search(v);
-        }, 250);
-    });
+    $('#datetimepicker').datetimepicker();
 
-    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
-    tqp.on('select_node.jstree', function(event, data) {
-        console.log('select_node');
-        // If this is a question (a leaf node), then preview it.
-        if (jstree_node_is_question(data.instance, data.node)) {
-            // Request the preview HTML from the server.
-            console.log(data.node.id);
-            $.getJSON(eBookConfig.get_HTML_for_questionURL, {"acid" : data.node.id}).done(function(html_src) {
-                // TODO: I get nothing or errors for many question types. ???
-                console.log(html_src);
-                renderRunestoneComponent(html_src, "component-preview")
-            });
-        }
-    });
-    // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
-    tqp.on('check_node.jstree', function(event, data) {
-        if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_is_question(instance, node)) {
-                    // Add each checked item to the assignment list with default values.
-                    updateAssignmentRaw(node.id, 1, '');
-                }
-            });
-        }
-    });
-    // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
-    tqp.on('uncheck_node.jstree', function(event, data) {
-        if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function(instance, node) {
-                if (jstree_node_is_question(instance, node)) {
-                    remove_question(node.id);
-                }
-            });
-        }
-    });
-
-    tqp.on('ready.jstree', function(event, data) {
+    configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
+        // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
+        function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'last_answer'); },
+        function (node) { remove_question(node.id) }
+    );
+    question_picker.on('ready.jstree', function(event, data) {
         // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
         assignmentInfo();
         $('#browse-button').click();
     });
-});
-
-// Given a jstree node, determine if it's an exercise or not.
-function jstree_node_is_question(instance, node) {
-    // Just checking if node has no children isn't sufficient -- some subchapters have no questions, for example, meaning they also have no children.
-    var subchapter_node = instance.get_parent(node);
-    // A root node returns ``#`` for its parent.
-    if (subchapter_node === '#') {
-        return false;
-    }
-    var chapter_node = instance.get_parent(subchapter_node);
-    if (chapter_node === '#') {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-// Given a jstree node, invoke f on node and all its children.
-function walk_jstree(instance, node, f) {
-    f(instance, node);
-    $(node.children).each(function(index, value) {
-        walk_jstree(instance, instance.get_node(value), f);
+    // Ask for `events <https://www.jstree.com/docs/events/>`_ when an item is `selected <https://www.jstree.com/api/#/?q=.jstree Event&f=select_node.jstree>`_.
+    question_picker.on('select_node.jstree', function(event, data) {
+        // If this is a question (a leaf node), then preview it.
+        if (jstree_node_depth(data.instance, data.node) == 3) {
+            // Request the preview HTML from the server.
+            $.getJSON('htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
+                renderRunestoneComponent(html_src, "component-preview")
+            });
+        }
     });
-}
 
-// Set up the `bootstrap table`_.
-$('#questionTable').bootstrapTable({
-    // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
-    // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
-    onEditableSave : function(field, row, oldValue, html_element) {
-        updateAssignmentRaw(row['question'], row['points'], row['autograde']);
-    },
-     // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
-    ///onReorderRow : function(rows) {
-    ///    var [dragRow, droppedAfterRow] = rows;
-    ///    console.log(dragRow);
-    ///    console.log(droppedAfterRow);
-    ///    var data = $('#questionTable').bootstrapTable('getData');
-    ///},
-    // This will be called multiple times. Record the beginning row of the drag.
-    onReorderRowsDrag : function(table, row) {
-        table.dragRowIndex = $(row).attr('data-index');
-        table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
-    },
-    onReorderRowsDrop : function(table, row) {
-        dropRowIndex = $(row).attr('data-index');
-        console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
-    },
+    configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
+        // Called when a node is checked.
+        function (node) {
+            $.getJSON('add__or_update_assignment_question', {
+                assignment: getAssignmentId(),
+                question: node.id
+            }).done(function (resposne_JSON) {
+                appendToReadingsTable(node.id);
+            });
+        },
+        // Called when a node is unchecked.
+        function (node) {
+            remove_reading(node.id);
+        }
+    );
+
+
+    // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
+    question_table.bootstrapTable({
+        // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+        uniqueId: 'question',
+        // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
+        reorderableRows: true,
+        // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+        columns : [
+            {
+                field: 'question',
+                title: 'Question',
+            }, {
+                field: 'points',
+                title: 'Points',
+                // Make the points value editable.
+                editable: true,
+            }, {
+                field: 'autograde',
+                title: 'Auto-grade',
+                // Specify that the ``autograde`` column should be edited by a select drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
+                //
+                // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
+                editable: {
+                    source: function () {
+                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
+                    },
+                },
+                editableType: 'select',
+            }, {
+                field: 'autograde_possible_values',
+                visible: false,
+            }, {
+                field: 'which_to_grade',
+                title: 'Which to grade',
+                editable: {
+                    source: function () {
+                        // Update the menu for this item.
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values');
+                    }
+                },
+                editableType: 'select',
+            }, {
+                field: 'which_to_grade_possible_values',
+                visible: false,
+            }, {
+                // Add a delete column with a button.
+                field: 'delete',
+                title: 'Delete',
+                formatter: function (value, row, index) {
+                    // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
+                    return [
+                        '<a class="question_table_remove" href="javascript:void(0)" title="Remove">',
+                        '<i class="glyphicon glyphicon-remove"><\/i>',
+                        '<\/a>'
+                    ].join('');
+                },
+                events: {
+                     // Copied from ``operateEvents`` in an example_.
+                    'click .question_table_remove': function (e, value, row, index) {
+                        // Unchecking the question in the tree picker also deletes it from the database and table.
+                        question_picker.jstree(true).uncheck_node(row['question']);
+                    },
+                },
+           },
+        ],
+        // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+        // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
+        onEditableSave : function(field, row, oldValue, html_element) {
+            updateAssignmentRaw(row['question'], row['points'], row['autograde'], row['which_to_grade']);
+        },
+         // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
+        ///onReorderRow : function(rows) {
+        ///    var [dragRow, droppedAfterRow] = rows;
+        ///    console.log(dragRow);
+        ///    console.log(droppedAfterRow);
+        ///    var data = question_table.bootstrapTable('getData');
+        ///},
+        // This will be called multiple times. Record the beginning row of the drag.
+        onReorderRowsDrag: function(table, row) {
+            table.dragRowIndex = $(row).attr('data-index');
+            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
+        },
+        onReorderRowsDrop: function(table, row) {
+            dropRowIndex = $(row).attr('data-index');
+            // Create an array of question names in the order they appear in the table.
+            var question_array = [];
+            for (let value of $(table).bootstrapTable('getData')) {
+                question_array.push(value['question']);
+            }
+            // Send it to the server.
+            $.getJSON('reorder_assignment_questions', {
+                assignment_id: getAssignmentId(),
+                names: question_array,
+            });
+        },
+    });
+
+
+    // This is a `bootstrap table`_. Configuration:
+    readings_table.bootstrapTable({
+        // Select the ``subchapter_id`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
+        uniqueId: 'subchapter_id',
+        // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
+        reorderableRows: true,
+        // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
+        columns : [
+            {
+                field: 'chapter',
+                title: 'Chapter',
+            }, {
+                field: 'subchapter',
+                title: 'Subchapter',
+            }, {
+                // Hide the subchapter ID.
+                field: 'subchapter_id',
+                visible: false,
+            }, {
+                // Add a delete column with a button.
+                field: 'delete',
+                title: 'Delete',
+                formatter: function (value, row, index) {
+                    // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
+                    return [
+                        '<a class="readings_table_remove" href="javascript:void(0)" title="Remove">',
+                        '<i class="glyphicon glyphicon-remove"><\/i>',
+                        '<\/a>'
+                    ].join('');
+                },
+                events: {
+                     // Copied from ``operateEvents`` in an example_.
+                    'click .readings_table_remove': function (e, value, row, index) {
+                        // Unchecking the question in the tree picker also deletes it from the database and table.
+                        readings_picker.jstree(true).uncheck_node(row['subchapter_id']);
+                    },
+                },
+           },
+        ],
+        // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+        //
+        // This will be called multiple times. Record the beginning row of the drag.
+        onReorderRowsDrag: function(table, row) {
+            table.dragRowIndex = $(row).attr('data-index');
+            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['subchapter_id'];
+        },
+        onReorderRowsDrop: function(table, row) {
+            dropRowIndex = $(row).attr('data-index');
+            // For debug if needed later.
+            ///console.log('drag', table.dragRowId, 'from row', table.dragRowIndex, 'to row', dropRowIndex);
+            // Create an array of question names in the order they appear in the table.
+            var question_array = [];
+            for (let value of $(table).bootstrapTable('getData')) {
+                question_array.push(value['subchapter_id']);
+            }
+            // Send it to the server.
+            $.getJSON('reorder_assignment_questions', {
+                assignment_id: getAssignmentId(),
+                names: question_array,
+            });
+        },
+    });
 });
-
-// Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
-function deleteFormatter(value, row, index) {
-    return [
-        '<a class="remove" href="javascript:void(0)" title="Remove">',
-        '<i class="glyphicon glyphicon-remove"><\/i>',
-        '<\/a>'
-    ].join('');
-}
-
-// Copied from ``operateEvents`` in an example_.
-window.deleteEvent = {
-    'click .remove': function (e, value, row, index) {
-        // Unchecking the question in the tree picker also deletes it from the database and table.
-        $('#tree-question-picker').jstree(true).uncheck_node(row['question']);
-    },
-};
-
 </script>
 
 {{ end }}
