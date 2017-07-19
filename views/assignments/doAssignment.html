@@ -27,6 +27,8 @@
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/css.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/xml.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
 
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
@@ -37,6 +39,7 @@
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/fitb.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/modal-basic.css" type="text/css" />
 
 
 
@@ -117,13 +120,23 @@
   		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 	}
 
+	
+
 
 	for (let i=0; i<questionHtmlCode.length; i++) {
 		let $div = $('#' + i);
 		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
 		let change = $.parseHTML(unescapedhtml);
 		$div.append(change);
+ 		let divscripts = unescapedhtml.replace(/<script/ig, '<div class="i-script"').replace(/<\/script/ig, '</div');
+        divscripts = $.parseHTML(divscripts);
+        let jscripts = $(divscripts).find('.i-script').addBack().filter('.i-script').detach();
+        // $div.html(divscripts);
+        // jscripts.each(function(i,script){
+        console.log(jscripts);
+
 	}
+
 
 </script>
 {{end}}
