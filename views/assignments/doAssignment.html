@@ -1,0 +1,130 @@
+{{extend 'admin/instructors.html'}}
+
+{{block tabcontent}}
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timeddnd.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedclickable.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_activecode.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedfitb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_shortanswer.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedmc.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedparsons.js"></script>
+
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/javascript.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/clike.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/codelens.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/htmlmixed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/css.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/xml.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
+
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/clickable.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/activecode.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/fitb.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
+
+
+
+<script>
+	$('#hideId').css('display','none');
+</script>
+
+<script type="text/javascript">
+  eBookConfig = {};
+  eBookConfig.host = 'http://{{=request.env.http_host}}';
+  eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = "{{=course['course_name']}}";
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = true;
+  eBookConfig.isLoggedIn = false;
+  eBookConfig.useRunestoneServices = true;
+  eBookConfig.basecourse = "{{=course['base_course']}}";
+</script>
+
+<div id='part1'>
+	<h1 style='text-align:center'>{{=assignment['name']}}</h1>
+	<h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}
+		<span style="float:right; margin-right:1cm;">
+			{{if assignment['threshold'] and assignment['threshold'] != None:}}
+				Points: {{=assignment['points_to_award']}}</span></h2>
+			{{else:}}
+				Points: {{=assignment['points']}}</span></h2>
+			{{pass}}
+	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
+	</div>
+	<div id='readings'>
+	</div>
+	<div id='questions'>
+		{{count=0}}
+		{{for q in questioninfo:}}	
+				{{ if q[1] != '':}}
+					<div style='float:right; width:30%;'>
+					<h4 style='text-align:center;'>Score: {{=q[1]}} / {{=q[2]}}</h4>
+					<p style='margin-left:2%;'>Comment: {{=q[3]}}</p>
+					</div><span>
+					<div class='oneq' id='{{=count}}' style='width:70%;'>
+						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+					</div></span>
+				{{ else: }}
+					<div style='float:right; width:10%;'>
+					<h5 style='text-align:center;'>Not yet graded</h5>
+					</div><span>
+					<div class='oneq' id='{{=count}}' style='width:90%;'>
+						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+					</div></span>
+				{{pass}}
+			{{count += 1}}
+		{{pass}}
+	
+	</div>
+</div>
+
+<script>
+	//console.log(document.getElementsByClassName('nav nav-tabs'))
+	// This script renders the html into elements in the DOM
+	// And because storing the html in a JSON object wasn't working well, the html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
+	
+
+	var questionHtmlCode = document.getElementsByClassName("htmlblock");
+	// Interestingly, javascript won't understand the html string without first dumping it into an html element
+	// a console.log of the html string within the questioninfo array would only give an unexpected token error
+	// pulling the html strings from the script element provides the string that javascript recognizes
+	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
+
+	// The htmlDecode is needed to unescape the html that the server has sent. 
+	// because only unescaped html gets rendered as html elements
+
+	function htmlDecode(input){
+  		let e = document.createElement('div');
+  		e.innerHTML = input;
+  		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+	}
+
+
+	for (let i=0; i<questionHtmlCode.length; i++) {
+		let $div = $('#' + i);
+		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
+		let change = $.parseHTML(unescapedhtml);
+		$div.append(change);
+	}
+
+</script>
+{{end}}
+

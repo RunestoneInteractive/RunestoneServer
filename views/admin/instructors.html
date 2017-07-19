@@ -38,7 +38,7 @@
 
 <div id="outerTabs" class="container" style="margin-top: 10px;">
   <h3 id="coursename" style="text-align: center">{{=auth.user.course_name}}</h3>
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" id="hideId">
     <li class="dashboardnav active" id="progresstab"><a href="{{=URL(c='dashboard',f='index')}}">Student Progress</a></li>
     <li class="dashboardnav" id="admintab"> <a href="{{=URL(c='admin',f='admin')}}">Admin</a></li>
     <li class="dashboardnav" id="gradingtab"><a href="{{=URL(c='admin',f='grading')}}">Grading</a></li>
