@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
 
+
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
@@ -59,6 +60,16 @@
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
 </script>
+
+<style>
+	.completed {
+		list-style-image: url('/{{=request.application}}/static/images/completed.png');
+	}
+	.started {
+		list-style-type: circle;
+		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
+	}
+</style>
 
 <div id='part1'>
 	<h1 style='text-align:center'>{{=assignment['name']}}</h1>

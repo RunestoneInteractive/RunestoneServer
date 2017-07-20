@@ -1111,11 +1111,10 @@ def doAssignment():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(auth.user.username)
     data_analyzer.load_assignment_metrics(auth.user.username)
-    print(readings)
+
     releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
 
     test = []
-    readinglist = []
     readingsList = {}
 
     for r in readings:
@@ -1128,22 +1127,19 @@ def doAssignment():
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
 
         if completion.chapter_id in readingsList:
-            if completion.end_date != None:
+            if completion.status == 1:
                 readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
-            elif completion.start_date != None:
+            elif completion.status == 0:
                 readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
             else:
                 readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'n/a'])
         else:
-            if completion.end_date != None:
+            if completion.status == 1:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed']]
-            elif completion.start_date != None:
+            elif completion.status == 0:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started']]
             else:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted']]
-
-        readinglist.append([chapterSections[0], chapterPath, chapterSections[1], sectionPath])
-
 
     currentqScore = 0
 
