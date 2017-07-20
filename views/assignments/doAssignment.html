@@ -75,21 +75,14 @@
 	<div id='readings' style='margin-left:15%;'>
 		<h3>Readings</h3>
 		<ul>
-			{{chapter = readings[0][0]}}
-			<a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[0][1]}}"><li class='toctree-l1'>{{=readings[0][0]}}</li></a>
-			<ul>
 			{{for reading in readings:}}
-				{{if reading[0] != chapter:}}
-					</ul>
-					<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[1]}}"><li>{{=reading[0]}}</li></a>
-					<ul>
-						<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[3]}}"><li>{{=reading[2]}}</li></a>
-				{{else:}}
-					<a href="/{{=request.application}}/static/{{=course_id}}/{{=reading[3]}}"><li>{{=reading[2]}}</li></a>
+				<li><a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[reading][0][1]}}">{{=readings[reading][0][0]}}</a></li>
+				<ul>
+				{{for r in readings[reading]:}}
+					<li class='{{=r[4]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r[3]}}">{{=r[2]}}</a></li>
 				{{pass}}
-				{{chapter = reading[0]}}
+				</ul>
 			{{pass}}
-			</ul>
 		</ul>
 	</div>
 	<div id='questions'>

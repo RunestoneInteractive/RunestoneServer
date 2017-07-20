@@ -1089,7 +1089,7 @@ def doAssignment():
     if not auth.user:
         session.flash = "Please Login"
         return redirect(URL('default','index'))
-
+    print(auth.user.id)
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
@@ -1116,17 +1116,38 @@ def doAssignment():
 
     test = []
     readinglist = []
+    readingsList = {}
 
     for r in readings:
         chapterSections = r.name.split('/')
-        if len(chapterSections) < 2:
-            chapterSections.append('')
-        chapterPath = (chapterSections[0] + '/toctree.html').replace(' ', '')
-        sectionPath = (r.name + '.html').replace(' ', '')
+
+        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
+            (db.user_sub_chapter_progress.sub_chapter_id.replace(' ','') == chapterSections[1].replace(' ',''))).select().first()
+
+        chapterPath = (completion.chapter_id + '/toctree.html').replace(' ', '')
+        sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
+
+        if completion.chapter_id in readingsList:
+            if completion.end_date != None:
+                readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
+            elif completion.start_date != None:
+                readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
+            else:
+                readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'n/a'])
+        else:
+            if completion.end_date != None:
+                readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed']]
+            elif completion.start_date != None:
+                readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started']]
+            else:
+                readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'n/a']]
+
         readinglist.append([chapterSections[0], chapterPath, chapterSections[1], sectionPath])
 
 
     currentqScore = 0
+    for reading in readingsList:
+        print(reading)
    
     for q in questions_html:
         if q.htmlsrc != None:
@@ -1144,7 +1165,7 @@ def doAssignment():
 
             test.append(questioninfo)
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=test, course_id=auth.user.course_name, readings=readinglist)
+    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=test, course_id=auth.user.course_name, readings=readingsList)
 
 def chooseAssignment():
     if not auth.user:
