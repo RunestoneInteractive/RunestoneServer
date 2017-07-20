@@ -1140,14 +1140,13 @@ def doAssignment():
             elif completion.start_date != None:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started']]
             else:
-                readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'n/a']]
+                readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted']]
 
         readinglist.append([chapterSections[0], chapterPath, chapterSections[1], sectionPath])
 
 
     currentqScore = 0
-    for reading in readingsList:
-        print(reading)
+
    
     for q in questions_html:
         if q.htmlsrc != None:
