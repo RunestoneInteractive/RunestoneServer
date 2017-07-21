@@ -1111,6 +1111,7 @@ def doAssignment():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(auth.user.username)
     data_analyzer.load_assignment_metrics(auth.user.username)
+    print(readings)
 
     releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
 
@@ -1120,10 +1121,14 @@ def doAssignment():
     for r in readings:
         chapterSections = r.name.split('/')
 
-        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
-            (db.user_sub_chapter_progress.sub_chapter_id.replace(' ','') == chapterSections[1].replace(' ',''))).select().first()
+        labels = db((db.chapters.chapter_name == chapterSections[0]) & \
+                    (db.sub_chapters.sub_chapter_name == chapterSections[1])).select(db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label).first()
 
-        chapterPath = (completion.chapter_id + '/toctree.html').replace(' ', '')
+        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
+            (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
+            (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
+
+        chapterPath = (completion.chapter_id + '/toctree.html')
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
 
         if completion.chapter_id in readingsList:
@@ -1132,7 +1137,7 @@ def doAssignment():
             elif completion.status == 0:
                 readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
             else:
-                readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'n/a'])
+                readingsList[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
         else:
             if completion.status == 1:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed']]
