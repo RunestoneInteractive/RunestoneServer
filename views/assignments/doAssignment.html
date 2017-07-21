@@ -151,16 +151,8 @@
 	for (let i=0; i<questionHtmlCode.length; i++) {
 		let $div = $('#' + i);
 		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
-		let change = $.parseHTML(unescapedhtml);
+		let change = $.parseHTML(unescapedhtml, keepScripts=true);
 		$div.append(change);
-
- 		// let divscripts = unescapedhtml.replace(/<script/ig, '<div class="i-script"').replace(/<\/script/ig, '</div');
-   //      divscripts = $.parseHTML(divscripts);
-   //      let jscripts = $(divscripts).find('.i-script').addBack().filter('.i-script').detach();
-        // $div.html(divscripts);
-        // jscripts.each(function(i,script){
-        // console.log(jscripts);
-
 	}
 
 
