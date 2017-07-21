@@ -83,11 +83,12 @@
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
+	
 	<div id='readings' style='margin-left:15%;'>
 		<h3>Readings</h3>
 		<ul>
 			{{for reading in readings:}}
-				<li><a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[reading][0][1]}}">{{=readings[reading][0][0]}}</a></li>
+				<li class='{{=readings[reading][0][5]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[reading][0][1]}}">{{=readings[reading][0][0]}}</a></li>
 				<ul>
 				{{for r in readings[reading]:}}
 					<li class='{{=r[4]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r[3]}}">{{=r[2]}}</a></li>
@@ -96,6 +97,7 @@
 			{{pass}}
 		</ul>
 	</div>
+
 	<div id='questions'>
 	<h3 style='text-align:center;'>Questions</h3>
 		{{count=0}}

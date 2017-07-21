@@ -1111,7 +1111,6 @@ def doAssignment():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(auth.user.username)
     data_analyzer.load_assignment_metrics(auth.user.username)
-    print(readings)
 
     releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
 
@@ -1145,6 +1144,22 @@ def doAssignment():
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started']]
             else:
                 readingsList[completion.chapter_id] = [[chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted']]
+
+    for chapter in readingsList:
+        hasStarted = False
+        completionState = 'completed'
+        for s in readingsList[chapter]:
+            if s[4] == 'completed':
+                hasStarted = True
+            if s[4] == 'started':
+                hasStarted = True
+                completionState = 'started'
+        if hasStarted:
+            readingsList[chapter][0].append(completionState)
+        else:
+            readingsList[chapter][0].append('notstarted')
+
+
 
     currentqScore = 0
 
