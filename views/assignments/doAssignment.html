@@ -83,7 +83,7 @@
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
-	
+
 	<div id='readings' style='margin-left:15%;'>
 		<h3>Readings</h3>
 		<ul>
@@ -127,7 +127,7 @@
 <script>
 	//console.log(document.getElementsByClassName('nav nav-tabs'))
 	// This script renders the html into elements in the DOM
-	// And because storing the html in a JSON object wasn't working well, the html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
+	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 	
 
 	var questionHtmlCode = document.getElementsByClassName("htmlblock");
@@ -153,6 +153,7 @@
 		let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
 		let change = $.parseHTML(unescapedhtml);
 		$div.append(change);
+
  		// let divscripts = unescapedhtml.replace(/<script/ig, '<div class="i-script"').replace(/<\/script/ig, '</div');
    //      divscripts = $.parseHTML(divscripts);
    //      let jscripts = $(divscripts).find('.i-script').addBack().filter('.i-script').detach();

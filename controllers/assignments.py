@@ -1089,7 +1089,6 @@ def doAssignment():
     if not auth.user:
         session.flash = "Please Login"
         return redirect(URL('default','index'))
-    print(auth.user.id)
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
@@ -1107,12 +1106,6 @@ def doAssignment():
                     (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
                     (db.question_grades.sid == auth.user.username) & \
                     (db.question_grades.div_id == db.questions.name)).select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
-
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    data_analyzer.load_user_metrics(auth.user.username)
-    data_analyzer.load_assignment_metrics(auth.user.username)
-
-    releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
 
     questionslist = []
     readingsDict = {}
@@ -1162,7 +1155,7 @@ def doAssignment():
             readingsDict[chapter][0].append('notstarted')
 
     currentqScore = 0
-
+    print(assignment['released'])
     # This formats questionslist into a list of lists.
     # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
@@ -1172,7 +1165,7 @@ def doAssignment():
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
-                if q.id == questions_scores[currentqScore]['questions'].id  and releasedScoreCheck != 'N/A':
+                if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
                     questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
                     currentqScore += 1
                 else:
@@ -1191,7 +1184,5 @@ def chooseAssignment():
         return redirect(URL('default','index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
-    print(course)
     assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.assignment_type)
-    print(assignments)
     return(dict(assignments=assignments))
