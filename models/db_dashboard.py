@@ -347,10 +347,11 @@ class DashboardDataAnalyzer(object):
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
         self.problem_metrics.update_metrics(self.logs)
 
-    def load_assignment_metrics(self, username):
+    def load_assignment_metrics(self, username, studentView=False):
         self.assignments = []
+
         res = db(db.assignments.course == self.course_id)\
-                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate)
+                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate, db.assignments.released)
                 # ^ Get assignments from DB
         for aRow in res:
             self.assignments.append(aRow.as_dict())
@@ -364,19 +365,24 @@ class DashboardDataAnalyzer(object):
             if row.records:             # If the row has a result
                 rl = row.as_list()      # List of dictionaries
 
-                s = 0.0
-                for userEntry in rl:
-                    self.grades[assign["name"]] = {}
-                    s += userEntry["grades"]["score"]   # Calculating average
+                if studentView and not assign['released']:      # N/A should be shown to students if assignment grades are not released
+                    self.grades[assign["name"]] = {"score":"N/A",
+                                               "class_average":"N/A",
+                                               "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
+                else:
+                    s = 0.0
+                    for userEntry in rl:
+                        self.grades[assign["name"]] = {}
+                        s += userEntry["grades"]["score"]   # Calculating average
 
-                    if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
-                        self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
-                    else:
-                        self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
+                        if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
+                            self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+                        else:
+                            self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
 
-                average = s/len(userEntry)
-                self.grades[assign["name"]]["class_average"] = average
-                self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
+                    average = s/len(userEntry)
+                    self.grades[assign["name"]]["class_average"] = average
+                    self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 
             else:           # The row has no result --> the query returned empty
                 self.grades[assign["name"]] = {"score":"N/A",

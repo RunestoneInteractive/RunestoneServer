@@ -29,7 +29,7 @@ def index():
 
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.get_vars["sid"])
-    data_analyzer.load_assignment_metrics(request.get_vars["sid"])
+    data_analyzer.load_assignment_metrics(request.get_vars["sid"], studentView=True)
 
     chapters = []
     for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
@@ -1099,13 +1099,15 @@ def doAssignment():
 
     readings = db((db.assignment_questions.assignment_id == assignment.id) & \
                 (db.assignment_questions.question_id == db.questions.id) & \
-                (db.assignment_questions.reading_assignment == 'T')).select(db.questions.base_course, db.questions.name, orderby=db.assignment_questions.sorting_priority)
+                (db.assignment_questions.reading_assignment == 'T')) \
+                .select(db.questions.base_course, db.questions.name, orderby=db.assignment_questions.sorting_priority)
 
     questions_scores = db((db.assignment_questions.assignment_id == assignment.id) & \
                     (db.assignment_questions.question_id == db.questions.id) & \
                     (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
                     (db.question_grades.sid == auth.user.username) & \
-                    (db.question_grades.div_id == db.questions.name)).select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
+                    (db.question_grades.div_id == db.questions.name)) \
+                    .select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
 
     questionslist = []
     readingsDict = {}
@@ -1139,6 +1141,7 @@ def doAssignment():
     # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
     # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
     # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
+    # Each chapter's completion gets appended to the first list within the list of section information
 
     for chapter in readingsDict:
         hasStarted = False
