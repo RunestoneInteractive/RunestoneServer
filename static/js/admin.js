@@ -1118,7 +1118,7 @@ function createAssignment(form) {
 
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
-    obj.send(JSON.stringify({name: name, description: description}));
+    obj.send(JSON.stringify({name: name}));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             added = JSON.parse(obj.responseText);
