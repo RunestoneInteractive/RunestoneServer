@@ -1209,6 +1209,8 @@ def save_assignment():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add__or_update_assignment_question():
+    logger.debug("========================")
+    logger.debug("We made it here")
     # This endpoint is for adding a question to an assignment, or updating an existing assignment_question
 
     # The following fields should be provided in request.vars:
@@ -1225,6 +1227,13 @@ def add__or_update_assignment_question():
     # subchapters tables, in RunestoneComponents
     question_id = _get_question_id(question_name, auth.user.course_id)
     question_type = db.questions[question_id].question_type
+    logger.debug("Just before sp")
+    tmpSp = _get_question_sorting_priority(assignment_id, question_id)
+    if tmpSp != None:
+        sp = 1 + tmpSp
+    else:
+        sp = 0
+    logger.debug(sp)
 
     if question_type == 'page':
         reading_assignment = 'T'
@@ -1240,7 +1249,7 @@ def add__or_update_assignment_question():
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
-
+    logger.debug(points)
     try:
         db.assignment_questions.update_or_insert(
             (db.assignment_questions.assignment_id==assignment_id) & (db.assignment_questions.question_id==question_id),
@@ -1249,12 +1258,13 @@ def add__or_update_assignment_question():
             points=points,
             autograde=autograde,
             which_to_grade = which_to_grade,
-            reading_assignment = reading_assignment
+            reading_assignment = reading_assignment,
+            sorting_priority = sp
         )
         total = _set_assignment_max_points(assignment_id)
         return json.dumps({'total': total})
     except Exception as ex:
-        print(ex)
+        logger.debug(ex)
         return json.dumps("Error")
 
 def _get_question_id(question_name, course_id):
@@ -1262,6 +1272,10 @@ def _get_question_id(question_name, course_id):
               (db.questions.base_course == db.courses.base_course) &
               (db.courses.id == course_id)
               ).select(db.questions.id).first().id)
+
+def _get_question_sorting_priority(assignment_id, question_id):
+    max = db.assignment_questions.sorting_priority.max()
+    return db((db.assignment_questions.assignment_id == assignment_id)).select(max).first()[max]
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def delete_assignment_question():
