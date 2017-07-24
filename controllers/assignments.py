@@ -1093,9 +1093,11 @@ def doAssignment():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
+
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id) & \
-                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
+                        .select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
 
     readings = db((db.assignment_questions.assignment_id == assignment.id) & \
                 (db.assignment_questions.question_id == db.questions.id) & \
@@ -1158,7 +1160,6 @@ def doAssignment():
             readingsDict[chapter][0].append('notstarted')
 
     currentqScore = 0
-    print(assignment['released'])
     # This formats questionslist into a list of lists.
     # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings

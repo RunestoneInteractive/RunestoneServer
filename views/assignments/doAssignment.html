@@ -88,7 +88,7 @@
 		<h3>Readings</h3>
 		<ul>
 			{{for reading in readings:}}
-				<li class='{{=readings[reading][0][5]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=readings[reading][0][1]}}">{{=readings[reading][0][0]}}</a></li>
+				<li class='{{=readings[reading][0][5]}}'>{{=readings[reading][0][0]}}</li>
 				<ul>
 				{{for r in readings[reading]:}}
 					<li class='{{=r[4]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r[3]}}">{{=r[2]}}</a></li>
