@@ -516,7 +516,7 @@ def createAssignment():
             due = datetime.datetime.strptime(d_str, format_str)
         else:
             due = None
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'])
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.now() + datetime.timedelta(days=7))
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
