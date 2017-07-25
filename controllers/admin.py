@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger("web2py.root")
 logger.setLevel(logging.DEBUG)
 
-ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
+ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
     clickablearea=[],
     external=[],
@@ -244,9 +244,6 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
-                get_assignmentURL=URL('admin', 'get_assignment'),
-                save_assignmentURL=URL('admin', 'save_assignment'),
-                get_HTML_for_questionURL=URL('admin', 'htmlsrc'),
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -514,10 +511,12 @@ def removeassign():
 def createAssignment():
     try:
         d_str = request.vars['due']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(d_str, format_str)
-        print(due)
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
+        if d_str:
+            format_str = "%Y/%m/%d %H:%M"
+            due = datetime.datetime.strptime(d_str, format_str)
+        else:
+            due = None
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'])
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
@@ -586,22 +585,6 @@ def getQuestions():
             questions.append(q.name)
     return json.dumps(questions)
 
-
-# Deprecated, replaced by delete_assignment_question
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def removeQuestion():
-    return delete_assignment_question()
-    question_name = request.vars['name']
-    assignment_id = request.vars['assignment_id']
-    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
-
-    assignment = db(db.assignments.id == int(assignment_id)).select().first()
-    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
-    new_points = int(assignment_points) - int(question_points)
-    assignment.update_record(points=new_points)
-    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
-    return json.dumps(new_points)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
@@ -742,27 +725,27 @@ def addToAssignment():
 def getQuestionInfo():
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
-    try:
-        question_code = db((db.questions.name == question_name)).select(db.questions.question).first().question
-        question_author = db((db.questions.name == question_name)).select(db.questions.author).first().author
-        question_difficulty = db((db.questions.name == question_name)).select(db.questions.difficulty).first().difficulty
-        #question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
-        question_id = _get_question_id(question_name, auth.user.course_id)
-        tags = []
-        question_tags = db((db.question_tags.question_id == question_id)).select()
-        for row in question_tags:
-            tag_id = row.tag_id
-            tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
-            tags.append(" " + str(tag_name))
-        if question_difficulty != None:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
-        else:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':None, 'tags': tags}
+    base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
+    row = db((db.questions.name == question_name) & (db.questions.base_course == base_course)).select().first()
 
-        return json.dumps(returnDict)
+    question_code = row.question
+    htmlsrc = row.htmlsrc
+    question_author = row.author
+    question_difficulty = row.difficulty
+    question_id = row.id
 
-    except Exception as ex:
-        print(ex)
+    tags = []
+    question_tags = db((db.question_tags.question_id == question_id)).select()
+    for row in question_tags:
+        tag_id = row.tag_id
+        tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
+        tags.append(" " + str(tag_name))
+    if question_difficulty != None:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
+    else:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':None, 'tags': tags}
+
+    return json.dumps(returnDict)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def edit_question():
@@ -874,7 +857,8 @@ def createquestion():
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
+                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
+                 is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
         assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points, assessment_type=typeid)
 
@@ -929,33 +913,7 @@ def htmlsrc():
         (db.questions.base_course == db.courses.base_course) &
         (db.courses.course_name == auth.user.course_name)
          ).select(db.questions.htmlsrc).first().htmlsrc
-    return json.dumps(htmlsrc)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDate():
-    try:
-        newdate = request.vars['newdate']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(newdate, format_str)
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(duedate=due)
-        return 'success'
-    except:
-        return 'error'
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDescription():
-    try:
-        newdescription = request.vars['newdescription']
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(description=newdescription)
-        return 'success'
-    except:
-        return 'error'
+    return json.dumps(unicode(htmlsrc))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1060,28 +1018,24 @@ def _get_toc_and_questions():
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
-            q_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             q_ch_info['text'] = ch.chapters.chapter_name
             q_ch_info['children'] = []
             # copy same stuff for reading picker
             r_ch_info = {}
             reading_picker.append(r_ch_info)
-            r_ch_info['id'] = "chapter:{}".format(ch.chapters.id)
             r_ch_info['text'] = ch.chapters.chapter_name
             r_ch_info['children'] = []
             subchapters_query = db(db.sub_chapters.chapter_id == ch.chapters.id).select()
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
                 q_ch_info['children'].append(q_sub_ch_info)
-                q_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
                 q_sub_ch_info['text'] = sub_ch.sub_chapter_name
                 q_sub_ch_info['children'] = []
                 # copy same stuff for reading picker
                 r_sub_ch_info = {}
                 r_ch_info['children'].append(r_sub_ch_info)
-                r_sub_ch_info['id'] = "subchapter:{}".format(sub_ch.id)
+                r_sub_ch_info['id'] = "{}/{}".format(ch.chapters.chapter_name, sub_ch.sub_chapter_name)
                 r_sub_ch_info['text'] = sub_ch.sub_chapter_name
-                r_sub_ch_info['children'] = []
 
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
@@ -1092,9 +1046,7 @@ def _get_toc_and_questions():
                     q_info = dict(
                         text = question.questions.name,
                         id = question.questions.name,
-                        question_type = question.questions.question_type,
-                        autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[question.questions.question_type],
-                        which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[question.questions.question_type]
+                        question_type = question.questions.question_type
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
@@ -1110,6 +1062,7 @@ def get_assignment():
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
+    print "here", assignment_row.duedate
     try:
         assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
@@ -1117,6 +1070,7 @@ def get_assignment():
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
     assignment_data['threshold'] = assignment_row.threshold
+    assignment_data['points_to_award'] = assignment_row.points_to_award
     assignment_data['readings_autograder'] = assignment_row.readings_autograder
 
     # Still need to get:
@@ -1127,7 +1081,7 @@ def get_assignment():
     a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
                   (db.assignment_questions.question_id == db.questions.id) &
                   (db.questions.question_type == 'page')
-                  ).select()
+                  ).select(orderby=db.assignment_questions.sorting_priority)
     pages_data = []
     for row in a_q_rows:
         pages_data.append(dict(
@@ -1140,14 +1094,17 @@ def get_assignment():
     a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
                   (db.assignment_questions.question_id == db.questions.id) &
                   (db.assignment_questions.reading_assignment == None)
-                  ).select()
+                  ).select(orderby=db.assignment_questions.sorting_priority)
     #return json.dumps(db._lastsql)
     questions_data = []
     for row in a_q_rows:
         questions_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
-            autograde = row.assignment_questions.autograde
+            autograde = row.assignment_questions.autograde,
+            which_to_grade = row.assignment_questions.which_to_grade,
+            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
         ))
 
     return json.dumps(dict(assignment_data=assignment_data,
@@ -1156,15 +1113,13 @@ def get_assignment():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def save_assignment():
-    # This endpoint is for saving (insert or update) an assignment's top-level information, without any
+    # This endpoint is for saving (updating) an assignment's top-level information, without any
     # questions or readings that might be part of the assignment
     # Should return the id of the assignment, if one is not passed in
 
     # The following fields must be provided in request.vars (see modesl/grouped_assignments.py for model definition):
     # -- assignment_id (if it's an existing assignment; if none provided, then we insert a new assignment)
-    # -- name
     # -- description
-    # -- points
     # -- threshold
     # -- points_to_award (should be non-null only if threshold is non-zero)
     # -- readings_autograder
@@ -1179,28 +1134,14 @@ def save_assignment():
     except:
         due = None
     try:
-        if assignment_id:
-            db(db.assignments.id == assignment_id).update(
-                course=auth.user.course_id,
-                name=request.vars['name'],
-                description=request.vars['description'],
-                points=request.vars['points'],
-                threshold=request.vars['threshold'],
-                points_to_award=request.vars['points_to_award'],
-                readings_autograder=request.vars['readings_autograder'],
-                duedate=due,
-            )
-        else:
-            assignment_id = db.assignments.insert(
-                course = auth.user.course_id,
-                name = request.vars['name'],
-                description = request.vars['description'],
-                points = request.vars['points'],
-                threshold = request.vars['threshold'],
-                points_to_award = request.vars['points_to_award'],
-                readings_autograder = request.vars['readings_autograder'],
-                duedate=due,
-            )
+        db(db.assignments.id == assignment_id).update(
+            course=auth.user.course_id,
+            description=request.vars['description'],
+            threshold=request.vars['threshold'],
+            points_to_award=request.vars['points_to_award'],
+            readings_autograder=request.vars['readings_autograder'],
+            duedate=due,
+        )
         return {request.vars['name']: assignment_id}
     except Exception as ex:
         print(ex)
@@ -1225,6 +1166,11 @@ def add__or_update_assignment_question():
     # subchapters tables, in RunestoneComponents
     question_id = _get_question_id(question_name, auth.user.course_id)
     question_type = db.questions[question_id].question_type
+    tmpSp = _get_question_sorting_priority(assignment_id, question_id)
+    if tmpSp != None:
+        sp = 1 + tmpSp
+    else:
+        sp = 0
 
     if question_type == 'page':
         reading_assignment = 'T'
@@ -1240,8 +1186,8 @@ def add__or_update_assignment_question():
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
-
     try:
+        # save the assignment_question
         db.assignment_questions.update_or_insert(
             (db.assignment_questions.assignment_id==assignment_id) & (db.assignment_questions.question_id==question_id),
             assignment_id = assignment_id,
@@ -1249,19 +1195,46 @@ def add__or_update_assignment_question():
             points=points,
             autograde=autograde,
             which_to_grade = which_to_grade,
-            reading_assignment = reading_assignment
+            reading_assignment = reading_assignment,
+            sorting_priority = sp
         )
         total = _set_assignment_max_points(assignment_id)
-        return json.dumps({'total': total})
+        return json.dumps(dict(
+            total = total,
+            autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+        ))
     except Exception as ex:
-        print(ex)
+        logger.debug(ex)
         return json.dumps("Error")
 
 def _get_question_id(question_name, course_id):
-    return int(db((db.questions.name == question_name) &
+    question = db((db.questions.name == question_name) &
               (db.questions.base_course == db.courses.base_course) &
               (db.courses.id == course_id)
-              ).select(db.questions.id).first().id)
+              ).select(db.questions.id).first()
+    if question:
+        return int(question.id)
+    else:
+        # insert the question object since it doesn't exist yet; must be a page
+        base_course = db(
+            (db.courses.id == course_id)
+            ).select(db.courses.base_course).first().base_course
+        id = db.questions.insert(
+                name = question_name,
+                base_course = base_course,
+                question_type = 'page'
+        )
+        return int(id)
+
+    # return int(db((db.questions.name == question_name) &
+    #           (db.questions.base_course == db.courses.base_course) &
+    #           (db.courses.id == course_id)
+    #           ).select(db.questions.id).first().id)
+
+def _get_question_sorting_priority(assignment_id, question_id):
+    max = db.assignment_questions.sorting_priority.max()
+    return db((db.assignment_questions.assignment_id == assignment_id)).select(max).first()[max]
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def delete_assignment_question():
@@ -1301,16 +1274,16 @@ def reorder_assignment_questions():
     boolean reading_assignment flag set to True, or all that have it set to False).
     We will reassign sorting_priorities to all of them.
     """
-    question_names = request.vars['names']  # a list of question_names
+    question_names = request.vars['names[]']  # a list of question_names
     assignment_id = int(request.vars['assignment_id'])
-
     i = 0
     for name in question_names:
         i += 1
         question_id = _get_question_id(name, auth.user.course_id)
-        db((db.assignment_questions.question_id==question_id) & \
-           (db.assignment_questions.assignment_id == assignment_id)
-           .update(sorting_priority = i))
+        db((db.assignment_questions.question_id == question_id) &
+           (db.assignment_questions.assignment_id == assignment_id)) \
+           .update(sorting_priority = i)
+
     return json.dumps("Reordered in DB")
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

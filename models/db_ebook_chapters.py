@@ -36,15 +36,6 @@ db.define_table('user_sub_chapter_progress',
   migrate='runestone_user_sub_chapter_progress.table'
 )
 
-db.define_table('div_ids',
-    Field('course_name'  , 'string'),
-    Field('chapter'    , 'string'),
-    Field('subchapter' , 'string'),
-    Field('div_type'   , 'string'),
-    Field('div_id'     , 'string'),
-    migrate='runestone_div_ids.table'
-)
-
 #
 # When a new user is registered we need to add a bunch of rows to the
 # user_sub_chapter_progress table.  One for each section/subsection

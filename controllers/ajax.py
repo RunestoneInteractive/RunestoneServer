@@ -56,7 +56,7 @@ def hsblog():    # Human Subjects Board Log
             r = 'T'
         else:
             r = None
-            
+
         try:
             db.timed_exam.insert(sid=sid, course_name=course, correct=int(request.vars.correct),
                              incorrect=int(request.vars.incorrect), skipped=int(request.vars.skipped),
@@ -100,6 +100,13 @@ def hsblog():    # Human Subjects Board Log
             answer = request.vars.answer
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
+            
+    elif event == "codelensq" and auth.user:
+        if db((db.codelens_answers.sid == sid) & (db.codelens_answers.div_id == div_id) & (db.codelens_answers.correct == 'T')).count() == 0:
+            correct = request.vars.correct
+            answer = request.vars.answer
+            source = request.vars.source
+            db.codelens_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     elif event == "shortanswer" and auth.user:
         # for shortanswers just keep the latest?? -- the history will be in useinfo
@@ -883,46 +890,40 @@ def getAssessResults():
 
     # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
-        query = "select answer, timestamp, correct from fitb_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, db.fitb_answers.correct, orderby=~db.fitb_answers.timestamp).first()
+        if not rows:
             return ""   # server doesn't have it so we load from local storage instead
-        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "mChoice":
-        query = "select answer, timestamp, correct from mchoice_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer. db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
+        if not rows:
             return ""
-        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "dragNdrop":
-        query = "select answer, timestamp, correct, minHeight from dragndrop_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.course_name == course) & (db.dragndrop_answers.sid == sid)).select(db.dragndrop_answers.answer, db.dragndrop_answers.timestamp, db.dragndrop_answers.correct, db.dragndrop_answers.minHeight, orderby=~db.dragndrop_answers.timestamp).first()
+        if not rows:
             return ""
-        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2], 'minHeight': str(rows[0][3])}
+        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct, 'minHeight': str(rows.minHeight)}
         return json.dumps(res)
     elif event == "clickableArea":
-        query = "select answer, timestamp, correct from clickablearea_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.course_name == course) & (db.clickablearea_answers.sid == sid)).select(db.clickablearea_answers.answer, db.clickablearea_answers.timestamp, db.clickablearea_answers.correct, orderby=~db.clickablearea_answers.timestamp).first()
+        if not rows:
             return ""
-        res = {'answer': rows[0][0], 'timestamp': str(rows[0][1]), 'correct': rows[0][2]}
+        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "timedExam":
-        query = "select correct, incorrect, skipped, time_taken, timestamp from timed_exam where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.timed_exam.div_id == div_id) & (db.timed_exam.course_name == course) & (db.timed_exam.sid == sid)).select(db.timed_exam.correct, db.timed_exam.incorrect, db.timed_exam.skipped, db.timed_exam.time_taken, db.timed_exam.timestamp, db.timed_exam.reset, orderby=~db.timed_exam.timestamp).first()
+        if not rows:
             return ""
-        res = {'correct': rows[0][0], 'incorrect': rows[0][1], 'skipped': str(rows[0][2]), 'timeTaken': str(rows[0][3]), 'timestamp': str(rows[0][4])}
+        res = {'correct': rows.correct, 'incorrect': rows.incorrect, 'skipped': str(rows.skipped), 'timeTaken': str(rows.timeTaken), 'timestamp': str(rows.timestamp), 'reset': str(rows.reset)}
         return json.dumps(res)
     elif event == "parsons":
-        query = "select answer, source, timestamp from parsons_answers where div_id=%s and course_name=%s and sid=%s order by timestamp desc"
-        rows = db.executesql(query, (div_id, course, sid))
-        if len(rows) == 0:
+        rows = db((db.parsons_answers.div_id == div_id) & (db.parsons_answers.course_name == course) & (db.parsons_answers.sid == sid)).select(db.parsons_answers.answer, db.parsons_answers.source, db.parsons_answers.timestamp, orderby=~db.parsons_answers.timestamp).first()
+        if not rows:
             return ""
-        res = {'answer': rows[0][0], 'source': rows[0][1], 'timestamp': str(rows[0][2])}
+        res = {'answer': rows.answer, 'source': rows.source, 'timestamp': str(rows.timestamp)}
         return json.dumps(res)
     elif event == "shortanswer":
         row = db((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course)).select().first()
@@ -939,10 +940,13 @@ def checkTimedReset():
 
     divId = request.vars.div_id
     course = request.vars.course
-    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select()
+    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select(orderby=~db.timed_exam.timestamp).first()
 
     if rows:        # If there was a scored exam
-        return json.dumps({"canReset":False})
+        if rows.reset == True:
+            return json.dumps({"canReset":True})
+        else:
+            return json.dumps({"canReset":False})
     else:
         return json.dumps({"canReset":True})
 

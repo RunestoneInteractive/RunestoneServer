@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+
+<h1>Assignments</h1>
+<ul>
+	{{for assignment in assignments:}}
+		<li><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></li>
+	{{pass}}
+</ul>
