@@ -76,9 +76,9 @@
 	<h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}
 		<span style="float:right; margin-right:1cm;">
 			{{if assignment['threshold'] and assignment['threshold'] != None:}}
-				Points: {{=assignment['points_to_award']}}</span></h2>
+				Points Possible: {{=assignment['points_to_award']}}</span></h2>
 			{{else:}}
-				Points: {{=assignment['points']}}</span></h2>
+				Points Possible: {{=assignment['points']}}</span></h2>
 			{{pass}}
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
@@ -87,7 +87,7 @@
 	<div id='readings' style='margin-left:15%;'>
 		<h3>Readings</h3>
 		<ul>
-			{{for reading in readings:}}
+			{{for reading in sorted(readings.keys()):}}
 				<li class='{{=readings[reading][0][5]}}'>{{=readings[reading][0][0]}}</li>
 				<ul>
 				{{for r in readings[reading]:}}
