@@ -1120,12 +1120,13 @@ def doAssignment():
     # Chapter ids are used as keys so the dictionary can be iterated in the correct order within doAssignment.html
 
     # Because readings do not record chapters in the questions table
-    # assigned readings cannot be grouped into chapters by a DB query yet
+    # assigned readings cannot (nicely) be grouped into chapters by a DB query yet
     # so using a dictionary is a quick short-term solution to group all the sections to each chapter
     # The chapters will appear in the order that they do in the ToC, 
     # but the sections within each chapter will appear according to the sorting_priority in assignment_questions
 
-    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore
+    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
+    # and the labels query won't be needed at all
 
     for r in readings:
         chapterSections = r.name.split('/')
