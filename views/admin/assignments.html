@@ -33,15 +33,31 @@
 <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.js')}}">
 </script>
 
-<div class="col-md-6">
-  <h4 style="text-align: center;">Assignment</h4>
-  <select class="form-control" id="assignlist" onchange="assignmentInfo();">
-    {{ for assignmentid in assignments: }}
-    <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
-    {{ pass }}
-  </select>
-  <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
-  <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h4 style="text-align: center;">Assignment</h4>
+    <select class="form-control" id="assignlist" onchange="assignmentInfo();">
+      {{ for assignmentid in assignments: }}
+      <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
+      {{ pass }}
+    </select>
+    <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
+    <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+    <fieldset>
+      <legend>Assignment properties</legend>
+      <form action="" id="assignment-form">
+        <label for="datetimepicker">Due Date</label>
+        <input id="datetimepicker" name="due" type="text"><br>
+
+        <label for="assignment_description">Description: </label>
+        <input class="form-control" id="assignment_description" name="description" type="text"><br>
+
+        <input class="btn btn-default" onclick="update_assignment()" type="button" value="Save">
+      </form>
+    <fieldset>
+  </div>
+  <div class="col-md-2"></div>
 </div>
 
 <!-- Modal -->
@@ -68,156 +84,149 @@
   </div>
 </div>
 
-<div class="col-md-11" id="leftpanel2" style="visibility: hidden">
+<div class="row">
+  <div class="col-md-6" id="leftpanel2" style="visibility: hidden">
+    <h4>Readings</h4>
+    <fielset>
+      <legend>Readings properites</legend>
+      <p>Define the completion criteria from this reading assingment.</p>
+      <form action="" id="readings-form">
+        <label for="readings-threshold">Threshold: </label>
+        <p>The number of points required to receive credit for this reading assignment. Enter 0 to disable the threshold.</p>
+        <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
 
-  <div class="col-md-6" style="border-left: solid black 1px;">
-    <form action="" id="readings-form">
-      <label for="datetimepicker">Due Date</label>
-      <input id="datetimepicker" name="due" type="text"><br>
+        <label for="readings-points-to-award">Points to award: </label>
+        <p>The points to award if the threshold specified above is met. If the threshold is 0, this is not used.</p>
+        <input class="form-control" id="readings-points-to-award" name="points_to_award" type="text"><br>
 
-      <label for="assignment_description">Description: </label>
-      <input class="form-control" id="assignment_description" name="description" type="text"><br>
+        <label for="readings-autograder">Autograder: </label>
+        <p>Define how reading assignments are graded.</p>
+        <select class="form-control" id="readings-autograder" name="readings_autograder">
+          <option value="manual">Manual</option>
+          <option value="all_or_nothing">All or nothing</option>
+          <option value="pct_correct">% correct</option>
+          <option value="interact">User interaction</option>
+        </select>
+        <input class="btn btn-default" onclick="update_assignment()" type="button" value="Save">
+      </form>
+    </fieldset>
 
-      <label for="readings-threshold">Threshold: </label>
-      <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
-
-      <label for="readings-points-to-award">Points to award: </label>
-      <input class="form-control" id="readings-points-to-award" name="points_to_award" type="text"><br>
-
-      <label for="readings-autograder">Autograder: </label>
-      <select class="form-control" id="readings-autograder" name="readings_autograder">
-        <option value="manual">Manual</option>
-        <option value="all_or_nothing">All or nothing</option>
-        <option value="pct_correct">% correct</option>
-        <option value="interact">User interaction</option>
-      </select>
-      <input class="btn btn-default" onclick="update_readings_grading(this.form)" type="button" value="Save">
-    </form>
+    <p>Define the readings students must complete by selecting chapters and subchapters of the textbook.</p>
+    <table id="readingsTable" style="width:100%;">
+    </table>
+    <input id="search-tree-readings-picker" type="text">
+    <div id="tree-readings-picker"></div>
   </div>
 
-
-  <table id="readingsTable" style="width:100%;">
-  </table>
-  <input id="search-tree-readings-picker" type="text">
-  <div id="tree-readings-picker"></div>
-
-  <div class="col-md-12" style="margin-top: 20px">
-    <div class="list-group" style="margin-bottom: 50px">
-      <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
-      <div class="list-group">
-        <div class="list-group-item">
-          <span id="totalPoints"></span><br>
-          <table id="questionTable" style="width:100%;"></table>
-          <div style="text-align: center">
-            <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
-          </div>
-        </div>
-      </div>
+  <div class="col-md-6" id="rightSection" style="visibility: hidden;">
+    <h4>Problems</h4>
+    <p>Select the problems which compose this assignment.</p>
+    <span id="totalPoints"></span><br>
+    <table id="questionTable" style="width:100%;"></table>
+    <div style="text-align: center">
+      <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
     </div>
-  </div>
-</div>
-
-<div class="col-md-6" id="rightSection" style="border-left: solid black 1px;" xtra="visibility: hidden;">
-  <div class="container">
-    <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
-    <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a>
-    <div class="tab-content">
-      <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
-        <input id="search-tree-question-picker" type="text">
-        <div id="tree-question-picker"></div>
-      </div>
-      <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
-        <h5 style="text-align: center">Search Question Bank</h5>
-        <form action="" id="qbankform" name="qbankform" role="form">
-          <div class="form-group">
-            <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
-          </div>
-          <div class="form-group">
-            <label for="chapter">Chapter</label>
-            <select class="form-control" id="chapter">
-              <option selected="selected" value=""></option>
-              {{ for chapter in chapters: }}
-              <option value="{{=chapter}}">{{=chapter}}</option>
-              {{ pass }}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
-          </div>
-          <div class="form-group">
-            <label for="difficultyselector">Difficulty</label>
-            <div id="difficultyselector">
-              <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="tags">Tags</label>
-            <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
-              {{ for tag in tags: }}
-              <option value="{{=tag}}">{{ =tag }}</option>
-              {{ pass }}
-            </select>
-          </div>
-          <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
-        </form>
-        <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
-          <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
-          </select>
-          <form id="questionform" name="questionform" style="visibility: hidden">
-            <label for="points">Points</label>
-            <input id="points" name="points" type="number">
-            <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
-            <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
-          </form>
+    <div class="container">
+      <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
+      <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a>
+      <div class="tab-content">
+        <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
+          <input id="search-tree-question-picker" type="text">
+          <div id="tree-question-picker"></div>
         </div>
-        <div class="col-md-12">
-          <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
-            <div class="list-group" style="margin-top: 20px">
-              <div class="list-group-item">
-                <div id="q_author"></div>
-                <div id="q_difficulty"></div>
-                <div id="q_tags"></div>
+        <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
+          <h5 style="text-align: center">Search Question Bank</h5>
+          <form action="" id="qbankform" name="qbankform" role="form">
+            <div class="form-group">
+              <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
+            </div>
+            <div class="form-group">
+              <label for="chapter">Chapter</label>
+              <select class="form-control" id="chapter">
+                <option selected="selected" value=""></option>
+                {{ for chapter in chapters: }}
+                <option value="{{=chapter}}">{{=chapter}}</option>
+                {{ pass }}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
+            </div>
+            <div class="form-group">
+              <label for="difficultyselector">Difficulty</label>
+              <div id="difficultyselector">
+                <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
               </div>
-              <div class="form-group">
-                <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
-              </div>
-              <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                      <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
-                    </div><!-- Modal Body -->
-                    <div class="modal-body">
-                      <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
-                      <form action="" id="editForm" name="editForm">
-                        <div class="form-group">
-                          <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
-                        </div>
-                        <div class="form-group">
-                          <label for="difficultyselector">Change Difficulty</label>
-                          <div id="change_difficulty">
-                            <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+            </div>
+            <div class="form-group">
+              <label for="tags">Tags</label>
+              <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
+                {{ for tag in tags: }}
+                <option value="{{=tag}}">{{ =tag }}</option>
+                {{ pass }}
+              </select>
+            </div>
+            <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
+          </form>
+          <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
+            <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
+            </select>
+            <form id="questionform" name="questionform" style="visibility: hidden">
+              <label for="points">Points</label>
+              <input id="points" name="points" type="number">
+              <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
+              <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
+            </form>
+          </div>
+          <div class="col-md-12">
+            <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
+              <div class="list-group" style="margin-top: 20px">
+                <div class="list-group-item">
+                  <div id="q_author"></div>
+                  <div id="q_difficulty"></div>
+                  <div id="q_tags"></div>
+                </div>
+                <div class="form-group">
+                  <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
+                </div>
+                <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
+                      </div><!-- Modal Body -->
+                      <div class="modal-body">
+                        <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
+                        <form action="" id="editForm" name="editForm">
+                          <div class="form-group">
+                            <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
                           </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="addTags">Add Tags</label>
-                          <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
-                            {{ for tag in tags: }}
-                            <option value="{{=tag}}">{{ =tag }}</option>
-                            {{ pass }}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="editRST">Edit Question</label>
-                          <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
-                        </div>
-                        <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
-                      </form>
-                    </div><!-- Modal Footer -->
-                    <div class="modal-footer">
-                      <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                          <div class="form-group">
+                            <label for="difficultyselector">Change Difficulty</label>
+                            <div id="change_difficulty">
+                              <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="addTags">Add Tags</label>
+                            <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
+                              {{ for tag in tags: }}
+                              <option value="{{=tag}}">{{ =tag }}</option>
+                              {{ pass }}
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="editRST">Edit Question</label>
+                            <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
+                          </div>
+                          <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
+                        </form>
+                      </div><!-- Modal Footer -->
+                      <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -226,12 +235,11 @@
           </div>
         </div>
       </div>
+      <div id="component-preview"></div>
     </div>
   </div>
 </div>
-<div class="col-md-6" id="previewside">
-      <div id="component-preview"></div>
-</div>
+
 <script type="text/javascript">
 
 var question_picker = $('#tree-question-picker');

@@ -1275,9 +1275,9 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
     }]);
 }
 
-// Update the grading parameters used for a reading assignment.
-function update_readings_grading(form) {
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+// Update the grading parameters used for an assignment.
+function update_assignment() {
+    $.getJSON('save_assignment', $('#assignment-form').serialize() + '&' + $('#readings-form').serialize() + '&assignment_id=' + getAssignmentId());
 }
 
 // Remove a reading from an assignment.
