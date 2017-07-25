@@ -29,7 +29,7 @@ def index():
 
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.get_vars["sid"])
-    data_analyzer.load_assignment_metrics(request.get_vars["sid"])
+    data_analyzer.load_assignment_metrics(request.get_vars["sid"], studentView=True)
 
     chapters = []
     for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
@@ -1090,33 +1090,86 @@ def doAssignment():
         session.flash = "Please Login"
         return redirect(URL('default','index'))
 
-
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
-    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')).select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
-    test=[]
-    readings = db((db.assignment_questions.assignment_id == assignment.id) & (db.assignment_questions.question_id == db.questions.id) & (db.assignment_questions.reading_assignment == 'T')).select(orderby=db.assignment_questions.sorting_priority)
+
+    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
+                        (db.assignment_questions.question_id == db.questions.id) & \
+                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
+                        .select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+
+    readings = db((db.assignment_questions.assignment_id == assignment.id) & \
+                (db.assignment_questions.question_id == db.questions.id) & \
+                (db.assignment_questions.reading_assignment == 'T')) \
+                .select(db.questions.base_course, db.questions.name, orderby=db.assignment_questions.sorting_priority)
+
     questions_scores = db((db.assignment_questions.assignment_id == assignment.id) & \
                     (db.assignment_questions.question_id == db.questions.id) & \
                     (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
                     (db.question_grades.sid == auth.user.username) & \
-                    (db.question_grades.div_id == db.questions.name)).select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
+                    (db.question_grades.div_id == db.questions.name)) \
+                    .select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
 
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    data_analyzer.load_user_metrics(auth.user.username)
-    data_analyzer.load_assignment_metrics(auth.user.username)
+    questionslist = []
+    readingsDict = {}
 
-    releasedScoreCheck = data_analyzer.grades[assignment.name]['score']
+    # Formats the readings information into readingsDict
+    # The keys of readingsDict are chapters, and each value is a list of lists detailing the information about each section within the assigned chapter
+    for r in readings:
+        chapterSections = r.name.split('/')
+
+        labels = db((db.chapters.chapter_name == chapterSections[0]) & \
+                    (db.sub_chapters.sub_chapter_name == chapterSections[1])).select(db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label).first()
+
+        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
+            (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
+            (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
+
+        chapterPath = (completion.chapter_id + '/toctree.html')
+        sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
+
+        if completion.chapter_id not in readingsDict:
+            readingsDict[completion.chapter_id] = []
+
+        if completion.status == 1:
+            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
+        elif completion.status == 0:
+            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
+        else:
+            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
+
+    # This is to get the chapters' completion states based on the completion of sections of the readings in assignments
+    # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
+    # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
+    # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
+    # Each chapter's completion gets appended to the first list within the list of section information
+
+    for chapter in readingsDict:
+        hasStarted = False
+        completionState = 'completed'
+        for s in readingsDict[chapter]:
+            if s[4] == 'completed':
+                hasStarted = True
+            if s[4] == 'started':
+                hasStarted = True
+                completionState = 'started'
+        if hasStarted:
+            readingsDict[chapter][0].append(completionState)
+        else:
+            readingsDict[chapter][0].append('notstarted')
 
     currentqScore = 0
-   
+    # This formats questionslist into a list of lists.
+    # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
+    # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
     for q in questions_html:
+        # It there is no html recorded, the question can't be rendered
         if q.htmlsrc != None:
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
-                if q.id == questions_scores[currentqScore]['questions'].id  and releasedScoreCheck != 'N/A':
+                if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
                     questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
                     currentqScore += 1
                 else:
@@ -1125,9 +1178,9 @@ def doAssignment():
                 # There are still questions, but no more recorded grades
                 questioninfo  = [q.htmlsrc, '', '','']
 
-            test.append(questioninfo)
+            questionslist.append(questioninfo)
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questions_html=questions_html, questioninfo=test, course_id=auth.user.course_name)
+    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=questionslist, course_id=auth.user.course_name, readings=readingsDict)
 
 def chooseAssignment():
     if not auth.user:
@@ -1135,8 +1188,5 @@ def chooseAssignment():
         return redirect(URL('default','index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
-    print(course)
     assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.assignment_type)
-    print(assignments)
     return(dict(assignments=assignments))
-
