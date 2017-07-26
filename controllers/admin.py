@@ -142,7 +142,7 @@ def sections_create():
     if form.accepts(request,session):
         section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
         session.flash = "Section Created"
-        return redirect('/%s/admin/sections_create' % (request.application))
+        return redirect('/%s/admin/admin' % (request.application))
     return dict(
         form = form,
         )
