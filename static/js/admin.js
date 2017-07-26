@@ -1604,15 +1604,6 @@ function getQuestionText() {
     }
 }
 
-// More preview panel functionality I don't understand.
-function questions2Rst() {
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    $.getJSON('/runestone/admin/questions2rst/' + assignmentid, {}, function () {
-        alert("done")
-    });
-}
-
 
 
 // ***********
