@@ -12,7 +12,7 @@ from lxml import html
 #sys.path.insert(0,os.path.dirname(__file__))
 #from coach import get_lint
 
-logger = logging.getLogger("web2py.root")
+logger = logging.getLogger('web2py.app.runestone')
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
@@ -896,7 +896,7 @@ def getAssessResults():
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "mChoice":
-        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer. db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
+        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
