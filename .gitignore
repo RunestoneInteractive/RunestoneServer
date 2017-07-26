@@ -49,4 +49,4 @@ node_modules
 !/static/images
 !/static/bootstrap*
 !/static/dashboard*
-.vscode/*```
+.vscode/*
