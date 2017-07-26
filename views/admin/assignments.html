@@ -123,17 +123,19 @@
     <p>Select the problems which compose this assignment.</p>
     <span id="totalPoints"></span><br>
     <table id="questionTable" style="width:100%;"></table>
-    <div style="text-align: center">
-      <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
-    </div>
     <div class="container">
       <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
       <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a>
+      <a class="btn btn-default" data-toggle="tab" href="#qwrite">Write</a>
       <div class="tab-content">
+
+        <!-- Browse tab -->
         <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
           <input id="search-tree-question-picker" type="text">
           <div id="tree-question-picker"></div>
         </div>
+
+        <!-- Search tab -->
         <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
           <h5 style="text-align: center">Search Question Bank</h5>
           <form action="" id="qbankform" name="qbankform" role="form">
@@ -234,6 +236,83 @@
             </div>
           </div>
         </div>
+
+        <!-- Write tab -->
+        <div class="form-group tab-pane fade" id="qwrite">
+          <form id="newqform" name="newqform">
+            <div class="col-md-12">
+              <label for="template">Template:</label><select id="template">
+                <option value="activecode">
+                  activecode
+                </option>
+                <option value="mchoice">
+                  multiple choice
+                </option>
+                <option value="clickablearea">
+                  clickable area
+                </option>
+                <option value="codelens">
+                  codelens
+                </option>
+                <option value="dragndrop">
+                  drag and drop
+                </option>
+                <option value="parsons">
+                  pasons
+                </option>
+                <option value="fillintheblank">
+                  fill in the blank
+                </option>
+                <option value="poll">
+                  poll
+                </option>
+                <option value="reveal">
+                  reveal
+                </option>
+                <option value="shortanswer">
+                  short answer
+                </option>
+                <option value="usageAssignment">
+                  usageAssignment
+                </option>
+              </select> <input class="btn" onclick="display_write();" type="button" value="Go">
+            </div>
+            <div id="hiddenwrite" style="visibility: hidden">
+              <div class="col-md-12">
+                <label for="qcode"></label>
+                <textarea cols="65" form="newqform" id="qcode" rows="12"></textarea>
+              </div>
+              <div class="col-md-12">
+                <p id="qnameerror" style="color: red"></p>
+              </div>
+              <div class="col-md-12">
+                <label>Difficulty:</label> 1<input checked="checked" id="difficulty1" name="difficulty" type="radio" value="1"> <input id="difficulty2" name="difficulty" type="radio" value="2"> <input id="difficulty3" name="difficulty" type="radio" value="3"> <input id="difficulty4" name="difficulty" type="radio" value="4"> <input id="difficulty5" name="difficulty" type="radio" value="5">5
+              </div>
+              <div class="col-md-12">
+                <label for="qtags">Tags:</label> <input id="qtags" type="text">
+              </div>
+              <div class="col-md-12">
+                <label>Location:</label><select id="qchapter">
+                  <option>
+                    Chapter
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label for="isprivate">Private</label><input id="isprivate" type="checkbox">
+              </div>
+              <div class="col-md-12">
+                <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
+              </div>
+                <input type="hidden" id="qrawhtml" name="qrawhtml" value="">
+              <div class="col-md-12">
+                <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Preview">
+                <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
+              </div>
+            </div>
+          </form>
+        </div>
+
       </div>
       <div id="component-preview"></div>
     </div>
