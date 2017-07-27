@@ -134,22 +134,6 @@ db.define_table('assignment_types',
     migrate='runestone_assignment_types.table',
     )
 
-existing_types = []
-type_query = db(db.assignment_types).select()
-for assign_type in type_query:
-    existing_types.append(assign_type.name)
-
-if 'summative' not in existing_types:
-    db.assignment_types.insert(name='summative')
-
-if 'formative' not in existing_types:
-    db.assignment_types.insert(name='formative')
-
-if 'external' not in existing_types:
-    db.assignment_types.insert(name='external')
-
-
-
 
 db.define_table('assignments',
     Field('course', db.courses),
