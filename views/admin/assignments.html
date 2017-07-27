@@ -46,6 +46,7 @@
     <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
     <fieldset>
       <legend>Assignment properties</legend>
+      <span id="totalPoints"></span><br>
       <form action="" id="assignment-form">
         <label for="datetimepicker">Due Date</label>
         <input id="datetimepicker" name="due" type="text"><br>
@@ -138,7 +139,6 @@
         <div id="problems-collapse" class="panel-collapse collapse">
           <div class="panel-body">
             <p>Select the problems which compose this assignment.</p>
-            <span id="totalPoints"></span><br>
             <table id="questionTable" style="width:100%;"></table>
             <div class="container">
               <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
