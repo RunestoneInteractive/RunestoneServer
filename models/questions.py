@@ -42,6 +42,7 @@ db.define_table('assignment_questions',
                 Field('reading_assignment', type='boolean'), # so we can differentiate reading part of an assignment from the questions to be embedded on the assignment page
                                                              # Also use this when it's an mchoice or parsons that's within a subchapter, not to be embeddedon the assignment page
                 Field('sorting_priority', type='integer'), #determines sort order of questions when displaying
+                Field('activities_required', type='integer'), # specifies how many activities in a sub chapter a student must perform in order to receive credit
                 Field('assessment_type', db.assignment_types,
                       requires=IS_EMPTY_OR(IS_IN_DB(db, 'assignment_types.id', '%(name)s'))),   # deprecated; shouldn't be property of assignment_question
                 migrate='runestone_assignment_questions.table')

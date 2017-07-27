@@ -1166,14 +1166,21 @@ def add__or_update_assignment_question():
     # subchapters tables, in RunestoneComponents
     question_id = _get_question_id(question_name, auth.user.course_id)
     question_type = db.questions[question_id].question_type
+    chapter = db.questions[question_id].chapter
+    subchapter db.questions[question_id].subchapter
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
     if tmpSp != None:
         sp = 1 + tmpSp
     else:
         sp = 0
 
+    activity_count = 0
     if question_type == 'page':
         reading_assignment = 'T'
+        # get the count of 'things to do' in this chap/subchap
+        activity_count = db((db.questions.chapter==chapter) & 
+                   (db.questions.subchapter==subchapter)).count()
+
     else:
         reading_assignment = None
 
@@ -1182,7 +1189,7 @@ def add__or_update_assignment_question():
     try:
         points = int(request.vars['points'])
     except:
-        points = 0
+        points = activity_count
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
@@ -1201,6 +1208,7 @@ def add__or_update_assignment_question():
         total = _set_assignment_max_points(assignment_id)
         return json.dumps(dict(
             total = total,
+            activity_count=activity_count,
             autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
             which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
         ))
@@ -1216,16 +1224,8 @@ def _get_question_id(question_name, course_id):
     if question:
         return int(question.id)
     else:
-        # insert the question object since it doesn't exist yet; must be a page
-        base_course = db(
-            (db.courses.id == course_id)
-            ).select(db.courses.base_course).first().base_course
-        id = db.questions.insert(
-                name = question_name,
-                base_course = base_course,
-                question_type = 'page'
-        )
-        return int(id)
+        # Hmmm, what should we do if not found?
+        return None
 
     # return int(db((db.questions.name == question_name) &
     #           (db.questions.base_course == db.courses.base_course) &
