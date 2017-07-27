@@ -1272,7 +1272,7 @@ function assignmentInfo() {
 function updateReading(subchapter_id, num_required, points, autograde, which_to_grade) {
     $.getJSON('add__or_update_assignment_question', {
         assignment: getAssignmentId(),
-        question: node.id,
+        question: subchapter_id,
         num_required: num_required,
         points: points,
         autograde: autograde,
@@ -1280,8 +1280,8 @@ function updateReading(subchapter_id, num_required, points, autograde, which_to_
     }).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
-        if (readings_table.bootstrapTable('getRowByUniqueId', node.id) === null) {
-            appendToReadingsTable(node.id, response_JSON['activity_count'], num_required, points, autograde,
+        if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
+            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], num_required, points, autograde,
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
@@ -1629,7 +1629,7 @@ function getQuestionText() {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var textarea = document.getElementById('editRST');
-            textarea.innerHTML = JSON.parse(obj.responseText);
+            textarea.innerHTML = obj.responseText;
         }
     }
 }
