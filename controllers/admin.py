@@ -229,7 +229,6 @@ def assignments():
 
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
-    print("ready")
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     chapter_labels = []
@@ -1069,9 +1068,6 @@ def get_assignment():
         print(ex)
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
-    assignment_data['threshold'] = assignment_row.threshold
-    assignment_data['points_to_award'] = assignment_row.points_to_award
-    assignment_data['readings_autograder'] = assignment_row.readings_autograder
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1098,6 +1094,7 @@ def get_assignment():
     #return json.dumps(db._lastsql)
     questions_data = []
     for row in a_q_rows:
+        logger.debug(row.questions.question_type)
         questions_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
@@ -1137,9 +1134,6 @@ def save_assignment():
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,
             description=request.vars['description'],
-            threshold=request.vars['threshold'],
-            points_to_award=request.vars['points_to_award'],
-            readings_autograder=request.vars['readings_autograder'],
             duedate=due,
         )
         return {request.vars['name']: assignment_id}
@@ -1167,7 +1161,7 @@ def add__or_update_assignment_question():
     question_id = _get_question_id(question_name, auth.user.course_id)
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
-    subchapter db.questions[question_id].subchapter
+    subchapter = db.questions[question_id].subchapter
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
     if tmpSp != None:
         sp = 1 + tmpSp
