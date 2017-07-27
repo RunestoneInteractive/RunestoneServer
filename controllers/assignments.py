@@ -5,7 +5,7 @@ import sys
 import json
 import logging
 
-logger = logging.getLogger("web2py.root")
+logger = logging.getLogger("web2py.app.runestone")
 logger.setLevel(logging.DEBUG)
 
 
@@ -72,7 +72,7 @@ def create():
     assignment = db(db.assignments.id == request.get_vars.id).select().first()
     form = SQLFORM(db.assignments, assignment,
         showid = False,
-        fields=['name','points','assignment_type','threshold'],
+        fields=['name','points','assignment_type'],
         keepvalues = True,
         formstyle='table3cols',
         )
@@ -98,7 +98,7 @@ def update():
         form = SQLFORM(db.assignments, assignment,
             showid = False,
             deletable=True,
-            fields=['name','points','assignment_type','threshold','released'],
+            fields=['name','points','assignment_type','released'],
             keepvalues = True,
             formstyle='table3cols',
             )
@@ -541,7 +541,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
-def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
+def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
     # print "autograding", assignment_id, sid, question_name, deadline, autograde
 
     autograde='all_or_nothing'
@@ -624,11 +624,17 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         score = 0
 
     # Save the score
+    if save_score:
+        _save_question_grade(sid, course_name, question_name, score, id)
+
+    return score
+
+def _save_question_grade(sid, course_name, question_name, score, id):
     db.question_grades.update_or_insert(
         ((db.question_grades.sid == sid) &
-         (db.question_grades.course_name == course_name) &
-         (db.question_grades.div_id == question_name)
-         ),
+        (db.question_grades.course_name == course_name) &
+        (db.question_grades.div_id == question_name)
+        ),
         sid=sid,
         course_name=course_name,
         div_id=question_name,
@@ -640,7 +646,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
 def _compute_assignment_total(student, assignment):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
     # student is a row, containing id and username
-    # assignment is a row, containing name and id and points and threshold
+    # assignment is a row, containing name and id and points
 
     # Get all question_grades for this sid/assignment_id
     # Retrieve from question_grades table  with right sids and div_ids
@@ -655,15 +661,9 @@ def _compute_assignment_total(student, assignment):
              & (db.questions.id == db.assignment_questions.question_id) \
              & (db.assignment_questions.assignment_id == assignment.id)
     scores = db(query).select(db.question_grades.score)
-    # Sum them up; if threshold, compute total based on threshold
+
     total = sum([row.score for row in scores])
-    if assignment.threshold:
-        if total >= assignment.threshold:
-            score = assignment.points
-        else:
-            score = 0
-    else:
-        score = total
+    score = total
 
     grade = db(
         (db.grades.auth_user == student.id) &
@@ -784,13 +784,41 @@ def autograde():
         # get all qids and point values for this assignment
         questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
                              (db.assignment_questions.question_id == db.questions.id)).select()
+
+    readings = [(row.questions.name, 
+                 row.questions.chapter, 
+                 row.questions.subchapter, 
+                 row.assignment_questions.points, 
+                 row.assignment_questions.activities_required, 
+                 row.assignment_questions.autograde,
+                 row.assignment_questions.which_to_grade,
+                 ) for row in questions_query if row.assignment_questions.reading_assignment == True]
+    logger.debug(readings)
+    # Now for each reading, get all of the questions in that subsection
+    # call _autograde_one_q using the autograde and which to grade for that section. likely interact
+    # 
+    count = 0
+    for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
+        count += 1
+        for s in sids:
+            score = 0
+            rows = db((db.questions.chapter == chapter) & (db.questions.subchapter == subchapter)).select()
+            for row in rows:
+                score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
+                                          deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
+            if score >= ar:
+                save_points = points
+            else:
+                save_points = 0
+
+            _save_question_grade(s, auth.user.course_name, name, save_points, None)
+
     questions = [(row.questions.name,
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query]
+                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment != 'T']
 
-    count = 0
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
             _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
