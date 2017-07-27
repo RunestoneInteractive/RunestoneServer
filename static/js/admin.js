@@ -1176,6 +1176,26 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
 }
 
 
+// Append a row to the question table.
+function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+    var _id = 'question_table_' + name;
+    question_table.bootstrapTable('append', [{
+        question: name,
+        points: points,
+        autograde: autograde,
+        autograde_possible_values: autograde_possible_values,
+        which_to_grade: which_to_grade,
+        which_to_grade_possible_values: which_to_grade_possible_values,
+        // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+        _id: _id,
+    }]);
+}
+
+// Update the grading parameters used for an assignment.
+function update_assignment(form) {
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+}
+
 // Return the assignment id based on the value selected in the ``assignlist`` item.
 function getAssignmentId() {
     var assignlist = document.getElementById('assignlist');
@@ -1239,45 +1259,53 @@ function assignmentInfo() {
         for (let readings_data of data['pages_data']) {
             id = readings_data['name'];
             trp.check_node(trp.get_node(id));
-            appendToReadingsTable(id)
+            appendToReadingsTable(id, readings_data['activity_count'], readings_data['num_required'], readings_data['points'], readings_data['autograde'], readings_data['autograde_possible_values'], readings_data['which_to_grade'], readings_data['which_to_grade_possible_values']);
         }
         trp.ignore_check = false;
     });
 }
 
 
+// Update a reading.
+function updateReading(subchapter_id, num_required, points, autograde, which_to_grade) {
+    $.getJSON('add__or_update_assignment_question', {
+        assignment: getAssignmentId(),
+        question: node.id,
+        num_required: num_required,
+        points: points,
+        autograde: autograde,
+        which_to_grade: which_to_grade,
+    }).done(function (response_JSON) {
+        $('#totalPoints').html('Total points: ' + response_JSON['total']);
+        // See if this question already exists in the table. Only append if it doesn't exist.
+        if (readings_table.bootstrapTable('getRowByUniqueId', node.id) === null) {
+            appendToReadingsTable(node.id, response_JSON['activity_count'], num_required, points, autograde,
+                response_JSON['autograde_possible_values'], which_to_grade,
+                response_JSON['which_to_grade_possible_values']);
+        }
+    });
+}
+
+
 // Append a row to the readings table given the ID of the reading.
-function appendToReadingsTable(readings_id) {
+function appendToReadingsTable(subchapter_id, activity_count, num_required, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     // Find this node in the tree.
-    var node = readings_picker.jstree(true).get_node(readings_id);
+    var node = readings_picker.jstree(true).get_node(subchapter_id);
     var _id = 'readings_table_' + node.id;
     readings_table.bootstrapTable('append', [{
         chapter: readings_picker.jstree(true).get_node(node.parent).text,
         subchapter: node.text,
         subchapter_id: node.id,
-        // Set an `ID for the row`_.
-        _id: _id,
-    }]);
-}
-
-// Append a row to the question table.
-function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    var _id = 'question_table_' + name;
-    question_table.bootstrapTable('append', [{
-        question: name,
+        activity_count: activity_count,
+        num_required: num_required,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
         which_to_grade: which_to_grade,
         which_to_grade_possible_values: which_to_grade_possible_values,
-        // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+        // Set an `ID for the row`_.
         _id: _id,
     }]);
-}
-
-// Update the grading parameters used for an assignment.
-function update_assignment() {
-    $.getJSON('save_assignment', $('#assignment-form').serialize() + '&' + $('#readings-form').serialize() + '&assignment_id=' + getAssignmentId());
 }
 
 // Remove a reading from an assignment.
