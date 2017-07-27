@@ -385,7 +385,7 @@ $(function () {
                 // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
                 editable: {
                     source: function () {
-                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
+                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values', question_table);
                     },
                 },
                 editableType: 'select',
@@ -398,7 +398,7 @@ $(function () {
                 editable: {
                     source: function () {
                         // Update the menu for this item.
-                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values');
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values', question_table);
                     }
                 },
                 editableType: 'select',
@@ -484,7 +484,7 @@ $(function () {
                 field: 'num_required',
                 title: '# required',
                 editable: true,
-                // TODO: Validate that this is <= activity_count.
+                // TODO: Validate that this is <= activity_count. See validate at http://vitalets.github.io/x-editable/docs.html#editable. Problem: how can this function determine the row in which it lives?
             }, {
                 field: 'points',
                 title: 'Points',
@@ -498,7 +498,7 @@ $(function () {
                 // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
                 editable: {
                     source: function () {
-                        return menu_from_editable(this, {interact: 'Interaction', correct_answer: 'Correct answer',}, 'autograde_possible_values');
+                        return menu_from_editable(this, {interact: 'Interaction', correct_answer: 'Correct answer',}, 'autograde_possible_values', readings_table);
                     },
                 },
                 editableType: 'select',
@@ -511,7 +511,7 @@ $(function () {
                 editable: {
                     source: function () {
                         // Update the menu for this item.
-                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values');
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values', readings_table);
                     }
                 },
                 editableType: 'select',

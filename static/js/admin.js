@@ -1097,11 +1097,13 @@ function menu_from_editable(
     // A dict which translates from values from the DB to user-friendly labels.
     ui,
     // The key to the row which gives allowable values from which to create a menu.
-    row_key) {
+    row_key,
+    // The table containing ``editable_element``.
+    table) {
 
     // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
     var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
-    var row = question_table.bootstrapTable('getData')[row_index];
+    var row = table.bootstrapTable('getData')[row_index];
     // Determine the appropriate menu for this question. First, find its autograde values in the tree.
     // Map these to the format necessary for a select control.
     var select_source = [];
