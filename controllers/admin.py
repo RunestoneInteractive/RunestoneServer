@@ -1082,15 +1082,15 @@ def get_assignment():
     for row in a_q_rows:
         if row.questions.question_type == 'page':
             # get the count of 'things to do' in this chap/subchap
-            activity_count = db((db.questions.chapter==chapter) & 
-                       (db.questions.subchapter==subchapter)).count()
+            activity_count = db((db.questions.chapter==row.questions.chapter) & 
+                       (db.questions.subchapter==row.questions.subchapter)).count()
 
         pages_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
             autograde = row.assignment_questions.autograde,
             activity_count = activity_count,
-            activities_required = row.assigment_questions.activities_required,
+            activities_required = row.assignment_questions.activities_required,
             which_to_grade = row.assignment_questions.which_to_grade,
             autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
             which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
