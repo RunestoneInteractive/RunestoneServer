@@ -229,7 +229,6 @@ def assignments():
 
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
-    print("ready")
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     chapter_labels = []
@@ -369,14 +368,13 @@ def grading():
 
     assignments = {}
     assignments_query = db(db.assignments.course == auth.user.course_id).select()
-    summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
 
     assignmentids = {}
     assignment_deadlines = {}
 
     for row in assignments_query:
         assignmentids[row.name] = int(row.id)
-        assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
+        assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
         questions = []
         for q in assignment_questions:
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
@@ -565,9 +563,6 @@ def assignmentInfo():
                 question_dict['name'] = row.name
                 question_dict['timed'] = timed
                 question_dict['points'] = question_points
-                type_id = db((db.assignment_questions.question_id == question_id) & (db.assignment_questions.assignment_id == assignment_id)).select(db.assignment_questions.assessment_type).first().assessment_type
-                type = db(db.assignment_types.id == type_id).select(db.assignment_types.name).first().name
-                question_dict['type'] = type
                 allquestion_info[int(row.id)] = question_dict
     except Exception as ex:
         print(ex)
@@ -707,7 +702,6 @@ def addToAssignment():
     #     db.assignment_questions.insert(assignment_id=assignment_id,
     #                                    question_id=question_id,
     #                                    points=points,
-    #                                    assessment_type=type_id,
     #                                    autograde=autograde)
     #     assignment = db(db.assignments.id == assignment_id).select().first()
     #     assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
@@ -786,7 +780,10 @@ def edit_question():
 def question_text():
     qname = request.vars['question_name']
     q_text = db(db.questions.name == qname).select(db.questions.question).first().question
-    return q_text
+    if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
+        q_text = q_text[2:].decode('hex')
+    logger.debug(q_text)
+    return json.dumps(unicode(q_text))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -849,7 +846,6 @@ def createquestion():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
-    typeid = db(db.assignment_types.name == tab).select(db.assignment_types.id).first().id
     assignmentid = int(request.vars['assignmentid'])
     points = int(request.vars['points'])
     timed = request.vars['timed']
@@ -860,7 +856,7 @@ def createquestion():
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
                  is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
-        assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points, assessment_type=typeid)
+        assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points)
 
         returndict = {request.vars['name']: newqID, 'timed':timed, 'points': points}
 
@@ -870,42 +866,6 @@ def createquestion():
         return json.dumps('ERROR')
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def questions2rst():
-    assignmentId = request.args[0]
-
-    custom_dir = os.path.join('applications', request.application, 'custom_courses', auth.user.course_name)
-    assignment_folder = os.path.join(custom_dir,'assignments')
-    if not os.path.exists(assignment_folder):
-        os.mkdir(assignment_folder)
-
-    assignment_file = os.path.join(assignment_folder,'assignment_{}.rst'.format(assignmentId))
-
-    questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.id,db.questions.question, join=db.questions.on(db.assignment_questions.question_id == db.questions.id) )
-
-    assignment = db(db.assignments.id == assignmentId).select().first()
-    points = assignment.points if assignment.points else 0
-    due = assignment.duedate if assignment.duedate else "None given"
-    description = assignment.description if assignment.description else "No Description"
-
-    with open(assignment_file,'w') as af:
-        af.write(assignment.name+'\n')
-        af.write("="*len(assignment.name)+'\n\n')
-        af.write("**Points**: {}\n\n".format(points))
-        af.write("**Due**: {}\n\n".format(due))
-        af.write(description+"\n\n")
-        for q in questions:
-            af.write(q.questions.question)
-            af.write("\n\n")
-
-    assign_list = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
-
-    with open(os.path.join(custom_dir,'assignments.rst'),'w') as af:
-        af.write("Assignments\n===========\n\n")
-        af.write(".. toctree::\n\n")
-        for a in assign_list:
-            af.write("   assignments/assignment_{}.rst\n".format(a.id))
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
     htmlsrc = db(
@@ -913,6 +873,8 @@ def htmlsrc():
         (db.questions.base_course == db.courses.base_course) &
         (db.courses.course_name == auth.user.course_name)
          ).select(db.questions.htmlsrc).first().htmlsrc
+    if htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
+        htmlsrc = htmlsrc.decode('hex')
     return json.dumps(unicode(htmlsrc))
 
 
@@ -1069,9 +1031,6 @@ def get_assignment():
         print(ex)
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
-    assignment_data['threshold'] = assignment_row.threshold
-    assignment_data['points_to_award'] = assignment_row.points_to_award
-    assignment_data['readings_autograder'] = assignment_row.readings_autograder
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1084,10 +1043,20 @@ def get_assignment():
                   ).select(orderby=db.assignment_questions.sorting_priority)
     pages_data = []
     for row in a_q_rows:
+        if row.questions.question_type == 'page':
+            # get the count of 'things to do' in this chap/subchap
+            activity_count = db((db.questions.chapter==row.questions.chapter) & 
+                       (db.questions.subchapter==row.questions.subchapter)).count()
+
         pages_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
-            autograde = row.assignment_questions.autograde
+            autograde = row.assignment_questions.autograde,
+            activity_count = activity_count,
+            activities_required = row.assignment_questions.activities_required,
+            which_to_grade = row.assignment_questions.which_to_grade,
+            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
         ))
 
     # Assemble the questions that are part of the assignment
@@ -1098,6 +1067,7 @@ def get_assignment():
     #return json.dumps(db._lastsql)
     questions_data = []
     for row in a_q_rows:
+        logger.debug(row.questions.question_type)
         questions_data.append(dict(
             name = row.questions.name,
             points = row.assignment_questions.points,
@@ -1120,9 +1090,6 @@ def save_assignment():
     # The following fields must be provided in request.vars (see modesl/grouped_assignments.py for model definition):
     # -- assignment_id (if it's an existing assignment; if none provided, then we insert a new assignment)
     # -- description
-    # -- threshold
-    # -- points_to_award (should be non-null only if threshold is non-zero)
-    # -- readings_autograder
     # -- duedate
 
     assignment_id = request.vars.get('assignment_id')
@@ -1137,9 +1104,6 @@ def save_assignment():
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,
             description=request.vars['description'],
-            threshold=request.vars['threshold'],
-            points_to_award=request.vars['points_to_award'],
-            readings_autograder=request.vars['readings_autograder'],
             duedate=due,
         )
         return {request.vars['name']: assignment_id}
@@ -1167,7 +1131,7 @@ def add__or_update_assignment_question():
     question_id = _get_question_id(question_name, auth.user.course_id)
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
-    subchapter db.questions[question_id].subchapter
+    subchapter = db.questions[question_id].subchapter
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
     if tmpSp != None:
         sp = 1 + tmpSp
