@@ -1599,7 +1599,7 @@ function getQuestionText() {
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var textarea = document.getElementById('editRST');
-            textarea.innerHTML = obj.responseText;
+            textarea.innerHTML = JSON.parse(obj.responseText);
         }
     }
 }

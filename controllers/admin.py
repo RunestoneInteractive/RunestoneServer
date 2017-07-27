@@ -780,7 +780,10 @@ def edit_question():
 def question_text():
     qname = request.vars['question_name']
     q_text = db(db.questions.name == qname).select(db.questions.question).first().question
-    return q_text
+    if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
+        q_text = q_text[2:].decode('hex')
+    logger.debug(q_text)
+    return json.dumps(unicode(q_text))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
