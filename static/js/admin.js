@@ -1090,18 +1090,31 @@ function walk_jstree(instance, node, f) {
     });
 }
 
-// Given an editable element (a hyperlink) in the questions table, return the menu data for it.
+// Given an editable element (a hyperlink) in a bootstrap table, return the containing row.
+function row_from_editable(
+    // The editable jQuery element which needs a menu.
+    editable_element,
+    // The table containing ``editable_element``.
+    table) {
+
+    // Determine which row this editable is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
+    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
+    return table.bootstrapTable('getData')[row_index];
+}
+
+// Given an editable element (a hyperlink) in the a bootstrap table, return the menu data for it.
 function menu_from_editable(
     // The editable jQuery element which needs a menu.
     editable_element,
     // A dict which translates from values from the DB to user-friendly labels.
     ui,
     // The key to the row which gives allowable values from which to create a menu.
-    row_key) {
+    row_key,
+    // The table containing ``editable_element``.
+    table) {
 
-    // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
-    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
-    var row = question_table.bootstrapTable('getData')[row_index];
+    // Determine which row this editable is associated with.
+    var row = row_from_editable(editable_element, table);
     // Determine the appropriate menu for this question. First, find its autograde values in the tree.
     // Map these to the format necessary for a select control.
     var select_source = [];
@@ -1158,7 +1171,13 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    $.getJSON('/runestone/admin/add__or_update_assignment_question/?question=' + question_name + '&assignment=' + assignmentid + '&points=' + points + '&autograde=' + autograde + '&which_to_grade=' + which_to_grade, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('add__or_update_assignment_question', {
+        question: question_name,
+        assignment: assignmentid,
+        points: points,
+        autograde: autograde,
+        which_to_grade: which_to_grade
+    }).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
         if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
@@ -1169,6 +1188,26 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     });
 }
 
+
+// Append a row to the question table.
+function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+    var _id = 'question_table_' + name;
+    question_table.bootstrapTable('append', [{
+        question: name,
+        points: points,
+        autograde: autograde,
+        autograde_possible_values: autograde_possible_values,
+        which_to_grade: which_to_grade,
+        which_to_grade_possible_values: which_to_grade_possible_values,
+        // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+        _id: _id,
+    }]);
+}
+
+// Update the grading parameters used for an assignment.
+function update_assignment(form) {
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+}
 
 // Return the assignment id based on the value selected in the ``assignlist`` item.
 function getAssignmentId() {
@@ -1233,45 +1272,53 @@ function assignmentInfo() {
         for (let readings_data of data['pages_data']) {
             id = readings_data['name'];
             trp.check_node(trp.get_node(id));
-            appendToReadingsTable(id)
+            appendToReadingsTable(id, readings_data['activity_count'], readings_data['activities_required'], readings_data['points'], readings_data['autograde'], readings_data['autograde_possible_values'], readings_data['which_to_grade'], readings_data['which_to_grade_possible_values']);
         }
         trp.ignore_check = false;
     });
 }
 
 
+// Update a reading.
+function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+    $.getJSON('add__or_update_assignment_question', {
+        assignment: getAssignmentId(),
+        question: subchapter_id,
+        activities_required: activities_required,
+        points: points,
+        autograde: autograde,
+        which_to_grade: which_to_grade,
+    }).done(function (response_JSON) {
+        $('#totalPoints').html('Total points: ' + response_JSON['total']);
+        // See if this question already exists in the table. Only append if it doesn't exist.
+        if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
+            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], activities_required, points, autograde,
+                response_JSON['autograde_possible_values'], which_to_grade,
+                response_JSON['which_to_grade_possible_values']);
+        }
+    });
+}
+
+
 // Append a row to the readings table given the ID of the reading.
-function appendToReadingsTable(readings_id) {
+function appendToReadingsTable(subchapter_id, activity_count, activities_required, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     // Find this node in the tree.
-    var node = readings_picker.jstree(true).get_node(readings_id);
+    var node = readings_picker.jstree(true).get_node(subchapter_id);
     var _id = 'readings_table_' + node.id;
     readings_table.bootstrapTable('append', [{
         chapter: readings_picker.jstree(true).get_node(node.parent).text,
         subchapter: node.text,
         subchapter_id: node.id,
-        // Set an `ID for the row`_.
-        _id: _id,
-    }]);
-}
-
-// Append a row to the question table.
-function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    var _id = 'question_table_' + name;
-    question_table.bootstrapTable('append', [{
-        question: name,
+        activity_count: activity_count,
+        activities_required: activities_required,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
         which_to_grade: which_to_grade,
         which_to_grade_possible_values: which_to_grade_possible_values,
-        // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
+        // Set an `ID for the row`_.
         _id: _id,
     }]);
-}
-
-// Update the grading parameters used for a reading assignment.
-function update_readings_grading(form) {
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
 }
 
 // Remove a reading from an assignment.
@@ -1596,15 +1643,6 @@ function getQuestionText() {
             textarea.innerHTML = obj.responseText;
         }
     }
-}
-
-// More preview panel functionality I don't understand.
-function questions2Rst() {
-    var select = document.getElementById('assignlist');
-    var assignmentid = select.options[select.selectedIndex].value;
-    $.getJSON('/runestone/admin/questions2rst/' + assignmentid, {}, function () {
-        alert("done")
-    });
 }
 
 

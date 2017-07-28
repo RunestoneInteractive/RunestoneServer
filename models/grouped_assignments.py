@@ -134,22 +134,6 @@ db.define_table('assignment_types',
     migrate='runestone_assignment_types.table',
     )
 
-existing_types = []
-type_query = db(db.assignment_types).select()
-for assign_type in type_query:
-    existing_types.append(assign_type.name)
-
-if 'summative' not in existing_types:
-    db.assignment_types.insert(name='summative')
-
-if 'formative' not in existing_types:
-    db.assignment_types.insert(name='formative')
-
-if 'external' not in existing_types:
-    db.assignment_types.insert(name='external')
-
-
-
 
 db.define_table('assignments',
     Field('course', db.courses),
@@ -159,14 +143,6 @@ db.define_table('assignments',
                                                                                   # questions portion
     Field('name', 'string'),
     Field('points', 'integer'),  # max possible points on the assignment, cached sum of assignment_question points
-    Field('threshold', 'integer'),              # for reading portion of assignment; if earn above this threshold,
-                                                # get full credit (from points field of assignment;
-                                                # 0 or null means not using threshold
-    Field('points_to_award', 'integer'),  # points to award if using threshold and student exceeded threshold
-    Field('readings_autograder', 'text', default = 'interact'),       # for reading portion,
-                                                # assignment-level variable that will control
-                                                # autograding of reading preps.
-                                                # Allowable values: [visit, interact, correct]
     Field('released', 'boolean'),
     Field('description', 'text'),
     Field('duedate','datetime'),

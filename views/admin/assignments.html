@@ -33,15 +33,32 @@
 <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.js')}}">
 </script>
 
-<div class="col-md-6">
-  <h4 style="text-align: center;">Assignment</h4>
-  <select class="form-control" id="assignlist" onchange="assignmentInfo();">
-    {{ for assignmentid in assignments: }}
-    <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
-    {{ pass }}
-  </select>
-  <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
-  <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h4 style="text-align: center;">Assignment</h4>
+    <select class="form-control" id="assignlist" onchange="assignmentInfo();">
+      {{ for assignmentid in assignments: }}
+      <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
+      {{ pass }}
+    </select>
+    <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
+    <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+    <fieldset>
+      <legend>Assignment properties</legend>
+      <span id="totalPoints"></span><br>
+      <form action="" id="assignment-form">
+        <label for="datetimepicker">Due Date: </label>
+        <input id="datetimepicker" name="due" type="text"><br>
+
+        <label for="assignment_description">Description: </label>
+        <input class="form-control" id="assignment_description" name="description" type="text"><br>
+
+        <input class="btn btn-default" onclick="update_assignment(this.form)" type="button" value="Save">
+      </form>
+    <fieldset>
+  </div>
+  <div class="col-md-2"></div>
 </div>
 
 <!-- Modal -->
@@ -68,243 +85,237 @@
   </div>
 </div>
 
-<div class="col-md-11" id="leftpanel2" style="visibility: hidden">
+<div class="row">
+  <div class="col-md-12" id="leftpanel2" style="visibility: hidden">
+    <div class="panel-group">
+      <div class="panel panel-default">
 
-  <div class="col-md-6" style="border-left: solid black 1px;">
-    <form action="" id="readings-form">
-      <label for="datetimepicker">Due Date</label>
-      <input id="datetimepicker" name="due" type="text"><br>
-
-      <label for="assignment_description">Description: </label>
-      <input class="form-control" id="assignment_description" name="description" type="text"><br>
-
-      <label for="readings-threshold">Threshold: </label>
-      <input class="form-control" id="readings-threshold" name="threshold" type="text"><br>
-
-      <label for="readings-points-to-award">Points to award: </label>
-      <input class="form-control" id="readings-points-to-award" name="points_to_award" type="text"><br>
-
-      <label for="readings-autograder">Autograder: </label>
-      <select class="form-control" id="readings-autograder" name="readings_autograder">
-        <option value="manual">Manual</option>
-        <option value="all_or_nothing">All or nothing</option>
-        <option value="pct_correct">% correct</option>
-        <option value="interact">User interaction</option>
-      </select>
-      <input class="btn btn-default" onclick="update_readings_grading(this.form)" type="button" value="Save">
-    </form>
-  </div>
-
-
-  <table id="readingsTable" style="width:100%;">
-  </table>
-  <input id="search-tree-readings-picker" type="text">
-  <div id="tree-readings-picker"></div>
-
-  <div class="col-md-12" style="margin-top: 20px">
-    <div class="list-group" style="margin-bottom: 50px">
-      <h5 style="text-align: center; visibility: hidden">Questions by Type</h5>
-      <div class="list-group">
-        <div class="list-group-item">
-          <span id="totalPoints"></span><br>
-          <table id="questionTable" style="width:100%;"></table>
-          <div style="text-align: center">
-            <button class="btn" onclick="questions2Rst()">Write Assignment</button> <!-- Modal -->
+        <!-- Readings collapsible section -->
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#readings-collapse">Readings</a>
+          </h4>
+        </div>
+        <div id="readings-collapse" class="panel-collapse collapse">
+          <div class="panel-body">
+            <p>Define the readings students must complete by selecting chapters and subchapters of the textbook.</p>
+            <table id="readingsTable" style="width:100%;">
+            </table>
+            <input id="search-tree-readings-picker" type="text">
+            <div id="tree-readings-picker"></div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="col-md-6" id="rightSection" style="border-left: solid black 1px;" xtra="visibility: hidden;">
-  <div class="container">
-    <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a> <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a> <a class="btn btn-default" data-toggle="tab" href="#qwrite">Write</a>
-    <div class="tab-content">
-      <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
-        <input id="search-tree-question-picker" type="text">
-        <div id="tree-question-picker"></div>
-      </div>
-      <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
-        <h5 style="text-align: center">Search Question Bank</h5>
-        <form action="" id="qbankform" name="qbankform" role="form">
-          <div class="form-group">
-            <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
-          </div>
-          <div class="form-group">
-            <label for="chapter">Chapter</label>
-            <select class="form-control" id="chapter">
-              <option selected="selected" value=""></option>
-              {{ for chapter in chapters: }}
-              <option value="{{=chapter}}">{{=chapter}}</option>
-              {{ pass }}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
-          </div>
-          <div class="form-group">
-            <label for="difficultyselector">Difficulty</label>
-            <div id="difficultyselector">
-              <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="tags">Tags</label>
-            <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
-              {{ for tag in tags: }}
-              <option value="{{=tag}}">{{ =tag }}</option>
-              {{ pass }}
-            </select>
-          </div>
-          <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
-        </form>
-        <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
-          <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
-          </select>
-          <form id="questionform" name="questionform" style="visibility: hidden">
-            <label for="points">Points</label>
-            <input id="points" name="points" type="number">
-            <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
-            <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
-          </form>
+        <!-- Problems collapsible section -->
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#problems-collapse">Problems</a>
+          </h4>
         </div>
-        <div class="col-md-12">
-          <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
-            <div class="list-group" style="margin-top: 20px">
-              <div class="list-group-item">
-                <div id="q_author"></div>
-                <div id="q_difficulty"></div>
-                <div id="q_tags"></div>
-              </div>
-              <div class="form-group">
-                <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
-              </div>
-              <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                      <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
-                    </div><!-- Modal Body -->
-                    <div class="modal-body">
-                      <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
-                      <form action="" id="editForm" name="editForm">
-                        <div class="form-group">
-                          <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
+        <div id="problems-collapse" class="panel-collapse collapse">
+          <div class="panel-body">
+            <p>Select the problems which compose this assignment.</p>
+            <table id="questionTable" style="width:100%;"></table>
+            <div class="container">
+              <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
+              <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a>
+              <a class="btn btn-default" data-toggle="tab" href="#qwrite">Write</a>
+              <div class="tab-content">
+
+                <!-- Browse tab -->
+                <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
+                  <input id="search-tree-question-picker" type="text">
+                  <div id="tree-question-picker"></div>
+                </div>
+
+                <!-- Search tab -->
+                <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
+                  <h5 style="text-align: center">Search Question Bank</h5>
+                  <form action="" id="qbankform" name="qbankform" role="form">
+                    <div class="form-group">
+                      <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
+                    </div>
+                    <div class="form-group">
+                      <label for="chapter">Chapter</label>
+                      <select class="form-control" id="chapter">
+                        <option selected="selected" value=""></option>
+                        {{ for chapter in chapters: }}
+                        <option value="{{=chapter}}">{{=chapter}}</option>
+                        {{ pass }}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
+                    </div>
+                    <div class="form-group">
+                      <label for="difficultyselector">Difficulty</label>
+                      <div id="difficultyselector">
+                        <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="tags">Tags</label>
+                      <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
+                        {{ for tag in tags: }}
+                        <option value="{{=tag}}">{{ =tag }}</option>
+                        {{ pass }}
+                      </select>
+                    </div>
+                    <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
+                  </form>
+                  <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
+                    <select class="list-group-item-text;" id="qbankselect" size="10" style="text-align: center; visibility: hidden">
+                    </select>
+                    <form id="questionform" name="questionform" style="visibility: hidden">
+                      <label for="points">Points</label>
+                      <input id="points" name="points" type="number">
+                      <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
+                      <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
+                    </form>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="list-group" id="questionInfo" style="width:100%; visibility: hidden;">
+                      <div class="list-group" style="margin-top: 20px">
+                        <div class="list-group-item">
+                          <div id="q_author"></div>
+                          <div id="q_difficulty"></div>
+                          <div id="q_tags"></div>
                         </div>
                         <div class="form-group">
-                          <label for="difficultyselector">Change Difficulty</label>
-                          <div id="change_difficulty">
-                            <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                          <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
+                        </div>
+                        <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
+                              </div><!-- Modal Body -->
+                              <div class="modal-body">
+                                <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
+                                <form action="" id="editForm" name="editForm">
+                                  <div class="form-group">
+                                    <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="difficultyselector">Change Difficulty</label>
+                                    <div id="change_difficulty">
+                                      <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="addTags">Add Tags</label>
+                                    <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
+                                      {{ for tag in tags: }}
+                                      <option value="{{=tag}}">{{ =tag }}</option>
+                                      {{ pass }}
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="editRST">Edit Question</label>
+                                    <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
+                                  </div>
+                                  <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
+                                </form>
+                              </div><!-- Modal Footer -->
+                              <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="addTags">Add Tags</label>
-                          <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
-                            {{ for tag in tags: }}
-                            <option value="{{=tag}}">{{ =tag }}</option>
-                            {{ pass }}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="editRST">Edit Question</label>
-                          <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
-                        </div>
-                        <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
-                      </form>
-                    </div><!-- Modal Footer -->
-                    <div class="modal-footer">
-                      <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                <!-- Write tab -->
+                <div class="form-group tab-pane fade" id="qwrite">
+                  <form id="newqform" name="newqform">
+                    <div class="col-md-12">
+                      <label for="template">Template:</label><select id="template">
+                        <option value="activecode">
+                          activecode
+                        </option>
+                        <option value="mchoice">
+                          multiple choice
+                        </option>
+                        <option value="clickablearea">
+                          clickable area
+                        </option>
+                        <option value="codelens">
+                          codelens
+                        </option>
+                        <option value="dragndrop">
+                          drag and drop
+                        </option>
+                        <option value="parsons">
+                          pasons
+                        </option>
+                        <option value="fillintheblank">
+                          fill in the blank
+                        </option>
+                        <option value="poll">
+                          poll
+                        </option>
+                        <option value="reveal">
+                          reveal
+                        </option>
+                        <option value="shortanswer">
+                          short answer
+                        </option>
+                        <option value="usageAssignment">
+                          usageAssignment
+                        </option>
+                      </select> <input class="btn" onclick="display_write();" type="button" value="Go">
+                    </div>
+                    <div id="hiddenwrite" style="visibility: hidden">
+                      <div class="col-md-12">
+                        <label for="qcode"></label>
+                        <textarea cols="65" form="newqform" id="qcode" rows="12"></textarea>
+                      </div>
+                      <div class="col-md-12">
+                        <p id="qnameerror" style="color: red"></p>
+                      </div>
+                      <div class="col-md-12">
+                        <label>Difficulty:</label> 1<input checked="checked" id="difficulty1" name="difficulty" type="radio" value="1"> <input id="difficulty2" name="difficulty" type="radio" value="2"> <input id="difficulty3" name="difficulty" type="radio" value="3"> <input id="difficulty4" name="difficulty" type="radio" value="4"> <input id="difficulty5" name="difficulty" type="radio" value="5">5
+                      </div>
+                      <div class="col-md-12">
+                        <label for="qtags">Tags:</label> <input id="qtags" type="text">
+                      </div>
+                      <div class="col-md-12">
+                        <label>Location:</label><select id="qchapter">
+                          <option>
+                            Chapter
+                          </option>
+                        </select>
+                      </div>
+                      <div class="col-md-12">
+                        <label for="isprivate">Private</label><input id="isprivate" type="checkbox">
+                      </div>
+                      <div class="col-md-12">
+                        <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
+                      </div>
+                        <input type="hidden" id="qrawhtml" name="qrawhtml" value="">
+                      <div class="col-md-12">
+                        <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Preview">
+                        <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
               </div>
+              <div id="component-preview"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group tab-pane fade" id="qwrite">
-        <form id="newqform" name="newqform">
-          <div class="col-md-12">
-            <label for="template">Template:</label><select id="template">
-              <option value="activecode">
-                activecode
-              </option>
-              <option value="mchoice">
-                multiple choice
-              </option>
-              <option value="clickablearea">
-                clickable area
-              </option>
-              <option value="codelens">
-                codelens
-              </option>
-              <option value="dragndrop">
-                drag and drop
-              </option>
-              <option value="parsons">
-                pasons
-              </option>
-              <option value="fillintheblank">
-                fill in the blank
-              </option>
-              <option value="poll">
-                poll
-              </option>
-              <option value="reveal">
-                reveal
-              </option>
-              <option value="shortanswer">
-                short answer
-              </option>
-              <option value="usageAssignment">
-                usageAssignment
-              </option>
-            </select> <input class="btn" onclick="display_write();" type="button" value="Go">
-          </div>
-          <div id="hiddenwrite" style="visibility: hidden">
-            <div class="col-md-12">
-              <label for="qcode"></label>
-              <textarea cols="65" form="newqform" id="qcode" rows="12"></textarea>
-            </div>
-            <div class="col-md-12">
-              <p id="qnameerror" style="color: red"></p>
-            </div>
-            <div class="col-md-12">
-              <label>Difficulty:</label> 1<input checked="checked" id="difficulty1" name="difficulty" type="radio" value="1"> <input id="difficulty2" name="difficulty" type="radio" value="2"> <input id="difficulty3" name="difficulty" type="radio" value="3"> <input id="difficulty4" name="difficulty" type="radio" value="4"> <input id="difficulty5" name="difficulty" type="radio" value="5">5
-            </div>
-            <div class="col-md-12">
-              <label for="qtags">Tags:</label> <input id="qtags" type="text">
-            </div>
-            <div class="col-md-12">
-              <label>Location:</label><select id="qchapter">
-                <option>
-                  Chapter
-                </option>
-              </select>
-            </div>
-            <div class="col-md-12">
-              <label for="isprivate">Private</label><input id="isprivate" type="checkbox">
-            </div>
-            <div class="col-md-12">
-              <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
-            </div>
-              <input type="hidden" id="qrawhtml" name="qrawhtml" value="">
-            <div class="col-md-12">
-              <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Preview">
-              <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
-            </div>
-          </div>
-        </form>
-      </div>
     </div>
   </div>
 </div>
-<div class="col-md-6" id="previewside">
-      <div id="component-preview"></div>
-</div>
+
 <script type="text/javascript">
 
 var question_picker = $('#tree-question-picker');
@@ -323,8 +334,10 @@ $(function () {
 
     configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
         // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
-        function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'last_answer'); },
-        function (node) { remove_question(node.id) }
+        // Called when a node is checked.
+        function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'best_answer'); },
+        // Called when a node is unchecked.
+        function (node) { remove_question(node.id); },
     );
     question_picker.on('ready.jstree', function(event, data) {
         // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
@@ -344,18 +357,9 @@ $(function () {
 
     configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
         // Called when a node is checked.
-        function (node) {
-            $.getJSON('add__or_update_assignment_question', {
-                assignment: getAssignmentId(),
-                question: node.id
-            }).done(function (resposne_JSON) {
-                appendToReadingsTable(node.id);
-            });
-        },
+        function (node) { updateReading(node.id, 1, 1, 'interact', 'any'); },
         // Called when a node is unchecked.
-        function (node) {
-            remove_reading(node.id);
-        }
+        function (node) { remove_reading(node.id); },
     );
 
 
@@ -383,7 +387,7 @@ $(function () {
                 // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
                 editable: {
                     source: function () {
-                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values');
+                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values', question_table);
                     },
                 },
                 editableType: 'select',
@@ -396,7 +400,7 @@ $(function () {
                 editable: {
                     source: function () {
                         // Update the menu for this item.
-                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values');
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values', question_table);
                     }
                 },
                 editableType: 'select',
@@ -476,6 +480,59 @@ $(function () {
                 field: 'subchapter_id',
                 visible: false,
             }, {
+                field: 'activity_count',
+                title: 'Activity count',
+            }, {
+                field: 'activities_required',
+                title: '# required',
+                // The hack_ again.
+                editable: {
+                    // TODO: Validate that this is <= activity_count. See validate at http://vitalets.github.io/x-editable/docs.html#editable.
+                    validate: function(value) {
+                        var row = row_from_editable(this, readings_table);
+                        // See `isNaN use <https://stackoverflow.com/a/175787>`_.
+                        if (isNaN(value) || value < 0) {
+                            return '# required must be a non-negative number.'
+                        }
+                        if (value > row['activity_count']) {
+                            return '# required must not exceed the activity count.';
+                        }
+                    },
+                },
+            }, {
+                field: 'points',
+                title: 'Points',
+                // Make the points value editable.
+                editable: true,
+            }, {
+                field: 'autograde',
+                title: 'Auto-grade',
+                // Specify that the ``autograde`` column should be edited by a select drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
+                //
+                // A bit of a _`hack`: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
+                editable: {
+                    source: function () {
+                        return menu_from_editable(this, {interact: 'Interaction', correct_answer: 'Correct answer',}, 'autograde_possible_values', readings_table);
+                    },
+                },
+                editableType: 'select',
+            }, {
+                field: 'autograde_possible_values',
+                visible: false,
+            }, {
+                field: 'which_to_grade',
+                title: 'Which to grade',
+                editable: {
+                    source: function () {
+                        // Update the menu for this item.
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer', any: 'Any'}, 'which_to_grade_possible_values', readings_table);
+                    }
+                },
+                editableType: 'select',
+            }, {
+                field: 'which_to_grade_possible_values',
+                visible: false,
+            }, {
                 // Add a delete column with a button.
                 field: 'delete',
                 title: 'Delete',
@@ -497,6 +554,11 @@ $(function () {
            },
         ],
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
+        //
+        // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
+        onEditableSave : function(field, row, oldValue, html_element) {
+            updateReading(row['subchapter_id'], row['activities_required'], row['points'], row['autograde'], row['which_to_grade']);
+        },
         //
         // This will be called multiple times. Record the beginning row of the drag.
         onReorderRowsDrag: function(table, row) {

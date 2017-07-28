@@ -5,7 +5,7 @@ import sys
 import json
 import logging
 
-logger = logging.getLogger("web2py.root")
+logger = logging.getLogger("web2py.app.runestone")
 logger.setLevel(logging.DEBUG)
 
 
@@ -72,7 +72,7 @@ def create():
     assignment = db(db.assignments.id == request.get_vars.id).select().first()
     form = SQLFORM(db.assignments, assignment,
         showid = False,
-        fields=['name','points','assignment_type','threshold'],
+        fields=['name','points','assignment_type'],
         keepvalues = True,
         formstyle='table3cols',
         )
@@ -98,7 +98,7 @@ def update():
         form = SQLFORM(db.assignments, assignment,
             showid = False,
             deletable=True,
-            fields=['name','points','assignment_type','threshold','released'],
+            fields=['name','points','assignment_type','released'],
             keepvalues = True,
             formstyle='table3cols',
             )
@@ -541,7 +541,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
-def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None):
+def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
     # print "autograding", assignment_id, sid, question_name, deadline, autograde
 
     autograde='all_or_nothing'
@@ -624,11 +624,17 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         score = 0
 
     # Save the score
+    if save_score:
+        _save_question_grade(sid, course_name, question_name, score, id)
+
+    return score
+
+def _save_question_grade(sid, course_name, question_name, score, id):
     db.question_grades.update_or_insert(
         ((db.question_grades.sid == sid) &
-         (db.question_grades.course_name == course_name) &
-         (db.question_grades.div_id == question_name)
-         ),
+        (db.question_grades.course_name == course_name) &
+        (db.question_grades.div_id == question_name)
+        ),
         sid=sid,
         course_name=course_name,
         div_id=question_name,
@@ -640,7 +646,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
 def _compute_assignment_total(student, assignment):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
     # student is a row, containing id and username
-    # assignment is a row, containing name and id and points and threshold
+    # assignment is a row, containing name and id and points
 
     # Get all question_grades for this sid/assignment_id
     # Retrieve from question_grades table  with right sids and div_ids
@@ -655,15 +661,9 @@ def _compute_assignment_total(student, assignment):
              & (db.questions.id == db.assignment_questions.question_id) \
              & (db.assignment_questions.assignment_id == assignment.id)
     scores = db(query).select(db.question_grades.score)
-    # Sum them up; if threshold, compute total based on threshold
+
     total = sum([row.score for row in scores])
-    if assignment.threshold:
-        if total >= assignment.threshold:
-            score = assignment.points
-        else:
-            score = 0
-    else:
-        score = total
+    score = total
 
     grade = db(
         (db.grades.auth_user == student.id) &
@@ -784,13 +784,41 @@ def autograde():
         # get all qids and point values for this assignment
         questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
                              (db.assignment_questions.question_id == db.questions.id)).select()
+
+    readings = [(row.questions.name, 
+                 row.questions.chapter, 
+                 row.questions.subchapter, 
+                 row.assignment_questions.points, 
+                 row.assignment_questions.activities_required, 
+                 row.assignment_questions.autograde,
+                 row.assignment_questions.which_to_grade,
+                 ) for row in questions_query if row.assignment_questions.reading_assignment == True]
+    logger.debug(readings)
+    # Now for each reading, get all of the questions in that subsection
+    # call _autograde_one_q using the autograde and which to grade for that section. likely interact
+    # 
+    count = 0
+    for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
+        count += 1
+        for s in sids:
+            score = 0
+            rows = db((db.questions.chapter == chapter) & (db.questions.subchapter == subchapter)).select()
+            for row in rows:
+                score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
+                                          deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
+            if score >= ar:
+                save_points = points
+            else:
+                save_points = 0
+
+            _save_question_grade(s, auth.user.course_name, name, save_points, None)
+
     questions = [(row.questions.name,
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query]
+                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment != 'T']
 
-    count = 0
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
             _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
@@ -1114,14 +1142,28 @@ def doAssignment():
     questionslist = []
     readingsDict = {}
 
-    # Formats the readings information into readingsDict
-    # The keys of readingsDict are chapters, and each value is a list of lists detailing the information about each section within the assigned chapter
+    # The next for loop formats the readings information into readingsDict
+    # The keys of readingsDict are ids in the chapters table
+    # Each value is a list of lists detailing the information about each section within the assigned chapter
+    # Chapter ids are used as keys so the dictionary can be iterated in the correct order within doAssignment.html
+
+    # Because readings do not record chapters in the questions table
+    # assigned readings cannot (nicely) be grouped into chapters by a DB query yet
+    # so using a dictionary is a quick short-term solution to group all the sections to each chapter
+    # The chapters will appear in the order that they do in the ToC, 
+    # but the sections within each chapter will appear according to the sorting_priority in assignment_questions
+
+    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
+    # and the labels query won't be needed at all
+
     for r in readings:
         chapterSections = r.name.split('/')
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
-                    (db.sub_chapters.sub_chapter_name == chapterSections[1])).select(db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label).first()
-
+                    (db.chapters.course_id == auth.user.course_name) & \
+                    (db.sub_chapters.sub_chapter_name == chapterSections[1])) \
+                    .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label, db.chapters.id).first()
+        
         completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
@@ -1129,22 +1171,21 @@ def doAssignment():
         chapterPath = (completion.chapter_id + '/toctree.html')
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
 
-        if completion.chapter_id not in readingsDict:
-            readingsDict[completion.chapter_id] = []
+        if labels['chapters'].id not in readingsDict:
+            readingsDict[labels['chapters'].id] = []
 
         if completion.status == 1:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
         elif completion.status == 0:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
         else:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
 
     # This is to get the chapters' completion states based on the completion of sections of the readings in assignments
     # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
     # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
     # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
-    # Each chapter's completion gets appended to the first list within the list of section information
-
+    # Each chapter's completion gets appended to the first list within the list of section information for each chapter in the readingsDict
     for chapter in readingsDict:
         hasStarted = False
         completionState = 'completed'
@@ -1160,12 +1201,15 @@ def doAssignment():
             readingsDict[chapter][0].append('notstarted')
 
     currentqScore = 0
+
     # This formats questionslist into a list of lists.
     # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
     for q in questions_html:
+
         # It there is no html recorded, the question can't be rendered
         if q.htmlsrc != None:
+
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
