@@ -27,7 +27,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
 
 ALL_WHICH_OPTIONS = ['first_answer', 'last_answer', 'best_answer']
 WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
-    clickablearea=[],
+    clickablearea=ALL_WHICH_OPTIONS,
     external=[],
     fillintheblank=ALL_WHICH_OPTIONS,
     activecode=ALL_WHICH_OPTIONS,
@@ -39,7 +39,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     parsonsprob=ALL_WHICH_OPTIONS,
     video=[],
     poll=[],
-    page=[]
+    page=ALL_WHICH_OPTIONS
 )
 
 # create a simple index to provide a page of links
@@ -1024,7 +1024,6 @@ def get_assignment():
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
-    print "here", assignment_row.duedate
     try:
         assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
@@ -1125,10 +1124,11 @@ def add__or_update_assignment_question():
     # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
+    logger.debug("adding or updating assign id {} question_name {}".format(assignment_id, question_name))
     # This assumes that question will always be in DB already, before an assignment_question is created
-    # That means that chapters and subchapters need to be added to questions table when added to chapters and
-    # subchapters tables, in RunestoneComponents
+    logger.debug("course_id %s",auth.user.course_id)
     question_id = _get_question_id(question_name, auth.user.course_id)
+    logger.debug(question_id)
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
     subchapter = db.questions[question_id].subchapter
