@@ -1,4 +1,8 @@
 import json
+import logging
+
+logger = logging.getLogger('web2py.app.runestone')
+logger.setLevel('DEBUG')
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def index():
@@ -86,15 +90,22 @@ def update():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def students():
     sectionName = request.args[0].replace('_',' ')
-    sectionIdQuery = db(db.sections.name == sectionName).select()
-    sectionId = sectionIdQuery[0].id
+    course = auth.user.course_id
+    logger.debug("Getting Students for %s", sectionName)
+    sectionIdQuery = db((db.sections.name == sectionName) & 
+                        (db.sections.course_id == course)).select().first()
+
+    if not sectionIdQuery:
+        return ""
+
+    sectionId = sectionIdQuery.id
     studentList = []
     studentsQuery = db(db.section_users.section == sectionId).select()
 
     for student in studentsQuery:
-        studentName = db(db.auth_user.id == student.auth_user).select()
-        firstName = studentName[0].first_name
-        lastName = studentName[0].last_name
+        studentName = db(db.auth_user.id == student.auth_user).select().first()
+        firstName = studentName.first_name
+        lastName = studentName.last_name
         studentList.append((firstName,lastName))
     return json.dumps(studentList)
 
@@ -120,7 +131,7 @@ def remove():
         section = db((db.sections.name == form.vars.name) & (db.sections.course_id==course.id)).select().first()
         if section:
             db(db.sections.id == section.id).delete()
-        return redirect(URL('sections','managesections'))
+        return redirect(URL('admin','admin'))
     return dict(
         form = form,
         )

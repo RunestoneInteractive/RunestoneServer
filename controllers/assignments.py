@@ -1142,14 +1142,28 @@ def doAssignment():
     questionslist = []
     readingsDict = {}
 
-    # Formats the readings information into readingsDict
-    # The keys of readingsDict are chapters, and each value is a list of lists detailing the information about each section within the assigned chapter
+    # The next for loop formats the readings information into readingsDict
+    # The keys of readingsDict are ids in the chapters table
+    # Each value is a list of lists detailing the information about each section within the assigned chapter
+    # Chapter ids are used as keys so the dictionary can be iterated in the correct order within doAssignment.html
+
+    # Because readings do not record chapters in the questions table
+    # assigned readings cannot (nicely) be grouped into chapters by a DB query yet
+    # so using a dictionary is a quick short-term solution to group all the sections to each chapter
+    # The chapters will appear in the order that they do in the ToC, 
+    # but the sections within each chapter will appear according to the sorting_priority in assignment_questions
+
+    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
+    # and the labels query won't be needed at all
+
     for r in readings:
         chapterSections = r.name.split('/')
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
-                    (db.sub_chapters.sub_chapter_name == chapterSections[1])).select(db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label).first()
-
+                    (db.chapters.course_id == auth.user.course_name) & \
+                    (db.sub_chapters.sub_chapter_name == chapterSections[1])) \
+                    .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label, db.chapters.id).first()
+        
         completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
@@ -1157,22 +1171,21 @@ def doAssignment():
         chapterPath = (completion.chapter_id + '/toctree.html')
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
 
-        if completion.chapter_id not in readingsDict:
-            readingsDict[completion.chapter_id] = []
+        if labels['chapters'].id not in readingsDict:
+            readingsDict[labels['chapters'].id] = []
 
         if completion.status == 1:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
         elif completion.status == 0:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
         else:
-            readingsDict[completion.chapter_id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
+            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
 
     # This is to get the chapters' completion states based on the completion of sections of the readings in assignments
     # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
     # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
     # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
-    # Each chapter's completion gets appended to the first list within the list of section information
-
+    # Each chapter's completion gets appended to the first list within the list of section information for each chapter in the readingsDict
     for chapter in readingsDict:
         hasStarted = False
         completionState = 'completed'
@@ -1188,12 +1201,15 @@ def doAssignment():
             readingsDict[chapter][0].append('notstarted')
 
     currentqScore = 0
+
     # This formats questionslist into a list of lists.
     # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
     for q in questions_html:
+
         # It there is no html recorded, the question can't be rendered
         if q.htmlsrc != None:
+
             # This replacement is to render images
             q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
