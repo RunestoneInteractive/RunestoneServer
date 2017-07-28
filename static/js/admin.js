@@ -1090,7 +1090,19 @@ function walk_jstree(instance, node, f) {
     });
 }
 
-// Given an editable element (a hyperlink) in the questions table, return the menu data for it.
+// Given an editable element (a hyperlink) in a bootstrap table, return the containing row.
+function row_from_editable(
+    // The editable jQuery element which needs a menu.
+    editable_element,
+    // The table containing ``editable_element``.
+    table) {
+
+    // Determine which row this editable is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
+    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
+    return table.bootstrapTable('getData')[row_index];
+}
+
+// Given an editable element (a hyperlink) in the a bootstrap table, return the menu data for it.
 function menu_from_editable(
     // The editable jQuery element which needs a menu.
     editable_element,
@@ -1101,9 +1113,8 @@ function menu_from_editable(
     // The table containing ``editable_element``.
     table) {
 
-    // Determine which question this select is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
-    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
-    var row = table.bootstrapTable('getData')[row_index];
+    // Determine which row this editable is associated with.
+    var row = row_from_editable(editable_element, table);
     // Determine the appropriate menu for this question. First, find its autograde values in the tree.
     // Map these to the format necessary for a select control.
     var select_source = [];
@@ -1261,7 +1272,7 @@ function assignmentInfo() {
         for (let readings_data of data['pages_data']) {
             id = readings_data['name'];
             trp.check_node(trp.get_node(id));
-            appendToReadingsTable(id, readings_data['activity_count'], readings_data['num_required'], readings_data['points'], readings_data['autograde'], readings_data['autograde_possible_values'], readings_data['which_to_grade'], readings_data['which_to_grade_possible_values']);
+            appendToReadingsTable(id, readings_data['activity_count'], readings_data['activities_required'], readings_data['points'], readings_data['autograde'], readings_data['autograde_possible_values'], readings_data['which_to_grade'], readings_data['which_to_grade_possible_values']);
         }
         trp.ignore_check = false;
     });
@@ -1269,11 +1280,11 @@ function assignmentInfo() {
 
 
 // Update a reading.
-function updateReading(subchapter_id, num_required, points, autograde, which_to_grade) {
+function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
     $.getJSON('add__or_update_assignment_question', {
         assignment: getAssignmentId(),
         question: subchapter_id,
-        num_required: num_required,
+        activities_required: activities_required,
         points: points,
         autograde: autograde,
         which_to_grade: which_to_grade,
@@ -1281,7 +1292,7 @@ function updateReading(subchapter_id, num_required, points, autograde, which_to_
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
         if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
-            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], num_required, points, autograde,
+            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], activities_required, points, autograde,
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
@@ -1290,7 +1301,7 @@ function updateReading(subchapter_id, num_required, points, autograde, which_to_
 
 
 // Append a row to the readings table given the ID of the reading.
-function appendToReadingsTable(subchapter_id, activity_count, num_required, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+function appendToReadingsTable(subchapter_id, activity_count, activities_required, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     // Find this node in the tree.
     var node = readings_picker.jstree(true).get_node(subchapter_id);
     var _id = 'readings_table_' + node.id;
@@ -1299,7 +1310,7 @@ function appendToReadingsTable(subchapter_id, activity_count, num_required, poin
         subchapter: node.text,
         subchapter_id: node.id,
         activity_count: activity_count,
-        num_required: num_required,
+        activities_required: activities_required,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
