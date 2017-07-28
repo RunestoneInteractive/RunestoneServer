@@ -142,7 +142,7 @@ def sections_create():
     if form.accepts(request,session):
         section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
         session.flash = "Section Created"
-        return redirect('/%s/admin/sections_create' % (request.application))
+        return redirect('/%s/admin/admin' % (request.application))
     return dict(
         form = form,
         )
@@ -514,7 +514,7 @@ def createAssignment():
             due = datetime.datetime.strptime(d_str, format_str)
         else:
             due = None
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'])
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.now() + datetime.timedelta(days=7))
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 

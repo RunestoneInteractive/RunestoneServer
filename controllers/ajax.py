@@ -12,7 +12,7 @@ from lxml import html
 #sys.path.insert(0,os.path.dirname(__file__))
 #from coach import get_lint
 
-logger = logging.getLogger("web2py.root")
+logger = logging.getLogger('web2py.app.runestone')
 logger.setLevel(logging.DEBUG)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
@@ -100,7 +100,7 @@ def hsblog():    # Human Subjects Board Log
             answer = request.vars.answer
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
-            
+
     elif event == "codelensq" and auth.user:
         if db((db.codelens_answers.sid == sid) & (db.codelens_answers.div_id == div_id) & (db.codelens_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
@@ -896,7 +896,7 @@ def getAssessResults():
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "mChoice":
-        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer. db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
+        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
@@ -914,10 +914,10 @@ def getAssessResults():
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "timedExam":
-        rows = db((db.timed_exam.div_id == div_id) & (db.timed_exam.course_name == course) & (db.timed_exam.sid == sid)).select(db.timed_exam.correct, db.timed_exam.incorrect, db.timed_exam.skipped, db.timed_exam.time_taken, db.timed_exam.timestamp, db.timed_exam.reset, orderby=~db.timed_exam.timestamp).first()
+        rows = db((db.timed_exam.reset == None) & (db.timed_exam.div_id == div_id) & (db.timed_exam.course_name == course) & (db.timed_exam.sid == sid)).select(db.timed_exam.correct, db.timed_exam.incorrect, db.timed_exam.skipped, db.timed_exam.time_taken, db.timed_exam.timestamp, db.timed_exam.reset, orderby=~db.timed_exam.timestamp).first()
         if not rows:
             return ""
-        res = {'correct': rows.correct, 'incorrect': rows.incorrect, 'skipped': str(rows.skipped), 'timeTaken': str(rows.timeTaken), 'timestamp': str(rows.timestamp), 'reset': str(rows.reset)}
+        res = {'correct': rows.correct, 'incorrect': rows.incorrect, 'skipped': str(rows.skipped), 'timeTaken': str(rows.time_taken), 'timestamp': str(rows.timestamp), 'reset': str(rows.reset)}
         return json.dumps(res)
     elif event == "parsons":
         rows = db((db.parsons_answers.div_id == div_id) & (db.parsons_answers.course_name == course) & (db.parsons_answers.sid == sid)).select(db.parsons_answers.answer, db.parsons_answers.source, db.parsons_answers.timestamp, orderby=~db.parsons_answers.timestamp).first()
