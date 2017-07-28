@@ -48,7 +48,7 @@
       <legend>Assignment properties</legend>
       <span id="totalPoints"></span><br>
       <form action="" id="assignment-form">
-        <label for="datetimepicker">Due Date</label>
+        <label for="datetimepicker">Due Date: </label>
         <input id="datetimepicker" name="due" type="text"><br>
 
         <label for="assignment_description">Description: </label>
@@ -334,8 +334,10 @@ $(function () {
 
     configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
         // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
+        // Called when a node is checked.
         function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'best_answer'); },
-        function (node) { remove_question(node.id) }
+        // Called when a node is unchecked.
+        function (node) { remove_question(node.id); },
     );
     question_picker.on('ready.jstree', function(event, data) {
         // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
@@ -355,7 +357,7 @@ $(function () {
 
     configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
         // Called when a node is checked.
-        function (node) { updateReading(node.id, 1, 1, 'interact', 'best_answer'); },
+        function (node) { updateReading(node.id, 1, 1, 'interact', 'any'); },
         // Called when a node is unchecked.
         function (node) { remove_reading(node.id); },
     );
@@ -481,10 +483,22 @@ $(function () {
                 field: 'activity_count',
                 title: 'Activity count',
             }, {
-                field: 'num_required',
+                field: 'activities_required',
                 title: '# required',
-                editable: true,
-                // TODO: Validate that this is <= activity_count. See validate at http://vitalets.github.io/x-editable/docs.html#editable. Problem: how can this function determine the row in which it lives?
+                // The hack_ again.
+                editable: {
+                    // TODO: Validate that this is <= activity_count. See validate at http://vitalets.github.io/x-editable/docs.html#editable.
+                    validate: function(value) {
+                        var row = row_from_editable(this, readings_table);
+                        // See `isNaN use <https://stackoverflow.com/a/175787>`_.
+                        if (isNaN(value) || value < 0) {
+                            return '# required must be a non-negative number.'
+                        }
+                        if (value > row['activity_count']) {
+                            return '# required must not exceed the activity count.';
+                        }
+                    },
+                },
             }, {
                 field: 'points',
                 title: 'Points',
@@ -495,7 +509,7 @@ $(function () {
                 title: 'Auto-grade',
                 // Specify that the ``autograde`` column should be edited by a select drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
                 //
-                // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
+                // A bit of a _`hack`: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
                 editable: {
                     source: function () {
                         return menu_from_editable(this, {interact: 'Interaction', correct_answer: 'Correct answer',}, 'autograde_possible_values', readings_table);
@@ -511,7 +525,7 @@ $(function () {
                 editable: {
                     source: function () {
                         // Update the menu for this item.
-                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values', readings_table);
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer', any: 'Any'}, 'which_to_grade_possible_values', readings_table);
                     }
                 },
                 editableType: 'select',
@@ -543,7 +557,7 @@ $(function () {
         //
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
         onEditableSave : function(field, row, oldValue, html_element) {
-            updateReading(row['_id'], row['num_required'], row['points'], row['autograde'], row['which_to_grade']);
+            updateReading(row['subchapter_id'], row['activities_required'], row['points'], row['autograde'], row['which_to_grade']);
         },
         //
         // This will be called multiple times. Record the beginning row of the drag.

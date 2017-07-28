@@ -1044,7 +1044,7 @@ def get_assignment():
     for row in a_q_rows:
         if row.questions.question_type == 'page':
             # get the count of 'things to do' in this chap/subchap
-            activity_count = db((db.questions.chapter==row.questions.chapter) & 
+            activity_count = db((db.questions.chapter==row.questions.chapter) &
                        (db.questions.subchapter==row.questions.subchapter)).count()
 
         pages_data.append(dict(
@@ -1142,7 +1142,7 @@ def add__or_update_assignment_question():
     if question_type == 'page':
         reading_assignment = 'T'
         # get the count of 'things to do' in this chap/subchap
-        activity_count = db((db.questions.chapter==chapter) & 
+        activity_count = db((db.questions.chapter==chapter) &
                    (db.questions.subchapter==subchapter)).count()
 
     else:
@@ -1155,6 +1155,7 @@ def add__or_update_assignment_question():
     except:
         points = activity_count
 
+    activities_required = request.vars.get('activities_required')
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
     try:
@@ -1163,6 +1164,7 @@ def add__or_update_assignment_question():
             (db.assignment_questions.assignment_id==assignment_id) & (db.assignment_questions.question_id==question_id),
             assignment_id = assignment_id,
             question_id = question_id,
+            activities_required=activities_required,
             points=points,
             autograde=autograde,
             which_to_grade = which_to_grade,
