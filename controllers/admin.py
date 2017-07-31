@@ -1067,14 +1067,15 @@ def get_assignment():
     questions_data = []
     for row in a_q_rows:
         logger.debug(row.questions.question_type)
-        questions_data.append(dict(
-            name = row.questions.name,
-            points = row.assignment_questions.points,
-            autograde = row.assignment_questions.autograde,
-            which_to_grade = row.assignment_questions.which_to_grade,
-            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
-            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
-        ))
+        if row.questions.question_type != 'page':
+            questions_data.append(dict(
+                name = row.questions.name,
+                points = row.assignment_questions.points,
+                autograde = row.assignment_questions.autograde,
+                which_to_grade = row.assignment_questions.which_to_grade,
+                autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+                which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
+            ))
 
     return json.dumps(dict(assignment_data=assignment_data,
                            pages_data=pages_data,
