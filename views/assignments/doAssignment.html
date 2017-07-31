@@ -50,7 +50,7 @@
 
 <script type="text/javascript">
   eBookConfig = {};
-  eBookConfig.host = 'http://{{=request.env.http_host}}';
+  eBookConfig.host = '';
   eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
   eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
   eBookConfig.course = "{{=course['course_name']}}";
@@ -75,11 +75,7 @@
 	<h1 style='text-align:center'>{{=assignment['name']}}</h1>
 	<h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}
 		<span style="float:right; margin-right:1cm;">
-			{{if assignment['threshold'] and assignment['threshold'] != None:}}
-				Points Possible: {{=assignment['points_to_award']}}</span></h2>
-			{{else:}}
-				Points Possible: {{=assignment['points']}}</span></h2>
-			{{pass}}
+			Points Possible: {{=assignment['points']}}</span></h2>
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
