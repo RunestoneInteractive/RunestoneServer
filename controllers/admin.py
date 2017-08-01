@@ -5,8 +5,8 @@ from paver.easy import sh
 import json
 from runestone import cmap
 import logging
-logger = logging.getLogger("web2py.root")
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
@@ -875,7 +875,7 @@ def htmlsrc():
          ).select(db.questions.htmlsrc).first().htmlsrc
     if htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode('hex')
-    return json.dumps(unicode(htmlsrc))
+    return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

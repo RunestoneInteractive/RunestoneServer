@@ -1,5 +1,6 @@
 from gluon.storage import Storage
 from platform import uname
+import logging
 
 settings = Storage()
 
@@ -36,3 +37,6 @@ elif 'luther' in uname()[1]:
 else:
     pass
     ## settings.database_uri will be set in 1.py if not one of those special cases
+
+settings.logger = "web2py.app.runestone"
+settings.log_level = logging.WARNING

@@ -5,8 +5,8 @@ import sys
 import json
 import logging
 
-logger = logging.getLogger("web2py.app.runestone")
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 
 # controller for "Progress Page" as well as List/create assignments

@@ -8,12 +8,8 @@ from diff_match_patch import *
 import os, sys
 from lxml import html
 
-# kind of a hacky approach to import coach functions
-#sys.path.insert(0,os.path.dirname(__file__))
-#from coach import get_lint
-
-logger = logging.getLogger('web2py.app.runestone')
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 

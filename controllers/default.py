@@ -6,7 +6,12 @@ import os
 import requests
 from urllib import unquote
 from urllib2 import HTTPError
+import logging
 from gluon.restricted import RestrictedError
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
+
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field

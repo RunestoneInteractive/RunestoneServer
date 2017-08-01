@@ -1,8 +1,8 @@
 import json
 import logging
 
-logger = logging.getLogger('web2py.app.runestone')
-logger.setLevel('DEBUG')
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def index():

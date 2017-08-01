@@ -5,8 +5,9 @@ from datetime import date, timedelta, datetime
 from operator import itemgetter
 from paver.easy import sh
 
-logger = logging.getLogger("web2py.root")
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
+
 
 
 # this is for admin links
