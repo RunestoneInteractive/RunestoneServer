@@ -483,12 +483,22 @@ def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
         query = query & (db.mchoice_answers.timestamp < deadline)
     return db(query).select(orderby=db.mchoice_answers.timestamp)
 
-def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None):
+def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None, question_type=None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
+    logger.debug("SCORING %s %s",div_id,event_filter)
+    # if question type is page we must do better with the div_id
+
     query = ((db.useinfo.course_id == course_name) & \
-            (db.useinfo.div_id == div_id) & \
             (db.useinfo.sid == sid))
+
+    if question_type == 'page':
+        quest = db(db.questions.name == div_id).select().first()
+        div_id = u"{}/{}".format(quest.chapter, quest.subchapter)
+        query = query & (db.useinfo.div_id.contains(div_id))
+    else:
+        query = query & (db.useinfo.div_id == div_id)
+
     if event_filter:
         query = query & (db.useinfo.event == event_filter)
     if deadline:
@@ -542,11 +552,12 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
-    # print "autograding", assignment_id, sid, question_name, deadline, autograde
+    logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
 
-    autograde='all_or_nothing'
+    
     if not autograde:
-        return
+        logger.debug("autograde not set returning 0")
+        return 0
 
     # if previously manually graded, don't overwrite
     existing = db((db.question_grades.sid == sid) \
@@ -554,8 +565,8 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
        & (db.question_grades.div_id == question_name) \
        ).select().first()
     if existing and (existing.comment != "autograded"):
-        # print "skipping; previously manually graded, comment = {}".format(existing.comment)
-        return
+        logger.debug("skipping; previously manually graded, comment = {}".format(existing.comment))
+        return 0
 
 
     # For all question types, and values of which_to_grade, we have the same basic structure:
@@ -577,7 +588,8 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
+        # question_name does not help us
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page')
         scoring_fn = _score_one_interaction
     elif question_type == 'parsonsprob':
         results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
@@ -594,11 +606,16 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
     elif question_type == 'codelens':
         results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_codelens
+    elif question_type == 'video':
+        # question_name does not help us
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
+        scoring_fn = _score_one_interaction
 
     else:
-        print "skipping; autograde = {}".format(autograde)
-        return
+        logger.debug("skipping; question_type = {}".format(question_type))
+        return 0
 
+    logger.debug("RESULT of autograding %s = %s", question_type, results)
     # use query results and the scoring function
     if results:
         if which_to_grade in ['first_answer', 'last_answer', None]:
@@ -617,7 +634,8 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             # score all rows and take the best one
             best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
             id = best_row.id
-            score = scoring_fn(best_row)
+            score = scoring_fn(best_row, points, autograde)
+            logger.debug("SCORE = %s", score)
     else:
         # no results found, score is 0, not attributed to any row
         id = None
@@ -908,10 +926,10 @@ def get_problem():
             included_divs = [x.strip() for x in txt.split(',') if x != '']
             # join together code for each of the includes
             res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
-            #print res['includes']
+            #logger.debug(res['includes'])
         if source.suffix_code:
             res['suffix_code'] = source.suffix_code
-            #print source.suffix_code
+            #logger.debug(source.suffix_code)
 
         file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
@@ -991,10 +1009,10 @@ def problem():
             included_divs = [x.strip() for x in txt.split(',') if x != '']
             # join together code for each of the includes
             res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
-            #print res['includes']
+            #logger.debug(res['includes'])
         if source.suffix_code:
             res['suffix_code'] = source.suffix_code
-            #print source.suffix_code
+            #logger.debug(source.suffix_code)
 
         file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
