@@ -1161,6 +1161,7 @@ def doAssignment():
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
                     (db.chapters.course_id == auth.user.course_name) & \
+                    (db.chapters.id == db.sub_chapters.chapter_id) & \
                     (db.sub_chapters.sub_chapter_name == chapterSections[1])) \
                     .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label, db.chapters.id).first()
         
