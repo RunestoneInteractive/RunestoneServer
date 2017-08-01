@@ -1,4 +1,5 @@
 from gluon.scheduler import Scheduler
+import stat
 import shutil
 from os import path
 import os
@@ -87,6 +88,7 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     ###########
 
     from paver.tasks import main as paver_main
+    old_cwd = os.getcwd()
     os.chdir(sourcedir)
     paver_main(args=["build"])
     rslogger.debug("Finished build of {}".format(rvars['projectname']))
@@ -107,7 +109,16 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # clean up
     #
 
-    shutil.rmtree(sourcedir)
+    # This will remove a directory that's versioned by Git, which marks some of its files as read-only on Windows. This causes rmtree to fail. So, provide a workaround per `SO <https://stackoverflow.com/questions/21261132/shutil-rmtree-to-remove-readonly-files>`_.
+    def del_rw(function, path, excinfo):
+        os.chmod(path, stat.S_IWRITE)
+        if os.path.isdir(path):
+            os.rmdir(path)
+        else:
+            os.remove(path)
+    # Change away from sourcedir, to avoid an error like ``WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'E:\\Runestone\\web2py\\applications\\runestone\\build\\test_book10'``.
+    os.chdir(old_cwd)
+    shutil.rmtree(sourcedir, onerror=del_rw)
     rslogger.debug("Completely done with {}".format(rvars['projectname']))
 
 
