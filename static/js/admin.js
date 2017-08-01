@@ -1247,10 +1247,8 @@ function assignmentInfo() {
         var tqp = question_picker.jstree(true);
         // Ignore these checks in the picker, since it's loading existing data, not user interaction.
         tqp.ignore_check = true;
-        // Clear all checks initially.
+        // Clear all checks and the table initially.
         tqp.uncheck_all();
-
-        // Clear the bootstrap table.
         question_table.bootstrapTable('removeAll');
         for (let question of data['questions_data']) {
             // Put the qeustion in the table.
@@ -1265,10 +1263,11 @@ function assignmentInfo() {
 
         // Update the readings
         ///===================
+        // Same as above.
         var trp = readings_picker.jstree(true);
         trp.ignore_check = true;
         trp.uncheck_all();
-
+        readings_table.bootstrapTable('removeAll');
         for (let readings_data of data['pages_data']) {
             id = readings_data['name'];
             trp.check_node(trp.get_node(id));
