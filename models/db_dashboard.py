@@ -2,8 +2,8 @@ from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
 
-rslogger = logging.getLogger('web2py.app.runestone')
-rslogger.setLevel('DEBUG')
+rslogger = logging.getLogger(settings.logger)
+rslogger.setLevel(settings.log_level)
 
 #db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
@@ -358,6 +358,7 @@ class DashboardDataAnalyzer(object):
 
         self.grades = {}
         for assign in self.assignments:
+            rslogger.debug("Processing assignment %s",assign)
             row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
                     .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
                     # ^ Get grades for assignment
@@ -371,15 +372,15 @@ class DashboardDataAnalyzer(object):
                                                "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
                 else:
                     s = 0.0
+                    self.grades[assign["name"]] = {}
                     for userEntry in rl:
-                        self.grades[assign["name"]] = {}
+                        rslogger.debug("GETTING USER SCORES %s",userEntry)
                         s += userEntry["grades"]["score"]   # Calculating average
-
                         if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
                             self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
-                        else:
-                            self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
 
+                    if 'score' not in self.grades[assign["name"]]:
+                            self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
                     average = s/len(userEntry)
                     self.grades[assign["name"]]["class_average"] = average
                     self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")

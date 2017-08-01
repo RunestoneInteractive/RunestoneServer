@@ -147,7 +147,7 @@ def studentreport():
             })
     activity = data_analyzer.formatted_activity.activities
 
-
+    logger.debug("GRADES = %s",data_analyzer.grades)
     return dict(course_id=auth.user.course_id, course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 def studentprogress():
