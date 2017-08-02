@@ -985,16 +985,10 @@ function remove_instructor() {
 
 
 function edit_indexrst(form) {
-    var newtext = form.editIndex.value;
-    newtext =  newtext.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/editindexrst?newtext=' + newtext, true);
-    obj.send(JSON.stringify({variable:'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
+    let data = {newtext: form.editIndex.value}
+    jQuery.post('/runestone/admin/editindexrst', data, function() {
             alert("Successfully edited index.rst");
-
-        }}
+        });
 }
 
 // *************************
