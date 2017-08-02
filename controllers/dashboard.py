@@ -84,6 +84,7 @@ def index():
         sections.append({
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
+            "name": metric.sub_chapter_name,
             "readPercent": metric.get_completed_percent(),
             "startedPercent": metric.get_started_percent(),
             "unreadPercent": metric.get_not_started_percent()

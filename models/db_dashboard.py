@@ -182,6 +182,7 @@ class UserActivityChapterProgress(object):
 class UserActivitySubChapterProgress(object):
     def __init__(self, chapter):
         self.chapter_label = chapter.chapter_name
+        self.chapter_id = chapter.id
         self.sub_chapters = OrderedDict()
         self.highest_status = -1
         self.lowest_status = 1
@@ -195,9 +196,11 @@ class UserActivitySubChapterProgress(object):
 
     def get_sub_chapter_progress(self):
         subchapters = []
+        subchapter_res = db(db.sub_chapters.chapter_id == self.chapter_id).select()
+        sub_chapter_label_to_text = {sc.sub_chapter_label : sc.sub_chapter_name for sc in subchapter_res}
         for subchapter_label, status in self.sub_chapters.iteritems():
             subchapters.append({
-                "label": IdConverter.sub_chapter_label_to_text(subchapter_label),
+                "label": sub_chapter_label_to_text.get(subchapter_label,subchapter_label),
                 "status": UserActivitySubChapterProgress.completion_status_to_text(status)
                 })
         return subchapters
@@ -241,7 +244,9 @@ class ProgressMetrics(object):
 class SubChapterActivity(object):
     def __init__(self, sub_chapter, total_users):
         self.sub_chapter_label = sub_chapter.sub_chapter_label
-        self.sub_chapter_text = IdConverter.sub_chapter_label_to_text(sub_chapter.sub_chapter_label)
+        rslogger.debug(sub_chapter.sub_chapter_name)
+        self.sub_chapter_text = sub_chapter.sub_chapter_label
+        self.sub_chapter_name = sub_chapter.sub_chapter_name
         self.not_started = 0
         self.started = 0
         self.completed = 0
@@ -338,9 +343,6 @@ class DashboardDataAnalyzer(object):
         self.user = db((db.auth_user.username == username) & (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.sid == username) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == self.user.id)).select(db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
-        print self.db_chapter_progress
-        print self.logs
-        print self.user
         self.formatted_activity = UserLogCategorizer(self.logs)
         self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)
 
@@ -417,57 +419,6 @@ class IdConverter(object):
         "4_3_2_s2":"4-3-2: What is the value of s1 after the following code executes?",
     }
 
-    sub_chapter_id_map = {
-        #CSP - Ch1
-        "studentBook": "This Book is for Students",
-        "pretest": "Pretest",
-        "computeNumbers": "Compute with Numbers",
-        "computeWords": "Compute with Words",
-        "computeTurtles": "Compute with Turtles",
-        "computeImages": "Compute with Images",
-        "standards": "Standards - Big Ideas",
-        "ch1_summary": "Chapter 1 - Concept Summary",
-        #CSP - Ch2
-        "whatIsComputer": "What is a Computer?",
-        "turingMachines": "Turing Machines",
-        "abilities": "Computer Abilities",
-        "ch2_summary": "Chapter 2 - Concept Summary",
-        "exam1a2": "Exam Questions for Chapters 1 and 2",
-        #CSP - Ch3
-        "assignName": "Assigning a Name",
-        "expression": "Expressions",
-        "expressionTable": "Summary of Expression Types",
-        "orderOfOperations": "How Expressions are Evaluated",
-        "driving": "Driving from Chicago to Dallas",
-        "ketchup": "Following the Ketchup Ooze",
-        "walkAssign": "Walking through Assignment more Generally",
-        "invoice": "Figuring out an Invoice",
-        "ch3_summary": "Chapter 3 - Summary",
-        "ch3_exercises": "Chapter 3 Exercises",
-        #CSP - Ch4
-        "assignNameStr":"Assign a Name to a String",
-        "strObjects":"Strings are Objects",
-        "immutable":"Strings are Immutable",
-        "madlib":"Making a MadLib Story",
-        "ch4_summary":"Chapter 4 - Summary",
-        "ch4_exercises":"Chapter 4 Exercises",
-        "exam3a4":"Exam Questions for Chapters 3 and 4",
-        #CSP - Ch5
-        "names4turtles": "Assign a Name to a Turtle",
-        "FuncAndProc": "Procedures and Functions",
-        "turtleFAP": "More Turtle Procedures and Functions",
-        "multTurtles": "Single and Multiple Turtles",
-        "ch5_summary": "Chapter 5 - Summary",
-        "ch5_exercises": "Chapter 5 Exercises",
-        "house": "Bob Builds a House",
-        "changeProg": "Changing Turtle Programs"
-#CSP - Ch6
-
-    }
     @staticmethod
     def problem_id_to_text(problem_id):
         return IdConverter.problem_id_map.get(problem_id, problem_id)
-
-    @staticmethod
-    def sub_chapter_label_to_text(sub_chapter_label):
-        return IdConverter.sub_chapter_id_map.get(sub_chapter_label, sub_chapter_label)
