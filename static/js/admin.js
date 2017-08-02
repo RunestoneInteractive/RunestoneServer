@@ -1285,7 +1285,7 @@ function updateReading(subchapter_id, activities_required, points, autograde, wh
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
         if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
-            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], activities_required, points, autograde,
+            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], response_JSON['activities_required'], points, autograde,
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }

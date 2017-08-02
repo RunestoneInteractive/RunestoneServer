@@ -357,7 +357,7 @@ $(function () {
 
     configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
         // Called when a node is checked.
-        function (node) { updateReading(node.id, 1, 1, 'interact', 'any'); },
+        function (node) { updateReading(node.id, -1, 1, 'interact', 'best_answer'); },
         // Called when a node is unchecked.
         function (node) { remove_reading(node.id); },
     );

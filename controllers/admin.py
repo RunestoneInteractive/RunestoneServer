@@ -1157,7 +1157,11 @@ def add__or_update_assignment_question():
     except:
         points = activity_count
 
-    activities_required = request.vars.get('activities_required')
+    activities_required = int(request.vars.get('activities_required'))
+    logger.debug("act required %s ", activities_required)
+    if activities_required == -1:
+        activities_required = max(int(activity_count * .8),1)
+
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
     try:
@@ -1177,11 +1181,12 @@ def add__or_update_assignment_question():
         return json.dumps(dict(
             total = total,
             activity_count=activity_count,
+            activities_required=activities_required,
             autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
             which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
         ))
     except Exception as ex:
-        logger.debug(ex)
+        logger.error(ex)
         return json.dumps("Error")
 
 def _get_question_id(question_name, course_id):
