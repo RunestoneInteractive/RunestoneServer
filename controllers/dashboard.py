@@ -223,7 +223,7 @@ def exercisemetrics():
     prob_id = request.get_vars["id"]
     answers = []
     attempt_histogram = []
-
+    logger.debug(problem_metrics.problems)
     problem_metric = problem_metrics.problems[prob_id]
     response_frequency = problem_metric.aggregate_responses
 
@@ -242,4 +242,4 @@ def exercisemetrics():
             "frequency": count
             })
 
-    return dict(course_name=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+    return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)

@@ -113,10 +113,12 @@ class CourseProblemMetrics(object):
         self.users = users
 
     def update_metrics(self, course_name):
+        rslogger.debug("Updating CourseProblemMetrics")
         mcans = db(db.mchoice_answers.course_name==course_name).select()
         fbans = db(db.fitb_answers.course_name==course_name).select()
         def add_problems(result_set):
             for row in result_set:
+                rslogger.debug("UPDATE_METRICS %s", row)
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
                 self.problems[row.div_id].add_data_point(row)
@@ -301,13 +303,14 @@ class DashboardDataAnalyzer(object):
 
     def load_chapter_metrics(self, chapter):
         if not chapter:
-            rslogger.debug("chapter not set, abort!")
+            rslogger.error("chapter not set, abort!")
             return
 
         self.db_chapter = chapter
         #go get all the course data... in the future the post processing
         #should probably be stored and only new data appended.
         self.course = db(db.courses.id == self.course_id).select().first()
+        rslogger.debug("COURSE QUERY GOT %s", self.course)
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
@@ -318,6 +321,7 @@ class DashboardDataAnalyzer(object):
         #self.divs = db(db.div_ids).select(db.div_ids.div_id)
         #print self.divs
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
+        rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
         self.user_activity.update_metrics(self.logs)
@@ -345,7 +349,7 @@ class DashboardDataAnalyzer(object):
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
-        self.problem_metrics.update_metrics(self.logs)
+        self.problem_metrics.update_metrics(self.course.course_name)
 
     def load_assignment_metrics(self, username, studentView=False):
         self.assignments = []
