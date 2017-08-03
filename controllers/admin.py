@@ -830,11 +830,16 @@ def createquestion():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
-    htmlsrc = db(
+    htmlsrc = ""
+    res = db(
         (db.questions.name == acid) &
         (db.questions.base_course == db.courses.base_course) &
         (db.courses.course_name == auth.user.course_name)
-         ).select(db.questions.htmlsrc).first().htmlsrc
+         ).select(db.questions.htmlsrc).first()
+    if res:
+        htmlsrc = res.htmlsrc
+    else:
+        logger.error("HTML Source not found for %s in course %s", acid, auth.user.course_name)
     if htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode('hex')
     return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
