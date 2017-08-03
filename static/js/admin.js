@@ -1028,6 +1028,11 @@ function configure_tree_picker(
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
         "core" : {
             "data" : picker_data,
+            "themes" : {
+                // Note that the CSS for the theme (`proton <https://www.orangehilldev.com/jstree-bootstrap-theme/demo/>`_) must also be loaded -- see assignments.html.
+                "name" : "proton",
+                "responsive" : true,
+            },
         },
     });
 
