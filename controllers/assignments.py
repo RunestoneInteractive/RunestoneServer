@@ -636,6 +636,9 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             id = best_row.id
             score = scoring_fn(best_row, points, autograde)
             logger.debug("SCORE = %s", score)
+        else:
+            logger.error("Unknown Scoring Scheme %s ", which_to_grade)
+            score = 0
     else:
         # no results found, score is 0, not attributed to any row
         id = None
