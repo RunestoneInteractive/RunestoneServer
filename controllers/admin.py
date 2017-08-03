@@ -519,7 +519,7 @@ def createAssignment():
         return json.dumps(returndict)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps('ERROR')
 
 # Deprecated
@@ -534,7 +534,7 @@ def assignmentInfo():
     try:
         due = date.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         due = 'No due date set for this assignment'
     allquestion_info['due_date'] = due
     description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
@@ -565,7 +565,7 @@ def assignmentInfo():
                 question_dict['points'] = question_points
                 allquestion_info[int(row.id)] = question_dict
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
     return json.dumps(allquestion_info)
 
@@ -666,7 +666,7 @@ def questionBank():
             questions.append(q_row.name)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return 'Error'
     return json.dumps(questions)
 
@@ -675,45 +675,7 @@ def questionBank():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addToAssignment():
     return add__or_update_assignment_question()
-    # # add one question to the assignment
-    # # perhaps this should be able to add_or_update
-    # assignment_id = int(request.vars['assignment'])
-    # question_name = request.vars['question']
-    # qtype = request.vars['type']
-    # question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
-    #
-    # # deprecated; we don't use this as a property of assignment_question
-    # # timed = request.vars['timed']
-    #
-    # # Have to use try/except here instead of request.vars.get in case the points is '',
-    # # which doesn't convert to int
-    # try:
-    #     points = int(request.vars['points'])
-    # except:
-    #     points = 0
-    # autograde = request.vars.get('autograde')
-    #
-    # try:
-    #     type_id = db(db.assignment_types.name == qtype).select(db.assignment_types.id).first().id
-    # except Exception as ex:
-    #     print(ex)
-    #
-    # try:
-    #     db.assignment_questions.insert(assignment_id=assignment_id,
-    #                                    question_id=question_id,
-    #                                    points=points,
-    #                                    autograde=autograde)
-    #     assignment = db(db.assignments.id == assignment_id).select().first()
-    #     assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
-    #     if assignment_points == None:
-    #         new_points = points
-    #     else:
-    #         new_points = int(assignment_points) + points
-    #
-    #     assignment.update_record(points=new_points)
-    #     return json.dumps([new_points,qtype])
-    # except Exception as ex:
-    #     print(ex)
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getQuestionInfo():
@@ -773,7 +735,7 @@ def edit_question():
             return "Success"
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -862,7 +824,7 @@ def createquestion():
 
         return json.dumps(returndict)
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps('ERROR')
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -886,7 +848,7 @@ def getStudentCode():
         c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
         return json.dumps(c.code)
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -920,7 +882,7 @@ def indexrst():
         file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'))
         filetxt = file.read()
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         filetxt = "Sorry, no index.rst file could be found"
     return json.dumps(filetxt)
 
@@ -935,7 +897,7 @@ def editindexrst():
         file.close()
         return 'ok'
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -947,7 +909,7 @@ def releasegrades():
         assignment.update_record(released=released)
         return "Success"
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment_release_states():
@@ -1028,7 +990,7 @@ def get_assignment():
     try:
         assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
 
@@ -1109,7 +1071,7 @@ def save_assignment():
         )
         return {request.vars['name']: assignment_id}
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps('ERROR')
 
 
@@ -1158,7 +1120,6 @@ def add__or_update_assignment_question():
         points = activity_count
 
     activities_required = int(request.vars.get('activities_required'))
-    logger.debug("act required %s ", activities_required)
     if activities_required == -1:
         activities_required = max(int(activity_count * .8),1)
 
@@ -1216,12 +1177,13 @@ def delete_assignment_question():
         question_name = request.vars['name']
         assignment_id = int(request.vars['assignment_id'])
         question_id = _get_question_id(question_name, auth.user.course_id)
+        logger.debug("DELETEING A: %s Q:%s ", assignment_id, question_id)
         db((db.assignment_questions.assignment_id == assignment_id) & \
            (db.assignment_questions.question_id == question_id)).delete()
         total = _set_assignment_max_points(assignment_id)
         return json.dumps({'total': total})
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps("Error")
 
 def _set_assignment_max_points(assignment_id):
