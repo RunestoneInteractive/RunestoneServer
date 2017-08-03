@@ -486,7 +486,6 @@ def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
 def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None, question_type=None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
-    logger.debug("SCORING %s %s",div_id,event_filter)
     # if question type is page we must do better with the div_id
 
     query = ((db.useinfo.course_id == course_name) & \
@@ -615,7 +614,6 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         logger.debug("skipping; question_type = {}".format(question_type))
         return 0
 
-    logger.debug("RESULT of autograding %s = %s", question_type, results)
     # use query results and the scoring function
     if results:
         if which_to_grade in ['first_answer', 'last_answer', None]:
@@ -664,7 +662,7 @@ def _save_question_grade(sid, course_name, question_name, score, id):
         useinfo_id = id
     )
 
-def _compute_assignment_total(student, assignment):
+def _compute_assignment_total(student, assignment, course_name):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
     # student is a row, containing id and username
     # assignment is a row, containing name and id and points
@@ -680,7 +678,8 @@ def _compute_assignment_total(student, assignment):
     query =  (db.question_grades.sid == student.username) \
              & (db.question_grades.div_id == db.questions.name) \
              & (db.questions.id == db.assignment_questions.question_id) \
-             & (db.assignment_questions.assignment_id == assignment.id)
+             & (db.assignment_questions.assignment_id == assignment.id) \
+             & (db.question_grades.course_name == course_name )
     scores = db(query).select(db.question_grades.score)
 
     total = sum([row.score for row in scores])
@@ -756,13 +755,13 @@ def calculate_totals():
 
     results = {'success':True}
     if sid:
-        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment)
+        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, auth.user.course_name)
         results['message'] = "Total for {} is {}".format(sid, computed_total)
         results['computed_score'] = computed_total
         results['manual_score'] = manual_score
     else:
         # compute total score for the assignment for each sid; also saves in DB unless manual value saved
-        scores = [_compute_assignment_total(student, assignment)[0] for student in student_rows]
+        scores = [_compute_assignment_total(student, assignment, auth.user.course_name)[0] for student in student_rows]
         results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
             len(scores),
             max(scores),
@@ -827,10 +826,13 @@ def autograde():
             for row in rows:
                 score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
                                           deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
+                logger.debug("Score of %s for %s for %s", score, row.name, auth.user.username)
             if score >= ar:
                 save_points = points
+                logger.debug("full points for %s on %s", auth.user.username, name)
             else:
                 save_points = 0
+                logger.debug("no points for %s on %s", auth.user.username, name)
 
             _save_question_grade(s, auth.user.course_name, name, save_points, None)
 

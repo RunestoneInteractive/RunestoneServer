@@ -229,7 +229,7 @@ class ProgressMetrics(object):
     def __init__(self, course_id, sub_chapters, users):
         self.sub_chapters = OrderedDict()
         for sub_chapter in sub_chapters:
-            print sub_chapter
+            rslogger.debug(sub_chapter)
             self.sub_chapters[sub_chapter.sub_chapter_label] = SubChapterActivity(sub_chapter, len(users))
 
     def update_metrics(self, logs, chapter_progress):

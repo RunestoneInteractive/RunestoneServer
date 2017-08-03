@@ -207,12 +207,15 @@ def grades():
 
 def questiongrades():
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignment = db(db.assignments.id == request.vars.assignment_id)(db.assignments.course == course.id).select().first()
+    assignment = db((db.assignments.id == request.vars.assignment_id) & (db.assignments.course == course.id)).select().first()
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(db.auth_user.first_name, db.auth_user.last_name)
 
-    query = ("select questions.name, score, points from questions join assignment_questions on (questions.id = assignment_questions.question_id) join question_grades on (questions.name = question_grades.div_id) where assignment_id = '%s' and sid = %s;")
-    rows = db.executesql(query, [assignment['id'], sid])
+    query = ("""select questions.name, score, points 
+        from questions join assignment_questions on (questions.id = assignment_questions.question_id) 
+             join question_grades on (questions.name = question_grades.div_id) 
+             where assignment_id = %s and sid = %s and question_grades.course_name = %s;""")
+    rows = db.executesql(query, [assignment['id'], sid, course.course_name])
 
     return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
