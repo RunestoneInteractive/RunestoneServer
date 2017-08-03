@@ -803,7 +803,8 @@ def autograde():
     else:
         # get all qids and point values for this assignment
         questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
-                             (db.assignment_questions.question_id == db.questions.id)).select()
+                             (db.assignment_questions.question_id == db.questions.id) 
+                             ).select()
 
     readings = [(row.questions.name, 
                  row.questions.chapter, 
@@ -813,7 +814,7 @@ def autograde():
                  row.assignment_questions.autograde,
                  row.assignment_questions.which_to_grade,
                  ) for row in questions_query if row.assignment_questions.reading_assignment == True]
-    logger.debug(readings)
+    logger.debug("GRADING READINGS")
     # Now for each reading, get all of the questions in that subsection
     # call _autograde_one_q using the autograde and which to grade for that section. likely interact
     # 
@@ -836,11 +837,12 @@ def autograde():
 
             _save_question_grade(s, auth.user.course_name, name, save_points, None)
 
+    logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment != 'T']
+                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment == False]
 
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
