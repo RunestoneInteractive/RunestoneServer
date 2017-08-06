@@ -603,8 +603,12 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
-        results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_codelens
+        if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
+            results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
+            scoring_fn = _score_one_interaction
+        else:
+            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
+            scoring_fn = _score_one_codelens
     elif question_type == 'video':
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
