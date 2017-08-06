@@ -629,7 +629,7 @@ def questionBank():
         for row in questions_query:
             removed_row = False
             if term:
-                if request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question:
+                if (request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question) or row.question_type == 'page':
                     try:
                         rows.remove(row)
                         removed_row = True
