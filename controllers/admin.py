@@ -1113,9 +1113,17 @@ def add__or_update_assignment_question():
         # get the count of 'things to do' in this chap/subchap
         activity_count = db((db.questions.chapter==chapter) &
                    (db.questions.subchapter==subchapter)).count()
+        try:
+            activities_required = int(request.vars.get('activities_required'))
+            if activities_required == -1:
+                activities_required = max(int(activity_count * .8),1)
+        except:
+            logger.error("No Activities set for RA %s", question_name)
+            activities_required = None
 
     else:
         reading_assignment = None
+        activities_required = None
 
     # Have to use try/except here instead of request.vars.get in case the points is '',
     # which doesn't convert to int
@@ -1123,10 +1131,7 @@ def add__or_update_assignment_question():
         points = int(request.vars['points'])
     except:
         points = activity_count
-
-    activities_required = int(request.vars.get('activities_required'))
-    if activities_required == -1:
-        activities_required = max(int(activity_count * .8),1)
+    
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
