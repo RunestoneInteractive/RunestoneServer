@@ -846,8 +846,11 @@ def autograde():
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment == False]
+                  row.questions.question_type) for row in questions_query 
+                  if row.assignment_questions.reading_assignment == False or 
+                     row.assignment_questions.reading_assignment == None]
 
+    logger.debug("questions to grade = %s", questions)
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
             _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
