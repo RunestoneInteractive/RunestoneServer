@@ -1,8 +1,13 @@
 {{extend 'layout.html'}}
 
 <h1>Assignments</h1>
-<ul>
+<table class="table table-striped">
+	<tr><th>Name</th><th>Due</th><th>Description</th></tr>
 	{{for assignment in assignments:}}
-		<li><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></li>
+		<tr>
+			<td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+			<td>{{=assignment['duedate']}}</td>
+			<td>{{=assignment['description']}}</td>
+		</tr>
 	{{pass}}
-</ul>
+</table>
