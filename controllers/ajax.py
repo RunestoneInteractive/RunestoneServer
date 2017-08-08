@@ -695,8 +695,9 @@ def getSphinxBuildStatus():
             tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
             results['traceback']=tb
     else:
-        results['status'] = 'failed'
+        results['status'] = 'FAILED'
         results['info'] = 'no row'
+        results['traceback'] = 'Sorry, no more info'
     return json.dumps(results)
 
 def getassignmentgrade():
