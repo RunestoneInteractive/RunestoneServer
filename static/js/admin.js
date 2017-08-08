@@ -1368,6 +1368,13 @@ function display_write() {
 
 // Called when the "Done" button of the "Write" dialog is clicked.
 function create_question(formdata) {
+    if (formdata.qchapter.value == "Chapter") {
+        alert("Please select a chapter for this question");
+        return;
+    }
+    if (formdata.createpoints.value == "") {
+        formdata.createpoints.value == "1"
+    }
     if (! confirm("Have you previewed your question?")) {
         return;
     }
@@ -1408,6 +1415,7 @@ function create_question(formdata) {
         'difficulty' : selectedDifficulty,
         'tags' : tags,
         'chapter' : chapter,
+        'subchapter': 'Exercises',
         'isprivate' : isprivate,
         'tab' : activetab,
         'assignmentid' : assignmentid,
