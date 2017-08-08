@@ -85,14 +85,13 @@
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				<div id="question-metrics">
-				{{ chapterIndex = 0 }}
+				{{ chapterName = "" }}
 				{{ for question in questions:}}
-					{{ nums = question["text"].split("n")[1].split("_") }}
-					{{ if nums[0] > chapterIndex: }}
+					{{ if question["chapter_title"] != chapterName: }}
 						<div style="clear:both; font-size:1.2em; font-weight: bold; margin: .5em;">
-							{{ =chapters[int(nums[0])].chapter_name }}:
+							{{ =question["chapter_title"] }}:
 						</div>
-						{{ chapterIndex = nums[0] }}
+						{{ chapterName = question["chapter_title"] }}
 					{{ pass }}
 					<div class="question-metric">
 						<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
