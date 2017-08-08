@@ -722,20 +722,25 @@ def edit_question():
     subchapter = old_question.subchapter
 
     question = vars['questiontext']
+    htmlsrc = vars['htmlsrc']
 
     try:
-        if new_qname != "" and new_qname != old_qname:
-            new_qid = db.questions.insert(difficulty=difficulty, question=question, name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
-            chapter=chapter, subchapter=subchapter, question_type=question_type)
-            if tags != 'null':
-                tags = tags.split(',')
-                for tag in tags:
-                    tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
-                    db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
-            return "Success"
-
+        new_qid = db.questions.update_or_insert(
+            (db.questions.name == new_qname) & (db.questions.base_course == base_course),
+            difficulty=difficulty, question=question,
+            name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
+            chapter=chapter, subchapter=subchapter, question_type=question_type,
+            htmlsrc=htmlsrc)
+        if tags and tags != 'null':
+            tags = tags.split(',')
+            for tag in tags:
+                logger.error("TAG = %s",tag)
+                tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
+                db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
+        return "Success"
     except Exception as ex:
         logger.error(ex)
+        return "failed"
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

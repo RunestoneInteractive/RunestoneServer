@@ -1365,6 +1365,18 @@ function display_write() {
     hiddenwrite.style.visibility = 'visible';
 }
 
+function find_name(lines) {
+    var name = "";
+    for(var i = 0; i < lines.length; i++) {
+        if (lines[i] != "") {
+            var line = lines[i];
+            var match = line.split(/.. \w*:: /);
+            name = match[1];
+            break;
+        }
+    }
+    return name
+}
 
 // Called when the "Done" button of the "Write" dialog is clicked.
 function create_question(formdata) {
@@ -1386,15 +1398,7 @@ function create_question(formdata) {
     var qcode = formdata.qcode.value;
     var lines = qcode.split('\n');
     var htmlsrc = formdata.qrawhtml.value;
-    for(var i = 0; i < lines.length; i++) {
-        if (lines[i] != "") {
-            var line = lines[i];
-            var match = line.split(/.. \w*:: /);
-            var name = match[1];
-            break;
-        }
-    }
-
+    var name = find_name(lines);
     var question = formdata.qcode.value;
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
@@ -1440,24 +1444,29 @@ function create_question(formdata) {
 }
 
 // Given a question ID, preview it.
-function preview_question_id(question_id) {
+function preview_question_id(question_id, preview_div) {
+    if (arguments.length == 1) {
+        preview_div = "component-preview"
+    }
     // Request the preview HTML from the server.
     $.getJSON('htmlsrc', {"acid" : question_id}).done(function(html_src) {
         // Render it.
-        renderRunestoneComponent(html_src, "component-preview")
+        renderRunestoneComponent(html_src, preview_div)
     });
 }
 
 
 // Called by the "Preview" button of the "Write" panel.
-function preview_question(form){
-
-    var code = $(form.qcode).val();
+function preview_question(form, preview_div){
+    if (arguments.length == 1) {
+        preview_div = "component-preview"
+    }
+    var code = $(form.editRST).val();
     var data = {'code': JSON.stringify(code)};
     $.post('/runestone/ajax/preview_question', data, function(result, status) {
             let code = JSON.parse(result);
             $(form.qrawhtml).val(code); // store the un-rendered html for submission
-            renderRunestoneComponent(code, "component-preview")
+            renderRunestoneComponent(code, preview_div)
         }
     );
     // get the text as above
@@ -1501,6 +1510,25 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         } else {
             component_factory[componentKind](opt)
         }
+    }
+
+    if (whereDiv != "modal-preview") {  // if we are in modal we are already editing
+        $("#modal-preview").data("orig_divid",opt.orig.id);  // save the original divid
+        let editButton = document.createElement("button")
+        $(editButton).text("Edit Source");
+        $(editButton).addClass("btn btn-normal");
+        //data-target="#editModal" data-toggle="modal" onclick="getQuestionText();"
+        $(editButton).attr("data-target","#editModal");
+        $(editButton).attr("data-toggle","modal");
+        $(editButton).click(function(event) {
+        data = {question_name: opt.orig.id}
+        jQuery.get('/runestone/admin/question_text', data,
+            function(obj) {
+                var textarea = document.getElementById('editRST');
+                textarea.innerHTML = JSON.parse(obj);
+            });
+        });
+        $(`#${whereDiv}`).append(editButton);
     }
 }
 
@@ -1616,10 +1644,7 @@ function getQuestionInfo() {
 
 // Called inside the "Write Assignment" panel?
 function edit_question(form) {
-    var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
     var tags = $("#addTags").select2("val");
-    var name = form.changename.value;
     var difficulty = null;
     var difficulty_options = ['r1', 'r2', 'r3', 'r4', 'r5'];
     var inputs = document.getElementById('editForm').getElementsByTagName('input');
@@ -1628,20 +1653,23 @@ function edit_question(form) {
             difficulty = inputs[i].value;
         }
     }
+    let orig_divid = $("#modal-preview").data("orig_divid")
     var question_text = form.editRST.value;
-          question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
-
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            if (obj.responseText == 'Success') {
+    question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
+    var lines = form.editRST.value.split('\n');
+    var htmlsrc = form.qrawhtml.value;
+    var name = find_name(lines);
+    data = {
+        question: orig_divid,
+        name: name,
+        tags: tags,
+        difficulty: difficulty,
+        questiontext: question_text,
+        htmlsrc: htmlsrc
+     };
+    jQuery.post('/runestone/admin/edit_question', data, function() {
                 alert('You successfully edited the selected question.');
-            }
-        }
-    }
-
+            });
 }
 
 
