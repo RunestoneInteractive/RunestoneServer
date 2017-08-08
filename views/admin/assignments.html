@@ -348,10 +348,7 @@ $(function () {
     question_picker.on('select_node.jstree', function(event, data) {
         // If this is a question (a leaf node), then preview it.
         if (jstree_node_depth(data.instance, data.node) == 3) {
-            // Request the preview HTML from the server.
-            $.getJSON('htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
-                renderRunestoneComponent(html_src, "component-preview")
-            });
+            preview_question_id(data.node.id);
         }
     });
 

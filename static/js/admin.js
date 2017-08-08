@@ -1192,7 +1192,7 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
-        question: name,
+        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
@@ -1429,6 +1429,15 @@ function create_question(formdata) {
             updateAssignmentRaw(name, points, 'pct_correct', 'last_answer');
         }
     }, 'json');
+}
+
+// Given a question ID, preview it.
+function preview_question_id(question_id) {
+    // Request the preview HTML from the server.
+    $.getJSON('htmlsrc', {"acid" : question_id}).done(function(html_src) {
+        // Render it.
+        renderRunestoneComponent(html_src, "component-preview")
+    });
 }
 
 
