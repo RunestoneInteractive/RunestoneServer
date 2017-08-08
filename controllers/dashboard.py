@@ -76,6 +76,7 @@ def index():
                 "text": metric.problem_text,
                 "chapter": "unknown",
                 "sub_chapter": "unknown",
+                "chapter_title": "unknown"
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
