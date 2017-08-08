@@ -407,6 +407,9 @@ def _score_from_pct_correct(pct_correct, points, autograde):
 def _score_one_code_run(row, points, autograde):
     # row is one row from useinfo table
     # second element of act is the percentage of tests that passed
+    if autograde == 'interact':
+        return _score_one_interaction(row, points, autograde)
+
     try:
         (ignore, pct, ignore, passed, ignore, failed) = row.act.split(':')
         pct_correct = 100 * float(passed)/(int(failed) + int(passed))
@@ -637,7 +640,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
             id = best_row.id
             score = scoring_fn(best_row, points, autograde)
-            logger.debug("SCORE = %s", score)
+            logger.debug("SCORE = %s by %s", score, scoring_fn)
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
             score = 0
@@ -831,7 +834,7 @@ def autograde():
             for row in rows:
                 score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
                                           deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
-                logger.debug("Score of %s for %s for %s", score, row.name, auth.user.username)
+                logger.debug("Score is now %s for %s for %s", score, row.name, auth.user.username)
             if score >= ar:
                 save_points = points
                 logger.debug("full points for %s on %s", auth.user.username, name)
