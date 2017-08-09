@@ -61,13 +61,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
 
             # copy the assignments.rst file from confidir as it may contain assignments written
             # by the instructor
-            shutil.copy(path.join(custom_dir, 'assignments.rst'),
-                        path.join(sourcedir, '_sources', 'assignments.rst'))
-
-            # this check should allow for backward compatibility
-            if os.path.exists(os.path.join(custom_dir,'assignments')):
-                shutil.copytree(path.join(custom_dir,'assignments'),
-                                path.join(sourcedir,'_sources','assignments'))
 
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
