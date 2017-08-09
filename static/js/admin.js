@@ -1033,6 +1033,8 @@ function configure_tree_picker(
                 "name" : "proton",
                 "responsive" : true,
             },
+            // Allow modifying the tree programatically. See https://www.jstree.com/api/#/?f=$.jstree.defaults.core.check_callback.
+            "check_callback" : true,
         },
     });
 
@@ -1192,7 +1194,8 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
-        question: `<a href="#component-preview" onclick="preview_question_id('${name}');">${name}</a>`,
+        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question_id: name,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
@@ -1339,27 +1342,25 @@ function remove_question(question_name) {
         question_table.bootstrapTable('removeByUniqueId', question_name);
     });
 }
+var chapterMap = {}
 
 // Called when the "Write" button is clicked.
 function display_write() {
     var template = document.getElementById('template');
     var questiontype = template.options[template.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/gettemplate/' + questiontype, true);
-    obj.send();
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var returns = JSON.parse(obj.responseText);
-            tplate = returns['template'];
-            $("#qcode").text(tplate);
-        }
+    jQuery.get('/runestone/admin/gettemplate/' + questiontype, {}, function(obj) {
+        var returns = JSON.parse(obj);
+        tplate = returns['template'];
+        $("#qcode").text(tplate);
+
         $.each(returns['chapters'], function (i, item) {
+            chapterMap[item[0]] = item[1];
             $('#qchapter').append($('<option>', {
-                value: item,
-                text: item
+                value: item[0],
+                text: item[1]
             }));
         });
-    };
+    });
 
     var hiddenwrite = document.getElementById('hiddenwrite');
     hiddenwrite.style.visibility = 'visible';
@@ -1438,7 +1439,13 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            updateAssignmentRaw(name, points, 'pct_correct', 'last_answer');
+            // Add this question to the question picker and the table.
+            var tqp = question_picker.jstree(true);
+            // Find the exercises for this chapter. They have an ID set, making them easy to find.
+            chapter = chapterMap[chapter];
+            var exercises_node = tqp.get_node(chapter + ' Exercises');
+            // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
+            tqp.check_node(tqp.create_node(exercises_node, {id: name, text: name}));
         }
     }, 'json');
 }
