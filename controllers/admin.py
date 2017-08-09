@@ -799,10 +799,10 @@ def gettemplate():
     returndict['template'] = base + cmap.get(template,'').__doc__
 
     chapters = []
-    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
+    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name, db.chapters.chapter_label)
     for row in chaptersrow:
-        chapters.append(row['chapter_name'])
-    print(chapters)
+        chapters.append((row['chapter_label'], row['chapter_name']))
+    logger.debug(chapters)
     returndict['chapters'] = chapters
 
     return json.dumps(returndict)
@@ -819,7 +819,7 @@ def createquestion():
 
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
-                 author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
+                 subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
                  is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
