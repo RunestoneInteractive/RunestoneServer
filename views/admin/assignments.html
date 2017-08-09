@@ -308,6 +308,12 @@
                             </div>
                           </div>
                         </div>
+                        <script type="text/javascript">
+                          // clean out the preview when the modal is hidden
+                          $("#editModal").on("hidden.bs.modal", function() { 
+                            $("#modal-preview").html("")
+                          });
+                        </script>
             </div>
           </div>
         </div>
