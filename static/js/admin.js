@@ -1033,6 +1033,8 @@ function configure_tree_picker(
                 "name" : "proton",
                 "responsive" : true,
             },
+            // Allow modifying the tree programatically. See https://www.jstree.com/api/#/?f=$.jstree.defaults.core.check_callback.
+            "check_callback" : true,
         },
     });
 
@@ -1192,7 +1194,8 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
-        question: `<a href="#component-preview" onclick="preview_question_id('${name}');">${name}</a>`,
+        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question_id: name,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
@@ -1438,7 +1441,12 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            updateAssignmentRaw(name, points, 'pct_correct', 'last_answer');
+            // Add this question to the question picker and the table.
+            var tqp = question_picker.jstree(true);
+            // Find the exercises for this chapter. They have an ID set, making them easy to find.
+            var exercises_node = tqp.get_node(chapter + ' Exercises');
+            // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
+            tqp.check_node(tqp.create_node(exercises_node, name));
         }
     }, 'json');
 }
