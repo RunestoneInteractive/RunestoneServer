@@ -849,8 +849,8 @@ def autograde():
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query 
-                  if row.assignment_questions.reading_assignment == False or 
+                  row.questions.question_type) for row in questions_query
+                  if row.assignment_questions.reading_assignment == False or
                      row.assignment_questions.reading_assignment == None]
 
     logger.debug("questions to grade = %s", questions)
@@ -1247,7 +1247,7 @@ def doAssignment():
         if q.htmlsrc != None:
 
             # This replacement is to render images
-            q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+            q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
                 if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
                     questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
