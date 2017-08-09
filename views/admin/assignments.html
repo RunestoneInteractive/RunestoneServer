@@ -182,7 +182,7 @@
                           <div id="q_author"></div>
                           <div id="q_difficulty"></div>
                           <div id="q_tags"></div>
-                        </div>                        
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -363,7 +363,7 @@ $(function () {
     // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
     question_table.bootstrapTable({
         // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
-        uniqueId: 'question',
+        uniqueId: 'question_id',
         // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
         reorderableRows: true,
         // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
@@ -371,6 +371,9 @@ $(function () {
             {
                 field: 'question',
                 title: 'Question',
+            }, {
+                field: 'question_id',
+                visible: false,
             }, {
                 field: 'points',
                 title: 'Points',
@@ -420,7 +423,7 @@ $(function () {
                      // Copied from ``operateEvents`` in an example_.
                     'click .question_table_remove': function (e, value, row, index) {
                         // Unchecking the question in the tree picker also deletes it from the database and table.
-                        question_picker.jstree(true).uncheck_node(row['question']);
+                        question_picker.jstree(true).uncheck_node(row['question_id']);
                     },
                 },
            },
@@ -428,7 +431,7 @@ $(function () {
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
         onEditableSave : function(field, row, oldValue, html_element) {
-            updateAssignmentRaw(row['question'], row['points'], row['autograde'], row['which_to_grade']);
+            updateAssignmentRaw(row['question_id'], row['points'], row['autograde'], row['which_to_grade']);
         },
          // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
         ///onReorderRow : function(rows) {
@@ -440,14 +443,14 @@ $(function () {
         // This will be called multiple times. Record the beginning row of the drag.
         onReorderRowsDrag: function(table, row) {
             table.dragRowIndex = $(row).attr('data-index');
-            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
+            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question_id'];
         },
         onReorderRowsDrop: function(table, row) {
             dropRowIndex = $(row).attr('data-index');
             // Create an array of question names in the order they appear in the table.
             var question_array = [];
             for (let value of $(table).bootstrapTable('getData')) {
-                question_array.push(value['question']);
+                question_array.push(value['question_id']);
             }
             // Send it to the server.
             $.getJSON('reorder_assignment_questions', {

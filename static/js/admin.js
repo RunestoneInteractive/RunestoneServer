@@ -1194,8 +1194,8 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
-        //question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
-        question: `<a href="#component-preview" onclick="preview_question_id('${name}');">${name}</a>`,
+        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question_id: name,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
