@@ -1195,6 +1195,7 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
     var _id = 'question_table_' + name;
     question_table.bootstrapTable('append', [{
         question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question_id: name,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
