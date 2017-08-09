@@ -964,6 +964,9 @@ def _get_toc_and_questions():
                 q_sub_ch_info = {}
                 q_ch_info['children'].append(q_sub_ch_info)
                 q_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
+                if sub_ch.sub_chapter_name == 'Exercises':
+                    q_sub_ch_info['id'] = ch.chapters.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
                 # copy same stuff for reading picker
                 r_sub_ch_info = {}
@@ -981,7 +984,6 @@ def _get_toc_and_questions():
                     q_info = dict(
                         text = question.questions.name,
                         id = question.questions.name,
-                        question_type = question.questions.question_type
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
