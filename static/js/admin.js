@@ -1661,7 +1661,6 @@ function edit_question(form) {
     }
     let orig_divid = $("#modal-preview").data("orig_divid")
     var question_text = form.editRST.value;
-    question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
     var lines = form.editRST.value.split('\n');
     var htmlsrc = form.qrawhtml.value;
     var name = find_name(lines);
