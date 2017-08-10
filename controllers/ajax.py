@@ -293,6 +293,8 @@ def getuser():
 
     if  auth.user:
         res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
+        session.timezoneoffset = request.vars.timezoneoffset
+        logger.debug("setting timezone offset in session %s", session.timezoneoffset)
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
     logging.debug("returning login info: %s",res)

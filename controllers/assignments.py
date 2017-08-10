@@ -918,9 +918,14 @@ def get_problem():
     else:
         deadline = None
 
+    offset = 0
+    if session.timezoneoffset:
+        offset = session.timezoneoffset
+        logger.debug("setting offset %s %s", offset, deadline+offset)
+
     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
-        query = query & (db.code.timestamp < deadline)
+        query = query & (db.code.timestamp < deadline+offset)
     c = db(query).select(orderby = db.code.id).last()
 
     if c:
