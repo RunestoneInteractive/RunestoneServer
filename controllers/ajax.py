@@ -300,6 +300,11 @@ def getuser():
     logging.debug("returning login info: %s",res)
     return json.dumps([res])
 
+def set_tz_offset():
+    session.timezoneoffset = request.vars.timezoneoffset
+    logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+    return "done"
+
 
 def getnumonline():
     response.headers['content-type'] = 'application/json'

@@ -58,6 +58,11 @@
 
 
     </div>
+      <script type="text/javascript">
+        var data = {timezoneoffset: (new Date()).getTimezoneOffset()/60};
+        jQuery.post('/{{=request.application}}/ajax/set_tz_offset',data, function() {
+        });
+      </script>
 </div>
 
 
