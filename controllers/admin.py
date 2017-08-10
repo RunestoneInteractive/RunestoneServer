@@ -459,6 +459,7 @@ def removeStudents():
         studentList = request.vars["studentList"]
     elif request.vars["studentList"] == "None":
         # No id selected
+        session.flash = T("No valid students were selected")
         return redirect('/%s/admin/admin' % (request.application))
     else:
         # One id selected
