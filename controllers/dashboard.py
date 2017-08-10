@@ -181,7 +181,9 @@ def grades():
     currentrow=0
     for student in students:
         studentrow = []
-        studentrow.append(student.first_name + " " + student.last_name)
+        studentrow.append(student.first_name)
+        studentrow.append(student.last_name)
+        studentrow.append(student.username)
         for assignment in assignments:
             try:
                 if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id and rows[currentrow][1] != None:
@@ -195,8 +197,8 @@ def grades():
         gradetable.append(studentrow)
 
     #Then build the average row for the table
-
-    for col in range(1, len(assignments)+1):
+    # columns 0-2 are names
+    for col in range(3, len(assignments)+3):
         applicable = False
         averagedivide = len(students)
         average = 0
