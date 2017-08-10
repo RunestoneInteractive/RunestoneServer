@@ -197,8 +197,8 @@ def grades():
         gradetable.append(studentrow)
 
     #Then build the average row for the table
-
-    for col in range(1, len(assignments)+1):
+    # columns 0-2 are names
+    for col in range(3, len(assignments)+3):
         applicable = False
         averagedivide = len(students)
         average = 0
