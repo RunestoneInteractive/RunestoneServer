@@ -1165,7 +1165,7 @@ def doAssignment():
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id) & \
                         (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
-                        .select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+                        .select(db.questions.htmlsrc, db.questions.id, db.questions.chapter, db.questions.subchapter, db.questions.name, orderby=db.assignment_questions.sorting_priority)
 
     readings = db((db.assignment_questions.assignment_id == assignment.id) & \
                 (db.assignment_questions.question_id == db.questions.id) & \
@@ -1255,13 +1255,19 @@ def doAssignment():
             q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
                 if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
-                    questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
+                    questioninfo = [q.htmlsrc, 
+                                    questions_scores[currentqScore]['question_grades'].score, 
+                                    questions_scores[currentqScore]['assignment_questions'].points, 
+                                    questions_scores[currentqScore]['question_grades'].comment,
+                                    q.chapter,
+                                    q.subchapter,
+                                    q.name]
                     currentqScore += 1
                 else:
-                    questioninfo  = [q.htmlsrc, '', '','']
+                    questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
             except:
                 # There are still questions, but no more recorded grades
-                questioninfo  = [q.htmlsrc, '', '','']
+                questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
 
             questionslist.append(questioninfo)
 
