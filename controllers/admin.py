@@ -478,12 +478,14 @@ def removeStudents():
             logger.debug(int(studentID))
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
+            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
         else:
             logger.debug("Inside 'else' statement")
 
         logger.debug("Finished")
         logger.debug(request.application)
-
+    
+    session.flash = T("You have successfully removed students")
     return redirect('/%s/admin/admin' % (request.application))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
