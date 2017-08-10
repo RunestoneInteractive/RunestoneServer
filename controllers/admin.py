@@ -451,13 +451,8 @@ def backup():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
-    logger.debug("-=-=-=-=-=-=-=-=-=-=-")
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
-    logger.debug(baseCourseName)
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
-    logger.debug(auth.user.course_name)
-    logger.debug(auth.user.id)
-    logger.debug(baseCourseID)
 
     if not isinstance(request.vars["studentList"], basestring):
         # Multiple ids selected
@@ -469,21 +464,11 @@ def removeStudents():
         # One id selected
         studentList = [request.vars["studentList"]]
 
-    logger.debug(studentList)
-
     for studentID in studentList:
-        logger.debug("Beginning of 'for' loop")
         if int(studentID) != auth.user.id:
-            logger.debug("Inside 'if' statement")
-            logger.debug(int(studentID))
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
-        else:
-            logger.debug("Inside 'else' statement")
-
-        logger.debug("Finished")
-        logger.debug(request.application)
-
+            
     return redirect('/%s/admin/admin' % (request.application))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
