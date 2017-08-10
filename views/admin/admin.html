@@ -179,7 +179,7 @@
         if (data.status == "COMPLETED"){
           window.location.href = data.course_url;
         }
-        if (data.status == "failed") {
+        if (data.status == "FAILED" || data.status == "TIMEOUT") {
           clearInterval(iid);
           $("#spinner_div").hide();
           $("#title").text("An error occurred.");

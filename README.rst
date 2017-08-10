@@ -149,7 +149,7 @@ Installation
    
      * Create a file ``applications/runestone/models/1.py``, with the following line: ``settings.database_uri = '<your_connection_string>'``. NOTE: Don't put this inside an if statement, like it shows in ``models/1.prototype``.
      * If you're running https, edit ``settings.server_type`` in ``models/0.py``.
-     * Set and export environment variables for DBHOST, DBUSER, DBPASS and DBNAME
+     * Set and export environment variable for DBURL -- Note the url format for web2py is different from sqlalchemy.  use `postgres` for web2py and `postgresql` for sqlalchemy.  example:  `postgresql://username:pw@host/database` where pw may be empty.
       
 #. Run web2py once, so that it will create all the tables.
 

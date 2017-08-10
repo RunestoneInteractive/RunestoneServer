@@ -648,7 +648,7 @@ def questionBank():
         for row in questions_query:
             removed_row = False
             if term:
-                if request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question:
+                if (request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question) or row.question_type == 'page':
                     try:
                         rows.remove(row)
                         removed_row = True
@@ -741,20 +741,25 @@ def edit_question():
     subchapter = old_question.subchapter
 
     question = vars['questiontext']
+    htmlsrc = vars['htmlsrc']
 
     try:
-        if new_qname != "" and new_qname != old_qname:
-            new_qid = db.questions.insert(difficulty=difficulty, question=question, name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
-            chapter=chapter, subchapter=subchapter, question_type=question_type)
-            if tags != 'null':
-                tags = tags.split(',')
-                for tag in tags:
-                    tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
-                    db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
-            return "Success"
-
+        new_qid = db.questions.update_or_insert(
+            (db.questions.name == new_qname) & (db.questions.base_course == base_course),
+            difficulty=difficulty, question=question,
+            name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
+            chapter=chapter, subchapter=subchapter, question_type=question_type,
+            htmlsrc=htmlsrc)
+        if tags and tags != 'null':
+            tags = tags.split(',')
+            for tag in tags:
+                logger.error("TAG = %s",tag)
+                tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
+                db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
+        return "Success"
     except Exception as ex:
         logger.error(ex)
+        return "failed"
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -813,10 +818,10 @@ def gettemplate():
     returndict['template'] = base + cmap.get(template,'').__doc__
 
     chapters = []
-    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
+    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name, db.chapters.chapter_label)
     for row in chaptersrow:
-        chapters.append(row['chapter_name'])
-    print(chapters)
+        chapters.append((row['chapter_label'], row['chapter_name']))
+    logger.debug(chapters)
     returndict['chapters'] = chapters
 
     return json.dumps(returndict)
@@ -833,7 +838,7 @@ def createquestion():
 
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
-                 author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
+                 subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
                  question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
                  is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
@@ -859,7 +864,7 @@ def htmlsrc():
         htmlsrc = res.htmlsrc
     else:
         logger.error("HTML Source not found for %s in course %s", acid, auth.user.course_name)
-    if htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
+    if htmlsrc and htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode('hex')
     return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
 
@@ -978,6 +983,9 @@ def _get_toc_and_questions():
                 q_sub_ch_info = {}
                 q_ch_info['children'].append(q_sub_ch_info)
                 q_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
+                if sub_ch.sub_chapter_name == 'Exercises':
+                    q_sub_ch_info['id'] = ch.chapters.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
                 # copy same stuff for reading picker
                 r_sub_ch_info = {}
@@ -995,7 +1003,6 @@ def _get_toc_and_questions():
                     q_info = dict(
                         text = question.questions.name,
                         id = question.questions.name,
-                        question_type = question.questions.question_type
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
@@ -1132,9 +1139,17 @@ def add__or_update_assignment_question():
         # get the count of 'things to do' in this chap/subchap
         activity_count = db((db.questions.chapter==chapter) &
                    (db.questions.subchapter==subchapter)).count()
+        try:
+            activities_required = int(request.vars.get('activities_required'))
+            if activities_required == -1:
+                activities_required = max(int(activity_count * .8),1)
+        except:
+            logger.error("No Activities set for RA %s", question_name)
+            activities_required = None
 
     else:
         reading_assignment = None
+        activities_required = None
 
     # Have to use try/except here instead of request.vars.get in case the points is '',
     # which doesn't convert to int
@@ -1142,10 +1157,7 @@ def add__or_update_assignment_question():
         points = int(request.vars['points'])
     except:
         points = activity_count
-
-    activities_required = int(request.vars.get('activities_required'))
-    if activities_required == -1:
-        activities_required = max(int(activity_count * .8),1)
+    
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')

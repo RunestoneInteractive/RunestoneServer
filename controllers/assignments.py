@@ -407,6 +407,9 @@ def _score_from_pct_correct(pct_correct, points, autograde):
 def _score_one_code_run(row, points, autograde):
     # row is one row from useinfo table
     # second element of act is the percentage of tests that passed
+    if autograde == 'interact':
+        return _score_one_interaction(row, points, autograde)
+
     try:
         (ignore, pct, ignore, passed, ignore, failed) = row.act.split(':')
         pct_correct = 100 * float(passed)/(int(failed) + int(passed))
@@ -603,8 +606,12 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
-        results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_codelens
+        if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
+            results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
+            scoring_fn = _score_one_interaction
+        else:
+            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
+            scoring_fn = _score_one_codelens
     elif question_type == 'video':
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
@@ -633,7 +640,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
             id = best_row.id
             score = scoring_fn(best_row, points, autograde)
-            logger.debug("SCORE = %s", score)
+            logger.debug("SCORE = %s by %s", score, scoring_fn)
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
             score = 0
@@ -827,7 +834,7 @@ def autograde():
             for row in rows:
                 score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
                                           deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
-                logger.debug("Score of %s for %s for %s", score, row.name, auth.user.username)
+                logger.debug("Score is now %s for %s for %s", score, row.name, auth.user.username)
             if score >= ar:
                 save_points = points
                 logger.debug("full points for %s on %s", auth.user.username, name)
@@ -842,8 +849,11 @@ def autograde():
                   row.assignment_questions.points,
                   row.assignment_questions.autograde,
                   row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query if row.assignment_questions.reading_assignment == False]
+                  row.questions.question_type) for row in questions_query
+                  if row.assignment_questions.reading_assignment == False or
+                     row.assignment_questions.reading_assignment == None]
 
+    logger.debug("questions to grade = %s", questions)
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
             _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
@@ -908,9 +918,14 @@ def get_problem():
     else:
         deadline = None
 
+    offset = 0
+    if session.timezoneoffset:
+        offset = session.timezoneoffset
+        logger.debug("setting offset %s %s", offset, deadline+offset)
+
     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
-        query = query & (db.code.timestamp < deadline)
+        query = query & (db.code.timestamp < deadline+offset)
     c = db(query).select(orderby = db.code.id).last()
 
     if c:
@@ -1150,7 +1165,7 @@ def doAssignment():
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id) & \
                         (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
-                        .select(db.questions.htmlsrc, db.questions.id, orderby=db.assignment_questions.sorting_priority)
+                        .select(db.questions.htmlsrc, db.questions.id, db.questions.chapter, db.questions.subchapter, db.questions.name, orderby=db.assignment_questions.sorting_priority)
 
     readings = db((db.assignment_questions.assignment_id == assignment.id) & \
                 (db.assignment_questions.question_id == db.questions.id) & \
@@ -1237,16 +1252,22 @@ def doAssignment():
         if q.htmlsrc != None:
 
             # This replacement is to render images
-            q.htmlsrc = q.htmlsrc.replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+            q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
             try:
                 if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
-                    questioninfo = [q.htmlsrc, questions_scores[currentqScore]['question_grades'].score, questions_scores[currentqScore]['assignment_questions'].points, questions_scores[currentqScore]['question_grades'].comment]
+                    questioninfo = [q.htmlsrc, 
+                                    questions_scores[currentqScore]['question_grades'].score, 
+                                    questions_scores[currentqScore]['assignment_questions'].points, 
+                                    questions_scores[currentqScore]['question_grades'].comment,
+                                    q.chapter,
+                                    q.subchapter,
+                                    q.name]
                     currentqScore += 1
                 else:
-                    questioninfo  = [q.htmlsrc, '', '','']
+                    questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
             except:
                 # There are still questions, but no more recorded grades
-                questioninfo  = [q.htmlsrc, '', '','']
+                questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
 
             questionslist.append(questioninfo)
 
@@ -1258,5 +1279,5 @@ def chooseAssignment():
         return redirect(URL('default','index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.assignment_type)
+    assignments = db(db.assignments.course == course.id).select(orderby=db.assignments.duedate)
     return(dict(assignments=assignments))

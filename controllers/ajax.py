@@ -293,10 +293,17 @@ def getuser():
 
     if  auth.user:
         res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
+        session.timezoneoffset = request.vars.timezoneoffset
+        logger.debug("setting timezone offset in session %s", session.timezoneoffset)
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
     logging.debug("returning login info: %s",res)
     return json.dumps([res])
+
+def set_tz_offset():
+    session.timezoneoffset = request.vars.timezoneoffset
+    logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+    return "done"
 
 
 def getnumonline():
@@ -695,8 +702,9 @@ def getSphinxBuildStatus():
             tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
             results['traceback']=tb
     else:
-        results['status'] = 'failed'
+        results['status'] = 'FAILED'
         results['info'] = 'no row'
+        results['traceback'] = 'Sorry, no more info'
     return json.dumps(results)
 
 def getassignmentgrade():

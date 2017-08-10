@@ -105,6 +105,9 @@
 					</div><span>
 					<div class='oneq' id='{{=count}}' style='width:70%;'>
 						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+						<div>
+						<a href="/{{=request.application}}/static/{{=course_id}}/{{=q[4]}}/{{=q[5]}}.html#{{=q[6]}}">See Question in {{=q[4]}}/{{=q[5]}}</a>
+						</div>
 					</div></span>
 				{{ else: }}
 					<div style='float:right; width:10%;'>
@@ -112,6 +115,9 @@
 					</div><span>
 					<div class='oneq' id='{{=count}}' style='width:90%;'>
 						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
+						<div>
+						<a href="/{{=request.application}}/static/{{=course_id}}/{{=q[4]}}/{{=q[5]}}.html#{{=q[6]}}">See Question in {{=q[4]}}/{{=q[5]}}</a>
+						</div>
 					</div></span>
 				{{pass}}
 			{{count += 1}}

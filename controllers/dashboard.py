@@ -35,6 +35,9 @@ def index():
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     logger.debug("getting chapters for {}".format(auth.user.course_name))
     chapters = db(db.chapters.course_id == auth.user.course_name).select()
+    chap_map = {}
+    for chapter in chapters:
+        chap_map[chapter.chapter_label] = chapter.chapter_name
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
@@ -54,10 +57,12 @@ def index():
         stats = metric.user_response_stats()
 
         if data_analyzer.questions[problem_id]:
+            chtmp = data_analyzer.questions[problem_id].chapter
             entry = {
                 "id": problem_id,
                 "text": metric.problem_text,
-                "chapter": data_analyzer.questions[problem_id].chapter,
+                "chapter": chtmp,
+                "chapter_title": chap_map.get(chtmp,chtmp),
                 "sub_chapter": data_analyzer.questions[problem_id].subchapter,
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
@@ -69,6 +74,9 @@ def index():
             entry = {
                 "id": problem_id,
                 "text": metric.problem_text,
+                "chapter": "unknown",
+                "sub_chapter": "unknown",
+                "chapter_title": "unknown",
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
@@ -76,9 +84,10 @@ def index():
                 "attemptedBy": stats[1] + stats[2] + stats[3]
                 }
         questions.append(entry)
+        logger.debug("ADDING QUESTION %s ", entry["chapter"])
 
     logger.debug("getting questsions")
-    questions = sorted(questions, key=itemgetter("id"))
+    questions = sorted(questions, key=itemgetter("chapter"))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
         sections.append({
@@ -172,7 +181,9 @@ def grades():
     currentrow=0
     for student in students:
         studentrow = []
-        studentrow.append(student.first_name + " " + student.last_name)
+        studentrow.append(student.first_name)
+        studentrow.append(student.last_name)
+        studentrow.append(student.username)
         for assignment in assignments:
             try:
                 if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id and rows[currentrow][1] != None:
@@ -186,8 +197,8 @@ def grades():
         gradetable.append(studentrow)
 
     #Then build the average row for the table
-
-    for col in range(1, len(assignments)+1):
+    # columns 0-2 are names
+    for col in range(3, len(assignments)+3):
         applicable = False
         averagedivide = len(students)
         average = 0
