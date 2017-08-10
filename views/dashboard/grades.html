@@ -32,7 +32,9 @@
 
 			<thead style="cursor: pointer;">
 				<tr id = "head">
-					<td id="leaveAlone">Student</td>
+					<td id="leaveAlone0">FName</td>
+					<td id="leaveAlone1">LName</td>
+					<td id="leaveAlone2">UName</td>
 					{{for assignment in assignments:}}
 						<td class="headrow">{{=assignment['name']}}</td>
 					{{pass}}
@@ -42,6 +44,8 @@
 			<tbody>
 				<tr bgcolor="lightgray" id="classaverage">
 					<td>Class Average</td>
+					<td> </td>
+					<td> </td>
 					{{for average in range(len(averagerow)):}}
 
 <!-- 						This if statement is to determine if a percent sign is needed in the average row. -->
@@ -56,9 +60,9 @@
 				{{for row in range(len(gradetable)):}}
 					<tr class="search">
 						{{for item in range(len(gradetable[row])):}}
-							{{if item != 0 and gradetable[row][item] != 'n/a':}}
+							{{if item > 2 and gradetable[row][item] != 'n/a':}}
 								<td class="{{=assignments[item-1]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-1]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
-							{{elif item == 0:}}
+							{{elif item < 3:}}
 								<td class="roguecol">{{=gradetable[row][item]}}</td>
 							{{else:}}
 								<td class="{{=assignments[item-1]['name']}}"></td>

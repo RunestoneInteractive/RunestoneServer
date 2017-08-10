@@ -181,7 +181,9 @@ def grades():
     currentrow=0
     for student in students:
         studentrow = []
-        studentrow.append(student.first_name + " " + student.last_name)
+        studentrow.append(student.first_name)
+        studentrow.append(student.last_name)
+        studentrow.append(student.username)
         for assignment in assignments:
             try:
                 if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id and rows[currentrow][1] != None:
