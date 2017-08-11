@@ -4,10 +4,10 @@ import shutil
 import sys
 import json
 import logging
+import datetime
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
-
 
 # controller for "Progress Page" as well as List/create assignments
 def index():
@@ -798,6 +798,10 @@ def autograde():
     else:
         deadline = None
 
+    if 'timezoneoffset' in session:
+        deadline = deadline + datetime.timedelta(hours=int(session.timezoneoffset))
+        logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
+
     student_rows = _get_students(auth.user.course_id, sid)
     sids = [row.username for row in student_rows]
 
@@ -923,12 +927,12 @@ def get_problem():
 
     offset = 0
     if session.timezoneoffset:
-        offset = session.timezoneoffset
+        offset = datetime.timedelta(hours=int(session.timezoneoffset))
         logger.debug("setting offset %s %s", offset, deadline+offset)
 
     query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
-        query = query & (db.code.timestamp < deadline+offset)
+        query = query & (db.code.timestamp < deadline + offset)
         logger.debug("DEADLINE QUERY = %s", query)
     c = db(query).select(orderby = db.code.id).last()
 
