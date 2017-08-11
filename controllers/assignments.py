@@ -832,7 +832,7 @@ def autograde():
         for s in sids:
             score = 0
             rows = db((db.questions.chapter == chapter) & 
-                      (db.questions.subchapter == subchapter)
+                      (db.questions.subchapter == subchapter) &
                       (db.questions.base_course == base_course)).select()
             for row in rows:
                 score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
