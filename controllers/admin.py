@@ -1127,6 +1127,8 @@ def add__or_update_assignment_question():
     logger.debug("course_id %s",auth.user.course_id)
     question_id = _get_question_id(question_name, auth.user.course_id)
     logger.debug(question_id)
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    logger.debug("base course %s", base_course)
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
     subchapter = db.questions[question_id].subchapter
@@ -1141,7 +1143,8 @@ def add__or_update_assignment_question():
         reading_assignment = 'T'
         # get the count of 'things to do' in this chap/subchap
         activity_count = db((db.questions.chapter==chapter) &
-                   (db.questions.subchapter==subchapter)).count()
+                   (db.questions.subchapter==subchapter) &
+                   (db.questions.base_course == base_course)).count()
         try:
             activities_required = int(request.vars.get('activities_required'))
             if activities_required == -1:

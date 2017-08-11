@@ -825,12 +825,15 @@ def autograde():
     # Now for each reading, get all of the questions in that subsection
     # call _autograde_one_q using the autograde and which to grade for that section. likely interact
     # 
+    base_course = row = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     count = 0
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
         count += 1
         for s in sids:
             score = 0
-            rows = db((db.questions.chapter == chapter) & (db.questions.subchapter == subchapter)).select()
+            rows = db((db.questions.chapter == chapter) & 
+                      (db.questions.subchapter == subchapter)
+                      (db.questions.base_course == base_course)).select()
             for row in rows:
                 score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
                                           deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
