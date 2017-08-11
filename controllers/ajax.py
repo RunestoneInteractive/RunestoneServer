@@ -247,21 +247,21 @@ def getprog():
             if sid:
                 res['sid'] = sid
         else:
-            logging.debug("Did not find anything to load for %s"%sid)
+            logger.debug("Did not find anything to load for %s"%sid)
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
 def getlastanswer():
     # get's user's last answer for multiple choice question
-    logging.debug("Hello from getlastanswer")
+    logger.debug("Hello from getlastanswer")
     divid = request.vars.div_id
     if  auth.user:
         sid = auth.user.username
         query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
-        logging.debug("finding last answer for %s %s " % (sid,divid))
+        logger.debug("finding last answer for %s %s " % (sid,divid))
     else:
         query = None
-        logging.debug("No User, No Query")
+        logger.debug("No User, No Query")
 
     res = {}
     if query:
@@ -272,7 +272,7 @@ def getlastanswer():
             res['answer'] = r.act
             res['timestamp'] = r.timestamp.isoformat()
         else:
-            logging.debug("No saved answers for %s %s" %(sid,divid))
+            logger.debug("No saved answers for %s %s" %(sid,divid))
     response.headers['content-type'] = 'application/json'
     return json.dumps(res)
 
@@ -297,7 +297,7 @@ def getuser():
         logger.debug("setting timezone offset in session %s", session.timezoneoffset)
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
-    logging.debug("returning login info: %s",res)
+    logger.debug("returning login info: %s",res)
     return json.dumps([res])
 
 def set_tz_offset():
@@ -364,7 +364,7 @@ def deletehighlight():
         try:
             db(db.user_highlights.id == uniqueId).update(is_active=0)
         except:
-            logging.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
+            logger.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
             return json.dumps({'success': False, 'message':'invalid id for highlighted text'})
 
         return json.dumps({"success":True})
@@ -617,7 +617,7 @@ def getaggregateresults():
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
             except:
-                logging.debug("Bad data for %s data is %s " % (question,key))
+                logger.debug("Bad data for %s data is %s " % (question,key))
 
     miscdata['correct'] = correct
     miscdata['course'] = course
