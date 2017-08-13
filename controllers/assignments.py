@@ -688,8 +688,8 @@ def _compute_assignment_total(student, assignment, course_name):
              & (db.assignment_questions.assignment_id == assignment.id) \
              & (db.question_grades.course_name == course_name )
     scores = db(query).select(db.question_grades.score)
-
-    total = sum([row.score for row in scores])
+    logger.debug("List of scores to add for %s is %s",student.username, scores)
+    total = sum([row.score for row in scores if row.score])
     score = total
 
     grade = db(
