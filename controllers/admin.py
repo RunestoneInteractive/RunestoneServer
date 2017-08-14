@@ -1037,7 +1037,7 @@ def get_assignment():
     # Still need to get:
     #  -- timed properties of assignment
     #  (See https://github.com/RunestoneInteractive/RunestoneServer/issues/930)
-
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     # Assemble the readings (subchapters) that are part of the assignment
     a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
                   (db.assignment_questions.question_id == db.questions.id) &
@@ -1048,7 +1048,8 @@ def get_assignment():
         if row.questions.question_type == 'page':
             # get the count of 'things to do' in this chap/subchap
             activity_count = db((db.questions.chapter==row.questions.chapter) &
-                       (db.questions.subchapter==row.questions.subchapter)).count()
+                       (db.questions.subchapter==row.questions.subchapter) &
+                       (db.questions.base_course == base_course)).count()
 
         pages_data.append(dict(
             name = row.questions.name,
