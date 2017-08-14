@@ -798,7 +798,7 @@ def autograde():
     else:
         deadline = None
 
-    if 'timezoneoffset' in session:
+    if 'timezoneoffset' in session and deadline:
         deadline = deadline + datetime.timedelta(hours=int(session.timezoneoffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
@@ -926,7 +926,7 @@ def get_problem():
         deadline = None
 
     offset = 0
-    if session.timezoneoffset:
+    if session.timezoneoffset and deadline:
         offset = datetime.timedelta(hours=int(session.timezoneoffset))
         logger.debug("setting offset %s %s", offset, deadline+offset)
 
