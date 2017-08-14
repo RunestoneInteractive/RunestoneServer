@@ -612,7 +612,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
         else:
             results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
             scoring_fn = _score_one_codelens
-    elif question_type == 'video':
+    elif question_type in ['video', 'showeval']:
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
         scoring_fn = _score_one_interaction
