@@ -27,7 +27,7 @@
 					{{for item in range(len(row)):}}
 						<td>{{=row[item]}}</td>
 						{{if item == 1:}}
-							{{total += row[item]}}
+							{{total += row[item] or 0}}
 						{{pass}}
 					{{pass}}
 					</tr>
