@@ -380,9 +380,11 @@ def grading():
         assignmentids[row.name] = int(row.id)
         assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
         questions = []
+        question_points = {}
         for q in assignment_questions:
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
             questions.append(question_name)
+            question_points[question_name] = q.points
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.isoformat()
 
@@ -416,7 +418,7 @@ def grading():
                 autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'),
                 calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'),
                 getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
-                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines
+                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines, question_points=json.dumps(question_points)
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

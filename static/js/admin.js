@@ -267,7 +267,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         newForm.innerHTML = formstr;
         document.getElementById("outerRightDiv").appendChild(newForm);
 
-        jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em>');
+        jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em> <span>Points: ' +  question_points[data.acid]+ '</span>');
 
         //jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
 
