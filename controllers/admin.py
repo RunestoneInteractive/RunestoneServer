@@ -375,12 +375,12 @@ def grading():
 
     assignmentids = {}
     assignment_deadlines = {}
+    question_points = {}
 
     for row in assignments_query:
         assignmentids[row.name] = int(row.id)
         assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
         questions = []
-        question_points = {}
         for q in assignment_questions:
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
             questions.append(question_name)
