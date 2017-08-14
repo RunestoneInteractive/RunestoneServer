@@ -1519,7 +1519,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         }
     }
 
-    if (whereDiv != "modal-preview") {  // if we are in modal we are already editing
+    if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") {  // if we are in modal we are already editing
         $("#modal-preview").data("orig_divid",opt.orig.id);  // save the original divid
         let editButton = document.createElement("button")
         $(editButton).text("Edit Source");
