@@ -67,38 +67,54 @@ def hsblog():    # Human Subjects Board Log
         # has user already submitted a correct answer for this question?
         if db((db.mchoice_answers.sid == sid) &
               (db.mchoice_answers.div_id == div_id) &
+              (db.mchoice_answers.course_name == auth.user.course_name) &
               (db.mchoice_answers.correct == 'T')).count() == 0:
             answer = request.vars.answer
             correct = request.vars.correct
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
-        if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
+        if db((db.fitb_answers.sid == sid) & 
+              (db.fitb_answers.div_id == div_id) & 
+              (db.fitb_answers.course_name == auth.user.course_name) &
+              (db.fitb_answers.correct == 'T')).count() == 0:
             answer = request.vars.answer
             correct = request.vars.correct
             db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
-        if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
+        if db((db.dragndrop_answers.sid == sid) & 
+              (db.dragndrop_answers.div_id == div_id) & 
+              (db.dragndrop_answers.course_name == auth.user.course_name) &
+              (db.dragndrop_answers.correct == 'T')).count() == 0:
             answers = request.vars.answer
             minHeight = request.vars.minHeight
             correct = request.vars.correct
 
             db.dragndrop_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answers, correct=correct, course_name=course, minHeight=minHeight)
     elif event == "clickableArea" and auth.user:
-        if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
+        if db((db.clickablearea_answers.sid == sid) & 
+              (db.clickablearea_answers.div_id == div_id) & 
+              (db.clickablearea_answers.course_name == auth.user.course_name) &
+              (db.clickablearea_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
 
     elif event == "parsons" and auth.user:
-        if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
+        if db((db.parsons_answers.sid == sid) & 
+              (db.parsons_answers.div_id == div_id) & 
+              (db.parsons_answers.course_name == auth.user.course_name) &
+              (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     elif event == "codelensq" and auth.user:
-        if db((db.codelens_answers.sid == sid) & (db.codelens_answers.div_id == div_id) & (db.codelens_answers.correct == 'T')).count() == 0:
+        if db((db.codelens_answers.sid == sid) & 
+              (db.codelens_answers.div_id == div_id) & 
+              (db.codelens_answers.course_name == auth.user.course_name) &
+              (db.codelens_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
             source = request.vars.source
