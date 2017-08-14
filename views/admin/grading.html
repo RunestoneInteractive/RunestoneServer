@@ -117,6 +117,7 @@
     var students = null;
     var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g,'"');
     var assignment_deadlines = "{{=assignment_deadlines}}".replace(/&#x27;/g,'"');
+    var question_points = {{=XML(question_points)}};
     assignment_deadlines = JSON.parse(assignment_deadlines);
 
     $('#autogradingform').submit(function (event) {
