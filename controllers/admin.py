@@ -67,6 +67,10 @@ def index():
 
     redirect(URL("admin","admin"))
 
+@auth.requires_login()
+def doc():
+    return dict(course_id=auth.user.course_name)
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def showlog():
     course = db(db.courses.id == auth.user.course_id).select().first()
