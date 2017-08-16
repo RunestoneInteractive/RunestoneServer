@@ -329,12 +329,14 @@ def sendreport():
     body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],
              'body': body}
+    logger.debug("POSTING ISSUE %s ", issue)
     r = reqsession.post(url, json.dumps(issue))
     if r.status_code == 201:
         session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
-
+    logger.debug("POST STATUS = %s",r.status_code)
+    
     courseCheck = 0
     if auth.user:
         courseCheck = db(db.user_courses.user_id == auth.user.id).count()
