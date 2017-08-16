@@ -58,10 +58,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             # copy the index and conf files to the sourcedir
             shutil.copy(path.join(custom_dir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
             shutil.copy(path.join(custom_dir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
-
-            # copy the assignments.rst file from confidir as it may contain assignments written
-            # by the instructor
-
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
@@ -73,8 +69,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     else:
         # Save copies of files that the instructor may customize
         shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
-        shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
-
 
     ###########
     # Set up and run Paver build
