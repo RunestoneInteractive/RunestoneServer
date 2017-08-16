@@ -69,7 +69,7 @@
           window.build_status = "started"
            $("#message").html('The rebuild has started.');
         }
-        else if (data.status == "failed") {
+        else if (data.status == "FAILED") {
           clearInterval(iid);
           $("#spinner_div").hide();
           $("#title").text("An error occurred.");
