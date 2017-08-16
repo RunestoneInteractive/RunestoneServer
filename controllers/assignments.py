@@ -863,9 +863,10 @@ def autograde():
     logger.debug("questions to grade = %s", questions)
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
-            _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
-                             deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
-            count += 1
+            if autograde != 'manual':
+                _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
+                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
+                count += 1
 
     return json.dumps({'message': "autograded {} items".format(count)})
 
