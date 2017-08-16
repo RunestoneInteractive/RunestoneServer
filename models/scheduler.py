@@ -9,8 +9,8 @@ from paver.easy import sh
 import logging
 from pkg_resources import resource_string, resource_filename
 
-rslogger = logging.getLogger('web2py.app.runestone')
-rslogger.setLevel('DEBUG')
+rslogger = logging.getLogger(settings.sched_logger)
+rslogger.setLevel(settings.log_level)
 
 
 ################
