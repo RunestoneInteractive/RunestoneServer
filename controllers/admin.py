@@ -873,6 +873,7 @@ def htmlsrc():
         htmlsrc = res.htmlsrc
     else:
         logger.error("HTML Source not found for %s in course %s", acid, auth.user.course_name)
+        htmlsrc = "<p>No preview Available</p>"
     if htmlsrc and htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode('hex')
     return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
