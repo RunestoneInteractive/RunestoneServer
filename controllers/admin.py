@@ -251,8 +251,8 @@ def assignments():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
-    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
-    courseid = sidQuery[0].id
+    sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
+    courseid = sidQuery.id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
     sectionsList = []
     for row in sectionsQuery:
@@ -261,10 +261,9 @@ def admin():
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
-
     cwd = os.getcwd()
     try:
-        os.chdir(path.join('applications',request.application,'books',row.base_course))
+        os.chdir(path.join('applications',request.application,'books',sidQuery.base_course))
         master_build = sh("git describe --long", capture=True)[:-1]
         with open('build_info','w') as bc:
             bc.write(master_build)
@@ -275,7 +274,7 @@ def admin():
         os.chdir(cwd)
 
     try:
-        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
+        mbf_path = path.join('applications',request.application,'custom_courses',sidQuery.course_name,'build_info')
         mbf = open(mbf_path,'r')
         last_build = os.path.getmtime(mbf_path)
         my_build = mbf.read()[:-1]
