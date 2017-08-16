@@ -868,7 +868,7 @@ def htmlsrc():
         (db.questions.base_course == db.courses.base_course) &
         (db.courses.course_name == auth.user.course_name)
          ).select(db.questions.htmlsrc).first()
-    if res:
+    if res and res.htmlsrc:
         htmlsrc = res.htmlsrc
     else:
         logger.error("HTML Source not found for %s in course %s", acid, auth.user.course_name)
