@@ -751,6 +751,14 @@ def edit_question():
     question = vars['questiontext']
     htmlsrc = vars['htmlsrc']
 
+    if old_qname == new_qname and old_question.author != author:
+        return "You do not own this question, Please assign a new unique id"
+
+    if old_qname != new_qname:
+        newq = db(db.questions.name == new_qname).select().first()
+        if newq and newq.author != author:
+            return "You cannot replace a question you did not author"
+
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname) & (db.questions.base_course == base_course),
@@ -764,10 +772,10 @@ def edit_question():
                 logger.error("TAG = %s",tag)
                 tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
                 db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
-        return "Success"
+        return "Success - Edited Question Saved"
     except Exception as ex:
         logger.error(ex)
-        return "failed"
+        return "An error occurred saving your question {}".format(str(ex))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

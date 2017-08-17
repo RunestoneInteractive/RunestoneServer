@@ -1659,6 +1659,11 @@ function getQuestionInfo() {
 
 // Called inside the "Write Assignment" panel?
 function edit_question(form) {
+
+    if (! form.qrawhtml.value) {
+        alert("You must generate the HTML for your edit.");
+        return;
+    }
     var tags = $("#addTags").select2("val");
     var difficulty = null;
     var difficulty_options = ['r1', 'r2', 'r3', 'r4', 'r5'];
@@ -1681,8 +1686,11 @@ function edit_question(form) {
         questiontext: question_text,
         htmlsrc: htmlsrc
      };
-    jQuery.post('/runestone/admin/edit_question', data, function() {
-                alert('You successfully edited the selected question.');
+    jQuery.post('/runestone/admin/edit_question', data, function(myres) {
+                alert(myres);
+                if (myres.includes("Success")) {
+                    $('#editModal').modal('hide');
+                }
             });
 }
 
