@@ -61,23 +61,24 @@
                             <label>
                             <input id = "enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline" class="big-checkbox" checked>
                             Only check work submitted before assignment deadline</label>
-                        <input type = "submit" value = "Autograde and Display Totals" />
+                        <input type = "submit" class="btn btn-primary" value = "Autograde and Display Totals" />
                         <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
 
                     </form>
             </div>
 
-            <div id="assignmentTotalform" style="text-align: center; visibility: hidden;">
+            <div id="assignmentTotalform" style="text-align: center; visibility: hidden; background-color: rgba(219,103,14,.71); margin: 10px; padding: 5px; border-radius: 10px;">
+                    <strong>Override student score for whole assignment.</strong>
                     <form>
                         <label for="computed-total-score">computed score</label>
-                        <input id="computed-total-score" type="text" class="form-control" value= ""/>
-                        <label for="manual-total-score">manual score</label>
+                        <input id="computed-total-score" type="text" class="form-control" value= "" readonly/>
+                        <label for="manual-total-score">manual override score</label>
                         <input id="manual-total-score" type="text" class="form-control" value= ""/>
-                        <input type="submit" value="Save Manual Total" />
+                        <input type="submit" value="Save Manual Total" class="btn btn-default" style="margin-top: 5px;"/>
                     </form>
              </div>
 
-            <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item" onclick="toggle_release_grades();">Release Grades</button>
+            <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item btn btn-success" onclick="toggle_release_grades();">Release Grades</button>
 
 
     </div>

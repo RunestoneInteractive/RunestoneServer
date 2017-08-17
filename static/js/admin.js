@@ -250,6 +250,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             success: function (data) {
                 jQuery('.grade', element).html(data.grade);
                 jQuery('.comment', element).html(data.comment);
+                calculateTotals();
             }
         });
     }
