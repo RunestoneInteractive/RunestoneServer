@@ -1388,7 +1388,11 @@ function create_question(formdata) {
     if (formdata.createpoints.value == "") {
         formdata.createpoints.value == "1"
     }
-    if (! confirm("Have you previewed your question?")) {
+    if (! confirm("Have you generated the HTML for your question?")) {
+        return;
+    }
+    if (! formdata.qrawhtml.value ) {
+        alert("No HTML for this question, please generate it.")
         return;
     }
     var activetab = 'formative';
