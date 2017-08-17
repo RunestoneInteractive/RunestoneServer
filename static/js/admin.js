@@ -1157,6 +1157,10 @@ function remove_assignment() {
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
 
+    if (! confirm(`Are you sure you want to remove the assignment ${assignmentname}?`)) {
+        return;
+    }
+
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/removeassign/' + assignmentid, true);
     obj.send(JSON.stringify({assignid: 'assignmentid'}));
@@ -1597,7 +1601,7 @@ function addToAssignment(form) {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, '');
+    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
