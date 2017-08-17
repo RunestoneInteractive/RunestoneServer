@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import os
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -261,3 +262,8 @@ db.define_table('user_courses',
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
 mail.settings.login = settings.email_login
+
+# Make sure the latest version of admin is always loaded.
+adminjs =  os.path.join('applications',request.application,'static','js','admin.js')
+mtime = int(os.path.getmtime(adminjs))
+request.admin_mtime = str(mtime)

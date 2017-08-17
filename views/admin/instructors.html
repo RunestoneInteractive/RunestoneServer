@@ -33,7 +33,7 @@
 <link href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" rel="stylesheet" type="text/css"/>
 <link href="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 
-<script src="{{=URL('static', 'js/admin.js')}}"></script>
+<script src="{{=URL('static', 'js/admin.js')}}?v={{=request.admin_mtime}}"></script>
 {{ end }}
 
 
