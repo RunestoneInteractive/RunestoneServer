@@ -1119,7 +1119,7 @@ def save_assignment():
             description=request.vars['description'],
             duedate=due,
         )
-        return {request.vars['name']: assignment_id}
+        return json.dumps({request.vars['name']: assignment_id})
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')

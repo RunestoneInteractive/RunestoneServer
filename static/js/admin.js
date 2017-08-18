@@ -1213,7 +1213,20 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
 
 // Update the grading parameters used for an assignment.
 function update_assignment(form) {
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+    if (! form.due.value ) {
+        alert("You must assign a due date to your assignment.")
+        return;
+    } else {
+        try {
+            d = new Date(form.due.value);
+        } catch(e) {
+            alert("Invalid Date: "+ form.due.value);
+            return;
+        }
+    }
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId(), function(data) {
+        alert("Assignment Saved");
+    }).error(function(){alert("huh??")});
 }
 
 // Return the assignment id based on the value selected in the ``assignlist`` item.
