@@ -740,9 +740,9 @@ def edit_question():
     except:
         difficulty = 0
     tags = vars['tags']
-    old_question = db(db.questions.name == old_qname).select().first()
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    old_question = db((db.questions.name == old_qname) & (db.questions.base_course == base_course)).select().first()
     author = auth.user.first_name + " " + auth.user.last_name
-    base_course = old_question.base_course
     timestamp = datetime.datetime.now()
     chapter = old_question.chapter
     question_type = old_question.question_type

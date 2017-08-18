@@ -1670,7 +1670,7 @@ function getQuestionInfo() {
 }
 
 
-// Called inside the "Write Assignment" panel?
+// Called from the editing modal when the save button is pressed
 function edit_question(form) {
 
     if (! form.qrawhtml.value) {
