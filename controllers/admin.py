@@ -1,6 +1,7 @@
 from os import path
 import os
 from datetime import date, timedelta
+from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
@@ -221,8 +222,8 @@ def assignments():
     courseid = sidQuery[0].id
 
 
-    cur_assignments = db(db.assignments.course == auth.user.course_id).select()
-    assigndict = {}
+    cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
+    assigndict = OrderedDict()
     for row in cur_assignments:
         assigndict[row.id] = row.name
 
