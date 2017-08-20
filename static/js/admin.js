@@ -1514,6 +1514,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  source into the actual component.
      */
 
+    patt = /..\/_images/g;
+    componentSrc = componentSrc.replace(patt,`/${eBookConfig.app}/static/${eBookConfig.course}/_images`)
     jQuery(`#${whereDiv}`).html(componentSrc);
 
     edList = [];

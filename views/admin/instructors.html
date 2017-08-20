@@ -37,7 +37,10 @@
 <script src="{{=URL('static', 'js/admin.js')}}?v={{=request.admin_mtime}}"></script>
 {{ end }}
 
-
+<script type="text/javascript">
+  eBookConfig.course = "{{=XML(course_id)}}"
+  eBookConfig.app = "{{=XML(request.application)}}"
+</script>
 
 <div id="outerTabs" class="container" style="margin-top: 10px;">
   <h3 id="coursename" style="text-align: center">{{=auth.user.course_name}}</h3>

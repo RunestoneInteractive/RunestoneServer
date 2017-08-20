@@ -1262,6 +1262,7 @@ def doAssignment():
 
             # This replacement is to render images
             q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
+            q.htmlsrc = q.htmlsrc.replace("../_images","/{}/static/{}/_images".format(request.application,course.course_name))
             try:
                 if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
                     questioninfo = [q.htmlsrc, 
