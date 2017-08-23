@@ -160,9 +160,11 @@ def studentreport():
     logger.debug("GRADES = %s",data_analyzer.grades)
     return dict(course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
+@auth.requires_login()
 def studentprogress():
     return dict(course_name=auth.user.course_name)
 
+@auth.requires_login()
 def grades():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -222,6 +224,7 @@ def grades():
 
     return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
 
+@auth.requires_login()
 def questiongrades():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db((db.assignments.id == request.vars.assignment_id) & (db.assignments.course == course.id)).select().first()
@@ -236,6 +239,7 @@ def questiongrades():
 
     return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
+@auth.requires_login()
 def exercisemetrics():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_exercise_metrics(request.get_vars["id"])
