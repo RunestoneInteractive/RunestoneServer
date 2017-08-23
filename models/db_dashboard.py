@@ -309,6 +309,7 @@ class DashboardDataAnalyzer(object):
     def load_chapter_metrics(self, chapter):
         if not chapter:
             rslogger.error("chapter not set, abort!")
+            session.flash = "Error No Course Data in DB"
             return
 
         self.db_chapter = chapter

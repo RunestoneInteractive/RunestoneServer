@@ -530,7 +530,12 @@ def deletecourse():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeassign():
-    db(db.assignments.id == request.args[0]).delete()
+    try:
+        assignment_id = int(request.args[0])
+    except:
+        session.flash("Cannot remove assignment with id of {}".format(request.args[0]))
+        return;
+    db(db.assignments.id == assignment_id).delete()
 
 # Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
