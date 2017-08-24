@@ -1169,6 +1169,7 @@ def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
+    logger.debug("COURSE = %s assignment %s", course, assignment_id)
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
 
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
@@ -1206,6 +1207,7 @@ def doAssignment():
     # and the labels query won't be needed at all
 
     for r in readings:
+        logger.debug("READING = %s",r.name)
         chapterSections = r.name.split('/')
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
@@ -1213,11 +1215,12 @@ def doAssignment():
                     (db.chapters.id == db.sub_chapters.chapter_id) & \
                     (db.sub_chapters.sub_chapter_name == chapterSections[1])) \
                     .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label, db.chapters.id).first()
-        
+        logger.debug("LABELS = %s",labels)
+        logger.debug("user_id = %s labels[chapters] = %s labels[sub_chapters] = %s",auth.user.id,labels['chapters'].chapter_label,labels['sub_chapters'].sub_chapter_label)
         completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
-
+        logger.debug("COMPLETION = %s",completion)
         chapterPath = (completion.chapter_id + '/toctree.html')
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
 
