@@ -2,6 +2,7 @@
 
 import datetime
 import os
+import random
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -265,5 +266,9 @@ mail.settings.login = settings.email_login
 
 # Make sure the latest version of admin is always loaded.
 adminjs =  os.path.join('applications',request.application,'static','js','admin.js')
-mtime = int(os.path.getmtime(adminjs))
+try:
+    mtime = int(os.path.getmtime(adminjs))
+except:
+    mtime = random.randrange(10000)
+
 request.admin_mtime = str(mtime)
