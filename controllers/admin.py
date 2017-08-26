@@ -990,39 +990,39 @@ def _get_toc_and_questions():
 
         question_picker = []
         reading_picker = []  # this one doesn't include the questions, but otherwise the same
-        chapters_query = db((db.chapters.course_id == db.courses.base_course) &
-                            (db.courses.course_name == auth.user.course_name)).select()
+        # chapters are associated with courses, not with base_courses
+        chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
-            q_ch_info['text'] = ch.chapters.chapter_name
+            q_ch_info['text'] = ch.chapter_name
             q_ch_info['children'] = []
             # copy same stuff for reading picker
             r_ch_info = {}
             reading_picker.append(r_ch_info)
-            r_ch_info['text'] = ch.chapters.chapter_name
+            r_ch_info['text'] = ch.chapter_name
             r_ch_info['children'] = []
-            subchapters_query = db(db.sub_chapters.chapter_id == ch.chapters.id).select()
+            subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
                 q_ch_info['children'].append(q_sub_ch_info)
                 q_sub_ch_info['text'] = sub_ch.sub_chapter_name
                 # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
                 if sub_ch.sub_chapter_name == 'Exercises':
-                    q_sub_ch_info['id'] = ch.chapters.chapter_name + ' Exercises'
+                    q_sub_ch_info['id'] = ch.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
                 # copy same stuff for reading picker
                 r_sub_ch_info = {}
                 r_ch_info['children'].append(r_sub_ch_info)
-                r_sub_ch_info['id'] = "{}/{}".format(ch.chapters.chapter_name, sub_ch.sub_chapter_name)
+                r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
                 r_sub_ch_info['text'] = sub_ch.sub_chapter_name
 
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
                                      (db.questions.base_course == db.courses.base_course) & \
-                                  (db.questions.chapter == ch.chapters.chapter_label) & \
+                                  (db.questions.chapter == ch.chapter_label) & \
                                   (db.questions.question_type <> 'page') & \
-                                  (db.questions.subchapter == sub_ch.sub_chapter_label)).select()
+                                  (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
                 for question in questions_query:
                     q_info = dict(
                         text = question.questions.name,
