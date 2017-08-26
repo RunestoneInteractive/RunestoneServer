@@ -856,7 +856,7 @@ def createquestion():
     base_course = row.base_course
     tab = request.vars['tab']
     assignmentid = int(request.vars['assignmentid'])
-    points = int(request.vars['points'])
+    points = int(request.vars['points']) if request.vars['points'] else 1
     timed = request.vars['timed']
 
     try:
