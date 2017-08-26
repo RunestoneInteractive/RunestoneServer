@@ -11,12 +11,12 @@ logger.setLevel(settings.log_level)
 
 ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
-    clickablearea=[],
+    clickablearea=['manual', 'all_or_nothing', 'interact'],
     external=[],
     fillintheblank=ALL_AUTOGRADE_OPTIONS,
     activecode=ALL_AUTOGRADE_OPTIONS,
     actex=ALL_AUTOGRADE_OPTIONS,
-    dragndrop=ALL_AUTOGRADE_OPTIONS,
+    dragndrop=['manual', 'all_or_nothing', 'interact'],
     shortanswer=ALL_AUTOGRADE_OPTIONS,
     mchoice=ALL_AUTOGRADE_OPTIONS,
     codelens=ALL_AUTOGRADE_OPTIONS,
