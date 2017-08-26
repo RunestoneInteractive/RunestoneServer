@@ -74,9 +74,10 @@ db.define_table('courses',
 
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
-    db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='thinkcspy', base_course = 'thinkcspy', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='pythonds', base_course = 'pythonds', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
 
 ## create cohort_master table
 db.define_table('cohort_master',
