@@ -112,6 +112,6 @@ def index():
     #    print "Logged in..."
         logged_in = True
 
-    redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
+#    redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
 
     return dict(logged_in=logged_in, lti_errors=lti_errors, masterapp=masterapp)
