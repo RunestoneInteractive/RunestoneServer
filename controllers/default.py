@@ -86,6 +86,7 @@ def user():
                     SELECT %s, %s
                     ''' % (auth.user.id, auth.user.course_id))
             res = db(db.chapters.course_id == auth.user.course_name)
+            logger.debug("PROFILE checking for progress table %s ", res)
             if res.count() > 0:
                 chapter_label = res.select().first().chapter_label
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
@@ -145,8 +146,11 @@ def index():
                     SELECT %s, %s
                     ''' % (auth.user.id, auth.user.course_id))
         try:
+            logger.debug("INDEX - checking for progress table")
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db(db.user_sub_chapter_progress.user_id == auth.user.id).count() == 0:
+            logger.debug("LABEL = %s user_id = %s course_name = %s", chapter_label,auth.user.id,auth.user.course_name)
+            if db((db.user_sub_chapter_progress.user_id == auth.user.id ) &
+                  (db.user_sub_chapter_progress.chapter_id == chapter_label )).count() == 0:
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
                             db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                     db.executesql('''
@@ -255,6 +259,19 @@ def coursechooser():
         db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
         auth.user.update(course_name=request.args[0])
         auth.user.update(course_id=res[0].id)
+        res = db(db.chapters.course_id == auth.user.course_name)
+        logger.debug("COURSECHOOSER checking for progress table %s ", res)
+        if res.count() > 0:
+            chapter_label = res.select().first().chapter_label
+            if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                    (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
+                logger.debug("SETTING UP PROGRESS for %s %s",auth.user.username, auth.user.course_name)
+                db.executesql('''
+                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
+                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
+                ''', (auth.user.id, auth.user.course_name))
+        
         redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
     else:
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
