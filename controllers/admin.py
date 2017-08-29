@@ -334,8 +334,11 @@ def admin():
         course = db(db.courses.id == auth.user.course_id).select().first()
         due = request.vars.startdate
         format_str = "%m/%d/%Y"
-        date = datetime.datetime.strptime(due, format_str).date()
-        course.update_record(term_start_date=date)
+        try:
+            date = datetime.datetime.strptime(due, format_str).date()
+            course.update_record(term_start_date=date)
+        except:
+            logger.error("Bad date format, not updating start date")
 
         # run_sphinx in defined in models/scheduler.py
         row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(folder=request.folder,
