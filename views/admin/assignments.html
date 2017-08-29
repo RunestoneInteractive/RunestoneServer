@@ -343,7 +343,7 @@ $(function () {
         // Called when a node is checked.
         function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'best_answer'); },
         // Called when a node is unchecked.
-        function (node) { remove_question(node.id); },
+        function (node) { remove_question(node.id); }
     );
     question_picker.on('ready.jstree', function(event, data) {
         // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
@@ -362,7 +362,7 @@ $(function () {
         // Called when a node is checked.
         function (node) { updateReading(node.id, -1, 1, 'interact', 'best_answer'); },
         // Called when a node is unchecked.
-        function (node) { remove_reading(node.id); },
+        function (node) { remove_reading(node.id); }
     );
 
 
