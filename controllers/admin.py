@@ -751,6 +751,10 @@ def edit_question():
     tags = vars['tags']
     base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     old_question = db((db.questions.name == old_qname) & (db.questions.base_course == base_course)).select().first()
+
+    if not old_question:
+        return "Could not find question {} to update".format(old_qname)
+
     author = auth.user.first_name + " " + auth.user.last_name
     timestamp = datetime.datetime.now()
     chapter = old_question.chapter
@@ -791,7 +795,11 @@ def edit_question():
 def question_text():
     qname = request.vars['question_name']
     base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
-    q_text = db((db.questions.name == qname) & (db.questions.base_course == base_course)).select(db.questions.question).first().question
+    try:
+        q_text = db((db.questions.name == qname) & (db.questions.base_course == base_course)).select(db.questions.question).first().question
+    except:
+        q_text = "Error: Could not find source for {} in the database".format(qname)
+
     if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
         q_text = q_text[2:].decode('hex')
     logger.debug(q_text)
