@@ -1177,6 +1177,10 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
+    if (! assignid) {
+        alert("No assignment selected");
+        return;
+    }
     $.getJSON('add__or_update_assignment_question', {
         question: question_name,
         assignment: assignmentid,
@@ -1300,8 +1304,13 @@ function assignmentInfo() {
 
 // Update a reading.
 function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+    let assignid = getAssignmentId();
+    if (! assignid) {
+        alert("No assignment selected");
+        return;
+    }
     $.getJSON('add__or_update_assignment_question', {
-        assignment: getAssignmentId(),
+        assignment: assignid,
         question: subchapter_id,
         activities_required: activities_required,
         points: points,
