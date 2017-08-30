@@ -27,6 +27,10 @@ def index():
     if not student:
         return redirect(URL('assignments','index'))
 
+    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','webfundamentals','StudentCSP','apcsareview']:
+        session.flash = "{} is not a graded course".format(auth.user.course_name)
+        return redirect(URL('default','user'))
+
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.get_vars["sid"])
     data_analyzer.load_assignment_metrics(request.get_vars["sid"], studentView=True)
