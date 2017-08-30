@@ -250,6 +250,7 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
+                chapterMap=_get_chapterMap(),
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -481,7 +482,7 @@ def removeStudents():
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
-    
+
     session.flash = T("You have successfully removed students")
     return redirect('/%s/admin/admin' % (request.application))
 
@@ -701,7 +702,7 @@ def questionBank():
                         except Exception as err:
                             print(err)
         for q_row in rows:
-            questions.append(q_row.name)
+            questions.append([q_row.name, q_row.chapter, q_row.subchapter])
 
     except Exception as ex:
         logger.error(ex)
@@ -853,14 +854,17 @@ def gettemplate():
 
     returndict['template'] = base + cmap.get(template,'').__doc__
 
-    chapters = []
+    return json.dumps(returndict)
+
+# Provide a mapping between chapter labels and chapter names.
+def _get_chapterMap():
+    chapters = {}
     chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name, db.chapters.chapter_label)
     for row in chaptersrow:
-        chapters.append((row['chapter_label'], row['chapter_name']))
+        chapters[row['chapter_label']] = row['chapter_name']
     logger.debug(chapters)
-    returndict['chapters'] = chapters
+    return chapters
 
-    return json.dumps(returndict)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

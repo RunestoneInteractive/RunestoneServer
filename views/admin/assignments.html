@@ -4,6 +4,8 @@
 <script type="text/javascript">
   <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
   eBookConfig.toc = {{=XML(toc)}};
+  eBookConfig.chapterMap = {{=XML(chapterMap)}};
+  eBookConfig.chapters = {{=XML(chapters)}};
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js">
@@ -310,7 +312,7 @@
                         </div>
                         <script type="text/javascript">
                           // clean out the preview when the modal is hidden
-                          $("#editModal").on("hidden.bs.modal", function() { 
+                          $("#editModal").on("hidden.bs.modal", function() {
                             $("#modal-preview").html("")
                           });
                         </script>

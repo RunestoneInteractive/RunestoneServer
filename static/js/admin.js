@@ -1373,24 +1373,21 @@ function remove_question(question_name) {
         question_table.bootstrapTable('removeByUniqueId', question_name);
     });
 }
-var chapterMap = {}
 
 // Called when the "Write" button is clicked.
 function display_write() {
     var template = document.getElementById('template');
     var questiontype = template.options[template.selectedIndex].value;
+    $.each(eBookConfig.chapters, function (i, item) {
+        $('#qchapter').append($('<option>', {
+            value: item,
+            text: eBookConfig.chapterMap[item],
+        }));
+    });
     jQuery.get('/runestone/admin/gettemplate/' + questiontype, {}, function(obj) {
         var returns = JSON.parse(obj);
         tplate = returns['template'];
         $("#qcode").text(tplate);
-
-        $.each(returns['chapters'], function (i, item) {
-            chapterMap[item[0]] = item[1];
-            $('#qchapter').append($('<option>', {
-                value: item[0],
-                text: item[1]
-            }));
-        });
     });
 
     var hiddenwrite = document.getElementById('hiddenwrite');
@@ -1474,15 +1471,26 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            // Add this question to the question picker and the table.
-            var tqp = question_picker.jstree(true);
-            // Find the exercises for this chapter. They have an ID set, making them easy to find.
-            chapter = chapterMap[chapter];
-            var exercises_node = tqp.get_node(chapter + ' Exercises');
-            // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
-            tqp.check_node(tqp.create_node(exercises_node, {id: name, text: name}));
+            add_question_to_tree(chapter, name);
         }
     }, 'json');
+}
+
+// Not all questions are in the ``question_picker`` tree: new questions can be created by writing them. Also, instructor-written exercises aren't included in the ``questions_data`` (see ``assignmentInfo``) unless they're already been assigned. This function adds these questions to the ``question_picker``, assuming that they question to be added **must** be an exercises for the given chapter.
+function add_question_to_tree(
+    // The chapter to add the question to. This is the "pretty" chapter name, no the chapter name stored in the underlying database.
+    chapter,
+    // The ID of the question to add.
+    id) {
+
+    // Add this question to the question picker and the table.
+    var tqp = question_picker.jstree(true);
+    // Translate the "pretty" chapter name to the underlying DB name.
+    chapter = eBookConfig.chapterMap[chapter];
+    // Find the exercises for this chapter. They have an ID set, making them easy to find.
+    var exercises_node = tqp.get_node(chapter + ' Exercises');
+    // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]). Set both the display text and the ID of the tree node.
+    tqp.check_node(tqp.create_node(exercises_node, {id: id, text: id}));
 }
 
 // Given a question ID, preview it.
@@ -1602,10 +1610,13 @@ function questionBank(form) {
             var questionform = document.getElementById('questionform');
             $("#qbankselect").empty();
             for (i = 0; i < resp.length; i++) {
+                // Each element of the response is an array of ``[name, chapter, subchapter]``.
                 var option = document.createElement("option");
-                option.text = resp[i];
-                option.value = resp[i];
+                option.text = resp[i][0];
+                option.value = resp[i][0];
                 option.onclick = getQuestionInfo;
+                option.data_chapter = resp[i][1];
+                option.data_subchapter = resp[i][2];
                 select.add(option);
             }
             if (resp.length == 0) {
@@ -1628,9 +1639,19 @@ function questionBank(form) {
 function addToAssignment(form) {
     var points = form.points.value;
     var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
+    var options = select.options[select.selectedIndex];
+    var question_name = options.value;
 
-    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    // If this question isn't in the tree, add it. This happens (I think) when the user writes a new question, removes it, then searches for it and re-adds it.
+    var tqp = question_picker.jstree(true);
+    if (!tqp.get_node(question_name)) {
+        // The only reason we couldn't find it is if it's an instructor-written exercise.
+        console.assert(options.data_subchapter == 'Exercises');
+        add_question_to_tree(options.data_chapter, question_name);
+    } else {
+        // Just check the existing question.
+        tqp.check_node(question_name);
+    }
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
