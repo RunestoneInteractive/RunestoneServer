@@ -1174,7 +1174,7 @@ def doAssignment():
 
     if not assignment:
         logger.error("NO ASSIGNMENT assign_id = %s course = %s user = %s",assignment_id, course, auth.user.username)
-        session.flash("Could not find login and try again.")
+        session.flash = "Could not find login and try again."
         return redirect(URL('default','index'))
 
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
