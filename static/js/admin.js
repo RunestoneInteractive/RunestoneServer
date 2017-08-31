@@ -902,7 +902,7 @@ function getStudents(sectionName) {
             var students = JSON.parse(obj.responseText);
             var studentsNames = [];
             for (i = 0; i < students.length; i++) {
-                studentsNames.push(students[i][0] + " " + students[i][1]);
+                studentsNames.push(students[i][1] + ", " + students[i][0]);
             }
             
             studentsNames.sort();
