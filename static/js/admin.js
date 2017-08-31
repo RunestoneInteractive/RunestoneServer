@@ -1177,7 +1177,7 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    if (! assignid) {
+    if (!assignmentid) {
         alert("No assignment selected");
         return;
     }
@@ -1626,7 +1626,8 @@ function addToAssignment(form) {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    var tqp = question_picker.jstree(true);
+    tqp.check_node(question_name);
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
