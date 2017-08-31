@@ -1229,6 +1229,11 @@ def doAssignment():
         completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
+
+        if not completion:
+            session.flash = "User not set up to track progress. Select course again"
+            return redirect(URL('default','courses'))
+
         logger.debug("COMPLETION = %s",completion)
         chapterPath = (completion.chapter_id + '/toctree.html')
         sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
