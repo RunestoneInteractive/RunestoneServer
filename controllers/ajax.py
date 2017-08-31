@@ -6,6 +6,7 @@ import uuid
 from collections import Counter
 from diff_match_patch import *
 import os, sys
+from io import open
 from lxml import html
 
 logger = logging.getLogger(settings.logger)
@@ -972,8 +973,7 @@ def checkTimedReset():
 
 def preview_question():
     code = json.loads(request.vars.code)
-    print(code)
-    with open("applications/runestone/build/preview/_sources/index.rst", "w") as ixf:
+    with open("applications/runestone/build/preview/_sources/index.rst", "w", encoding="utf-8") as ixf:
         ixf.write(code)
 
     res = os.system('applications/runestone/scripts/build_preview.sh')
