@@ -1487,7 +1487,7 @@ function preview_question_id(question_id, preview_div) {
         preview_div = "component-preview"
     }
     // Request the preview HTML from the server.
-    $.getJSON('htmlsrc', {"acid" : question_id}).done(function(html_src) {
+    $.getJSON('/runestone/admin/htmlsrc', {"acid" : question_id}).done(function(html_src) {
         // Render it.
         renderRunestoneComponent(html_src, preview_div)
     });

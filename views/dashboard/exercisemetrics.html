@@ -103,9 +103,15 @@
 					</tr>
 					{{ pass }}
 				</table>
+				<div id="questionpreview"></div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			preview_question_id("{{=exercise_label}}", "questionpreview");
+		});
+	</script>
 </div>
 
 {{ end }}
