@@ -1177,7 +1177,7 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    if (! assignid) {
+    if (! assignmentid) {
         alert("No assignment selected");
         return;
     }
