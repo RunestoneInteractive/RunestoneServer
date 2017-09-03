@@ -49,13 +49,16 @@
 </script>
 
 <script type="text/javascript">
-  eBookConfig = {};
+  if(! eBookConfig) {
+	  eBookConfig = {};
+  }
   eBookConfig.host = '';
   eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
   eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
   eBookConfig.course = "{{=course['course_name']}}";
   eBookConfig.logLevel = 10;
   eBookConfig.loginRequired = true;
+  eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
