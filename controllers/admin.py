@@ -23,7 +23,8 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
     video=['interact'],
     poll=['interact'],
-    page=['interact']
+    page=['interact'],
+    showeval=['interact']
 )
 
 ALL_WHICH_OPTIONS = ['first_answer', 'last_answer', 'best_answer']
@@ -40,6 +41,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     parsonsprob=ALL_WHICH_OPTIONS,
     video=[],
     poll=[],
+    showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS
 )
 
