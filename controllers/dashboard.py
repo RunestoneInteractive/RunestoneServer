@@ -236,6 +236,9 @@ def questiongrades():
              join question_grades on (questions.name = question_grades.div_id) 
              where assignment_id = %s and sid = %s and question_grades.course_name = %s;""")
     rows = db.executesql(query, [assignment['id'], sid, course.course_name])
+    if not student or not rows:
+        session.flash = "Student {} not found for course {}".format(sid, course.course_name)
+        return redirect(URL('dashboard','grades'))
 
     return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
 
