@@ -523,12 +523,13 @@ function pickedStudents(column) {
     var studentslist = students;
     var keys = [];
     var i;
-    for (i in studentslist) {
+    for (i in list) {
         if (studentslist.hasOwnProperty(i)) {
             keys.push(i);
         }
     }
 
+    keys.sort();
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
