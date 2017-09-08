@@ -477,7 +477,7 @@ def removeStudents():
         studentList = [request.vars["studentList"]]
 
     for studentID in studentList:
-        if int(studentID) != auth.user.id:
+        if studentID.isdigit() and int(studentID) != auth.user.id:
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
