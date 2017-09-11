@@ -1177,7 +1177,7 @@ function remove_assignment() {
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
-    if (! assignmentid) {
+    if (! assignmentid || assignmentid == "undefined") {
         alert("No assignment selected");
         return;
     }
@@ -1195,6 +1195,8 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
+    }).fail(function() {
+        alert(`Your added question ${question_name} was not saved to the database for assignment ${assignmentid}, please file a bug report describing exactly what you were doing.`)
     });
 }
 
@@ -1305,7 +1307,7 @@ function assignmentInfo() {
 // Update a reading.
 function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
     let assignid = getAssignmentId();
-    if (! assignid) {
+    if (! assignid || assignid == 'undefined') {
         alert("No assignment selected");
         return;
     }
@@ -1324,6 +1326,8 @@ function updateReading(subchapter_id, activities_required, points, autograde, wh
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
+    }).fail(function() {
+        alert(`Your added question ${subchapter_id} was not saved to the database for assignment ${assignid}, please file a bug report describing exactly what you were doing.`)
     });
 }
 

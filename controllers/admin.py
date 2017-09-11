@@ -477,7 +477,7 @@ def removeStudents():
         studentList = [request.vars["studentList"]]
 
     for studentID in studentList:
-        if int(studentID) != auth.user.id:
+        if studentID.isdigit() and int(studentID) != auth.user.id:
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
@@ -1155,6 +1155,10 @@ def add__or_update_assignment_question():
     # -- autograde
     # -- which_to_grade
     # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
+    if request.vars.assignment == 'undefined':
+        session.flash = "Error: Unable to update assignment in DB. No assignment is selected"
+        return redirect(URL('admin','assignments'))
+
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
     logger.debug("adding or updating assign id {} question_name {}".format(assignment_id, question_name))
