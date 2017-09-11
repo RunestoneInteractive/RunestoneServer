@@ -107,21 +107,29 @@ class UserResponse(object):
                 self.status = UserResponse.INCOMPLETE
 
 class CourseProblemMetrics(object):
-    def __init__(self, course_id, users):
+    def __init__(self, course_id, users, chapter):
         self.course_id = course_id
         self.problems = {}
         self.users = users
+        self.chapter = chapter
 
     def update_metrics(self, course_name):
-        rslogger.debug("Updating CourseProblemMetrics")
-        mcans = db(db.mchoice_answers.course_name==course_name).select()
+        rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
+        print("doing chapter {}".format(self.chapter))
+        # todo:  Join this with questions so that we can limit the questions to the selected chapter
+        mcans = db((db.mchoice_answers.course_name==course_name) &
+                   (db.mchoice_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                    ).select()
+        rslogger.debug("Found {} exercises")
         fbans = db(db.fitb_answers.course_name==course_name).select()
         def add_problems(result_set):
             for row in result_set:
+                print("ROW = ",row)
                 rslogger.debug("UPDATE_METRICS %s", row)
-                if not row.div_id in self.problems:
-                    self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
-                self.problems[row.div_id].add_data_point(row)
+                if not row.mchoice_answers.div_id in self.problems:
+                    self.problems[row.mchoice_answers.div_id] = ProblemMetrics(self.course_id, row.mchoice_answers.div_id, self.users)
+                self.problems[row.mchoice_answers.div_id].add_data_point(row.mchoice_answers)
         add_problems(mcans)
         add_problems(fbans)
 
@@ -303,8 +311,10 @@ class UserLogCategorizer(object):
         return "{0} {1}".format(event, div_id)
 
 class DashboardDataAnalyzer(object):
-    def __init__(self, course_id):
+    def __init__(self, course_id, chapter=None):
         self.course_id = course_id
+        if chapter:
+            self.db_chapter = chapter
 
     def load_chapter_metrics(self, chapter):
         if not chapter:
@@ -326,7 +336,7 @@ class DashboardDataAnalyzer(object):
         self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
         #self.divs = db(db.div_ids).select(db.div_ids.div_id)
         #print self.divs
-        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
+        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
@@ -351,7 +361,7 @@ class DashboardDataAnalyzer(object):
         self.course = db(db.courses.id == self.course_id).select().first()
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
-        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
+        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users,self.db_chapter)
         self.problem_metrics.update_metrics(self.course.course_name)
 
     def load_assignment_metrics(self, username, studentView=False):

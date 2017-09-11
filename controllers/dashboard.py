@@ -44,7 +44,7 @@ def index():
         selected_chapter = chapters.first()
 
     logger.debug("making an analyzer")
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id,selected_chapter)
     logger.debug("loading chapter metrics for course {}".format(auth.user.course_name))
     data_analyzer.load_chapter_metrics(selected_chapter)
     logger.debug("loading problem metrics")
