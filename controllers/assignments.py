@@ -1173,6 +1173,11 @@ def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
+    if assignment_id.isdigit() == False:
+        logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
+        session.flash = "Bad Assignment ID"
+        return redirect(URL("assignments","chooseAssignment"))
+
     logger.debug("COURSE = %s assignment %s", course, assignment_id)
     assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
 
