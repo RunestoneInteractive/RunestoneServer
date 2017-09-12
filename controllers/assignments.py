@@ -1235,9 +1235,14 @@ def doAssignment():
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
 
-        if not completion:
-            session.flash = "User not set up to track progress. Select course again"
-            return redirect(URL('default','courses'))
+        # Sometimes when a sub-chapter is added to the book after the user has registerd and the 
+        # subchapter tables have been created you need to catch that and insert.
+        if not completion:   
+            newid = db.user_sub_chapter_progress.insert(chapter_id=labels['chapters'].chapter_label,
+                                                        sub_chapter_id=labels['sub_chapters'].sub_chapter_label, 
+                                                        status=-1, 
+                                                        user_id=auth.user.id)
+            completion = db(db.user_sub_chapter_progress.id == newid).select().first()
 
         logger.debug("COMPLETION = %s",completion)
         chapterPath = (completion.chapter_id + '/toctree.html')
