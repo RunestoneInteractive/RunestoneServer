@@ -122,16 +122,25 @@ class CourseProblemMetrics(object):
                    (db.questions.chapter == self.chapter.chapter_label)
                     ).select()
         rslogger.debug("Found {} exercises")
-        fbans = db(db.fitb_answers.course_name==course_name).select()
-        def add_problems(result_set):
-            for row in result_set:
+        fbans = db((db.fitb_answers.course_name==course_name) &
+                   (db.fitb_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                   ).select()
+        psans = db((db.parsons_answers.course_name==course_name) &
+                   (db.parsons_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                   ).select()
+        def add_problems(result_set,tbl):
+            for srow in result_set:
+                row = srow[tbl]
                 print("ROW = ",row)
                 rslogger.debug("UPDATE_METRICS %s", row)
-                if not row.mchoice_answers.div_id in self.problems:
-                    self.problems[row.mchoice_answers.div_id] = ProblemMetrics(self.course_id, row.mchoice_answers.div_id, self.users)
-                self.problems[row.mchoice_answers.div_id].add_data_point(row.mchoice_answers)
-        add_problems(mcans)
-        add_problems(fbans)
+                if not row.div_id in self.problems:
+                    self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
+                self.problems[row.div_id].add_data_point(row)
+        add_problems(mcans, 'mchoice_answers')
+        add_problems(fbans, 'fitb_answers')
+        add_problems(psans, 'parsons_answers')
 
     def retrieve_chapter_problems(self):
         return self
