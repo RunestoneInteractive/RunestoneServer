@@ -244,7 +244,9 @@ def questiongrades():
 
 @auth.requires_login()
 def exercisemetrics():
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    chapter = request.get_vars['chapter']
+    chapter = db((db.chapters.course_id == auth.user.course_name) & (db.chapters.chapter_label == chapter)).select().first()
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id,chapter)
     data_analyzer.load_exercise_metrics(request.get_vars["id"])
     problem_metrics = data_analyzer.problem_metrics
 

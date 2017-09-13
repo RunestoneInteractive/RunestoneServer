@@ -102,7 +102,7 @@
                             <b>{{=question["text"]}}</b>
                             {{ pass }}
                             <p>Attempted by {{=question["attemptedBy"]}} students</p>
-							<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}">Exercise Details &raquo;</a></div>
+							<div class="detail-link"><a href="{{=URL('exercisemetrics')}}?id={{=question['id']}}&chapter={{=question['chapter']}}">Exercise Details &raquo;</a></div>
 						</div>
 					</div>
 				{{pass}}

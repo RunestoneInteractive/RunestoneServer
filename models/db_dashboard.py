@@ -324,6 +324,8 @@ class DashboardDataAnalyzer(object):
         self.course_id = course_id
         if chapter:
             self.db_chapter = chapter
+        else:
+            self.db_chapter = None
 
     def load_chapter_metrics(self, chapter):
         if not chapter:
