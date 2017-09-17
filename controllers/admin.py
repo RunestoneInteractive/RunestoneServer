@@ -1052,6 +1052,11 @@ def _get_toc_and_questions():
 def get_assignment():
     assignment_id = request.vars['assignmentid']
     # Assemble the assignment-level properties
+    if assignment_id == 'undefined':
+        logger.error('UNDEFINED assignment {} {}'.format(auth.user.course_name, auth.user.username))
+        session.flash = 'Error assignment ID is undefined'
+        return redirect(URL('assignments','index'))
+    
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
