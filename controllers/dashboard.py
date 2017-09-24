@@ -168,11 +168,11 @@ def studentprogress():
 
 @auth.requires_login()
 def grades():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name,
-                    db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
+
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL,
                     orderby=(db.assignments.duedate, db.assignments.id))
+
     students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
@@ -180,14 +180,15 @@ def grades():
              db.auth_user.id,
              orderby=(db.auth_user.last_name, db.auth_user.first_name))
 
+
     query = """select score, points, assignments.id, auth_user.id
-    from auth_user join grades on (auth_user.id = grades.auth_user)
-    join assignments on (grades.assignment = assignments.id)
-    where points is not null and assignments.course = %s
-    and auth_user.id in
-    (select user_id from user_courses where course_id = %s)
-    order by last_name, first_name, assignments.duedate, assignments.id;"""
+        from auth_user join grades on (auth_user.id = grades.auth_user)
+        join assignments on (grades.assignment = assignments.id)
+        where points is not null and assignments.course = %s and auth_user.id in
+            (select user_id from user_courses where course_id = %s)
+            order by last_name, first_name, assignments.duedate, assignments.id;"""
     rows = db.executesql(query, [course['id'], course['id']])
+
     studentinfo = {}
     for s in students:
         studentinfo[s.id]= {'last_name': s.last_name,
@@ -198,16 +199,15 @@ def grades():
     gradebook = OrderedDict((sid.id, OrderedDict()) for sid in students)
     avgs = {assign.id: {'total':0, 'count':0} for assign in assignments}
     for k in gradebook:
-        gradebook[k] = OrderedDict((assign.id,'N/A') for assign in assignments)
+        gradebook[k] = OrderedDict((assign.id,'n/a') for assign in assignments)
 
     for row in rows:
-        gradebook[row[3]][row[2]] = (100 * row[0]/row[1]) if row[1] > 0 else 'N/A'
+        gradebook[row[3]][row[2]] = (100 * row[0]/row[1]) if row[1] > 0 else 'n/a'
         avgs[row[2]]['total'] += (100 * row[0]/row[1]) if row[1] > 0 else 0
         avgs[row[2]]['count'] += 1 if row[0] >= 0 else 0
 
     logger.debug("GRADEBOOK = {}".format(gradebook))
     # now transform the matrix into the gradetable needed by the template
-
 
     gradetable = []
     averagerow = []
@@ -222,24 +222,16 @@ def grades():
         gradetable.append(studentrow)
 
     #Then build the average row for the table
-    # columns 0-2 are names
-    for col in range(3, len(assignments)+3):
-        applicable = False
-        averagedivide = len(students)
-        average = 0
-        for grade in range(len(students)):
-            if gradetable[grade][col] != 'N/A':
-                average += gradetable[grade][col]
-                gradetable[grade][col] = str(round(gradetable[grade][col], 2))
-                applicable = True
-            else:
-                averagedivide = averagedivide - 1
-        if applicable:
-            averagerow.append(str(round(average/averagedivide, 2)))
+    for g in avgs:
+        if avgs[g]['count'] > 0:
+            averagerow.append(avgs[g]['total']/avgs[g]['count'])
         else:
             averagerow.append('n/a')
 
-    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignments=assignments, students=students, gradetable=gradetable, averagerow=averagerow)
+
+    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name,
+                assignments=assignments, students=students, gradetable=gradetable,
+                averagerow=averagerow)
 
 @auth.requires_login()
 def questiongrades():
