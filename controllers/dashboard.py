@@ -197,7 +197,7 @@ def grades():
 
     # create a matrix indexed by user.id and assignment.id
     gradebook = OrderedDict((sid.id, OrderedDict()) for sid in students)
-    avgs = {assign.id: {'total':0, 'count':0} for assign in assignments}
+    avgs = OrderedDict((assign.id, {'total':0, 'count':0}) for assign in assignments)
     for k in gradebook:
         gradebook[k] = OrderedDict((assign.id,'n/a') for assign in assignments)
 
