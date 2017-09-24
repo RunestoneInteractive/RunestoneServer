@@ -115,7 +115,7 @@ class CourseProblemMetrics(object):
 
     def update_metrics(self, course_name):
         rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
-        print("doing chapter {}".format(self.chapter))
+        rslogger.debug("doing chapter {}".format(self.chapter))
         # todo:  Join this with questions so that we can limit the questions to the selected chapter
         mcans = db((db.mchoice_answers.course_name==course_name) &
                    (db.mchoice_answers.div_id == db.questions.name) &
@@ -133,7 +133,7 @@ class CourseProblemMetrics(object):
         def add_problems(result_set,tbl):
             for srow in result_set:
                 row = srow[tbl]
-                print("ROW = ",row)
+                rslogger.debug("ROW = ",row)
                 rslogger.debug("UPDATE_METRICS %s", row)
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
