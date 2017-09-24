@@ -202,7 +202,7 @@ def grades():
         gradebook[k] = OrderedDict((assign.id,'n/a') for assign in assignments)
 
     for row in rows:
-        gradebook[row[3]][row[2]] = (100 * row[0]/row[1]) if row[1] > 0 else 'n/a'
+        gradebook[row[3]][row[2]] = '{0:.2f}'.format((100 * row[0]/row[1])) if row[1] > 0 else 'n/a'
         avgs[row[2]]['total'] += (100 * row[0]/row[1]) if row[1] > 0 else 0
         avgs[row[2]]['count'] += 1 if row[0] >= 0 else 0
 
