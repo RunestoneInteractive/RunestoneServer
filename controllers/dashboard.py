@@ -224,7 +224,7 @@ def grades():
     #Then build the average row for the table
     for g in avgs:
         if avgs[g]['count'] > 0:
-            averagerow.append(avgs[g]['total']/avgs[g]['count'])
+            averagerow.append('{0:.2f}'.format(avgs[g]['total']/avgs[g]['count']))
         else:
             averagerow.append('n/a')
 
