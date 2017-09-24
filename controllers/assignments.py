@@ -560,7 +560,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
 
-    
+
     if not autograde:
         logger.debug("autograde not set returning 0")
         return 0
@@ -818,28 +818,28 @@ def autograde():
     else:
         # get all qids and point values for this assignment
         questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
-                             (db.assignment_questions.question_id == db.questions.id) 
+                             (db.assignment_questions.question_id == db.questions.id)
                              ).select()
 
-    readings = [(row.questions.name, 
-                 row.questions.chapter, 
-                 row.questions.subchapter, 
-                 row.assignment_questions.points, 
-                 row.assignment_questions.activities_required, 
+    readings = [(row.questions.name,
+                 row.questions.chapter,
+                 row.questions.subchapter,
+                 row.assignment_questions.points,
+                 row.assignment_questions.activities_required,
                  row.assignment_questions.autograde,
                  row.assignment_questions.which_to_grade,
                  ) for row in questions_query if row.assignment_questions.reading_assignment == True]
     logger.debug("GRADING READINGS")
     # Now for each reading, get all of the questions in that subsection
     # call _autograde_one_q using the autograde and which to grade for that section. likely interact
-    # 
+    #
     base_course = row = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     count = 0
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
         count += 1
         for s in sids:
             score = 0
-            rows = db((db.questions.chapter == chapter) & 
+            rows = db((db.questions.chapter == chapter) &
                       (db.questions.subchapter == subchapter) &
                       (db.questions.base_course == base_course)).select()
             for row in rows:
@@ -1173,7 +1173,7 @@ def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
-    if assignment_id.isdigit() == False:
+    if not assignment_id or assignment_id.isdigit() == False:
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
         session.flash = "Bad Assignment ID"
         return redirect(URL("assignments","chooseAssignment"))
@@ -1214,7 +1214,7 @@ def doAssignment():
     # Because readings do not record chapters in the questions table
     # assigned readings cannot (nicely) be grouped into chapters by a DB query yet
     # so using a dictionary is a quick short-term solution to group all the sections to each chapter
-    # The chapters will appear in the order that they do in the ToC, 
+    # The chapters will appear in the order that they do in the ToC,
     # but the sections within each chapter will appear according to the sorting_priority in assignment_questions
 
     # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
@@ -1235,12 +1235,12 @@ def doAssignment():
             (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
             (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
 
-        # Sometimes when a sub-chapter is added to the book after the user has registerd and the 
+        # Sometimes when a sub-chapter is added to the book after the user has registerd and the
         # subchapter tables have been created you need to catch that and insert.
-        if not completion:   
+        if not completion:
             newid = db.user_sub_chapter_progress.insert(chapter_id=labels['chapters'].chapter_label,
-                                                        sub_chapter_id=labels['sub_chapters'].sub_chapter_label, 
-                                                        status=-1, 
+                                                        sub_chapter_id=labels['sub_chapters'].sub_chapter_label,
+                                                        status=-1,
                                                         user_id=auth.user.id)
             completion = db(db.user_sub_chapter_progress.id == newid).select().first()
 
@@ -1292,9 +1292,9 @@ def doAssignment():
             q.htmlsrc = q.htmlsrc.replace("../_images","/{}/static/{}/_images".format(request.application,course.course_name))
             try:
                 if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
-                    questioninfo = [q.htmlsrc, 
-                                    questions_scores[currentqScore]['question_grades'].score, 
-                                    questions_scores[currentqScore]['assignment_questions'].points, 
+                    questioninfo = [q.htmlsrc,
+                                    questions_scores[currentqScore]['question_grades'].score,
+                                    questions_scores[currentqScore]['assignment_questions'].points,
                                     questions_scores[currentqScore]['question_grades'].comment,
                                     q.chapter,
                                     q.subchapter,
