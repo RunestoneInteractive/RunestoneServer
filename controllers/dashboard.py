@@ -1,13 +1,15 @@
+# pylint: good-names=auth, settings, db
+
 from os import path
 import os
 import logging
 from datetime import date, timedelta, datetime
 from operator import itemgetter
+from collections import OrderedDict
 from paver.easy import sh
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
-
 
 
 # this is for admin links
@@ -166,42 +168,57 @@ def studentprogress():
 
 @auth.requires_login()
 def grades():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
+    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name,
+                    db.courses.base_course).first()
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=(db.assignments.duedate, db.assignments.id))
+    assignments = db(db.assignments.course == course.id).select(db.assignments.ALL,
+                    orderby=(db.assignments.duedate, db.assignments.id))
     students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
-    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name,db.auth_user.id, orderby=(db.auth_user.last_name, db.auth_user.first_name))
-    query = """select score, points, assignments.id, auth_user.id 
-    from auth_user join grades on (auth_user.id = grades.auth_user) 
-    join assignments on (grades.assignment = assignments.id) 
-    where points is not null and assignments.course = %s 
-    and auth_user.id in 
-    (select user_id from user_courses where course_id = %s) 
+    ).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name,
+             db.auth_user.id,
+             orderby=(db.auth_user.last_name, db.auth_user.first_name))
+
+    query = """select score, points, assignments.id, auth_user.id
+    from auth_user join grades on (auth_user.id = grades.auth_user)
+    join assignments on (grades.assignment = assignments.id)
+    where points is not null and assignments.course = %s
+    and auth_user.id in
+    (select user_id from user_courses where course_id = %s)
     order by last_name, first_name, assignments.duedate, assignments.id;"""
     rows = db.executesql(query, [course['id'], course['id']])
+    studentinfo = {}
+    for s in students:
+        studentinfo[s.id]= {'last_name': s.last_name,
+                            'first_name': s.first_name,
+                            'username': s.username}
+
+    # create a matrix indexed by user.id and assignment.id
+    gradebook = OrderedDict((sid.id, OrderedDict()) for sid in students)
+    avgs = {assign.id: {'total':0, 'count':0} for assign in assignments}
+    for k in gradebook:
+        gradebook[k] = OrderedDict((assign.id,'N/A') for assign in assignments)
+
+    for row in rows:
+        gradebook[row[3]][row[2]] = (100 * row[0]/row[1]) if row[1] > 0 else 'N/A'
+        avgs[row[2]]['total'] += (100 * row[0]/row[1]) if row[1] > 0 else 0
+        avgs[row[2]]['count'] += 1 if row[0] >= 0 else 0
+
+    logger.debug("GRADEBOOK = {}".format(gradebook))
+    # now transform the matrix into the gradetable needed by the template
+
 
     gradetable = []
     averagerow = []
 
-    #now use the query result to form the rows in the table
-    currentrow=0
-    for student in students:
+    for k in gradebook:
         studentrow = []
-        studentrow.append(student.first_name)
-        studentrow.append(student.last_name)
-        studentrow.append(student.username)
-        for assignment in assignments:
-            try:
-                if rows[currentrow][2] == assignment['id'] and rows[currentrow][3] == student.id and rows[currentrow][1] != None:
-                        studentrow.append(100 * rows[currentrow][0]/rows[currentrow][1])
-                        currentrow += 1
-                else:
-                    studentrow.append('n/a')
-
-            except:  #This exception should only trigger when the bottom right slot in the table has a grade of 'n/a'
-                studentrow.append('n/a')
+        studentrow.append(studentinfo[k]['first_name'])
+        studentrow.append(studentinfo[k]['last_name'])
+        studentrow.append(studentinfo[k]['username'])
+        for assignment in gradebook[k]:
+            studentrow.append(gradebook[k][assignment])
         gradetable.append(studentrow)
 
     #Then build the average row for the table
@@ -211,7 +228,7 @@ def grades():
         averagedivide = len(students)
         average = 0
         for grade in range(len(students)):
-            if gradetable[grade][col] != 'n/a':
+            if gradetable[grade][col] != 'N/A':
                 average += gradetable[grade][col]
                 gradetable[grade][col] = str(round(gradetable[grade][col], 2))
                 applicable = True
@@ -231,9 +248,9 @@ def questiongrades():
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(db.auth_user.first_name, db.auth_user.last_name)
 
-    query = ("""select questions.name, score, points 
-        from questions join assignment_questions on (questions.id = assignment_questions.question_id) 
-             join question_grades on (questions.name = question_grades.div_id) 
+    query = ("""select questions.name, score, points
+        from questions join assignment_questions on (questions.id = assignment_questions.question_id)
+             join question_grades on (questions.name = question_grades.div_id)
              where assignment_id = %s and sid = %s and question_grades.course_name = %s;""")
     rows = db.executesql(query, [assignment['id'], sid, course.course_name])
     if not student or not rows:
