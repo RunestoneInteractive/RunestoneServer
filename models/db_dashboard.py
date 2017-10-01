@@ -393,23 +393,26 @@ class DashboardDataAnalyzer(object):
 
             if row.records:             # If the row has a result
                 rl = row.as_list()      # List of dictionaries
-
+                rslogger.debug("RL = %s", rl)
                 if studentView and not assign['released']:      # N/A should be shown to students if assignment grades are not released
                     self.grades[assign["name"]] = {"score":"N/A",
                                                "class_average":"N/A",
                                                "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
                 else:
                     s = 0.0
+                    count = 0
                     self.grades[assign["name"]] = {}
                     for userEntry in rl:
                         rslogger.debug("GETTING USER SCORES %s",userEntry)
                         s += userEntry["grades"]["score"]   # Calculating average
+                        count += 1
                         if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
                             self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
 
                     if 'score' not in self.grades[assign["name"]]:
                             self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
-                    average = s/len(userEntry)
+                    rslogger.debug("COUNT = %s", count)
+                    average = s/count
                     self.grades[assign["name"]]["class_average"] = average
                     self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 
