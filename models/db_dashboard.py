@@ -413,7 +413,7 @@ class DashboardDataAnalyzer(object):
                             self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
                     rslogger.debug("COUNT = %s", count)
                     average = s/count
-                    self.grades[assign["name"]]["class_average"] = average
+                    self.grades[assign["name"]]["class_average"] = "{:.02f}".format(average)
                     self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 
             else:           # The row has no result --> the query returned empty
