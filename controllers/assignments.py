@@ -5,6 +5,7 @@ import sys
 import json
 import logging
 import datetime
+from psycopg2 import IntegrityError
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -705,12 +706,16 @@ def _compute_assignment_total(student, assignment, course_name):
         return score, grade.score
     else:
         # Write the score to the grades table
-        db.grades.update_or_insert(
-            ((db.grades.auth_user == student.id) &
-             (db.grades.assignment == assignment.id)),
-            auth_user = student.id,
-            assignment = assignment.id,
-            score=score)
+        try:
+            db.grades.update_or_insert(
+                ((db.grades.auth_user == student.id) &
+                 (db.grades.assignment == assignment.id)),
+                auth_user = student.id,
+                assignment = assignment.id,
+                score=score)
+        except IntegrityError:
+            logger.error("IntegrityError update or insert {} {} with score {}"
+                         .format(student.id, assignment.id, score))
         return score, None
 
 def _get_students(course_id, sid = None):
