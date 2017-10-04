@@ -661,18 +661,22 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
     return score
 
 def _save_question_grade(sid, course_name, question_name, score, id):
-    db.question_grades.update_or_insert(
-        ((db.question_grades.sid == sid) &
-        (db.question_grades.course_name == course_name) &
-        (db.question_grades.div_id == question_name)
-        ),
-        sid=sid,
-        course_name=course_name,
-        div_id=question_name,
-        score = score,
-        comment = "autograded",
-        useinfo_id = id
-    )
+    try:
+        db.question_grades.update_or_insert(
+            ((db.question_grades.sid == sid) &
+            (db.question_grades.course_name == course_name) &
+            (db.question_grades.div_id == question_name)
+            ),
+            sid=sid,
+            course_name=course_name,
+            div_id=question_name,
+            score = score,
+            comment = "autograded",
+            useinfo_id = id
+        )
+    except IntegrityError:
+        logger.error("IntegrityError {} {} {}".format(sid, course_name, question_name))
+
 
 def _compute_assignment_total(student, assignment, course_name):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
@@ -894,20 +898,25 @@ def record_grade():
         score = float(score_str)
     comment = request.vars.get('comment', None)
     if score_str != "" or ('comment' in request.vars and comment != ""):
-        db.question_grades.update_or_insert((\
-            (db.question_grades.sid == request.vars['sid']) \
-            & (db.question_grades.div_id == request.vars['acid']) \
-            & (db.question_grades.course_name == auth.user.course_name) \
-            ),
-            sid = request.vars['sid'],
-            div_id = request.vars['acid'],
-            course_name = auth.user.course_name,
-            score = score,
-            comment = comment)
+        try:
+            db.question_grades.update_or_insert((\
+                (db.question_grades.sid == request.vars['sid']) \
+                & (db.question_grades.div_id == request.vars['acid']) \
+                & (db.question_grades.course_name == auth.user.course_name) \
+                ),
+                sid = request.vars['sid'],
+                div_id = request.vars['acid'],
+                course_name = auth.user.course_name,
+                score = score,
+                comment = comment)
+        except IntegrityError:
+            logger.error("IntegrityError {} {} {}".format(request.vars['sid'], request.vars['acid'], auth.user.course_name))
+            return json.dumps({'response': 'not replaced'})
         return json.dumps({'response': 'replaced'})
     else:
         return json.dumps({'response': 'not replaced'})
 
+# create a unique index:  question_grades_sid_course_name_div_id_idx" UNIQUE, btree (sid, course_name, div_id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_problem():
