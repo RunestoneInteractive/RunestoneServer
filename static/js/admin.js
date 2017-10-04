@@ -154,6 +154,8 @@ function autoGrade(){
             alert(retdata.message);
             calculateTotals();
         }
+    }).always(function() {
+        $("#autogradesubmit").prop("disabled",false);
     });
 }
 
@@ -1875,4 +1877,3 @@ function toggle_release_grades() {
         set_release_button();
     }
 }
-
