@@ -481,7 +481,7 @@ def removeStudents():
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
-    
+
     session.flash = T("You have successfully removed students")
     return redirect('/%s/admin/admin' % (request.application))
 
@@ -805,7 +805,7 @@ def question_text():
     if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
         q_text = q_text[2:].decode('hex')
     logger.debug(q_text)
-    return json.dumps(unicode(q_text))
+    return json.dumps(unicode(q_text, encoding="utf8"))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1056,7 +1056,7 @@ def get_assignment():
         logger.error('UNDEFINED assignment {} {}'.format(auth.user.course_name, auth.user.username))
         session.flash = 'Error assignment ID is undefined'
         return redirect(URL('assignments','index'))
-    
+
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
@@ -1207,7 +1207,7 @@ def add__or_update_assignment_question():
         points = int(request.vars['points'])
     except:
         points = activity_count
-    
+
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
