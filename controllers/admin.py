@@ -1136,7 +1136,8 @@ def save_assignment():
         format_str = "%Y/%m/%d %H:%M"
         due = datetime.datetime.strptime(d_str, format_str)
     except:
-        due = None
+        logger.error("Bad Date format for assignment: {}".format(d_str))
+        due = datetime.datetime.now() + datetime.timedelta(7)
     try:
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,
