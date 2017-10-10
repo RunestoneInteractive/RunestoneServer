@@ -1171,7 +1171,11 @@ def add__or_update_assignment_question():
     # This assumes that question will always be in DB already, before an assignment_question is created
     logger.debug("course_id %s",auth.user.course_id)
     question_id = _get_question_id(question_name, auth.user.course_id)
-    logger.debug(question_id)
+    if question_id == None:
+        logger.error("Question Not found for name = {} course = {}".format(question_name, auth.user.course_id))
+        session.flash = "Error: Cannot find question {} in the database".format(question_name)
+        return redirect(URL('admin','assignments'))
+
     base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     logger.debug("base course %s", base_course)
     question_type = db.questions[question_id].question_type
