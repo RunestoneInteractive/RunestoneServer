@@ -110,7 +110,7 @@ db.define_table('mchoice_answers',
     Field('div_id','string'),
     Field('sid','string'),
     Field('course_name','string'),
-    Field('answer','string', length=10),
+    Field('answer','string', length=50),
     Field('correct','boolean'),
     migrate='runestone_mchoice_answers.table'
     )
