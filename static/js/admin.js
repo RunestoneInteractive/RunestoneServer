@@ -523,7 +523,7 @@ function pickedStudents(column) {
     var studentslist = students;
     var keys = [];
     var i;
-    for (i in list) {
+    for (i in studentslist) {
         if (studentslist.hasOwnProperty(i)) {
             keys.push(i);
         }
