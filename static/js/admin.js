@@ -531,6 +531,7 @@ function pickedStudents(column) {
         }
     }
 
+    keys.sort();
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -902,9 +903,15 @@ function getStudents(sectionName) {
 
         if (obj.readyState == 4 && obj.status == 200) {
             var students = JSON.parse(obj.responseText);
+            var studentsNames = [];
             for (i = 0; i < students.length; i++) {
-                studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + students[i][0] + " " + students[i][1] + '</h4> </a>';
-
+                studentsNames.push(students[i][1] + ", " + students[i][0]);
+            }
+            
+            studentsNames.sort();
+            
+            for (i = 0; i < studentsNames.length; i++) {
+                studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + studentsNames[i] + '</h4> </a>';
             }
 
             var total = document.getElementById("total");
