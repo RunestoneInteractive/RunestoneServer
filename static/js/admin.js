@@ -1141,6 +1141,7 @@ function createAssignment(form) {
     var name = form.name.value;
 
     var obj = new XMLHttpRequest();
+    $('#assign_visible').prop('checked',true);
     obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
     obj.send(JSON.stringify({name: name}));
     obj.onreadystatechange = function () {
@@ -1282,7 +1283,7 @@ function assignmentInfo() {
         if (assignmentData['visible'] === true) {
             $('#assign_visible').prop('checked',true);
         } else {
-            $('#assign_visible').prop('checked',false);    
+            $('#assign_visible').prop('checked',false);
         }
         $('#readings-points-to-award').val(assignmentData['points_to_award']);
         $('#readings-autograder').val(assignmentData['readings_autograder']);
