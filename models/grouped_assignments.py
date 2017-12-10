@@ -146,6 +146,7 @@ db.define_table('assignments',
     Field('released', 'boolean'),
     Field('description', 'text'),
     Field('duedate','datetime'),
+    Field('visible','boolean'),
     format='%(name)s',
     migrate='runestone_assignments.table'
     )

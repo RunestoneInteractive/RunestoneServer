@@ -50,7 +50,8 @@
       <form action="" id="assignment-form">
         <label for="datetimepicker">Due Date: </label>
         <input id="datetimepicker" name="due" type="text"><br>
-
+        <label for="assign_visible">Visible to Students</label>
+        <input id="assign_visible" type="checkbox" name="visible" value="T"><br>
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
 
@@ -310,7 +311,7 @@
                         </div>
                         <script type="text/javascript">
                           // clean out the preview when the modal is hidden
-                          $("#editModal").on("hidden.bs.modal", function() { 
+                          $("#editModal").on("hidden.bs.modal", function() {
                             $("#modal-preview").html("")
                           });
                         </script>
