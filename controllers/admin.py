@@ -868,7 +868,15 @@ def createquestion():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
-    assignmentid = int(request.vars['assignmentid'])
+    aid = request.vars['assignmentid']
+    if aid == 'undefined':
+        logger.error("undefined assignmentid by {} for name {} subchap {} question {}".format(auth.user.username,
+                                                                        request.vars.name,
+                                                                        request.vars.subchapter,
+                                                                        request.vars.question))
+        return json.dumps("ERROR")
+    
+    assignmentid = int(aid)
     points = int(request.vars['points']) if request.vars['points'] else 1
     timed = request.vars['timed']
 
