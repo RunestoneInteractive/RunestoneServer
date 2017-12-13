@@ -21,6 +21,7 @@ def index():
     last_name = request.vars.get('lis_person_name_family', None)
     first_name = request.vars.get('lis_person_name_given', None)
     email = request.vars.get('lis_person_contact_email_primary', None)
+    instructor = "Instructor" in request.vars.get('roles', None)
     
     
     if user_id is None :
@@ -54,13 +55,8 @@ def index():
         oauth_server = oauth.OAuthServer(oauth_store.LTI_OAuthDataStore(myrecord.consumer,myrecord.secret))
         oauth_server.add_signature_method(oauth.OAuthSignatureMethod_PLAINTEXT())
         oauth_server.add_signature_method(oauth.OAuthSignatureMethod_HMAC_SHA1())
-    
-        # Reconstruct the incoming URL
-        if request.is_https : 
-            full_uri = 'https://' 
-        else :
-            full_uri = 'http://'
-        full_uri = full_uri + request.env.http_host + request.env.request_uri
+
+        full_uri = settings.lti_uri
         oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None, dict(request.vars))
     
         try:
@@ -80,16 +76,16 @@ def index():
     
     # Time to create / update / login the user
     if consumer is not None:
-        userinfo['username'] = consumer.key + ":" + user_id;
+        userinfo['username'] = email
         # print db.auth_user.password.validate('1C5CHFA_enUS503US503')
         # pw = db.auth_user.password.validate('2C5CHFA_enUS503US503')[0];
-        pw = db.auth_user.password.validate(str(uuid.uuid4()))[0];
+        pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
     #    print pw 
         userinfo['password'] = pw
     #    print userinfo
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
         if user is None : 
-            lti_errors.append("Unable to create user record");
+            lti_errors.append("Unable to create user record")
         else:
             # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
             course_id = request.vars.get('custom_course_id', None)
@@ -100,6 +96,10 @@ def index():
                 user['section'] = section_id
                 user.update_record()
                 db.user_courses.update_or_insert(user_id=user.id,course_id=course_id)
+                if instructor:
+                    db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
+                else:
+                    db.course_instructor.delete(instructor = user.id, course=course_id)
             if section_id:
                 # set the section in the section_users table
                 # test this

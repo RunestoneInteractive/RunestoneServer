@@ -17,3 +17,4 @@ settings.enable_captchas = True
 
 # Set the strings used as credentials by remote LMS app when passing a student in to be automatically logged in
 settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
+settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or whatever the full URL is for making an LTI connection
