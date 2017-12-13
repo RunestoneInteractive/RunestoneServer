@@ -14,3 +14,6 @@ settings.janrain_domain = 'my-janrain-domain'
 
 # Enable captchas during registration
 settings.enable_captchas = True
+
+# Set the strings used as credentials by remote LMS app when passing a student in to be automatically logged in
+settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
