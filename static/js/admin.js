@@ -907,9 +907,9 @@ function getStudents(sectionName) {
             for (i = 0; i < students.length; i++) {
                 studentsNames.push(students[i][1] + ", " + students[i][0]);
             }
-            
+
             studentsNames.sort();
-            
+
             for (i = 0; i < studentsNames.length; i++) {
                 studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + studentsNames[i] + '</h4> </a>';
             }
@@ -1141,6 +1141,7 @@ function createAssignment(form) {
     var name = form.name.value;
 
     var obj = new XMLHttpRequest();
+    $('#assign_visible').prop('checked',true);
     obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
     obj.send(JSON.stringify({name: name}));
     obj.onreadystatechange = function () {
@@ -1239,6 +1240,11 @@ function update_assignment(form) {
             return;
         }
     }
+    if (form.visible.checked) {
+        form.visible.value = 'T';
+    } else {
+        form.visible.value = 'F';
+    }
     $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId(), function(data) {
         alert("Assignment Saved");
     }).error(function(){alert("huh??")});
@@ -1273,6 +1279,12 @@ function assignmentInfo() {
         $('#datetimepicker').val(assignmentData['due_date']);
         $('#assignment_description').val(assignmentData['description']);
         $('#readings-threshold').val(assignmentData['threshold']);
+        $('#assign_visible').val(assignmentData['visible']);
+        if (assignmentData['visible'] === true) {
+            $('#assign_visible').prop('checked',true);
+        } else {
+            $('#assign_visible').prop('checked',false);
+        }
         $('#readings-points-to-award').val(assignmentData['points_to_award']);
         $('#readings-autograder').val(assignmentData['readings_autograder']);
 

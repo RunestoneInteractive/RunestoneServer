@@ -868,7 +868,15 @@ def createquestion():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
-    assignmentid = int(request.vars['assignmentid'])
+    aid = request.vars['assignmentid']
+    if aid == 'undefined':
+        logger.error("undefined assignmentid by {} for name {} subchap {} question {}".format(auth.user.username,
+                                                                        request.vars.name,
+                                                                        request.vars.subchapter,
+                                                                        request.vars.question))
+        return json.dumps("ERROR")
+
+    assignmentid = int(aid)
     points = int(request.vars['points']) if request.vars['points'] else 1
     timed = request.vars['timed']
 
@@ -1066,6 +1074,7 @@ def get_assignment():
         logger.error(ex)
         assignment_data['due_date'] = None
     assignment_data['description'] = assignment_row.description
+    assignment_data['visible'] = assignment_row.visible
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1130,6 +1139,7 @@ def save_assignment():
     # -- duedate
 
     assignment_id = request.vars.get('assignment_id')
+    isVisible = request.vars['visible']
 
     try:
         d_str = request.vars['due']
@@ -1143,6 +1153,7 @@ def save_assignment():
             course=auth.user.course_id,
             description=request.vars['description'],
             duedate=due,
+            visible=request.vars['visible']
         )
         return json.dumps({request.vars['name']: assignment_id})
     except Exception as ex:
