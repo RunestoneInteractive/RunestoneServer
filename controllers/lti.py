@@ -22,7 +22,14 @@ def index():
     first_name = request.vars.get('lis_person_name_given', None)
     email = request.vars.get('lis_person_contact_email_primary', None)
     instructor = "Instructor" in request.vars.get('roles', None)
-    
+    result_source_did=request.vars.get('lis_result_sourcedid', None)
+    outcome_url=request.vars.get('lis_outcome_service_url', None)
+    print result_source_did, outcome_url
+    assignment_id=request.vars.get('assignment_id', None)
+    # for some reason, url query parameters are being processed twice and returned as a list, like [23, 23]
+    if assignment_id:
+        # so just take the first element in the list
+        assignment_id=assignment_id[0]
     
     if user_id is None :
         lti_errors.append("user_id is required for this tool to function")
@@ -57,7 +64,8 @@ def index():
         oauth_server.add_signature_method(oauth.OAuthSignatureMethod_HMAC_SHA1())
 
         full_uri = settings.lti_uri
-        oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None, dict(request.vars))
+        oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None, dict(request.vars),
+                                                        query_string=request.env.query_string)
     
         try:
 #            print "secret: ", myrecord.secret
@@ -82,8 +90,9 @@ def index():
         pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
     #    print pw 
         userinfo['password'] = pw
-    #    print userinfo
+        print userinfo
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
+        print user
         if user is None : 
             lti_errors.append("Unable to create user record")
         else:
@@ -99,11 +108,13 @@ def index():
                 if instructor:
                     db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
                 else:
-                    db.course_instructor.delete(instructor = user.id, course=course_id)
+                    db((db.course_instructor.instructor == user.id) & (db.course_instructor.course == course_id)).delete()
+                    print "deleted"
             if section_id:
                 # set the section in the section_users table
                 # test this
                 db.section_users.update_or_insert(db.section_users.auth_user == user['id'], auth_user=user['id'], section = section_id)
+
 
                 
     #    print user, type(user)
@@ -112,6 +123,19 @@ def index():
     #    print "Logged in..."
         logged_in = True
 
+    if assignment_id:
+        # save the guid and url for reporting back the grade
+        print user.id, assignment_id
+        db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
+                                   auth_user=user.id,
+                                   assignment=assignment_id,
+                                   lis_result_sourcedid=result_source_did,
+                                   lis_outcome_url=outcome_url)
+        print("redirecting")
+        redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
+
+
+    # print(lti_errors)
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
 
     return dict(logged_in=logged_in, lti_errors=lti_errors, masterapp=masterapp)

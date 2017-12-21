@@ -526,7 +526,9 @@ db.define_table('grades',
     Field('score', 'double'),
     Field('manual_total', 'boolean'),
     Field('projected', 'double'),
-    migrate='runestone_grades.table',
+    Field('lis_result_sourcedid', 'string'),
+    Field('lis_outcome_url', 'string'), # guid for the student x assignment cell in the Canvas gradebook
+    migrate='runestone_grades.table', #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
     )
 
 # deprecated; now storing deadlines directly in assignments table, so no separate deadlines for different sections
