@@ -690,7 +690,7 @@ def _compute_assignment_total(student, assignment, course_name):
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
 
-    print (student.id, assignment.id)
+    # print (student.id, assignment.id)
 
     # compute the score
     query =  (db.question_grades.sid == student.username) \

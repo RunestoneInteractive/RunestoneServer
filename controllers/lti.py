@@ -26,8 +26,8 @@ def index():
     outcome_url=request.vars.get('lis_outcome_service_url', None)
     print result_source_did, outcome_url
     assignment_id=request.vars.get('assignment_id', None)
-    # for some reason, url query parameters are being processed twice and returned as a list, like [23, 23]
     if assignment_id:
+        # for some reason, url query parameters are being processed twice and returned as a list, like [23, 23]
         # so just take the first element in the list
         assignment_id=assignment_id[0]
     
@@ -75,7 +75,7 @@ def index():
         except oauth.OAuthError, err:
             oauth_error = "OAuth Security Validation failed:"+err.message
             lti_errors.append(oauth_error)
-            print oauth_error
+            # print oauth_error
             consumer = None
         # except:
             # print "Unexpected error"
@@ -90,9 +90,9 @@ def index():
         pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
     #    print pw 
         userinfo['password'] = pw
-        print userinfo
+        # print userinfo
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
-        print user
+        # print user
         if user is None : 
             lti_errors.append("Unable to create user record")
         else:
@@ -109,7 +109,6 @@ def index():
                     db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
                 else:
                     db((db.course_instructor.instructor == user.id) & (db.course_instructor.course == course_id)).delete()
-                    print "deleted"
             if section_id:
                 # set the section in the section_users table
                 # test this
@@ -123,13 +122,13 @@ def index():
 
     if assignment_id:
         # save the guid and url for reporting back the grade
-        print user.id, assignment_id
+        # print user.id, assignment_id
         db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
                                    auth_user=user.id,
                                    assignment=assignment_id,
                                    lis_result_sourcedid=result_source_did,
                                    lis_outcome_url=outcome_url)
-        print("redirecting")
+        # print("redirecting")
         redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
 
 
