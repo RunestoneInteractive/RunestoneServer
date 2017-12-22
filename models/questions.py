@@ -11,6 +11,7 @@ db.define_table('questions',
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
                 Field('autograde', type='string'),
+                Field('practice', type='boolean'),
                 migrate='runestone_questions.table')
 
 # In SQL we can manually add the constraint

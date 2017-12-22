@@ -36,6 +36,14 @@ db.define_table('user_sub_chapter_progress',
   migrate='runestone_user_sub_chapter_progress.table'
 )
 
+db.define_table('sub_chapter_taught',
+  Field('course_name', 'string'),
+  Field('chapter_name', 'string'),
+  Field('sub_chapter_name', 'string'),
+  Field('teaching_date', 'datetime', default=datetime.datetime.now()),
+  migrate='runestone_sub_chapter_taught.table'
+)
+
 #
 # When a new user is registered we need to add a bunch of rows to the
 # user_sub_chapter_progress table.  One for each section/subsection
