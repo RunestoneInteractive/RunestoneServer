@@ -727,7 +727,7 @@ def _compute_assignment_total(student, assignment, course_name):
             logger.error("IntegrityError update or insert {} {} with score {}"
                          .format(student.id, assignment.id, score))
 
-        if grade.lis_result_sourcedid and grade.lis_outcome_url and session.oauth_consumer_key:
+        if grade and grade.lis_result_sourcedid and grade.lis_outcome_url and session.oauth_consumer_key:
             # send it back to the LMS
             # have to send a percentage of the max score, rather than total points
             pct = score / float(points) if points else 0.0
