@@ -83,47 +83,52 @@
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
 
-	<div id='readings' style='margin-left:15%;'>
-		<h3>Readings</h3>
-		<ul>
-			{{for reading in readings:}}
-				<li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
-				<ul>
-				{{for r in readings[reading]['subchapters']:}}
-					<li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
-					{{if r['score'] != '':}}
-						{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
-					{{else:}}
-						not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required}}
+	{{if len(readings) > 0:}}
+		<div id='readings' style='margin-left:15%;'>
+			<h3>Readings</h3>
+			<ul>
+				{{for reading in readings:}}
+					<li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
+					<ul>
+					{{for r in readings[reading]['subchapters']:}}
+						<li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
+						{{if r['score'] != '':}}
+							{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
+						{{else:}}
+							not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required}}
+						{{pass}}
+					</li>
+
 					{{pass}}
-				</li>
-
+					</ul>
 				{{pass}}
-				</ul>
+			</ul>
+		</div>
+	{{pass}}
+
+	{{if len(questioninfo) > 0:}}
+		<div id='questions' style='margin-left:15%;'>
+		<h3>Questions</h3>
+			{{count=0}}
+			{{for q in questioninfo:}}
+					{{ if q['score'] != '':}}
+						<div style='float:right; width:30%;'>
+						<h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+						<p style='margin-left:2%;'>Comment: {{=q['comments']}}</p>
+					{{ else: }}
+						<div style='float:right; width:10%;'>
+						<h5 style='text-align:center;'>Not yet graded</h5>
+						</div>
+					{{pass}}
+					<span><div class='oneq' id='{{=count}}' style='width:90%;'>
+						<script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+					</div></span>
+
+				{{count += 1}}
 			{{pass}}
-		</ul>
-	</div>
-	<div id='questions' style='margin-left:15%;'>
-	<h3 style='text-align:center;'>Questions</h3>
-		{{count=0}}
-		{{for q in questioninfo:}}	
-				{{ if q['score'] != '':}}
-					<div style='float:right; width:30%;'>
-					<h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-					<p style='margin-left:2%;'>Comment: {{=q['comments']}}</p>
-				{{ else: }}
-					<div style='float:right; width:10%;'>
-					<h5 style='text-align:center;'>Not yet graded</h5>
-					</div>
-				{{pass}}
-				<span><div class='oneq' id='{{=count}}' style='width:90%;'>
-					<script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
-				</div></span>
-
-			{{count += 1}}
-		{{pass}}
 	
-	</div>
+		</div>
+	{{pass}}
 </div>
 
 <script>
