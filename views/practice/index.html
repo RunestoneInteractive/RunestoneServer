@@ -62,7 +62,7 @@
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
-  eBookConfig.practicemode = true;
+  eBookConfig.practice_mode = true;
 </script>
 
 <style>
@@ -84,7 +84,6 @@
             </div>
         </span>
         {{ if q[3] == 1: }}
-
             <p><a href="/{{=request.application}}/practice/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
             <p><a href="/{{=request.application}}/practice/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
             <p><a href="/{{=request.application}}/practice/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
@@ -97,7 +96,7 @@
             <p><a href="/{{=request.application}}/practice/checkanswer/?QID={{=q[2]}}&q=0&Pick=1" type="button" class="btn btn-danger NextQuestionAnchor">I don't know the answer.</a></p>
         {{ pass }}
     {{ else: }}
-        <p>Congratulations! You have answered all the questions for today. Please check your spaced repetition system tomorrow for more questions.</p>
+        <div style="margin-bottom: 40px">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
     {{ pass }}
 </div>
 

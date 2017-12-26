@@ -260,11 +260,11 @@ def practice():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def add_practice_items(data):
+def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
 
-    print ("\n\n\ndata: " + str(data))
-    data = json.loads(data)
+    data = json.loads(request.vars.data)
+    print("data: ", data)
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -274,14 +274,15 @@ def add_practice_items(data):
         subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
             .select()
         for subchapter in subchapters:
-            chapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
+            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
                                (db.sub_chapter_taught.chapter_name == chapter.chapter_name) & \
                                (db.sub_chapter_taught.sub_chapter_name == subchapter.sub_chapter_name))
-            questions = db((db.questions.chapter == chapter.chapter_label) & \
+            questions = db((db.questions.base_course == course.base_course) & \
+                           (db.questions.chapter == chapter.chapter_label) & \
                            (db.questions.subchapter == subchapter.sub_chapter_label) & \
                            (db.questions.practice == True))
             if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in data:
-                if chapterTaught.isempty() and not questions.isempty():
+                if subchapterTaught.isempty() and not questions.isempty():
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
                         chapter_name=chapter.chapter_name,
@@ -303,8 +304,8 @@ def add_practice_items(data):
                                 last_practice=datetime.date.today() - datetime.timedelta(1),
                             )
             else:
-                if not chapterTaught.isempty():
-                    chapterTaught.delete()
+                if not subchapterTaught.isempty():
+                    subchapterTaught.delete()
                     for student in students:
                         flashcards = db((db.user_topic_practice.user_id == student.id) & \
                                         (db.user_topic_practice.chapter_name == chapter.chapter_name) & \
@@ -1077,7 +1078,6 @@ def _get_toc_and_questions():
         # chapters are associated with courses, not with base_courses
         chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
         subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
-        print (subchapters_taught_query)
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)

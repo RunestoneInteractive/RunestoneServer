@@ -68,21 +68,26 @@ def index():
     flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
 
     if len(flashcards) == 0:
-        subchapters = db((db.chapters.course_id == course.course_name) &
-                       (db.sub_chapters.chapter_id == db.chapters.id)) \
-            .select(db.sub_chapters.id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label,
+        subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
+                              (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
+                              (db.sub_chapter_taught.sub_chapter_name == db.sub_chapters.sub_chapter_name) & \
+                              (db.chapters.course_id == auth.user.course_name) & \
+                              (db.sub_chapters.chapter_id == db.chapters.id)) \
+            .select(db.chapters.chapter_label, db.chapters.chapter_name, db.sub_chapters.sub_chapter_label,
                     orderby=db.chapters.id | db.sub_chapters.id)
-
-        for subchapter in subchapters:
-            questions = db((db.questions.subchapter == subchapter.sub_chapter_label)) \
-                .select()
+        for subchapterTaught in subchaptersTaught:
+            questions = db((db.questions.base_course == course.base_course) & \
+                           (db.questions.chapter == subchapterTaught.chapters.chapter_label) & \
+                           (db.questions.subchapter == subchapterTaught.sub_chapters.sub_chapter_label) & \
+                           (db.questions.practice == True)).select()
             qIndex = 0
             question = _get_next_qualified_question(questions, qIndex)
 
             if question:
                 db.user_topic_practice.insert(
                     user_id=auth.user.id,
-                    sub_chapter_label=subchapter.sub_chapter_label,
+                    chapter_name=subchapterTaught.chapters.chapter_name,
+                    sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
                     question_name=question.name,
                     i_interval=0,
                     e_factor=2.5,
@@ -92,6 +97,10 @@ def index():
         flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
 
     for counter, flashcard in enumerate(flashcards):
+        print ("datetime.datetime.now(): ", datetime.datetime.now())
+        print ("flashcard.last_practice: ", flashcard.last_practice)
+        print ("(datetime.datetime.now() - flashcard.last_practice).days: ", (datetime.datetime.now() - flashcard.last_practice).days)
+        print ("flashcard.i_interval: ", flashcard.i_interval)
         if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
             questions = db(db.questions.subchapter == flashcard.sub_chapter_label).select()
             if len(questions) != 0:
@@ -125,7 +134,7 @@ def index():
 
                     return dict(course=course, course_name=auth.user.course_name,
                                 course_id=auth.user.course_name, q=questioninfo, questionsExist=1)
-    return dict(questionsExist=1)
+    return dict(course=course, course_id=auth.user.course_name, questionsExist=0)
 
 
 def _get_next_qualified_question(questions, qIndex):
@@ -144,13 +153,14 @@ def _get_next_qualified_question(questions, qIndex):
 
 
 def _is_qualified_question(question):
-    isQualified = False
-    if (question.htmlsrc is not None and question.htmlsrc != "" and
-            ((question.question_type is not None and
-              question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop']) or
-            ('exercise' in question.subchapter.lower()))):
-        isQualified = True
-    return isQualified
+    # isQualified = False
+    # if (question.htmlsrc is not None and question.htmlsrc != "" and
+    #         ((question.question_type is not None and
+    #           question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop']) or
+    #         ('exercise' in question.subchapter.lower()))):
+    #     isQualified = True
+    # return isQualified
+    return question.practice
 
 
 def _get_next_i_interval(flashcard, q):

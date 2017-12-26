@@ -44,7 +44,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
             event_filter = 'unittest'
         else:
             event_filter = None
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter,
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter, None,
                                      practice_start_time)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
@@ -70,7 +70,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
         if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
-            results = _scorable_useinfos(course_name, sid, question_name, points, deadline, practice_start_time)
+            results = _scorable_useinfos(course_name, sid, question_name, points, deadline, None, None, practice_start_time)
             scoring_fn = _score_one_interaction
         else:
             results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time)
@@ -119,18 +119,30 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         _save_question_grade(sid, course_name, question_name, score, id)
 
     if practice_start_time:
+        page_visits = db((db.useinfo.course_id == course_name) & \
+                         (db.useinfo.sid == sid) & \
+                         (db.useinfo.event == 'page') & \
+                         (db.useinfo.timestamp >= practice_start_time)) \
+            .select()
         practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
         practice_score = 0
-        if len(results) == 1 and practice_duration <= 2:
-            practice_score = 5
-        elif len(results) <= 2 and practice_duration <= 2:
-            practice_score = 4
-        elif len(results) <= 3 and practice_duration <= 3:
-            practice_score = 3
-        elif len(results) <= 4 and practice_duration <= 4:
-            practice_score = 2
-        elif len(results) <= 5 and practice_duration <= 5:
-            practice_score = 1
+        print ("len(page_visits): ", len(page_visits))
+        print ("practice_duration: ", practice_duration)
+        print ("len(results): ", len(results))
+        print ("score: ", score)
+        print ("points: ", points)
+        if score == points:
+            if len(page_visits) <= 1 and len(results) <= 1 and practice_duration <= 2:
+                practice_score = 5
+            elif len(results) <= 2 and practice_duration <= 2:
+                practice_score = 4
+            elif len(results) <= 3 and practice_duration <= 3:
+                practice_score = 3
+            elif len(results) <= 4 and practice_duration <= 4:
+                practice_score = 2
+            elif len(results) <= 5 and practice_duration <= 5:
+                practice_score = 1
+        print ("practice_score = ", practice_score)
         return practice_score
     return score
 

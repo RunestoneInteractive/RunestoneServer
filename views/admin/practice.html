@@ -53,14 +53,12 @@
 
 <script type="text/javascript">
 
-var practice_picker = $('#tree-practice-picker');
-
 // Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
 $(function () {
     $(".dashboardnav").removeClass("active");
     $("#practicetab").addClass("active");
 
-    console.log(eBookConfig.toc.practice_picker);
+    var practice_picker = $('#tree-practice-picker');
 
     if (eBookConfig.toc.practice_picker.length != 0) {
         configure_tree_picker(practice_picker, eBookConfig.toc.practice_picker, $('#search-tree-practice-picker'), 2,
@@ -74,15 +72,10 @@ $(function () {
 
         practice_picker.on("check_node.jstree uncheck_node.jstree", function (event, data) {
             waitingDialog.show('Please wait to load the flashcards for all the students.', {progressType: 'warning'});
-
-            $.ajax({
-                method: "POST",
-                url: "/{{=request.application}}/admin/add_practice_items",
-                data: JSON.stringify(data.selected)
-            })
-                    .done(function (msg) {
-                        waitingDialog.hide();
-                    });
+            $.post("/{{=request.application}}/admin/add_practice_items", { data: JSON.stringify(practice_picker.jstree(true).get_checked()) })
+            .done(function () {
+                waitingDialog.hide();
+            });
         });
     }
     else {
