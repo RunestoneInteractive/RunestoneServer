@@ -6,6 +6,7 @@ import json
 import logging
 import datetime
 from psycopg2 import IntegrityError
+from outcome_request import OutcomeRequest
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -412,7 +413,7 @@ def _compute_assignment_total(student, assignment, course_name):
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
 
-    # print(student.id, assignment.id)
+    # print (student.id, assignment.id)
 
     # compute the score
     query =  (db.question_grades.sid == student.username) \
@@ -422,9 +423,13 @@ def _compute_assignment_total(student, assignment, course_name):
              & (db.question_grades.course_name == course_name )
     scores = db(query).select(db.question_grades.score)
     logger.debug("List of scores to add for %s is %s",student.username, scores)
-    total = sum([row.score for row in scores if row.score])
-    score = total
-
+    score = sum([row.score for row in scores if row.score])
+    # get total points for assignment, so can compute percentage to send to gradebook via LTI
+    record = db.assignments(assignment.id)
+    if record:
+        points = record.points
+    else:
+        points = 0
     grade = db(
         (db.grades.auth_user == student.id) &
         (db.grades.assignment == assignment.id)).select().first()
@@ -444,6 +449,21 @@ def _compute_assignment_total(student, assignment, course_name):
         except IntegrityError:
             logger.error("IntegrityError update or insert {} {} with score {}"
                          .format(student.id, assignment.id, score))
+
+        if grade and grade.lis_result_sourcedid and grade.lis_outcome_url and session.oauth_consumer_key:
+            # send it back to the LMS
+            # have to send a percentage of the max score, rather than total points
+            pct = score / float(points) if points else 0.0
+            lti_record = db(db.lti_keys.consumer == session.oauth_consumer_key).select().first()
+            if lti_record:
+                print "score", score, points, pct
+                request = OutcomeRequest({"consumer_key": session.oauth_consumer_key,
+                                          "consumer_secret": lti_record.secret,
+                                          "lis_outcome_service_url": grade.lis_outcome_url,
+                                          "lis_result_sourcedid": grade.lis_result_sourcedid})
+                resp = request.post_replace_result(pct)
+                print resp
+
         return score, None
 
 
