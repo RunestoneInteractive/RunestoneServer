@@ -1222,6 +1222,12 @@ def doAssignment():
         session.flash = "Could not find login and try again."
         return redirect(URL('default','index'))
 
+
+    if assignment.visible == 'F' or assignment.visible == None:
+        if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
+            session.flash = "That assignment is no longer available"
+            return redirect(URL('assignments', 'chooseAssignment'))
+
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id)) \
                         .select(db.questions.name,
@@ -1233,6 +1239,7 @@ def doAssignment():
                                 db.assignment_questions.activities_required,
                                 db.assignment_questions.reading_assignment,
                                 orderby=db.assignment_questions.sorting_priority)
+
 
     questionslist = []
     readings = OrderedDict()
