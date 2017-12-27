@@ -1221,6 +1221,12 @@ def doAssignment():
         session.flash = "Could not find login and try again."
         return redirect(URL('default','index'))
 
+    if assignment.visible == 'F' or assignment.visible == None:
+        if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
+            session.flash = "That assignment is no longer available"
+            return redirect(URL('assignments','chooseAssignment'))
+
+
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id) & \
                         (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
