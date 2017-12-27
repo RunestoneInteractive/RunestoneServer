@@ -5,8 +5,8 @@
 # Exit on first occurrance of an error
 set -e
 
-WEB2PY_CONFIG=test
-TEST_DBURL=postgres://bmiller:@localhost/runestone_test
+export WEB2PY_CONFIG=test
+export TEST_DBURL=postgres://bmiller:@localhost/runestone_test
 
 # make sure runestone_test is nice and clean
 
