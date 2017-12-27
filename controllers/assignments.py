@@ -703,11 +703,6 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
             .select()
         practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
         practice_score = 0
-        print ("len(page_visits): ", len(page_visits))
-        print ("practice_duration: ", practice_duration)
-        print ("len(results): ", len(results))
-        print ("score: ", score)
-        print ("points: ", points)
         if score == points:
             if len(page_visits) <= 1 and len(results) <= 1 and practice_duration <= 2:
                 practice_score = 5
@@ -719,7 +714,6 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
                 practice_score = 2
             elif len(results) <= 5 and practice_duration <= 5:
                 practice_score = 1
-        print ("practice_score = ", practice_score)
         return practice_score
     return score
 
@@ -1487,10 +1481,6 @@ def practice():
         flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
 
     for counter, flashcard in enumerate(flashcards):
-        print ("datetime.datetime.now(): ", datetime.datetime.now())
-        print ("flashcard.last_practice: ", flashcard.last_practice)
-        print ("(datetime.datetime.now() - flashcard.last_practice).days: ", (datetime.datetime.now() - flashcard.last_practice).days)
-        print ("flashcard.i_interval: ", flashcard.i_interval)
         if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
             questions = db(db.questions.subchapter == flashcard.sub_chapter_label).select()
             if len(questions) != 0:
