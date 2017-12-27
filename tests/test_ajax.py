@@ -42,6 +42,13 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(len(dbres), 1)
         self.assertEqual(dbres[0].course_id, 'thinkcspy')
 
+    def testInstructorStatus(self):
+        auth.login_user(db.auth_user(11))
+        course = 'testcourse'
+        self.assertTrue(verifyInstructorStatus(course,auth.user.id))
+        auth.login_user(db.auth_user(1663))
+        self.assertFalse(verifyInstructorStatus(course,auth.user.id))
+
     def testGetAssessResults(self):
         """
         getAssessResults

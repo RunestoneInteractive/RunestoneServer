@@ -10,9 +10,13 @@ export TEST_DBURL=postgres://bmiller:@localhost/runestone_test
 
 # make sure runestone_test is nice and clean
 
-dropdb --echo runestone_test
-createdb --echo runestone_test
-psql runestone_test < runestone_test.sql
+if [ $1 != "--skipdbinit" ]; then
+    dropdb --echo runestone_test
+    createdb --echo runestone_test
+    psql runestone_test < runestone_test.sql
+else
+    echo "Skipping DB initialization"
+fi
 
 # Ascend to the main web2py directory
 cd ../../../
