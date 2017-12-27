@@ -122,7 +122,7 @@
             {{ pass }}
             {{ if auth.user: }}
               <li class="divider"></li>
-              <li><a href='/{{=request.application}}/practice'>Practice</a></li>
+              <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
               <li class="divider"></li>
               <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
             {{ pass }}
