@@ -42,6 +42,34 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(len(dbres), 1)
         self.assertEqual(dbres[0].course_id, 'thinkcspy')
 
+    def testInstructorStatus(self):
+        auth.login_user(db.auth_user(11))
+        course = 'testcourse'
+        self.assertTrue(verifyInstructorStatus(course,auth.user.id))
+        auth.login_user(db.auth_user(1663))
+        self.assertFalse(verifyInstructorStatus(course,auth.user.id))
+
+    def testGetAssessResults(self):
+        """
+        getAssessResults
+        test_question2_4_1 | user_1662 correct answer is 1 on second try
+        """
+        #globals auth, db
+        # can login user with auth.login_user(db.auth_user(60)) then auth.user will be defined
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'test_question2_4_1'
+        request.vars.sid = 'user_1662'
+        request.vars.event = 'mChoice'
+
+        res = getAssessResults()
+        print("RESULTS = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '1')
+        self.assertEqual(res['correct'], True)
+
+
+
 
 
 suite = unittest.TestSuite()

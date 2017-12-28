@@ -5,14 +5,18 @@
 # Exit on first occurrance of an error
 set -e
 
-WEB2PY_CONFIG=test
-TEST_DBURL=postgres://bmiller:@localhost/runestone_test
+export WEB2PY_CONFIG=test
+export TEST_DBURL=postgres://bmiller:@localhost/runestone_test
 
 # make sure runestone_test is nice and clean
 
-dropdb --echo runestone_test
-createdb --echo runestone_test
-psql runestone_test < runestone_test.sql
+if [ $1 != "--skipdbinit" ]; then
+    dropdb --echo runestone_test
+    createdb --echo runestone_test
+    psql runestone_test < runestone_test.sql
+else
+    echo "Skipping DB initialization"
+fi
 
 # Ascend to the main web2py directory
 cd ../../../
