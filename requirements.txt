@@ -14,3 +14,4 @@ Sphinx>=1.6.3
 sphinxcontrib-paverutils>=1.7
 SQLAlchemy>=1.0.14
 cssselect>=1.0
+oauth2>=1.9

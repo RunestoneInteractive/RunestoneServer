@@ -526,6 +526,8 @@ db.define_table('grades',
     Field('score', 'double'),
     Field('manual_total', 'boolean'),
     Field('projected', 'double'),
+    Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the Canvas gradebook
+    Field('lis_outcome_url', 'string'), #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
     migrate='runestone_grades.table',
     )
 
