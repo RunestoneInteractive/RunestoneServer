@@ -420,7 +420,6 @@ def _score_one_code_run(row, points, autograde):
         pct_correct = 100 * float(passed)/(int(failed) + int(passed))
     except:
         pct_correct = 0 # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
-    print "here", pct_correct
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 def _score_one_mchoice(row, points, autograde):
@@ -560,16 +559,9 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
+
+
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
-    print """
-             course_name: {}
-             sid: {}
-             question_name {}
-             points {}
-             question_type {}
-             deadline {}
-             autograde {}
-             which_to_grade {}""".format(course_name, sid, question_name, points, question_type, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
         return 0
@@ -592,15 +584,12 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
     #      affect how the score is determined.
 
     # get the results from the right table, and choose the scoring function
-    print "here 1"
     if question_type in ['activecode', 'actex']:
         if autograde in ['pct_correct', 'all_or_nothing', 'unittest']:
             event_filter = 'unittest'
         else:
             event_filter = None
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
-        print "here2", len(results)
-        print db._lastsql
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
         results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
