@@ -621,16 +621,16 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
             event_filter = 'unittest'
         else:
             event_filter = None
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter, None,
-                                     practice_start_time)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter,
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
         results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
         # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, None, 'page',
-                                     practice_start_time)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page',
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_interaction
     elif question_type == 'parsonsprob':
         results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time)
@@ -647,15 +647,16 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
         if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
-            results = _scorable_useinfos(course_name, sid, question_name, points, deadline, None, None, practice_start_time)
+            results = _scorable_useinfos(course_name, sid, question_name, points, deadline,
+                                         practice_start_time=practice_start_time)
             scoring_fn = _score_one_interaction
         else:
             results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time)
             scoring_fn = _score_one_codelens
     elif question_type in ['video', 'showeval']:
         # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, None, 'video',
-                                     practice_start_time)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_interaction
 
     else:
