@@ -27,16 +27,23 @@ settings.server_type = "http://"
 settings.janrain_api_key = 'a_fake_key'
 settings.janrain_domain = 'a-fake-domain'
 
-if 'local' in uname()[1] or 'Darwin' in uname()[0] or 'Linux' in uname()[0]:
-    settings.database_uri = 'sqlite://storage.sqlite'
-elif 'webfaction' in uname()[1]:
-    # the real uri is set in gitignore'd 1.py
-    settings.database_uri = 'postgres://a_fake_database'
-elif 'luther' in uname()[1]:
-    settings.database_uri = 'sqlite://storage.sqlite'
+# Do not control this with hostnames
+config = environ.get("WEB2PY_CONFIG","NOT SET")
+
+if config == "production":
+    settings.database_uri = environ["DBURL"]
+elif config == "development":
+    settings.database_uri = environ.get("DEV_DBURL")
+elif config == "test":
+    settings.database_uri = environ.get("TEST_DBURL")
 else:
-    pass
-    ## settings.database_uri will be set in 1.py if not one of those special cases
+    print "To configure web2py you should set up both WEB2PY_CONFIG and"
+    print "XXX_DBURL values in your environment -- See README for more detail"
+    raise ValueError("unknown value for WEB2PY_CONFIG")
+
+# Just for compatibility -- many things use postgresql but web2py removes the ql
+settings.database_uri = settings.database_uri.replace('postgresql://','postgres://')
+
 
 settings.logger = "web2py.app.runestone"
 settings.sched_logger = settings.logger  # works for production where sending log to syslog but not for dev.
