@@ -1,6 +1,7 @@
 from gluon.storage import Storage
 from platform import uname
 import logging
+from os import environ
 
 settings = Storage()
 
