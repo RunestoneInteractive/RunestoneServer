@@ -264,7 +264,6 @@ def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
 
     data = json.loads(request.vars.data)
-    print("data: ", data)
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -291,12 +290,14 @@ def add_practice_items():
                     )
                     for student in students:
                         flashcards = db((db.user_topic_practice.user_id == student.id) & \
-                                        (db.user_topic_practice.chapter_name == chapter.chapter_name) & \
+                                        (db.user_topic_practice.course_name == course.course_name) &
+                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
                                         (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
                         if flashcards.isempty():
                             db.user_topic_practice.insert(
                                 user_id=student.id,
-                                chapter_name=chapter.chapter_name,
+                                course_name=course.course_name,
+                                chapter_label=chapter.chapter_label,
                                 sub_chapter_label=subchapter.sub_chapter_label,
                                 question_name=questions.select().first().name,
                                 i_interval=0,
@@ -308,7 +309,8 @@ def add_practice_items():
                     subchapterTaught.delete()
                     for student in students:
                         flashcards = db((db.user_topic_practice.user_id == student.id) & \
-                                        (db.user_topic_practice.chapter_name == chapter.chapter_name) & \
+                                        (db.user_topic_practice.course_name == course.course_name) &
+                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
                                         (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
                         if not flashcards.isempty():
                             flashcards.delete()
