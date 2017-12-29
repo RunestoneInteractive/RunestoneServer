@@ -12,6 +12,7 @@
 import unittest
 import json
 from gluon.globals import Request
+from dateutil.parser import parse
 
 # bring in the ajax controllers
 execfile("applications/runestone/controllers/ajax.py", globals())
@@ -68,8 +69,30 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res['answer'], '1')
         self.assertEqual(res['correct'], True)
 
+    def testGetHist(self):
+        """
+        user_1662 | 2017-09-22 20:29:19 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:29:34 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:29:43 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:30:16 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:30:28 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:31:24 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:31:54 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:33:15 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:33:32 | bnm_fruitco_selection
+        user_1662 | 2017-09-22 20:43:58 | bnm_fruitco_selection
+        """
+        request.vars.acid = 'bnm_fruitco_selection'
+        request.vars.sid = 'user_1662'
 
-
+        res = gethist()
+        res = json.loads(res)
+        self.assertEqual(len(res['timestamps']), 10)
+        self.assertEqual(len(res['history']), 10)
+        self.assertEqual(parse(res['timestamps'][-1]), parse('2017-09-22 20:43:58'))
+        self.assertEqual(parse(res['timestamps'][0]), parse('2017-09-22 20:29:19'))
+        prog = json.loads(getprog())
+        self.assertEqual(res['history'][-1],prog[0]['source'])
 
 
 suite = unittest.TestSuite()
