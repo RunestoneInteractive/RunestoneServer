@@ -56,7 +56,7 @@ class TestGradingFunction(unittest.TestCase):
                                               save_score=False)
             self.assertEqual(sc,
                              g.question_grades.score,
-                             "Failed for graded question {}".format(g))
+                             "Failed for graded question {} got a score of {}".format(g,sc))
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
