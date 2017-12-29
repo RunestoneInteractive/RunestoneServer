@@ -5,6 +5,7 @@ import sys
 import json
 import logging
 import datetime
+import math
 from psycopg2 import IntegrityError
 from outcome_request import OutcomeRequest
 
@@ -715,7 +716,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
                 practice_score = 2
             elif len(results) <= 5 and practice_duration <= 5:
                 practice_score = 1
-        return practice_score
+        return (practice_score, len(results))
     return score
 
 
@@ -1419,29 +1420,44 @@ def checkanswer():
         session.flash = "Please Login"
         return redirect(URL('default', 'index'))
 
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
-
-    lastQuestion = None
     if request.vars.QID:
         lastQuestion = db(db.questions.id == int(request.vars.QID)).select().first()
 
         flashcard = db((db.user_topic_practice.user_id == auth.user.id) &
+                       (db.user_topic_practice.course_name == auth.user.course_name) &
+                       (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
                        (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
                        (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
         if 'q' in request.vars:
             q = int(request.vars.q)
+            trials_num = 0
         else:
             autograde = 'pct_correct'
             if lastQuestion.autograde is not None:
                 autograde = lastQuestion.autograde
-            q = round(_autograde_one_q(auth.user.course_name, auth.user.username, lastQuestion.name, 100,
+            q, trials_num = _autograde_one_q(auth.user.course_name, auth.user.username, lastQuestion.name, 100,
                                  lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                 flashcard.last_practice))
+                                 flashcard.last_practice)
+            q = round(q)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
 
+        db.user_topic_practice_log.insert(
+            user_id=auth.user.id,
+            course_name=auth.user.course_name,
+            chapter_label=flashcard.chapter_label,
+            sub_chapter_label=flashcard.sub_chapter_label,
+            question_name=flashcard.question_name,
+            i_interval=flashcard.i_interval,
+            e_factor=flashcard.e_factor,
+            trials_num=trials_num,
+            start_practice=flashcard.last_practice,
+            end_practice=datetime.datetime.now(),
+        )
+
         redirect(URL('practice'))
+    session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
+    redirect(URL('practice'))
 
 
 def practice():
@@ -1471,7 +1487,8 @@ def practice():
             if question:
                 db.user_topic_practice.insert(
                     user_id=auth.user.id,
-                    chapter_name=subchapterTaught.chapters.chapter_name,
+                    course_name=auth.user.course_name,
+                    chapter_label=subchapterTaught.chapters.chapter_label,
                     sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
                     question_name=question.name,
                     i_interval=0,
