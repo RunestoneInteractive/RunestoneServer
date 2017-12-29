@@ -24,12 +24,20 @@ export WEB2PY_CONFIG=test
 # HINT: if using postgres, set an environment variable for PGUSER so that the database drops and creates will work
 # export PGUSER=<dbusername>
 
-# Ascend to the main web2py directory
-cd ../../../
+if [ "$1" == "--help" ]; then
+    echo "Options are --rebuildgrades or --skipdbinit"
+    exit
+fi
 
 # To reset the unit test based on current grading code, uncomment these lines
-# python web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py
-# pg_dump runestone_test > runestone_test.sql
+if [ "$1" == "--rebuildgrades" ]; then
+    cd ../../..
+    echo "recalculating grades tables"
+    python web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py
+    echo "dumping the data"
+    pg_dump runestone_test --no-owner > applications/runestone/tests/runestone_test.sql
+    exit
+fi
 
 # make sure runestone_test is nice and clean
 
@@ -41,6 +49,7 @@ else
     echo "Skipping DB initialization"
 fi
 
+cd ../../..
 # Now run
 python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 python web2py.py -S runestone -M -R applications/runestone/tests/test_assignments.py
