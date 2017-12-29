@@ -75,8 +75,8 @@ def hsblog():    # Human Subjects Board Log
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
         # Has user already submitted a correct answer for this question? If not, insert a record
-        if db((db.fitb_answers.sid == sid) & 
-              (db.fitb_answers.div_id == div_id) & 
+        if db((db.fitb_answers.sid == sid) &
+              (db.fitb_answers.div_id == div_id) &
               (db.fitb_answers.course_name == auth.user.course_name) &
               (db.fitb_answers.correct == 'T')).count() == 0:
             answer = request.vars.answer
@@ -84,8 +84,8 @@ def hsblog():    # Human Subjects Board Log
             db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
-        if db((db.dragndrop_answers.sid == sid) & 
-              (db.dragndrop_answers.div_id == div_id) & 
+        if db((db.dragndrop_answers.sid == sid) &
+              (db.dragndrop_answers.div_id == div_id) &
               (db.dragndrop_answers.course_name == auth.user.course_name) &
               (db.dragndrop_answers.correct == 'T')).count() == 0:
             answers = request.vars.answer
@@ -94,16 +94,16 @@ def hsblog():    # Human Subjects Board Log
 
             db.dragndrop_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answers, correct=correct, course_name=course, minHeight=minHeight)
     elif event == "clickableArea" and auth.user:
-        if db((db.clickablearea_answers.sid == sid) & 
-              (db.clickablearea_answers.div_id == div_id) & 
+        if db((db.clickablearea_answers.sid == sid) &
+              (db.clickablearea_answers.div_id == div_id) &
               (db.clickablearea_answers.course_name == auth.user.course_name) &
               (db.clickablearea_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
 
     elif event == "parsons" and auth.user:
-        if db((db.parsons_answers.sid == sid) & 
-              (db.parsons_answers.div_id == div_id) & 
+        if db((db.parsons_answers.sid == sid) &
+              (db.parsons_answers.div_id == div_id) &
               (db.parsons_answers.course_name == auth.user.course_name) &
               (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
@@ -112,8 +112,8 @@ def hsblog():    # Human Subjects Board Log
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     elif event == "codelensq" and auth.user:
-        if db((db.codelens_answers.sid == sid) & 
-              (db.codelens_answers.div_id == div_id) & 
+        if db((db.codelens_answers.sid == sid) &
+              (db.codelens_answers.div_id == div_id) &
               (db.codelens_answers.course_name == auth.user.course_name) &
               (db.codelens_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
@@ -747,7 +747,7 @@ def getassignmentgrade():
         (db.assignment_questions.question_id == db.questions.id) &
         (db.questions.name == divid)
     ).select(db.assignments.released, db.assignments.id, db.assignment_questions.points).first()
-    print a_q
+    logger.debug(a_q)
     if not a_q:
         return json.dumps([ret])
     # try new way that we store scores and comments
@@ -758,7 +758,7 @@ def getassignmentgrade():
         (db.question_grades.course_name == auth.user.course_name) &
         (db.question_grades.div_id == divid)
     ).select(db.question_grades.score, db.question_grades.comment).first()
-    print result
+    logger.debug(result)
     if result:
         # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
         ret['version'] = 2
@@ -988,7 +988,7 @@ def preview_question():
                 component = tree.cssselect(".system-message")
                 if len(component) > 0:
                     ctext = html.tostring(component[0])
-                    print "error - ", ctext
+                    logger.debug("error - ", ctext)
                 else:
                     ctext = "Unknown error occurred"
 
