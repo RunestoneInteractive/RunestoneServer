@@ -15,7 +15,10 @@ import random
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(settings.database_uri,fake_migrate_all=False)
+    if os.environ.get("WEB2PY_CONFIG","") == 'test':
+        db = DAL(settings.database_uri,migrate=False)
+    else:
+        db = DAL(settings.database_uri,fake_migrate_all=False)
     session.connect(request, response, masterapp='runestone', db=db)
 
 else:
