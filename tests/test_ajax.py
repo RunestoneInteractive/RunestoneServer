@@ -94,6 +94,38 @@ class TestAjaxEndpoints(unittest.TestCase):
         prog = json.loads(getprog())
         self.assertEqual(res['history'][-1],prog[0]['source'])
 
+    def testRunLog(self):
+        """
+        runlog should add an entry into the useinfo table as well as the code and acerror_log tables...
+        code and acerror_log seem pretty redundant... This ought to be cleaned up.
+        """
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        request.vars.div_id = "unittest_div_111"
+        request.vars.code = "this is a unittest"
+        error_info = "succes"
+        request.vars.event = 'activecode'
+        request.vars.to_save = "True"
+
+        runlog()
+        request.vars.sid = None
+        request.vars.acid = 'unittest_div_111'
+        prog = json.loads(getprog())
+        self.assertEqual(prog[0]['source'], "this is a unittest")
+
+
+    # getCompletionStatus
+    # getAllCompletionStatus
+    # getlastpage
+    # getCorrectStats
+    # getStudentResults ??
+    # getaggregateresults
+    # getpollresults
+    # gettop10Answers
+    # getassignmentgrade
+    # getAssessResults
+    # preview_question
+    # getlastanswer
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
