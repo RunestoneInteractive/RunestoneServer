@@ -545,7 +545,8 @@ db.define_table('question_grades',
     Field('course_name',type='string', notnull=True),
     Field('div_id', type = 'string', notnull=True),
     Field('useinfo_id', db.useinfo), # the particular useinfo run that was graded
+    Field('deadline', 'datetime'),
     Field('score', type='double'),
-    Field('comment', type = 'text'),
+    Field('comment', type ='text'),
     migrate='runestone_question_grades.table',
     )
