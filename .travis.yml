@@ -20,5 +20,4 @@ script:
 - "./run_tests.sh"
 notifications:
   slack:
-    rooms:
-      secure: ONY0xc6ojIqcBLUkqPsvv4C04CSuEmLbQacm3UYZyPSBWixt6j6Mbo9V4BpmtK0hBJwGyhuFalaGMXfRcT9oVhLb/EAq2u2LF8mM1kSRrZHbMZ76oAVcbFHQVYg2R780u0ch1pS/Cmoev4Y1VeJkmZrtiHk/PGiI3GjaHYYk1CY=
+    secure: OfeZ/+YHpSl7GNFkzEKu0uObuMdymKmDEeDyfB++RaglalcgkDQAqrCPx+YVw6brXOHGeC6BkGJe/Fs143Ai8/yf38nMmZg/dej5nLgZNST67jWaapIydx5QeuCrsRKvUP+z6yEYoBkYXTsYPyTiKGGsyzvX6dimZRT4nD8qrv0=
