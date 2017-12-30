@@ -1,24 +1,24 @@
 language: python
-
 python:
-    - '2.7'
-
+- '2.7'
 services:
-    - postgresql
-
+- postgresql
 addons:
-    postgresql: "9.4"
-
+  postgresql: '9.4'
 script:
-    - export LANG=en_US.UTF-8
-    - export WEB2PY_CONFIG=test
-    - export TEST_DBURL=postgres://postgres:@localhost/runestone_test
-    - wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip
-    - unzip web2py_src.zip
-    - cd web2py/applications
-    - ln -s ../../ runestone
-    - cd runestone
-    - mkdir private
-    - echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key
-    - cd tests
-    - ./run_tests.sh
+- export LANG=en_US.UTF-8
+- export WEB2PY_CONFIG=test
+- export TEST_DBURL=postgres://postgres:@localhost/runestone_test
+- wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip
+- unzip web2py_src.zip
+- cd web2py/applications
+- ln -s ../../ runestone
+- cd runestone
+- mkdir private
+- echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key
+- cd tests
+- "./run_tests.sh"
+notifications:
+  slack:
+    rooms:
+      secure: ONY0xc6ojIqcBLUkqPsvv4C04CSuEmLbQacm3UYZyPSBWixt6j6Mbo9V4BpmtK0hBJwGyhuFalaGMXfRcT9oVhLb/EAq2u2LF8mM1kSRrZHbMZ76oAVcbFHQVYg2R780u0ch1pS/Cmoev4Y1VeJkmZrtiHk/PGiI3GjaHYYk1CY=
