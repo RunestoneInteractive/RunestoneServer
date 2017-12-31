@@ -38,8 +38,6 @@ def build():
         return dict(mess='That name has already been used.', building=False)
 
 
-    db.projects.update_or_insert(projectcode=request.vars.projectname,description=request.vars.projectdescription)
-
     # if make instructor add row to auth_membership
     if 'instructor' in request.vars:
         gid = db(db.auth_group.role == 'instructor').select(db.auth_group.id).first()
@@ -191,6 +189,3 @@ def delete_course():
 
 
     return dict(verify_form=verify_form, deleted=deleted)
-
-
-
