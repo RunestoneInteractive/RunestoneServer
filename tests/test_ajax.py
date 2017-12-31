@@ -23,6 +23,7 @@ db.commit()
 
 class TestAjaxEndpoints(unittest.TestCase):
     def setUp(self):
+        global request, session
         request = Request(globals()) # Use a clean Request object
         session = Session()
 
@@ -69,6 +70,25 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = json.loads(res)
         self.assertEqual(res['answer'], '1')
         self.assertEqual(res['correct'], True)
+        # add for fillb, dragNdrop, parsons, clickableArea, codelensq, shortanswer, timedExam
+
+        # Parsons
+        request.vars.event = 'parsons'
+        request.vars.div_id = '3_8'
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0', msg=None)
+        # self.assertEqual(res['correct'], True) # todo: why isn't correct returned?
+
+        # clickable
+        request.vars.event = 'clickableArea'
+        request.vars.div_id = 'ca_id_str'
+        request.vars.sid = 'user_1674'
+        res = json.loads(getAssessResults())
+        print("RES ", res)
+        self.assertEqual(res['answer'], '0;1', msg=None)
+        self.assertEqual(res['correct'], False) # todo: why isn't correct returned?
+        # timestamp 2017-09-04 00:56:34
+        self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
 
     def testGetHist(self):
         """
@@ -109,7 +129,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.to_save = "True"
 
         runlog()
-        request.vars.sid = None
         request.vars.acid = 'unittest_div_111'
         prog = json.loads(getprog())
         self.assertEqual(prog[0]['source'], "this is a unittest")
@@ -131,3 +150,24 @@ class TestAjaxEndpoints(unittest.TestCase):
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
 unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+# One month of AJAX on runestone.academy
+#      endpoint           calls   avg time   max time
+#      gettop10Answers        644 213.599    2468
+#   getassignmentgrade       4610 215.614    4289
+#               runlog     723377 220.344   40371
+#               hsblog    1821749 249.369   40197
+#  getaggregateresults      16347 252.095    6018
+#      checkTimedReset         78 265.128    1884
+#        set_tz_offset      46490 268.683    5175
+#              getuser     579962 292.291   10217
+#          getnumusers     580003 297.314   10345
+#         getnumonline     579967 299.845   40147
+#  getCompletionStatus     299650 347.226   10315
+#       updatelastpage     228058 371.076   10359
+#          getlastpage      93856 390.003    6591
+#       getpollresults        253 432.198    1972
+# getAllCompletionStatus    93890 478.528    5844
+#     getAssessResults     732162 491.053   10311
+#     preview_question        796 1664.394  17134
