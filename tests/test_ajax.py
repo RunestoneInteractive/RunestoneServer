@@ -11,7 +11,7 @@
 
 import unittest
 import json
-from gluon.globals import Request
+from gluon.globals import Request, Session
 from dateutil.parser import parse
 
 # bring in the ajax controllers
@@ -24,6 +24,7 @@ db.commit()
 class TestAjaxEndpoints(unittest.TestCase):
     def setUp(self):
         request = Request(globals()) # Use a clean Request object
+        session = Session()
 
     def testHSBLog(self):
         # Set up the request object
