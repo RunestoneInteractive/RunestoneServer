@@ -22,6 +22,8 @@
     <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-3.0.0/js/bootstrap.min.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
+    {{ block moreincludes }}
+    {{ end }}
     <script type="text/javascript">
       var eBookConfig = {};
       var portPart = '';
@@ -152,7 +154,7 @@
           </a>
           <ul class="dropdown-menu user-menu">
 
-            <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li>
+            <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
             <li class="divider"></li>
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
             <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
@@ -178,6 +180,7 @@
             <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
             <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
             <li><a href="/{{=request.application}}/static/pip2/index.html">Programs, Information, and People</a></li>
+            <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>            
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>

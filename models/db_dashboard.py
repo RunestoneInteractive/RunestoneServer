@@ -1,8 +1,9 @@
 from collections import OrderedDict
 import logging
+from datetime import datetime, timedelta
 
-rslogger = logging.getLogger('web2py.app.runestone')
-rslogger.setLevel('DEBUG')
+rslogger = logging.getLogger(settings.logger)
+rslogger.setLevel(settings.log_level)
 
 #db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
@@ -42,17 +43,15 @@ class ProblemMetrics(object):
             self.user_responses[user.username] = UserResponse(user)
 
     def add_data_point(self, row):
-        if ':' in row.act:
-            answer = row.act.split(':')
-            choice = answer[1]
-            correct = answer[2] == "correct"
-            if choice == "":
-                choice = "(empty)"
+        correct = row.correct
+        choice = row.answer
+        if choice == "":
+            choice = "(empty)"
 
-            self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
+        self.aggregate_responses[choice] = self.aggregate_responses.get(choice, 0) + 1
 
-            if row.sid in self.user_responses:
-                self.user_responses[row.sid].add_response(choice, correct)
+        if row.sid in self.user_responses:
+            self.user_responses[row.sid].add_response(choice, correct)
 
     def user_response_stats(self):
         correct = 0
@@ -108,18 +107,40 @@ class UserResponse(object):
                 self.status = UserResponse.INCOMPLETE
 
 class CourseProblemMetrics(object):
-    def __init__(self, course_id, users):
+    def __init__(self, course_id, users, chapter):
         self.course_id = course_id
         self.problems = {}
         self.users = users
+        self.chapter = chapter
 
-    def update_metrics(self, logs):
-        for row in logs:
-            if row.event == "mChoice" or row.event == "fillb":
+    def update_metrics(self, course_name):
+        rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
+        rslogger.debug("doing chapter {}".format(self.chapter))
+        # todo:  Join this with questions so that we can limit the questions to the selected chapter
+        mcans = db((db.mchoice_answers.course_name==course_name) &
+                   (db.mchoice_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                    ).select()
+        rslogger.debug("Found {} exercises")
+        fbans = db((db.fitb_answers.course_name==course_name) &
+                   (db.fitb_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                   ).select()
+        psans = db((db.parsons_answers.course_name==course_name) &
+                   (db.parsons_answers.div_id == db.questions.name) &
+                   (db.questions.chapter == self.chapter.chapter_label)
+                   ).select()
+        def add_problems(result_set,tbl):
+            for srow in result_set:
+                row = srow[tbl]
+                rslogger.debug("ROW = ",row)
+                rslogger.debug("UPDATE_METRICS %s", row)
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
-
                 self.problems[row.div_id].add_data_point(row)
+        add_problems(mcans, 'mchoice_answers')
+        add_problems(fbans, 'fitb_answers')
+        add_problems(psans, 'parsons_answers')
 
     def retrieve_chapter_problems(self):
         return self
@@ -148,7 +169,18 @@ class UserActivity(object):
         self.rows.append(row)
 
     def get_page_views(self):
+        # returns page views for all time
         return len(self.rows)
+
+    def get_recent_page_views(self):
+        # returns page views for the last 7 days
+        recentViewCount = 0
+        current = len(self.rows) - 1
+        while current >= 0 and self.rows[current]['timestamp'] >= datetime.now() - timedelta(days=7):
+            recentViewCount += 1
+            current = current - 1
+        return recentViewCount
+
 
     def get_activity_stats(self):
         return self
@@ -167,6 +199,7 @@ class UserActivityChapterProgress(object):
 class UserActivitySubChapterProgress(object):
     def __init__(self, chapter):
         self.chapter_label = chapter.chapter_name
+        self.chapter_id = chapter.id
         self.sub_chapters = OrderedDict()
         self.highest_status = -1
         self.lowest_status = 1
@@ -180,9 +213,11 @@ class UserActivitySubChapterProgress(object):
 
     def get_sub_chapter_progress(self):
         subchapters = []
+        subchapter_res = db(db.sub_chapters.chapter_id == self.chapter_id).select()
+        sub_chapter_label_to_text = {sc.sub_chapter_label : sc.sub_chapter_name for sc in subchapter_res}
         for subchapter_label, status in self.sub_chapters.iteritems():
             subchapters.append({
-                "label": IdConverter.sub_chapter_label_to_text(subchapter_label),
+                "label": sub_chapter_label_to_text.get(subchapter_label,subchapter_label),
                 "status": UserActivitySubChapterProgress.completion_status_to_text(status)
                 })
         return subchapters
@@ -211,7 +246,7 @@ class ProgressMetrics(object):
     def __init__(self, course_id, sub_chapters, users):
         self.sub_chapters = OrderedDict()
         for sub_chapter in sub_chapters:
-            print sub_chapter
+            rslogger.debug(sub_chapter)
             self.sub_chapters[sub_chapter.sub_chapter_label] = SubChapterActivity(sub_chapter, len(users))
 
     def update_metrics(self, logs, chapter_progress):
@@ -226,7 +261,9 @@ class ProgressMetrics(object):
 class SubChapterActivity(object):
     def __init__(self, sub_chapter, total_users):
         self.sub_chapter_label = sub_chapter.sub_chapter_label
-        self.sub_chapter_text = IdConverter.sub_chapter_label_to_text(sub_chapter.sub_chapter_label)
+        rslogger.debug(sub_chapter.sub_chapter_name)
+        self.sub_chapter_text = sub_chapter.sub_chapter_label
+        self.sub_chapter_name = sub_chapter.sub_chapter_name
         self.not_started = 0
         self.started = 0
         self.completed = 0
@@ -283,14 +320,24 @@ class UserLogCategorizer(object):
         return "{0} {1}".format(event, div_id)
 
 class DashboardDataAnalyzer(object):
-    def __init__(self, course_id):
+    def __init__(self, course_id, chapter=None):
         self.course_id = course_id
+        if chapter:
+            self.db_chapter = chapter
+        else:
+            self.db_chapter = None
 
     def load_chapter_metrics(self, chapter):
+        if not chapter:
+            rslogger.error("chapter not set, abort!")
+            session.flash = "Error No Course Data in DB"
+            return
+
         self.db_chapter = chapter
         #go get all the course data... in the future the post processing
         #should probably be stored and only new data appended.
         self.course = db(db.courses.id == self.course_id).select().first()
+        rslogger.debug("COURSE QUERY GOT %s", self.course)
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
@@ -300,12 +347,16 @@ class DashboardDataAnalyzer(object):
         self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
         #self.divs = db(db.div_ids).select(db.div_ids.div_id)
         #print self.divs
-        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
-        self.problem_metrics.update_metrics(self.logs)
+        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
+        rslogger.debug("About to call update_metrics")
+        self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
         self.user_activity.update_metrics(self.logs)
         self.progress_metrics = ProgressMetrics(self.course_id, self.db_sub_chapters, self.users)
         self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
+        self.questions = {}
+        for i in self.problem_metrics.problems.keys():
+            self.questions[i] = db(db.questions.name == i).select(db.questions.chapter, db.questions.subchapter).first()
 
     def load_user_metrics(self, username):
         self.username = username
@@ -314,9 +365,6 @@ class DashboardDataAnalyzer(object):
         self.user = db((db.auth_user.username == username) & (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.sid == username) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == self.user.id)).select(db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
-        print self.db_chapter_progress
-        print self.logs
-        print self.user
         self.formatted_activity = UserLogCategorizer(self.logs)
         self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)
 
@@ -324,8 +372,54 @@ class DashboardDataAnalyzer(object):
         self.course = db(db.courses.id == self.course_id).select().first()
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
-        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users)
-        self.problem_metrics.update_metrics(self.logs)
+        self.problem_metrics = CourseProblemMetrics(self.course_id, self.users,self.db_chapter)
+        self.problem_metrics.update_metrics(self.course.course_name)
+
+    def load_assignment_metrics(self, username, studentView=False):
+        self.assignments = []
+
+        res = db(db.assignments.course == self.course_id)\
+                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate, db.assignments.released)
+                # ^ Get assignments from DB
+        for aRow in res:
+            self.assignments.append(aRow.as_dict())
+
+        self.grades = {}
+        for assign in self.assignments:
+            rslogger.debug("Processing assignment %s",assign)
+            row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
+                    .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
+                    # ^ Get grades for assignment
+
+            if row.records:             # If the row has a result
+                rl = row.as_list()      # List of dictionaries
+                rslogger.debug("RL = %s", rl)
+                if studentView and not assign['released']:      # N/A should be shown to students if assignment grades are not released
+                    self.grades[assign["name"]] = {"score":"N/A",
+                                               "class_average":"N/A",
+                                               "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
+                else:
+                    s = 0.0
+                    count = 0
+                    self.grades[assign["name"]] = {}
+                    for userEntry in rl:
+                        rslogger.debug("GETTING USER SCORES %s",userEntry)
+                        s += userEntry["grades"]["score"]   # Calculating average
+                        count += 1
+                        if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
+                            self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+
+                    if 'score' not in self.grades[assign["name"]]:
+                            self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
+                    rslogger.debug("COUNT = %s", count)
+                    average = s/count
+                    self.grades[assign["name"]]["class_average"] = "{:.02f}".format(average)
+                    self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
+
+            else:           # The row has no result --> the query returned empty
+                self.grades[assign["name"]] = {"score":"N/A",
+                                               "class_average":"N/A",
+                                               "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
 
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
@@ -350,57 +444,6 @@ class IdConverter(object):
         "4_3_2_s2":"4-3-2: What is the value of s1 after the following code executes?",
     }
 
-    sub_chapter_id_map = {
-        #CSP - Ch1
-        "studentBook": "This Book is for Stuents",
-        "pretest": "Pretest",
-        "computeNumbers": "Compute with Numbers",
-        "computeWords": "Compute with Words",
-        "computeTurtles": "Compute with Turtles",
-        "computeImages": "Compute with Images",
-        "standards": "Standards - Big Ideas",
-        "ch1_summary": "Chapter 1 - Concept Summary",
-        #CSP - Ch2
-        "whatIsComputer": "What is a Computer?",
-        "turingMachines": "Turing Machines",
-        "abilities": "Computer Abilities",
-        "ch2_summary": "Chapter 2 - Concept Summary",
-        "exam1a2": "Exam Questions for Chapters 1 and 2",
-        #CSP - Ch3
-        "assignName": "Assigning a Name",
-        "expression": "Expressions",
-        "expressionTable": "Summary of Expression Types",
-        "orderOfOperations": "How Expressions are Evaluated",
-        "driving": "Driving from Chicago to Dallas",
-        "ketchup": "Following the Ketchup Ooze",
-        "walkAssign": "Walking through Assignment more Generally",
-        "invoice": "Figuring out an Invoice",
-        "ch3_summary": "Chapter 3 - Summary",
-        "ch3_exercises": "Chapter 3 Exercises",
-        #CSP - Ch4
-        "assignNameStr":"Assign a Name to a String",
-        "strObjects":"Strings are Objects",
-        "immutable":"Strings are Immutable",
-        "madlib":"Making a MadLib Story",
-        "ch4_summary":"Chapter 4 - Summary",
-        "ch4_exercises":"Chapter 4 Exercises",
-        "exam3a4":"Exam Questions for Chapters 3 and 4",
-        #CSP - Ch5
-        "names4turtles": "Assign a Name to a Turtle",
-        "FuncAndProc": "Procedures and Functions",
-        "turtleFAP": "More Turtle Procedures and Functions",
-        "multTurtles": "Single and Multiple Turtles",
-        "ch5_summary": "Chapter 5 - Summary",
-        "ch5_exercises": "Chapter 5 Exercises",
-        "house": "Bob Builds a House",
-        "changeProg": "Changing Turtle Programs"
-#CSP - Ch6
-
-    }
     @staticmethod
     def problem_id_to_text(problem_id):
         return IdConverter.problem_id_map.get(problem_id, problem_id)
-
-    @staticmethod
-    def sub_chapter_label_to_text(sub_chapter_label):
-        return IdConverter.sub_chapter_id_map.get(sub_chapter_label, sub_chapter_label)

@@ -1,0 +1,26 @@
+{{ extend "admin/instructors.html"}} 
+{{ block tabcontent }}
+
+<h2>Runestone Help and Documentation</p>
+
+    <h4>Current Videos</h4>
+    <p>For a video tour of and help with the instructors interface check out our <a href="https://www.youtube.com/channel/UCAfQvSLv5senKZHfaycIz8w">YouTube Channel</a></p>
+
+    <h4>Overview of Runestone Directives</h4>
+    <p>This <a href="/runestone/static/overview/overview.html">Overview Page</a> Shows you all of the runestone directives, along with the source.  You may find this very useful for writing your own questions.</p>
+
+    <h4>Frequently Asked Questions</h4>
+    We maintain a frequently asked questions page <a href="http://runestoneinteractive.org/build/html/faq.html">Here</a>
+
+    <h4>Workshop Materials</h4>
+    <p>We are working on more comprehensive documentation, and although this is a bit out of date, This book we put together
+        for our <a href="http://interactivepython.org/runestone/static/sigcse2017/index.html">SIGCSE 2017 workshop</a> is
+        a good place to start.
+        </p>
+
+        <script type="text/javascript">
+          $(".dashboardnav").removeClass("active");
+          $("#doctab").addClass("active");
+
+        </script>
+        {{ end }}

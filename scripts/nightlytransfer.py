@@ -5,7 +5,7 @@ import os
 rspw = os.environ['RUNESTONEPW']
 
 localengine = create_engine('postgresql://millbr02@localhost/runestoneanalysis')
-remoteengine = create_engine('postgresql://bnmnetp_courselib:{}@web407.webfaction.com/bnmnetp_courselib'.format(rspw))
+remoteengine = create_engine('postgresql://bnmnetp_courselib:{}@web608.webfaction.com/bnmnetp_courselib'.format(rspw))
 
 meta = MetaData()
 

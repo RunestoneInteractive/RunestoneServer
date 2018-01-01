@@ -1,4 +1,5 @@
 from gluon.scheduler import Scheduler
+import stat
 import shutil
 from os import path
 import os
@@ -7,10 +8,9 @@ import re
 from paver.easy import sh
 import logging
 from pkg_resources import resource_string, resource_filename
-from runestone.server.chapternames import addChapterInfoFromScheduler, findChaptersSubChapters
 
-rslogger = logging.getLogger('web2py.app.runestone')
-rslogger.setLevel('DEBUG')
+rslogger = logging.getLogger(settings.sched_logger)
+rslogger.setLevel(settings.log_level)
 
 
 ################
@@ -58,17 +58,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
             # copy the index and conf files to the sourcedir
             shutil.copy(path.join(custom_dir, 'pavement.py'), path.join(sourcedir, 'pavement.py'))
             shutil.copy(path.join(custom_dir, 'index.rst'), path.join(sourcedir, '_sources', 'index.rst'))
-
-            # copy the assignments.rst file from confidir as it may contain assignments written
-            # by the instructor
-            shutil.copy(path.join(custom_dir, 'assignments.rst'),
-                        path.join(sourcedir, '_sources', 'assignments.rst'))
-
-            # this check should allow for backward compatibility
-            if os.path.exists(os.path.join(custom_dir,'assignments')):
-                shutil.copytree(path.join(custom_dir,'assignments'),
-                                path.join(sourcedir,'_sources','assignments'))
-
         except OSError:
             # Either the sourcedir already exists (meaning this is probably devcourse, thinkcspy, etc,
             # or the conf.py or index.rst files are missing for some reason.
@@ -80,14 +69,13 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     else:
         # Save copies of files that the instructor may customize
         shutil.copy(path.join(sourcedir,'_sources', 'index.rst'),custom_dir)
-        shutil.copy(path.join(sourcedir,'_sources', 'assignments.rst'),custom_dir)
-
 
     ###########
     # Set up and run Paver build
     ###########
 
     from paver.tasks import main as paver_main
+    old_cwd = os.getcwd()
     os.chdir(sourcedir)
     paver_main(args=["build"])
     rslogger.debug("Finished build of {}".format(rvars['projectname']))
@@ -99,19 +87,6 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
         idxname = 'index.rst'
 
     #
-    # Build the completion database
-    #
-    rslogger.debug("Starting to populate chapters for {}".format(rvars['projectname']))
-    scd, ct = findChaptersSubChapters(path.join(sourcedir, '_sources', 'index.rst'))
-    addChapterInfoFromScheduler(scd, ct, rvars['projectname'],db)
-
-    for root, dirs, files in os.walk(sourcedir):
-        for fn in files:
-            if fn.endswith('.rst'):
-                fh = open(path.join(root, fn), 'r')
-                populateSubchapter(root, fn, fh, sourcedir, rvars['projectname'])
-
-    #
     # move the sourcedir/build/projectname folder into static
     #
     shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
@@ -121,7 +96,16 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     # clean up
     #
 
-    shutil.rmtree(sourcedir)
+    # This will remove a directory that's versioned by Git, which marks some of its files as read-only on Windows. This causes rmtree to fail. So, provide a workaround per `SO <https://stackoverflow.com/questions/21261132/shutil-rmtree-to-remove-readonly-files>`_.
+    def del_rw(function, path, excinfo):
+        os.chmod(path, stat.S_IWRITE)
+        if os.path.isdir(path):
+            os.rmdir(path)
+        else:
+            os.remove(path)
+    # Change away from sourcedir, to avoid an error like ``WindowsError: [Error 32] The process cannot access the file because it is being used by another process: 'E:\\Runestone\\web2py\\applications\\runestone\\build\\test_book10'``.
+    os.chdir(old_cwd)
+    shutil.rmtree(sourcedir, onerror=del_rw)
     rslogger.debug("Completely done with {}".format(rvars['projectname']))
 
 
@@ -149,97 +133,5 @@ def makePavement(http_host, rvars, sourcedir, base_course):
     paver_stuff = paver_stuff % opts
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
-
-
-div_re = re.compile(
-    r'\s*\.\.\s+(activecode|codelens|mchoicemf|mchoicema|parsonsprob|animation|actex|fillintheblank|mcmfrandom|video)\s*::\s+(.*)$'
-)
-
-odd_ex_list = [
-'ch02_ex1',
-'ex_2_3',
-'ex_2_5',
-'ex_2_7',
-'ex_2_9',
-'ex_2_11',
-'ex_3_1',
-'ex_3_3',
-'ex_3_5',
-'ex_3_7',
-'ex_3_9',
-'ex_3_11',
-'ex_3_13',
-'mod_q1',
-'ex_5_1',
-'ex_5_3',
-'ex_5_5',
-'ex_5_7',
-'ex_5_9',
-'ex_5_11',
-'ex_5_13',
-'ex_5_15',
-'ex_5_17',
-'ex_6_1',
-'ex_6_3',
-'ex_6_5',
-'ex_6_7',
-'ex_6_9',
-'ex_6_11',
-'ex_6_13',
-'ex_7_7',
-'ex_7_9',
-'ex_7_13',
-'ex_7_15',
-'ex_7_17',
-'ex_7_19',
-'ex_7_21',
-'ex_7_23',
-'ex_7_10',
-'ex_8_3',
-'ex_8_6',
-'ex_8_8',
-'ex_8_10',
-'ex_8_12',
-'ex_8_14',
-'ex_8_16',
-'ex_8_18',
-'ex_8_20',
-'ex_9_3',
-'ex_9_5',
-'ex_9_6',
-'ex_9_8',
-'ex_9_10',
-'ex_9_12',
-'ex_9_14',
-'ex_6_1',
-'ex_6_3',
-'ex_10_5',
-'ex_11_01',
-'ex_11_02',
-'ex_11_04',
-'ex_rec_1',
-'ex_rec_3',
-'ex_rec_5',
-'ex_rec_7']
-
-
-
-def populateSubchapter(fpath, fn, fh, sourcedir, base_course):
-    chapter = fpath.replace(sourcedir+'/', '')
-    subchapter = fn.replace('.rst', '')
-    for line in fh:
-        mo = div_re.match(line)
-        if mo:
-            #rslogger.debug("{} {} {} {}".format(chapter, subchapter, mo.group(1), mo.group(2)))
-            divt = mo.group(1)
-            divid = mo.group(2)
-            if divt == 'actex' and divid in odd_ex_list:
-                divt = 'actex_answered'
-            if chapter not in ['Test', 'ExtraStuff', sourcedir]:
-                div = db.div_ids.update_or_insert(chapter=chapter, subchapter=subchapter, div_type=divt,
-                                                  div_id=divid, course_name=base_course)
-
-    db.commit()
-
 
 scheduler = Scheduler(db)

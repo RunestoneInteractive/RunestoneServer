@@ -70,10 +70,24 @@ def build():
             institution = "Not Provided"
         else:
             institution = request.vars.institution
+
+        if not request.vars.python3:
+            python3 = 'false'
+        else:
+            python3 = 'true'
+
+        if not request.vars.loginreq:
+            login_required = 'false'
+        else:
+            login_required = 'true'
+
         cid = db.courses.update_or_insert(course_name=request.vars.projectname,
                                           term_start_date=request.vars.startdate,
                                           institution=institution,
-                                          base_course=base_course)
+                                          base_course=base_course,
+                                          login_required = login_required,
+                                          python3=python3)
+
 
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)

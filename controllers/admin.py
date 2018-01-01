@@ -1,14 +1,50 @@
 from os import path
 import os
-import pygal
 from datetime import date, timedelta
+from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
+import logging
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
-# this is for admin links
-# use auth.requires_membership('manager')
-#
+ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
+AUTOGRADE_POSSIBLE_VALUES = dict(
+    clickablearea=['manual', 'all_or_nothing', 'interact'],
+    external=[],
+    fillintheblank=ALL_AUTOGRADE_OPTIONS,
+    activecode=ALL_AUTOGRADE_OPTIONS,
+    actex=ALL_AUTOGRADE_OPTIONS,
+    dragndrop=['manual', 'all_or_nothing', 'interact'],
+    shortanswer=ALL_AUTOGRADE_OPTIONS,
+    mchoice=ALL_AUTOGRADE_OPTIONS,
+    codelens=ALL_AUTOGRADE_OPTIONS,
+    parsonsprob=ALL_AUTOGRADE_OPTIONS,
+    video=['interact'],
+    poll=['interact'],
+    page=['interact'],
+    showeval=['interact']
+)
+
+ALL_WHICH_OPTIONS = ['first_answer', 'last_answer', 'best_answer']
+WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
+    clickablearea=ALL_WHICH_OPTIONS,
+    external=[],
+    fillintheblank=ALL_WHICH_OPTIONS,
+    activecode=ALL_WHICH_OPTIONS,
+    actex=ALL_WHICH_OPTIONS,
+    dragndrop=ALL_WHICH_OPTIONS,
+    shortanswer=ALL_WHICH_OPTIONS,
+    mchoice=ALL_WHICH_OPTIONS,
+    codelens=ALL_WHICH_OPTIONS,
+    parsonsprob=ALL_WHICH_OPTIONS,
+    video=[],
+    poll=[],
+    showeval=ALL_WHICH_OPTIONS,
+    page=ALL_WHICH_OPTIONS
+)
+
 # create a simple index to provide a page of links
 # - re build the book
 # - list assignments
@@ -31,228 +67,12 @@ def index():
         if not verifyInstructorStatus(auth.user.course_name, auth.user):
             session.flash = "You must be an instructor to access this page"
             redirect(URL(c="default"))
-    cwd = os.getcwd()
-    try:
-        os.chdir(path.join('applications',request.application,'books',row.base_course))
-        master_build = sh("git describe --long", capture=True)[:-1]
-        with open('build_info','w') as bc:
-            bc.write(master_build)
-            bc.write("\n")
-    except:
-        master_build = ""
-    finally:
-        os.chdir(cwd)
 
-    try:
-        mbf_path = path.join('applications',request.application,'custom_courses',row.course_name,'build_info')
-        mbf = open(mbf_path,'r')
-        last_build = os.path.getmtime(mbf_path)
-        my_build = mbf.read()[:-1]
-        mbf.close()
-    except:
-        my_build = ""
-        last_build = 0
+    redirect(URL("admin","admin"))
 
-    my_vers = 0
-    mst_vers = 0
-    rebuild_notice = path.join('applications',request.application,'REBUILD')
-    if os.path.exists(rebuild_notice):
-        rebuild_post = os.path.getmtime(rebuild_notice)
-        if rebuild_post > last_build:
-            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-    elif master_build and my_build:
-        mst_vers,mst_bld,mst_hsh = master_build.split('-')
-        my_vers,my_bld,my_hsh = my_build.split('-')
-        if my_vers != mst_vers:
-            response.flash = "Updates available, consider rebuilding"
-
-    # Now build the activity bar chart
-    bar_chart = pygal.Bar(disable_xml_declaration=True, explicit_size=True,
-                          show_legend=False, height=400, width=400,
-                          style=pygal.style.TurquoiseStyle)
-    bar_chart.title = 'Class Activities'
-    bar_chart.x_labels = []
-    counts = []
-
-    d = date.today() - timedelta(days=10)
-    query = '''select date(timestamp) xday, count(*)  ycount from useinfo where timestamp > '%s' and course_id = '%s' group by date(timestamp) order by xday''' % (d, row.course_name)
-    rows = db.executesql(query)
-    for row in rows:
-        bar_chart.x_labels.append(str(row[0]))
-        counts.append(row[1])
-
-    bar_chart.add('Class', counts)
-    chart = bar_chart.render()
-
-
-    return dict(build_info=my_build, master_build=master_build, my_vers=my_vers,
-                mst_vers=mst_vers, bchart=chart, course_name=auth.user.course_name)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def listassignments():
-    sid = request.vars.student
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    if sid:
-        q = db((db.code.sid == sid)
-             & (db.code.course_id == course.course_name)
-             & (db.code.timestamp >= course.term_start_date))
-    else:
-        q = db((db.code.course_id == auth.user.course_id)
-             & (db.code.timestamp >= course.term_start_date))
-    prefixes = {}
-    for row in q.select(db.code.acid,orderby=db.code.acid,distinct=True):
-        acid = row.acid
-        acid_prefix = acid.split('_')[0]
-        if acid_prefix not in prefixes.keys():
-            prefixes[acid_prefix] = []
-        prefixes[acid_prefix].append(acid)
-    return dict(sections=prefixes,course_id=course.course_name)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def listassessments():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-
-    # get all the useinfos for this course
-    results = db((db.useinfo.course_id == course.course_name) & (db.useinfo.timestamp > course.term_start_date) & (db.useinfo.event == 'mChoice')).select(orderby=db.useinfo.div_id)
-    # by div_id, calculate percent correct and popularity of answers, taking only the first answer for each user
-    divs = {}
-    for row in results:
-        if row.div_id not in divs:
-            divs[row.div_id] = dict(sids = {}, answers = {}, correct = 0)
-        thisdiv = divs[row.div_id]
-        if row.sid not in thisdiv['sids']:
-            thisdiv['sids'][row.sid] = True
-            ignore, answer, grade = row.act.split(":")
-            thisdiv['answers'][answer] = 1 + thisdiv['answers'].get(answer, 0)
-            if grade == 'correct':
-                thisdiv['correct'] +=1
-    for div in divs.values():
-        div['pct'] = int(100 * float(div['correct']) / len(div['sids']))
-        counts = {}
-        pop_answers = sorted(div['answers'].keys(), key = lambda k: div['answers'][k], reverse = True)
-        try:
-            div['first'] = (pop_answers[0], div['answers'][pop_answers[0]])
-        except:
-            div['first'] = ""
-        try:
-            div['second'] = (pop_answers[1], div['answers'][pop_answers[1]])
-        except:
-            div['second'] = ""
-        try:
-            div['third'] = (pop_answers[2], div['answers'][pop_answers[2]])
-        except:
-            div['third'] = ""
-
-    # group and order by chapter;  using Brad's div_ids table
-    results = db(db.div_ids.course_name == course.course_name).select()
-    by_chapter = {}
-    chapter_ordering = {}
-    for row in results:
-        if row.chapter not in by_chapter:
-            by_chapter[row.chapter] = []
-            chapter_ordering[row.chapter] = row.id
-        if row.div_id in divs:
-            div = divs[row.div_id]
-            div['subchapter'] = row.subchapter
-            div['ordering'] = row.id
-            div['div_id'] = row.div_id   #stick div_id into the div for lookup in templated
-            by_chapter[row.chapter].append(div)
-    for L in by_chapter.values():
-        L.sort(key = lambda div: div['ordering'], reverse = True)
-    # a little hack: sort the chapters by their appearance in div_ids table, which is generated by going through all the divs in a chapter before moving on to next chapter
-    chap_list = sorted(by_chapter.items(), key = lambda (chap, divs): chapter_ordering[chap])
-
-    return dict(solutions=chap_list)
-
-#@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-#def assessdetail():
-#    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-#    q = db( (db.useinfo.div_id == request.vars.id) & (db.useinfo.course_id == course.course_name) )
-#    res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
-#
-#    currentSid = res[0].sid
-#    currentAnswers = []
-#    answerDict = {}
-#    totalAnswers = 0
-#    resultList = []
-#    correct = ''
-#    for row in res:
-#        answer = row.act.split(':')[1]
-#        answerDict[answer] = answerDict.get(answer,0) + 1
-#        totalAnswers += 1
-#
-#        if row.sid == currentSid:
-#            currentAnswers.append(answer)
-#            if row.act.split(':')[2] == 'correct':
-#                correct = answer
-#        else:
-#            currentAnswers.sort()
-#            resultList.append((currentSid,currentAnswers))
-#            currentAnswers = [row.act.split(':')[1]]
-#
-#            currentSid = row.sid
-#
-#
-#
-#    currentAnswers.sort()
-#    resultList.append((currentSid,currentAnswers))
-#
-#    return dict(reslist=resultList, answerDict=answerDict, correct=correct)
-
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def gradeassignment():
-    sid = request.vars.student
-    acid = request.vars.id
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
-
-    section_form=FORM(
-        INPUT(_type="hidden", _name="id", _value=acid),
-        _class="form-inline",
-        _method="GET",
-        )
-    section_form.append(LABEL(
-            INPUT(_name="section_id", _type="radio", _value=""),
-            "All Students",
-            _class="radio-inline",
-            ))
-    for section in db(db.sections.course_id == auth.user.course_id).select():
-        section_form.append(LABEL(
-            INPUT(_name="section_id", _type="radio", _value=section.id),
-            section.name,
-            _class="radio-inline",
-            ))
-
-    section_form.append(INPUT(_type="submit", _value="Filter Students", _class="btn btn-default"))
-
-    joined = db((db.code.sid == db.auth_user.username) & (db.section_users.auth_user == db.auth_user.id))
-    q = joined((db.code.course_id == auth.user.course_id) & (db.code.acid == acid))
-
-    if section_form.accepts(request.vars, session, keepvalues=True) and section_form.vars.section_id != "":
-        q = q(db.section_users.section == section_form.vars.section_id)
-
-    rset = q.select(
-        db.code.acid,
-        db.code.sid,
-        db.code.grade,
-        db.code.id,
-        db.code.language,
-        db.auth_user.first_name,
-        db.auth_user.last_name,
-        db.code.comment,
-        distinct = db.code.sid,
-        orderby = db.code.sid|~db.code.timestamp,
-        )
-    return dict(
-        acid = acid,
-        sid = sid,
-        section_form = section_form,
-        solutions=rset,
-        course_id=course.course_name
-        )
-
+@auth.requires_login()
+def doc():
+    return dict(course_id=auth.user.course_name)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def showlog():
@@ -268,60 +88,6 @@ def showlog():
         formstyle='divs')
     return dict(grid=grid,course_id=course.course_name)
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def studentactivity():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    count = db.useinfo.id.count()
-    last = db.useinfo.timestamp.max()
-    res = db((db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date))\
-            .select(db.useinfo.sid,
-                    count,
-                    last,
-                    groupby=db.useinfo.sid,
-                    orderby=count)
-
-    return dict(grid=res,course_id=course.course_name)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def startdate():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    if request.vars.startdate:
-        date = request.vars.startdate.split('/')
-        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
-        course.update_record(term_start_date=date)
-        session.flash = "Course start date changed."
-        redirect(URL('admin','index'))
-    else:
-        current_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(startdate=current_start_date)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def rebuildcourse():
-    if not request.vars.projectname or not request.vars.startdate:
-        course = db(db.courses.course_name == auth.user.course_name).select().first()
-        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(curr_start_date=curr_start_date, confirm=True)
-    else:
-        # update the start date
-        course = db(db.courses.id == auth.user.course_id).select().first()
-        date = request.vars.startdate.split('/')
-        date = datetime.date(int(date[2]), int(date[0]), int(date[1]))
-        course.update_record(term_start_date=date)
-
-        # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
-                                                                       rvars=request.vars,
-                                                                       base_course=course.base_course,
-                                                                       application=request.application,
-                                                                       http_host=request.env.http_host))
-        uuid = row['uuid']
-
-
-        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
-
-        return dict(confirm=False,
-                    task_name=uuid,
-                    course_url=course_url)
 
 #@auth.requires_membership('instructor')
 def buildmodulelist():
@@ -383,7 +149,7 @@ def sections_create():
     if form.accepts(request,session):
         section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
         session.flash = "Section Created"
-        return redirect('/%s/admin/sections_create' % (request.application))
+        return redirect('/%s/admin/admin' % (request.application))
     return dict(
         form = form,
         )
@@ -450,132 +216,6 @@ def diffviewer():
 
 
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def cohortprogress():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    cohort = db(db.cohort_master.course_name == course.course_name).select(db.cohort_master.cohort_name)
-    cohort_plan = db( (db.cohort_plan.cohort_id == db.cohort_master.id) &
-                      (db.cohort_plan.chapter_id == db.chapters.id)).select(db.cohort_master.cohort_name,
-                                                                             db.chapters.chapter_name,
-                                                                             db.cohort_plan.start_date,
-                                                                             db.cohort_plan.end_date,
-                                                                             db.cohort_plan.actual_end_date,
-                                                                             db.cohort_plan.status,
-                                                                             orderby=db.cohort_master.cohort_name|db.cohort_plan.start_date)
-
-    return dict(grid=cohort_plan, course_id=course.course_name)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def editcustom():
-    course_name = auth.user.course_name
-    custom_file = request.args[0]
-    try:
-        assignfile = open(path.join('applications', request.application,
-                                'custom_courses', course_name, custom_file+'.rst'), 'r')
-    except IOError as e:
-        session.flash = "Sorry, " + custom_file + " does not exist for this course."
-        redirect(URL('index'))
-
-    form = FORM(TEXTAREA(_id='text', _name='text', value=assignfile.read()),
-                INPUT(_type='submit', _value='submit'))
-
-    assignfile.close()
-
-    if form.process().accepted:
-        session.flash = 'File Updated'
-        assignfile = open(path.join('applications', request.application,
-                                    'custom_courses', course_name, custom_file+'.rst'), 'w')
-        assignfile.write(request.vars.text)
-        assignfile.close()
-        redirect(URL('index'))
-    elif form.errors:
-        response.flash = 'Assignments has errors'
-
-
-    return dict(form=form,cfile=custom_file.capitalize())
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def chapterprogress():
-    import numpy as np
-    from matplotlib import use, colors
-    from math import ceil
-    use('Agg')
-    import matplotlib.pyplot as plt
-    from collections import OrderedDict
-
-    subcquery = '''
-    select chapter_label, sub_chapter_label, sub_chapter_name
-    from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id
-    WHERE course_id = '{}' order by chapters.id
-    '''.format(auth.user.course_name)
-
-    subs = db.executesql(subcquery)
-
-    idxdict = {}
-    xlabs = []
-    i = 0
-    for row in subs:
-        idxdict[row[0]+row[1]] = i
-        xlabs.append(row[2])
-        i += 1
-
-    subs = None
-
-    spquery = '''
-    select username, chapter_id, sub_chapter_id, status, start_date, end_date
-from user_sub_chapter_progress join auth_user on auth_user.id = user_sub_chapter_progress.user_id join courses on courses.course_name = auth_user.course_name
-where auth_user.course_name = '{}' and auth_user.active = 'T' and sub_chapter_id in
-    (select sub_chapter_label from chapters join sub_chapters on chapters.id = sub_chapters.chapter_id and course_id = '{}' order by chapters.id)
-order by username;
-    '''.format(auth.user.course_name, auth.user.course_name)
-
-    spres = db.executesql(spquery)
-
-    snames = OrderedDict()
-    for row in spres:
-            snames[row[0]] = None
-
-    statmat = [[2 for j in range(len(idxdict))] for i in range(len(snames))]
-    print len(idxdict), len(snames)
-    rowix = -1
-    prev = ""
-    for row in spres:
-        #        statmat[row][idxdict[i[1].subchap]] = i[1].status
-        scidx = row[1]+row[2]
-        if row[0] != prev:
-            rowix += 1
-        if row[3]< 0:
-            status = 2
-        else:
-            status = row[3]
-        if scidx in idxdict:
-            statmat[rowix][idxdict[scidx]] = status
-        prev = row[0]
-
-    final = np.matrix(statmat)
-    ht = int(ceil(len(snames)/4.0)+1)
-    wt = int(ceil(len(xlabs)/4.0)+1)
-    fig,ax = plt.subplots(figsize=(wt,ht))
-    cmap = colors.ListedColormap(['orange', 'green', 'white'])
-
-    #labels = [item.get_text() for item in ax.get_xticklabels()]
-    labels = list(snames.keys())
-    ax.set_yticks(list(range(len(snames))))
-    ax.set_yticklabels(labels)
-
-    ax.set_xticks(list(range(len(xlabs))))
-    ax.set_xticklabels(xlabs)
-
-
-    for i in ax.xaxis.get_major_ticks():
-        i.label.set_rotation(90)
-    ax.imshow(final,interpolation='nearest', cmap=cmap)
-    saveName = path.join('applications',request.application,'static', auth.user.course_name,'_static','progress.png')
-    fig.savefig(saveName)
-
-    return dict(coursename=auth.user.course_name)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -584,8 +224,8 @@ def assignments():
     courseid = sidQuery[0].id
 
 
-    cur_assignments = db(db.assignments.course == auth.user.course_id).select()
-    assigndict = {}
+    cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
+    assigndict = OrderedDict()
     for row in cur_assignments:
         assigndict[row.id] = row.name
 
@@ -596,21 +236,26 @@ def assignments():
 
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
-    print("ready")
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     chapter_labels = []
     chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
-    return dict(coursename=auth.user.course_name,confirm=False,
-                    course_url=course_url, assignments=assigndict, tags=tags, chapters=chapter_labels)
-
+    return dict(coursename=auth.user.course_name,
+                confirm=False,
+                course_id = auth.user.course_name,
+                course_url=course_url,
+                assignments=assigndict,
+                tags=tags,
+                chapters=chapter_labels,
+                toc=_get_toc_and_questions(),
+                )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
-    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
-    courseid = sidQuery[0].id
+    sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
+    courseid = sidQuery.id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
     sectionsList = []
     for row in sectionsQuery:
@@ -619,7 +264,42 @@ def admin():
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
+    cwd = os.getcwd()
+    try:
+        os.chdir(path.join('applications',request.application,'books',sidQuery.base_course))
+        master_build = sh("git describe --long", capture=True)[:-1]
+        with open('build_info','w') as bc:
+            bc.write(master_build)
+            bc.write("\n")
+    except:
+        master_build = ""
+    finally:
+        os.chdir(cwd)
 
+    try:
+        mbf_path = path.join('applications',request.application,'custom_courses',sidQuery.course_name,'build_info')
+        mbf = open(mbf_path,'r')
+        last_build = os.path.getmtime(mbf_path)
+        my_build = mbf.read()[:-1]
+        mbf.close()
+    except:
+        my_build = ""
+        last_build = 0
+
+    my_vers = 0
+    mst_vers = 0
+    rebuild_notice = path.join('applications',request.application,'REBUILD')
+    if os.path.exists(rebuild_notice):
+        rebuild_post = os.path.getmtime(rebuild_notice)
+        if rebuild_post > last_build:
+            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
+    elif master_build and my_build:
+        mst_vers,mst_bld,mst_hsh = master_build.split('-')
+        my_vers,my_bld,my_hsh = my_build.split('-')
+        if my_vers != mst_vers:
+            response.flash = "Updates available, consider rebuilding"
+
+#    return dict(, course_name=auth.user.course_name)
 
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
@@ -642,7 +322,13 @@ def admin():
     if not request.vars.projectname or not request.vars.startdate:
         course = db(db.courses.course_name == auth.user.course_name).select().first()
         curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,coursename=auth.user.course_name,instructors=instructordict, students=studentdict, curr_start_date=curr_start_date, confirm=True)
+        return dict(sectionInfo=sectionsList,startDate=date,
+                    coursename=auth.user.course_name, course_id=auth.user.course_name,
+                    instructors=instructordict, students=studentdict,
+                    curr_start_date=curr_start_date, confirm=True,
+                    build_info=my_build, master_build=master_build, my_vers=my_vers,
+                    mst_vers=mst_vers
+                    )
 
     #Rebuilding now
     else:
@@ -650,11 +336,14 @@ def admin():
         course = db(db.courses.id == auth.user.course_id).select().first()
         due = request.vars.startdate
         format_str = "%m/%d/%Y"
-        date = datetime.datetime.strptime(due, format_str).date()
-        course.update_record(term_start_date=date)
+        try:
+            date = datetime.datetime.strptime(due, format_str).date()
+            course.update_record(term_start_date=date)
+        except:
+            logger.error("Bad date format, not updating start date")
 
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,
@@ -667,26 +356,42 @@ def admin():
 
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url)
+                task_name=uuid, course_url=course_url, course_id=auth.user.course_name)
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def course_students():
+    cur_students = db(
+        (db.user_courses.course_id == auth.user.course_id) &
+        (db.auth_user.id == db.user_courses.user_id)
+    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
+    searchdict = {}
+    for row in cur_students:
+        name = row.first_name + " " + row.last_name
+        username = row.username
+        searchdict[str(username)] = name
+    return json.dumps(searchdict)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
 
     assignments = {}
     assignments_query = db(db.assignments.course == auth.user.course_id).select()
-    summative_qid = db(db.assignment_types.name == 'summative').select(db.assignment_types.id).first().id
 
     assignmentids = {}
+    assignment_deadlines = {}
+    question_points = {}
 
     for row in assignments_query:
         assignmentids[row.name] = int(row.id)
-        assignment_questions = db((db.assignment_questions.assignment_id == int(row.id)) & (db.assignment_questions.assessment_type == summative_qid)).select()
+        assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
         questions = []
         for q in assignment_questions:
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
             questions.append(question_name)
+            question_points[question_name] = q.points
         assignments[row.name] = questions
+        assignment_deadlines[row.name] = row.duedate.isoformat()
 
     cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
     searchdict = {}
@@ -714,8 +419,12 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'), autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'), calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'), course_id = auth.user.course_name, assignmentids = assignmentids
-)
+    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'),
+                autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'),
+                calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'),
+                getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
+                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines, question_points=json.dumps(question_points)
+                )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getChangeLog():
@@ -751,8 +460,30 @@ def backup():
     directoryPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup.zip')
     return response.stream(directoryPath, attachment=True)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def removeStudents():
+    baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
+    baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
 
+    if not isinstance(request.vars["studentList"], basestring):
+        # Multiple ids selected
+        studentList = request.vars["studentList"]
+    elif request.vars["studentList"] == "None":
+        # No id selected
+        session.flash = T("No valid students were selected")
+        return redirect('/%s/admin/admin' % (request.application))
+    else:
+        # One id selected
+        studentList = [request.vars["studentList"]]
 
+    for studentID in studentList:
+        if studentID.isdigit() and int(studentID) != auth.user.id:
+            db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
+            db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
+            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
+
+    session.flash = T("You have successfully removed students")
+    return redirect('/%s/admin/admin' % (request.application))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeinstructor():
@@ -804,24 +535,32 @@ def deletecourse():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeassign():
-    db(db.assignments.id == request.args[0]).delete()
+    try:
+        assignment_id = int(request.args[0])
+    except:
+        session.flash("Cannot remove assignment with id of {}".format(request.args[0]))
+        return;
+    db(db.assignments.id == assignment_id).delete()
 
+# Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createAssignment():
     try:
         d_str = request.vars['due']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(d_str, format_str)
-        print(due)
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=due, description=request.vars['description'])
+        if d_str:
+            format_str = "%Y/%m/%d %H:%M"
+            due = datetime.datetime.strptime(d_str, format_str)
+        else:
+            due = None
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.now() + datetime.timedelta(days=7))
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps('ERROR')
 
-
+# Deprecated
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignmentInfo():
     assignment_id = request.vars['assignmentid']
@@ -833,7 +572,7 @@ def assignmentInfo():
     try:
         due = date.strftime("%Y/%m/%d %H:%M")
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         due = 'No due date set for this assignment'
     allquestion_info['due_date'] = due
     description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
@@ -862,12 +601,9 @@ def assignmentInfo():
                 question_dict['name'] = row.name
                 question_dict['timed'] = timed
                 question_dict['points'] = question_points
-                type_id = db((db.assignment_questions.question_id == question_id) & (db.assignment_questions.assignment_id == assignment_id)).select(db.assignment_questions.assessment_type).first().assessment_type
-                type = db(db.assignment_types.id == type_id).select(db.assignment_types.name).first().name
-                question_dict['type'] = type
                 allquestion_info[int(row.id)] = question_dict
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
     return json.dumps(allquestion_info)
 
@@ -882,21 +618,6 @@ def getQuestions():
             questions.append(q.name)
     return json.dumps(questions)
 
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def removeQuestion():
-    question_name = request.vars['name']
-    assignment_id = request.vars['assignment_id']
-    question_id = db(db.questions.name == question_name).select(db.questions.id).first().id
-    question_points = db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).select(db.assignment_questions.points).first().points
-
-    assignment = db(db.assignments.id == int(assignment_id)).select().first()
-    assignment_points = db(db.assignments.id == int(assignment_id)).select(db.assignments.points).first().points
-    new_points = int(assignment_points) - int(question_points)
-    assignment.update_record(points=new_points)
-    db((db.assignment_questions.assignment_id == int(assignment_id)) & (db.assignment_questions.question_id == int(question_id))).delete()
-    return json.dumps(new_points)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
@@ -946,7 +667,7 @@ def questionBank():
         for row in questions_query:
             removed_row = False
             if term:
-                if request.vars['term'] not in row.name and request.vars['term'] not in row.question:
+                if (request.vars['term'] not in row.name and row.question and request.vars['term'] not in row.question) or row.question_type == 'page':
                     try:
                         rows.remove(row)
                         removed_row = True
@@ -983,72 +704,42 @@ def questionBank():
             questions.append(q_row.name)
 
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return 'Error'
     return json.dumps(questions)
 
 
-
+# Deprecated; use add__or_update_assignment_question instead
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addToAssignment():
-    assignment_id = int(request.vars['assignment'])
-    question_name = request.vars['question']
-    qtype = request.vars['type']
-    question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
-
-    timed = request.vars['timed']
-    try:
-        points = int(request.vars['points'])
-    except:
-        points = 0
-
-    try:
-        type_id = db(db.assignment_types.name == qtype).select(db.assignment_types.id).first().id
-    except Exception as ex:
-        print(ex)
-
-    try:
-        db.assignment_questions.insert(assignment_id=assignment_id, question_id=question_id, points=points, timed=timed, assessment_type=type_id)
-        assignment = db(db.assignments.id == assignment_id).select().first()
-        assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
-        if assignment_points == None:
-            new_points = points
-        else:
-            new_points = int(assignment_points) + points
-
-        assignment.update_record(points=new_points)
-        return json.dumps([new_points,qtype])
-    except Exception as ex:
-        print(ex)
-
+    return add__or_update_assignment_question()
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getQuestionInfo():
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
-    try:
-        question_code = db((db.questions.name == question_name)).select(db.questions.question).first().question
-        question_author = db((db.questions.name == question_name)).select(db.questions.author).first().author
-        question_difficulty = db((db.questions.name == question_name)).select(db.questions.difficulty).first().difficulty
-        question_id = db((db.questions.name == question_name)).select(db.questions.id).first().id
-        tags = []
-        question_tags = db((db.question_tags.question_id == question_id)).select()
-        for row in question_tags:
-            tag_id = row.tag_id
-            tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
-            tags.append(" " + str(tag_name))
-        if question_difficulty != None:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
-        else:
-            returnDict = {'code':question_code, 'author':question_author, 'difficulty':None, 'tags': tags}
+    base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
+    row = db((db.questions.name == question_name) & (db.questions.base_course == base_course)).select().first()
 
-        return json.dumps(returnDict)
+    question_code = row.question
+    htmlsrc = row.htmlsrc
+    question_author = row.author
+    question_difficulty = row.difficulty
+    question_id = row.id
 
-    except Exception as ex:
-        print(ex)
+    tags = []
+    question_tags = db((db.question_tags.question_id == question_id)).select()
+    for row in question_tags:
+        tag_id = row.tag_id
+        tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
+        tags.append(" " + str(tag_name))
+    if question_difficulty != None:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':int(question_difficulty), 'tags': tags}
+    else:
+        returnDict = {'code':question_code, 'htmlsrc': htmlsrc, 'author':question_author, 'difficulty':None, 'tags': tags}
 
-
+    return json.dumps(returnDict)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def edit_question():
@@ -1060,36 +751,61 @@ def edit_question():
     except:
         difficulty = 0
     tags = vars['tags']
-    old_question = db(db.questions.name == old_qname).select().first()
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    old_question = db((db.questions.name == old_qname) & (db.questions.base_course == base_course)).select().first()
+
+    if not old_question:
+        return "Could not find question {} to update".format(old_qname)
+
     author = auth.user.first_name + " " + auth.user.last_name
-    base_course = old_question.base_course
     timestamp = datetime.datetime.now()
     chapter = old_question.chapter
     question_type = old_question.question_type
     subchapter = old_question.subchapter
 
     question = vars['questiontext']
+    htmlsrc = vars['htmlsrc']
+
+    if old_qname == new_qname and old_question.author != author:
+        return "You do not own this question, Please assign a new unique id"
+
+    if old_qname != new_qname:
+        newq = db(db.questions.name == new_qname).select().first()
+        if newq and newq.author != author:
+            return "You cannot replace a question you did not author"
 
     try:
-        if new_qname != "" and new_qname != old_qname:
-            new_qid = db.questions.insert(difficulty=difficulty, question=question, name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
-            chapter=chapter, subchapter=subchapter, question_type=question_type)
-            if tags != 'null':
-                tags = tags.split(',')
-                for tag in tags:
-                    tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
-                    db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
-            return "Success"
-
+        new_qid = db.questions.update_or_insert(
+            (db.questions.name == new_qname) & (db.questions.base_course == base_course),
+            difficulty=difficulty, question=question,
+            name=new_qname, author=author, base_course=base_course, timestamp=timestamp,
+            chapter=chapter, subchapter=subchapter, question_type=question_type,
+            htmlsrc=htmlsrc)
+        if tags and tags != 'null':
+            tags = tags.split(',')
+            for tag in tags:
+                logger.error("TAG = %s",tag)
+                tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
+                db.question_tags.insert(question_id = new_qid, tag_id=tag_id)
+        return "Success - Edited Question Saved"
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
+        return "An error occurred saving your question {}".format(str(ex))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def question_text():
     qname = request.vars['question_name']
-    q_text = db(db.questions.name == qname).select(db.questions.question).first().question
-    return q_text
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    try:
+        q_text = db((db.questions.name == qname) & (db.questions.base_course == base_course)).select(db.questions.question).first().question
+    except:
+        q_text = "Error: Could not find source for {} in the database".format(qname)
+
+    if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
+        q_text = q_text[2:].decode('hex')
+    logger.debug(q_text)
+    return json.dumps(unicode(q_text, encoding="utf8"))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1138,10 +854,10 @@ def gettemplate():
     returndict['template'] = base + cmap.get(template,'').__doc__
 
     chapters = []
-    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name)
+    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name, db.chapters.chapter_label)
     for row in chaptersrow:
-        chapters.append(row['chapter_name'])
-    print(chapters)
+        chapters.append((row['chapter_label'], row['chapter_name']))
+    logger.debug(chapters)
     returndict['chapters'] = chapters
 
     return json.dumps(returndict)
@@ -1152,95 +868,50 @@ def createquestion():
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
-    typeid = db(db.assignment_types.name == tab).select(db.assignment_types.id).first().id
-    assignmentid = int(request.vars['assignmentid'])
-    points = int(request.vars['points'])
+    aid = request.vars['assignmentid']
+    if aid == 'undefined':
+        logger.error("undefined assignmentid by {} for name {} subchap {} question {}".format(auth.user.username,
+                                                                        request.vars.name,
+                                                                        request.vars.subchapter,
+                                                                        request.vars.question))
+        return json.dumps("ERROR")
+
+    assignmentid = int(aid)
+    points = int(request.vars['points']) if request.vars['points'] else 1
     timed = request.vars['timed']
 
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
-                 author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'], is_private=request.vars['isprivate'])
+                 subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
+                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
+                 is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
-        assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points, assessment_type=typeid)
+        assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points)
 
         returndict = {request.vars['name']: newqID, 'timed':timed, 'points': points}
 
         return json.dumps(returndict)
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return json.dumps('ERROR')
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def questions2rst():
-    assignmentId = request.args[0]
-
-    custom_dir = os.path.join('applications', request.application, 'custom_courses', auth.user.course_name)
-    assignment_folder = os.path.join(custom_dir,'assignments')
-    if not os.path.exists(assignment_folder):
-        os.mkdir(assignment_folder)
-
-    assignment_file = os.path.join(assignment_folder,'assignment_{}.rst'.format(assignmentId))
-
-    questions = db(db.assignment_questions.assignment_id == assignmentId).select(db.assignment_questions.id,db.questions.question, join=db.questions.on(db.assignment_questions.question_id == db.questions.id) )
-
-    assignment = db(db.assignments.id == assignmentId).select().first()
-    points = assignment.points if assignment.points else 0
-    due = assignment.duedate if assignment.duedate else "None given"
-    description = assignment.description if assignment.description else "No Description"
-
-    with open(assignment_file,'w') as af:
-        af.write(assignment.name+'\n')
-        af.write("="*len(assignment.name)+'\n\n')
-        af.write("**Points**: {}\n\n".format(points))
-        af.write("**Due**: {}\n\n".format(due))
-        af.write(description+"\n\n")
-        for q in questions:
-            af.write(q.questions.question)
-            af.write("\n\n")
-
-    assign_list = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
-
-    with open(os.path.join(custom_dir,'assignments.rst'),'w') as af:
-        af.write("Assignments\n===========\n\n")
-        af.write(".. toctree::\n\n")
-        for a in assign_list:
-            af.write("   assignments/assignment_{}.rst\n".format(a.id))
-
-
-
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def htmlsrc():
     acid = request.vars['acid']
-    htmlsrc = db(db.questions.name == acid).select(db.questions.htmlsrc).first().htmlsrc
-    return json.dumps(htmlsrc)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDate():
-    try:
-        newdate = request.vars['newdate']
-        format_str = "%Y/%m/%d %H:%M"
-        due = datetime.datetime.strptime(newdate, format_str)
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(duedate=due)
-        return 'success'
-    except:
-        return 'error'
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def changeDescription():
-    try:
-        newdescription = request.vars['newdescription']
-        assignmentid = int(request.vars['assignmentid'])
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(description=newdescription)
-        return 'success'
-    except:
-        return 'error'
+    htmlsrc = ""
+    res = db(
+        (db.questions.name == acid) &
+        (db.questions.base_course == db.courses.base_course) &
+        (db.courses.course_name == auth.user.course_name)
+         ).select(db.questions.htmlsrc).first()
+    if res and res.htmlsrc:
+        htmlsrc = res.htmlsrc
+    else:
+        logger.error("HTML Source not found for %s in course %s", acid, auth.user.course_name)
+        htmlsrc = "<p>No preview Available</p>"
+    if htmlsrc and htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
+        htmlsrc = htmlsrc.decode('hex')
+    return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1251,7 +922,7 @@ def getStudentCode():
         c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
         return json.dumps(c.code)
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1285,7 +956,7 @@ def indexrst():
         file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'))
         filetxt = file.read()
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         filetxt = "Sorry, no index.rst file could be found"
     return json.dumps(filetxt)
 
@@ -1300,19 +971,357 @@ def editindexrst():
         file.close()
         return 'ok'
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
         assignmentid = request.vars['assignmentid']
+        released = (request.vars['released'] == 'yes')
         assignment = db(db.assignments.id == assignmentid).select().first()
-        assignment.update_record(released=True)
+        assignment.update_record(released=released)
         return "Success"
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_assignment_release_states():
+    # return a dictionary with the release status of whether grades have been
+    # released for each of the assignments for the current course
+    try:
+        assignments_query = db(db.assignments.course == auth.user.course_id).select()
+        return json.dumps({row.name: row.released for row in assignments_query})
+    except Exception as ex:
+        print ex
+        return json.dumps({})
+
+def _get_toc_and_questions():
+    # return a dictionary with a nested dictionary representing everything the
+    # picker will need in the instructor's assignment authoring tab
+
+    # Format is documented at https://www.jstree.com/docs/json/
+
+    #try:
+        # First get the chapters associated with the current course, and insert them into the tree
+        # Recurse, with each chapter:
+        #   -- get the subchapters associated with it, and insert into the subdictionary
+        #   -- Recurse; with each subchapter:
+        #      -- get the divs associated with it, and insert into the sub-sub-dictionary
+
+        question_picker = []
+        reading_picker = []  # this one doesn't include the questions, but otherwise the same
+        # chapters are associated with courses, not with base_courses
+        chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
+        for ch in chapters_query:
+            q_ch_info = {}
+            question_picker.append(q_ch_info)
+            q_ch_info['text'] = ch.chapter_name
+            q_ch_info['children'] = []
+            # copy same stuff for reading picker
+            r_ch_info = {}
+            reading_picker.append(r_ch_info)
+            r_ch_info['text'] = ch.chapter_name
+            r_ch_info['children'] = []
+            subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
+            for sub_ch in subchapters_query:
+                q_sub_ch_info = {}
+                q_ch_info['children'].append(q_sub_ch_info)
+                q_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
+                if sub_ch.sub_chapter_name == 'Exercises':
+                    q_sub_ch_info['id'] = ch.chapter_name + ' Exercises'
+                q_sub_ch_info['children'] = []
+                # copy same stuff for reading picker
+                r_sub_ch_info = {}
+                r_ch_info['children'].append(r_sub_ch_info)
+                r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
+                r_sub_ch_info['text'] = sub_ch.sub_chapter_name
+
+                # include another level for questions only in the question picker
+                questions_query = db((db.courses.course_name == auth.user.course_name) & \
+                                     (db.questions.base_course == db.courses.base_course) & \
+                                  (db.questions.chapter == ch.chapter_label) & \
+                                  (db.questions.question_type <> 'page') & \
+                                  (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
+                for question in questions_query:
+                    q_info = dict(
+                        text = question.questions.name,
+                        id = question.questions.name,
+                    )
+                    q_sub_ch_info['children'].append(q_info)
+        return json.dumps({'reading_picker': reading_picker,
+                          'question_picker': question_picker})
+    # except Exception as ex:
+    #     print ex
+    #     return json.dumps({})
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def get_assignment():
+    assignment_id = request.vars['assignmentid']
+    # Assemble the assignment-level properties
+    if assignment_id == 'undefined':
+        logger.error('UNDEFINED assignment {} {}'.format(auth.user.course_name, auth.user.username))
+        session.flash = 'Error assignment ID is undefined'
+        return redirect(URL('assignments','index'))
+
+    assignment_data = {}
+    assignment_row = db(db.assignments.id == assignment_id).select().first()
+    assignment_data['assignment_points'] = assignment_row.points
+    try:
+        assignment_data['due_date'] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
+    except Exception as ex:
+        logger.error(ex)
+        assignment_data['due_date'] = None
+    assignment_data['description'] = assignment_row.description
+    assignment_data['visible'] = assignment_row.visible
+
+    # Still need to get:
+    #  -- timed properties of assignment
+    #  (See https://github.com/RunestoneInteractive/RunestoneServer/issues/930)
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    # Assemble the readings (subchapters) that are part of the assignment
+    a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
+                  (db.assignment_questions.question_id == db.questions.id) &
+                  (db.questions.question_type == 'page')
+                  ).select(orderby=db.assignment_questions.sorting_priority)
+    pages_data = []
+    for row in a_q_rows:
+        if row.questions.question_type == 'page':
+            # get the count of 'things to do' in this chap/subchap
+            activity_count = db((db.questions.chapter==row.questions.chapter) &
+                       (db.questions.subchapter==row.questions.subchapter) &
+                       (db.questions.base_course == base_course)).count()
+
+        pages_data.append(dict(
+            name = row.questions.name,
+            points = row.assignment_questions.points,
+            autograde = row.assignment_questions.autograde,
+            activity_count = activity_count,
+            activities_required = row.assignment_questions.activities_required,
+            which_to_grade = row.assignment_questions.which_to_grade,
+            autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+            which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
+        ))
+
+    # Assemble the questions that are part of the assignment
+    a_q_rows = db((db.assignment_questions.assignment_id == assignment_id) &
+                  (db.assignment_questions.question_id == db.questions.id) &
+                  (db.assignment_questions.reading_assignment == None)
+                  ).select(orderby=db.assignment_questions.sorting_priority)
+    #return json.dumps(db._lastsql)
+    questions_data = []
+    for row in a_q_rows:
+        logger.debug(row.questions.question_type)
+        if row.questions.question_type != 'page':
+            questions_data.append(dict(
+                name = row.questions.name,
+                points = row.assignment_questions.points,
+                autograde = row.assignment_questions.autograde,
+                which_to_grade = row.assignment_questions.which_to_grade,
+                autograde_possible_values = AUTOGRADE_POSSIBLE_VALUES[row.questions.question_type],
+                which_to_grade_possible_values = WHICH_TO_GRADE_POSSIBLE_VALUES[row.questions.question_type]
+            ))
+
+    return json.dumps(dict(assignment_data=assignment_data,
+                           pages_data=pages_data,
+                           questions_data=questions_data))
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def save_assignment():
+    # This endpoint is for saving (updating) an assignment's top-level information, without any
+    # questions or readings that might be part of the assignment
+    # Should return the id of the assignment, if one is not passed in
+
+    # The following fields must be provided in request.vars (see modesl/grouped_assignments.py for model definition):
+    # -- assignment_id (if it's an existing assignment; if none provided, then we insert a new assignment)
+    # -- description
+    # -- duedate
+
+    assignment_id = request.vars.get('assignment_id')
+    isVisible = request.vars['visible']
+
+    try:
+        d_str = request.vars['due']
+        format_str = "%Y/%m/%d %H:%M"
+        due = datetime.datetime.strptime(d_str, format_str)
+    except:
+        logger.error("Bad Date format for assignment: {}".format(d_str))
+        due = datetime.datetime.now() + datetime.timedelta(7)
+    try:
+        db(db.assignments.id == assignment_id).update(
+            course=auth.user.course_id,
+            description=request.vars['description'],
+            duedate=due,
+            visible=request.vars['visible']
+        )
+        return json.dumps({request.vars['name']: assignment_id})
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def add__or_update_assignment_question():
+    # This endpoint is for adding a question to an assignment, or updating an existing assignment_question
+
+    # The following fields should be provided in request.vars:
+    # -- assignment (an integer)
+    # -- question (the question_name)
+    # -- points
+    # -- autograde
+    # -- which_to_grade
+    # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
+    if request.vars.assignment == 'undefined':
+        session.flash = "Error: Unable to update assignment in DB. No assignment is selected"
+        return redirect(URL('admin','assignments'))
+
+    assignment_id = int(request.vars['assignment'])
+    question_name = request.vars['question']
+    logger.debug("adding or updating assign id {} question_name {}".format(assignment_id, question_name))
+    # This assumes that question will always be in DB already, before an assignment_question is created
+    logger.debug("course_id %s",auth.user.course_id)
+    question_id = _get_question_id(question_name, auth.user.course_id)
+    if question_id == None:
+        logger.error("Question Not found for name = {} course = {}".format(question_name, auth.user.course_id))
+        session.flash = "Error: Cannot find question {} in the database".format(question_name)
+        return redirect(URL('admin','assignments'))
+
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
+    logger.debug("base course %s", base_course)
+    question_type = db.questions[question_id].question_type
+    chapter = db.questions[question_id].chapter
+    subchapter = db.questions[question_id].subchapter
+    tmpSp = _get_question_sorting_priority(assignment_id, question_id)
+    if tmpSp != None:
+        sp = 1 + tmpSp
+    else:
+        sp = 0
+
+    activity_count = 0
+    if question_type == 'page':
+        reading_assignment = 'T'
+        # get the count of 'things to do' in this chap/subchap
+        activity_count = db((db.questions.chapter==chapter) &
+                   (db.questions.subchapter==subchapter) &
+                   (db.questions.base_course == base_course)).count()
+        try:
+            activities_required = int(request.vars.get('activities_required'))
+            if activities_required == -1:
+                activities_required = max(int(activity_count * .8),1)
+        except:
+            logger.error("No Activities set for RA %s", question_name)
+            activities_required = None
+
+    else:
+        reading_assignment = None
+        activities_required = None
+
+    # Have to use try/except here instead of request.vars.get in case the points is '',
+    # which doesn't convert to int
+    try:
+        points = int(request.vars['points'])
+    except:
+        points = activity_count
+
+
+    autograde = request.vars.get('autograde')
+    which_to_grade = request.vars.get('which_to_grade')
+    try:
+        # save the assignment_question
+        db.assignment_questions.update_or_insert(
+            (db.assignment_questions.assignment_id==assignment_id) & (db.assignment_questions.question_id==question_id),
+            assignment_id = assignment_id,
+            question_id = question_id,
+            activities_required=activities_required,
+            points=points,
+            autograde=autograde,
+            which_to_grade = which_to_grade,
+            reading_assignment = reading_assignment,
+            sorting_priority = sp
+        )
+        total = _set_assignment_max_points(assignment_id)
+        return json.dumps(dict(
+            total = total,
+            activity_count=activity_count,
+            activities_required=activities_required,
+            autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+        ))
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps("Error")
+
+def _get_question_id(question_name, course_id):
+    question = db((db.questions.name == question_name) &
+              (db.questions.base_course == db.courses.base_course) &
+              (db.courses.id == course_id)
+              ).select(db.questions.id).first()
+    if question:
+        return int(question.id)
+    else:
+        # Hmmm, what should we do if not found?
+        return None
+
+    # return int(db((db.questions.name == question_name) &
+    #           (db.questions.base_course == db.courses.base_course) &
+    #           (db.courses.id == course_id)
+    #           ).select(db.questions.id).first().id)
+
+def _get_question_sorting_priority(assignment_id, question_id):
+    max = db.assignment_questions.sorting_priority.max()
+    return db((db.assignment_questions.assignment_id == assignment_id)).select(max).first()[max]
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def delete_assignment_question():
+    ## Deletes one assignment_question
+    try:
+        question_name = request.vars['name']
+        assignment_id = int(request.vars['assignment_id'])
+        question_id = _get_question_id(question_name, auth.user.course_id)
+        logger.debug("DELETEING A: %s Q:%s ", assignment_id, question_id)
+        db((db.assignment_questions.assignment_id == assignment_id) & \
+           (db.assignment_questions.question_id == question_id)).delete()
+        total = _set_assignment_max_points(assignment_id)
+        return json.dumps({'total': total})
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps("Error")
+
+def _set_assignment_max_points(assignment_id):
+    """Called after a change to assignment questions.
+    Recalculate the total, save it in the assignment row
+    and return it."""
+    sum_op = db.assignment_questions.points.sum()
+    total = db(db.assignment_questions.assignment_id == assignment_id).select(sum_op).first()[sum_op]
+    db(db.assignments.id == assignment_id).update(
+        points=total
+    )
+    return total
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def reorder_assignment_questions():
+    """Called when the questions are reordered in the instructor assignments interface.
+    request.vars must include:
+    -- names: a list of strings for question_names
+    -- assignment_id: a database record id
+
+    The names list should be a list of *all* assignment_questions of that type (i.e., all that have the
+    boolean reading_assignment flag set to True, or all that have it set to False).
+    We will reassign sorting_priorities to all of them.
+    """
+    question_names = request.vars['names[]']  # a list of question_names
+    assignment_id = int(request.vars['assignment_id'])
+    i = 0
+    for name in question_names:
+        i += 1
+        question_id = _get_question_id(name, auth.user.course_id)
+        db((db.assignment_questions.question_id == question_id) &
+           (db.assignment_questions.assignment_id == assignment_id)) \
+           .update(sorting_priority = i)
+
+    return json.dumps("Reordered in DB")
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def checkQType():

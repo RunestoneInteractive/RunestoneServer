@@ -6,7 +6,12 @@ import os
 import requests
 from urllib import unquote
 from urllib2 import HTTPError
+import logging
 from gluon.restricted import RestrictedError
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
+
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
@@ -81,6 +86,7 @@ def user():
                     SELECT %s, %s
                     ''' % (auth.user.id, auth.user.course_id))
             res = db(db.chapters.course_id == auth.user.course_name)
+            logger.debug("PROFILE checking for progress table %s ", res)
             if res.count() > 0:
                 chapter_label = res.select().first().chapter_label
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
@@ -88,8 +94,8 @@ def user():
                     db.executesql('''
                        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
                        SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
-                       FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
-                    ''' % (auth.user.id, auth.user.course_name))
+                       FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
+                    ''', (auth.user.id, auth.user.course_name))
             else:
                 session.flash = 'This course is not set up for tracking progress'
             # Add user to default section for course.
@@ -104,7 +110,7 @@ def user():
 
     if 'login' in request.args(0):
         # add info text re: using local auth. CSS styled to match text on Janrain form
-        sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
+        sign_in_text = TR(TD('Sign in with your Runestone Academy account', _colspan='3'), _id='sign_in_text')
         usernamewarn = TR(TD('Your username is NOT your email address', _colspan='3') )
         form[0][0].insert(0, usernamewarn)
         form[0][0].insert(0, sign_in_text)
@@ -125,7 +131,7 @@ def call(): return service()
 def index():
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
-    if 'boguscourse' in course.course_name:
+    if not course or 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
         # redirect them to the profile page to choose one
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
@@ -140,8 +146,11 @@ def index():
                     SELECT %s, %s
                     ''' % (auth.user.id, auth.user.course_id))
         try:
+            logger.debug("INDEX - checking for progress table")
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
-            if db(db.user_sub_chapter_progress.user_id == auth.user.id).count() == 0:
+            logger.debug("LABEL = %s user_id = %s course_name = %s", chapter_label,auth.user.id,auth.user.course_name)
+            if db((db.user_sub_chapter_progress.user_id == auth.user.id ) &
+                  (db.user_sub_chapter_progress.chapter_id == chapter_label )).count() == 0:
                 if db((db.user_sub_chapter_progress.user_id == auth.user.id) & (
                             db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                     db.executesql('''
@@ -247,12 +256,27 @@ def remove():
 def coursechooser():
     res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
 
-    db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
-    db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
-    auth.user.update(course_name=request.args[0])
-    auth.user.update(course_id=res[0].id)
-
-    redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+    if len(res) > 0:
+        db(db.auth_user.id == auth.user.id).update(course_id = res[0].id)
+        db(db.auth_user.id == auth.user.id).update(course_name = request.args[0])
+        auth.user.update(course_name=request.args[0])
+        auth.user.update(course_id=res[0].id)
+        res = db(db.chapters.course_id == auth.user.course_name)
+        logger.debug("COURSECHOOSER checking for progress table %s ", res)
+        if res.count() > 0:
+            chapter_label = res.select().first().chapter_label
+            if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                    (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
+                logger.debug("SETTING UP PROGRESS for %s %s",auth.user.username, auth.user.course_name)
+                db.executesql('''
+                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
+                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
+                ''', (auth.user.id, auth.user.course_name))
+        
+        redirect('/%s/static/%s/index.html' % (request.application,request.args[0]))
+    else:
+        redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
 
 @auth.requires_login()
 def removecourse():
@@ -268,6 +292,7 @@ def removecourse():
 
     redirect('/%s/default/courses' % request.application)
 
+
 def reportabug():
     path = os.path.join(request.folder, 'errors')
     course = request.vars['course']
@@ -277,6 +302,8 @@ def reportabug():
     code = None
     ticket = None
     pagerequest = None
+    registered_user = False
+
     if request.vars.code:
         code = request.vars.code
         ticket = request.vars.ticket.split('/')[1]
@@ -289,8 +316,11 @@ def reportabug():
         username = auth.user.username
         email = auth.user.email
         course = auth.user.course_name
-    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket)
+        registered_user = True
 
+    return dict(course=course,uri=uri,username=username,email=email,code=code,ticket=ticket, registered_user=registered_user)
+
+@auth.requires_login()
 def sendreport():
     # settings.github_token should be set to a valid Github access token
     # that has full repo access in models/1.py
@@ -308,16 +338,20 @@ def sendreport():
     coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
     pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
     details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
-    userinfo = request.vars['username'] + ' ' + request.vars['useremail']
+    uname = request.vars['username'] if request.vars['username'] else "anonymous"
+    uemail = request.vars['useremail'] if request.vars['useremail'] else "no_email"
+    userinfo =  uname + ' ' + uemail
 
     body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
     issue = {'title': request.vars['bugtitle'],
              'body': body}
+    logger.debug("POSTING ISSUE %s ", issue)
     r = reqsession.post(url, json.dumps(issue))
     if r.status_code == 201:
         session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
     else:
         session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
+    logger.debug("POST STATUS = %s",r.status_code)
 
     courseCheck = 0
     if auth.user:

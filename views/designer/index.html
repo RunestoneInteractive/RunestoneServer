@@ -104,6 +104,13 @@
             </label>
           </div>
 
+        <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="java4python" />
+              Java for Python Programmers, by Bradley Miller
+            </label>
+          </div>
+
         <!-- <label>
           OR
         </label>
@@ -144,7 +151,7 @@
       <div class="form-group row">
         <div class="col-md-3">
           <label for="startdate">Term start date </label>
-          <input type="text" name="startdate" id='startdate' class='form-control' data-date-format="mm/dd/yyyy" placeholder="{{=datetime.date.today().strftime('%m/%d/%Y')}}"/>
+          <input type="text" name="startdate" id='startdate' class='form-control' data-date-format="mm/dd/yyyy" placeholder="{{=datetime.date.today().strftime('%m/%d/%Y')}}" onkeydown='return false'/>
         </div>
       </div>
 

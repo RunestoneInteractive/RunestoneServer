@@ -2,3 +2,6 @@
 *
 # Except this file
 !.gitignore
+!preview/*
+!preview/_sources/.gitignore
+preview/_sources/index.rst

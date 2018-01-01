@@ -8,23 +8,24 @@
         <h3 style="visibility: hidden">Admin Panel</h3>
 
 
-           <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
-                </a>
-
-
+        <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
+            <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
+        </a>
+        <a id="studentsTab" data-toggle="tab" href="#manageStudents" class="list-group-item">
+            <h4 style="text-align: center" class="list-group-item-heading">Manage Students</h4>
+        </a>
         <a id="rebuildTab" data-toggle="tab" href="#rebuild" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
-                </a>
+            <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
+        </a>
         <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
-                </a>
+            <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
+        </a>
         <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
-                </a>
-      <a id="changeIndexTab" data-toggle="tab" href="#changeIndex" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">Edit Index</h4>
-                </a>
+            <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
+        </a>
+        <a id="changeIndexTab" data-toggle="tab" href="#changeIndex" class="list-group-item">
+            <h4 style="text-align: center" class="list-group-item-heading">Edit Index</h4>
+        </a>
 
         <div style="margin-top: 125px; border-top: dashed">
 
@@ -39,6 +40,22 @@
 
           <div class="tab-content">
 
+              <div id="manageStudents" class="tab-pane fade">
+                  <form id="removeStudents" method="POST" action="/runestone/admin/removeStudents">
+                      <div class="col-md-3">
+                          <h3 style="text-align: center">Students</h3>
+                          <select id="studentList" class="form-control" size="10" name="studentList" multiple>
+                              <option value="None" selected>--Select Student(s) to Remove--</option>
+                              {{ for person in students: }}
+                              <option value="{{=person}}">{{ =students[person] }}</option>
+                              {{ pass }}
+                          </select>
+                          <div style="text-align: center">
+                              <input style="width: 35px; height:30px;" type="submit" value="-">
+                          </div>
+                      </div>
+                  </form>
+              </div>
 
         <div id="sections" class="tab-pane fade">
             <div class="col-md-3">
@@ -162,7 +179,7 @@
         if (data.status == "COMPLETED"){
           window.location.href = data.course_url;
         }
-        if (data.status == "failed") {
+        if (data.status == "FAILED" || data.status == "TIMEOUT") {
           clearInterval(iid);
           $("#spinner_div").hide();
           $("#title").text("An error occurred.");
@@ -263,16 +280,18 @@
 });
     $('#sectionsTab').click(function(){
     $('#sectionsTab').css('background-color', 'gainsboro');
+    $('#studentsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-        $('#changeIndexTab').css('background-color','transparent');
+    $('#changeIndexTab').css('background-color','transparent');
 
 });
 
     $('#rebuildTab').click(function(){
     $('#rebuildTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
+    $('#studentsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
         $('#changeIndexTab').css('background-color','transparent');
@@ -282,6 +301,7 @@
     $('#AddInstructorTab').click(function(){
     $('#AddInstructorTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
+    $('#studentsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
         $('#changeIndexTab').css('background-color','transparent');
@@ -291,15 +311,27 @@
     $('#DeleteTab').click(function(){
     $('#DeleteTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
+    $('#studentsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
         $('#changeIndexTab').css('background-color','transparent');
 
 });
 
+    $('#studentsTab').click(function(){
+    $('#studentsTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#DeleteTab').css('background-color','transparent');
+    $('#rebuildTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#changeIndexTab').css('background-color','transparent');
+
+});
+
         $('#changeIndexTab').click(function(){
     $('#changeIndexTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
+    $('#studentsTab').css('background-color','transparent');
     $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
         $('#DeleteTab').css('background-color','transparent');

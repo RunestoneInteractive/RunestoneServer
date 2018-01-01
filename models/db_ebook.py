@@ -15,7 +15,7 @@ db.define_table('code',
   Field('acid','string'),
   Field('code','text'),
   Field('emessage','text'),
-  Field('course_id','string'),
+  Field('course_id','integer'),
   Field('grade','double'),
   Field('sid','string'),
   Field('timestamp','datetime'),
@@ -101,6 +101,7 @@ db.define_table('timed_exam',
     Field('incorrect','integer'),
     Field('skipped','integer'),
     Field('time_taken','integer'),
+    Field('reset','boolean'),
     migrate='runestone_timed_exam.table'
     )
 
@@ -109,7 +110,7 @@ db.define_table('mchoice_answers',
     Field('div_id','string'),
     Field('sid','string'),
     Field('course_name','string'),
-    Field('answer','string', length=10),
+    Field('answer','string', length=50),
     Field('correct','boolean'),
     migrate='runestone_mchoice_answers.table'
     )
@@ -151,4 +152,23 @@ db.define_table('parsons_answers',
     Field('source','string'),
     Field('correct','boolean'),
     migrate='runestone_parsons_answers.table'
+    )
+db.define_table('codelens_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    Field('source','string'),
+    Field('correct','boolean'),
+    migrate='runestone_codelens_answers.table'
+    )
+
+db.define_table('shortanswer_answers',
+    Field('timestamp','datetime'),
+    Field('div_id','string'),
+    Field('sid','string'),
+    Field('course_name','string'),
+    Field('answer','string'),
+    migrate='runestone_shortanswer_answers.table'
     )

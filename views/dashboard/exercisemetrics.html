@@ -1,8 +1,8 @@
 {{extend 'admin/instructors.html'}}
 
 {{ block tabcontent }}
-<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
-<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
@@ -103,9 +103,15 @@
 					</tr>
 					{{ pass }}
 				</table>
+				<div id="questionpreview"></div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			preview_question_id("{{=exercise_label}}", "questionpreview");
+		});
+	</script>
 </div>
 
 {{ end }}

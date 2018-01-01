@@ -1,17 +1,17 @@
 {{extend 'admin/instructors.html'}}
 
 {{ block tabcontent }}
-<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
-<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
+	<h1>{{=course_id}} <span class="dash-title-description">Instructor Dashboard</span></h1>
 	<h2>Student Report - {{=user.first_name}} {{=user.last_name}}</h2>
 	<div class="col-md-7">
-		
+
 		<div class="dash-section" id="book-completion">
 			<div class="dash-section-header">
 				Book Completion
@@ -56,47 +56,25 @@
 			<div class="dash-section-header">
 				Grades
 			</div>
-			<div class="dash-section-content">
+			<div class="dash-section-content scroll">
 				<table width="90%">
 					<thead>
 						<tr>
 							<td>Assignment</td>
-							<td>Completed Date</td>
+							<td>Due Date</td>
 							<td>Grade</td>
 							<td>Average</td>
 						</tr>
 					</thead>
 					<tbody>
+						{{ for k in sorted(assignments.keys()): }}
 						<tr>
-							<td>Assignment #1</td>
-							<td>1/19/2016</td>
-							<td>80</td>
-							<td>76</td>
+							<td>{{=k}}</td>
+							<td>{{=assignments[k]["due_date"]}}</td>
+							<td>{{=assignments[k]["score"]}}</td>
+							<td>{{=assignments[k]["class_average"]}}</td>
 						</tr>
-						<tr>
-							<td>Assignment #2</td>
-							<td>2/2/2016</td>
-							<td>95</td>
-							<td>84</td>
-						</tr>
-						<tr>
-							<td>Assignment #3</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
-						<tr>
-							<td>Assignment #4</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
-						<tr>
-							<td>Assignment #5</td>
-							<td>n/a</td>
-							<td>n/a</td>
-							<td>n/a</td>
-						</tr>
+						{{ pass }}
 					</tbody>
 				</table>
 			</div>
@@ -118,7 +96,7 @@
 			<div class="dash-section-header">
 				Recent Activity
 			</div>
-			<div class="dash-section-content">
+			<div class="dash-section-content scroll">
 				<table class="nodec">
 					{{for row in activity:}}
 					<tr>

@@ -1,17 +1,55 @@
 {{extend 'layout.html'}}
-<script src="{{=URL('static', 'js/admin.js')}}"></script>
 
+{{ block moreincludes }}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" rel="stylesheet"/>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" rel="stylesheet"/>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
+<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js" type="text/javascript"></script>
+<!--<script src="/{{=request.application}}/static/{{=course_id}}/_static/builtin.js" type="text/javascript"></script>-->
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/runestonebase.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/activecode.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/mchoice.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/shortanswer.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/parsons.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/fitb.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/timeddnd.js" type="text/javascript"></script>
 
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/clickable.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/poll.js" type="text/javascript"></script>
+<script src="/{{=request.application}}/static/{{=course_id}}/_static/bookfuncs.js" type="text/javascript"></script>
 
+<script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.js"></script>
+
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" rel="stylesheet" type="text/css"/>
+<link href="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+
+<script src="{{=URL('static', 'js/admin.js')}}?v={{=request.admin_mtime}}"></script>
+{{ end }}
+
+<script type="text/javascript">
+  eBookConfig.course = "{{=XML(course_id)}}"
+  eBookConfig.app = "{{=XML(request.application)}}"
+</script>
 
 <div id="outerTabs" class="container" style="margin-top: 10px;">
   <h3 id="coursename" style="text-align: center">{{=auth.user.course_name}}</h3>
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" id="hideId">
     <li class="dashboardnav active" id="progresstab"><a href="{{=URL(c='dashboard',f='index')}}">Student Progress</a></li>
     <li class="dashboardnav" id="admintab"> <a href="{{=URL(c='admin',f='admin')}}">Admin</a></li>
     <li class="dashboardnav" id="gradingtab"><a href="{{=URL(c='admin',f='grading')}}">Grading</a></li>
     <li class="dashboardnav" id="assignmentstab"><a href="{{=URL(c='admin',f='assignments')}}">Assignments</a></li>
-    <li class="dashboardnav" id="doctab"><a href="#doc">Doc</a></li>
+    <li class="dashboardnav" id="doctab"><a href="{{=URL(c='admin',f='doc')}}">Doc</a></li>
   </ul>
 
     <div class="tab-content">
@@ -24,6 +62,11 @@
 
 
     </div>
+      <script type="text/javascript">
+        var data = {timezoneoffset: (new Date()).getTimezoneOffset()/60};
+        jQuery.post('/{{=request.application}}/ajax/set_tz_offset',data, function() {
+        });
+      </script>
 </div>
 
 

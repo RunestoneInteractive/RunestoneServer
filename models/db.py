@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import os
+import random
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -13,7 +15,10 @@ import datetime
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(settings.database_uri,fake_migrate_all=False)
+    if os.environ.get("WEB2PY_CONFIG","") == 'test':
+        db = DAL(settings.database_uri,migrate=False,migrate_enabled=False)
+    else:
+        db = DAL(settings.database_uri,fake_migrate_all=False)
     session.connect(request, response, masterapp='runestone', db=db)
 
 else:
@@ -62,18 +67,21 @@ auth.settings.retrieve_password_captcha	= False
 
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
-  Field('course_id','string'),
   Field('course_name', 'string', unique=True),
   Field('term_start_date', 'date'),
   Field('institution', 'string'),
   Field('base_course', 'string'),
+  Field('python3', type='boolean', default=True),
+  Field('login_required', type='boolean', default=True),
   migrate='runestone_courses.table'
 )
+
 if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
-    db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='thinkcspy', base_course = 'thinkcspy', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='pythonds', base_course = 'pythonds', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
 
 ## create cohort_master table
 db.define_table('cohort_master',
@@ -164,10 +172,10 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('cohort_id','reference cohort_master', requires=IS_IN_DB(db, 'cohort_master.id', 'id'),
           writable=False,readable=False),
-    Field('course_id',db.courses,label=T('Course Name'),
+    Field('course_id','reference courses',label=T('Course Name'),
           required=True,
           default=1),
-    Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id)),
+    Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id),readable=False, writable=False),
     Field('active',type='boolean',writable=False,readable=False,default=True),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
@@ -259,3 +267,12 @@ db.define_table('user_courses',
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
 mail.settings.login = settings.email_login
+
+# Make sure the latest version of admin is always loaded.
+adminjs =  os.path.join('applications',request.application,'static','js','admin.js')
+try:
+    mtime = int(os.path.getmtime(adminjs))
+except:
+    mtime = random.randrange(10000)
+
+request.admin_mtime = str(mtime)
