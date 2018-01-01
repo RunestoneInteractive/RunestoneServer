@@ -18,6 +18,7 @@ execfile("applications/runestone/controllers/assignments.py", globals())
 
 class TestGradingFunction(unittest.TestCase):
     def setUp(self):
+        global request
         request = Request(globals()) # Use a clean Request object
 
     def testReproduceScores(self):

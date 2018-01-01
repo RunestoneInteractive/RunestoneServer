@@ -352,67 +352,6 @@ def getnumusers():
     return json.dumps([res])
 
 #
-#  Ajax Handlers to save / delete and restore user highlights
-#
-def savehighlight():
-    parentClass = request.vars.parentClass
-    hrange = request.vars.range
-    method = request.vars.method
-    page = request.vars.page
-    pageSection = request.vars.pageSection
-    course = request.vars.course
-
-    if auth.user:
-        insert_id = db.user_highlights.insert(created_on=datetime.datetime.now(),
-                       user_id=auth.user.id,
-                       course_id=course,
-                       parent_class=parentClass,
-                       range=hrange,
-                       chapter_url=page,
-                       sub_chapter_url=pageSection,
-                       method = method)
-        return str(insert_id)
-
-
-def deletehighlight():
-    uniqueId = request.vars.uniqueId
-
-    if auth.user:
-        try:
-            db(db.user_highlights.id == uniqueId).update(is_active=0)
-        except:
-            logger.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
-            return json.dumps({'success': False, 'message':'invalid id for highlighted text'})
-
-        return json.dumps({"success":True})
-
-
-def gethighlights():
-    """
-    return all the highlights for a given user, on a given page
-    :Parameters:
-        - `page`: the page to search the highlights on
-        - `course`: the course to search the highlights in
-    :Return:
-        - json object containing a list of matching highlights
-    """
-    page = request.vars.page
-    course = request.vars.course
-    if auth.user:
-        result = db((db.user_highlights.user_id == auth.user.id) &
-                    (db.user_highlights.chapter_url == page) &
-                    (db.user_highlights.course_id == course) &
-                    (db.user_highlights.is_active == 1)).select()
-        rowarray_list = []
-        for row in result:
-            res = {'range': row.range, 'uniqueId': row.id,
-                   'parentClass': row.parent_class,
-                   'pageSection': row.sub_chapter_url, 'method': row.method}
-            rowarray_list.append(res)
-        return json.dumps(rowarray_list)
-
-
-#
 #  Ajax Handlers to update and retreive the last position of the user in the course
 #
 def updatelastpage():
@@ -550,7 +489,7 @@ def getCorrectStats(miscdata,event):
     miscdata['yourpct'] = pctcorr
 
 
-def getStudentResults(question):
+def _getStudentResults(question):
         course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
         q = db( (db.useinfo.div_id == question) &
@@ -644,7 +583,7 @@ def getaggregateresults():
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
     if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
-        resultList = getStudentResults(question)
+        resultList = _getStudentResults(question)
         returnDict['reslist'] = resultList
 
     return json.dumps([returnDict])
@@ -698,7 +637,7 @@ def gettop10Answers():
     getCorrectStats(miscdata,'fillb')
 
     if auth.user and auth.has_membership('instructor',auth.user.id):
-        resultList = getStudentResults(question)
+        resultList = _getStudentResults(question)
         miscdata['reslist'] = resultList
 
     return json.dumps([res,miscdata])
