@@ -52,7 +52,6 @@ try:
 except:
     click.echo(message="The creation of one or more indices/constraints failed", file=None, nl=True, err=False, color='red')
 
-
 if "--list_tables" in sys.argv:
     res = db.executesql("""
     SELECT table_name
