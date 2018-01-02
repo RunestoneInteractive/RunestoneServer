@@ -58,3 +58,8 @@ Generally the web2py documentation is pretty good, if you are confused after loo
 
 We have a small set of unit tests that we really want to grow into a full blown full coverage set of tests.  To run the unit tests you will need to `cd tests` and the run the run_tests.sh script. You should also set your TEST_DBURL environment variable to connect to the runestone_test database.
 
+We have a Travis-CI job set up to automatically test all PR's if your pull request does not pass it won't be accepted.
+
+Please take a look at the few unit tests we have, and write a new one that demonstrates that your feature or enhancement works.
+
+
