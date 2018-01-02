@@ -197,7 +197,8 @@ def bio():
               'interesting_fact': "Tell me something interesting about your outside activities that you wouldn't mind my mentioning in class. For example, are you the goalie for the UM soccer team? An officer in a club or fraternity? An expert on South American insects? Going into the Peace Corps after graduation? Have a company that you started last summer? Have an unusual favorite color?",
               'programming_experience': "Have you ever done any programming before? If so, please describe briefly. (Note: no prior programming experience is required for this course. I just like to know whether you have programmed before.)",
               'image': "I use a flashcard app to try to learn student names. I will use the mugshot that I get with the student roster (presumably from your Mcard). If you have a better photo to help me recognize you in class, please upload it. For example, if you always wear a particular hat or glasses, wear them in the picture. I won't succeed at learning everyone's name with so many in the class, so please forgive me in advance.",
-              'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?"}
+              'laptop_type': "Do you have a laptop you can bring to class? If so, what kind?",
+              'confidence': "On a 1-5 scale, how confident are you that you can learn to program?"}
         )
     form.vars.user_id = auth.user.id
     if form.process().accepted:
