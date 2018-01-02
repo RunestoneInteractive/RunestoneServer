@@ -18,8 +18,10 @@ if not request.env.web2py_runtime_gae:
     if os.environ.get("WEB2PY_CONFIG","") == 'test':
         db = DAL(settings.database_uri,migrate=False,migrate_enabled=False)
     else:
-        db = DAL(settings.database_uri,fake_migrate_all=False)
-    session.connect(request, response, masterapp='runestone', db=db)
+        # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
+        db = DAL(settings.database_uri, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
+                 migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
+    session.connect(request, response, masterapp='runestone', db=db, migrate='runestone_web2py_sessions.table')
 
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
