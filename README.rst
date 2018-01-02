@@ -150,11 +150,16 @@ Installation
      * Create a file ``applications/runestone/models/1.py``, with the following line: ``settings.database_uri = '<your_connection_string>'``. NOTE: Don't put this inside an if statement, like it shows in ``models/1.prototype``.
      * If you're running https, edit ``settings.server_type`` in ``models/0.py``.
      * Set and export environment variable for DBURL -- Note the url format for web2py is different from sqlalchemy.  use `postgres` for web2py and `postgresql` for sqlalchemy.  example:  `postgresql://username:pw@host/database` where pw may be empty.
+     * Set and export environment variable WEB2PY_CONFIG. If set to production, it will get the database connection string from DBURL. If set to development, it will get the database connection string from DEV_DBURL. If set to test, it will get it from TEST_DBURL.
+     * Set and export environment variable WEB2PY_MIGRATE. If set to Yes, web2py will check on each page load whether any database migrations are needed and perform them. If set to No, web2py will just assume that models match the database. If set to Fake, web2py will try to update the metadata it maintains about the database tables to match the models, but will not make any changes to the database; use that setting only for repairs when something has gone wrong.
 
    ::
        
        export WEB2PY_CONFIG=production
+       export WEB2PY_MIGRATE=Yes
        export DBURL=postgresql://username:pw@host/database
+       export TEST_DBURL=postgresql://username:pw@host/database
+       export DEV_DBURL=postgresql://username:pw@host/database
 
 #. Run web2py once, so that it will create all the tables.
 
