@@ -133,10 +133,19 @@ class TestAjaxEndpoints(unittest.TestCase):
         prog = json.loads(getprog())
         self.assertEqual(prog[0]['source'], "this is a unittest")
 
+    def testGetLastPage(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        res = json.loads(getlastpage())
+
+        self.assertEqual('/runestone/static/testcourse/SimplePythonData/Exercises.html',
+                         res[0]['lastPageUrl'])
+
+        self.assertEqual('Simple Python Data', res[0]['lastPageChapter'])
+
 
     # getCompletionStatus
     # getAllCompletionStatus
-    # getlastpage
     # getCorrectStats
     # getStudentResults ??
     # getaggregateresults

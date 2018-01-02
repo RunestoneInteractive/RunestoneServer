@@ -143,7 +143,7 @@ Installation
        runestone=# \q
        $
 
-   * Figure out your database connection string. It will be something like ``postgres://username:passwd@localhost/dbname``
+   * Figure out your database connection string. It will be something like ``postgresql://username:passwd@localhost/dbname``
 
    * Tell web2py to use that database:
 
@@ -154,7 +154,7 @@ Installation
      * Set and export environment variable WEB2PY_MIGRATE. If set to Yes, web2py will check on each page load whether any database migrations are needed and perform them. If set to No, web2py will just assume that models match the database. If set to Fake, web2py will try to update the metadata it maintains about the database tables to match the models, but will not make any changes to the database; use that setting only for repairs when something has gone wrong.
 
    ::
-       
+
        export WEB2PY_CONFIG=production
        export WEB2PY_MIGRATE=Yes
        export DBURL=postgresql://username:pw@host/database
