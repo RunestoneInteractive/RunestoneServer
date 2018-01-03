@@ -98,7 +98,7 @@ def run(config, with_scheduler):
 @cli.command()
 @pass_config
 def shutdown(config):
-    """Shutdown the server"""
+    """Shutdown the server and any schedulers"""
     os.chdir(findProjectRoot())
     with open('rs.pid', 'r') as pfile:
         pid = int(pfile.read())
