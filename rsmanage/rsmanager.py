@@ -1,4 +1,4 @@
-import subprocess, os, re, signal
+import subprocess, os, re, signal, json
 import click
 from sqlalchemy import create_engine
 
@@ -122,11 +122,27 @@ def addbook(config):
 
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
-@click.option("--fromfile", default="-", type=click.File(mode="r"), help="Make this user an instructor")
+@click.option("--fromfile", default=None, type=click.File(mode="r"), help="Make this user an instructor")
 @pass_config
-def inituser(config):
+def inituser(config, instructor, fromfile):
     """Add a user (or users)-- coming soon"""
-    pass
+    os.chdir(findProjectRoot())
+
+    if fromfile:
+        # if fromfile then be sure to get the full path name NOW.
+        pass
+    else:
+        userinfo = {}
+        userinfo['username'] = click.prompt("Username")
+        userinfo['password'] = click.prompt("Password", hide_input=True)
+        userinfo['first_name'] = click.prompt("First Name")
+        userinfo['last_name'] = click.prompt("Last Name")
+        userinfo['email'] = click.prompt("email address")
+        userinfo['course'] = click.prompt("course name")
+        userinfo['instructor'] = instructor
+
+        os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+        subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
 
 
 # Utility Functions Below here
