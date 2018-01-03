@@ -77,7 +77,7 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.div_id = '3_8'
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0', msg=None)
-        # self.assertEqual(res['correct'], True) # todo: why isn't correct returned?
+        # self.assertEqual(res['correct'], True) # TODO: why isn't correct returned?
 
         # clickable
         request.vars.event = 'clickableArea'
@@ -86,7 +86,7 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = json.loads(getAssessResults())
         print("RES ", res)
         self.assertEqual(res['answer'], '0;1', msg=None)
-        self.assertEqual(res['correct'], False) # todo: why isn't correct returned?
+        self.assertEqual(res['correct'], False)
         # timestamp 2017-09-04 00:56:34
         self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
 
@@ -143,6 +143,49 @@ class TestAjaxEndpoints(unittest.TestCase):
 
         self.assertEqual('Simple Python Data', res[0]['lastPageChapter'])
 
+
+# getaggregateresults
+#    id   |      timestamp      |       div_id       |    sid    | course_name | correct | answer
+# --------+---------------------+--------------------+-----------+-------------+---------+--------
+#   46630 | 2017-09-04 19:24:36 | test_question2_4_1 | user_1662 | testcourse  | F       | 0
+#   46631 | 2017-09-04 19:24:38 | test_question2_4_1 | user_1662 | testcourse  | T       | 1
+#   46467 | 2017-09-04 18:39:44 | test_question2_4_1 | user_1663 | testcourse  | T       | 1
+#   42189 | 2017-09-03 01:19:19 | test_question2_4_1 | user_1665 | testcourse  | T       | 1
+#   44746 | 2017-09-04 01:40:22 | test_question2_4_1 | user_1667 | testcourse  | F       | 0
+#   44748 | 2017-09-04 01:40:26 | test_question2_4_1 | user_1667 | testcourse  | T       | 1
+#   41088 | 2017-09-02 13:57:49 | test_question2_4_1 | user_1668 | testcourse  | F       | 0
+#   41089 | 2017-09-02 13:57:52 | test_question2_4_1 | user_1668 | testcourse  | T       | 1
+#   40908 | 2017-09-02 02:44:59 | test_question2_4_1 | user_1669 | testcourse  | T       | 1
+#  390419 | 2017-10-30 00:18:26 | test_question2_4_1 | user_1670 | testcourse  | T       | 1
+#   43072 | 2017-09-03 17:31:03 | test_question2_4_1 | user_1671 | testcourse  | T       | 1
+#   41422 | 2017-09-02 17:16:08 | test_question2_4_1 | user_1672 | testcourse  | F       | 0
+#   41423 | 2017-09-02 17:16:10 | test_question2_4_1 | user_1672 | testcourse  | T       | 1
+#   43349 | 2017-09-03 18:57:54 | test_question2_4_1 | user_1673 | testcourse  | F       | 0
+#   43350 | 2017-09-03 18:58:02 | test_question2_4_1 | user_1673 | testcourse  | T       | 1
+#   44514 | 2017-09-04 00:35:29 | test_question2_4_1 | user_1674 | testcourse  | T       | 1
+#   43534 | 2017-09-03 19:35:08 | test_question2_4_1 | user_1675 | testcourse  | F       | 0
+#   43535 | 2017-09-03 19:35:13 | test_question2_4_1 | user_1675 | testcourse  | T       | 1
+#   49076 | 2017-09-05 02:05:02 | test_question2_4_1 | user_1676 | testcourse  | T       | 1
+#   40767 | 2017-09-01 23:00:20 | test_question2_4_1 | user_1677 | testcourse  | T       | 1
+#   40835 | 2017-09-02 00:49:28 | test_question2_4_1 | user_1751 | testcourse  | F       | 0
+#   40836 | 2017-09-02 00:49:31 | test_question2_4_1 | user_1751 | testcourse  | T       | 1
+#   76275 | 2017-09-08 00:55:02 | test_question2_4_1 | user_2521 | testcourse  | T       | 1
+
+    def testGetAggregateResults(self):
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'test_question2_4_1'
+        auth.login_user(db.auth_user(1675))
+
+        res = json.loads(getaggregateresults())[0]
+        # [{u'answerDict': {u'1': 72.0, u'0': 28.0}, u'misc': {u'course': u'testcourse', u'correct': u'1', u'yourpct': 76.0}}]
+        self.assertEqual(res['answerDict']['1'], 72.0)
+        self.assertEqual(res['answerDict']['0'], 28.0)
+        self.assertEqual(res['misc']['yourpct'], 76.0)
+
+        # TODO: this shows the old method of doing things using useinfo.  We should use mchoice_answers and then calculate
+        # a sensible way of calculating class percentages. for example 16 1's and 7 0's 23 total would indicate 70% 1 and 30% 0
+        # we should not count answers after they are correct
+        # TODO: We can do away with the instructor view here as it is better in the dashboard
 
     # getCompletionStatus
     # getAllCompletionStatus
