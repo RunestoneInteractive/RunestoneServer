@@ -161,16 +161,15 @@ Installation
        export TEST_DBURL=postgresql://username:pw@host/database
        export DEV_DBURL=postgresql://username:pw@host/database
 
-#. Run web2py once, so that it will create all the tables.
+#. run `rsmanage initdb`  -- This will initialize the database so you can build your first book.  The rsmanage command was installed when you ran `pip install -r requirements.txt` in a previous step.  If you are upgrading you should run `pip install -e rsmanage` from the applications/runestone directory.
 
-   * cd web2py/
-   * python web2py.py
-   * Then you must access http://localhost:8000/runestone one time so that the models load and create the tables in the database.
 
    .. important:: Database errors
 
       If you get an error message that the session table already exists, you need to go into the database and drop the table.
-      If you get other error messages about tables that either exist or do not exist when they should or should not, then your database is out of sync with the data in your databases folder created by web2py.  This is not a happy spot to be in.  If this is a new installation then you may simply try to drop the database and recreate the database.   If this is an old installation and you don't want to lose any data then you may still find the easiest path to drop and recreate the database.   As a last resort you can try to do a fake migration by setting `fake_migrate=True` in db.py where the DAL object is created.   This is likely going to cause even more problems, so only use it if you really know what changes you have made to the database schema and why.
+      If you get other error messages about tables that either exist or do not exist when they should or should not, then your database is out of sync with the data in your databases folder created by web2py.  This is not a happy spot to be in.  `rsmanage initdb --reset` will definitely get things back in order for a new installation.
+
+      If this is an old installation and you don't want to lose any data the you can try setting the `WEB2PY_MIGRATE` variable to 'Fake' But, this may cause cause even more problems, so only use it if you really know what changes you have made to the database schema and why.  You may need to study sql.log to figure out which talbes need to be migrated by hand.
 
 
 
