@@ -455,7 +455,7 @@ def getlastpage():
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
-def getCorrectStats(miscdata,event):
+def _getCorrectStats(miscdata,event):
     sid = None
     if auth.user:
         sid = auth.user.username
@@ -578,7 +578,7 @@ def getaggregateresults():
     miscdata['correct'] = correct
     miscdata['course'] = course
 
-    getCorrectStats(miscdata, 'mChoice')
+    _getCorrectStats(miscdata, 'mChoice')
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
@@ -634,7 +634,7 @@ def gettop10Answers():
         res = 'error in query'
 
     miscdata = {'course': course}
-    getCorrectStats(miscdata,'fillb')
+    _getCorrectStats(miscdata,'fillb')
 
     if auth.user and auth.has_membership('instructor',auth.user.id):
         resultList = _getStudentResults(question)
