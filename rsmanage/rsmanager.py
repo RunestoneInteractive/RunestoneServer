@@ -1,5 +1,6 @@
-import subprocess, os, re
+import subprocess, os, re, signal
 import click
+from sqlalchemy import create_engine
 
 class Config(object):
     def __init__(self):
@@ -85,6 +86,48 @@ def initdb(config, list_tables, reset):
 
     if res != 0:
         click.echo(message="Database Initialization Failed")
+
+@cli.command()
+@click.option("--with-scheduler", is_flag=True, help="Star the background task scheduler too")
+@pass_config
+def run(config, with_scheduler):
+    """Starts up the runestone server and optionally scheduler"""
+    os.chdir(findProjectRoot())
+    res = subprocess.Popen("python -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X", shell=True)
+
+@cli.command()
+@pass_config
+def shutdown(config):
+    """Shutdown the server"""
+    os.chdir(findProjectRoot())
+    with open('rs.pid', 'r') as pfile:
+        pid = int(pfile.read())
+
+    click.echo("killing process {}".format(pid))
+    os.kill(pid, signal.SIGINT)
+
+    # select worker_name from scheduler_worker;
+    # iterate over results to kill all schedulers
+    eng = create_engine(config.dburl)
+    res = eng.execute("select worker_name from scheduler_worker")
+    for row in res:
+        # result will be form of hostname#pid
+        os.kill(int(row[0].split("#")[1]), signal.SIGINT)
+
+@cli.command()
+@pass_config
+def addbook(config):
+    """Create a course and build the book -- coming soon"""
+    pass
+
+@cli.command()
+@click.option("--instructor", is_flag=True, help="Make this user an instructor")
+@click.option("--fromfile", default="-", type=click.File(mode="r"), help="Make this user an instructor")
+@pass_config
+def inituser(config):
+    """Add a user (or users)-- coming soon"""
+    pass
+
 
 # Utility Functions Below here
 
