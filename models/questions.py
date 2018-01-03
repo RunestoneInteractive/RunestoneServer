@@ -13,12 +13,6 @@ db.define_table('questions',
                 Field('autograde', type='string'),
                 migrate='runestone_questions.table')
 
-# In SQL we can manually add the constraint
-# alter table questions add constraint name_bc_unique UNIQUE(name, base_course);
-# try:
-#     db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
-# except:
-#     pass
 
 db.define_table('tags',
                 Field('tag_name', type='string', unique=True),
