@@ -35,12 +35,11 @@ def cli(config, verbose):
         click.echo("Incorrect WEB2PY_CONFIG")
         sys.exit(1)
 
+    config.conf = conf
     config.dbname = re.match(r'postgres.*//.*?@.*?/(.*)', config.dburl).group(1)
 
     if verbose:
-        click.echo("WEB2PY_CONFIG is {}".format(conf))
-        click.echo("DBURL is {}".format(config.dburl))
-        click.echo("DBNAME is {}".format(config.dbname))
+        echoEnviron(config)
 
     config.verbose = verbose
 
@@ -247,6 +246,13 @@ def inituser(config, instructor, fromfile):
         # csv file should be username, email first_name, last_name, password, course
         # users from a csv cannot be instructors
         for line in csv.reader(fromfile):
+            if len(line) != 6:
+                click.echo("Not enough data to create a user.  Lines must be")
+                click.echo("username, email first_name, last_name, password, course")
+                exit(1)
+            if "@" not in line[1]:
+                click.echo("emails should have an @ in them in column 2")
+                exit(1)
             userinfo = {}
             userinfo['username'] = line[0]
             userinfo['password'] = line[4]
@@ -256,7 +262,10 @@ def inituser(config, instructor, fromfile):
             userinfo['course'] = line[5]
             userinfo['instructor'] = False
             os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-            subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+            res = subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+            if res != 0:
+                click.echo("Failed to create user {} fix your data and try again".format(line[0]))
+                exit(1)
     else:
         userinfo = {}
         userinfo['username'] = click.prompt("Username")
@@ -270,7 +279,11 @@ def inituser(config, instructor, fromfile):
         os.environ['RSM_USERINFO'] = json.dumps(userinfo)
         subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
 
-
+@cli.command()
+@pass_config
+def env(config):
+    """Print out your configured environment"""
+    echoEnviron(config)
 
 #
 # Utility Functions Below here
@@ -292,6 +305,11 @@ def checkEnvironment():
 
     if stop:
         sys.exit(1)
+
+def echoEnviron(config):
+    click.echo("WEB2PY_CONFIG is {}".format(config.conf))
+    click.echo("The database URL is configured as {}".format(config.dburl))
+    click.echo("DBNAME is {}".format(config.dbname))
 
 
 def findProjectRoot():
