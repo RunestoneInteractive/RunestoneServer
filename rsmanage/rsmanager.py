@@ -1,4 +1,4 @@
-import subprocess, os, re, signal, json, sys
+import subprocess, os, re, signal, json, sys, csv
 import click
 from sqlalchemy import create_engine
 
@@ -236,15 +236,27 @@ def build(config, course, repo, skipclone):
 
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
-@click.option("--fromfile", default=None, type=click.File(mode="r"), help="Make this user an instructor")
+@click.option("--fromfile", default=None, type=click.File(mode="r"), help="read a csv file of users of the form username, email, first_name, last_name, password, course")
 @pass_config
 def inituser(config, instructor, fromfile):
-    """Add a user (or users)-- coming soon"""
+    """Add a user (or users from a csv file)"""
     os.chdir(findProjectRoot())
 
     if fromfile:
         # if fromfile then be sure to get the full path name NOW.
-        pass
+        # csv file should be username, email first_name, last_name, password, course
+        # users from a csv cannot be instructors
+        for line in csv.reader(fromfile):
+            userinfo = {}
+            userinfo['username'] = line[0]
+            userinfo['password'] = line[4]
+            userinfo['first_name'] = line[2]
+            userinfo['last_name'] = line[3]
+            userinfo['email'] = line[1]
+            userinfo['course'] = line[5]
+            userinfo['instructor'] = False
+            os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+            subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
     else:
         userinfo = {}
         userinfo['username'] = click.prompt("Username")
@@ -253,7 +265,7 @@ def inituser(config, instructor, fromfile):
         userinfo['last_name'] = click.prompt("Last Name")
         userinfo['email'] = click.prompt("email address")
         userinfo['course'] = click.prompt("course name")
-        userinfo['instructor'] = instructor
+        userinfo['instructor'] = True if instructor else click.confirm("Make this user an instructor", default=False)
 
         os.environ['RSM_USERINFO'] = json.dumps(userinfo)
         subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
