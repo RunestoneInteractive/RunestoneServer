@@ -11,7 +11,9 @@
 
 import unittest
 import json
+import datetime
 from gluon.globals import Request, Session
+from gluon.tools import Auth
 from dateutil.parser import parse
 
 # bring in the ajax controllers
@@ -23,9 +25,10 @@ db.commit()
 
 class TestAjaxEndpoints(unittest.TestCase):
     def setUp(self):
-        global request, session
+        global request, session, auth
         request = Request(globals()) # Use a clean Request object
         session = Session()
+        auth = Auth(db, hmac_key=Auth.get_or_create_key())
 
     def testHSBLog(self):
         # Set up the request object
@@ -198,6 +201,55 @@ class TestAjaxEndpoints(unittest.TestCase):
     # getAssessResults
     # preview_question
     # getlastanswer
+
+
+
+    def testGetCompletionStatus(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.lastPageUrl = 'https://runestone.academy/runestone/static/testcourse/PythonTurtle/InstancesAHerdofTurtles.html'
+
+        res = json.loads(getCompletionStatus())
+        self.assertEqual(0, res[0]['completionStatus'])
+
+        request.vars.lastPageUrl = 'https://runestone.academy/runestone/static/testcourse/SimplePythonData/ValuesandDataTypes.html'
+        res = json.loads(getCompletionStatus())
+        self.assertEqual(1, res[0]['completionStatus'])
+
+        request.vars.lastPageUrl = 'https://runestone.academy/runestone/static/testcourse/Recursion/SierpinskiTriangle.html'
+        res = json.loads(getCompletionStatus())
+        self.assertEqual(-1, res[0]['completionStatus'])   
+        row = db((db.user_sub_chapter_progress.chapter_id == 'Recursion') & (db.user_sub_chapter_progress.sub_chapter_id == 'SierpinskiTriangle')).select().first()
+        self.assertIsNotNone(row)
+        self.assertIsNone(row.end_date)
+        today = datetime.datetime.now()
+        self.assertEqual(row.start_date.month, today.month)
+        self.assertEqual(row.start_date.day, today.day)        
+        self.assertEqual(row.start_date.year, today.year)        
+
+        res = json.loads(getAllCompletionStatus())
+        self.assertEqual(409, len(res))
+
+    def testGetNumOnline(self):
+        res = json.loads(getnumonline())
+        self.assertEqual(0, res[0]['online'])
+
+    def testGetUserLoggedIn(self):
+        auth.login_user(db.auth_user(11))
+        res = json.loads(getuser())
+        self.assertEqual('user_11', res[0]['nick'])
+        auth.logout_bare()
+
+    def testGetUserNotLoggedIn(self):
+        res = json.loads(getuser())[0]
+        self.assertTrue('redirect' in res)
+
+
+    def test_gettop10Answers(self):
+        auth.login_user(db.auth_user(1663))
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'question4_2_1'
+        res = json.loads(gettop10Answers())[0]
+        print res
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
