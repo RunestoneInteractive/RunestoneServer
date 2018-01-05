@@ -696,27 +696,9 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         _save_question_grade(sid, course_name, question_name, score, id, deadline)
 
     if practice_start_time:
-        page_visits = db((db.useinfo.course_id == course_name) & \
-                         (db.useinfo.sid == sid) & \
-                         (db.useinfo.event == 'page') & \
-                         (db.useinfo.timestamp >= practice_start_time)) \
-            .select()
-        practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
-        practice_score = 0
-        if score == points:
-            if len(page_visits) <= 1 and len(results) <= 1 and practice_duration <= 2:
-                practice_score = 5
-            elif len(results) <= 2 and practice_duration <= 2:
-                practice_score = 4
-            elif len(results) <= 3 and practice_duration <= 3:
-                practice_score = 3
-            elif len(results) <= 4 and practice_duration <= 4:
-                practice_score = 2
-            elif len(results) <= 5 and practice_duration <= 5:
-                practice_score = 1
-        return (practice_score, len(results))
-    return score
+        return (_score_practice_quality(practice_start_time, len(results)), len(results))
 
+    return score
 
 def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
     try:
@@ -1420,6 +1402,28 @@ def chooseAssignment():
 
 # The rest of the file is about the the spaced practice:
 
+def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count):
+    page_visits = db((db.useinfo.course_id == course_name) & \
+                     (db.useinfo.sid == sid) & \
+                     (db.useinfo.event == 'page') & \
+                     (db.useinfo.timestamp >= practice_start_time)) \
+        .select()
+    practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
+    practice_score = 0
+    if score == points:
+        if len(page_visits) <= 1 and len(results) <= 1 and practice_duration <= 2:
+            practice_score = 5
+        elif len(results) <= 2 and practice_duration <= 2:
+            practice_score = 4
+        elif len(results) <= 3 and practice_duration <= 3:
+            practice_score = 3
+        elif len(results) <= 4 and practice_duration <= 4:
+            practice_score = 2
+        elif len(results) <= 5 and practice_duration <= 5:
+            practice_score = 1
+    return (practice_score, len(results))
+
+# Called when user clicks "I'm done" button or the "I don't know the answer" button
 def checkanswer():
     if not auth.user:
         session.flash = "Please Login"
@@ -1434,16 +1438,17 @@ def checkanswer():
                        (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
                        (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
         if 'q' in request.vars:
+            # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
             q = int(request.vars.q)
             trials_num = 0
         else:
+            # Compute q using the auto grader
             autograde = 'pct_correct'
             if lastQuestion.autograde is not None:
                 autograde = lastQuestion.autograde
             q, trials_num = _autograde_one_q(auth.user.course_name, auth.user.username, lastQuestion.name, 100,
                                  lastQuestion.question_type, None, autograde, 'last_answer', False,
                                  flashcard.last_practice)
-            q = round(q)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
 
@@ -1474,6 +1479,7 @@ def practice():
     flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
 
     if len(flashcards) == 0:
+        # new student; create flashcards
         subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
                               (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
                               (db.sub_chapter_taught.sub_chapter_name == db.sub_chapters.sub_chapter_name) & \
@@ -1490,6 +1496,7 @@ def practice():
             question = _get_next_qualified_question(questions, qIndex)
 
             if question:
+                # there is at least one qualified question in this subchapter, so insert a flashcard for the subchapter
                 db.user_topic_practice.insert(
                     user_id=auth.user.id,
                     course_name=auth.user.course_name,
@@ -1498,15 +1505,17 @@ def practice():
                     question_name=question.name,
                     i_interval=0,
                     e_factor=2.5,
-                    last_practice=datetime.date.today() - datetime.timedelta(1),
+                    last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
                 )
 
         flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
 
     for counter, flashcard in enumerate(flashcards):
         if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
+            # enough time has passed to present this
             questions = db(db.questions.subchapter == flashcard.sub_chapter_label).select()
             if len(questions) != 0:
+                # find index of the last question asked
                 qIndex = 0
                 while questions[qIndex].name != flashcard.question_name:
                     qIndex += 1
