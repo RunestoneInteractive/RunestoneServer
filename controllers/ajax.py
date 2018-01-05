@@ -268,32 +268,6 @@ def getprog():
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
-def getlastanswer():
-    # get's user's last answer for multiple choice question
-    logger.debug("Hello from getlastanswer")
-    divid = request.vars.div_id
-    if  auth.user:
-        sid = auth.user.username
-        query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
-        logger.debug("finding last answer for %s %s " % (sid,divid))
-    else:
-        query = None
-        logger.debug("No User, No Query")
-
-    res = {}
-    if query:
-        result = db(query)
-        if not result.isempty():
-            r = result.select(orderby=~db.useinfo.timestamp).first()
-            res['divid'] = divid
-            res['answer'] = r.act
-            res['timestamp'] = r.timestamp.isoformat()
-        else:
-            logger.debug("No saved answers for %s %s" %(sid,divid))
-    response.headers['content-type'] = 'application/json'
-    return json.dumps(res)
-
-
 
 @auth.requires_membership('instructor')
 def savegrade():
@@ -456,6 +430,9 @@ def getlastpage():
 
 
 def _getCorrectStats(miscdata,event):
+    # TODO: update this to use the xxx_answer table
+    # select and count grouping by the correct column
+    # this version can suffer from division by zero error
     sid = None
     if auth.user:
         sid = auth.user.username
@@ -582,7 +559,7 @@ def getaggregateresults():
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
+    if auth.user and is_instructor:
         resultList = _getStudentResults(question)
         returnDict['reslist'] = resultList
 
@@ -625,20 +602,23 @@ def gettop10Answers():
     response.headers['content-type'] = 'application/json'
     rows = []
 
-    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
     try:
-        rows = db.executesql(query)
-        res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')],
-                'count':row[1]} for row in rows ]
+        dbcourse = db(db.courses.course_name == course).select().first()
+        rows = db((db.useinfo.event == 'fillb') &
+            (db.useinfo.div_id == question) & 
+            (db.useinfo.course_id == dbcourse.course_name) & 
+            (db.useinfo.timestamp > dbcourse.term_start_date)).select(db.useinfo.act, db.useinfo.act.count(), groupby=db.useinfo.act, orderby=~db.useinfo.act.count())
+        res = [{'answer':row.useinfo.act[row.useinfo.act.index(':')+1:row.useinfo.act.rindex(':')], 'count':row._extra.values()[0]} for row in rows[:10] ]
+        logger.debug(res)
     except:
         res = 'error in query'
 
     miscdata = {'course': course}
-    _getCorrectStats(miscdata,'fillb')
+    _getCorrectStats(miscdata,'fillb')  # TODO: rewrite _getCorrectStats to use xxx_answers
 
-    if auth.user and auth.has_membership('instructor',auth.user.id):
-        resultList = _getStudentResults(question)
-        miscdata['reslist'] = resultList
+    # if auth.user and verifyInstructorStatus(course, auth.user.id):
+    #     resultList = _getStudentResults(question)
+    #     miscdata['reslist'] = resultList
 
     return json.dumps([res,miscdata])
 
