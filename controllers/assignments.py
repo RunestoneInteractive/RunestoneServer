@@ -1302,7 +1302,7 @@ def doAssignment():
 
     for r in readings:
         logger.debug("READING = %s",r.name)
-        chapterSections = r.name.split('/')
+        chapterSections = r.name.split('/', 1)
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
                     (db.chapters.course_id == auth.user.course_name) & \

@@ -50,3 +50,5 @@ node_modules
 !/static/bootstrap*
 !/static/dashboard*
 .vscode/*
+*.egg-info/
+*.egg
