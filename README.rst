@@ -10,9 +10,9 @@ Runestone Interactive Server and API
    :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 
-.. |buildstatus| image:: https://drone.io/github.com/bnmnetp/runestone/status.png
+.. image:: http://bnmnetp.me:8088/buildStatus/icon?job=RunestoneServer
+   :alt: Build Status
 
-Build Status |buildstatus|
 
 Relationship to other Runestone components
 ------------------------------------------
@@ -150,10 +150,16 @@ Installation
      * Create a file ``applications/runestone/models/1.py``, with the following line: ``settings.database_uri = '<your_connection_string>'``. NOTE: Don't put this inside an if statement, like it shows in ``models/1.prototype``.
      * If you're running https, edit ``settings.server_type`` in ``models/0.py``.
      * Set and export environment variable for DBURL -- Note the url format for web2py is different from sqlalchemy.  use `postgres` for web2py and `postgresql` for sqlalchemy.  example:  `postgresql://username:pw@host/database` where pw may be empty.
+     * Set and export environment variable WEB2PY_CONFIG. If set to production, it will get the database connection string from DBURL. If set to development, it will get the database connection string from DEV_DBURL. If set to test, it will get it from TEST_DBURL.
+     * Set and export environment variable WEB2PY_MIGRATE. If set to Yes, web2py will check on each page load whether any database migrations are needed and perform them. If set to No, web2py will just assume that models match the database. If set to Fake, web2py will try to update the metadata it maintains about the database tables to match the models, but will not make any changes to the database; use that setting only for repairs when something has gone wrong.
 
    ::
-
+       
+       export WEB2PY_CONFIG=production
+       export WEB2PY_MIGRATE=Yes
        export DBURL=postgresql://username:pw@host/database
+       export TEST_DBURL=postgresql://username:pw@host/database
+       export DEV_DBURL=postgresql://username:pw@host/database
 
 #. Run web2py once, so that it will create all the tables.
 
@@ -165,6 +171,7 @@ Installation
 
       If you get an error message that the session table already exists, you need to go into the database and drop the table.
       If you get other error messages about tables that either exist or do not exist when they should or should not, then your database is out of sync with the data in your databases folder created by web2py.  This is not a happy spot to be in.  If this is a new installation then you may simply try to drop the database and recreate the database.   If this is an old installation and you don't want to lose any data then you may still find the easiest path to drop and recreate the database.   As a last resort you can try to do a fake migration by setting `fake_migrate=True` in db.py where the DAL object is created.   This is likely going to cause even more problems, so only use it if you really know what changes you have made to the database schema and why.
+
 
 
 #. Build the book.
@@ -189,6 +196,16 @@ This step is somewhat optional even for developers, depending on what you are wo
         $ cp applications/runestone/scripts/run_scheduler.py .
 
 Now you will want to edit the start script according to your setup.  Then use the start script to start web2py and the scheduler together.  Do not just run `python web2py.py` directly.
+
+More on Environment Variables
+-----------------------------
+
+There are a few environment variables that you can use to control the runestone server out of the box:
+
+* `WEB2PY_CONFIG` You can set this to production, development, or test.  Each mode can have a corresponding database connection environment variable.  They are:
+* for development use `DEV_DBURL`
+* for test use `TEST_DBURL`
+* for production use `DBURL`   Yes, its not quite consistent, but its backward compatible for the way we have been doing things.
 
 
 Create an account for yourself

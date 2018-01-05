@@ -15,9 +15,13 @@ import random
 
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(settings.database_uri,fake_migrate_all=False)
-    session.connect(request, response, masterapp='runestone', db=db)
+    if os.environ.get("WEB2PY_CONFIG","") == 'test':
+        db = DAL(settings.database_uri,migrate=False,migrate_enabled=False)
+    else:
+        # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
+        db = DAL(settings.database_uri, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
+                 migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
+    session.connect(request, response, masterapp='runestone', db=db, migrate='runestone_web2py_sessions.table')
 
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
@@ -75,12 +79,11 @@ db.define_table('courses',
 )
 
 if db(db.courses.id > 0).isempty():
-    db.courses.insert(id=1, course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1, to avoid error in auto populate of auth_users, where course_id defaults to 1
-    db.courses.insert(id=2, course_name='thinkcspy', base_course = 'thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(id=3, course_name='pythonds', base_course = 'pythonds', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(id=4, course_name='overview', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(id=5, course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(id=6, course_name='UMSI106', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
+    db.courses.insert(course_name='thinkcspy', base_course = 'thinkcspy', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='pythonds', base_course = 'pythonds', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
 
 ## create cohort_master table
 db.define_table('cohort_master',

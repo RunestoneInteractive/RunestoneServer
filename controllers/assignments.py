@@ -593,8 +593,6 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
                      practice_start_time = None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
-
-
     if not autograde:
         logger.debug("autograde not set returning 0")
         return 0
@@ -695,7 +693,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
 
     # Save the score
     if save_score:
-        _save_question_grade(sid, course_name, question_name, score, id)
+        _save_question_grade(sid, course_name, question_name, score, id, deadline)
 
     if practice_start_time:
         page_visits = db((db.useinfo.course_id == course_name) & \
@@ -720,7 +718,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
     return score
 
 
-def _save_question_grade(sid, course_name, question_name, score, id):
+def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
     try:
         db.question_grades.update_or_insert(
             ((db.question_grades.sid == sid) &
@@ -732,7 +730,8 @@ def _save_question_grade(sid, course_name, question_name, score, id):
             div_id=question_name,
             score = score,
             comment = "autograded",
-            useinfo_id = id
+            useinfo_id = useinfo_id,
+            deadline=deadline
         )
     except IntegrityError:
         logger.error("IntegrityError {} {} {}".format(sid, course_name, question_name))
@@ -941,7 +940,7 @@ def autograde():
                 save_points = 0
                 logger.debug("no points for %s on %s", auth.user.username, name)
 
-            _save_question_grade(s, auth.user.course_name, name, save_points, None)
+            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadlline)
 
     logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,
@@ -1278,6 +1277,12 @@ def doAssignment():
         logger.error("NO ASSIGNMENT assign_id = %s course = %s user = %s",assignment_id, course, auth.user.username)
         session.flash = "Could not find login and try again."
         return redirect(URL('default','index'))
+
+    if assignment.visible == 'F' or assignment.visible == None:
+        if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
+            session.flash = "That assignment is no longer available"
+            return redirect(URL('assignments','chooseAssignment'))
+
 
     questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
                         (db.assignment_questions.question_id == db.questions.id) & \
