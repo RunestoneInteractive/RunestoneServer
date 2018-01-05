@@ -14,11 +14,24 @@ logger.setLevel(settings.log_level)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
+EVENT_TABLE = {'mChoice':'mchoice_answers', 
+               'fillb':'fitb_answers', 
+               'dragNdrop':'dragndrop_answers', 
+               'clickableArea':'clickablearea_answers', 
+               'parsons':'parsons_answers',
+               'codelens1':'codelens_answers',
+               'shortanswer':'shortanswer_answers',
+               'fillintheblank': 'fitb_answers',
+               'mchoice': 'mchoice_answers',
+               'dragndrop': 'dragndrop_answers',
+               'clickablearea':'clickablearea_answers',
+               'parsonsprob': 'parsons_answers' }
+
 def compareAndUpdateCookieData(sid):
     if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
         db.useinfo(db.useinfo.sid == request.cookies['ipuser'].value).update(sid=sid)
 
-def hsblog():    # Human Subjects Board Log
+def hsblog():
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -434,6 +447,8 @@ def _getCorrectStats(miscdata,event):
     # select and count grouping by the correct column
     # this version can suffer from division by zero error
     sid = None
+    dbtable = EVENT_TABLE[event]  # translate event to correct table
+
     if auth.user:
         sid = auth.user.username
     else:
@@ -442,24 +457,18 @@ def _getCorrectStats(miscdata,event):
 
     if sid:
         course = db(db.courses.course_name == miscdata['course']).select().first()
+        tbl = db[dbtable]
 
-        correctquery = '''select
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-                                               and position('correct' in act) > 0 )
-/
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-) as result;
-''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
-
-        try:
-            rows = db.executesql(correctquery)
-            pctcorr = round(rows[0][0]*100)
-        except:
-            pctcorr = 'unavailable in sqlite'
+        rows = db((tbl.sid == sid) & (tbl.timestamp > course.term_start_date)).select(tbl.correct, tbl.correct.count(),groupby=tbl.correct)
+        total = 0
+        correct = 0
+        for row in rows:
+            count = row._extra.values()[0]
+            total += count
+            if row[dbtable].correct:
+                correct = count
+        if total > 0:
+            pctcorr = round(float(correct) / total * 100)
     else:
         pctcorr = 'unavailable'
 
@@ -467,11 +476,17 @@ def _getCorrectStats(miscdata,event):
 
 
 def _getStudentResults(question):
-        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+        # TODO: redo this using the xxx_answers table
+        cc = db(db.courses.id == auth.user.course_id).select().first()
+        course = cc.course_name
+        print "COURSE = ", course, "QUESTION = ", question
+        qst = db((db.questions.name == question) & (db.questions.base_course == cc.base_course )).select().first()
+        tbl = EVENT_TABLE[qst.question_type]
+        assert db[tbl]
 
         q = db( (db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course.course_name) &
-                (db.courses.course_name == course.course_name) &
+                (db.useinfo.course_id == cc.course_name) &
+                (db.courses.course_name == cc.course_name) &
                 (db.useinfo.timestamp >= db.courses.term_start_date) )
 
         res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
@@ -598,27 +613,26 @@ def getpollresults():
 def gettop10Answers():
     course = request.vars.course
     question = request.vars.div_id
-    # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
     rows = []
 
     try:
         dbcourse = db(db.courses.course_name == course).select().first()
-        rows = db((db.useinfo.event == 'fillb') &
-            (db.useinfo.div_id == question) & 
-            (db.useinfo.course_id == dbcourse.course_name) & 
-            (db.useinfo.timestamp > dbcourse.term_start_date)).select(db.useinfo.act, db.useinfo.act.count(), groupby=db.useinfo.act, orderby=~db.useinfo.act.count())
-        res = [{'answer':row.useinfo.act[row.useinfo.act.index(':')+1:row.useinfo.act.rindex(':')], 'count':row._extra.values()[0]} for row in rows[:10] ]
-        logger.debug(res)
-    except:
+        rows = db((db.fitb_answers.div_id == question) &
+                (db.fitb_answers.course_name == course) &
+                (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, db.fitb_answers.answer.count(),
+                    groupby=db.fitb_answers.answer, orderby=~db.fitb_answers.answer.count())
+        res = [{'answer':row.fitb_answers.answer, 'count':row._extra.values()[0]} for row in rows[:10] ]
+    except Exception as e:
+        logger.debug(e)
         res = 'error in query'
 
     miscdata = {'course': course}
     _getCorrectStats(miscdata,'fillb')  # TODO: rewrite _getCorrectStats to use xxx_answers
 
-    # if auth.user and verifyInstructorStatus(course, auth.user.id):
-    #     resultList = _getStudentResults(question)
-    #     miscdata['reslist'] = resultList
+    if auth.user and verifyInstructorStatus(course, auth.user.id):
+        resultList = _getStudentResults(question)
+        miscdata['reslist'] = resultList
 
     return json.dumps([res,miscdata])
 
