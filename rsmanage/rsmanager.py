@@ -1,4 +1,4 @@
-import subprocess, os, re, signal
+import subprocess, os, re, signal, json, sys, csv
 import click
 from sqlalchemy import create_engine
 
@@ -14,7 +14,7 @@ OPT_ENV = ['TEST_DBURL','WEB2PY_MIGRATE']
 APP = 'runestone'
 APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
-
+BUILDDIR = '{}/build'.format(APP_PATH)
 
 @click.group()
 @click.option("--verbose", is_flag=True, help="More verbose output")
@@ -35,15 +35,17 @@ def cli(config, verbose):
         click.echo("Incorrect WEB2PY_CONFIG")
         sys.exit(1)
 
+    config.conf = conf
     config.dbname = re.match(r'postgres.*//.*?@.*?/(.*)', config.dburl).group(1)
 
     if verbose:
-        click.echo("WEB2PY_CONFIG is {}".format(conf))
-        click.echo("DBURL is {}".format(config.dburl))
-        click.echo("DBNAME is {}".format(config.dbname))
+        echoEnviron(config)
 
     config.verbose = verbose
 
+#
+#    initdb
+#
 @cli.command()
 @click.option("--list_tables", is_flag=True, help="List all of the defined tables when done")
 @click.option("--reset", is_flag=True, help="drop database and delete all migration information")
@@ -87,6 +89,11 @@ def initdb(config, list_tables, reset):
     if res != 0:
         click.echo(message="Database Initialization Failed")
 
+
+#
+#    run
+#
+
 @cli.command()
 @click.option("--with-scheduler", is_flag=True, help="Star the background task scheduler too")
 @pass_config
@@ -94,6 +101,10 @@ def run(config, with_scheduler):
     """Starts up the runestone server and optionally scheduler"""
     os.chdir(findProjectRoot())
     res = subprocess.Popen("python -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X", shell=True)
+
+#
+#    shutdown
+#
 
 @cli.command()
 @pass_config
@@ -114,22 +125,169 @@ def shutdown(config):
         # result will be form of hostname#pid
         os.kill(int(row[0].split("#")[1]), signal.SIGINT)
 
+#
+#    addcourse
+#
+
 @cli.command()
+@click.option("--course-name", help="The name of a course to create")
+@click.option("--basecourse", help="The name of the basecourse")
+@click.option("--start-date", help="Start Date for the course in YYYY-MM-DD")
+@click.option("--python3", is_flag=True, help="Use python3 style syntax")
+@click.option("--login-required", is_flag=True, help="Only registered users can access this course?")
+@click.option("--institution", help="Your institution")
 @pass_config
-def addbook(config):
-    """Create a course and build the book -- coming soon"""
-    pass
+def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution):
+    """Create a course in the database"""
+    #TODO:  Add options for all of the things we prompt for
+    eng = create_engine(config.dburl)
+    done = False
+    while not done:
+        if not course_name:
+            course_name = click.prompt("Course Name")
+        if not python3:
+            python3 = 'T' if click.confirm("Use Python3 style syntax?", default=True) else 'F'
+        if not basecourse:
+            basecourse = click.prompt("Base Course")
+        if not start_date:
+            start_date = click.prompt("Start Date YYYY-MM-DD")
+        if not institution:
+            institution = click.prompt("Your institution")
+        if not login_required:
+            login_required = 'T' if click.confirm("Require users to log in", default=True) else 'F'
+
+        res = eng.execute("select id from courses where course_name = '{}'".format(course_name)).first()
+        if not res:
+            done = true
+        else:
+            click.confirm("Course {} already exists continue with a different name?".format(course_name), default=True, abort=True)
+
+    eng.execute("""insert into courses (course_name, base_course, python3, term_start_date, login_required, institution)
+                values ({} {} {} {} {} {})
+                """.format(course_name, basecourse, python3, start_date, login_required, institution ))
+
+    click.echo("Course added to DB successfully")
+
+
+#
+#    build
+#
+
+@cli.command()
+@click.option("--course", help="The name of a course that should already exist in the DB")
+@click.option("--repo",  help="URL to a git repository with the book to build")
+@click.option("--skipclone", is_flag=True, help="avoid recloning when directory is already there")
+@pass_config
+def build(config, course, repo, skipclone):
+    """Build the book for an existing course"""
+    os.chdir(findProjectRoot())  # change to a known location
+    eng = create_engine(config.dburl)
+    res = eng.execute("select id from courses where course_name = '{}'".format(course)).first()
+    if not res:
+        click.echo("Error:  The course {} must already exist in the database -- use rsmanage addcourse".format(course), color='red')
+        exit(1)
+
+    os.chdir(BUILDDIR)
+    if not skipclone:
+        res = subprocess.call("git clone {}".format(repo), shell=True)
+        if res != 0:
+            click.echo("Cloning the repository failed, please check the URL and try again")
+            exit(1)
+
+    proj_dir = os.path.basename(repo).replace(".git","")
+    click.echo("Switching to project dir {}".format(proj_dir))
+    os.chdir(proj_dir)
+    try:
+        if os.path.exists('pavement.py'):
+            sys.path.insert(0, os.getcwd())
+            from pavement import project_name, dest
+        else:
+            click.echo("I can't find a pavement.py file in {} you need that to build".format(os.getcwd()))
+            exit(1)
+    except ImportError as e:
+        click.echo("You do not appear to have project_name defined in your pavement.py file.")
+        print e
+        exit(1)
+
+    if project_name != course:
+        click.echo("Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(course, project_name))
+        exit(1)
+
+    res = subprocess.call("runestone build --all", shell=True)
+    if res != 0:
+        click.echo("building the book failed, check the log for errors and try again")
+        exit(1)
+    click.echo("Build succeedeed... Now deploying to static")
+    if dest != "../../static":
+        click.echo("Incorrect deployment directory.  dest should be ../../static in pavement.py")
+        exit(1)
+
+    res = subprocess.call("runestone deploy", shell=True)
+    if res == 0:
+        click.echo("Success! Book deployed")
+    else:
+        click.echo("Deploy failed, check the log to see what went wrong.")
+
+
+#
+#    inituser
+#
 
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
-@click.option("--fromfile", default="-", type=click.File(mode="r"), help="Make this user an instructor")
+@click.option("--fromfile", default=None, type=click.File(mode="r"), help="read a csv file of users of the form username, email, first_name, last_name, password, course")
 @pass_config
-def inituser(config):
-    """Add a user (or users)-- coming soon"""
-    pass
+def inituser(config, instructor, fromfile):
+    """Add a user (or users from a csv file)"""
+    os.chdir(findProjectRoot())
 
+    if fromfile:
+        # if fromfile then be sure to get the full path name NOW.
+        # csv file should be username, email first_name, last_name, password, course
+        # users from a csv cannot be instructors
+        for line in csv.reader(fromfile):
+            if len(line) != 6:
+                click.echo("Not enough data to create a user.  Lines must be")
+                click.echo("username, email first_name, last_name, password, course")
+                exit(1)
+            if "@" not in line[1]:
+                click.echo("emails should have an @ in them in column 2")
+                exit(1)
+            userinfo = {}
+            userinfo['username'] = line[0]
+            userinfo['password'] = line[4]
+            userinfo['first_name'] = line[2]
+            userinfo['last_name'] = line[3]
+            userinfo['email'] = line[1]
+            userinfo['course'] = line[5]
+            userinfo['instructor'] = False
+            os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+            res = subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+            if res != 0:
+                click.echo("Failed to create user {} fix your data and try again".format(line[0]))
+                exit(1)
+    else:
+        userinfo = {}
+        userinfo['username'] = click.prompt("Username")
+        userinfo['password'] = click.prompt("Password", hide_input=True)
+        userinfo['first_name'] = click.prompt("First Name")
+        userinfo['last_name'] = click.prompt("Last Name")
+        userinfo['email'] = click.prompt("email address")
+        userinfo['course'] = click.prompt("course name")
+        userinfo['instructor'] = True if instructor else click.confirm("Make this user an instructor", default=False)
 
+        os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+        subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+
+@cli.command()
+@pass_config
+def env(config):
+    """Print out your configured environment"""
+    echoEnviron(config)
+
+#
 # Utility Functions Below here
+#
 
 def checkEnvironment():
     """
@@ -147,6 +305,11 @@ def checkEnvironment():
 
     if stop:
         sys.exit(1)
+
+def echoEnviron(config):
+    click.echo("WEB2PY_CONFIG is {}".format(config.conf))
+    click.echo("The database URL is configured as {}".format(config.dburl))
+    click.echo("DBNAME is {}".format(config.dbname))
 
 
 def findProjectRoot():
