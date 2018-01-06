@@ -9,6 +9,13 @@
 # python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 #
 
+# TODO:  Write these
+# getCorrectStats
+# getpollresults
+# getassignmentgrade
+# getAssessResults
+# preview_question
+
 import unittest
 import json
 import datetime
@@ -190,17 +197,30 @@ class TestAjaxEndpoints(unittest.TestCase):
         # we should not count answers after they are correct
         # TODO: We can do away with the instructor view here as it is better in the dashboard
 
-    # getCompletionStatus
-    # getAllCompletionStatus
-    # getCorrectStats
-    # getStudentResults ??
-    # getaggregateresults
-    # getpollresults
-    # gettop10Answers
-    # getassignmentgrade
-    # getAssessResults
-    # preview_question
-    # getlastanswer
+        # Now test for the instructor:
+        auth.login_user(db.auth_user(11))
+        res = json.loads(getaggregateresults())
+        res = res[0]
+        expect = {
+        'user_1662': [u'0', u'1'],
+        'user_1663': [u'1'],
+        'user_1665': [u'1'],
+        'user_1667': [u'0', u'1'],
+        'user_1668': [u'0', u'1'],
+        'user_1669': [u'1'],
+        'user_1670': [u'1'],
+        'user_1671': [u'1'],
+        'user_1672': [u'0', u'1'],
+        'user_1673': [u'0', u'1'],
+        'user_1674': [u'1'],
+        'user_1675': [u'0', u'1'],
+        'user_1676': [u'1'],
+        'user_1677': [u'1'],
+        'user_1751': [u'0', u'1'],
+        'user_2521': [u'1']        ,
+        }
+        for student in res['reslist']:
+            self.assertEqual(student[1], expect[student[0]])
 
 
 
