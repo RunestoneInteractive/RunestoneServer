@@ -302,7 +302,7 @@ def add_practice_items():
                                 question_name=questions.select().first().name,
                                 i_interval=0,
                                 e_factor=2.5,
-                                last_practice=datetime.date.today() - datetime.timedelta(1),
+                                last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
                             )
             else:
                 if not subchapterTaught.isempty():
@@ -1080,6 +1080,7 @@ def _get_toc_and_questions():
         # chapters are associated with courses, not with base_courses
         chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
         subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
+        chapters_and_subchapters_taught = [(row.chapter_name, row.sub_chapter_name) for row in subchapters_taught_query]
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
@@ -1121,12 +1122,9 @@ def _get_toc_and_questions():
                     p_ch_info['children'].append(p_sub_ch_info)
                     p_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
                     p_sub_ch_info['text'] = sub_ch.sub_chapter_name
-                    p_sub_ch_info['state'] = {'checked': False} # Indicates that the sub_chapter is not taught, so it should not be checked in the jstree.
-                    for sub_ch_taught in subchapters_taught_query:
-                        if (ch.chapter_name == sub_ch_taught.chapter_name and
-                                sub_ch.sub_chapter_name == sub_ch_taught.sub_chapter_name):
-                            p_sub_ch_info['state'] = {'checked': True} # Indicates that the sub_chapter is taught, so it should be checked in the jstree.
-                            break
+                    # checked if
+                    p_sub_ch_info['state'] = {'checked':
+                                              (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
                                      (db.questions.base_course == db.courses.base_course) & \
