@@ -922,7 +922,7 @@ def autograde():
                 save_points = 0
                 logger.debug("no points for %s on %s", auth.user.username, name)
 
-            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadlline)
+            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadline)
 
     logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,

@@ -9,6 +9,13 @@
 # python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 #
 
+# TODO:  Write these
+# getCorrectStats
+# getpollresults
+# getassignmentgrade
+# getAssessResults
+# preview_question
+
 import unittest
 import json
 import datetime
@@ -183,24 +190,37 @@ class TestAjaxEndpoints(unittest.TestCase):
         # [{u'answerDict': {u'1': 72.0, u'0': 28.0}, u'misc': {u'course': u'testcourse', u'correct': u'1', u'yourpct': 76.0}}]
         self.assertEqual(res['answerDict']['1'], 72.0)
         self.assertEqual(res['answerDict']['0'], 28.0)
-        self.assertEqual(res['misc']['yourpct'], 76.0)
+        self.assertEqual(res['misc']['yourpct'], 79.0)
 
         # TODO: this shows the old method of doing things using useinfo.  We should use mchoice_answers and then calculate
         # a sensible way of calculating class percentages. for example 16 1's and 7 0's 23 total would indicate 70% 1 and 30% 0
         # we should not count answers after they are correct
         # TODO: We can do away with the instructor view here as it is better in the dashboard
 
-    # getCompletionStatus
-    # getAllCompletionStatus
-    # getCorrectStats
-    # getStudentResults ??
-    # getaggregateresults
-    # getpollresults
-    # gettop10Answers
-    # getassignmentgrade
-    # getAssessResults
-    # preview_question
-    # getlastanswer
+        # Now test for the instructor:
+        auth.login_user(db.auth_user(11))
+        res = json.loads(getaggregateresults())
+        res = res[0]
+        expect = {
+        'user_1662': [u'0', u'1'],
+        'user_1663': [u'1'],
+        'user_1665': [u'1'],
+        'user_1667': [u'0', u'1'],
+        'user_1668': [u'0', u'1'],
+        'user_1669': [u'1'],
+        'user_1670': [u'1'],
+        'user_1671': [u'1'],
+        'user_1672': [u'0', u'1'],
+        'user_1673': [u'0', u'1'],
+        'user_1674': [u'1'],
+        'user_1675': [u'0', u'1'],
+        'user_1676': [u'1'],
+        'user_1677': [u'1'],
+        'user_1751': [u'0', u'1'],
+        'user_2521': [u'1']        ,
+        }
+        for student in res['reslist']:
+            self.assertEqual(student[1], expect[student[0]])
 
 
 
@@ -245,11 +265,41 @@ class TestAjaxEndpoints(unittest.TestCase):
 
 
     def test_gettop10Answers(self):
-        auth.login_user(db.auth_user(1663))
+        # We don't have any fillb answers in our test database, so lets add some.
+        db.questions.insert(base_course='thinkcspy', name='fillb1',
+                            chapter='Exceptions',
+                            subchapter='using-exceptions',
+                            htmlsrc='<h2>Hello World</h2>', question_type='fillintheblank')
+
+        for user in [11, 1662, 1663, 1665, 1667, 1670]:
+            auth.login_user(db.auth_user(user))
+            request.vars["act"] = 'run'
+            request.vars.event = 'fillb'
+            request.vars.course = 'testcourse'
+            request.vars.div_id = 'fillb1'
+            if user % 2 == 1:
+                request.vars.act = '42'
+                request.vars.answer = '42'
+                request.vars.correct = 'T'
+            else:
+                request.vars.act = '41'
+                request.vars.answer = '41'
+                request.vars.correct = 'F'
+            res = hsblog()
+
+        auth.login_user(db.auth_user(11))
         request.vars.course = 'testcourse'
-        request.vars.div_id = 'question4_2_1'
-        res = json.loads(gettop10Answers())[0]
-        print res
+        request.vars.div_id = 'fillb1'
+        res = json.loads(gettop10Answers())
+        misc = res[1]
+        res = res[0]
+        self.assertEqual(len(res), 2)
+        self.assertEqual(res[0]['answer'], '42')
+        self.assertEqual(res[0]['count'], 4)
+        self.assertEqual(res[1]['answer'], '41')
+        self.assertEqual(res[1]['count'], 2)                        
+        print misc
+        self.assertEqual(misc['yourpct'], 100)
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
