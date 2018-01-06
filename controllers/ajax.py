@@ -469,6 +469,8 @@ def _getCorrectStats(miscdata,event):
                 correct = count
         if total > 0:
             pctcorr = round(float(correct) / total * 100)
+        else:
+            pctcorr = 'unavailable'
     else:
         pctcorr = 'unavailable'
 
