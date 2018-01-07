@@ -696,9 +696,14 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         _save_question_grade(sid, course_name, question_name, score, id, deadline)
 
     if practice_start_time:
-        return (_score_practice_quality(practice_start_time, len(results)), len(results))
-
+        return _score_practice_quality(practice_start_time,
+                                       course_name,
+                                       sid,
+                                       points,
+                                       score,
+                                       len(results) if results else 0)
     return score
+
 
 def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
     try:
@@ -1411,17 +1416,17 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
     practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
     practice_score = 0
     if score == points:
-        if len(page_visits) <= 1 and len(results) <= 1 and practice_duration <= 2:
+        if len(page_visits) <= 1 and trials_count <= 1 and practice_duration <= 2:
             practice_score = 5
-        elif len(results) <= 2 and practice_duration <= 2:
+        elif trials_count <= 2 and practice_duration <= 2:
             practice_score = 4
-        elif len(results) <= 3 and practice_duration <= 3:
+        elif trials_count <= 3 and practice_duration <= 3:
             practice_score = 3
-        elif len(results) <= 4 and practice_duration <= 4:
+        elif trials_count <= 4 and practice_duration <= 4:
             practice_score = 2
-        elif len(results) <= 5 and practice_duration <= 5:
+        elif trials_count <= 5 and practice_duration <= 5:
             practice_score = 1
-    return (practice_score, len(results))
+    return (practice_score, trials_count)
 
 # Called when user clicks "I'm done" button or the "I don't know the answer" button
 def checkanswer():
