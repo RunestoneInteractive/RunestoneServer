@@ -6,7 +6,7 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
     cinfo = db(db.courses.course_name == course_name).select().first()
     if not cinfo:
         raise ValueError("Course {} does not exist".format(course_name))
-    pw = CRYPT(auth.settings.hmac_key)('grouplens')[0]
+    pw = CRYPT(auth.settings.hmac_key)(password)[0]
     uid = db.auth_user.insert(username=username, password=pw, first_name=fname,
                         last_name=lname, email=email,
                         course_id=cinfo.id, course_name=course_name, active='T',

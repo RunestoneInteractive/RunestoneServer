@@ -146,7 +146,9 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
         if not course_name:
             course_name = click.prompt("Course Name")
         if not python3:
-            python3 = 'T' if click.confirm("Use Python3 style syntax?", default=True) else 'F'
+            python3 = 'T' if click.confirm("Use Python3 style syntax?", default='T') else 'F'
+        else:
+            python3 = 'T'
         if not basecourse:
             basecourse = click.prompt("Base Course")
         if not start_date:
@@ -154,16 +156,18 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
         if not institution:
             institution = click.prompt("Your institution")
         if not login_required:
-            login_required = 'T' if click.confirm("Require users to log in", default=True) else 'F'
+            login_required = 'T' if click.confirm("Require users to log in", default='T') else 'F'
+        else:
+            login_required = 'T'
 
         res = eng.execute("select id from courses where course_name = '{}'".format(course_name)).first()
         if not res:
-            done = true
+            done = True
         else:
             click.confirm("Course {} already exists continue with a different name?".format(course_name), default=True, abort=True)
 
     eng.execute("""insert into courses (course_name, base_course, python3, term_start_date, login_required, institution)
-                values ({} {} {} {} {} {})
+                values ('{}', '{}', '{}', '{}', '{}', '{}')
                 """.format(course_name, basecourse, python3, start_date, login_required, institution ))
 
     click.echo("Course added to DB successfully")
