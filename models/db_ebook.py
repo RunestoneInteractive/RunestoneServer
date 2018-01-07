@@ -46,20 +46,6 @@ db.define_table('acerror_log',
                 migrate='runestone_acerror_log.table'
                 )
 
-##table to store highlights saved by the user
-db.define_table('user_highlights',
-  Field('created_on','datetime'),
-  Field('user_id','integer'),
-  Field('course_id','string'),
-  Field('parent_class','string'), #class of the parent container
-  Field('range','text'), #range JSON of the highlight
-  Field('chapter_url','text'),
-  Field('sub_chapter_url','text'),
-  Field('method','string'), #self / Imported from friend
-  Field('is_active','integer', default=1), #0 - deleted / inactive. 1 - active
-  migrate='runestone_user_highlights.table'
-)
-
 ##table to store the last position of the user. 1 row per user, per course
 db.define_table('user_state',
   Field('user_id','integer'),
