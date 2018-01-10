@@ -561,9 +561,9 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
+
+
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
-
-
     if not autograde:
         logger.debug("autograde not set returning 0")
         return 0
@@ -659,11 +659,11 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
 
     # Save the score
     if save_score:
-        _save_question_grade(sid, course_name, question_name, score, id)
+        _save_question_grade(sid, course_name, question_name, score, id, deadline)
 
     return score
 
-def _save_question_grade(sid, course_name, question_name, score, id):
+def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
     try:
         db.question_grades.update_or_insert(
             ((db.question_grades.sid == sid) &
@@ -675,7 +675,8 @@ def _save_question_grade(sid, course_name, question_name, score, id):
             div_id=question_name,
             score = score,
             comment = "autograded",
-            useinfo_id = id
+            useinfo_id = useinfo_id,
+            deadline=deadline
         )
     except IntegrityError:
         logger.error("IntegrityError {} {} {}".format(sid, course_name, question_name))
@@ -884,7 +885,7 @@ def autograde():
                 save_points = 0
                 logger.debug("no points for %s on %s", auth.user.username, name)
 
-            _save_question_grade(s, auth.user.course_name, name, save_points, None)
+            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadline)
 
     logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,

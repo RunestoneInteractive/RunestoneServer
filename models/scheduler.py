@@ -118,6 +118,8 @@ def makePavement(http_host, rvars, sourcedir, base_course):
             'use_services': 'true',
             'dburl': settings.database_uri,
             'basecourse': base_course,
+            'default_ac_lang': rvars.get('default_ac_lang') if rvars.get('default_ac_lang',False) else 'python',
+            'downloads_enabled': rvars.get('downloads_enabled','false')
             }
     if 'loginreq' in rvars:
         opts['login_req'] = 'true'
@@ -134,4 +136,4 @@ def makePavement(http_host, rvars, sourcedir, base_course):
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
 
-scheduler = Scheduler(db)
+scheduler = Scheduler(db, migrate='runestone_')
