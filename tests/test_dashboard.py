@@ -37,14 +37,13 @@ class TestDashboardEndpoints(unittest.TestCase):
         session.auth = auth
         request.vars.id=auth.user.username
 
-        # TODO: this does not appear to populate the session object
+        res = studentreport()   #todo: if this is an endoint why does it not return json?
 
-        print "SESSION = ", session
-        res = studentreport()
         #course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades
         self.assertEqual(res['course_id'], 'testcourse')
         self.assertEqual(res['user'].username, 'user_1674')
-        print res['assignments']
+        self.assertEqual(res['assignments']['List Practice']['score'], 13.0)
+        self.assertEqual(res['assignments']['List Practice']['class_average'], '7.82') #todo: why a string?
 
 
 
