@@ -78,7 +78,7 @@
 	<h1 style='text-align:center'>{{=assignment['name']}}</h1>
 	<h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}
 		<span style="float:right; margin-right:1cm;">
-			Points Possible: {{=assignment['points']}}</span></h2>
+			Score: {{=questions_score+readings_score}} of {{=assignment['points']}}</span>
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
@@ -93,9 +93,9 @@
 					{{for r in readings[reading]['subchapters']:}}
 						<li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
 						{{if r['score'] != '':}}
-							{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
+							</br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
 						{{else:}}
-							not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required}}
+							</br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
 						{{pass}}
 					</li>
 

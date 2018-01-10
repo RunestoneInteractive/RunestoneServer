@@ -1244,6 +1244,7 @@ def doAssignment():
 
     questionslist = []
     readings = OrderedDict()
+    readings_score = 0
 
     # For each question, accumulate information, and add it to either the readings or questions data structure
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
@@ -1309,11 +1310,21 @@ def doAssignment():
             info['status']=status
 
             readings[q.questions.chapter]['subchapters'].append(info)
+            readings_score += info['score']
         else:
             # add to questions
             questionslist.append(info)
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=questionslist, course_id=auth.user.course_name, readings=readings)
+
+
+    return dict(course=course,
+                course_name=auth.user.course_name,
+                assignment=assignment,
+                questioninfo=questionslist,
+                course_id=auth.user.course_name,
+                readings=readings,
+                questions_score=sum([info.score for info in questionslist]),
+                readings_score=readings_score)
 
 def chooseAssignment():
     if not auth.user:
