@@ -69,6 +69,8 @@ class TestAjaxEndpoints(unittest.TestCase):
         """
         #globals auth, db
         # can login user with auth.login_user(db.auth_user(60)) then auth.user will be defined
+
+        #mchoice
         auth.login_user(db.auth_user(11))
         request.vars.course = 'testcourse'
         request.vars.div_id = 'test_question2_4_1'
@@ -99,6 +101,35 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res['correct'], False)
         # timestamp 2017-09-04 00:56:34
         self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
+
+        # shortanswer
+        request.vars.event = 'shortanswer'
+        request.vars.div_id = 'turtle_reflect'
+        request.vars.sid = 'user_1669'
+        res = json.loads(getAssessResults())
+        self.assertTrue("Moving the turtle" in res['answer'])
+
+        # fitb -- tested in getTop10answers
+
+        # dragndrop
+        auth.login_user(db.auth_user(11))
+        request.vars["act"] = '0;1;2'
+        request.vars.answer = '0;1;2'
+        request.vars.correct = 'T'
+        request.vars.event = 'dragNdrop'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'demovideodnd'
+        request.client = "foobar"
+        request.vars.minHeight = '512'
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = json.loads(getAssessResults())
+        print(res)
+        self.assertTrue(res['correct'])
+
+
+
+
 
     def testGetHist(self):
         """
@@ -298,7 +329,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res[0]['count'], 4)
         self.assertEqual(res[1]['answer'], '41')
         self.assertEqual(res[1]['count'], 2)                        
-        print misc
         self.assertEqual(misc['yourpct'], 100)
 
 suite = unittest.TestSuite()
