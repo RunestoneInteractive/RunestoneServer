@@ -16,3 +16,4 @@ SQLAlchemy>=1.0.14
 cssselect>=1.0
 oauth2>=1.9
 coverage
+-e rsmanage/

@@ -42,9 +42,10 @@ fi
 # make sure runestone_test is nice and clean
 
 if [ "$1" != "--skipdbinit" ]; then
-    dropdb --echo --if-exists runestone_test
-    createdb --echo runestone_test
-    psql runestone_test < runestone_test.sql
+    dbname=`basename "$TEST_DBURL"`
+    dropdb --echo --if-exists "$dbname"
+    createdb --echo "$dbname"
+    psql "$dbname" < runestone_test.sql
 else
     echo "Skipping DB initialization"
 fi
@@ -53,5 +54,6 @@ cd ../../..
 # Now run
 COVER_DIRS=applications/runestone/tests,applications/runestone/controllers,applications/runestone/models
 coverage run --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
+coverage run --append --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_dashboard.py
 coverage run --append --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_assignments.py
 coverage report

@@ -3,7 +3,7 @@ import time
 
 def everyday():
     def get_posts(args, dname, flist):
-        print dname
+        print(dname)
         l = flist[:]
         for f in l:
             if "~" in f:

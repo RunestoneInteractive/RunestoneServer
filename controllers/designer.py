@@ -166,7 +166,7 @@ def delete_course():
         cset = db(db.courses.course_name == course_name)
         if not cset.isempty():
             courseid = cset.select(db.courses.id).first()
-            print 'courseid = ', courseid
+            print('courseid = ', courseid)
             qset = db((db.course_instructor.course == courseid) & (db.course_instructor.instructor == auth.user.id) )
             if not qset.isempty():
                 qset.delete()

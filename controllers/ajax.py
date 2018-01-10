@@ -14,11 +14,24 @@ logger.setLevel(settings.log_level)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
+EVENT_TABLE = {'mChoice':'mchoice_answers', 
+               'fillb':'fitb_answers', 
+               'dragNdrop':'dragndrop_answers', 
+               'clickableArea':'clickablearea_answers', 
+               'parsons':'parsons_answers',
+               'codelens1':'codelens_answers',
+               'shortanswer':'shortanswer_answers',
+               'fillintheblank': 'fitb_answers',
+               'mchoice': 'mchoice_answers',
+               'dragndrop': 'dragndrop_answers',
+               'clickablearea':'clickablearea_answers',
+               'parsonsprob': 'parsons_answers' }
+
 def compareAndUpdateCookieData(sid):
     if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
         db.useinfo(db.useinfo.sid == request.cookies['ipuser'].value).update(sid=sid)
 
-def hsblog():    # Human Subjects Board Log
+def hsblog():
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -268,32 +281,6 @@ def getprog():
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
-def getlastanswer():
-    # get's user's last answer for multiple choice question
-    logger.debug("Hello from getlastanswer")
-    divid = request.vars.div_id
-    if  auth.user:
-        sid = auth.user.username
-        query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
-        logger.debug("finding last answer for %s %s " % (sid,divid))
-    else:
-        query = None
-        logger.debug("No User, No Query")
-
-    res = {}
-    if query:
-        result = db(query)
-        if not result.isempty():
-            r = result.select(orderby=~db.useinfo.timestamp).first()
-            res['divid'] = divid
-            res['answer'] = r.act
-            res['timestamp'] = r.timestamp.isoformat()
-        else:
-            logger.debug("No saved answers for %s %s" %(sid,divid))
-    response.headers['content-type'] = 'application/json'
-    return json.dumps(res)
-
-
 
 @auth.requires_membership('instructor')
 def savegrade():
@@ -455,8 +442,13 @@ def getlastpage():
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
-def getCorrectStats(miscdata,event):
+def _getCorrectStats(miscdata,event):
+    # TODO: update this to use the xxx_answer table
+    # select and count grouping by the correct column
+    # this version can suffer from division by zero error
     sid = None
+    dbtable = EVENT_TABLE[event]  # translate event to correct table
+
     if auth.user:
         sid = auth.user.username
     else:
@@ -465,24 +457,20 @@ def getCorrectStats(miscdata,event):
 
     if sid:
         course = db(db.courses.course_name == miscdata['course']).select().first()
+        tbl = db[dbtable]
 
-        correctquery = '''select
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-                                               and position('correct' in act) > 0 )
-/
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-) as result;
-''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
-
-        try:
-            rows = db.executesql(correctquery)
-            pctcorr = round(rows[0][0]*100)
-        except:
-            pctcorr = 'unavailable in sqlite'
+        rows = db((tbl.sid == sid) & (tbl.timestamp > course.term_start_date)).select(tbl.correct, tbl.correct.count(),groupby=tbl.correct)
+        total = 0
+        correct = 0
+        for row in rows:
+            count = row._extra.values()[0]
+            total += count
+            if row[dbtable].correct:
+                correct = count
+        if total > 0:
+            pctcorr = round(float(correct) / total * 100)
+        else:
+            pctcorr = 'unavailable'
     else:
         pctcorr = 'unavailable'
 
@@ -490,38 +478,39 @@ def getCorrectStats(miscdata,event):
 
 
 def _getStudentResults(question):
-        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    """
+    Internal function to collect student answers
+    """
+    cc = db(db.courses.id == auth.user.course_id).select().first()
+    course = cc.course_name
+    qst = db((db.questions.name == question) & (db.questions.base_course == cc.base_course )).select().first()
+    tbl_name = EVENT_TABLE[qst.question_type]
+    tbl = db[tbl_name]
 
-        q = db( (db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course.course_name) &
-                (db.courses.course_name == course.course_name) &
-                (db.useinfo.timestamp >= db.courses.term_start_date) )
+    res = db( (tbl.div_id == question) & 
+                (tbl.course_name == cc.course_name) &
+                (tbl.timestamp >= cc.term_start_date)).select(tbl.sid, tbl.answer, orderby=tbl.sid)
 
-        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+    resultList = []
+    if len(res) > 0:
+        currentSid = res[0].sid
+        currentAnswers = []
 
-        resultList = []
-        if len(res) > 0:
-            currentSid = res[0].sid
-            currentAnswers = []
+        for row in res:
+            answer = row.answer
 
-            for row in res:
-                if ':' not in row.act:
-                    continue  # skip this row
-                answer = row.act.split(':')[1]
+            if row.sid == currentSid:
+                currentAnswers.append(answer)
+            else:
+                currentAnswers.sort()
+                resultList.append((currentSid, currentAnswers))
+                currentAnswers = [row.answer]
+                currentSid = row.sid
 
-                if row.sid == currentSid:
-                    currentAnswers.append(answer)
-                else:
-                    currentAnswers.sort()
-                    resultList.append((currentSid, currentAnswers))
-                    currentAnswers = [row.act.split(':')[1]]
+        currentAnswers.sort()
+        resultList.append((currentSid, currentAnswers))
 
-                    currentSid = row.sid
-
-            currentAnswers.sort()
-            resultList.append((currentSid, currentAnswers))
-
-        return resultList
+    return resultList
 
 
 def getaggregateresults():
@@ -578,11 +567,11 @@ def getaggregateresults():
     miscdata['correct'] = correct
     miscdata['course'] = course
 
-    getCorrectStats(miscdata, 'mChoice')
+    _getCorrectStats(miscdata, 'mChoice')
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
+    if auth.user and is_instructor:
         resultList = _getStudentResults(question)
         returnDict['reslist'] = resultList
 
@@ -621,22 +610,24 @@ def getpollresults():
 def gettop10Answers():
     course = request.vars.course
     question = request.vars.div_id
-    # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
     rows = []
 
-    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
     try:
-        rows = db.executesql(query)
-        res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')],
-                'count':row[1]} for row in rows ]
-    except:
+        dbcourse = db(db.courses.course_name == course).select().first()
+        rows = db((db.fitb_answers.div_id == question) &
+                (db.fitb_answers.course_name == course) &
+                (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, db.fitb_answers.answer.count(),
+                    groupby=db.fitb_answers.answer, orderby=~db.fitb_answers.answer.count())
+        res = [{'answer':row.fitb_answers.answer, 'count':row._extra.values()[0]} for row in rows[:10] ]
+    except Exception as e:
+        logger.debug(e)
         res = 'error in query'
 
     miscdata = {'course': course}
-    getCorrectStats(miscdata,'fillb')
+    _getCorrectStats(miscdata,'fillb')  # TODO: rewrite _getCorrectStats to use xxx_answers
 
-    if auth.user and auth.has_membership('instructor',auth.user.id):
+    if auth.user and verifyInstructorStatus(course, auth.user.id):
         resultList = _getStudentResults(question)
         miscdata['reslist'] = resultList
 
@@ -735,103 +726,6 @@ def getassignmentgrade():
     return json.dumps([ret])
 
 
-def diff_prettyHtml(self, diffs):
-    """Convert a diff array into a pretty HTML report.
-
-    Args:
-      diffs: Array of diff tuples.
-
-    Returns:
-      HTML representation.
-    """
-    html = []
-    ct = 1
-    for (op, data) in diffs:
-        text = (data.replace("&", "&amp;").replace("<", "&lt;")
-                .replace(">", "&gt;").replace("\n", "<br>"))
-        if op == self.DIFF_INSERT:
-            html.append("<ins style=\"background:#e6ffe6;\">%s</ins>" % text)
-        elif op == self.DIFF_DELETE:
-            html.append("<del style=\"background:#ffe6e6;\">%s</del>" % text)
-        elif op == self.DIFF_EQUAL:
-            html.append("<span>%s</span>" % text)
-    return "".join(html)
-
-
-def getCodeDiffs():
-    if auth.user:
-        sid = auth.user.username
-    else:
-        sid = request.vars['sid']
-
-    divid = request.vars['divid']
-    rows = []
-    if sid and divid and auth.user:
-        q = '''select timestamp, sid, div_id, code, emessage, id
-               from acerror_log
-               where sid = '%s' and course_id = '%s' and div_id='%s'
-               order by timestamp
-        ''' % (sid, auth.user.course_name, divid)
-        rows = db.executesql(q)
-    if len(rows) < 1:
-        return json.dumps(dict(timestamps=[0], code=[''],
-                               diffs=[''],
-                               mess=['No Coaching hints yet.  You need to run the example at least once and be logged in and registered for a course'],
-                               chints=['']))
-
-    differ = diff_match_patch()
-    ts = []
-    newcode = []
-    diffcode = []
-    messages = []
-    coachHints = []
-
-#    diffs = differ.diff_lineMode(rows[0][3], rows[0][3], True)
-#    diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
-    newcode.append(rows[0][3])
-    ts.append(str(rows[0][0]))
-    coachHints.append(getCoachingHints(int(rows[0][5])))
-    messages.append(rows[0][4].replace("success",""))
-
-    for i in range(1,len(rows)):
-        diffs = differ.diff_lineMode(rows[i-1][3], rows[i][3],True)
-        ts.append(str(rows[i][0]))
-        newcode.append(rows[i][3])
-        diffcode.append(diff_prettyHtml(differ,diffs).replace('&para;', ''))
-        messages.append(rows[i][4].replace("success", ""))
-        coachHints.append(getCoachingHints(int(rows[i][5])))
-    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages,chints=coachHints))
-
-
-def getCoachingHints(ecId):
-    catToTitle = {"C": "Coding Conventions", "R": "Good Practice", "W": "Minor Programming Issues",
-                  "E": "Serious Programming Error", "F": "Fatal Errors"}
-
-    rows = db.executesql("select category,symbol,line,msg from coach_hints where source=%d order by category, line" % ecId)
-    res = ''
-    catres = {'C':'', 'R':'', 'W':'', 'E':'', 'F':''}
-    for k in catres:
-        catres[k] = '<h2>%s</h2>' % catToTitle[k]
-    for row in rows:
-            cat = row[0]
-            catres[cat] += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
-
-    for ch in "FEWRC":
-        res += catres[ch]
-    return res
-
-
-def lintAfterSave(dbid, code, div_id, sid):
-    #dbid = request.args.id
-    #entry = db(db.acerror_log.id == dbid).select().first()
-    pylint_stdout = get_lint(code, div_id, sid)
-
-    for line in pylint_stdout:
-        g = re.match(r"^([RCWEF]):\s(.*?):\s([RCWEF]\d+):\s+(\d+),(\d+):(.*?):\s(.*)$", line)
-        if g:
-            db.coach_hints.insert(category=g.group(1), symbol=g.group(2), msg_id=g.group(3),
-                                  line=g.group(4), col=g.group(5), obj=g.group(6),
-                                  msg=g.group(7).replace("'", ""), source=dbid)
 
 def getAssessResults():
     if not auth.user:

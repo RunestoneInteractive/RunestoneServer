@@ -78,13 +78,6 @@ db.define_table('courses',
   migrate='runestone_courses.table'
 )
 
-if db(db.courses.id > 0).isempty():
-    db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
-    db.courses.insert(course_name='thinkcspy', base_course = 'thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='pythonds', base_course = 'pythonds', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
-
 ## create cohort_master table
 db.define_table('cohort_master',
   Field('cohort_name','string',
@@ -100,8 +93,6 @@ db.define_table('cohort_master',
   Field('course_name', 'string'),
   migrate='runestone_cohort_master.table'
   )
-if db(db.cohort_master.id > 0).isempty():
-    db.cohort_master.insert(cohort_name='Default Group', is_active = 1)
 
 ########################################
 
@@ -195,9 +186,6 @@ db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate='runestone_')
 
-# create the instructor group if it doesn't already exist
-if not db(db.auth_group.role == 'instructor').select().first():
-    db.auth_group.insert(role='instructor')
 
 ## configure email
 mail=auth.settings.mailer

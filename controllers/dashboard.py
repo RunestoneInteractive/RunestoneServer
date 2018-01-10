@@ -147,8 +147,8 @@ def index():
 @auth.requires_login()
 def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    data_analyzer.load_user_metrics(request.get_vars["id"])
-    data_analyzer.load_assignment_metrics(request.get_vars["id"])
+    data_analyzer.load_user_metrics(request.vars.id)
+    data_analyzer.load_assignment_metrics(request.vars.id)
 
     chapters = []
     for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
