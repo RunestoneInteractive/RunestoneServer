@@ -5,6 +5,7 @@ import sys
 import json
 import logging
 import datetime
+from collections import OrderedDict
 from psycopg2 import IntegrityError
 from outcome_request import OutcomeRequest
 
@@ -1222,135 +1223,108 @@ def doAssignment():
         session.flash = "Could not find login and try again."
         return redirect(URL('default','index'))
 
+
     if assignment.visible == 'F' or assignment.visible == None:
         if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
             session.flash = "That assignment is no longer available"
-            return redirect(URL('assignments','chooseAssignment'))
+            return redirect(URL('assignments', 'chooseAssignment'))
 
+    questions = db((db.assignment_questions.assignment_id == assignment.id) & \
+                        (db.assignment_questions.question_id == db.questions.id)) \
+                        .select(db.questions.name,
+                                db.questions.htmlsrc,
+                                db.questions.id,
+                                db.questions.chapter,
+                                db.questions.subchapter,
+                                db.assignment_questions.points,
+                                db.assignment_questions.activities_required,
+                                db.assignment_questions.reading_assignment,
+                                orderby=db.assignment_questions.sorting_priority)
 
-    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
-                        (db.assignment_questions.question_id == db.questions.id) & \
-                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
-                        .select(db.questions.htmlsrc, db.questions.id, db.questions.chapter, db.questions.subchapter, db.questions.name, orderby=db.assignment_questions.sorting_priority)
-
-    readings = db((db.assignment_questions.assignment_id == assignment.id) & \
-                (db.assignment_questions.question_id == db.questions.id) & \
-                (db.assignment_questions.reading_assignment == 'T')) \
-                .select(db.questions.base_course, db.questions.name, orderby=db.assignment_questions.sorting_priority)
-
-    questions_scores = db((db.assignment_questions.assignment_id == assignment.id) & \
-                    (db.assignment_questions.question_id == db.questions.id) & \
-                    (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
-                    (db.question_grades.sid == auth.user.username) & \
-                    (db.question_grades.div_id == db.questions.name)) \
-                    .select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
 
     questionslist = []
-    readingsDict = {}
+    readings = OrderedDict()
+    readings_score = 0
 
-    # The next for loop formats the readings information into readingsDict
-    # The keys of readingsDict are ids in the chapters table
-    # Each value is a list of lists detailing the information about each section within the assigned chapter
-    # Chapter ids are used as keys so the dictionary can be iterated in the correct order within doAssignment.html
-
-    # Because readings do not record chapters in the questions table
-    # assigned readings cannot (nicely) be grouped into chapters by a DB query yet
-    # so using a dictionary is a quick short-term solution to group all the sections to each chapter
-    # The chapters will appear in the order that they do in the ToC,
-    # but the sections within each chapter will appear according to the sorting_priority in assignment_questions
-
-    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
-    # and the labels query won't be needed at all
-
-    for r in readings:
-        logger.debug("READING = %s",r.name)
-        chapterSections = r.name.split('/', 1)
-
-        labels = db((db.chapters.chapter_name == chapterSections[0]) & \
-                    (db.chapters.course_id == auth.user.course_name) & \
-                    (db.chapters.id == db.sub_chapters.chapter_id) & \
-                    (db.sub_chapters.sub_chapter_name == chapterSections[1])) \
-                    .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name, db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label, db.chapters.id).first()
-        logger.debug("LABELS = %s",labels)
-        logger.debug("user_id = %s labels[chapters] = %s labels[sub_chapters] = %s",auth.user.id,labels['chapters'].chapter_label,labels['sub_chapters'].sub_chapter_label)
-        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
-            (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) & \
-            (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
-
-        # Sometimes when a sub-chapter is added to the book after the user has registerd and the
-        # subchapter tables have been created you need to catch that and insert.
-        if not completion:
-            newid = db.user_sub_chapter_progress.insert(chapter_id=labels['chapters'].chapter_label,
-                                                        sub_chapter_id=labels['sub_chapters'].sub_chapter_label,
-                                                        status=-1,
-                                                        user_id=auth.user.id)
-            completion = db(db.user_sub_chapter_progress.id == newid).select().first()
-
-        logger.debug("COMPLETION = %s",completion)
-        chapterPath = (completion.chapter_id + '/toctree.html')
-        sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
-
-        if labels['chapters'].id not in readingsDict:
-            readingsDict[labels['chapters'].id] = []
-
-        if completion.status == 1:
-            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'completed'])
-        elif completion.status == 0:
-            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'started'])
-        else:
-            readingsDict[labels['chapters'].id].append([chapterSections[0], chapterPath, chapterSections[1], sectionPath, 'notstarted'])
-
-    # This is to get the chapters' completion states based on the completion of sections of the readings in assignments
-    # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
-    # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
-    # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
-    # Each chapter's completion gets appended to the first list within the list of section information for each chapter in the readingsDict
-    for chapter in readingsDict:
-        hasStarted = False
-        completionState = 'completed'
-        for s in readingsDict[chapter]:
-            if s[4] == 'completed':
-                hasStarted = True
-            if s[4] == 'started':
-                hasStarted = True
-                completionState = 'started'
-        if hasStarted:
-            readingsDict[chapter][0].append(completionState)
-        else:
-            readingsDict[chapter][0].append('notstarted')
-
-    currentqScore = 0
-
-    # This formats questionslist into a list of lists.
-    # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
+    # For each question, accumulate information, and add it to either the readings or questions data structure
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
-    for q in questions_html:
 
-        # It there is no html recorded, the question can't be rendered
-        if q.htmlsrc != None:
-
+    for q in questions:
+        if q.questions.htmlsrc:
             # This replacement is to render images
-            q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
-            q.htmlsrc = q.htmlsrc.replace("../_images","/{}/static/{}/_images".format(request.application,course.course_name))
-            try:
-                if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
-                    questioninfo = [q.htmlsrc,
-                                    questions_scores[currentqScore]['question_grades'].score,
-                                    questions_scores[currentqScore]['assignment_questions'].points,
-                                    questions_scores[currentqScore]['question_grades'].comment,
-                                    q.chapter,
-                                    q.subchapter,
-                                    q.name]
-                    currentqScore += 1
+            htmlsrc = bytes(q.questions.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course[
+                'course_name'] + '/_static/')
+            htmlsrc = htmlsrc.replace("../_images",
+                                      "/{}/static/{}/_images".format(request.application, course.course_name))
+        else:
+            htmlsrc = None
+        if assignment['released']:
+            # get score and comment
+            grade = db((db.question_grades.sid == auth.user.username) &
+                       (db.question_grades.div_id == q.questions.name)).select().first()
+            if grade:
+                score, comment = grade.score, grade.comment
+            else:
+                score, comment = '' , ''
+        else:
+            score, comment = '', ''
+
+        info = dict(
+            htmlsrc=htmlsrc,
+            score=score,
+            points=q.assignment_questions.points,
+            comment=comment,
+            chapter=q.questions.chapter,
+            subchapter=q.questions.subchapter,
+            name=q.questions.name,
+            activities_required=q.assignment_questions.activities_required
+            )
+        if q.assignment_questions.reading_assignment:
+            # add to readings
+            if q.questions.chapter not in readings:
+                # add chapter info
+                completion = db((db.user_chapter_progress.user_id == auth.user.id) & \
+                                (db.user_chapter_progress.chapter_id == q.questions.chapter)).select().first()
+                if not completion:
+                    status = 'notstarted'
+                elif completion.status == 1:
+                    status = 'completed'
+                elif completion.status == 0:
+                    status = 'started'
                 else:
-                    questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
-            except:
-                # There are still questions, but no more recorded grades
-                questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
+                    status = 'notstarted'
+                readings[q.questions.chapter] = dict(status=status, subchapters = [])
 
-            questionslist.append(questioninfo)
+            # add subchapter info
+            # add completion status to info
+            subch_completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
+                                  (db.user_sub_chapter_progress.sub_chapter_id == q.questions.subchapter)).select().first()
+            if not subch_completion:
+                status = 'notstarted'
+            elif subch_completion.status == 1:
+                status = 'completed'
+            elif subch_completion.status == 0:
+                status = 'started'
+            else:
+                status = 'notstarted'
+            info['status']=status
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=questionslist, course_id=auth.user.course_name, readings=readingsDict)
+            readings[q.questions.chapter]['subchapters'].append(info)
+            readings_score += info['score']
+        else:
+            # add to questions
+            questionslist.append(info)
+
+
+
+    return dict(course=course,
+                course_name=auth.user.course_name,
+                assignment=assignment,
+                questioninfo=questionslist,
+                course_id=auth.user.course_name,
+                readings=readings,
+                questions_score=sum([info.score for info in questionslist]),
+                readings_score=readings_score)
 
 def chooseAssignment():
     if not auth.user:
@@ -1359,4 +1333,5 @@ def chooseAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db((db.assignments.course == course.id) & (db.assignments.visible == 'T')).select(orderby=db.assignments.duedate)
+    print db._lastsql
     return(dict(assignments=assignments))

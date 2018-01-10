@@ -78,55 +78,57 @@
 	<h1 style='text-align:center'>{{=assignment['name']}}</h1>
 	<h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}
 		<span style="float:right; margin-right:1cm;">
-			Points Possible: {{=assignment['points']}}</span></h2>
+			Score: {{=questions_score+readings_score}} of {{=assignment['points']}}</span>
 	<div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
 		<p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
 	</div>
 
-	<div id='readings' style='margin-left:15%;'>
-		<h3>Readings</h3>
-		<ul>
-			{{for reading in sorted(readings.keys()):}}
-				<li class='{{=readings[reading][0][5]}}'>{{=readings[reading][0][0]}}</li>
-				<ul>
-				{{for r in readings[reading]:}}
-					<li class='{{=r[4]}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r[3]}}">{{=r[2]}}</a></li>
-				{{pass}}
-				</ul>
-			{{pass}}
-		</ul>
-	</div>
+	{{if len(readings) > 0:}}
+		<div id='readings' style='margin-left:15%;'>
+			<h3>Readings</h3>
+			<ul>
+				{{for reading in readings:}}
+					<li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
+					<ul>
+					{{for r in readings[reading]['subchapters']:}}
+						<li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
+						{{if r['score'] != '':}}
+							</br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
+						{{else:}}
+							</br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
+						{{pass}}
+					</li>
 
-	<div id='questions'>
-	<h3 style='text-align:center;'>Questions</h3>
-		{{count=0}}
-		{{for q in questioninfo:}}	
-				{{ if q[1] != '':}}
-					<div style='float:right; width:30%;'>
-					<h4 style='text-align:center;'>Score: {{=q[1]}} / {{=q[2]}}</h4>
-					<p style='margin-left:2%;'>Comment: {{=q[3]}}</p>
-					</div><span>
-					<div class='oneq' id='{{=count}}' style='width:70%;'>
-						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
-						<div>
-						<a href="/{{=request.application}}/static/{{=course_id}}/{{=q[4]}}/{{=q[5]}}.html#{{=q[6]}}">See Question in {{=q[4]}}/{{=q[5]}}</a>
-						</div>
-					</div></span>
-				{{ else: }}
-					<div style='float:right; width:10%;'>
-					<h5 style='text-align:center;'>Not yet graded</h5>
-					</div><span>
-					<div class='oneq' id='{{=count}}' style='width:90%;'>
-						<script class='htmlblock' type='text/html'>{{=q[0]}}</script>
-						<div>
-						<a href="/{{=request.application}}/static/{{=course_id}}/{{=q[4]}}/{{=q[5]}}.html#{{=q[6]}}">See Question in {{=q[4]}}/{{=q[5]}}</a>
-						</div>
-					</div></span>
+					{{pass}}
+					</ul>
 				{{pass}}
-			{{count += 1}}
-		{{pass}}
+			</ul>
+		</div>
+	{{pass}}
+
+	{{if len(questioninfo) > 0:}}
+		<div id='questions' style='margin-left:15%;'>
+		<h3>Questions</h3>
+			{{count=0}}
+			{{for q in questioninfo:}}
+					{{ if q['score'] != '':}}
+						<div style='float:right; width:30%;'>
+						<h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+						<p style='margin-left:2%;'>Comment: {{=q['comments']}}</p>
+					{{ else: }}
+						<div style='float:right; width:10%;'>
+						<h5 style='text-align:center;'>Not yet graded</h5>
+						</div>
+					{{pass}}
+					<span><div class='oneq' id='{{=count}}' style='width:90%;'>
+						<script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+					</div></span>
+
+				{{count += 1}}
+			{{pass}}
 	
-	</div>
+		</div>
+	{{pass}}
 </div>
 
 <script>
