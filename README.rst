@@ -320,8 +320,7 @@ Creating Your Own Textbook
 --------------------------
 
 To find instructions on using the Runestone Tools to create your own interactive textbook, see the
-file in this directory named README_new_book.rst.
-
+instructions in the `Runestone Components repository <https://github.com/RunestoneInteractive/RunestoneComponents>`_.
 
 Browser Notes
 -------------
