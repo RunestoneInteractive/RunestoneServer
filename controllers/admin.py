@@ -993,7 +993,7 @@ def get_assignment_release_states():
         assignments_query = db(db.assignments.course == auth.user.course_id).select()
         return json.dumps({row.name: row.released for row in assignments_query})
     except Exception as ex:
-        print ex
+        print(ex)
         return json.dumps({})
 
 def _get_toc_and_questions():

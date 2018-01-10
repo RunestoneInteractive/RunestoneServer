@@ -71,7 +71,7 @@ def index():
         except oauth.OAuthError, err:
             oauth_error = "OAuth Security Validation failed:"+err.message
             lti_errors.append(oauth_error)
-            print oauth_error
+            print(oauth_error)
             consumer = None
         # except:
             # print "Unexpected error"
