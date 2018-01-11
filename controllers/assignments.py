@@ -6,6 +6,7 @@ import json
 import logging
 import datetime
 from collections import OrderedDict
+import math
 from psycopg2 import IntegrityError
 from outcome_request import OutcomeRequest
 
@@ -395,6 +396,7 @@ def detail():
         gradeRecordingUrl = URL('assignments', 'record_grade'),
         )
 
+
 def _score_from_pct_correct(pct_correct, points, autograde):
     # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
     if autograde == 'interact' or autograde == 'visited':
@@ -424,6 +426,7 @@ def _score_one_code_run(row, points, autograde):
         pct_correct = 0 # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
     return _score_from_pct_correct(pct_correct, points, autograde)
 
+
 def _score_one_mchoice(row, points, autograde):
     # row is from mchoice_answers
     ## It appears that the mchoice_answers is only storing a binary correct_or_not
@@ -434,12 +437,14 @@ def _score_one_mchoice(row, points, autograde):
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
+
 def _score_one_interaction(row, points, autograde):
     # row is from useinfo
     if row:
         return points
     else:
         return 0
+
 
 def _score_one_parsons(row, points, autograde):
     # row is from parsons_answers
@@ -451,6 +456,7 @@ def _score_one_parsons(row, points, autograde):
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
+
 def _score_one_fitb(row, points, autograde):
     # row is from fitb_answers
     if row.correct:
@@ -458,6 +464,7 @@ def _score_one_fitb(row, points, autograde):
     else:
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
+
 
 def _score_one_clickablearea(row, points, autograde):
     # row is from clickablearea_answers
@@ -467,6 +474,7 @@ def _score_one_clickablearea(row, points, autograde):
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
+
 def _score_one_dragndrop(row, points, autograde):
     # row is from dragndrop_answers
     if row.correct:
@@ -474,6 +482,7 @@ def _score_one_dragndrop(row, points, autograde):
     else:
         pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
+
 
 def _score_one_codelens(row, points, autograde):
     # row is from codelens_answers
@@ -484,16 +493,20 @@ def _score_one_codelens(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
-def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
+def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.mchoice_answers.course_name == course_name) & \
             (db.mchoice_answers.sid == sid) & \
             (db.mchoice_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.mchoice_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.mchoice_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.mchoice_answers.timestamp)
 
-def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None, question_type=None):
+
+def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=None, question_type=None,
+                       practice_start_time=None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
     # if question type is page we must do better with the div_id
@@ -512,68 +525,85 @@ def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter 
         query = query & (db.useinfo.event == event_filter)
     if deadline:
         query = query & (db.useinfo.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.useinfo.timestamp >= practice_start_time)
     return db(query).select(orderby=db.useinfo.timestamp)
 
-def _scorable_parsons_answers(course_name, sid, question_name, points, deadline):
+
+def _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.parsons_answers.course_name == course_name) & \
             (db.parsons_answers.sid == sid) & \
             (db.parsons_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.parsons_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.parsons_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.parsons_answers.timestamp)
 
-def _scorable_fitb_answers(course_name, sid, question_name, points, deadline):
+
+def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.fitb_answers.course_name == course_name) & \
             (db.fitb_answers.sid == sid) & \
             (db.fitb_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.fitb_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.fitb_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.fitb_answers.timestamp)
 
-def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline):
+
+def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.clickablearea_answers.course_name == course_name) & \
             (db.clickablearea_answers.sid == sid) & \
             (db.clickablearea_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.clickablearea_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.clickablearea_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.clickablearea_answers.timestamp)
 
-def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline):
+
+def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.dragndrop_answers.course_name == course_name) & \
             (db.dragndrop_answers.sid == sid) & \
             (db.dragndrop_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.dragndrop_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.dragndrop_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
-def _scorable_codelens_answers(course_name, sid, question_name, points, deadline):
+
+def _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
     query = ((db.codelens_answers.course_name == course_name) & \
             (db.codelens_answers.sid == sid) & \
             (db.codelens_answers.div_id == question_name) \
             )
     if deadline:
         query = query & (db.codelens_answers.timestamp < deadline)
-
+    if practice_start_time:
+        query = query & (db.codelens_answers.timestamp >= practice_start_time)
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
-def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
 
-
+def _autograde_one_q(course_name, sid, question_name, points, question_type,
+                     deadline=None, autograde=None, which_to_grade=None, save_score=True,
+                     practice_start_time = None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
         return 0
 
-    # if previously manually graded, don't overwrite
+    # If previously manually graded and it is required to save the score, don't overwrite.
     existing = db((db.question_grades.sid == sid) \
        & (db.question_grades.course_name == course_name) \
        & (db.question_grades.div_id == question_name) \
        ).select().first()
-    if existing and (existing.comment != "autograded"):
+    if save_score and existing and (existing.comment != "autograded"):
         logger.debug("skipping; previously manually graded, comment = {}".format(existing.comment))
         return 0
 
@@ -591,37 +621,42 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             event_filter = 'unittest'
         else:
             event_filter = None
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter,
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
-        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
         # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page')
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page',
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_interaction
     elif question_type == 'parsonsprob':
-        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time)
         scoring_fn = _score_one_parsons
     elif question_type == 'fillintheblank':
-        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time)
         scoring_fn = _score_one_fitb
     elif question_type == 'clickablearea':
-        results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline,
+                                                  practice_start_time)
         scoring_fn = _score_one_clickablearea
     elif question_type == 'dragndrop':
-        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
+        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time)
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
         if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
-            results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
+            results = _scorable_useinfos(course_name, sid, question_name, points, deadline,
+                                         practice_start_time=practice_start_time)
             scoring_fn = _score_one_interaction
         else:
-            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
+            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time)
             scoring_fn = _score_one_codelens
     elif question_type in ['video', 'showeval']:
         # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
+        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
+                                     practice_start_time=practice_start_time)
         scoring_fn = _score_one_interaction
 
     else:
@@ -661,7 +696,15 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
     if save_score:
         _save_question_grade(sid, course_name, question_name, score, id, deadline)
 
+    if practice_start_time:
+        return _score_practice_quality(practice_start_time,
+                                       course_name,
+                                       sid,
+                                       points,
+                                       score,
+                                       len(results) if results else 0)
     return score
+
 
 def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
     try:
@@ -1336,3 +1379,203 @@ def chooseAssignment():
     assignments = db((db.assignments.course == course.id) & (db.assignments.visible == 'T')).select(orderby=db.assignments.duedate)
     print db._lastsql
     return(dict(assignments=assignments))
+
+
+# The rest of the file is about the the spaced practice:
+
+def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count):
+    page_visits = db((db.useinfo.course_id == course_name) & \
+                     (db.useinfo.sid == sid) & \
+                     (db.useinfo.event == 'page') & \
+                     (db.useinfo.timestamp >= practice_start_time)) \
+        .select()
+    practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
+    practice_score = 0
+    if score == points:
+        if len(page_visits) <= 1 and trials_count <= 1 and practice_duration <= 2:
+            practice_score = 5
+        elif trials_count <= 2 and practice_duration <= 2:
+            practice_score = 4
+        elif trials_count <= 3 and practice_duration <= 3:
+            practice_score = 3
+        elif trials_count <= 4 and practice_duration <= 4:
+            practice_score = 2
+        elif trials_count <= 5 and practice_duration <= 5:
+            practice_score = 1
+    return (practice_score, trials_count)
+
+# Called when user clicks "I'm done" button or the "I don't know the answer" button
+def checkanswer():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    if request.vars.QID:
+        lastQuestion = db(db.questions.id == int(request.vars.QID)).select().first()
+
+        flashcard = db((db.user_topic_practice.user_id == auth.user.id) &
+                       (db.user_topic_practice.course_name == auth.user.course_name) &
+                       (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
+                       (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
+                       (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
+        if 'q' in request.vars:
+            # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
+            q = int(request.vars.q)
+            trials_num = 0
+        else:
+            # Compute q using the auto grader
+            autograde = 'pct_correct'
+            if lastQuestion.autograde is not None:
+                autograde = lastQuestion.autograde
+            q, trials_num = _autograde_one_q(auth.user.course_name, auth.user.username, lastQuestion.name, 100,
+                                 lastQuestion.question_type, None, autograde, 'last_answer', False,
+                                 flashcard.last_practice)
+        flashcard = _change_e_factor(flashcard, q)
+        flashcard = _get_next_i_interval(flashcard, q)
+
+        db.user_topic_practice_log.insert(
+            user_id=auth.user.id,
+            course_name=auth.user.course_name,
+            chapter_label=flashcard.chapter_label,
+            sub_chapter_label=flashcard.sub_chapter_label,
+            question_name=flashcard.question_name,
+            i_interval=flashcard.i_interval,
+            e_factor=flashcard.e_factor,
+            trials_num=trials_num,
+            start_practice=flashcard.last_practice,
+            end_practice=datetime.datetime.now(),
+        )
+
+        redirect(URL('practice'))
+    session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
+    redirect(URL('practice'))
+
+
+def practice():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
+
+    if len(flashcards) == 0:
+        # new student; create flashcards
+        subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
+                              (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
+                              (db.sub_chapter_taught.sub_chapter_name == db.sub_chapters.sub_chapter_name) & \
+                              (db.chapters.course_id == auth.user.course_name) & \
+                              (db.sub_chapters.chapter_id == db.chapters.id)) \
+            .select(db.chapters.chapter_label, db.chapters.chapter_name, db.sub_chapters.sub_chapter_label,
+                    orderby=db.chapters.id | db.sub_chapters.id)
+        for subchapterTaught in subchaptersTaught:
+            questions = db((db.questions.base_course == course.base_course) & \
+                           (db.questions.chapter == subchapterTaught.chapters.chapter_label) & \
+                           (db.questions.subchapter == subchapterTaught.sub_chapters.sub_chapter_label) & \
+                           (db.questions.practice == True)).select()
+            qIndex = 0
+            question = _get_next_qualified_question(questions, qIndex)
+
+            if question:
+                # there is at least one qualified question in this subchapter, so insert a flashcard for the subchapter
+                db.user_topic_practice.insert(
+                    user_id=auth.user.id,
+                    course_name=auth.user.course_name,
+                    chapter_label=subchapterTaught.chapters.chapter_label,
+                    sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
+                    question_name=question.name,
+                    i_interval=0,
+                    e_factor=2.5,
+                    last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
+                )
+
+        flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
+
+    for counter, flashcard in enumerate(flashcards):
+        if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
+            # enough time has passed to present this
+            questions = db(db.questions.subchapter == flashcard.sub_chapter_label).select()
+            if len(questions) != 0:
+                # find index of the last question asked
+                qIndex = 0
+                while questions[qIndex].name != flashcard.question_name:
+                    qIndex += 1
+                qIndex += 1
+                if qIndex == len(questions):
+                    qIndex = 0
+
+                question = _get_next_qualified_question(questions, qIndex)
+
+                if question:
+                    # This replacement is to render images
+                    question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
+                                                                        'src="../static/' + course[
+                                                                            'course_name'] + '/_static/')
+                    question.htmlsrc = question.htmlsrc.replace("../_images",
+                                                  "/{}/static/{}/_images".format(request.application, course.course_name))
+
+                    autogradable = 1
+                    if ((question.autograde is not None) or
+                        (question.question_type is not None and question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
+                        autogradable = 2
+
+                    questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
+
+                    flashcard.question_name = question.name
+                    flashcard.last_practice = datetime.datetime.now()
+                    flashcard.update_record()
+
+                    return dict(course=course, course_name=auth.user.course_name,
+                                course_id=auth.user.course_name, q=questioninfo, questionsExist=1)
+    return dict(course=course, course_id=auth.user.course_name, questionsExist=0)
+
+
+def _get_next_qualified_question(questions, qIndex):
+    iterations = 0
+    question = questions[qIndex]
+    if not _is_qualified_question(question):
+        while not _is_qualified_question(question):
+            qIndex += 1
+            if qIndex == len(questions):
+                qIndex = 0
+            question = questions[qIndex]
+            iterations += 1
+            if iterations == len(questions):
+                return False
+    return question
+
+
+def _is_qualified_question(question):
+    # isQualified = False
+    # if (question.htmlsrc is not None and question.htmlsrc != "" and
+    #         ((question.question_type is not None and
+    #           question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop']) or
+    #         ('exercise' in question.subchapter.lower()))):
+    #     isQualified = True
+    # return isQualified
+    return question.practice
+
+
+def _get_next_i_interval(flashcard, q):
+    """Get next inter-repetition interval after the n-th repetition"""
+    if q < 3:
+        flashcard.i_interval = 0
+    else:
+        last_i_interval = flashcard.i_interval
+        if last_i_interval == 0:
+            flashcard.i_interval = 1
+        elif last_i_interval == 1:
+            flashcard.i_interval = 6
+        else:
+            flashcard.i_interval = math.ceil(last_i_interval * flashcard.e_factor)
+    flashcard.update_record()
+    return flashcard
+
+
+def _change_e_factor(flashcard, q):
+    if flashcard.e_factor >= 1.3:
+        flashcard.e_factor = flashcard.e_factor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
+        if flashcard.e_factor < 1.3:
+            flashcard.e_factor = 1.3
+        flashcard.update_record()
+    return flashcard
