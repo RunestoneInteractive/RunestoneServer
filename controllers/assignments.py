@@ -1310,7 +1310,8 @@ def doAssignment():
             info['status']=status
 
             readings[q.questions.chapter]['subchapters'].append(info)
-            readings_score += info['score']
+            if info['score'] != '':
+                readings_score += info['score']
         else:
             # add to questions
             questionslist.append(info)
