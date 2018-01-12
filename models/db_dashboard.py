@@ -267,7 +267,7 @@ class SubChapterActivity(object):
         self.not_started = 0
         self.started = 0
         self.completed = 0
-        self.total_users = total_users
+        self.total_users = total_users if total_users > 0 else 1
 
     def add_activity(self, row):
         if row.user_sub_chapter_progress.status == -1:
@@ -285,6 +285,7 @@ class SubChapterActivity(object):
 
     def get_completed_percent(self):
         return "{0:.2f}%".format(float(self.completed) / self.total_users * 100)
+
 class UserLogCategorizer(object):
     def __init__(self, logs):
         self.activities = []
