@@ -16,7 +16,7 @@ APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
 BUILDDIR = '{}/build'.format(APP_PATH)
 
-@click.group()
+@click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
 @pass_config
 def cli(config, verbose):
@@ -49,8 +49,9 @@ def cli(config, verbose):
 @cli.command()
 @click.option("--list_tables", is_flag=True, help="List all of the defined tables when done")
 @click.option("--reset", is_flag=True, help="drop database and delete all migration information")
+@click.option("--fake", is_flag=True, help="perform a fake migration")
 @pass_config
-def initdb(config, list_tables, reset):
+def initdb(config, list_tables, reset, fake):
     """Initialize and optionally reset the database"""
     os.chdir(findProjectRoot())
     if not os.path.exists(DBSDIR):
@@ -76,10 +77,13 @@ def initdb(config, list_tables, reset):
                 print(e)
 
 
-    if len(os.listdir("{}/databases".format(APP_PATH))) > 1:
+    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake:
         click.confirm("It appears you already have database migration information do you want to proceed?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
 
     click.echo(message='Initializing the database', file=None, nl=True, err=False, color=None)
+
+    if fake:
+        os.environ['WEB2PY_MIGRATE'] = 'fake'
 
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
     cmd = "python web2py.py -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(APP, APP_PATH, list_tables)
