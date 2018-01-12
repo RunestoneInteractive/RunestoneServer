@@ -92,7 +92,7 @@
 					<ul>
 					{{for r in readings[reading]['subchapters']:}}
 						<li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
-						{{if r['score'] != '':}}
+						{{if r['comment'] != 'ungraded':}}
 							</br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
 						{{else:}}
 							</br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
@@ -111,10 +111,11 @@
 		<h3>Questions</h3>
 			{{count=0}}
 			{{for q in questioninfo:}}
-					{{ if q['score'] != '':}}
+					{{ if q['comment'] != 'ungraded':}}
 						<div style='float:right; width:30%;'>
 						<h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-						<p style='margin-left:2%;'>Comment: {{=q['comments']}}</p>
+						<p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+						</div>
 					{{ else: }}
 						<div style='float:right; width:10%;'>
 						<h5 style='text-align:center;'>Not yet graded</h5>

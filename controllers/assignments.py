@@ -1286,6 +1286,7 @@ def doAssignment():
 
 
     questionslist = []
+    questions_score = 0
     readings = OrderedDict()
     readings_score = 0
 
@@ -1308,9 +1309,9 @@ def doAssignment():
             if grade:
                 score, comment = grade.score, grade.comment
             else:
-                score, comment = '' , ''
+                score, comment = 0 , 'ungraded'
         else:
-            score, comment = '', ''
+            score, comment = 0, 'ungraded'
 
         info = dict(
             htmlsrc=htmlsrc,
@@ -1353,13 +1354,11 @@ def doAssignment():
             info['status']=status
 
             readings[q.questions.chapter]['subchapters'].append(info)
-            if info['score'] != '':
-                readings_score += info['score']
+            readings_score += info['score']
         else:
             # add to questions
             questionslist.append(info)
-
-
+            questions_score += info['score']
 
     return dict(course=course,
                 course_name=auth.user.course_name,
@@ -1367,7 +1366,7 @@ def doAssignment():
                 questioninfo=questionslist,
                 course_id=auth.user.course_name,
                 readings=readings,
-                questions_score=sum([info.score for info in questionslist]),
+                questions_score=questions_score,
                 readings_score=readings_score)
 
 def chooseAssignment():
