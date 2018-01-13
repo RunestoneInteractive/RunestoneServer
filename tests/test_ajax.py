@@ -78,11 +78,23 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.event = 'mChoice'
 
         res = getAssessResults()
-        print("RESULTS = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], '1')
         self.assertEqual(res['correct'], True)
-        # add for fillb, dragNdrop, parsons, clickableArea, codelensq, shortanswer, timedExam
+
+        request.vars["act"] = '3'
+        request.vars.answer = '3'
+        request.vars.correct = 'T'
+        request.vars.event = 'mChoice'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddmchoice1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '3')
+        self.assertEqual(res['correct'], True)
 
     def testGetParsonsResults(self):
         # Parsons
@@ -94,6 +106,21 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0', msg=None)
         # self.assertEqual(res['correct'], True) # TODO: why isn't correct returned?
+        request.vars["act"] = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+        request.vars.answer = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+        request.vars.correct = 'F'
+        request.vars.event = 'parsons'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddParsons1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0')
+        #self.assertEqual(res['correct'], False)
+
 
     def testGetClickableResults(self):
         # Parsons
@@ -109,6 +136,21 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res['correct'], False)
         # timestamp 2017-09-04 00:56:34
         self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
+        request.vars["act"] = '0;1'
+        request.vars.answer = '0;1'
+        request.vars.correct = 'F'
+        request.vars.event = 'clickableArea'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddClickable1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '0;1')
+        self.assertEqual(res['correct'], False)
+
 
     def testGetShortAnswerResults(self):
         auth.login_user(db.auth_user(11))
@@ -118,6 +160,20 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.sid = 'user_1669'
         res = json.loads(getAssessResults())
         self.assertTrue("Moving the turtle" in res['answer'])
+        request.vars["act"] = 'hello_test'
+        request.vars.answer = 'hello_test'
+        request.vars.correct = 'F'
+        request.vars.event = 'shortanswer'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddShortanswer1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], 'hello_test')
+
 
         # fitb -- tested in getTop10answers
 
@@ -340,6 +396,33 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res[1]['answer'], '41')
         self.assertEqual(res[1]['count'], 2)                        
         self.assertEqual(misc['yourpct'], 100)
+
+    def testPreviewQuestion(self):
+        src = """
+.. activecode:: preview_test1
+        
+   Hello World
+   ~~~~
+   print("Hello World")
+   
+"""
+        request.vars.code = json.dumps(src)
+        res = json.loads(preview_question())
+        print("PREVIEW = ", res)
+        self.assertTrue('id="preview_test1"' in res)
+        self.assertTrue('print("Hello World")' in res)
+        self.assertTrue('</textarea>' in res)
+        self.assertTrue('<textarea data-component="activecode"' in res)
+        self.assertTrue('<div data-childcomponent="preview_test1"' in res)
+
+
+# for each question type develop the following
+# 1. use preview to preview a question
+# 2. save the question
+# 3. 'submit' through hsblog an answer
+# 4. 'through getassessresults check that answer
+
+
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
