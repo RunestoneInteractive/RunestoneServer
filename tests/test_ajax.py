@@ -175,9 +175,27 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res['answer'], 'hello_test')
 
 
-        # fitb -- tested in getTop10answers
+    # fitb
+    def testGetFITBAnswerResults(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        request.vars.event = 'fillb'
+        request.vars["act"] = '42'
+        request.vars.answer = '42'
+        request.vars.correct = 'T'
+        request.vars.div_id = 'testAddFillb1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '42')
+        self.assertTrue(res['correct'])
 
-        # dragndrop
+
+
+                # dragndrop
     def testGetDragNDropResults(self):
         auth.login_user(db.auth_user(11))
         request.vars.course = 'testcourse'
@@ -416,11 +434,37 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertTrue('<div data-childcomponent="preview_test1"' in res)
 
 
-# for each question type develop the following
-# 1. use preview to preview a question
-# 2. save the question
-# 3. 'submit' through hsblog an answer
-# 4. 'through getassessresults check that answer
+    # TODO: Cannot verify any questions other than activecodes and readings -- mchoice et al not stored??
+    def test_getassignmentgrade(self):
+        auth.login_user(db.auth_user(1667))
+        request.vars.div_id = 'Functions/Functions'
+        res = json.loads(getassignmentgrade())[0]
+        self.assertEqual(res['grade'], 5)
+
+    def test_getassignmentgrade_actex(self):
+        auth.login_user(db.auth_user(1675))
+        request.vars.div_id = 'ex_7_11'
+        res = json.loads(getassignmentgrade())[0]
+        self.assertEqual(res['grade'], 5)
+
+
+    def test_updatelastpage(self):
+        auth.login_user(db.auth_user(1667))
+        request.vars.lastPageUrl = '/runestone.academy/runestone/static/testcourse/SimplePythonData/VariableNamesandKeywords.html'
+        request.vars.lastPageScrollLocation = 0
+        request.vars.course = 'testcourse'
+        request.vars.completionFlag = 1
+        res = updatelastpage()
+
+        res = db((db.user_sub_chapter_progress.user_id == 1667) &
+                (db.user_sub_chapter_progress.sub_chapter_id == 'VariableNamesandKeywords')).select().first()
+
+        now = datetime.datetime.now()
+
+        self.assertEqual(res.status, 1)
+        self.assertEqual(res.end_date.month, now.month)
+        self.assertEqual(res.end_date.day, now.day)
+        self.assertEqual(res.end_date.year, now.year)
 
 
 
