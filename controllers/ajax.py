@@ -697,32 +697,6 @@ def getassignmentgrade():
         if result.comment:
             ret['comment'] = result.comment
 
-    else:
-        # fall back on old way; eventually will deprecate this
-        result = db(
-            (db.code.sid == auth.user.username) &
-            (db.code.acid == db.problems.acid) &
-            (db.problems.assignment == db.assignments.id) &
-            (db.assignments.released == True) &
-            (db.code.acid == divid)
-            ).select(
-                db.code.grade,
-                db.code.comment,
-                orderby=~db.code.timestamp
-            ).first()
-
-        if result:
-            ret['grade'] = result.grade
-            if result.comment:
-                ret['comment'] = result.comment
-
-            query = '''select avg(grade), count(grade)
-                       from code where acid='%s';''' % (divid)
-
-            rows = db.executesql(query)
-            ret['avg'] = rows[0][0]
-            ret['count'] = rows[0][1]
-
     return json.dumps([ret])
 
 
