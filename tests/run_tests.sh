@@ -55,5 +55,6 @@ cd ../../..
 COVER_DIRS=applications/runestone/tests,applications/runestone/controllers,applications/runestone/models
 coverage run --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 coverage run --append --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_dashboard.py
+coverage run --append --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_admin.py
 coverage run --append --source=$COVER_DIRS web2py.py -S runestone -M -R applications/runestone/tests/test_assignments.py
 coverage report

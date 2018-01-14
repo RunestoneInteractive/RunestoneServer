@@ -10,11 +10,10 @@
 #
 
 # TODO:  Write these
-# getCorrectStats
 # getpollresults
-# getassignmentgrade
-# getAssessResults
-# preview_question
+# timedAssess
+
+
 
 import unittest
 import json
@@ -24,7 +23,7 @@ from gluon.tools import Auth
 from dateutil.parser import parse
 
 # bring in the ajax controllers
-execfile("applications/runestone/controllers/ajax.py", globals())
+
 
 # clean up the database
 db(db.useinfo.div_id == 'unit_test_1').delete()
@@ -36,6 +35,7 @@ class TestAjaxEndpoints(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
+        execfile("applications/runestone/controllers/ajax.py", globals())
 
     def testHSBLog(self):
         # Set up the request object

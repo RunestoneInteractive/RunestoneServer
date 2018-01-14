@@ -9,6 +9,17 @@
 # python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 #
 
+#         record_grade      11539 305.000   29372
+#     calculate_totals      40596 325.000    6490
+# record_assignment_score     129 169.000     545
+#            undefined         42 362.000    3374
+#          get_problem      26087 702.000    9464
+#                index       3775 901.000   17725
+#         doAssignment      36219 1435.000          57225
+#            autograde       2306 5531.000         235419
+
+
+
 import unittest
 import json
 from gluon.globals import Request
