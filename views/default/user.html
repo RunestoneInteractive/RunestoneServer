@@ -8,7 +8,8 @@
 <!-- Carousel
     ================================================== -->
     <link href="/runestone/static/css/carousel.css" rel="stylesheet">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div class="row">
+    <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -98,7 +99,60 @@
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
-{{pass}}
+{{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
+
+<!--  LOGIN -->
+<h4>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+{{ if request.args(0) == 'login': }}
+    <div id="web2py_user_form" class="col-md-4">
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                <label for="auth_user_username" class="control-label">Username</label>
+                <input type="text" class="form-control col-xs-4" id="auth_user_username" name="username"
+                       placeholder="Enter username">
+            </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <label for="auth_user_password" class="control-label ">Password</label>
+                    <div>
+                        <input type="password" class="form-control" id="auth_user_password" name="password"
+                               placeholder="Enter password">
+                </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button type="submit" class="btn btn-default">Login</button>
+                </div>
+            </div>
+        {{=form.custom.end}} <!-- </form> Must use this to get all the good defaults for the form -->
+            <div id='auth-actions' class="" col-md-4>
+            {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+                <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
+                   role="button">{{=T('Lost Password')}}</a>
+                <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
+                   role="button">{{=T('email my username')}}</a>
+            {{pass}}
+            </div>
+        {{ else: }}
+        {{=form}}
+        {{pass}}
+    </div>
+</div>
+
+
+
 
 {{ if 'static' in request.env.query_string:}}
 <h2>Welcome</h2>
@@ -107,6 +161,7 @@
 
 {{pass}}
 
+        <div class="row">
 <div class='col-md-6'>
     <div class="alert alert-success">
         <h3>Welcome to the New Home of Runestone Interactive</h3>
@@ -119,7 +174,9 @@
         <h3>If you find something broken</h3>
         <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
     </div>
-  <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+</div>
+
+
 
     {{if request.args(0) == 'retrieve_username': }}
     <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
@@ -137,20 +194,6 @@
     <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
   </div>
     {{pass}}
-  <div id="web2py_user_form">
-    {{=form}}
-    {{if request.args(0)=='login':}}
-      <div id='auth-actions'>
-        {{if not 'register' in auth.settings.actions_disabled:}}
-          <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
-        {{pass}}
-        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-          <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}" role="button">{{=T('Lost Password')}}</a>
-          <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}" role="button">{{=T('email my username')}}</a>
-        {{pass}}
-      </div>
-    {{pass}}
-  </div>
   <br />
 
   <button class="btn btn-lg btn-default" onclick="window.location.href='../../designer/index'">Create a Course</button>
@@ -203,4 +246,7 @@
     If you have questions about this please feel free to <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
 </div>
 
+<!--        {{if not 'register' in auth.settings.actions_disabled:}}
+          <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
+        {{pass}} -->
 
