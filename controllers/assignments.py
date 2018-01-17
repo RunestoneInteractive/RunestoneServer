@@ -778,13 +778,13 @@ def _compute_assignment_total(student, assignment, course_name):
             pct = score / float(points) if points else 0.0
             lti_record = db(db.lti_keys.consumer == session.oauth_consumer_key).select().first()
             if lti_record:
-                print "score", score, points, pct
+                # print "score", score, points, pct
                 request = OutcomeRequest({"consumer_key": session.oauth_consumer_key,
                                           "consumer_secret": lti_record.secret,
                                           "lis_outcome_service_url": grade.lis_outcome_url,
                                           "lis_result_sourcedid": grade.lis_result_sourcedid})
                 resp = request.post_replace_result(pct)
-                print resp
+                # print resp
 
         return score, None
 
