@@ -52,6 +52,8 @@ def index():
     #    print myrecord, type(myrecord)
         if myrecord is None :
             lti_errors.append("Could not find oauth_consumer_key")
+        else:
+            session.oauth_consumer_key = key
     
     if myrecord is not None : 
         masterapp = myrecord.application
