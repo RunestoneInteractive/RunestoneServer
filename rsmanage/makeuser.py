@@ -1,5 +1,5 @@
 # running in the context of a web2py shell
-import json, datetime, sys
+import json
 
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):

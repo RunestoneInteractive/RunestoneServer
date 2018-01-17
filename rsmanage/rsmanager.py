@@ -290,6 +290,26 @@ def env(config):
     echoEnviron(config)
 
 #
+#    grade
+#
+
+@cli.command()
+@click.option("--course", help="The name of a course that should already exist in the DB")
+@click.option("--pset", help="Database ID of the Problem Set")
+@pass_config
+def grade(config, course, pset):
+    """Grade a problem set; hack for long-running grading processes"""
+    os.chdir(findProjectRoot())
+
+    userinfo = {}
+    userinfo['course'] = course if course else click.prompt("Name of course")
+    userinfo['pset'] = pset if pset else click.prompt("Problem Set ID")
+    os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+
+    subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py", shell=True)
+
+
+#
 # Utility Functions Below here
 #
 
