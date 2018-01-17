@@ -7,8 +7,8 @@
 
 <!-- Carousel
     ================================================== -->
-    <link href="/runestone/static/css/carousel.css" rel="stylesheet">
-    <div class="row">
+<link href="/runestone/static/css/carousel.css" rel="stylesheet">
+<div class="row">
     <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
@@ -149,34 +149,6 @@
         {{=form}}
         {{pass}}
     </div>
-</div>
-
-
-
-
-{{ if 'static' in request.env.query_string:}}
-<h2>Welcome</h2>
-<p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
-<p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p>
-
-{{pass}}
-
-        <div class="row">
-<div class='col-md-6'>
-    <div class="alert alert-success">
-        <h3>Welcome to the New Home of Runestone Interactive</h3>
-        <ul>
-            <li>We have moved.  Same team, just a new hosting service and a bunch of new features.</li>
-            <li>A great new redesigned <a href="https://www.youtube.com/channel/UCAfQvSLv5senKZHfaycIz8w">instructor interface</a> two summers in the making.</li>
-            <li>Same great books</li>
-            <li>Any transition is likely to uncover bugs.  Please let us know if something isn't working!</li>
-        </ul>
-        <h3>If you find something broken</h3>
-        <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
-    </div>
-</div>
-
-
 
     {{if request.args(0) == 'retrieve_username': }}
     <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
@@ -189,34 +161,34 @@
         <li><strong>JavaReview</strong> for the AP Java Review</li>
         <li><strong>pip2</strong> for Programs, Information, People</li>
     </ul>
-    {{else:}}
-  <div id="loginexp">
-    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
-  </div>
     {{pass}}
-  <br />
 
-  <button class="btn btn-lg btn-default" onclick="window.location.href='../../designer/index'">Create a Course</button>
 
 </div>
 
-<script language="javascript">
-    var cur_course = $('#auth_user_course_id').val();
-    if (cur_course == '') {
-        $('#auth_user_course_id').val('thinkcspy, pythonds, pip or other')
-    }
-    $("#auth_user_course_id").on("click", function () {
-       $(this).select();
-    });
-</script>
 
-<div class='col-md-6'>
+
+
+{{ if 'static' in request.env.query_string:}}
+<h2>Welcome</h2>
+<p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
+<p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p>
+
+{{pass}}
+
+
+<div class="row">
+
+<div class='col-md-12'>
   <h2>More Information</h2>
      What is Runestone? How can you use and contribute to what we offer? To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
 
      <h2>New Instructors - Getting Started</h2>
      <iframe width="560" height="315" src="https://www.youtube.com/embed/IGg_SUWEnGU" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
 
+<div class="row">
   <h2>Support Us</h2>
   <div class="alert alert-info"><strong>Thank You! </strong>
   Many thanks to the Minnesota State University Moorhead CS department for a generous donation to keep Runestone development active and all of these resources free.
@@ -245,6 +217,24 @@
     educational researchers, but rest assured that all personally identifying information will be anonymized before we do.
     If you have questions about this please feel free to <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
 </div>
+
+
+
+
+  <button class="btn btn-lg btn-default" onclick="window.location.href='../../designer/index'">Create a Course</button>
+
+</div>
+
+<script language="javascript">
+    var cur_course = $('#auth_user_course_id').val();
+    if (cur_course == '') {
+        $('#auth_user_course_id').val('thinkcspy, pythonds, pip or other')
+    }
+    $("#auth_user_course_id").on("click", function () {
+       $(this).select();
+    });
+</script>
+
 
 <!--        {{if not 'register' in auth.settings.actions_disabled:}}
           <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
