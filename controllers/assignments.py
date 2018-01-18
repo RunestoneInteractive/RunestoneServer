@@ -9,6 +9,7 @@ from collections import OrderedDict
 import math
 from psycopg2 import IntegrityError
 from outcome_request import OutcomeRequest
+from rs_grading import do_autograde, do_calculate_totals
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -422,7 +423,6 @@ def record_assignment_score():
             manual_total=True
         )
 
-from rs_grading import do_autograde, do_calculate_totals
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():

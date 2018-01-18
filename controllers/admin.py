@@ -6,6 +6,8 @@ from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
+from rs_grading import send_lti_grades
+
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -1038,7 +1040,6 @@ def editindexrst():
     except Exception as ex:
         logger.error(ex)
 
-from rs_grading import send_lti_grades
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
