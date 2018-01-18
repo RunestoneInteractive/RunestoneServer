@@ -1,3 +1,5 @@
+import datetime
+import logging
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
@@ -337,7 +339,7 @@ def _compute_assignment_total(student, assignment, course_name):
     # student is a row, containing id and username
     # assignment is a row, containing name and id and points
 
-    # Get all question_grades for this sid/assignment_id
+        # Get all question_grades for this sid/assignment_id
     # Retrieve from question_grades table  with right sids and div_ids
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
@@ -385,13 +387,13 @@ def _compute_assignment_total(student, assignment, course_name):
             pct = score / float(points) if points else 0.0
             lti_record = db(db.lti_keys.consumer == session.oauth_consumer_key).select().first()
             if lti_record:
-                print "score", score, points, pct
+                # print "score", score, points, pct
                 request = OutcomeRequest({"consumer_key": session.oauth_consumer_key,
                                           "consumer_secret": lti_record.secret,
                                           "lis_outcome_service_url": grade.lis_outcome_url,
                                           "lis_result_sourcedid": grade.lis_result_sourcedid})
                 resp = request.post_replace_result(pct)
-                print resp
+                # print resp
 
         return score, None
 
@@ -409,7 +411,12 @@ def _get_students(course_id, sid = None):
                           ).select(db.auth_user.username, db.auth_user.id)
     return student_rows
 
-def do_autograde(assignment, course_id, sid, question_name, enforce_deadline, ):
+def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, thedb, settings):
+    global logger
+    global db
+    db = thedb
+    logger = logging.getLogger(settings.logger)
+    logger.setLevel(settings.log_level)
 
     start = datetime.datetime.now()
     if enforce_deadline == 'true':
@@ -418,8 +425,8 @@ def do_autograde(assignment, course_id, sid, question_name, enforce_deadline, ):
     else:
         deadline = None
 
-    if 'timezoneoffset' in session and deadline:
-        deadline = deadline + datetime.timedelta(hours=int(session.timezoneoffset))
+    if timezoneoffset and deadline:
+        deadline = deadline + datetime.timedelta(hours=int(timezoneoffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
     student_rows = _get_students(course_id, sid)
@@ -427,13 +434,13 @@ def do_autograde(assignment, course_id, sid, question_name, enforce_deadline, ):
 
     if question_name:
         questions_query = db(
-            (db.assignment_questions.assignment_id == assignment_id) &
+            (db.assignment_questions.assignment_id == assignment.id) &
             (db.assignment_questions.question_id == db.questions.id) &
             (db.questions.name == question_name)
             ).select()
     else:
         # get all qids and point values for this assignment
-        questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
+        questions_query = db((db.assignment_questions.assignment_id == assignment.id) &
                              (db.assignment_questions.question_id == db.questions.id)
                              ).select()
     _profile(start, "after questions fetched")
@@ -462,17 +469,17 @@ def do_autograde(assignment, course_id, sid, question_name, enforce_deadline, ):
                       (db.questions.base_course == base_course)).select()
             # _profile(start, "\t{}. rows fetched for {}/{}".format(count, chapter, subchapter))
             for row in rows:
-                score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
+                score += _autograde_one_q(course_name, s, row.name, 1, row.question_type,
                                           deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
-                logger.debug("Score is now %s for %s for %s", score, row.name, auth.user.username)
+                logger.debug("Score is now %s for %s for %s", score, row.name, sid)
             if score >= ar:
                 save_points = points
-                logger.debug("full points for %s on %s", auth.user.username, name)
+                logger.debug("full points for %s on %s", sid, name)
             else:
                 save_points = 0
-                logger.debug("no points for %s on %s", auth.user.username, name)
+                logger.debug("no points for %s on %s", sid, name)
             # _profile(start, "\t\tgraded")
-            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadline)
+            _save_question_grade(s, course_name, name, save_points, useinfo_id=None, deadline=deadline)
             #_profile(start, "\t\tsaved")
 
     _profile(start, "after readings graded")
@@ -491,7 +498,7 @@ def do_autograde(assignment, course_id, sid, question_name, enforce_deadline, ):
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
             if autograde != 'manual':
-                _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
+                _autograde_one_q(course_name, s, qdiv, points, question_type,
                                  deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
                 count += 1
 

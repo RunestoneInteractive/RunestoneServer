@@ -452,7 +452,8 @@ def calculate_totals():
 
     return json.dumps(results)
 
-from rs_grading.py import do_grading
+from rs_grading import do_autograde
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
     ### This endpoint is hit to autograde one or all students or questions for an assignment
@@ -461,10 +462,11 @@ def autograde():
     question_name = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
     assignment_name = request.vars.assignment
+    timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
 
     assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
     if assignment:
-        count = do_autograde(assignment, auth.user.course_id, sid, question_name, enforce_deadline)
+        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name, sid, question_name, enforce_deadline, timezoneoffset, db, settings)
         return json.dumps({'message': "autograded {} items".format(count)})
     else:
         return json.dumps({'success':False, 'message':"Select an assignment before trying to autograde."})
