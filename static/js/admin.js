@@ -152,7 +152,6 @@ function autoGrade(){
             $('#assignmentTotalform').css('visibility', 'hidden');
             calculateTotals();
             alert(retdata.message);
-            calculateTotals();
         }
     }).always(function() {
         $("#autogradesubmit").prop("disabled",false);
