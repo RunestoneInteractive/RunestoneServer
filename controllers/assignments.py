@@ -248,13 +248,14 @@ def grade():
         return redirect(request.env.HTTP_REFERER)
     return redirect("%s?id=%d" % (URL('assignments','detail'), assignment.id))
 
+## deprecated; now using admin/releasegrades
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def release_grades():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db(db.assignments.id == request.get_vars.id).select().first()
 
     if assignment.release_grades():
-        session.flash = "Grades Relased"
+        session.flash = "Grades Released"
     if request.env.HTTP_REFERER:
         return redirect(request.env.HTTP_REFERER)
     return redirect("%s?id=%d" % (URL('assignments','detail'), assignment.id))
@@ -421,38 +422,18 @@ def record_assignment_score():
             manual_total=True
         )
 
+from rs_grading import do_autograde, do_calculate_totals
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
     assignment_name = request.vars.assignment
+    sid = request.vars.get('sid', None)
     assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
     if assignment:
-        assignment_id = assignment.id
+        return json.dumps(do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name, sid, db, settings))
     else:
         return json.dumps({'success':False, 'message':"Select an assignment before trying to calculate totals."})
 
-    sid = request.vars.get('sid', None)
-
-    student_rows = _get_students(auth.user.course_id, sid)
-
-    results = {'success':True}
-    if sid:
-        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, auth.user.course_name)
-        results['message'] = "Total for {} is {}".format(sid, computed_total)
-        results['computed_score'] = computed_total
-        results['manual_score'] = manual_score
-    else:
-        # compute total score for the assignment for each sid; also saves in DB unless manual value saved
-        scores = [_compute_assignment_total(student, assignment, auth.user.course_name)[0] for student in student_rows]
-        results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
-            len(scores),
-            max(scores),
-            min(scores),
-            sum(scores)/float(len(scores))
-        )
-
-    return json.dumps(results)
-
-from rs_grading import do_autograde
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():

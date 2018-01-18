@@ -1038,7 +1038,7 @@ def editindexrst():
     except Exception as ex:
         logger.error(ex)
 
-
+from rs_grading import send_lti_grades
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
@@ -1046,9 +1046,17 @@ def releasegrades():
         released = (request.vars['released'] == 'yes')
         assignment = db(db.assignments.id == assignmentid).select().first()
         assignment.update_record(released=released)
-        return "Success"
+
     except Exception as ex:
         logger.error(ex)
+
+    if released:
+        # send lti grades
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        if assignment:
+            send_lti_grades(assignment, auth.user.course_id, db, settings, session.oauth_consumer_key)
+    return "Success"
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment_release_states():

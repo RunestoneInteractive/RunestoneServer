@@ -411,6 +411,80 @@ def _get_students(course_id, sid = None):
                           ).select(db.auth_user.username, db.auth_user.id)
     return student_rows
 
+def send_lti_grade(assignment, student, lti_record):
+    # get total points for assignment, so can compute percentage to send to gradebook via LTI
+
+    points = assignment.points
+    grade = db(
+        (db.grades.auth_user == student.id) &
+        (db.grades.assignment == assignment.id)).select().first()
+
+    if grade and grade.lis_result_sourcedid and grade.lis_outcome_url and lti_record:
+        # send it back to the LMS
+        # have to send a percentage of the max score, rather than total points
+        pct = grade.score / float(points) if points else 0.0
+        # print "score", score, points, pct
+        request = OutcomeRequest({"consumer_key": lti_record.consumer,
+                                  "consumer_secret": lti_record.secret,
+                                  "lis_outcome_service_url": grade.lis_outcome_url,
+                                  "lis_result_sourcedid": grade.lis_result_sourcedid})
+        resp = request.post_replace_result(pct)
+        # print resp
+        return pct
+    elif grade and grade.lis_result_sourcedid and grade.lis_outcome_url:
+        print "would have sent", grade.score / float(points) if points else 0.0
+    elif grade:
+        print "nowhere to send", student.id
+    else:
+        print "nothing to send", student.id
+
+    return "No grade sent"
+
+def send_lti_grades(assignment, course_id, thedb, settings, oauth_consumer_key):
+    global logger
+    global db
+    db = thedb
+    logger = logging.getLogger(settings.logger)
+    logger.setLevel(settings.log_level)
+
+    print("sending lti grades")
+    if oauth_consumer_key:
+        lti_record = db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+    else:
+        lti_record = None
+
+    student_rows = _get_students(course_id)
+    for student in student_rows:
+        send_lti_grade(assignment, student, lti_record)
+
+def do_calculate_totals(assignment, course_id, course_name, sid, thedb, settings):
+    global logger
+    global db
+    db = thedb
+    logger = logging.getLogger(settings.logger)
+    logger.setLevel(settings.log_level)
+
+    student_rows = _get_students(course_id, sid)
+
+    results = {'success':True}
+    if sid:
+        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, course_name)
+        results['message'] = "Total for {} is {}".format(sid, computed_total)
+        results['computed_score'] = computed_total
+        results['manual_score'] = manual_score
+    else:
+        # compute total score for the assignment for each sid; also saves in DB unless manual value saved
+        scores = [_compute_assignment_total(student, assignment, course_name)[0] for student in student_rows]
+        results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
+            len(scores),
+            max(scores),
+            min(scores),
+            sum(scores)/float(len(scores))
+        )
+
+    return results
+
+
 def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, thedb, settings):
     global logger
     global db
