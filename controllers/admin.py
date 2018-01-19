@@ -307,13 +307,9 @@ def add_practice_items():
             else:
                 if not subchapterTaught.isempty():
                     subchapterTaught.delete()
-                    for student in students:
-                        flashcards = db((db.user_topic_practice.user_id == student.id) & \
-                                        (db.user_topic_practice.course_name == course.course_name) &
-                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
-                                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
-                        if not flashcards.isempty():
-                            flashcards.delete()
+                    db((db.user_topic_practice.course_name == course.course_name) &
+                       (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                       (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
     return dict()
 
 
