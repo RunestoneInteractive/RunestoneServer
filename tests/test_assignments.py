@@ -25,13 +25,13 @@ import json
 from gluon.globals import Request
 
 # bring in the assignments controllers
-execfile("applications/runestone/controllers/assignments.py", globals())
-execfile("applications/runestone/controllers/admin.py", globals())
+
 
 class TestGradingFunction(unittest.TestCase):
     def setUp(self):
         global request
         request = Request(globals()) # Use a clean Request object
+        execfile("applications/runestone/controllers/assignments.py", globals())
 
     def testReproduceScores(self):
         # fetch all of the autograded questions_grades
@@ -73,6 +73,7 @@ class TestGradingFunction(unittest.TestCase):
 
 
     def testASlashInSubchapter(self):
+        execfile("applications/runestone/controllers/admin.py", globals())
         auth.login_user(db.auth_user(11))
         bad_name = 'Exceptions/When to use try/except'
 
@@ -115,6 +116,14 @@ class TestGradingFunction(unittest.TestCase):
         request.vars.assignment_id=str(assignment_id)
         res = doAssignment()
         # TODO: verify results of doAssignment
+
+    def test_index(self):
+        # Try to reproduce crash
+        auth.login_user(db.auth_user(11))
+        request.vars.sid = 'user_1663'
+        res = index()
+        self.assertEqual('user_1663', res['student'].username)
+
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
