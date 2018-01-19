@@ -344,7 +344,7 @@ def _compute_assignment_total(student, assignment, course_name):
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
 
-    # print (student.id, assignment.id)
+    print (student.id, assignment.id)
 
     # compute the score
     query =  (db.question_grades.sid == student.username) \
@@ -380,21 +380,6 @@ def _compute_assignment_total(student, assignment, course_name):
         except IntegrityError:
             logger.error("IntegrityError update or insert {} {} with score {}"
                          .format(student.id, assignment.id, score))
-
-        if grade and grade.lis_result_sourcedid and grade.lis_outcome_url and session.oauth_consumer_key:
-            # send it back to the LMS
-            # have to send a percentage of the max score, rather than total points
-            pct = score / float(points) if points else 0.0
-            lti_record = db(db.lti_keys.consumer == session.oauth_consumer_key).select().first()
-            if lti_record:
-                # print "score", score, points, pct
-                request = OutcomeRequest({"consumer_key": session.oauth_consumer_key,
-                                          "consumer_secret": lti_record.secret,
-                                          "lis_outcome_service_url": grade.lis_outcome_url,
-                                          "lis_result_sourcedid": grade.lis_result_sourcedid})
-                resp = request.post_replace_result(pct)
-                # print resp
-
         return score, None
 
 def _get_students(course_id, sid = None):
@@ -517,7 +502,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         questions_query = db((db.assignment_questions.assignment_id == assignment.id) &
                              (db.assignment_questions.question_id == db.questions.id)
                              ).select()
-    _profile(start, "after questions fetched")
+    # _profile(start, "after questions fetched")
 
     readings = [(row.questions.name,
                  row.questions.chapter,
@@ -533,10 +518,12 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
     #
     base_course = db(db.courses.id == course_id).select(db.courses.base_course).first().base_course
     count = 0
-    _profile(start, "after readings fetched")
+    # _profile(start, "after readings fetched")
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
+        print "\nGrading all students for {}/{}".format(chapter, subchapter)
         count += 1
         for s in sids:
+            print ".",
             score = 0
             rows = db((db.questions.chapter == chapter) &
                       (db.questions.subchapter == subchapter) &
@@ -556,7 +543,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
             _save_question_grade(s, course_name, name, save_points, useinfo_id=None, deadline=deadline)
             #_profile(start, "\t\tsaved")
 
-    _profile(start, "after readings graded")
+    # _profile(start, "after readings graded")
 
     logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,
@@ -567,7 +554,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
                   if row.assignment_questions.reading_assignment == False or
                      row.assignment_questions.reading_assignment == None]
 
-    _profile(start, "after questions fetched")
+    # _profile(start, "after questions fetched")
     logger.debug("questions to grade = %s", questions)
     for (qdiv, points, autograde, which_to_grade, question_type) in questions:
         for s in sids:
@@ -576,6 +563,6 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
                                  deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
                 count += 1
 
-    _profile(start, "after calls to _autograde_one_q")
+    # _profile(start, "after calls to _autograde_one_q")
     return count
 
