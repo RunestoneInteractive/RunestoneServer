@@ -428,11 +428,12 @@ def admin():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
+    print "here"
     cur_students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
-    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
-    searchdict = {}
+    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name, orderby= db.auth_user.last_name|db.auth_user.first_name)
+    searchdict = OrderedDict()
     for row in cur_students:
         name = row.first_name + " " + row.last_name
         username = row.username

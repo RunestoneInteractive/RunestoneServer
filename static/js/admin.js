@@ -530,7 +530,8 @@ function pickedStudents(column) {
         }
     }
 
-    keys.sort();
+    // keep sort order determined by server side
+    // keys.sort();
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
