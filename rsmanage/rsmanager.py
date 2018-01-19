@@ -294,16 +294,18 @@ def env(config):
 #
 
 @cli.command()
+@click.option("--enforce", is_flag=True, help="Enforce deadline when grading")
 @click.option("--course", help="The name of a course that should already exist in the DB")
 @click.option("--pset", help="Database ID of the Problem Set")
 @pass_config
-def grade(config, course, pset):
+def grade(config, course, pset, enforce):
     """Grade a problem set; hack for long-running grading processes"""
     os.chdir(findProjectRoot())
 
     userinfo = {}
     userinfo['course'] = course if course else click.prompt("Name of course")
     userinfo['pset'] = pset if pset else click.prompt("Problem Set ID")
+    userinfo['enforce_deadline'] = enforce if enforce else click.confirm("Enforce deadline?", default=True)
     os.environ['RSM_USERINFO'] = json.dumps(userinfo)
 
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py", shell=True)
