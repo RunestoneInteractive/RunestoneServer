@@ -1481,7 +1481,11 @@ def practice():
         return redirect(URL('default', 'index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
-    flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
+    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                    (db.user_topic_practice.user_id == auth.user.id)).select()
+    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                             (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
+    remaining_days = (datetime.date(datetime.date.today().year, 4, 19) - datetime.date.today()).days
 
     if len(flashcards) == 0:
         # new student; create flashcards
@@ -1513,7 +1517,8 @@ def practice():
                     last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
                 )
 
-        flashcards = db(db.user_topic_practice.user_id == auth.user.id).select()
+        flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                        (db.user_topic_practice.user_id == auth.user.id)).select()
 
     for counter, flashcard in enumerate(flashcards):
         if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
@@ -1550,8 +1555,24 @@ def practice():
                     flashcard.update_record()
 
                     return dict(course=course, course_name=auth.user.course_name,
-                                course_id=auth.user.course_name, q=questioninfo, questionsExist=1)
-    return dict(course=course, course_id=auth.user.course_name, questionsExist=0)
+                                course_id=auth.user.course_name, q=questioninfo, questionsExist=1,
+                                practice_completion_count=practice_completion_count,
+                                remaining_days=remaining_days)
+
+    practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                                   (db.user_topic_practice_Completion.user_id == auth.user.id) & \
+                                   (db.user_topic_practice_Completion.practice_completion_time == datetime.date.today()))
+    if practice_completion_today.isempty():
+        db.user_topic_practice_Completion.insert(
+            user_id=auth.user.id,
+            course_name=auth.user.course_name,
+            practice_completion_time=datetime.date.today(),
+            # add as if yesterday, so can practice right away
+        )
+
+    return dict(course=course, course_id=auth.user.course_name, questionsExist=0,
+                practice_completion_count=practice_completion_count,
+                remaining_days=remaining_days)
 
 
 def _get_next_qualified_question(questions, qIndex):

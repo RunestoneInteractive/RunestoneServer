@@ -22,3 +22,10 @@ db.define_table('user_topic_practice_log',
                 Field('start_practice', type='datetime'),
                 Field('end_practice', type='datetime'),
                 migrate='runestone_spacing_log.table')
+
+
+db.define_table('user_topic_practice_Completion',
+                Field('user_id', db.auth_user),
+                Field('course_name','string'),
+                Field('practice_completion_time', type='date'),
+                migrate='user_topic_practice_Completion.table')

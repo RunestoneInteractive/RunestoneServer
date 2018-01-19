@@ -264,6 +264,7 @@ def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
 
     data = json.loads(request.vars.data)
+    string_data = [x.encode('UTF8') for x in data]
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -280,7 +281,7 @@ def add_practice_items():
                            (db.questions.chapter == chapter.chapter_label) & \
                            (db.questions.subchapter == subchapter.sub_chapter_label) & \
                            (db.questions.practice == True))
-            if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in data:
+            if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
                 if subchapterTaught.isempty() and not questions.isempty():
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,

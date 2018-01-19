@@ -98,6 +98,10 @@
     {{ else: }}
         <div style="margin-bottom: 40px">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
     {{ pass }}
+    <div class="alert alert-danger">
+        <p>You have completed {{=practice_completion_count}} days out of 50 days of your practice.</p>
+        <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
+    </div>
 </div>
 
 <script>
