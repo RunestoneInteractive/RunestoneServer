@@ -310,7 +310,7 @@ def add_practice_items():
                     db((db.user_topic_practice.course_name == course.course_name) &
                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
-    return dict()
+    return json.dumps(dict(complete=True))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
