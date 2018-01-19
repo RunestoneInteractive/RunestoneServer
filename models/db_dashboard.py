@@ -362,9 +362,18 @@ class DashboardDataAnalyzer(object):
     def load_user_metrics(self, username):
         self.username = username
         self.course = db(db.courses.id == self.course_id).select().first()
+        if not self.course:
+            rslogger.debug("ERROR - NO COURSE course_id = {}".format(self.course_id))
+
         self.chapters = db(db.chapters.course_id == auth.user.course_name).select()
-        self.user = db((db.auth_user.username == username) & (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
-        self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.sid == username) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
+        self.user = db((db.auth_user.username == username) &
+                       (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
+        if not self.user:
+            rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
+
+        self.logs = db((db.useinfo.course_id==self.course.course_name) &
+                       (db.useinfo.sid == username) &
+                       (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == self.user.id)).select(db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
         self.formatted_activity = UserLogCategorizer(self.logs)
         self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)

@@ -10,13 +10,15 @@ from psycopg2 import IntegrityError
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
-# controller for "Progress Page" as well as List/create assignments
+# todo: This is a strange place for this function or at least a strange name.
+# index is called to show the student progress page
 def index():
     if not auth.user:
         session.flash = "Please Login"
         return redirect(URL('default','index'))
     if 'sid' not in request.vars:
-        return redirect(URL('assignments','index') + '?sid=%s' % (auth.user.username))
+        #return redirect(URL('assignments','index') + '?sid=%s' % (auth.user.username))
+        request.vars.sid = auth.user.username
 
     student = db(db.auth_user.username == request.vars.sid).select(
         db.auth_user.id,
@@ -33,8 +35,8 @@ def index():
         return redirect(URL('default','user'))
 
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    data_analyzer.load_user_metrics(request.get_vars["sid"])
-    data_analyzer.load_assignment_metrics(request.get_vars["sid"], studentView=True)
+    data_analyzer.load_user_metrics(request.vars.sid)
+    data_analyzer.load_assignment_metrics(request.vars.sid, studentView=True)
 
     chapters = []
     for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
@@ -500,7 +502,7 @@ def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter 
             (db.useinfo.sid == sid))
 
     if question_type == 'page':
-        quest = db(db.questions.name == div_id).select().first()
+        quest = db(db.questions.name == div_id).select().first()  #todo cache this translation somehow
         div_id = u"{}/{}".format(quest.chapter, quest.subchapter)
         query = query & (db.useinfo.div_id.contains(div_id))
     else:
