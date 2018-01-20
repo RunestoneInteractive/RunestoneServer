@@ -11,7 +11,7 @@ logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
 # todo: This is a strange place for this function or at least a strange name.
-# index is called to show the student progress page
+# index is called to show the student progress page from the user menu -- its redundant with studentreport in dashboard
 def index():
     if not auth.user:
         session.flash = "Please Login"
@@ -948,7 +948,7 @@ def get_problem():
     else:
         deadline = None
 
-    offset = 0
+    offset = datetime.timedelta(0)
     if session.timezoneoffset and deadline:
         offset = datetime.timedelta(hours=int(session.timezoneoffset))
         logger.debug("setting offset %s %s", offset, deadline+offset)
