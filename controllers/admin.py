@@ -266,6 +266,7 @@ def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
 
     data = json.loads(request.vars.data)
+    string_data = [x.encode('UTF8') for x in data]
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -282,7 +283,7 @@ def add_practice_items():
                            (db.questions.chapter == chapter.chapter_label) & \
                            (db.questions.subchapter == subchapter.sub_chapter_label) & \
                            (db.questions.practice == True))
-            if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in data:
+            if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
                 if subchapterTaught.isempty() and not questions.isempty():
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
@@ -309,14 +310,10 @@ def add_practice_items():
             else:
                 if not subchapterTaught.isempty():
                     subchapterTaught.delete()
-                    for student in students:
-                        flashcards = db((db.user_topic_practice.user_id == student.id) & \
-                                        (db.user_topic_practice.course_name == course.course_name) &
-                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
-                                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
-                        if not flashcards.isempty():
-                            flashcards.delete()
-    return json.dumps(dict())
+                    db((db.user_topic_practice.course_name == course.course_name) &
+                       (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                       (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
+    return json.dumps(dict(complete=True))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
