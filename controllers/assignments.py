@@ -1246,7 +1246,7 @@ def doAssignment():
 
     for r in readings:
         logger.debug("READING = %s",r.name)
-        chapterSections = r.name.split('/', 1)
+        chapterSections = r.name.split('/', 1) #todo: this can be replaced by pulling chapter and sub_chapter label from the question rather than inferring from split!
 
         labels = db((db.chapters.chapter_name == chapterSections[0]) & \
                     (db.chapters.course_id == auth.user.course_name) & \

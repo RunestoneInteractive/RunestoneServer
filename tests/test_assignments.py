@@ -33,7 +33,7 @@ class TestGradingFunction(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         execfile("applications/runestone/controllers/assignments.py", globals())
 
-    def testReproduceScores(self):
+    def test_reproduce_scores(self):
         # fetch all of the autograded questions_grades
         # with all the info about them
         graded = db((db.question_grades.comment == 'autograded') &
@@ -124,6 +124,38 @@ class TestGradingFunction(unittest.TestCase):
         res = index()
         self.assertEqual('user_1663', res['student'].username)
 
+    def test_doAssignment(self):
+        auth.login_user(db.auth_user(1663))
+        request.vars.assignment_id = '94'
+        res = doAssignment()
+
+        rlist = [['General Introduction', 'GeneralIntro/toctree.html', 'The Python Programming Language', 'GeneralIntro/ThePythonProgrammingLanguage.html', 'completed', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'More About Programs', 'GeneralIntro/MoreAboutPrograms.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'What is Debugging?', 'GeneralIntro/WhatisDebugging.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Algorithms', 'GeneralIntro/Algorithms.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Syntax errors', 'GeneralIntro/Syntaxerrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'The Way of the Program', 'GeneralIntro/intro-TheWayoftheProgram.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Semantic Errors', 'GeneralIntro/SemanticErrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Runtime Errors', 'GeneralIntro/RuntimeErrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Executing Python in this Book', 'GeneralIntro/SpecialWaystoExecutePythoninthisBook.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Formal and Natural Languages', 'GeneralIntro/FormalandNaturalLanguages.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Experimental Debugging', 'GeneralIntro/ExperimentalDebugging.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'A Typical First Program', 'GeneralIntro/ATypicalFirstProgram.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Comments', 'GeneralIntro/Comments.html', 'completed']]
+
+        self.assertEqual(len(res['readings'][7116]),13)
+        for i in res['readings'][7116]:
+            self.assertEqual(i[-1], "completed")
+            self.assertEqual(i[0], "General Introduction")
+        self.assertEqual(len(res['questioninfo']),0)
+        self.assertEqual('testcourse', res['course_name'])
+        self.assertEqual('testcourse', res['course_id'])
+
+        request.vars.assignment_id = '263'
+        res = doAssignment()
+        self.assertEqual(len(res['questioninfo']),2)
+        self.assertEqual(res['questioninfo'][0][-1], 'ex_3_10')
+        self.assertEqual(res['questioninfo'][0][-6], 5)
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
