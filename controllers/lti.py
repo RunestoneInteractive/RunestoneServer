@@ -25,13 +25,17 @@ def index():
                  ("TeachingAssistant" in request.vars.get('roles', None))
     result_source_did=request.vars.get('lis_result_sourcedid', None)
     outcome_url=request.vars.get('lis_outcome_service_url', None)
-    print result_source_did, outcome_url
+    # print request.vars
+    # print result_source_did, outcome_url
     assignment_id=request.vars.get('assignment_id', None)
     if assignment_id:
         # for some reason, url query parameters are being processed twice and returned as a list, like [23, 23]
         # so just take the first element in the list
         assignment_id=assignment_id[0]
-    
+    practice_id = request.vars.get('practice', None)
+    if practice_id:
+        practice_id=practice_id[0]
+    # print "practice_id: ", practice_id
     if user_id is None :
         lti_errors.append("user_id is required for this tool to function")
     elif first_name is None :
@@ -71,19 +75,19 @@ def index():
                                                         query_string=request.env.query_string)
     
         try:
-#            print "secret: ", myrecord.secret
-#            print "Incoming request from:", full_uri
+            # print "secret: ", myrecord.secret
+            # print "Incoming request from:", full_uri
             consumer, token, params = oauth_server.verify_request(oauth_request)
-#            print "Verified."
+            # print "Verified."
         except oauth.OAuthError, err:
             oauth_error = "OAuth Security Validation failed:"+err.message
             lti_errors.append(oauth_error)
             # print oauth_error
             consumer = None
         # except:
-            # print "Unexpected error"
-            # oauth_error = "Unexpected Error"
-            # consumer = None
+        #     print "Unexpected error"
+        #     oauth_error = "Unexpected Error"
+        #     consumer = None
     
     # Time to create / update / login the user
     if consumer is not None:
@@ -131,9 +135,15 @@ def index():
                                    assignment=assignment_id,
                                    lis_result_sourcedid=result_source_did,
                                    lis_outcome_url=outcome_url)
-        # print("redirecting")
         redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
 
+    elif practice_id:
+        db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == practice_id),
+                                   auth_user=user.id,
+                                   assignment=practice_id,
+                                   lis_result_sourcedid=result_source_did,
+                                   lis_outcome_url=outcome_url)
+        redirect(URL('assignments', 'practice'))
 
     # print(lti_errors)
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
