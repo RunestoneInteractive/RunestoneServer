@@ -903,20 +903,25 @@ def checkanswer():
     session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
     redirect(URL('practice'))
 
+def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
+    return db((db.questions.base_course == base_course) & \
+                   (db.questions.chapter == chapter_label) & \
+                   (db.questions.subchapter == sub_chapter_label) & \
+                   (db.questions.practice == True)).select()
+
 
 def practice():
     if not auth.user:
         session.flash = "Please Login"
         return redirect(URL('default', 'index'))
 
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                    (db.user_topic_practice.user_id == auth.user.id)).select()
-    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                             (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
     remaining_days = (datetime.date(datetime.date.today().year, 4, 19) - datetime.date.today()).days
 
-    if len(flashcards) == 0:
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    existing_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                    (db.user_topic_practice.user_id == auth.user.id))
+
+    if existing_flashcards.isempty():
         # new student; create flashcards
         subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
                               (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
@@ -926,107 +931,79 @@ def practice():
             .select(db.chapters.chapter_label, db.chapters.chapter_name, db.sub_chapters.sub_chapter_label,
                     orderby=db.chapters.id | db.sub_chapters.id)
         for subchapterTaught in subchaptersTaught:
-            questions = db((db.questions.base_course == course.base_course) & \
-                           (db.questions.chapter == subchapterTaught.chapters.chapter_label) & \
-                           (db.questions.subchapter == subchapterTaught.sub_chapters.sub_chapter_label) & \
-                           (db.questions.practice == True)).select()
-            qIndex = 0
-            question = _get_next_qualified_question(questions, qIndex)
-
-            if question:
+            questions = _get_qualified_questions(course.base_course,
+                                                 subchapterTaught.chapters.chapter_label,
+                                                 subchapterTaught.sub_chapters.sub_chapter_label)
+            if len(questions) > 0:
                 # there is at least one qualified question in this subchapter, so insert a flashcard for the subchapter
                 db.user_topic_practice.insert(
                     user_id=auth.user.id,
                     course_name=auth.user.course_name,
                     chapter_label=subchapterTaught.chapters.chapter_label,
                     sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
-                    question_name=question.name,
+                    question_name=questions[0].name,  # treat it as if the first eligible question is the last one asked
                     i_interval=0,
                     e_factor=2.5,
                     last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
                 )
 
-        flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                        (db.user_topic_practice.user_id == auth.user.id)).select()
+    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                        (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
+    ts = datetime.datetime.now()
+    # select only those where enough time has passed since last presentation
+    presentable_flashcards = [f for f in flashcards if (ts - f.last_practice).days >= f.i_interval]
 
-    for counter, flashcard in enumerate(flashcards):
-        if (datetime.datetime.now() - flashcard.last_practice).days >= flashcard.i_interval:
-            # enough time has passed to present this
-            questions = db(db.questions.subchapter == flashcard.sub_chapter_label).select()
-            if len(questions) != 0:
-                # find index of the last question asked
-                qIndex = 0
-                while questions[qIndex].name != flashcard.question_name:
-                    qIndex += 1
-                qIndex += 1
-                if qIndex == len(questions):
-                    qIndex = 0
+    if len(presentable_flashcards) > 0:
+        # present the first one
+        flashcard = presentable_flashcards[0]
+        # get eligible questions
+        questions = _get_qualified_questions(course.base_course,
+                                             flashcard.chapter_label,
+                                             flashcard.sub_chapter_label)
+        # find index of the last question asked
+        question_names = [q.name for q in questions]
+        qIndex = question_names.index(flashcard.question_name)
+        # present the next one in the list after the last one that was asked
+        question = questions[(qIndex + 1) % len(questions)]
 
-                question = _get_next_qualified_question(questions, qIndex)
+         # This replacement is to render images
+        question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
+                                                            'src="../static/' + course[
+                                                                'course_name'] + '/_static/')
+        question.htmlsrc = question.htmlsrc.replace("../_images",
+                                      "/{}/static/{}/_images".format(request.application, course.course_name))
 
-                if question:
-                    # This replacement is to render images
-                    question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
-                                                                        'src="../static/' + course[
-                                                                            'course_name'] + '/_static/')
-                    question.htmlsrc = question.htmlsrc.replace("../_images",
-                                                  "/{}/static/{}/_images".format(request.application, course.course_name))
+        autogradable = 1
+        if ((question.autograde is not None) or
+            (question.question_type is not None and question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
+            autogradable = 2
 
-                    autogradable = 1
-                    if ((question.autograde is not None) or
-                        (question.question_type is not None and question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
-                        autogradable = 2
+        questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
 
-                    questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
+        flashcard.question_name = question.name
+        flashcard.last_practice = datetime.datetime.now()
+        flashcard.update_record()
 
-                    flashcard.question_name = question.name
-                    flashcard.last_practice = datetime.datetime.now()
-                    flashcard.update_record()
 
-                    return dict(course=course, course_name=auth.user.course_name,
-                                course_id=auth.user.course_name, q=questioninfo, questionsExist=1,
-                                practice_completion_count=practice_completion_count,
-                                remaining_days=remaining_days)
+    else:
+        questioninfo = None
+        # add a practice completion record for today, if there isn't one already
+        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                                       (db.user_topic_practice_Completion.user_id == auth.user.id) & \
+                                       (db.user_topic_practice_Completion.practice_completion_time == datetime.date.today()))
+        if practice_completion_today.isempty():
+            db.user_topic_practice_Completion.insert(
+                user_id=auth.user.id,
+                course_name=auth.user.course_name,
+                practice_completion_time=datetime.date.today()
+            )
 
-    practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                                   (db.user_topic_practice_Completion.user_id == auth.user.id) & \
-                                   (db.user_topic_practice_Completion.practice_completion_time == datetime.date.today()))
-    if practice_completion_today.isempty():
-        db.user_topic_practice_Completion.insert(
-            user_id=auth.user.id,
-            course_name=auth.user.course_name,
-            practice_completion_time=datetime.date.today(),
-            # add as if yesterday, so can practice right away
-        )
+    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                                   (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
 
-    return dict(course=course, course_id=auth.user.course_name, questionsExist=0,
+    return dict(course=course, course_name=auth.user.course_name,
+                course_id=auth.user.course_name,
+                q=questioninfo,
+                flashcard_count=len(presentable_flashcards),
                 practice_completion_count=practice_completion_count,
-                remaining_days=remaining_days)
-
-
-def _get_next_qualified_question(questions, qIndex):
-    iterations = 0
-    question = questions[qIndex]
-    if not _is_qualified_question(question):
-        while not _is_qualified_question(question):
-            qIndex += 1
-            if qIndex == len(questions):
-                qIndex = 0
-            question = questions[qIndex]
-            iterations += 1
-            if iterations == len(questions):
-                return False
-    return question
-
-
-def _is_qualified_question(question):
-    # isQualified = False
-    # if (question.htmlsrc is not None and question.htmlsrc != "" and
-    #         ((question.question_type is not None and
-    #           question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop']) or
-    #         ('exercise' in question.subchapter.lower()))):
-    #     isQualified = True
-    # return isQualified
-    return question.practice
-
-
+                remaining_days=remaining_days, max_days=45)

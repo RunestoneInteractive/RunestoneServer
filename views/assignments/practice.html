@@ -85,12 +85,17 @@
 </style>
 
 <div id='part1' style="padding-left: 40px">
-	<h1 style='text-align:center'>Practice Questions</h1>
-    <div class="alert alert-danger">
-        <p>You have completed {{=practice_completion_count}} days out of 50 days of your practice.</p>
+	<h1 style='text-align:center'>Review Practice Questions</h1>
+    <div class="alert alert-danger"
+         {{ if flashcard_count > 1: }}
+            <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} to go today</p>
+         {{ elif flashcard_count == 1: }}
+            <p>Hang in there. Last question for today.</p>
+         {{pass}}
+        <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
     </div>
-    {{ if questionsExist == 1: }}
+    {{ if flashcard_count > 0: }}
         <span>
             <div class='oneq' id='QuestionContainer' style='width:90%;'>
                 <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
@@ -104,7 +109,7 @@
             <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
             <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
         {{ else: }}
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! Ask me another question!</a></p>
+            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{ if flashcard_count > 1: }}Ask me another question!{{else: }}Claim my completion point!{{pass}}</a></p>
             <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
             <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0&Pick=1" type="button" class="btn btn-danger NextQuestionAnchor">I don't know the answer.</a></p>
         {{ pass }}
@@ -121,7 +126,7 @@
 	// This script renders the html into elements in the DOM
 	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
-    {{ if questionsExist == 1: }}
+    {{ if flashcard_count > 0: }}
 	var questionHtmlCode = document.getElementById("htmlblock");
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the html string within the questioninfo array would only give an unexpected token error
