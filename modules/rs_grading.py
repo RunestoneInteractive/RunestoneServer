@@ -1,5 +1,6 @@
 import datetime
 import logging
+from outcome_request import OutcomeRequest
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
@@ -344,7 +345,7 @@ def _compute_assignment_total(student, assignment, course_name):
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
 
-    print (student.id, assignment.id)
+    # print (student.id, assignment.id)
 
     # compute the score
     query =  (db.question_grades.sid == student.username) \
@@ -441,6 +442,7 @@ def send_lti_grades(assignment, course_id, thedb, settings, oauth_consumer_key):
     student_rows = _get_students(course_id)
     for student in student_rows:
         send_lti_grade(assignment, student, lti_record)
+    print("done sending lti grades")
 
 def do_calculate_totals(assignment, course_id, course_name, sid, thedb, settings):
     global logger
@@ -566,3 +568,93 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
     # _profile(start, "after calls to _autograde_one_q")
     return count
 
+#### stuff for the practice feature
+
+def _get_next_i_interval(flashcard, q):
+    """Get next inter-repetition interval after the n-th repetition"""
+    if q < 3:
+        flashcard.i_interval = 0
+    else:
+        last_i_interval = flashcard.i_interval
+        if last_i_interval == 0:
+            flashcard.i_interval = 1
+        elif last_i_interval == 1:
+            flashcard.i_interval = 6
+        else:
+            flashcard.i_interval = math.ceil(last_i_interval * flashcard.e_factor)
+    flashcard.update_record()
+    return flashcard
+
+
+def _change_e_factor(flashcard, q):
+    if flashcard.e_factor >= 1.3:
+        flashcard.e_factor = flashcard.e_factor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
+        if flashcard.e_factor < 1.3:
+            flashcard.e_factor = 1.3
+        flashcard.update_record()
+    return flashcard
+
+
+def do_check_answer(sid, course_name, qid, username, q, thedb, settings):
+    global logger
+    global db
+    db = thedb
+    logger = logging.getLogger(settings.logger)
+    logger.setLevel(settings.log_level)
+
+    lastQuestion = db(db.questions.id == int(qid)).select().first()
+
+    flashcard = db((db.user_topic_practice.user_id == sid) &
+                   (db.user_topic_practice.course_name == course_name) &
+                   (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
+                   (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
+                   (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
+    if q:
+        # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
+        q = int(q)
+        trials_num = 0
+    else:
+        # Compute q using the auto grader
+        autograde = 'pct_correct'
+        if lastQuestion.autograde is not None:
+            autograde = lastQuestion.autograde
+        q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
+                                         lastQuestion.question_type, None, autograde, 'last_answer', False,
+                                         flashcard.last_practice)
+    flashcard = _change_e_factor(flashcard, q)
+    flashcard = _get_next_i_interval(flashcard, q)
+
+    db.user_topic_practice_log.insert(
+        user_id=sid,
+        course_name=course_name,
+        chapter_label=flashcard.chapter_label,
+        sub_chapter_label=flashcard.sub_chapter_label,
+        question_name=flashcard.question_name,
+        i_interval=flashcard.i_interval,
+        e_factor=flashcard.e_factor,
+        trials_num=trials_num,
+        start_practice=flashcard.last_practice,
+        end_practice=datetime.datetime.now(),
+    )
+
+
+def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count):
+    page_visits = db((db.useinfo.course_id == course_name) & \
+                     (db.useinfo.sid == sid) & \
+                     (db.useinfo.event == 'page') & \
+                     (db.useinfo.timestamp >= practice_start_time)) \
+        .select()
+    practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
+    practice_score = 0
+    if score == points:
+        if len(page_visits) <= 1 and trials_count <= 1 and practice_duration <= 2:
+            practice_score = 5
+        elif trials_count <= 2 and practice_duration <= 2:
+            practice_score = 4
+        elif trials_count <= 3 and practice_duration <= 3:
+            practice_score = 3
+        elif trials_count <= 4 and practice_duration <= 4:
+            practice_score = 2
+        elif trials_count <= 5 and practice_duration <= 5:
+            practice_score = 1
+    return (practice_score, trials_count)

@@ -316,7 +316,7 @@ def add_practice_items():
                                         (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
                         if not flashcards.isempty():
                             flashcards.delete()
-    return dict()
+    return json.dumps(dict())
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -428,7 +428,6 @@ def admin():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
-    print "here"
     cur_students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
