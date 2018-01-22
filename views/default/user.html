@@ -8,6 +8,7 @@
 <!-- Carousel
     ================================================== -->
 <link href="/runestone/static/css/carousel.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="row">
     <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
@@ -136,6 +137,17 @@
                     <button type="submit" class="btn btn-default">Login</button>
                 </div>
             </div>
+<div class="ui-widget">
+  <label for="coursename">Tags: </label>
+  <input id="coursename">
+</div>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script type="text/javascript">
+                $( "#coursename" ).autocomplete({
+      source: ['thinkcspy','pythonds']
+    });
+
+            </script>
         {{=form.custom.end}} <!-- </form> Must use this to get all the good defaults for the form -->
             <div id='auth-actions' class="" col-md-4>
             {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
