@@ -987,15 +987,17 @@ def practice():
 
     else:
         questioninfo = None
+        ## hardcoded local datetime; fix this
+        today = (datetime.datetime.utcnow() - datetime.timedelta(hours=5)).date()
         # add a practice completion record for today, if there isn't one already
         practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
                                        (db.user_topic_practice_Completion.user_id == auth.user.id) & \
-                                       (db.user_topic_practice_Completion.practice_completion_time == datetime.date.today()))
+                                       (db.user_topic_practice_Completion.practice_completion_time == today))
         if practice_completion_today.isempty():
             db.user_topic_practice_Completion.insert(
                 user_id=auth.user.id,
                 course_name=auth.user.course_name,
-                practice_completion_time=datetime.date.today()
+                practice_completion_time=today
             )
 
     practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
