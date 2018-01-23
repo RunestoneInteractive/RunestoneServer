@@ -108,13 +108,6 @@ def user():
             # add a row to section_users for this user with the section selected.
             redirect(URL('default', 'index'))
 
-    if 'login' in request.args(0):
-        # add info text re: using local auth. CSS styled to match text on Janrain form
-        sign_in_text = TR(TD('Sign in with your Runestone Academy account', _colspan='3'), _id='sign_in_text')
-        usernamewarn = TR(TD('Your username is NOT your email address', _colspan='3') )
-        form[0][0].insert(0, usernamewarn)
-        form[0][0].insert(0, sign_in_text)
-
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     try:
         form.element(_id='submit_record__row')[1][0]['_class']='btn btn-default'
