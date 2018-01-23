@@ -103,7 +103,7 @@ def _score_one_codelens(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
-def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.mchoice_answers.course_name == course_name) & \
             (db.mchoice_answers.sid == sid) & \
             (db.mchoice_answers.div_id == question_name) \
@@ -116,7 +116,7 @@ def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline,
 
 
 def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=None, question_type=None,
-                       practice_start_time=None):
+                       practice_start_time=None, db=None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
     # if question type is page we must do better with the div_id
@@ -140,7 +140,7 @@ def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=
     return db(query).select(db.useinfo.id, db.useinfo.act, orderby=db.useinfo.timestamp)
 
 
-def _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.parsons_answers.course_name == course_name) & \
             (db.parsons_answers.sid == sid) & \
             (db.parsons_answers.div_id == question_name) \
@@ -152,7 +152,7 @@ def _scorable_parsons_answers(course_name, sid, question_name, points, deadline,
     return db(query).select(orderby=db.parsons_answers.timestamp)
 
 
-def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.fitb_answers.course_name == course_name) & \
             (db.fitb_answers.sid == sid) & \
             (db.fitb_answers.div_id == question_name) \
@@ -164,7 +164,7 @@ def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, pr
     return db(query).select(orderby=db.fitb_answers.timestamp)
 
 
-def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.clickablearea_answers.course_name == course_name) & \
             (db.clickablearea_answers.sid == sid) & \
             (db.clickablearea_answers.div_id == question_name) \
@@ -176,7 +176,7 @@ def _scorable_clickablearea_answers(course_name, sid, question_name, points, dea
     return db(query).select(orderby=db.clickablearea_answers.timestamp)
 
 
-def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.dragndrop_answers.course_name == course_name) & \
             (db.dragndrop_answers.sid == sid) & \
             (db.dragndrop_answers.div_id == question_name) \
@@ -188,7 +188,7 @@ def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadlin
     return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
 
-def _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time=None):
+def _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
     query = ((db.codelens_answers.course_name == course_name) & \
             (db.codelens_answers.sid == sid) & \
             (db.codelens_answers.div_id == question_name) \
@@ -202,7 +202,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
-                     practice_start_time = None):
+                     practice_start_time = None, db=None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
@@ -232,41 +232,41 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         else:
             event_filter = None
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter,
-                                     practice_start_time=practice_start_time)
+                                     practice_start_time=practice_start_time, db=db)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
-        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time)
+        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page',
-                                     practice_start_time=practice_start_time)
+                                     practice_start_time=practice_start_time, db=db)
         scoring_fn = _score_one_interaction
     elif question_type == 'parsonsprob':
-        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time)
+        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
         scoring_fn = _score_one_parsons
     elif question_type == 'fillintheblank':
-        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time)
+        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
         scoring_fn = _score_one_fitb
     elif question_type == 'clickablearea':
         results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline,
-                                                  practice_start_time)
+                                                  practice_start_time, db=db)
         scoring_fn = _score_one_clickablearea
     elif question_type == 'dragndrop':
-        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time)
+        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
         if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
             results = _scorable_useinfos(course_name, sid, question_name, points, deadline,
-                                         practice_start_time=practice_start_time)
+                                         practice_start_time=practice_start_time, db=db)
             scoring_fn = _score_one_interaction
         else:
-            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time)
+            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
             scoring_fn = _score_one_codelens
     elif question_type in ['video', 'showeval']:
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
-                                     practice_start_time=practice_start_time)
+                                     practice_start_time=practice_start_time, db=db)
         scoring_fn = _score_one_interaction
 
     else:
@@ -304,7 +304,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
 
     # Save the score
     if save_score:
-        _save_question_grade(sid, course_name, question_name, score, id, deadline)
+        _save_question_grade(sid, course_name, question_name, score, id, deadline, db)
 
     if practice_start_time:
         return _score_practice_quality(practice_start_time,
@@ -312,11 +312,12 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
                                        sid,
                                        points,
                                        score,
-                                       len(results) if results else 0)
+                                       len(results) if results else 0,
+                                       db)
     return score
 
 
-def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
+def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None, db=None):
     try:
         db.question_grades.update_or_insert(
             ((db.question_grades.sid == sid) &
@@ -335,7 +336,7 @@ def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None
         logger.error("IntegrityError {} {} {}".format(sid, course_name, question_name))
 
 
-def _compute_assignment_total(student, assignment, course_name):
+def _compute_assignment_total(student, assignment, course_name, db=None):
     # return the computed score and the manual score if there is one; if no manual score, save computed score
     # student is a row, containing id and username
     # assignment is a row, containing name and id and points
@@ -383,7 +384,7 @@ def _compute_assignment_total(student, assignment, course_name):
                          .format(student.id, assignment.id, score))
         return score, None
 
-def _get_students(course_id, sid = None):
+def _get_students(course_id, sid = None, db=None):
     if sid:
         # sid which is passed in is a username, not a row id
         student_rows = db((db.user_courses.course_id == course_id) &
@@ -397,7 +398,7 @@ def _get_students(course_id, sid = None):
                           ).select(db.auth_user.username, db.auth_user.id)
     return student_rows
 
-def send_lti_grade(assignment, student, lti_record):
+def send_lti_grade(assignment, student, lti_record, db):
     # get total points for assignment, so can compute percentage to send to gradebook via LTI
 
     points = assignment.points
@@ -426,10 +427,8 @@ def send_lti_grade(assignment, student, lti_record):
 
     return "No grade sent"
 
-def send_lti_grades(assignment, course_id, thedb, settings, oauth_consumer_key):
+def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
     global logger
-    global db
-    db = thedb
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
 
@@ -439,29 +438,27 @@ def send_lti_grades(assignment, course_id, thedb, settings, oauth_consumer_key):
     else:
         lti_record = None
 
-    student_rows = _get_students(course_id)
+    student_rows = _get_students(course_id, db)
     for student in student_rows:
-        send_lti_grade(assignment, student, lti_record)
+        send_lti_grade(assignment, student, lti_record, db)
     print("done sending lti grades")
 
-def do_calculate_totals(assignment, course_id, course_name, sid, thedb, settings):
+def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
     global logger
-    global db
-    db = thedb
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
 
-    student_rows = _get_students(course_id, sid)
+    student_rows = _get_students(course_id, sid, db)
 
     results = {'success':True}
     if sid:
-        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, course_name)
+        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, course_name, db)
         results['message'] = "Total for {} is {}".format(sid, computed_total)
         results['computed_score'] = computed_total
         results['manual_score'] = manual_score
     else:
         # compute total score for the assignment for each sid; also saves in DB unless manual value saved
-        scores = [_compute_assignment_total(student, assignment, course_name)[0] for student in student_rows]
+        scores = [_compute_assignment_total(student, assignment, course_name, db)[0] for student in student_rows]
         results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
             len(scores),
             max(scores),
@@ -472,10 +469,8 @@ def do_calculate_totals(assignment, course_id, course_name, sid, thedb, settings
     return results
 
 
-def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, thedb, settings):
+def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, db, settings):
     global logger
-    global db
-    db = thedb
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
 
@@ -490,7 +485,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         deadline = deadline + datetime.timedelta(hours=int(timezoneoffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
-    student_rows = _get_students(course_id, sid)
+    student_rows = _get_students(course_id, sid, db)
     sids = [row.username for row in student_rows]
 
     if question_name:
@@ -533,7 +528,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
             # _profile(start, "\t{}. rows fetched for {}/{}".format(count, chapter, subchapter))
             for row in rows:
                 score += _autograde_one_q(course_name, s, row.name, 1, row.question_type,
-                                          deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
+                                          deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False, db=db)
                 logger.debug("Score is now %s for %s for %s", score, row.name, sid)
             if score >= ar:
                 save_points = points
@@ -542,7 +537,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
                 save_points = 0
                 logger.debug("no points for %s on %s", sid, name)
             # _profile(start, "\t\tgraded")
-            _save_question_grade(s, course_name, name, save_points, useinfo_id=None, deadline=deadline)
+            _save_question_grade(s, course_name, name, save_points, useinfo_id=None, deadline=deadline, db=db)
             #_profile(start, "\t\tsaved")
 
     # _profile(start, "after readings graded")
@@ -562,7 +557,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         for s in sids:
             if autograde != 'manual':
                 _autograde_one_q(course_name, s, qdiv, points, question_type,
-                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
+                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade, db=db)
                 count += 1
 
     # _profile(start, "after calls to _autograde_one_q")
@@ -595,10 +590,8 @@ def _change_e_factor(flashcard, q):
     return flashcard
 
 
-def do_check_answer(sid, course_name, qid, username, q, thedb, settings):
+def do_check_answer(sid, course_name, qid, username, q, db, settings):
     global logger
-    global db
-    db = thedb
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
 
@@ -620,7 +613,7 @@ def do_check_answer(sid, course_name, qid, username, q, thedb, settings):
             autograde = lastQuestion.autograde
         q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                          lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                         flashcard.last_practice)
+                                         flashcard.last_practice, db=db)
     flashcard = _change_e_factor(flashcard, q)
     flashcard = _get_next_i_interval(flashcard, q)
 
@@ -638,7 +631,7 @@ def do_check_answer(sid, course_name, qid, username, q, thedb, settings):
     )
 
 
-def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count):
+def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count, db):
     page_visits = db((db.useinfo.course_id == course_name) & \
                      (db.useinfo.sid == sid) & \
                      (db.useinfo.event == 'page') & \
