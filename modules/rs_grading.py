@@ -573,7 +573,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
 def _get_next_i_interval(flashcard, q):
     """Get next inter-repetition interval after the n-th repetition"""
     if q < 3:
-        flashcard.i_interval = 0
+        flashcard.i_interval = 1
     else:
         last_i_interval = flashcard.i_interval
         if last_i_interval == 0:
