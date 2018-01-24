@@ -438,7 +438,7 @@ def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
     else:
         lti_record = None
 
-    student_rows = _get_students(course_id, db)
+    student_rows = _get_students(course_id, db=db)
     for student in student_rows:
         send_lti_grade(assignment, student, lti_record, db)
     print("done sending lti grades")
