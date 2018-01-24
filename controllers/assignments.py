@@ -957,8 +957,7 @@ def practice():
     # select only those where enough time has passed since last presentation
     presentable_flashcards = [f for f in flashcards if (ts - f.last_practice).days >= f.i_interval]
 
-    if len(presentable_flashcards) > 0 and (practiced_today_count == 0 or request.vars.willing_to_continue or
-                                            practiced_today_count % 10 != 0):
+    if len(presentable_flashcards) > 0 and (practiced_today_count != 10 or request.vars.willing_to_continue):
         # present the first one
         flashcard = presentable_flashcards[0]
         # get eligible questions
@@ -989,6 +988,7 @@ def practice():
         flashcard.last_practice = datetime.datetime.now()
         flashcard.update_record()
 
+        form = None
 
     else:
         questioninfo = None
@@ -1005,8 +1005,34 @@ def practice():
                 practice_completion_time=today
             )
 
+        # form = FORM('Do you like the practice tool?',
+        #             INPUT(_name='like_practice', requires=IS_IN_SET(['Like', 'Dislike', 'No response'],
+        #                   zero=T('choose one'), error_message='Please choose one of the options.')),
+        #             TEXTAREA(_id='feedback', _name='feedback', value="How do you think we can improve the practice tool?"),
+        #             INPUT(_type='submit'))
+        # if form.accepts(request, session):
+        #     response.flash = 'Your response is saved!'
+        #     db.user_topic_practice_survey.insert(
+        #         user_id=auth.user.id,
+        #         course_name=auth.user.course_name,
+        #         like_practice=form.vars.like_practice,
+        #         feedback=form.vars.feedback,
+        #         response_time=datetime.datetime.now(),
+        #     )
+        # elif form.errors:
+        #     response.flash = 'There was an issue saving your response. Please submit it again.'
+
     practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
                                    (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
+
+    practice_times_to_pass_today = 10
+    if len(presentable_flashcards) + practiced_today_count < practice_times_to_pass_today:
+        practice_times_to_pass_today = len(presentable_flashcards) + practiced_today_count
+
+    if practiced_today_count < practice_times_to_pass_today:
+        practice_today_left = practice_times_to_pass_today - practiced_today_count
+    else:
+        practice_today_left = 0
 
     return dict(course=course, course_name=auth.user.course_name,
                 course_id=auth.user.course_name,
@@ -1014,6 +1040,6 @@ def practice():
                 flashcard_count=len(presentable_flashcards),
                 practice_completion_count=practice_completion_count,
                 remaining_days=remaining_days, max_days=45,
-                practiced_today_count=practiced_today_count,
-                practiced_10s_today=(practiced_today_count != 0 and practiced_today_count % 10 == 0 and
-                                     not request.vars.willing_to_continue))
+                practice_today_left=practice_today_left,
+                practice_times_to_pass_today=practice_times_to_pass_today,
+                practiced_10s_today=(practiced_today_count == practice_times_to_pass_today and not request.vars.willing_to_continue))
