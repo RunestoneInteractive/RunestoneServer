@@ -345,6 +345,10 @@ function getRightSideGradingDiv(element, acid, studentId) {
                     if (newdata != "Error") {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
                     jQuery('#input-comments', rightDiv).val(newdata['comments']);}
+                    else {
+                        jQuery('#input-grade', rightDiv).val(0);
+                        jQuery('#input-comments', rightDiv).val('');
+                    }
                 }}
         },250);
     }
