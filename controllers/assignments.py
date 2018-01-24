@@ -885,7 +885,7 @@ def chooseAssignment():
 # The rest of the file is about the the spaced practice:
 
 
-# Called when user clicks "I'm done" button or the "I don't know the answer" button
+# Called when user clicks "I'm done" button.
 def checkanswer():
     if not auth.user:
         session.flash = "Please Login"
@@ -947,13 +947,18 @@ def practice():
                     last_practice=datetime.date.today() - datetime.timedelta(1), # add as if yesterday, so can practice right away
                 )
 
-    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                        (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     ts = datetime.datetime.now()
+    practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
+                               (db.user_topic_practice_log.user_id == auth.user.id) & \
+                               (db.user_topic_practice_log.end_practice >= datetime.datetime(ts.year, ts.month, ts.day,
+                                                                                             0, 0, 0, 0))).count()
+    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                    (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     # select only those where enough time has passed since last presentation
     presentable_flashcards = [f for f in flashcards if (ts - f.last_practice).days >= f.i_interval]
 
-    if len(presentable_flashcards) > 0:
+    if len(presentable_flashcards) > 0 and (practiced_today_count == 0 or request.vars.willing_to_continue or
+                                            practiced_today_count % 10 != 0):
         # present the first one
         flashcard = presentable_flashcards[0]
         # get eligible questions
@@ -966,7 +971,7 @@ def practice():
         # present the next one in the list after the last one that was asked
         question = questions[(qIndex + 1) % len(questions)]
 
-         # This replacement is to render images
+        # This replacement is to render images
         question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
                                                             'src="../static/' + course[
                                                                 'course_name'] + '/_static/')
@@ -1008,4 +1013,7 @@ def practice():
                 q=questioninfo,
                 flashcard_count=len(presentable_flashcards),
                 practice_completion_count=practice_completion_count,
-                remaining_days=remaining_days, max_days=45)
+                remaining_days=remaining_days, max_days=45,
+                practiced_today_count=practiced_today_count,
+                practiced_10s_today=(practiced_today_count != 0 and practiced_today_count % 10 == 0 and
+                                     not request.vars.willing_to_continue))

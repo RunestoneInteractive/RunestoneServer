@@ -96,22 +96,29 @@
         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
     </div>
     {{ if flashcard_count > 0: }}
-        <span>
-            <div class='oneq' id='QuestionContainer' style='width:90%;'>
-                <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+         {{ if practiced_10s_today: }}
+            <div style="margin-bottom: 40px">Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</div>
+            <p><a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">I'd like to continue practicing.</a></p>
+            <div id="CanvasContainer">
+                <canvas id="canvas"></canvas>
             </div>
-        </span>
-        {{ if q[3] == 1: }}
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
         {{ else: }}
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{ if flashcard_count > 1: }}Ask me another question!{{else: }}Claim my completion point!{{pass}}</a></p>
-            <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0&Pick=1" type="button" class="btn btn-danger NextQuestionAnchor">I don't know the answer.</a></p>
+            <span>
+                <div class='oneq' id='QuestionContainer' style='width:90%;'>
+                    <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+                </div>
+            </span>
+            {{ if q[3] == 1: }}
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
+            {{ else: }}
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{ if flashcard_count > 1: }}Ask me another question!{{else: }}Claim my completion point!{{pass}}</a></p>
+                <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
+            {{ pass }}
         {{ pass }}
     {{ else: }}
         <div style="margin-bottom: 40px">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
