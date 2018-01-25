@@ -1,16 +1,16 @@
 from os import uname
 
-# Update this if statement to something that will match your production environment.
-# In this example, 'webfaction' is in the hostname of the production server.
-if 'webfaction' in uname()[1]:
-        # Update this to point to your production database.
-        settings.database_uri = 'postgres://username:password@database-host.com/database_name'
+#The best way to set the database_uri is to set your environment variable WEB2PY_CONFIG to one of the following values along with an database environment variable for each configuration as follows:
+#
+# production - set DBURL
+# test - set TEST_DBURL
+# development - set DEV_DBURL
+#
 
-# Update this with your Janrain API key
-settings.janrain_api_key = 'ThisIsntARealKey'
+# If, for some reason, you do not want to use environment variables then you'll have to remember
+# to edit this file every time you want to use a different database.
 
-# Add your Janrain domain (without the .rpxnow.com suffix)
-settings.janrain_domain = 'my-janrain-domain'
+#settings.database_uri = 'postgres://username:password@database-host.com/database_name'
 
 # Enable captchas during registration
 settings.enable_captchas = True
