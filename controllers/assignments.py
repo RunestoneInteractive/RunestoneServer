@@ -1242,7 +1242,7 @@ def doAssignment():
 
     for r in readings:
         logger.debug("READING = %s",r.name)
-
+        # todo: eliminate this query
         labels = db((db.chapters.chapter_label == r.chapter) &
                     (db.chapters.course_id == auth.user.course_name) &
                     (db.chapters.id == db.sub_chapters.chapter_id) &

@@ -147,6 +147,10 @@ class TestGradingFunction(unittest.TestCase):
         for i in res['readings'][7116]:
             self.assertEqual(i[-1], "completed")
             self.assertEqual(i[0], "General Introduction")
+
+        for i, r in enumerate(res['readings'][7116]):
+            self.assertEqual(r, rlist[i])
+
         self.assertEqual(len(res['questioninfo']),0)
         self.assertEqual('testcourse', res['course_name'])
         self.assertEqual('testcourse', res['course_id'])
