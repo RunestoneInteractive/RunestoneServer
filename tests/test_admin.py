@@ -62,7 +62,14 @@ class TestAdminEndpoints(unittest.TestCase):
         self.assertEqual(5, res['grade'])
         self.assertEqual('autograded', res['comments'])
 
-
+    def test_addinstructor(self):
+        auth.login_user(db.auth_user(11))
+        request.args.append('1675')
+        res = addinstructor()
+        res = db(db.course_instructor.course == 65).select()
+        self.assertEqual(2,len(res))
+        for row in res:
+            self.assertTrue(row.instructor in [11, 1675])
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAdminEndpoints))
