@@ -70,6 +70,17 @@ class TestAdminEndpoints(unittest.TestCase):
         self.assertEqual(2,len(res))
         for row in res:
             self.assertTrue(row.instructor in [11, 1675])
+    def test_get_question_id(self):
+        qid = _get_question_id('test-name-incorrect', 65)
+        self.assertEqual(qid, None)
+        qid = _get_question_id('lsh_comphist_1', 65)
+        self.assertEqual(qid, 2093)
+
+    def test_sections_list(self):
+        auth.login_user(db.auth_user(11))
+        sec_list = sections_list()
+        # self.assertEqual(len(sec_list), 2)
+        self.assertEqual(len(sec_list['sections']), 1)
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAdminEndpoints))
