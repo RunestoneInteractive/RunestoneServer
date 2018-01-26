@@ -567,8 +567,8 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
 
 def _get_next_i_interval(flashcard, q):
     """Get next inter-repetition interval after the n-th repetition"""
-    if q < 3:
-        flashcard.i_interval = 1
+    if q < 1:
+        flashcard.i_interval = 0
     else:
         last_i_interval = flashcard.i_interval
         if last_i_interval == 0:
@@ -648,6 +648,6 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
             practice_score = 3
         elif trials_count <= 4 and practice_duration <= 4:
             practice_score = 2
-        elif trials_count <= 5 and practice_duration <= 5:
+        else:
             practice_score = 1
     return (practice_score, trials_count)
