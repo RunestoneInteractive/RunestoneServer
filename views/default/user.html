@@ -5,7 +5,7 @@
 
 {{if request.args(0) != 'register':}}
 
-<div class="row">
+<div class="row col-md-offset-1">
 <!-- Carousel
     ================================================== -->
     <link href="/runestone/static/css/carousel.css" rel="stylesheet">
@@ -162,7 +162,10 @@
 {{pass}}
 {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
 
-{{if request.args(0) == 'register':}}
+<div class="content">
+<!-- REGISTRATION -->
+{{if request.args(0) == 'register': }}
+    <div id="registration_div">
     <p>Thanks for registering.  Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
     <ul>
         <li><strong>thinkcspy</strong> for How to Think Like a Computer Scientist</li>
@@ -171,10 +174,7 @@
         <li><strong>JavaReview</strong> for the AP Java Review</li>
         <li><strong>pip2</strong> for Programs, Information, People</li>
     </ul>
-    {{pass}}
 
-<!-- REGISTRATION -->
-{{if request.args(0) == 'register': }}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <div id="web2py_user_form">
     <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
@@ -276,12 +276,10 @@
 
         </script>
     {{=form.custom.end}}
-    </form>
-    </div>
+    </form> <!-- this tag is superflous as it is added by prev line -->
+    </div> <!-- end form div -->
+    </div> <!-- end register div -->
 {{pass}}
-
-
-
 
 <div class="row">
 
@@ -334,7 +332,6 @@
                     href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
     </div>
 </div>
-
 
 
 
