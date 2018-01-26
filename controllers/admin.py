@@ -1083,10 +1083,39 @@ def _get_toc_and_questions():
         question_picker = []
         reading_picker = []  # This one doesn't include the questions, but otherwise the same
         practice_picker = []  # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
-        # chapters are associated with courses, not with base_courses
-        chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
         subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
         chapters_and_subchapters_taught = [(row.chapter_name, row.sub_chapter_name) for row in subchapters_taught_query]
+
+
+
+        topic_query = db((db.courses.course_name == auth.user.course_name) & \
+                         (db.questions.base_course == db.courses.base_course) & \
+                         (db.questions.practice == True) & \
+                         (db.questions.topic != None)).select(db.questions.topic)
+        for q in topic_query:
+            chap, subch = q.topic.split('/')
+            # find the item in practice picker for this chapter
+            p_ch_info = None
+            for ch_info in practice_picker:
+                if ch_info['text'] == chap:
+                    p_ch_info = ch_info
+            if not p_ch_info:
+                # if there isn't one, add one
+                p_ch_info = {}
+                practice_picker.append(p_ch_info)
+                p_ch_info['text'] = ch.chapter_name
+                p_ch_info['children'] = []
+            # add the subchapter
+            p_sub_ch_info = {}
+            p_ch_info['children'].append(p_sub_ch_info)
+            p_sub_ch_info['id'] = "{}/{}".format(chap, subch)
+            p_sub_ch_info['text'] = subch
+            # checked if
+            p_sub_ch_info['state'] = {'checked':
+                                      (chap, subchap) in chapters_and_subchapters_taught}
+
+        # chapters are associated with courses, not with base_courses
+        chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
@@ -1097,14 +1126,14 @@ def _get_toc_and_questions():
             reading_picker.append(r_ch_info)
             r_ch_info['text'] = ch.chapter_name
             r_ch_info['children'] = []
-            practice_questions = db((db.questions.chapter == ch.chapter_label) & \
-                                    (db.questions.practice == True))
-            if not practice_questions.isempty():
-                # Copy the same stuff for practice picker.
-                p_ch_info = {}
-                practice_picker.append(p_ch_info)
-                p_ch_info['text'] = ch.chapter_name
-                p_ch_info['children'] = []
+            # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
+            #                         (db.questions.practice == True))
+            # if not practice_questions.isempty():
+            #     # Copy the same stuff for practice picker.
+            #     p_ch_info = {}
+            #     practice_picker.append(p_ch_info)
+            #     p_ch_info['text'] = ch.chapter_name
+            #     p_ch_info['children'] = []
             subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
@@ -1119,18 +1148,18 @@ def _get_toc_and_questions():
                 r_ch_info['children'].append(r_sub_ch_info)
                 r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
                 r_sub_ch_info['text'] = sub_ch.sub_chapter_name
-                practice_questions = db((db.questions.chapter == ch.chapter_label) & \
-                               (db.questions.subchapter == sub_ch.sub_chapter_label) & \
-                               (db.questions.practice == True))
-                if not practice_questions.isempty():
-                    # Copy the same stuff for reading picker.
-                    p_sub_ch_info = {}
-                    p_ch_info['children'].append(p_sub_ch_info)
-                    p_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
-                    p_sub_ch_info['text'] = sub_ch.sub_chapter_name
-                    # checked if
-                    p_sub_ch_info['state'] = {'checked':
-                                              (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
+                # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
+                #                (db.questions.subchapter == sub_ch.sub_chapter_label) & \
+                #                (db.questions.practice == True))
+                # if not practice_questions.isempty():
+                #     # Copy the same stuff for reading picker.
+                #     p_sub_ch_info = {}
+                #     p_ch_info['children'].append(p_sub_ch_info)
+                #     p_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
+                #     p_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                #     # checked if
+                #     p_sub_ch_info['state'] = {'checked':
+                #                               (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
                                      (db.questions.base_course == db.courses.base_course) & \
