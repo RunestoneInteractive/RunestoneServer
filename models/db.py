@@ -257,3 +257,13 @@ except:
     mtime = random.randrange(10000)
 
 request.admin_mtime = str(mtime)
+
+def check_for_donate_or_build(field_dict,id_of_insert):
+    if 'donate' in request.vars:
+        session.donate = request.vars.donate
+
+    if 'ccn_checkbox' in request.vars:
+        session.build_course = True
+
+if 'auth_user' in db:
+    db.auth_user._after_insert.append(check_for_donate_or_build)
