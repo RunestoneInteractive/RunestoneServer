@@ -177,7 +177,7 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <div id="web2py_user_form">
-    <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+    <form class="form-horizontal" enctype="multipart/form-data" method="post">
         <table>
             <tr id="auth_user_username__row">
                 <td class="w2p_fl"><label class="" for="auth_user_username"
@@ -243,6 +243,7 @@
                 <td class="w2p_fl"><label for="ccn_checkbox">Create Course</label></td>
                 <td class="w2p_fl"><input type="checkbox" id="ccn_checkbox" name="ccn_checkbox"> Make course after registering (Instructors Only)</td>
             </tr>
+            {{if settings.enable_captchas: }}
             <tr id="captcha__row">
                 <td class="w2p_fl"><label>Verify:</label></td>
                 <td class="w2p_fw">
@@ -262,6 +263,7 @@
                 </td>
                 <td class="w2p_fc"></td>
             </tr>
+            {{pass}}
             <tr id="submit_record__row">
                 <td class="w2p_fl"></td>
                 <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>

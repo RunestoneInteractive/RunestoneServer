@@ -43,6 +43,11 @@ def user():
                     db.auth_user.course_id.default = course_name
                     break
     try:
+        # After the registration form is submitted the registration is processed here
+        # this function will not return in that case, but instead continue on and end up
+        # redirecting to index.
+        # Additional registration processing can be handled by make_section_entries or another function added
+        # through db.auth_user._after_insert.append(some_function)
         form = auth()
     except HTTPError:
         session.flash = "Sorry, that service failed.  Try a different service or file a bug"
@@ -63,12 +68,6 @@ def user():
         form[0].insert(-1, my_extra_element)
         form.element('#auth_user_username')['_readonly']=True
 
-    if 'register' in request.args(0) and request.janrain_form:
-        # add the Janrain login form
-        form[0][5][2] = ''
-        form = (DIV(form, request.janrain_form.login_form()))
-
-
     if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
         if form.process().accepted:
@@ -81,10 +80,7 @@ def user():
             for row in inDB:
                 DBcheck.append(row)
             if DBcheck == []:
-                db.executesql('''
-                    INSERT INTO user_courses(user_id, course_id)
-                    SELECT %s, %s
-                    ''' % (auth.user.id, auth.user.course_id))
+                db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
             res = db(db.chapters.course_id == auth.user.course_name)
             logger.debug("PROFILE checking for progress table %s ", res)
             if res.count() > 0:
@@ -113,8 +109,11 @@ def user():
         form.element(_id='submit_record__row')[1][0]['_class']='btn btn-default'
     except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
-
     return dict(form=form)
+
+# Can use db.auth_user._after_insert.append(make_section_entries)
+# to add a custom function to deal with donation and/or creating a course
+# May have to disable auto_login ??
 
 def download(): return response.download(request,db)
 def call(): return service()
@@ -122,6 +121,10 @@ def call(): return service()
 
 @auth.requires_login()
 def index():
+    print("REFERER = ", request.env.http_referer)
+    print("session - donate", session.donate)
+    print("session - build", session.build)
+
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
     if not course or 'boguscourse' in course.course_name:
@@ -134,10 +137,7 @@ def index():
         for row in inDB:
             DBcheck.append(row)
         if DBcheck == []:
-            db.executesql('''
-                    INSERT INTO user_courses(user_id, course_id)
-                    SELECT %s, %s
-                    ''' % (auth.user.id, auth.user.course_id))
+            db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
         try:
             logger.debug("INDEX - checking for progress table")
             chapter_label = db(db.chapters.course_id == auth.user.course_name).select()[0].chapter_label
@@ -155,11 +155,17 @@ def index():
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
+        if session.donate != "0":
+            amt = session.donate
+            del session.donate
+            redirect(URL(c='default', f='donate', args=amt))
+
+        if session.build == True:
+            del session.build
+            redirect(URL(c='designer', f='index'))
+
         #check number of classes, if more than 1, send to course selection, if only 1, send to book
-        courseCheck = db(db.user_courses.user_id == auth.user.id).select()
-        numCourses = 0
-        for row in courseCheck:
-            numCourses += 1
+        numCourses = db(db.user_courses.user_id == auth.user.id).count()
         if numCourses == 1:
             redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
         redirect('/%s/default/courses' % request.application)
