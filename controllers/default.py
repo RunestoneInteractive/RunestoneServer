@@ -361,3 +361,10 @@ def sendreport():
         redirect('/%s/default/courses' % request.application)
     else:
         redirect('/%s/default/' % request.application)
+
+
+def terms():
+    return dict(terms={})
+
+def privacy():
+    return dict(private={})
