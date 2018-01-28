@@ -16,12 +16,12 @@ do_autograde(assignment,
              question_name = None,
              enforce_deadline = userinfo['enforce_deadline'],
              timezoneoffset = 5,
-             thedb=db,
+             db=db,
              settings=settings)
 
 do_calculate_totals(assignment,
                     course.id,
                     course.course_name,
                     sid = None,
-                    thedb = db,
+                    db = db,
                     settings = settings)
