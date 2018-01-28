@@ -155,7 +155,7 @@ def index():
             session.flash = "Your course is not set up to track your progress"
         #todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
-        if session.donate != "0":
+        if session.donate and session.donate != "0":
             amt = session.donate
             del session.donate
             redirect(URL(c='default', f='donate', args=amt))
