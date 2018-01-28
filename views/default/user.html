@@ -5,7 +5,7 @@
 
 {{if request.args(0) != 'register':}}
 
-<div class="row col-md-offset-1">
+<div class="row ">
 <!-- Carousel
     ================================================== -->
     <link href="/runestone/static/css/carousel.css" rel="stylesheet">
@@ -152,14 +152,19 @@
                role="button">{{=T('email my username')}}</a>
         {{pass}}
         </div>
-    {{pass}}
     </div>
+    {{pass}}
 
-{{if request.args(0) == 'retrieve_username': }}
-{{=form}}
-<p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
-</div>
+
+{{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password']: }}
+    <div id="web2py_user_form" class="col-md-4">
+        {{=form}}
+        {{ if request.args(0) != 'profile': }}
+        <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
+        {{pass}}
+    </div>
 {{pass}}
+</div>
 {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
 
 <div class="content">
