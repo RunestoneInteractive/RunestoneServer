@@ -31,12 +31,11 @@ db.define_table('user_topic_practice_Completion',
                 migrate='user_topic_practice_Completion.table')
 
 
-# db.define_table('user_topic_practice_survey',
-#                 Field('user_id', db.auth_user,
-#                       default=auth.user_id, update=auth.user_id, writable=False),
-#                 Field('course_name', 'string'),
-#                 Field('like_practice', requires=IS_IN_SET(['Like', 'Dislike', 'No response'])),
-#                 Field('feedback', 'text'),
-#                 Field('response_time', type='datetime',
-#                       default=request.now, update=request.now, writable=False),
-#                 migrate='user_topic_practice_Completion.table')
+db.define_table('user_topic_practice_survey',
+                Field('user_id', db.auth_user,
+                      default=auth.user_id, update=auth.user_id, writable=False),
+                Field('course_name', 'string'),
+                Field('like_practice', requires=IS_IN_SET(['Like', 'Dislike'])),
+                Field('response_time', type='datetime',
+                      default=request.now, update=request.now, writable=False),
+                migrate='user_topic_practice_survey.table')

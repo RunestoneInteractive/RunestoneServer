@@ -42,6 +42,8 @@
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/modal-basic.css" type="text/css" />
 
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 <script>
@@ -77,22 +79,54 @@
         cursor: crosshair;
         display: block;
     }
-    #CanvasContainer, #Canvas1Container {
+    #CanvasContainer {
         position: absolute;
         left: 0px;
         top: 0px;
     }
-    #follow-up-Container {
-        position: absolute;
-        left: 190px;
-        top: 400px;
-        z-index: 1;
+    /* I had to make this !important to override the same !important style is defined for
+    .fb_iframe_widget span, .fb_iframe_widget iframe in runestone-custom-sphinx-bootstrap.css
+    that is required for the social icons on top of the page and I had to override it. */
+    .fb-comments span, .fb-comments iframe {
+        height: 316px !important;
+        width: 550px !important;
     }
+    #CongratulationsDIV {
+        padding-bottom: 40px;
+    }
+    #CongratulationsContinueDIV {
+        padding-bottom: 25px;
+    }
+    #FeedbackRequestDIV {
+        margin-top: 10px;
+        margin-right: 40px;
+        margin-bottom: 10px;
+    }
+    #LikeDislikeDIV {
+        margin-top: 19px;
+        margin-bottom: 10px;
+    }
+    .LikeDislikeIcon {
+        font-size: 19px;
+    }
+
 </style>
+
+<!--Facebook Comments plugin script-->
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 
 <div id='part1' style="padding-left: 40px">
 	<h1 style='text-align:center'>Review Practice Questions</h1>
-    <div class="alert alert-danger"
+    <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
              {{ if practice_today_left > 0: }}
                 <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's point.</p>
@@ -107,13 +141,30 @@
          <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
     </div>
     {{ if flashcard_count > 0: }}
-         {{ if practice_today_left == 0: }}
-            <div style="margin-bottom: 190px">Congratulations! You have answered {{=practice_times_to_pass_today}} questions and received today's point.</div>
+         {{ if practice_today_left == 0 and not q: }}
+            <div id="CongratulationsContinueDIV">Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</div>
             <div id="CanvasContainer">
                 <canvas id="canvas"></canvas>
             </div>
             <div id="follow-up-Container">
-                <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">I'd like to continue practicing.</a>
+                <div id="WillingToContinueDIV">
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">I'd like to continue practicing.</a>
+                </div>
+                <div id="LikeDislikeDIV">
+                    Do you like the practice feature?
+                    <button type="button" class="btn btn-info" id="Like"><i class="LikeDislikeIcon fa fa-thumbs-up"></i>
+                        Like
+                        <!--Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                    <button type="button" class="btn btn-info" id="Dislike"><i class="LikeDislikeIcon fa fa-thumbs-down"></i>
+                        Dislike
+                        <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                </div>
+                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your suggestions on how to
+                    improve it. If someone else has already written the same feedback, please like/dislike those
+                    comments instead of repeating them.</div>
+                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice" data-numposts="5"></div>
             </div>
          {{ else: }}
             <span>
@@ -134,12 +185,9 @@
             {{ pass }}
          {{ pass }}
     {{ else: }}
-        <div style="margin-bottom: 40px">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
+        <div id="CongratulationsDIV">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
         <div id="CanvasContainer">
             <canvas id="canvas"></canvas>
-        </div>
-        <div id="Canvas1Container">
-            <canvas id="canvas1"></canvas>
         </div>
     {{ pass }}
 </div>
@@ -149,7 +197,7 @@
 	// This script renders the html into elements in the DOM
 	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
-{{ if practice_today_left > 0: }}
+{{ if practice_today_left > 0 or q: }}
 	var questionHtmlCode = document.getElementById("htmlblock");
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the html string within the questioninfo array would only give an unexpected token error
@@ -179,6 +227,38 @@
     // });
 
 {{ else: }}
+    $( "#Like, #Dislike" ).click(function() {
+        // var input = $(this).find('.qty1');
+        // input.val(parseInt(input.val())+ 1);
+
+        // Get some values from elements on the page:
+        var $atag = $( this ),
+        likeVal = $atag.attr( "id" );
+
+        // Send the data using post
+        var posting = $.post( "/{{=request.application}}/assignments/like_dislike", { likeVal: likeVal } );
+
+        // Put the results in a div
+        posting.done(function( data ) {
+            if (likeVal == "Like") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-secondary');
+                $("#Like").addClass('btn-success');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-danger');
+                $("#Dislike").addClass('btn-secondary');
+            }
+            else if (likeVal == "Dislike") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-success');
+                $("#Like").addClass('btn-secondary');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-secondary');
+                $("#Dislike").addClass('btn-danger');
+            }
+        });
+    });
+
     // when animating on canvas, it is best to use requestAnimationFrame instead of setTimeout or setInterval
     // not supported in all browsers though and sometimes needs a prefix, so we need a shim
     window.requestAnimFrame = ( function() {
@@ -215,11 +295,14 @@
             my;
 
     // set canvas dimensions
-    var outerTabsDIV = $("#outerTabs");
-    canvas.width = outerTabsDIV.width();
-    canvas.height = outerTabsDIV.height() + 190;
-    var CanvasContainerDIV = $("#CanvasContainer");
-    CanvasContainerDIV.offset({ top: outerTabsDIV.offset().top, left: outerTabsDIV.offset().left });
+    canvas.width = $(window).width();
+    {{ if flashcard_count > 0: }}
+        var congratulationsContinueDIV = $("#CongratulationsContinueDIV");
+        canvas.height = congratulationsContinueDIV.height() + congratulationsContinueDIV.offset().top;
+    {{ else: }}
+        var congratulationsDIV = $("#CongratulationsDIV");
+        canvas.height = congratulationsDIV.height() + congratulationsDIV.offset().top;
+    {{ pass }}
 
     // now we are going to setup our function placeholders for the entire demo
 
@@ -459,142 +542,6 @@
     window.onload = loop;
 
 
-    {{ if flashcard_count == 0: }}
-        $(function() {
-            var canvas = $('#canvas1')[0];
-            canvas.width = $(window).width();
-            canvas.height = $(window).height();
-            var ctx = canvas.getContext('2d');
-            // init
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // objects
-            var listFire = [];
-            var listFirework = [];
-            var fireNumber = 10;
-            var center = {
-                x: canvas.width / 2,
-                y: canvas.height / 2
-            };
-            var range = 100;
-            for (var i = 0; i < fireNumber; i++) {
-                var fire = {
-                    x: Math.random() * range / 2 - range / 4 + center.x,
-                    y: Math.random() * range * 2 + canvas.height,
-                    size: Math.random() + 0.5,
-                    fill: '#fd1',
-                    vx: Math.random() - 0.5,
-                    vy: -(Math.random() + 4),
-                    ax: Math.random() * 0.02 - 0.01,
-                    far: Math.random() * range + (center.y - range)
-                };
-                fire.base = {
-                    x: fire.x,
-                    y: fire.y,
-                    vx: fire.vx
-                };
-                //
-                listFire.push(fire);
-            }
-
-            function randColor() {
-                var r = Math.floor(Math.random() * 256);
-                var g = Math.floor(Math.random() * 256);
-                var b = Math.floor(Math.random() * 256);
-                var color = 'rgb($r, $g, $b)';
-                color = color.replace('$r', r);
-                color = color.replace('$g', g);
-                color = color.replace('$b', b);
-                return color;
-            }
-            (function loop() {
-                requestAnimationFrame(loop);
-                update();
-                draw();
-            })();
-
-            function update() {
-                for (var i = 0; i < listFire.length; i++) {
-                    var fire = listFire[i];
-                    //
-                    if (fire.y <= fire.far) {
-                        // case add firework
-                        var color = randColor();
-                        for (var i = 0; i < fireNumber * 5; i++) {
-                            var firework = {
-                                x: fire.x,
-                                y: fire.y,
-                                size: Math.random() + 1.5,
-                                fill: color,
-                                vx: Math.random() * 5 - 2.5,
-                                vy: Math.random() * -5 + 1.5,
-                                ay: 0.05,
-                                alpha: 1,
-                                life: Math.round(Math.random() * range / 2) + range / 2
-                            };
-                            firework.base = {
-                                life: firework.life,
-                                size: firework.size
-                            };
-                            listFirework.push(firework);
-                        }
-                        // reset
-                        fire.y = fire.base.y;
-                        fire.x = fire.base.x;
-                        fire.vx = fire.base.vx;
-                        fire.ax = Math.random() * 0.02 - 0.01;
-                    }
-                    //
-                    fire.x += fire.vx;
-                    fire.y += fire.vy;
-                    fire.vx += fire.ax;
-                }
-                for (var i = listFirework.length - 1; i >= 0; i--) {
-                    var firework = listFirework[i];
-                    if (firework) {
-                        firework.x += firework.vx;
-                        firework.y += firework.vy;
-                        firework.vy += firework.ay;
-                        firework.alpha = firework.life / firework.base.life;
-                        firework.size = firework.alpha * firework.base.size;
-                        firework.alpha = firework.alpha > 0.6 ? 1 : firework.alpha;
-                        //
-                        firework.life--;
-                        if (firework.life <= 0) {
-                            listFirework.splice(i, 1);
-                        }
-                    }
-                }
-            }
-
-            function draw() {
-                // clear
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.globalAlpha = 0.18;
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // re-draw
-                ctx.globalCompositeOperation = 'screen';
-                ctx.globalAlpha = 1;
-                for (var i = 0; i < listFire.length; i++) {
-                    var fire = listFire[i];
-                    ctx.beginPath();
-                    ctx.arc(fire.x, fire.y, fire.size, 0, Math.PI * 2);
-                    ctx.closePath();
-                    ctx.fillStyle = fire.fill;
-                    ctx.fill();
-                }
-                for (var i = 0; i < listFirework.length; i++) {
-                    var firework = listFirework[i];
-                    ctx.globalAlpha = firework.alpha;
-                    ctx.beginPath();
-                    ctx.arc(firework.x, firework.y, firework.size, 0, Math.PI * 2);
-                    ctx.closePath();
-                    ctx.fillStyle = firework.fill;
-                    ctx.fill();
-                }
-            }
-        })
-    {{ pass }}
 {{ pass }}
 
 
