@@ -75,6 +75,9 @@
 		list-style-type: circle;
 		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
 	}
+    .NextQuestionAnchor {
+        font-size: 19px;
+    }
     .canvas {
         cursor: crosshair;
         display: block;
@@ -142,13 +145,18 @@
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
-            <div id="CongratulationsContinueDIV">Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</div>
+            <div id="CongratulationsContinueDIV">
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</p>
+                <p>Click on the fireworks to create more of them.</p>
+            </div>
             <div id="CanvasContainer">
                 <canvas id="canvas"></canvas>
             </div>
             <div id="follow-up-Container">
                 <div id="WillingToContinueDIV">
-                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">I'd like to continue practicing.</a>
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">
+                        I'd like to continue practicing.
+                    </a>
                 </div>
                 <div id="LikeDislikeDIV">
                     Do you like the practice feature?
@@ -185,7 +193,10 @@
             {{ pass }}
          {{ pass }}
     {{ else: }}
-        <div id="CongratulationsDIV">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
+        <div id="CongratulationsDIV">
+            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
+            <p>Click on the fireworks to create more of them.</p>
+        </div>
         <div id="CanvasContainer">
             <canvas id="canvas"></canvas>
         </div>
