@@ -13,6 +13,7 @@ db.define_table('questions',
                 Field('practice', type='boolean'),
                 Field('autograde', type='string'),
                 Field('practice', type='boolean'),
+                Field('topic', type='string'),
                 migrate='runestone_questions.table')
 
 
