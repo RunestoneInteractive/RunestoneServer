@@ -1018,8 +1018,9 @@ def practice():
     else:
         questioninfo = None
 
-        ## hardcoded local datetime; fix this
-        today = (datetime.datetime.utcnow() - datetime.timedelta(hours=5)).date()
+        ## Professor Resnick, please test this fix on your server. It works on my localhost, but I am not sure what
+        ## happens when we deploy it on the server.
+        today = (datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))).date()
         # Add a practice completion record for today, if there isn't one already.
         practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
                                        (db.user_topic_practice_Completion.user_id == auth.user.id) & \
