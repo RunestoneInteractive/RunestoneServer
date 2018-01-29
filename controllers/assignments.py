@@ -1012,6 +1012,12 @@ def practice():
 
         questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
 
+        # This is required to check the same question in do_check_answer().
+        flashcard.question_name = question.name
+        # This is required to only check answers after this timestamp in do_check_answer().
+        flashcard.last_practice = datetime.datetime.now()
+        flashcard.update_record()
+
     else:
         questioninfo = None
 

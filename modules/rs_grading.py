@@ -602,9 +602,6 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
                    (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
                    (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
-    flashcard.question_name = lastQuestion.name
-    flashcard.last_practice = datetime.datetime.now()
-    flashcard.update_record()
 
     if q:
         # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
