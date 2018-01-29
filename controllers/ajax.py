@@ -349,7 +349,7 @@ def updatelastpage():
     course = request.vars.course
     completionFlag = request.vars.completionFlag
     lastPageChapter = lastPageUrl.split("/")[-2]
-    lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+    lastPageSubchapter = ".".join(lastPageUrl.split("/")[-1].split(".")[:-1])
     if auth.user:
         db((db.user_state.user_id == auth.user.id) &
                  (db.user_state.course_id == course)).update(
@@ -370,7 +370,7 @@ def getCompletionStatus():
     if auth.user:
         lastPageUrl = request.vars.lastPageUrl
         lastPageChapter = lastPageUrl.split("/")[-2]
-        lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+        lastPageSubchapter = ".".join(lastPageUrl.split("/")[-1].split(".")[:-1])
         result = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
                     (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
                     (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
