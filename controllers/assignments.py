@@ -6,7 +6,6 @@ import json
 import logging
 import datetime
 from collections import OrderedDict
-import math
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer
 

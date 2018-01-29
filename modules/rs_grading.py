@@ -1,5 +1,6 @@
 import datetime
 import logging
+from math import ceil
 from outcome_request import OutcomeRequest
 
 def _profile(start, msg):
@@ -576,7 +577,7 @@ def _get_next_i_interval(flashcard, q):
         elif last_i_interval == 1:
             flashcard.i_interval = 6
         else:
-            flashcard.i_interval = math.ceil(last_i_interval * flashcard.e_factor)
+            flashcard.i_interval = ceil(last_i_interval * flashcard.e_factor)
     flashcard.update_record()
     return flashcard
 
