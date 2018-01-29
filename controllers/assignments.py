@@ -1011,10 +1011,6 @@ def practice():
 
         questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
 
-        flashcard.question_name = question.name
-        flashcard.last_practice = datetime.datetime.now()
-        flashcard.update_record()
-
     else:
         questioninfo = None
 
