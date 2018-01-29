@@ -959,8 +959,9 @@ def practice():
                     question_name=questions[0].name, # Treat it as if the first eligible question is the last one asked.
                     i_interval=0,
                     e_factor=2.5,
-                    # Add as if yesterday, so can practice right away.
-                    last_practice=datetime.date.today() - datetime.timedelta(1),
+                    # add as if yesterday, so can practice right away
+                    last_presented=datetime.date.today() - datetime.timedelta(1),
+                    last_completed=datetime.date.today() - datetime.timedelta(1),
                 )
 
     current_time = datetime.datetime.now()
@@ -975,7 +976,7 @@ def practice():
     flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                     (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if (current_time - f.last_practice).days >= f.i_interval]
+    presentable_flashcards = [f for f in flashcards if (current_time - f.last_completed).days >= f.i_interval]
 
     # Define how many topics you expect your students practice every day.
     practice_times_to_pass_today = 10
@@ -1006,7 +1007,8 @@ def practice():
         autogradable = 1
         # If it is possible to autograde it:
         if ((question.autograde is not None) or
-            (question.question_type is not None and question.question_type in ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
+            (question.question_type is not None and question.question_type in
+             ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
             autogradable = 2
 
         questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
@@ -1014,7 +1016,7 @@ def practice():
         # This is required to check the same question in do_check_answer().
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
-        flashcard.last_practice = datetime.datetime.now()
+        flashcard.last_presented = datetime.datetime.now()
         flashcard.update_record()
 
     else:

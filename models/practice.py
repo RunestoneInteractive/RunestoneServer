@@ -7,6 +7,8 @@ db.define_table('user_topic_practice',
                 Field('i_interval', type='integer', notnull=True),
                 Field('e_factor', type='double', notnull=True),
                 Field('last_practice', type='datetime'),
+                Field('last_presented', type='datetime'),
+                Field('last_completed', type='datetime'),
                 migrate='runestone_spacing.table')
 
 
