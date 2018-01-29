@@ -112,7 +112,11 @@
     .LikeDislikeIcon {
         font-size: 19px;
     }
-
+    .demo {
+        margin:0 auto;
+        width:100%;
+        height:100%;
+    }
 </style>
 
 <!--Facebook Comments plugin script-->
@@ -195,11 +199,8 @@
     {{ else: }}
         <div id="CongratulationsDIV">
             <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
-            <p>Click on the fireworks to create more of them.</p>
         </div>
-        <div id="CanvasContainer">
-            <canvas id="canvas"></canvas>
-        </div>
+        <div class="demo"></div>
     {{ pass }}
 </div>
 
@@ -237,7 +238,7 @@
     //     });
     // });
 
-{{ else: }}
+{{ elif flashcard_count > 0: }}
     $( "#Like, #Dislike" ).click(function() {
         // var input = $(this).find('.qty1');
         // input.val(parseInt(input.val())+ 1);
@@ -311,8 +312,7 @@
         var congratulationsContinueDIV = $("#CongratulationsContinueDIV");
         canvas.height = congratulationsContinueDIV.height() + congratulationsContinueDIV.offset().top;
     {{ else: }}
-        var congratulationsDIV = $("#CongratulationsDIV");
-        canvas.height = congratulationsDIV.height() + congratulationsDIV.offset().top;
+        canvas.height = $(window).height();
     {{ pass }}
 
     // now we are going to setup our function placeholders for the entire demo
@@ -551,11 +551,14 @@
 
     // once the window loads, we are ready for some fireworks!
     window.onload = loop;
-
-
+{{ pass }}
+</script>
+{{ if flashcard_count == 0: }}
+    <script src="{{=URL('static', 'js/jquery.fireworks.js')}}"></script>
+    <script>
+        $('.demo').fireworks({ sound: true, opacity: 0.7, width: '100%', height: '100%' });
+    </script>
 {{ pass }}
 
-
-</script>
 {{end}}
 
