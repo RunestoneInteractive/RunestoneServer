@@ -1,26 +1,76 @@
-{{ extend "admin/instructors.html"}} 
+{{ extend "admin/instructors.html"}}
 {{ block tabcontent }}
 
-<h2>Runestone Help and Documentation</p>
+<h2>Runestone Help and Documentation</h2>
 
-    <h4>Current Videos</h4>
-    <p>For a video tour of and help with the instructors interface check out our <a href="https://www.youtube.com/channel/UCAfQvSLv5senKZHfaycIz8w">YouTube Channel</a></p>
+<h4>Current Videos</h4>
+<div class="col-md-6">
+    <h4>Manage your course</h4>
 
+    <p>The <a href="https://youtu.be/oeGwKLNLI-Y"> Admin Page</a> Lets you manage every
+        aspect of your course from student enrollment to grading. </p>
+</div>
+
+<div class="col-md-6">
+    <h4>Check Student Progress and Activity</h4>
+
+    <p>Do you wonder whether your students are really doing the readings homework? Our <a
+            href="https://youtu.be/nqcv3U6uFQg">Instructor
+        Dashboard</a> can show you</p>
+</div>
+
+<div class="col-md-6">
+    <h4>Create your own assignments</h4>
+
+    <p>Choose from the exercises we provide, questions written by fellow instructors, or write your own. <a
+            href="https://youtu.be/wJnpanrFpYI">This video</a> will show you how.
+
+    </p>
+</div>
+
+<div class="col-md-6">
+    <h4>Grade Homework Right in the Book</h4>
+
+    <p>For each assignment you can see all your student
+        homeworks on one page. Grading is quick and easy with the
+        click of a button to run each submission. Many exercises can also be auto graded!
+        Check out <a href="https://youtu.be/Sfxbrgr9-ug">This Video</a></p>
+</div>
+
+<div class="col-md-6">
+    <h4>Write your own Questions</h4>
+
+    <p>When you are ready you can write your own questions using the Runestone Components
+        <a href="https://youtu.be/l84cb4wtM8g">This Video</a> will get you started.</p>
+</div>
+
+<div class="col-md-6">
     <h4>Overview of Runestone Directives</h4>
-    <p>This <a href="/runestone/static/overview/overview.html">Overview Page</a> Shows you all of the runestone directives, along with the source.  You may find this very useful for writing your own questions.</p>
-
+    <p>This <a href="/runestone/static/overview/overview.html">Overview Page</a> Shows you all of the runestone
+        directives,
+        along with the source. You may find this very useful for writing your own questions.</p>
+</div>
+<div class="col-md-6">
     <h4>Frequently Asked Questions</h4>
-    We maintain a frequently asked questions page <a href="http://runestoneinteractive.org/build/html/faq.html">Here</a>
+    <p>We maintain a frequently asked questions page <a href="http://runestoneinteractive.org/build/html/faq.html">Here</a></p>
+</div>
 
-    <h4>Workshop Materials</h4>
-    <p>We are working on more comprehensive documentation, and although this is a bit out of date, This book we put together
-        for our <a href="http://interactivepython.org/runestone/static/sigcse2017/index.html">SIGCSE 2017 workshop</a> is
-        a good place to start.
-        </p>
+<div class="col-md-12">
+<h4>Workshop Materials</h4>
+<p>We are working on more comprehensive documentation, and although this is a bit out of date, This book we put together
+    for our <a href="http://interactivepython.org/runestone/static/sigcse2017/index.html">SIGCSE 2017 workshop</a> is
+    a good place to start.
+</p>
+</div>
 
-        <script type="text/javascript">
-          $(".dashboardnav").removeClass("active");
-          $("#doctab").addClass("active");
+<div class="col-md-12">
+    <p>You can find all of the videos on <a href="https://www.youtube.com/watch?v=IGg_SUWEnGU&list=PLnjfglXW2QQRG6NRsg5mq8V99MM_3j_ZU">this youtube playlist</a></p>
+</div>
 
-        </script>
-        {{ end }}
+
+<script type="text/javascript">
+    $(".dashboardnav").removeClass("active");
+    $("#doctab").addClass("active");
+
+</script>
+{{ end }}
