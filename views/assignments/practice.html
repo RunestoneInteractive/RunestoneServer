@@ -42,6 +42,8 @@
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/modal-basic.css" type="text/css" />
 
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 <script>
@@ -73,6 +75,9 @@
 		list-style-type: circle;
 		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
 	}
+    .NextQuestionAnchor {
+        font-size: 19px;
+    }
     .canvas {
         cursor: crosshair;
         display: block;
@@ -82,42 +87,120 @@
         left: 0px;
         top: 0px;
     }
+    /* I had to make this !important to override the same !important style is defined for
+    .fb_iframe_widget span, .fb_iframe_widget iframe in runestone-custom-sphinx-bootstrap.css
+    that is required for the social icons on top of the page and I had to override it. */
+    .fb-comments span, .fb-comments iframe {
+        height: 316px !important;
+        width: 550px !important;
+    }
+    #CongratulationsDIV {
+        padding-bottom: 40px;
+    }
+    #CongratulationsContinueDIV {
+        padding-bottom: 25px;
+    }
+    #FeedbackRequestDIV {
+        margin-top: 10px;
+        margin-right: 40px;
+        margin-bottom: 10px;
+    }
+    #LikeDislikeDIV {
+        margin-top: 19px;
+        margin-bottom: 10px;
+    }
+    .LikeDislikeIcon {
+        font-size: 19px;
+    }
+    .demo {
+        margin:0 auto;
+        width:100%;
+        height:100%;
+    }
 </style>
+
+<!--Facebook Comments plugin script-->
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 
 <div id='part1' style="padding-left: 40px">
 	<h1 style='text-align:center'>Review Practice Questions</h1>
-    <div class="alert alert-danger"
+    <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
-            <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} to go today</p>
+             {{ if practice_today_left > 0: }}
+                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's point.</p>
+             {{else:}}
+                <p>You've already got today's point.</p>
+             {{pass}}
+             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.</p>
          {{ elif flashcard_count == 1: }}
-            <p>Hang in there. Last question for today.</p>
+             <p>Hang in there. Last question for today.</p>
          {{pass}}
-        <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
-        <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
+         <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
+         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
     </div>
     {{ if flashcard_count > 0: }}
-        <span>
-            <div class='oneq' id='QuestionContainer' style='width:90%;'>
-                <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+         {{ if practice_today_left == 0 and not q: }}
+            <div id="CongratulationsContinueDIV">
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</p>
+                <p>Click on the fireworks to create more of them.</p>
             </div>
-        </span>
-        {{ if q[3] == 1: }}
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
-        {{ else: }}
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{ if flashcard_count > 1: }}Ask me another question!{{else: }}Claim my completion point!{{pass}}</a></p>
-            <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
-            <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0&Pick=1" type="button" class="btn btn-danger NextQuestionAnchor">I don't know the answer.</a></p>
-        {{ pass }}
+            <div id="CanvasContainer">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="follow-up-Container">
+                <div id="WillingToContinueDIV">
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">
+                        I'd like to continue practicing.
+                    </a>
+                </div>
+                <div id="LikeDislikeDIV">
+                    Do you like the practice feature?
+                    <button type="button" class="btn btn-info" id="Like"><i class="LikeDislikeIcon fa fa-thumbs-up"></i>
+                        Like
+                        <!--Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                    <button type="button" class="btn btn-info" id="Dislike"><i class="LikeDislikeIcon fa fa-thumbs-down"></i>
+                        Dislike
+                        <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                </div>
+                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your suggestions on how to
+                    improve it. If someone else has already written the same feedback, please like/dislike those
+                    comments instead of repeating them.</div>
+                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice" data-numposts="5"></div>
+            </div>
+         {{ else: }}
+            <span>
+                <div class='oneq' id='QuestionContainer' style='width:90%;'>
+                    <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+                </div>
+            </span>
+            {{ if q[3] == 1: }}
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
+            {{ else: }}
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if flashcard_count > 1 else "Claim my completion point!" }}</a></p>
+                <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
+            {{ pass }}
+         {{ pass }}
     {{ else: }}
-        <div style="margin-bottom: 40px">Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</div>
-        <div id="CanvasContainer">
-            <canvas id="canvas"></canvas>
+        <div id="CongratulationsDIV">
+            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
         </div>
+        <div class="demo"></div>
     {{ pass }}
 </div>
 
@@ -126,7 +209,7 @@
 	// This script renders the html into elements in the DOM
 	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
-    {{ if flashcard_count > 0: }}
+{{ if practice_today_left > 0 or q: }}
 	var questionHtmlCode = document.getElementById("htmlblock");
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the html string within the questioninfo array would only give an unexpected token error
@@ -155,8 +238,39 @@
     //     });
     // });
 
+{{ elif flashcard_count > 0: }}
+    $( "#Like, #Dislike" ).click(function() {
+        // var input = $(this).find('.qty1');
+        // input.val(parseInt(input.val())+ 1);
 
-    {{ else: }}
+        // Get some values from elements on the page:
+        var $atag = $( this ),
+        likeVal = $atag.attr( "id" );
+
+        // Send the data using post
+        var posting = $.post( "/{{=request.application}}/assignments/like_dislike", { likeVal: likeVal } );
+
+        // Put the results in a div
+        posting.done(function( data ) {
+            if (likeVal == "Like") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-secondary');
+                $("#Like").addClass('btn-success');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-danger');
+                $("#Dislike").addClass('btn-secondary');
+            }
+            else if (likeVal == "Dislike") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-success');
+                $("#Like").addClass('btn-secondary');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-secondary');
+                $("#Dislike").addClass('btn-danger');
+            }
+        });
+    });
+
     // when animating on canvas, it is best to use requestAnimationFrame instead of setTimeout or setInterval
     // not supported in all browsers though and sometimes needs a prefix, so we need a shim
     window.requestAnimFrame = ( function() {
@@ -193,11 +307,13 @@
             my;
 
     // set canvas dimensions
-    var outerTabsDIV = $("#outerTabs");
-    canvas.width = outerTabsDIV.width();
-    canvas.height = outerTabsDIV.height() + 190;
-    var CanvasContainerDIV = $("#CanvasContainer");
-    CanvasContainerDIV.offset({ top: outerTabsDIV.offset().top, left: outerTabsDIV.offset().left });
+    canvas.width = $(window).width();
+    {{ if flashcard_count > 0: }}
+        var congratulationsContinueDIV = $("#CongratulationsContinueDIV");
+        canvas.height = congratulationsContinueDIV.height() + congratulationsContinueDIV.offset().top;
+    {{ else: }}
+        canvas.height = $(window).height();
+    {{ pass }}
 
     // now we are going to setup our function placeholders for the entire demo
 
@@ -435,9 +551,14 @@
 
     // once the window loads, we are ready for some fireworks!
     window.onload = loop;
-    {{ pass }}
-
-
+{{ pass }}
 </script>
+{{ if flashcard_count == 0: }}
+    <script src="{{=URL('static', 'js/jquery.fireworks.js')}}"></script>
+    <script>
+        $('.demo').fireworks({ sound: true, opacity: 0.7, width: '100%', height: '100%' });
+    </script>
+{{ pass }}
+
 {{end}}
 
