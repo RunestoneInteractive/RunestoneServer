@@ -330,7 +330,7 @@ def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None
             div_id=question_name,
             score = score,
             comment = "autograded",
-            useinfo_id = useinfo_id,
+            useinfo_id = None,
             deadline=deadline
         )
     except IntegrityError:
@@ -342,12 +342,10 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
     # student is a row, containing id and username
     # assignment is a row, containing name and id and points
 
-        # Get all question_grades for this sid/assignment_id
+    # Get all question_grades for this sid/assignment_id
     # Retrieve from question_grades table  with right sids and div_ids
     # sid is really a username, so look it up in auth_user
     # div_id is found in questions; questions are associated with assignments, which have assignment_id
-
-    # print (student.id, assignment.id)
 
     # compute the score
     query =  (db.question_grades.sid == student.username) \
@@ -358,12 +356,10 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
     scores = db(query).select(db.question_grades.score)
     logger.debug("List of scores to add for %s is %s",student.username, scores)
     score = sum([row.score for row in scores if row.score])
-    # get total points for assignment, so can compute percentage to send to gradebook via LTI
+    # check for threshold scoring for the assignment
     record = db.assignments(assignment.id)
-    if record:
-        points = record.points
-    else:
-        points = 0
+    if record and record.threshold_pct and score/record.points > record.threshold_pct:
+        score = record.points
     grade = db(
         (db.grades.auth_user == student.id) &
         (db.grades.assignment == assignment.id)).select().first()
