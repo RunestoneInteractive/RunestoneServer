@@ -191,6 +191,16 @@
           {{ pass }}
         <li class="divider-vertical"></li>
 
+        {{if 'user_navs' in globals() and user_navs: }}
+          <li><a href="/{{=request.application}}/default/user/register">Register</a> </li>
+          {{if 'auth' in globals() and auth.user:}}
+              <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
+          {{pass}}
+          {{if 'auth' in globals() and not auth.user:}}
+          <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
+          {{pass}}
+        {{pass}}
+
 
 
         <li class="divider-vertical"></li>

@@ -58,7 +58,9 @@ body {
   height: 350px;
 }
 
-
+.carousel-control {
+  background-color: #285558;
+}
 
 /* MARKETING CONTENT
 -------------------------------------------------- */

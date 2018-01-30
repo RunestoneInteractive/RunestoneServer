@@ -1,7 +1,19 @@
+{{user_navs = True}}
 {{extend 'layout.html'}}
+
 
 {{block statusbar}}
 {{end}}
+
+<style>
+    .rscontainer {
+        padding-left: 20px;
+        padding-right:20px;
+        padding-top: 20px;
+    }
+</style>
+
+<div class="container rscontainer">
 
 {{if request.args(0) != 'register':}}
 
@@ -25,8 +37,8 @@
 
             <div class="container">
               <div class="carousel-caption">
-                <h1>Welcome to Interactive Python</h1>
-                <p>Interactive Python is a project of Runestone Interactive.  We host a growing number of Open Source, interactive textbooks you can use in a course. Written by award winning authors. Used by some of the best schools.</p>
+                <h3>Welcome to Runestone Academy</h3>
+                <p>We host a growing number of open source, interactive textbooks, written by award winning authors. Used by hundreds of schools</p>
                 <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/library.html" role="button">See the List</a>
                    <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take a Tour</a>
                 </p>
@@ -38,7 +50,7 @@
         <div class="item">
           <div class="container">
             <div class="carousel-caption">
-              <h1>How to Think Like a Computer Scientist: Interactive Edition</h1>
+              <h3>How to Think Like a Computer Scientist: Interactive Edition</h3>
               <p>Based on the original open source book.  Learn Python, try examples, answer questions, interactively, right in the book!</p>
               <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/thinkcspy/index.html" role="button">Try it Now</a></p>
             </div>
@@ -69,7 +81,7 @@
           <div class="item">
             <div class="container">
               <div class="carousel-caption">
-                <h1>Programs, Information, and People</h1>
+                <h3>Programs, Information, and People</h3>
                 <p>By Paul Resnick  This book introduces Python for an introductory, data-focused programming course.</p>
                 <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/pip2/index.html" role="button">Learn more</a></p>
               </div>
@@ -79,7 +91,7 @@
           <div class="item">
             <div class="container">
               <div class="carousel-caption">
-                <h1>CS Principles -- Big Ideas in Programming</h1>
+                <h3>CS Principles -- Big Ideas in Programming</h3>
                 <p>By Mark Guzdial, Barbara Ericson, and Briana Morrison This book introduces important concepts for the new AP CS Principles course.</p>
                 <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/StudentCSP/index.html" role="button">Learn more</a></p>
               </div>
@@ -89,7 +101,7 @@
         <div class="item">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Java Review for the AP CS A Exam</h1>
+              <h3>Java Review for the AP CS A Exam</h3>
               <p>Not just for Python.  This great resource, written by Barbara Ericson, is loaded with review questions and clear explanations.</p>
               <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/JavaReview/index.html" role="button">Get Started</a></p>
             </div>
@@ -100,14 +112,15 @@
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
 
-<!--  LOGIN -->
-<h4>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+
+    <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
 
 {{ if 'static' in request.env.query_string:}}
 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
 
 {{pass}}
 
+    <!--  LOGIN -->
 {{ if request.args(0) == 'login': }}
     <div id="web2py_user_form" class="col-md-4">
         <form class="form-horizontal" method="post">
@@ -289,14 +302,20 @@
 {{pass}}
 
 <div class="row">
-
-<div class='col-md-12'>
-  <h2>More Information</h2>
-     What is Runestone? How can you use and contribute to what we offer? To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
-
-     <h2>New Instructors - Getting Started</h2>
-     <iframe width="560" height="315" src="https://www.youtube.com/embed/IGg_SUWEnGU" frameborder="0" allowfullscreen></iframe>
-</div>
+    <div class='col-md-6'>
+      <h2>More Information</h2>
+        <p>The mission of Runestone Interactive is to democratize textbooks for the 21st century.  Textbook prices are too high, and paper textbooks are too old fashioned.  We are changing that.</p>
+        <ul>
+            <li>Freely available open source books</li>
+            <li>Easy to use Authoring Tools to create Runestone books</li>
+            <li>Hosting services for your course</li>
+        </ul>
+        <p>To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
+    </div>
+    <div class="col-md-6">
+         <h2>New Instructors - Getting Started</h2>
+         <iframe width="560" height="315" src="https://www.youtube.com/embed/IGg_SUWEnGU" frameborder="0" allowfullscreen></iframe>
+    </div>
 </div>
 
 <div class="row">
@@ -340,10 +359,6 @@
     </div>
 </div>
 
-
-
-  <button class="btn btn-lg btn-default" onclick="window.location.href='../../designer/index'">Create a Course</button>
-
 </div>
 
 <script language="javascript">
@@ -361,3 +376,4 @@
           <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
         {{pass}} -->
 
+</div>
