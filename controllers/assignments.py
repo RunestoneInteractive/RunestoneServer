@@ -976,7 +976,8 @@ def practice():
     flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                     (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if (current_time - f.last_completed).days >= f.i_interval]
+    current_date = current_time.date()
+    presentable_flashcards = [f for f in flashcards if (current_date - f.last_completed.date()).days >= f.i_interval]
 
     # Define how many topics you expect your students practice every day.
     practice_times_to_pass_today = 10
