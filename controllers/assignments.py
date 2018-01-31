@@ -250,7 +250,7 @@ def grade():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def release_grades():
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignment = db(db.assignments.id == request.get_vars.id).select().first()
+    assignment = db(db.assignments.id == request.vars.id).select().first()
 
     if assignment.release_grades():
         session.flash = "Grades Relased"

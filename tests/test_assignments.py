@@ -218,6 +218,29 @@ class TestGradingFunction(unittest.TestCase):
                               save_score=True)
         self.assertEqual(0,sc)
 
+    def test_chooseAssignment(self):
+        auth.login_user(db.auth_user(1663))
+        res = chooseAssignment()
+        # note:  19 may be affected by earlier testsadding more
+        alist = res['assignments']
+        self.assertEqual(len(alist), 19)
+        self.assertEqual(alist[0].name, 'Chapter 1 Reading')
+        self.assertEqual(alist[0].points, 13)
+        self.assertEqual(alist[0].released, True)
+        self.assertEqual(alist[8].released, None)
+
+    def test_release_grades(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.id = 440
+        try:
+            res = release_grades()
+        except Exception as e:
+            print('redirect', e)
+            self.assertTrue('303' in str(e))
+
+        r = db(db.assignments.id == 440).select().first()
+        self.assertEqual(r.released, True)
+
 
 
 
