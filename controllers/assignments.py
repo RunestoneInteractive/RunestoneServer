@@ -639,31 +639,27 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type, dea
             else:
                 # default is last
                 row = results.last()
-            # extract its score and id
-            id = row.id
+            # extract its score
             score = scoring_fn(row, points, autograde)
         elif which_to_grade == 'best_answer':
             # score all rows and take the best one
             best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
-            id = best_row.id
             score = scoring_fn(best_row, points, autograde)
             logger.debug("SCORE = %s by %s", score, scoring_fn)
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
-            id = 0
             score = 0
     else:
         # no results found, score is 0, not attributed to any row
-        id = None
         score = 0
 
     # Save the score
     if save_score:
-        _save_question_grade(sid, course_name, question_name, score, id, deadline)
+        _save_question_grade(sid, course_name, question_name, score, deadline)
 
     return score
 
-def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None, deadline=None):
+def _save_question_grade(sid, course_name, question_name, score, deadline=None):
     try:
         db.question_grades.update_or_insert(
             ((db.question_grades.sid == sid) &
@@ -675,7 +671,7 @@ def _save_question_grade(sid, course_name, question_name, score, useinfo_id=None
             div_id=question_name,
             score = score,
             comment = "autograded",
-            useinfo_id = useinfo_id,
+            useinfo_id=None,
             deadline=deadline
         )
     except IntegrityError:
@@ -866,7 +862,8 @@ def autograde():
                 save_points = 0
                 logger.debug("no points for %s on %s", auth.user.username, name)
 
-            _save_question_grade(s, auth.user.course_name, name, save_points, useinfo_id=None, deadline=deadline)
+            _save_question_grade(s, auth.user.course_name, name, save_points,
+                                 deadline=deadline)
 
     logger.debug("GRADING QUESTIONS")
     questions = [(row.questions.name,
