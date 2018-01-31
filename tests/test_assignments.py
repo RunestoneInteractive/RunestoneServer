@@ -161,6 +161,66 @@ class TestGradingFunction(unittest.TestCase):
         self.assertEqual(res['questioninfo'][0][-1], 'ex_3_10')
         self.assertEqual(res['questioninfo'][0][-6], 5)
 
+    def test_save_score(self):
+        auth.login_user(db.auth_user(11))
+        # the db contains a pre-existing answer of 0.0 percent correct
+        db.useinfo.insert(sid='user_11', timestamp=datetime.datetime.now(),
+                          event='unittest', course_id='testcourse',
+                          div_id='ex_5_8', act='percent:0.5:passed:2:failed:2')
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='first_answer',
+                              save_score=True)
+        self.assertEqual(sc, 0)
+        res = db((db.question_grades.sid=='user_11') &
+                 (db.question_grades.div_id == 'ex_5_8')).select().first()
+        self.assertEqual(0.0, res.score)
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='last_answer',
+                              save_score=True)
+        self.assertEqual(5,sc)
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='best_answer',
+                              save_score=True)
+        self.assertEqual(5,sc)
+
+        res = db((db.question_grades.sid=='user_11') &
+                 (db.question_grades.div_id == 'ex_5_8')).select().first()
+        self.assertEqual(5.0, res.score)
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=datetime.datetime.now() - datetime.timedelta(days=1),
+                              autograde='pct_correct',
+                              which_to_grade='best_answer',
+                              save_score=True)
+        self.assertEqual(0,sc)
+
+
+
+
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
 unittest.TextTestRunner(verbosity=2).run(suite)
