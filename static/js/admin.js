@@ -1573,7 +1573,10 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         if (!component_factory[componentKind]) {
             jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
         } else {
-            component_factory[componentKind](opt)
+            let res = component_factory[componentKind](opt);
+            if (componentKind === 'activecode') {
+                edList[res.divid] = res;
+            }
         }
     }
 
