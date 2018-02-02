@@ -1016,8 +1016,6 @@ def practice():
             .select(db.chapters.chapter_name, db.sub_chapters.sub_chapter_name, db.user_topic_practice.i_interval,
                 db.user_topic_practice.last_completed, orderby=db.user_topic_practice.id)
     for f_card in all_flashcards:
-        print (f_card.chapters.chapter_name, f_card.sub_chapters.sub_chapter_name, f_card.user_topic_practice.i_interval,
-                f_card.user_topic_practice.last_completed)
         f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval - (current_time.date() - f_card.user_topic_practice.last_completed.date()).days)
         f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
         f_card["mastery_color"] = "danger"
