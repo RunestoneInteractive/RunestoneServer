@@ -1028,7 +1028,7 @@ def practice():
         elif f_card["mastery_percent"] >= 25:
             f_card["mastery_color"] = "warning"
 
-        # Define how many topics you expect your students practice every day.
+    # Define how many topics you expect your students practice every day.
     practice_times_to_pass_today = 10
 
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
