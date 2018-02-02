@@ -599,8 +599,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
                    (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
                    (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
-    flashcard.question_name = lastQuestion.name
-    flashcard.last_practice = datetime.datetime.now()
+    flashcard.last_completed = datetime.datetime.now()
     flashcard.update_record()
 
     if q:
@@ -614,7 +613,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
             autograde = lastQuestion.autograde
         q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                          lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                         flashcard.last_practice, db=db)
+                                         flashcard.last_presented, db=db)
     flashcard = _change_e_factor(flashcard, q)
     flashcard = _get_next_i_interval(flashcard, q)
 
@@ -627,7 +626,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
         i_interval=flashcard.i_interval,
         e_factor=flashcard.e_factor,
         trials_num=trials_num,
-        start_practice=flashcard.last_practice,
+        start_practice=flashcard.last_presented,
         end_practice=datetime.datetime.now(),
     )
 
