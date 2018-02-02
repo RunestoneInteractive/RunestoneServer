@@ -117,6 +117,21 @@
         width:100%;
         height:100%;
     }
+    .progress {
+        margin-right: 40px;
+    }
+    .bg-success {
+        background-color: #28a745!important;
+    }
+    .bg-info {
+        background-color: #17a2b8!important;
+    }
+    .bg-warning {
+        background-color: #ffc107!important;
+    }
+    .bg-danger {
+        background-color: #dc3545!important;
+    }
 </style>
 
 <!--Facebook Comments plugin script-->
@@ -195,6 +210,32 @@
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if flashcard_count > 1 else "Claim my completion point!" }}</a></p>
                 <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
             {{ pass }}
+            <h3>In how many days questions will be asked from each topic again:</h3>
+            <ul>
+            {{ current_chapter = all_flashcards[0].chapters.chapter_name }}
+                <li><h4>{{=current_chapter}}</h4></li>
+                <ul>
+            {{ for flash_card in all_flashcards: }}
+                {{ if flash_card.chapters.chapter_name != current_chapter: }}
+                    </ul>
+                    {{ current_chapter = flash_card.chapters.chapter_name }}
+                    <li><h4>{{=current_chapter}}</h4></li>
+                    <ul>
+                {{ else: }}
+                    <li>
+                        <p><strong>{{=flash_card.sub_chapters.sub_chapter_name}}:</strong></p>
+                        {{ if flash_card.mastery_percent > 0: }}
+                        <div class="progress">
+                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar" style="width: {{=flash_card.mastery_percent}}%" aria-valuenow="{{=flash_card.mastery_percent}}" aria-valuemin="0" aria-valuemax="100">{{=flash_card.remaining_days}} days</div>
+                        </div>
+                        {{ else: }}
+                            <p>It's gonna be asked <strong>today</strong>!</p>
+                        {{ pass }}
+                    </li>
+                {{ pass }}
+            {{ pass }}
+                </ul>
+            </ul>
          {{ pass }}
     {{ else: }}
         <div id="CongratulationsDIV">
