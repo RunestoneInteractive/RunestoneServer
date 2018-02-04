@@ -267,7 +267,6 @@ def add_practice_items():
 
     data = json.loads(request.vars.data)
     string_data = [x.encode('UTF8') for x in data]
-
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
     chapters = db((db.chapters.course_id == auth.user.course_name)) \
@@ -280,8 +279,7 @@ def add_practice_items():
                                (db.sub_chapter_taught.chapter_name == chapter.chapter_name) & \
                                (db.sub_chapter_taught.sub_chapter_name == subchapter.sub_chapter_name))
             questions = db((db.questions.base_course == course.base_course) & \
-                           (db.questions.chapter == chapter.chapter_label) & \
-                           (db.questions.subchapter == subchapter.sub_chapter_label) & \
+                           (db.questions.topic == "{}/{}".format(chapter.chapter_label, subchapter.sub_chapter_label)) & \
                            (db.questions.practice == True))
             if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
                 if subchapterTaught.isempty() and not questions.isempty():
@@ -1093,31 +1091,46 @@ def _get_toc_and_questions():
         topic_query = db((db.courses.course_name == auth.user.course_name) & \
                          (db.questions.base_course == db.courses.base_course) & \
                          (db.questions.practice == True) & \
-                         (db.questions.topic != None)).select(db.questions.topic)
+                         (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
         for q in topic_query:
             chap, subch = q.topic.split('/')
+            # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
+            # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
+            # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
+            # corresponding tables.
+            chapter = db((db.chapters.course_id == auth.user.course_name) & \
+                              (db.chapters.chapter_label == chap)) \
+                              .select()[0]
+            sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
+                              (db.sub_chapters.sub_chapter_label == subch)) \
+                              .select()[0].sub_chapter_name
+            chapter_name = chapter.chapter_name
             # find the item in practice picker for this chapter
             p_ch_info = None
             for ch_info in practice_picker:
-                if ch_info['text'] == chap:
+                if ch_info['text'] == chapter_name:
                     p_ch_info = ch_info
             if not p_ch_info:
                 # if there isn't one, add one
                 p_ch_info = {}
                 practice_picker.append(p_ch_info)
-                p_ch_info['text'] = ch.chapter_name
+                p_ch_info['text'] = chapter_name
                 p_ch_info['children'] = []
             # add the subchapter
             p_sub_ch_info = {}
-            p_ch_info['children'].append(p_sub_ch_info)
-            p_sub_ch_info['id'] = "{}/{}".format(chap, subch)
-            p_sub_ch_info['text'] = subch
-            # checked if
-            p_sub_ch_info['state'] = {'checked':
-                                      (chap, subchap) in chapters_and_subchapters_taught}
+            if sub_chapter_name not in [child['text'] for child in p_ch_info['children']]:
+                p_ch_info['children'].append(p_sub_ch_info)
+                p_sub_ch_info['id'] = "{}/{}".format(chapter_name, sub_chapter_name)
+                p_sub_ch_info['text'] = sub_chapter_name
+                # checked if
+                p_sub_ch_info['state'] = {'checked':
+                                          (chapter_name, sub_chapter_name) in chapters_and_subchapters_taught}
 
         # chapters are associated with courses, not with base_courses
         chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
+        ids = {row.chapter_name: row.id for row in chapters_query}
+        practice_picker.sort(key=lambda d: ids[d['text']])
+
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
