@@ -593,11 +593,12 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
     logger.setLevel(settings.log_level)
 
     lastQuestion = db(db.questions.id == int(qid)).select().first()
+    chapter_label, sub_chapter_label = lastQuestion.topic.split('/')
 
     flashcard = db((db.user_topic_practice.user_id == sid) &
                    (db.user_topic_practice.course_name == course_name) &
-                   (db.user_topic_practice.chapter_label == lastQuestion.chapter) &
-                   (db.user_topic_practice.sub_chapter_label == lastQuestion.subchapter) &
+                   (db.user_topic_practice.chapter_label == chapter_label) &
+                   (db.user_topic_practice.sub_chapter_label == sub_chapter_label) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
     flashcard.last_completed = datetime.datetime.now()
     flashcard.update_record()
