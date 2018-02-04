@@ -229,20 +229,6 @@ class TestGradingFunction(unittest.TestCase):
         self.assertEqual(alist[0].released, True)
         self.assertEqual(alist[8].released, None)
 
-    def test_release_grades(self):
-        auth.login_user(db.auth_user(11))
-        request.vars.id = 440
-        try:
-            res = release_grades()
-        except Exception as e:
-            print('redirect', e)
-            self.assertTrue('303' in str(e))
-
-        r = db(db.assignments.id == 440).select().first()
-        self.assertEqual(r.released, True)
-
-
-
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
