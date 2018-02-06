@@ -600,36 +600,39 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
                    (db.user_topic_practice.chapter_label == chapter_label) &
                    (db.user_topic_practice.sub_chapter_label == sub_chapter_label) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
-    flashcard.last_completed = datetime.datetime.now()
-    flashcard.update_record()
 
-    if q:
-        # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
-        q = int(q)
-        trials_num = 0
-    else:
-        # Compute q using the auto grader
-        autograde = 'pct_correct'
-        if lastQuestion.autograde is not None:
-            autograde = lastQuestion.autograde
-        q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
-                                         lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                         flashcard.last_presented, db=db)
-    flashcard = _change_e_factor(flashcard, q)
-    flashcard = _get_next_i_interval(flashcard, q)
+    # We need to make sure that the request was a valid request, i.e., the flashcard was supposed to be asked at this time.
+    if (datetime.datetime.now().date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
+        flashcard.last_completed = datetime.datetime.now()
+        flashcard.update_record()
 
-    db.user_topic_practice_log.insert(
-        user_id=sid,
-        course_name=course_name,
-        chapter_label=flashcard.chapter_label,
-        sub_chapter_label=flashcard.sub_chapter_label,
-        question_name=flashcard.question_name,
-        i_interval=flashcard.i_interval,
-        e_factor=flashcard.e_factor,
-        trials_num=trials_num,
-        start_practice=flashcard.last_presented,
-        end_practice=datetime.datetime.now(),
-    )
+        if q:
+            # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
+            q = int(q)
+            trials_num = 0
+        else:
+            # Compute q using the auto grader
+            autograde = 'pct_correct'
+            if lastQuestion.autograde is not None:
+                autograde = lastQuestion.autograde
+            q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
+                                             lastQuestion.question_type, None, autograde, 'last_answer', False,
+                                             flashcard.last_presented, db=db)
+        flashcard = _change_e_factor(flashcard, q)
+        flashcard = _get_next_i_interval(flashcard, q)
+
+        db.user_topic_practice_log.insert(
+            user_id=sid,
+            course_name=course_name,
+            chapter_label=flashcard.chapter_label,
+            sub_chapter_label=flashcard.sub_chapter_label,
+            question_name=flashcard.question_name,
+            i_interval=flashcard.i_interval,
+            e_factor=flashcard.e_factor,
+            trials_num=trials_num,
+            start_practice=flashcard.last_presented,
+            end_practice=datetime.datetime.now(),
+        )
 
 
 def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count, db):
