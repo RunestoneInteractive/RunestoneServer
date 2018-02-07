@@ -630,6 +630,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
             question_name=flashcard.question_name,
             i_interval=flashcard.i_interval,
             e_factor=flashcard.e_factor,
+            q=q,
             trials_num=trials_num,
             start_practice=flashcard.last_presented,
             end_practice=now,

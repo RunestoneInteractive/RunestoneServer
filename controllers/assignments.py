@@ -997,6 +997,7 @@ def practice():
     # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
     practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
                                (db.user_topic_practice_log.user_id == auth.user.id) & \
+                               (db.user_topic_practice_log.q != 0) & \
                                (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
                                                                                              now.month,
                                                                                              now.day,
