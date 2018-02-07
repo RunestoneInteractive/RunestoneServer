@@ -575,7 +575,6 @@ def _get_next_i_interval(flashcard, q):
             flashcard.i_interval = 6
         else:
             flashcard.i_interval = ceil(last_i_interval * flashcard.e_factor)
-    flashcard.update_record()
     return flashcard
 
 
@@ -584,7 +583,6 @@ def _change_e_factor(flashcard, q):
         flashcard.e_factor = flashcard.e_factor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
         if flashcard.e_factor < 1.3:
             flashcard.e_factor = 1.3
-        flashcard.update_record()
     return flashcard
 
 
@@ -604,13 +602,10 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
 
     # We need to make sure that the request was a valid request, i.e., the flashcard was supposed to be asked at this time.
     if (now.date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
-        flashcard.last_completed = now
-        flashcard.update_record()
-
         if q:
-            # User clicked on "I don't know the answer" or one of the self-evaluated answer buttons
+            # User clicked one of the self-evaluated answer buttons.
             q = int(q)
-            trials_num = 0
+            trials_num = 1
         else:
             # Compute q using the auto grader
             autograde = 'pct_correct'
@@ -621,6 +616,8 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
                                              flashcard.last_presented, db=db, now=now)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
+        flashcard.last_completed = now
+        flashcard.update_record()
 
         db.user_topic_practice_log.insert(
             user_id=sid,
