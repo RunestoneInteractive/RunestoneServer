@@ -208,7 +208,7 @@
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if flashcard_count > 1 else "Claim my completion point!" }}</a></p>
+                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
                 <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
@@ -251,6 +251,31 @@
 	// This script renders the html into elements in the DOM
 	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
+{{ if flashcard_count > 0: }}
+    $(window).on('load', function (e) {
+        var check_me_clicked = false;
+        $("button[name='do answer']").click(function(event) {
+            check_me_clicked = true;
+        });
+        $("#DoneBtn").click(function(event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
+            // click "Check me" for them.
+            if (!check_me_clicked) {
+                $("button[name='do answer']").click();
+                setTimeout(function(){
+                    window.location = url;
+                }, 2500);
+            }
+            else {
+                window.location = url;
+            }
+
+            return false; // for good measure
+        });
+    });
+{{ pass }}
 {{ if practice_today_left > 0 or q: }}
 	var questionHtmlCode = document.getElementById("htmlblock");
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element

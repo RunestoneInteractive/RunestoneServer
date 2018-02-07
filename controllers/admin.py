@@ -267,6 +267,9 @@ def add_practice_items():
 
     data = json.loads(request.vars.data)
     string_data = [x.encode('UTF8') for x in data]
+
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
     chapters = db((db.chapters.course_id == auth.user.course_name)) \
@@ -287,7 +290,7 @@ def add_practice_items():
                         course_name=auth.user.course_name,
                         chapter_name=chapter.chapter_name,
                         sub_chapter_name=subchapter.sub_chapter_name,
-                        teaching_date=datetime.datetime.now(),
+                        teaching_date=now,
                     )
                     for student in students:
                         flashcards = db((db.user_topic_practice.user_id == student.id) & \
@@ -304,8 +307,8 @@ def add_practice_items():
                                 i_interval=0,
                                 e_factor=2.5,
                                 # add as if yesterday, so can practice right away
-                                last_presented=datetime.date.today() - datetime.timedelta(1),
-                                last_completed=datetime.date.today() - datetime.timedelta(1),
+                                last_presented=now.date() - datetime.timedelta(1),
+                                last_completed=now.date() - datetime.timedelta(1),
                             )
             else:
                 if not subchapterTaught.isempty():
