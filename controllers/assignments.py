@@ -927,8 +927,9 @@ def checkanswer():
 
     # If the question id exists:
     if request.vars.QID:
+        now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
         # Use the autograding function to update the flashcard's e-factor and i-interval.
-        do_check_answer(sid, course_name, qid, username, q, db, settings)
+        do_check_answer(sid, course_name, qid, username, q, db, settings, now)
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
     session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
@@ -948,9 +949,11 @@ def practice():
         session.flash = "Please Login"
         return redirect(URL('default', 'index'))
 
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+
     # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
     # 2018, please replace it.
-    remaining_days = (datetime.date(2018, 4, 19) - datetime.date.today()).days
+    remaining_days = (datetime.date(2018, 4, 19) - now.date()).days
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -987,24 +990,23 @@ def practice():
                     i_interval=0,
                     e_factor=2.5,
                     # add as if yesterday, so can practice right away
-                    last_presented=datetime.date.today() - datetime.timedelta(1),
-                    last_completed=datetime.date.today() - datetime.timedelta(1),
+                    last_presented=now.date() - datetime.timedelta(1),
+                    last_completed=now.date() - datetime.timedelta(1),
                 )
 
-    current_time = datetime.datetime.now()
     # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
     practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
                                (db.user_topic_practice_log.user_id == auth.user.id) & \
-                               (db.user_topic_practice_log.end_practice >= datetime.datetime(current_time.year,
-                                                                                             current_time.month,
-                                                                                             current_time.day,
+                               (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
+                                                                                             now.month,
+                                                                                             now.day,
                                                                                              0, 0, 0, 0))).count()
     # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
     flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                     (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     # Select only those where enough time has passed since last presentation.
     presentable_flashcards = [f for f in flashcards if
-                              (current_time.date() - f.last_completed.date()).days >= f.i_interval]
+                              (now.date() - f.last_completed.date()).days >= f.i_interval]
 
     all_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                         (db.user_topic_practice.user_id == auth.user.id) & \
@@ -1015,7 +1017,8 @@ def practice():
             .select(db.chapters.chapter_name, db.sub_chapters.sub_chapter_name, db.user_topic_practice.i_interval,
                 db.user_topic_practice.last_completed, orderby=db.user_topic_practice.id)
     for f_card in all_flashcards:
-        f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval - (current_time.date() - f_card.user_topic_practice.last_completed.date()).days)
+        f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval -
+                                       (now.date() - f_card.user_topic_practice.last_completed.date()).days)
         f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
         f_card["mastery_color"] = "danger"
         if f_card["mastery_percent"] >= 75:
@@ -1064,24 +1067,21 @@ def practice():
         # This is required to check the same question in do_check_answer().
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
-        flashcard.last_presented = datetime.datetime.now()
+        flashcard.last_presented = now
         flashcard.update_record()
 
     else:
         questioninfo = None
 
-        ## Professor Resnick, please test this fix on your server. It works on my localhost, but I am not sure what
-        ## happens when we deploy it on the server.
-        today = (datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))).date()
         # Add a practice completion record for today, if there isn't one already.
         practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
                                        (db.user_topic_practice_Completion.user_id == auth.user.id) & \
-                                       (db.user_topic_practice_Completion.practice_completion_time == today))
+                                       (db.user_topic_practice_Completion.practice_completion_time == now.date()))
         if practice_completion_today.isempty():
             db.user_topic_practice_Completion.insert(
                 user_id=auth.user.id,
                 course_name=auth.user.course_name,
-                practice_completion_time=today
+                practice_completion_time=now.date()
             )
 
     # The number of days the student has completed their practice.

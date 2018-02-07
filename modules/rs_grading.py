@@ -203,7 +203,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
-                     practice_start_time = None, db=None):
+                     practice_start_time = None, db=None, now=None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
@@ -314,7 +314,8 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
                                        points,
                                        score,
                                        len(results) if results else 0,
-                                       db)
+                                       db,
+                                       now)
     return score
 
 
@@ -587,7 +588,7 @@ def _change_e_factor(flashcard, q):
     return flashcard
 
 
-def do_check_answer(sid, course_name, qid, username, q, db, settings):
+def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
     global logger
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
@@ -602,8 +603,8 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
 
     # We need to make sure that the request was a valid request, i.e., the flashcard was supposed to be asked at this time.
-    if (datetime.datetime.now().date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
-        flashcard.last_completed = datetime.datetime.now()
+    if (now.date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
+        flashcard.last_completed = now
         flashcard.update_record()
 
         if q:
@@ -617,7 +618,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
                 autograde = lastQuestion.autograde
             q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                              lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                             flashcard.last_presented, db=db)
+                                             flashcard.last_presented, db=db, now=now)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
 
@@ -631,17 +632,17 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings):
             e_factor=flashcard.e_factor,
             trials_num=trials_num,
             start_practice=flashcard.last_presented,
-            end_practice=datetime.datetime.now(),
+            end_practice=now,
         )
 
 
-def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count, db):
+def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count, db, now):
     page_visits = db((db.useinfo.course_id == course_name) & \
                      (db.useinfo.sid == sid) & \
                      (db.useinfo.event == 'page') & \
                      (db.useinfo.timestamp >= practice_start_time)) \
         .select()
-    practice_duration = (datetime.datetime.now() - practice_start_time).seconds / 60
+    practice_duration = (now - practice_start_time).seconds / 60
     practice_score = 0
     if score == points:
         if len(page_visits) <= 1 and trials_count <= 1 and practice_duration <= 2:
