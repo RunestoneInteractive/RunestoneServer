@@ -579,10 +579,9 @@ def _get_next_i_interval(flashcard, q):
 
 
 def _change_e_factor(flashcard, q):
-    if flashcard.e_factor >= 1.3:
-        flashcard.e_factor = flashcard.e_factor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
-        if flashcard.e_factor < 1.3:
-            flashcard.e_factor = 1.3
+    flashcard.e_factor = flashcard.e_factor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
+    if flashcard.e_factor < 1.3:
+        flashcard.e_factor = 1.3
     return flashcard
 
 

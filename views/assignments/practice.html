@@ -209,7 +209,7 @@
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
                 <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <!-- <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&Pick=1" type="button" class="btn btn-success NextQuestionAnchor">Done! I want to pick a section to practice.</a></p>-->
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
             <ul>
@@ -254,16 +254,28 @@
 {{ if flashcard_count > 0: }}
     $(window).on('load', function (e) {
         var check_me_clicked = false;
-        $("button[name='do answer']").click(function(event) {
-            check_me_clicked = true;
-        });
+        if ($("button[name='do answer']").length) {
+            $("button[name='do answer']").click(function(event) {
+                check_me_clicked = true;
+            });
+        }
+        else if ($('button:contains("Save & Run")')) {
+            $('button:contains("Save & Run")').click(function(event) {
+                check_me_clicked = true;
+            });
+        }
         $("#DoneBtn").click(function(event) {
             event.preventDefault();
             var url = $(this).attr('href');
             // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
             // click "Check me" for them.
             if (!check_me_clicked) {
-                $("button[name='do answer']").click();
+                if ($("button[name='do answer']").length) {
+                    $("button[name='do answer']").click();
+                }
+                else if ($('button:contains("Save & Run")')) {
+                    $('button:contains("Save & Run")').click();
+                }
                 setTimeout(function(){
                     window.location = url;
                 }, 2500);
