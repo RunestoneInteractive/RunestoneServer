@@ -143,7 +143,7 @@ def index():
                                    assignment=practice_id,
                                    lis_result_sourcedid=result_source_did,
                                    lis_outcome_url=outcome_url)
-        redirect(URL('assignments', 'practice'))
+        redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
     # print(lti_errors)
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))

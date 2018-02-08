@@ -942,6 +942,9 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
               (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) & \
               (db.questions.practice == True)).select()
 
+# Gets invoked from lti to set timezone and then redirect to practice()
+def settz_then_practice():
+    return dict(course_name=request.vars.get('course_name', 'UMSI106'))
 
 # Gets invoked when the student requests practicing topics.
 def practice():
