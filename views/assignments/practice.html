@@ -209,7 +209,7 @@
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
                 <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
             <ul>
