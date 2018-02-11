@@ -229,6 +229,19 @@ class TestGradingFunction(unittest.TestCase):
         self.assertEqual(alist[0].released, True)
         self.assertEqual(alist[8].released, None)
 
+    def test_calculate_totals(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.assignment = 'Function Practice'
+        request.vars.sid = 'user_1663'
+        res = json.loads(calculate_totals())
+        # res {"computed_score": 5.0, "manual_score": null, "message": "Total for user_1663 is 5.0", "success": true}
+        self.assertEqual(res['computed_score'], 5.0)
+        self.assertEqual(res['success'], True)
+        self.assertTrue('user_1663' in res['message'])
+        assign = db( (db.assignments.name == request.vars.assignment) &\
+                     (db.assignments.course == auth.user.course_id)).select(db.assignments.id).first()
+        score = db((db.grades.assignment == assign) & (db.grades.auth_user == 1663)).select(db.grades.score).first()
+        self.assertEqual(res['computed_score'], score.score)
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))
