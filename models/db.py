@@ -210,7 +210,7 @@ auth.settings.expiration = 3600*24
 try:
     from gluon.contrib.login_methods.janrain_account import RPXAccount
 except:
-    print "Warning you should upgrade to a newer web2py for better janrain support"
+    print("Warning you should upgrade to a newer web2py for better janrain support")
     from gluon.contrib.login_methods.rpx_account import RPXAccount
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
