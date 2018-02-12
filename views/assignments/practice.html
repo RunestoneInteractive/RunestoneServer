@@ -254,8 +254,8 @@
 {{ if flashcard_count > 0: }}
     $(window).on('load', function (e) {
         var check_me_clicked = false;
-        if ($("button[name='do answer']").length) {
-            $("button[name='do answer']").click(function(event) {
+        if ($('button:contains(\"Check Me\")').length) {
+            $('button:contains(\"Check Me\")').click(function(event) {
                 check_me_clicked = true;
             });
         }
@@ -270,8 +270,8 @@
             // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
             // click "Check me" for them.
             if (!check_me_clicked) {
-                if ($("button[name='do answer']").length) {
-                    $("button[name='do answer']").click();
+                if ($('button:contains(\"Check Me\")').length) {
+                    $('button:contains(\"Check Me\")').click();
                 }
                 else if ($('button:contains("Save & Run")')) {
                     $('button:contains("Save & Run")').click();
