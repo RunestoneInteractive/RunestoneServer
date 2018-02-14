@@ -16,7 +16,7 @@ APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
 BUILDDIR = '{}/build'.format(APP_PATH)
 
-@click.group()
+@click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
 @pass_config
 def cli(config, verbose):
@@ -49,8 +49,9 @@ def cli(config, verbose):
 @cli.command()
 @click.option("--list_tables", is_flag=True, help="List all of the defined tables when done")
 @click.option("--reset", is_flag=True, help="drop database and delete all migration information")
+@click.option("--fake", is_flag=True, help="perform a fake migration")
 @pass_config
-def initdb(config, list_tables, reset):
+def initdb(config, list_tables, reset, fake):
     """Initialize and optionally reset the database"""
     os.chdir(findProjectRoot())
     if not os.path.exists(DBSDIR):
@@ -76,10 +77,13 @@ def initdb(config, list_tables, reset):
                 print(e)
 
 
-    if len(os.listdir("{}/databases".format(APP_PATH))) > 1:
+    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake:
         click.confirm("It appears you already have database migration information do you want to proceed?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
 
     click.echo(message='Initializing the database', file=None, nl=True, err=False, color=None)
+
+    if fake:
+        os.environ['WEB2PY_MIGRATE'] = 'fake'
 
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
     cmd = "python web2py.py -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(APP, APP_PATH, list_tables)
@@ -288,6 +292,60 @@ def inituser(config, instructor, fromfile):
 def env(config):
     """Print out your configured environment"""
     echoEnviron(config)
+
+@cli.command()
+@click.option("--username", help="user to promote to instructor")
+@click.option("--course", help="name of course")
+@pass_config
+def addinstructor(config, username, course):
+    """
+    Add an existing user as an instructor for a course
+    """
+    eng = create_engine(config.dburl)
+    res = eng.execute("select id from auth_user where username=%s", username).first()
+    if res:
+        userid = res[0]
+    else:
+        print("Sorry, that user does not exist")
+        sys.exit(-1)
+
+    res = eng.execute("select id from courses where course_name=%s", course).first()
+    if res:
+        courseid = res[0]
+    else:
+        print("Sorry, that course does not exist")
+        sys.exit(-1)
+
+    # if needed insert a row into auth_membership
+    res = eng.execute("select id from auth_group where role='instructor'").first()
+    if res:
+        role = res[0]
+    else:
+        print("Sorry, your system does not have the instructor role setup -- this is bad")
+        sys.exit(-1)
+
+    res = eng.execute("select * from auth_membership where user_id=%s and group_id=%s", userid, role ).first()
+    if not res:
+        eng.execute("insert into auth_membership (user_id, group_id) values (%s, %s)", userid, role)
+        print("made {} an instructor".format(username))
+    else:
+        print("{} is already an instructor".format(username))
+
+    # if needed insert a row into user_courses
+    res = eng.execute("select * from user_courses where user_id=%s and course_id=%s ", userid, courseid).first()
+    if not res:
+        eng.execute("insert into user_courses (user_id, course_id) values (%s, %s)", userid, courseid)
+        print("enrolled {} in {}".format(username, course))
+    else:
+        print("{} is already enrolled in {}".format(username, course))
+
+    # if needed insert a row into course_instructor
+    res = eng.execute("select * from course_instructor where instructor=%s and course=%s ", userid, courseid).first()
+    if not res:
+        eng.execute("insert into course_instructor (instructor, course) values (%s, %s)", userid, courseid)
+        print("made {} and instructor for {}".format(username, course))
+    else:
+        print("{} is already an instructor for {}".format(username, course))
 
 #
 #    grade

@@ -120,10 +120,23 @@
         <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
     </div>
   <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+
+    {{if request.args(0) == 'retrieve_username': }}
+    <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
+    {{elif request.args(0) == 'register':}}
+    <p>Thanks for registering.  Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
+    <ul>
+        <li><strong>thinkcspy</strong> for How to Think Like a Computer Scientist</li>
+        <li><strong>pythonds</strong> for Problem Solving with Algorithms and data structures</li>
+        <li><strong>StudentCSP</strong> for the AP CS Principles</li>
+        <li><strong>JavaReview</strong> for the AP Java Review</li>
+        <li><strong>pip2</strong> for Programs, Information, People</li>
+    </ul>
+    {{else:}}
   <div id="loginexp">
     <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
   </div>
-
+    {{pass}}
   <div id="web2py_user_form">
     {{=form}}
     {{if request.args(0)=='login':}}
@@ -132,7 +145,8 @@
           <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
         {{pass}}
         {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-          <a class="btn btn-lg btn-primary" href="{{=URL(args='request_reset_password')}}" role="button">{{=T('Lost Password')}}</a>
+          <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}" role="button">{{=T('Lost Password')}}</a>
+          <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}" role="button">{{=T('email my username')}}</a>
         {{pass}}
       </div>
     {{pass}}
@@ -154,20 +168,6 @@
 </script>
 
 <div class='col-md-6'>
-  {{if request.args(0)=='register':}}
-  <h2>Which course name?</h2>
-  <ul>
-      <li>If you are part of a high school, college,or university course your instructor should provide this for you.</li>
-      <li>Otherwise the following are open to anyone:
-          <ul>
-              <li>thinkcspy &mdash; How to Think Like a Computer Scientist</li>
-              <li>pythonds &mdash; Problem Solving with Algorithms and Data Structures using Python </li>
-              <li>pip2 &mdash; Programs Information and People</li>
-              <li>JavaReview &mdash; Review course for AP CS Exam</li>
-              </ul>
-      </li>
-  </ul>
-  {{pass}}
   <h2>More Information</h2>
      What is Runestone? How can you use and contribute to what we offer? To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
 

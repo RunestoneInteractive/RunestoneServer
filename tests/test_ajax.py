@@ -10,11 +10,10 @@
 #
 
 # TODO:  Write these
-# getCorrectStats
 # getpollresults
-# getassignmentgrade
-# getAssessResults
-# preview_question
+# timedAssess
+
+
 
 import unittest
 import json
@@ -24,7 +23,7 @@ from gluon.tools import Auth
 from dateutil.parser import parse
 
 # bring in the ajax controllers
-execfile("applications/runestone/controllers/ajax.py", globals())
+
 
 # clean up the database
 db(db.useinfo.div_id == 'unit_test_1').delete()
@@ -36,6 +35,7 @@ class TestAjaxEndpoints(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
+        execfile("applications/runestone/controllers/ajax.py", globals())
 
     def testHSBLog(self):
         # Set up the request object
@@ -78,19 +78,54 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.event = 'mChoice'
 
         res = getAssessResults()
-        print("RESULTS = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], '1')
         self.assertEqual(res['correct'], True)
-        # add for fillb, dragNdrop, parsons, clickableArea, codelensq, shortanswer, timedExam
 
+        request.vars["act"] = '3'
+        request.vars.answer = '3'
+        request.vars.correct = 'T'
+        request.vars.event = 'mChoice'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddmchoice1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '3')
+        self.assertEqual(res['correct'], True)
+
+    def testGetParsonsResults(self):
         # Parsons
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        request.vars.sid = 'user_1662'
         request.vars.event = 'parsons'
         request.vars.div_id = '3_8'
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0', msg=None)
         # self.assertEqual(res['correct'], True) # TODO: why isn't correct returned?
+        request.vars["act"] = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+        request.vars.answer = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+        request.vars.correct = 'F'
+        request.vars.event = 'parsons'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddParsons1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0')
+        #self.assertEqual(res['correct'], False)
 
+
+    def testGetClickableResults(self):
+        # Parsons
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
         # clickable
         request.vars.event = 'clickableArea'
         request.vars.div_id = 'ca_id_str'
@@ -101,17 +136,69 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res['correct'], False)
         # timestamp 2017-09-04 00:56:34
         self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
+        request.vars["act"] = '0;1'
+        request.vars.answer = '0;1'
+        request.vars.correct = 'F'
+        request.vars.event = 'clickableArea'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddClickable1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '0;1')
+        self.assertEqual(res['correct'], False)
 
-        # shortanswer
+
+    def testGetShortAnswerResults(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
         request.vars.event = 'shortanswer'
         request.vars.div_id = 'turtle_reflect'
         request.vars.sid = 'user_1669'
         res = json.loads(getAssessResults())
         self.assertTrue("Moving the turtle" in res['answer'])
+        request.vars["act"] = 'hello_test'
+        request.vars.answer = 'hello_test'
+        request.vars.correct = 'F'
+        request.vars.event = 'shortanswer'
+        request.vars.course = 'testcourse'
+        request.vars.div_id = 'testAddShortanswer1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], 'hello_test')
 
-        # fitb -- tested in getTop10answers
 
-        # dragndrop
+    # fitb
+    def testGetFITBAnswerResults(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
+        request.vars.event = 'fillb'
+        request.vars["act"] = '42'
+        request.vars.answer = '42'
+        request.vars.correct = 'T'
+        request.vars.div_id = 'testAddFillb1'
+        request.client = "foobar"
+        res = hsblog()
+        request.vars.sid = 'user_11'
+        res = getAssessResults()
+        print("RESULTS FROM = ", res)
+        res = json.loads(res)
+        self.assertEqual(res['answer'], '42')
+        self.assertTrue(res['correct'])
+
+
+
+                # dragndrop
+    def testGetDragNDropResults(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.course = 'testcourse'
         auth.login_user(db.auth_user(11))
         request.vars["act"] = '0;1;2'
         request.vars.answer = '0;1;2'
@@ -126,9 +213,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = json.loads(getAssessResults())
         print(res)
         self.assertTrue(res['correct'])
-
-
-
 
 
     def testGetHist(self):
@@ -331,6 +415,59 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res[1]['count'], 2)                        
         self.assertEqual(misc['yourpct'], 100)
 
+    def testPreviewQuestion(self):
+        src = """
+.. activecode:: preview_test1
+        
+   Hello World
+   ~~~~
+   print("Hello World")
+   
+"""
+        request.vars.code = json.dumps(src)
+        res = json.loads(preview_question())
+        print("PREVIEW = ", res)
+        self.assertTrue('id="preview_test1"' in res)
+        self.assertTrue('print("Hello World")' in res)
+        self.assertTrue('</textarea>' in res)
+        self.assertTrue('<textarea data-component="activecode"' in res)
+        self.assertTrue('<div data-childcomponent="preview_test1"' in res)
+
+
+    # TODO: Cannot verify any questions other than activecodes and readings -- mchoice et al not stored??
+    def test_getassignmentgrade(self):
+        auth.login_user(db.auth_user(1667))
+        request.vars.div_id = 'Functions/Functions'
+        res = json.loads(getassignmentgrade())[0]
+        self.assertEqual(res['grade'], 5)
+
+    def test_getassignmentgrade_actex(self):
+        auth.login_user(db.auth_user(1675))
+        request.vars.div_id = 'ex_7_11'
+        res = json.loads(getassignmentgrade())[0]
+        self.assertEqual(res['grade'], 5)
+
+
+    def test_updatelastpage(self):
+        auth.login_user(db.auth_user(1667))
+        request.vars.lastPageUrl = '/runestone.academy/runestone/static/testcourse/SimplePythonData/VariableNamesandKeywords.html'
+        request.vars.lastPageScrollLocation = 0
+        request.vars.course = 'testcourse'
+        request.vars.completionFlag = 1
+        res = updatelastpage()
+
+        res = db((db.user_sub_chapter_progress.user_id == 1667) &
+                (db.user_sub_chapter_progress.sub_chapter_id == 'VariableNamesandKeywords')).select().first()
+
+        now = datetime.datetime.now()
+
+        self.assertEqual(res.status, 1)
+        self.assertEqual(res.end_date.month, now.month)
+        self.assertEqual(res.end_date.day, now.day)
+        self.assertEqual(res.end_date.year, now.year)
+
+
+
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
 unittest.TextTestRunner(verbosity=2).run(suite)
@@ -338,20 +475,20 @@ unittest.TextTestRunner(verbosity=2).run(suite)
 
 # One month of AJAX on runestone.academy
 #      endpoint           calls   avg time   max time
-#      gettop10Answers        644 213.599    2468
-#   getassignmentgrade       4610 215.614    4289
-#               runlog     723377 220.344   40371
 #               hsblog    1821749 249.369   40197
-#  getaggregateresults      16347 252.095    6018
-#      checkTimedReset         78 265.128    1884
-#        set_tz_offset      46490 268.683    5175
+#     getAssessResults     732162 491.053   10311
+#               runlog     723377 220.344   40371
 #              getuser     579962 292.291   10217
-#          getnumusers     580003 297.314   10345
 #         getnumonline     579967 299.845   40147
+#          getnumusers     580003 297.314   10345
 #  getCompletionStatus     299650 347.226   10315
 #       updatelastpage     228058 371.076   10359
-#          getlastpage      93856 390.003    6591
-#       getpollresults        253 432.198    1972
 # getAllCompletionStatus    93890 478.528    5844
-#     getAssessResults     732162 491.053   10311
+#          getlastpage      93856 390.003    6591
+#        set_tz_offset      46490 268.683    5175
+#  getaggregateresults      16347 252.095    6018
+#   getassignmentgrade       4610 215.614    4289
 #     preview_question        796 1664.394  17134
+#      gettop10Answers        644 213.599    2468
+#       getpollresults        253 432.198    1972
+#      checkTimedReset         78 265.128    1884

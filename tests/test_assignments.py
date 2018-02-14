@@ -9,20 +9,31 @@
 # python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 #
 
+#         record_grade      11539 305.000   29372
+#     calculate_totals      40596 325.000    6490
+# record_assignment_score     129 169.000     545
+#            undefined         42 362.000    3374
+#          get_problem      26087 702.000    9464
+#                index       3775 901.000   17725
+#         doAssignment      36219 1435.000          57225
+#            autograde       2306 5531.000         235419
+
+
+
 import unittest
 import json
 from gluon.globals import Request
 
 # bring in the assignments controllers
-execfile("applications/runestone/controllers/assignments.py", globals())
-execfile("applications/runestone/controllers/admin.py", globals())
+
 
 class TestGradingFunction(unittest.TestCase):
     def setUp(self):
         global request
         request = Request(globals()) # Use a clean Request object
+        execfile("applications/runestone/controllers/assignments.py", globals())
 
-    def testReproduceScores(self):
+    def test_reproduce_scores(self):
         # fetch all of the autograded questions_grades
         # with all the info about them
         graded = db((db.question_grades.comment == 'autograded') &
@@ -62,6 +73,7 @@ class TestGradingFunction(unittest.TestCase):
 
 
     def testASlashInSubchapter(self):
+        execfile("applications/runestone/controllers/admin.py", globals())
         auth.login_user(db.auth_user(11))
         bad_name = 'Exceptions/When to use try/except'
 
@@ -104,6 +116,132 @@ class TestGradingFunction(unittest.TestCase):
         request.vars.assignment_id=str(assignment_id)
         res = doAssignment()
         # TODO: verify results of doAssignment
+
+    def test_index(self):
+        # Try to reproduce crash
+        auth.login_user(db.auth_user(11))
+        request.vars.sid = 'user_1663'
+        res = index()
+        self.assertEqual('user_1663', res['student'].username)
+
+    def test_doAssignment(self):
+        auth.login_user(db.auth_user(1663))
+        request.vars.assignment_id = '94'
+        res = doAssignment()
+
+        rlist = [['General Introduction', 'GeneralIntro/toctree.html', 'The Python Programming Language', 'GeneralIntro/ThePythonProgrammingLanguage.html', 'completed', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'More About Programs', 'GeneralIntro/MoreAboutPrograms.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'What is Debugging?', 'GeneralIntro/WhatisDebugging.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Algorithms', 'GeneralIntro/Algorithms.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Syntax errors', 'GeneralIntro/Syntaxerrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'The Way of the Program', 'GeneralIntro/intro-TheWayoftheProgram.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Semantic Errors', 'GeneralIntro/SemanticErrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Runtime Errors', 'GeneralIntro/RuntimeErrors.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Executing Python in this Book', 'GeneralIntro/SpecialWaystoExecutePythoninthisBook.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Formal and Natural Languages', 'GeneralIntro/FormalandNaturalLanguages.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Experimental Debugging', 'GeneralIntro/ExperimentalDebugging.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'A Typical First Program', 'GeneralIntro/ATypicalFirstProgram.html', 'completed'],
+         ['General Introduction', 'GeneralIntro/toctree.html', 'Comments', 'GeneralIntro/Comments.html', 'completed']]
+
+        self.assertEqual(len(res['readings'][7116]),13)
+        for i in res['readings'][7116]:
+            self.assertEqual(i[-1], "completed")
+            self.assertEqual(i[0], "General Introduction")
+
+        for i, r in enumerate(res['readings'][7116]):
+            self.assertEqual(r, rlist[i])
+
+        self.assertEqual(len(res['questioninfo']),0)
+        self.assertEqual('testcourse', res['course_name'])
+        self.assertEqual('testcourse', res['course_id'])
+
+        request.vars.assignment_id = '263'
+        res = doAssignment()
+        self.assertEqual(len(res['questioninfo']),2)
+        self.assertEqual(res['questioninfo'][0][-1], 'ex_3_10')
+        self.assertEqual(res['questioninfo'][0][-6], 5)
+
+    def test_save_score(self):
+        auth.login_user(db.auth_user(11))
+        # the db contains a pre-existing answer of 0.0 percent correct
+        db.useinfo.insert(sid='user_11', timestamp=datetime.datetime.now(),
+                          event='unittest', course_id='testcourse',
+                          div_id='ex_5_8', act='percent:0.5:passed:2:failed:2')
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='first_answer',
+                              save_score=True)
+        self.assertEqual(sc, 0)
+        res = db((db.question_grades.sid=='user_11') &
+                 (db.question_grades.div_id == 'ex_5_8')).select().first()
+        self.assertEqual(0.0, res.score)
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='last_answer',
+                              save_score=True)
+        self.assertEqual(5,sc)
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=None,
+                              autograde='pct_correct',
+                              which_to_grade='best_answer',
+                              save_score=True)
+        self.assertEqual(5,sc)
+
+        res = db((db.question_grades.sid=='user_11') &
+                 (db.question_grades.div_id == 'ex_5_8')).select().first()
+        self.assertEqual(5.0, res.score)
+
+        sc = _autograde_one_q(course_name='testcourse',
+                              sid='user_11',
+                              question_name='ex_5_8',
+                              points=10,
+                              question_type='actex',
+                              deadline=datetime.datetime.now() - datetime.timedelta(days=1),
+                              autograde='pct_correct',
+                              which_to_grade='best_answer',
+                              save_score=True)
+        self.assertEqual(0,sc)
+
+    def test_chooseAssignment(self):
+        auth.login_user(db.auth_user(1663))
+        res = chooseAssignment()
+        # note:  19 may be affected by earlier testsadding more
+        alist = res['assignments']
+        self.assertEqual(len(alist), 19)
+        self.assertEqual(alist[0].name, 'Chapter 1 Reading')
+        self.assertEqual(alist[0].points, 13)
+        self.assertEqual(alist[0].released, True)
+        self.assertEqual(alist[8].released, None)
+
+    def test_calculate_totals(self):
+        auth.login_user(db.auth_user(11))
+        request.vars.assignment = 'Function Practice'
+        request.vars.sid = 'user_1663'
+        res = json.loads(calculate_totals())
+        # res {"computed_score": 5.0, "manual_score": null, "message": "Total for user_1663 is 5.0", "success": true}
+        self.assertEqual(res['computed_score'], 5.0)
+        self.assertEqual(res['success'], True)
+        self.assertTrue('user_1663' in res['message'])
+        assign = db( (db.assignments.name == request.vars.assignment) &\
+                     (db.assignments.course == auth.user.course_id)).select(db.assignments.id).first()
+        score = db((db.grades.assignment == assign) & (db.grades.auth_user == 1663)).select(db.grades.score).first()
+        self.assertEqual(res['computed_score'], score.score)
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestGradingFunction))

@@ -410,7 +410,7 @@ def admin():
             logger.error("Bad date format, not updating start date")
 
         # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=360, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=600, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=course.base_course,
                                                                        application=request.application,

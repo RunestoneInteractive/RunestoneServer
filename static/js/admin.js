@@ -158,10 +158,14 @@ function autoGrade(){
     });
 }
 
-function calculateTotals(){
+function calculateTotals(sid){
     var assignment = getSelectedItem("assignment")
     var question = getSelectedItem("question")
-    var studentID = getSelectedItem("student")
+    if (! sid ) {
+        var studentID = getSelectedItem("student")
+    } else {
+        studentID = sid
+    }
     $('#assignmentTotalform').css('visibility', 'hidden');
     jQuery.ajax({
         url: eBookConfig.calcTotalsURL,
@@ -251,7 +255,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             success: function (data) {
                 jQuery('.grade', element).html(data.grade);
                 jQuery('.comment', element).html(data.comment);
-                calculateTotals();
+                calculateTotals(studentId);
             }
         });
     }
@@ -300,11 +304,13 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         // outerdiv, acdiv, sid, initialcode, language
 
-
+        // Handle the save button
         jQuery('form', rightDiv).submit(save);
+        // Handle the save and next button
         jQuery('.next', rightDiv).click(function (event) {
             event.preventDefault();
             jQuery('form', rightDiv).submit();
+            // This next block should not run until save is complete.
             var col3 = document.getElementById("gradingcolumn3");
             try {
                 var ind = col3.selectedIndex + 1;
@@ -1577,7 +1583,10 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         if (!component_factory[componentKind]) {
             jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
         } else {
-            component_factory[componentKind](opt)
+            let res = component_factory[componentKind](opt);
+            if (componentKind === 'activecode') {
+                edList[res.divid] = res;
+            }
         }
     }
 

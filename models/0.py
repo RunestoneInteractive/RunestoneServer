@@ -38,8 +38,8 @@ elif config == "development":
 elif config == "test":
     settings.database_uri = environ.get("TEST_DBURL")
 else:
-    print "To configure web2py you should set up both WEB2PY_CONFIG and"
-    print "XXX_DBURL values in your environment -- See README for more detail"
+    print("To configure web2py you should set up both WEB2PY_CONFIG and")
+    print("XXX_DBURL values in your environment -- See README for more detail")
     raise ValueError("unknown value for WEB2PY_CONFIG")
 
 # Just for compatibility -- many things use postgresql but web2py removes the ql

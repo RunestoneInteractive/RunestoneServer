@@ -54,9 +54,9 @@ def make_section_entries(field_dict,id_of_insert):
     # Add user to default section for course.
     sect = db((db.sections.course_id == field_dict['course_id']) & (db.sections.name == 'default')).select(
         db.sections.id).first()
-    print "sect = ", sect
+    print("sect = ", sect)
     x = db.section_users.update_or_insert(auth_user=id_of_insert, section=sect)
-    print "inserted a row in section_users, id = ", x
+    print("inserted a row in section_users, id = ", x)
     # select from sections where course_id = auth_user.course_id and section.name = 'default'
     # add a row to section_users for this user with the section selected.
 
