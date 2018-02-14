@@ -1001,6 +1001,7 @@ def practice():
     practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
                                (db.user_topic_practice_log.user_id == auth.user.id) & \
                                (db.user_topic_practice_log.q != 0) & \
+                               (db.user_topic_practice_log.q != -1) & \
                                (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
                                                                                              now.month,
                                                                                              now.day,
@@ -1039,7 +1040,7 @@ def practice():
     # have intrinsic motivation to practice beyond what they are expected to do.
     if len(presentable_flashcards) > 0 and (practiced_today_count != practice_times_to_pass_today or
                                             request.vars.willing_to_continue):
-        # Ppresent the first one.
+        # Present the first one.
         flashcard = presentable_flashcards[0]
         # Get eligible questions.
         questions = _get_qualified_questions(course.base_course,
