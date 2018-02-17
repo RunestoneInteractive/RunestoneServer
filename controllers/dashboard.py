@@ -7,6 +7,8 @@ from datetime import date, timedelta, datetime
 from operator import itemgetter
 from collections import OrderedDict
 from paver.easy import sh
+from db_dashboard import *
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -46,7 +48,7 @@ def index():
         selected_chapter = chapters.first()
 
     logger.debug("making an analyzer")
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id,selected_chapter)
+    data_analyzer = DashboardDataAnalyzer(db, auth.user.course_id,selected_chapter)
     logger.debug("loading chapter metrics for course {}".format(auth.user.course_name))
     data_analyzer.load_chapter_metrics(selected_chapter)
     logger.debug("loading problem metrics")
@@ -146,7 +148,7 @@ def index():
 
 @auth.requires_login()
 def studentreport():
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    data_analyzer = DashboardDataAnalyzer(db, auth.user.course_id)
     data_analyzer.load_user_metrics(request.vars.id)
     data_analyzer.load_assignment_metrics(request.vars.id)
 
@@ -255,7 +257,7 @@ def questiongrades():
 def exercisemetrics():
     chapter = request.get_vars['chapter']
     chapter = db((db.chapters.course_id == auth.user.course_name) & (db.chapters.chapter_label == chapter)).select().first()
-    data_analyzer = DashboardDataAnalyzer(auth.user.course_id,chapter)
+    data_analyzer = DashboardDataAnalyzer(db, auth.user.course_id,chapter)
     data_analyzer.load_exercise_metrics(request.get_vars["id"])
     problem_metrics = data_analyzer.problem_metrics
 
