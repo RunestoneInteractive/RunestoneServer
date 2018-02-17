@@ -1,11 +1,11 @@
 from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
+from gluon import *
+
 
 rslogger = logging.getLogger("web2py.app.runestone")
 rslogger.setLevel(logging.DEBUG)
-
-db = None
 
 #db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
@@ -322,9 +322,10 @@ class UserLogCategorizer(object):
         return "{0} {1}".format(event, div_id)
 
 class DashboardDataAnalyzer(object):
-    def __init__(self, mydb, course_id, chapter=None):
-        global db
+    def __init__(self, mydb, myauth, course_id, chapter=None):
+        global db, auth
         db = mydb
+        auth = myauth
         self.course_id = course_id
         if chapter:
             self.db_chapter = chapter
