@@ -35,7 +35,7 @@ def index():
         session.flash = "{} is not a graded course".format(auth.user.course_name)
         return redirect(URL('default','user'))
 
-    data_analyzer = DashboardDataAnalyzer(db, auth, auth.user.course_id)
+    data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.vars.sid)
     data_analyzer.load_assignment_metrics(request.vars.sid, studentView=True)
 

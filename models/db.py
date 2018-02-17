@@ -50,7 +50,7 @@ response.generic_patterns = ['*'] if request.is_local else []
 ## (more options discussed in gluon/tools.py)
 #########################################################################
 
-from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
+from gluon.tools import Auth, Crud, Service, PluginManager, prettydate, current
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
@@ -266,3 +266,6 @@ except:
     mtime = random.randrange(10000)
 
 request.admin_mtime = str(mtime)
+
+current.db = db
+current.auth = auth
