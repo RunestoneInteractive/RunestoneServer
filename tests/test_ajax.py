@@ -366,7 +366,7 @@ class TestAjaxEndpoints(unittest.TestCase):
 
     def testGetNumOnline(self):
         res = json.loads(getnumonline())
-        self.assertEqual(0, res[0]['online'])
+        self.assertEqual(1, res[0]['online'])
 
     def testGetUserLoggedIn(self):
         auth.login_user(db.auth_user(11))

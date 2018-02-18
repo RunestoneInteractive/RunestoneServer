@@ -269,3 +269,4 @@ request.admin_mtime = str(mtime)
 
 current.db = db
 current.auth = auth
+current.settings = settings

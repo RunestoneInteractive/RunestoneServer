@@ -15,6 +15,7 @@ import datetime
 from gluon.globals import Request, Session
 from gluon.tools import Auth
 from dateutil.parser import parse
+from gluon import current
 
 # bring in the ajax controllers
 
@@ -29,12 +30,12 @@ class TestDashboardEndpoints(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
+        current.auth = auth
         execfile("applications/runestone/controllers/dashboard.py", globals())
 
 
     def testStudentReport(self):
         auth.login_user(db.auth_user(1674))
-        session.auth = auth
         request.vars.id=auth.user.username
 
         res = studentreport()   #todo: if this is an endoint why does it not return json?

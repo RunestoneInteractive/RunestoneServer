@@ -3,9 +3,8 @@ import logging
 from datetime import datetime, timedelta
 from gluon import *
 
-
-rslogger = logging.getLogger("web2py.app.runestone")
-rslogger.setLevel(logging.DEBUG)
+rslogger = logging.getLogger(current.settings.logger)
+rslogger.setLevel(current.settings.log_level)
 
 #db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
@@ -119,6 +118,7 @@ class CourseProblemMetrics(object):
         rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
         rslogger.debug("doing chapter {}".format(self.chapter))
         # todo:  Join this with questions so that we can limit the questions to the selected chapter
+        db = current.db
         mcans = db((db.mchoice_answers.course_name==course_name) &
                    (db.mchoice_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
@@ -214,6 +214,7 @@ class UserActivitySubChapterProgress(object):
 
     def get_sub_chapter_progress(self):
         subchapters = []
+        db = current.db
         subchapter_res = db(db.sub_chapters.chapter_id == self.chapter_id).select()
         sub_chapter_label_to_text = {sc.sub_chapter_label : sc.sub_chapter_name for sc in subchapter_res}
         for subchapter_label, status in self.sub_chapters.iteritems():
@@ -251,6 +252,7 @@ class ProgressMetrics(object):
             self.sub_chapters[sub_chapter.sub_chapter_label] = SubChapterActivity(sub_chapter, len(users))
 
     def update_metrics(self, logs, chapter_progress):
+        auth = current.auth
         for row in chapter_progress:
             try:
                 self.sub_chapters[row.user_sub_chapter_progress.sub_chapter_id].add_activity(row)
@@ -322,10 +324,7 @@ class UserLogCategorizer(object):
         return "{0} {1}".format(event, div_id)
 
 class DashboardDataAnalyzer(object):
-    def __init__(self, mydb, myauth, course_id, chapter=None):
-        global db, auth
-        db = mydb
-        auth = myauth
+    def __init__(self, course_id, chapter=None):
         self.course_id = course_id
         if chapter:
             self.db_chapter = chapter
@@ -333,6 +332,8 @@ class DashboardDataAnalyzer(object):
             self.db_chapter = None
 
     def load_chapter_metrics(self, chapter):
+        db = current.db
+        auth = current.auth
         if not chapter:
             rslogger.error("chapter not set, abort!")
             session.flash = "Error No Course Data in DB"
@@ -364,6 +365,8 @@ class DashboardDataAnalyzer(object):
             self.questions[i] = db(db.questions.name == i).select(db.questions.chapter, db.questions.subchapter).first()
 
     def load_user_metrics(self, username):
+        db = current.db
+        auth = current.auth
         self.username = username
         self.course = db(db.courses.id == self.course_id).select().first()
         if not self.course:
@@ -383,6 +386,8 @@ class DashboardDataAnalyzer(object):
         self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)
 
     def load_exercise_metrics(self, exercise):
+        db = current.db
+        auth = current.auth
         self.course = db(db.courses.id == self.course_id).select().first()
         self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
@@ -391,6 +396,7 @@ class DashboardDataAnalyzer(object):
 
     def load_assignment_metrics(self, username, studentView=False):
         self.assignments = []
+        db = current.db
 
         res = db(db.assignments.course == self.course_id)\
                 .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate, db.assignments.released)
