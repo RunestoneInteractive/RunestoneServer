@@ -22,6 +22,7 @@ db.define_table('user_topic_practice_log',
                 Field('e_factor', type='double', notnull=True),
                 Field('q', type='integer', notnull=True, default=-1),
                 Field('trials_num', type='integer', notnull=True),
+                Field('available_flashcards', type='integer', notnull=True, default=-1),
                 Field('start_practice', type='datetime'),
                 Field('end_practice', type='datetime'),
                 migrate='runestone_spacing_log.table')
