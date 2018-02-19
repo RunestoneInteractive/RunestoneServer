@@ -204,10 +204,10 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
                      practice_start_time = None, db=None, now=None):
-    # logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
-    # if not autograde:
-    #     logger.debug("autograde not set returning 0")
-    #     return 0
+    logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
+    if not autograde:
+        logger.debug("autograde not set returning 0")
+        return 0
 
     # If previously manually graded and it is required to save the score, don't overwrite.
     existing = db((db.question_grades.sid == sid) \
