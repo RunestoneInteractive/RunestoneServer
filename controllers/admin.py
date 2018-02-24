@@ -6,7 +6,7 @@ from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
-from rs_grading import send_lti_grades
+from rs_grading import send_lti_grades, do_fill_user_topic_practice_log_missings
 
 import logging
 
@@ -316,6 +316,12 @@ def add_practice_items():
                     db((db.user_topic_practice.course_name == course.course_name) &
                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
+    return json.dumps(dict(complete=True))
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def fill_user_topic_practice_log_missings():
+    do_fill_user_topic_practice_log_missings(db, settings)
     return json.dumps(dict(complete=True))
 
 
