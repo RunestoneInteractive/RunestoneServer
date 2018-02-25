@@ -114,7 +114,8 @@ def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline,
         query = query & (db.mchoice_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.mchoice_answers.timestamp >= practice_start_time)
-        query = query & (db.mchoice_answers.timestamp <= now)
+        if now:
+            query = query & (db.mchoice_answers.timestamp <= now)
     return db(query).select(orderby=db.mchoice_answers.timestamp)
 
 
@@ -140,7 +141,8 @@ def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=
         query = query & (db.useinfo.timestamp < deadline)
     if practice_start_time:
         query = query & (db.useinfo.timestamp >= practice_start_time)
-        query = query & (db.useinfo.timestamp <= now)
+        if now:
+            query = query & (db.useinfo.timestamp <= now)
     return db(query).select(db.useinfo.id, db.useinfo.act, orderby=db.useinfo.timestamp)
 
 
@@ -154,7 +156,8 @@ def _scorable_parsons_answers(course_name, sid, question_name, points, deadline,
         query = query & (db.parsons_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.parsons_answers.timestamp >= practice_start_time)
-        query = query & (db.parsons_answers.timestamp <= now)
+        if now:
+            query = query & (db.parsons_answers.timestamp <= now)
     return db(query).select(orderby=db.parsons_answers.timestamp)
 
 
@@ -168,7 +171,8 @@ def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, pr
         query = query & (db.fitb_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.fitb_answers.timestamp >= practice_start_time)
-        query = query & (db.fitb_answers.timestamp <= now)
+        if now:
+            query = query & (db.fitb_answers.timestamp <= now)
     return db(query).select(orderby=db.fitb_answers.timestamp)
 
 
@@ -182,7 +186,8 @@ def _scorable_clickablearea_answers(course_name, sid, question_name, points, dea
         query = query & (db.clickablearea_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.clickablearea_answers.timestamp >= practice_start_time)
-        query = query & (db.clickablearea_answers.timestamp <= now)
+        if now:
+            query = query & (db.clickablearea_answers.timestamp <= now)
     return db(query).select(orderby=db.clickablearea_answers.timestamp)
 
 
@@ -196,7 +201,8 @@ def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadlin
         query = query & (db.dragndrop_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.dragndrop_answers.timestamp >= practice_start_time)
-        query = query & (db.dragndrop_answers.timestamp <= now)
+        if now:
+            query = query & (db.dragndrop_answers.timestamp <= now)
     return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
 
@@ -210,7 +216,8 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
         query = query & (db.codelens_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.codelens_answers.timestamp >= practice_start_time)
-        query = query & (db.codelens_answers.timestamp <= now)
+        if now:
+            query = query & (db.codelens_answers.timestamp <= now)
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 
@@ -693,7 +700,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
     flashcard_logs = db(db.user_topic_practice_log.id > 0).select()
     for flashcard_log in flashcard_logs:
         if flashcard_log.available_flashcards == -1:
-            # Retrieve all the flashcards created for this user in the current course.
+            # Retrieve all the flashcards that this user has practiced in the current course from the log table.
             flashcards = db((db.user_topic_practice_log.course_name == flashcard_log.course_name) & \
                             (db.user_topic_practice_log.user_id == flashcard_log.user_id) & \
                             (db.user_topic_practice_log.start_practice <= flashcard_log.start_practice)).select()
@@ -704,7 +711,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                     presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
                 elif f.start_practice >= presentable_flashcards[f.chapter_label + f.sub_chapter_label].start_practice:
                     presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-            # Retrieve all the flashcards created for this user in the current course.
+            # Retrieve all the flashcards created for this user in the current course that the user has never opened.
             flashcards = db((db.user_topic_practice.course_name == flashcard_log.course_name) & \
                             (db.user_topic_practice.user_id == flashcard_log.user_id) & \
                             (db.user_topic_practice.last_completed <= flashcard_log.start_practice)).select()
@@ -715,14 +722,14 @@ def do_fill_user_topic_practice_log_missings(db, settings):
             # Select only those where enough time has passed since last presentation.
             flashcards = [f for f in presentable_flashcards.values() if
                                       (flashcard_log.end_practice.date() - f.end_practice.date()).days >= f.i_interval]
+            # Now, there are still flashcards remaining that have already been practiced today.
             presentable_flashcards = {}
             for f in flashcards:
                 presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
             # Flashcards that have already been practiced today after this one:
             flashcards = db((db.user_topic_practice_log.course_name == flashcard_log.course_name) & \
                             (db.user_topic_practice_log.user_id == flashcard_log.user_id)).select()
-            flashcards = [f for f in flashcards
-                                                if f.start_practice.date() == flashcard_log.start_practice.date() and
+            flashcards = [f for f in flashcards if f.start_practice.date() == flashcard_log.start_practice.date() and
                                                    f.start_practice >= flashcard_log.start_practice]
             for f in flashcards:
                 if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:

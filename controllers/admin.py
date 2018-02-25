@@ -320,12 +320,6 @@ def add_practice_items():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def fill_user_topic_practice_log_missings():
-    do_fill_user_topic_practice_log_missings(db, settings)
-    return json.dumps(dict(complete=True))
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
     sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
     courseid = sidQuery.id
