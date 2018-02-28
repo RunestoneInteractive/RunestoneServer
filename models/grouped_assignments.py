@@ -106,19 +106,27 @@ class CourseGrade(object):
     def points(self, projected = False, potential = False):
         return sum([t.points(projected, potential) or 0 for t in self.assignment_type_grades])
 
-    def csv(self, type_names, assignment_names):
+    def csv(self, type_names, assignment_names, as_of_timestamp=None):
         # pass the row dictionary and fields_names into the csv method for the components, which will accumulate extra values and field names
         row = {}
         row['Lastname']= self.student.last_name
         row['Firstname']= self.student.first_name
         row['Email']= self.student.email
         row['Total']= self.points()
-        if 'NonPS Hours' not in type_names:
-            type_names.append('NonPS Hours')
-        row['NonPS Hours'] = get_engagement_time(None, self.student, False, all_non_problem_sets = True)/3600.0
-        if 'PS Hours' not in type_names:
-            type_names.append('PS Hours')
-        row['PS Hours'] = get_engagement_time(None, self.student, False, all_problem_sets = True)/3600.0
+        if 'NonPS Seconds' not in type_names:
+            type_names.append('NonPS Seconds')
+        row['NonPS Seconds'] = get_engagement_time(assignment=None,
+                                                   user=self.student,
+                                                   preclass=False,
+                                                   all_non_problem_sets=True,
+                                                   as_of_timestamp=as_of_timestamp)
+        if 'PS Seconds' not in type_names:
+            type_names.append('PS Seconds')
+        row['PS Seconds'] = get_engagement_time(assignment=None,
+                                                user=self.student,
+                                                preclass=False,
+                                                all_problem_sets=True,
+                                                as_of_timestamp=as_of_timestamp)
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
@@ -203,7 +211,7 @@ def get_deadline(assignment, user):
     else:
         return None
 
-def get_engagement_time(assignment, user, preclass, all_problem_sets = False, all_non_problem_sets = False):
+def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False, all_non_problem_sets=False, as_of_timestamp=None):
     if all_problem_sets:
         q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_'))
     elif all_non_problem_sets:
@@ -214,6 +222,8 @@ def get_engagement_time(assignment, user, preclass, all_problem_sets = False, al
             dl = get_deadline(assignment, user)
             if dl:
                 q = q(db.useinfo.timestamp < dl)
+    if as_of_timestamp:
+        q = q(db.useinfo.timestamp < as_of_timestamp)
     activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
     sessions = []
     THRESH = 300
@@ -223,7 +233,7 @@ def get_engagement_time(assignment, user, preclass, all_problem_sets = False, al
             # first activity; start a session for it
             sessions.append(Session(activity.timestamp))
         elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
-            # close previous session; set its end time be previous activity's time, plus 30 seconds
+            # close previous session; set its end time be previous activity's time, plus THRESH seconds
             sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
             # start a new session
             sessions.append(Session(activity.timestamp))

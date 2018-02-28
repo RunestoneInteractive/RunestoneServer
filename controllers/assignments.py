@@ -78,6 +78,38 @@ def record_assignment_score():
             manual_total=True
         )
 
+# download a CSV with the student's performance on all assignments so far
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def download_time_spent():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    students = db(db.auth_user.course_id == course.id).select()
+    assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type==db.assignment_types.id).select(orderby=db.assignments.assignment_type)
+    grades = db(db.grades).select()
+
+    field_names = ['Lastname','Firstname','Email','Total']
+    type_names = []
+    assignment_names = []
+
+    # datestr should be in format "05-20-13"
+    datestr = request.vars.as_of
+    print datestr
+    as_of_timestamp = datetime.datetime.strptime(datestr, '%m-%d-%y')
+    try:
+        as_of_timestamp = datetime.datetime.strptime(datestr, '%m-%d-%y')
+    except:
+        print "problem"
+        return dict(error="Please enter ?as_of=03-24-16")
+    # probably broken now; assignment_types is deprecated and maybe not filled in correctly
+    # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
+    rows = [CourseGrade(user = student,
+                        course=course,
+                        assignment_types = []).csv(type_names,
+                                                   assignment_names,
+                                                   as_of_timestamp=as_of_timestamp
+                                                   ) for student in students]
+    response.view='generic.csv'
+    return dict(filename='grades_download.csv', csvdata=rows,field_names=field_names+type_names+assignment_names)
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
