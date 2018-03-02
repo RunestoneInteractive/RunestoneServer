@@ -440,6 +440,7 @@ def practice():
                     # add as if yesterday, so can practice right away
                     last_presented=now.date() - datetime.timedelta(1),
                     last_completed=now.date() - datetime.timedelta(1),
+                    creation_time=now,
                 )
 
     # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?

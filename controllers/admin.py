@@ -309,6 +309,7 @@ def add_practice_items():
                                 # add as if yesterday, so can practice right away
                                 last_presented=now.date() - datetime.timedelta(1),
                                 last_completed=now.date() - datetime.timedelta(1),
+                                creation_time=now,
                             )
             else:
                 if not subchapterTaught.isempty():
