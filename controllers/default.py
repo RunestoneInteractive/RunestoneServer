@@ -381,4 +381,11 @@ def privacy():
 
 
 def donate():
-    return dict(donate={})
+    if request.vars.donate:
+        amt = request.vars.donate
+    elif session.donate:
+        amt = session.donate
+    else:
+        amt = None
+    print("donate amoutn = ", amt)
+    return dict(donate=amt)
