@@ -1,0 +1,107 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+<script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
+
+{{block statusbar}}
+{{end}}
+
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+<h1>Support Runestone Interactive</h1>
+
+<p>Your support of Runestone Interaction is vital to our future.
+    Runestone has grown from one introductory computer science
+    course to supporting hundreds of courses and thousands of
+    students every day!</p>
+<p>If I get enough support through donations I can devote full time to this
+    project.  Your support goes directly to Runestone Interactive LLC to
+    support hosting and ongoing development efforts</p>
+<p>Thank You! <br/>Brad Miller, Founder and Chief Developer -- Runestone Interactive LLC</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Donation Amount</div>
+    <div class="panel panel-body">
+    <input type="radio" name="donate" id="doneate5" value="5.00"> $5</input></br>
+    <input type="radio" name="donate" id="donate10" value="10.00"> $10</input></br>
+    <input type="radio" name="donate" id="donate20" value="20.00"> $20</input></br>
+    <input type="radio" name="donate" id="donate50" value="50.00"> $50</input></br>
+    Other<input type="text" name="donate" id="donateother" value=""/>
+    </div>
+    </div>
+</div>
+        </div>
+ <div id="paypal-button"></div>
+
+  <script>
+    paypal.Button.render({
+      env: 'production', // Or 'sandbox', 'production'
+      client: {
+          sandbox: 'AVsIrTPVGQOcMILmCSyfLioKBiqdTgAzC_ax74na1CZ0HZV0EPf9Vq7PDp_sWPeqNitq0yRGRYq5vjDp',
+          production: 'ASkp77N-Kiw5GKOF_0I13P0GCW6lrnaukdVqeFykz7zBT9F-WXHRIisBsau5VEmC-vCKCzt--41kaOjb'
+      },
+
+      commit: true, // Show a 'Pay Now' button
+
+      style: {
+        color: 'blue',
+        size: 'responsive',
+        layout: 'vertical'
+      },
+
+      payment: function(data, actions) {
+        var amt_opts = document.getElementsByName("donate")
+        var amt = "10.00"
+        for (let rb of amt_opts) {
+            if (rb.type === "radio" & rb.checked) {
+                amt = rb.value
+            }
+        }
+        if (amt === "") {
+            amt = document.getElementById("donateother").value
+        }
+        return actions.payment.create({
+                payment: {
+                    transactions: [
+                        {
+                            amount: { total: amt, currency: 'USD' }
+                        }
+                    ]
+                }
+            });
+      },
+
+      onAuthorize: function(data, actions) {
+        return actions.payment.execute().then(function(payment) {
+
+                // The payment is complete!
+                // You can now show a confirmation message to the customer
+            alert('Payment successful - Thank you! ')
+            window.location.href = "https://runestone.academy/runestone/default"
+            });
+      },
+
+      onCancel: function(data, actions) {
+        /*
+         * Buyer cancelled the payment
+         */
+      },
+
+      onError: function(err) {
+        /*
+         * An error occurred during the transaction
+         */
+      }
+    }, '#paypal-button');
+  </script>
+
+{{ if request.args: }}
+<script>
+    $(document).ready(function() {
+        var amt = "{{=request.args(0)}}";
+        var btn = document.getElementById("donate"+amt);
+        if (btn) {
+            btn.checked = true;
+        }
+    });
+</script>
+{{pass}}

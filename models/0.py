@@ -24,10 +24,6 @@ settings.course_id = 'devcourse'
 settings.plugins = []
 settings.server_type = "http://"
 
-# real API key and domain set in gitignore'd 1.py
-settings.janrain_api_key = 'a_fake_key'
-settings.janrain_domain = 'a-fake-domain'
-
 # Do not control this with hostnames
 config = environ.get("WEB2PY_CONFIG","NOT SET")
 

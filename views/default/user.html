@@ -1,14 +1,28 @@
+{{user_navs = True}}
 {{extend 'layout.html'}}
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 {{block statusbar}}
 {{end}}
 
+<style>
+    .rscontainer {
+        padding-left: 20px;
+        padding-right:20px;
+        padding-top: 20px;
+    }
+</style>
+
+<div class="container rscontainer">
+
 {{if request.args(0) != 'register':}}
 
+<div class="row ">
 <!-- Carousel
     ================================================== -->
     <link href="/runestone/static/css/carousel.css" rel="stylesheet">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -24,8 +38,8 @@
 
             <div class="container">
               <div class="carousel-caption">
-                <h1>Welcome to Interactive Python</h1>
-                <p>Interactive Python is a project of Runestone Interactive.  We host a growing number of Open Source, interactive textbooks you can use in a course. Written by award winning authors. Used by some of the best schools.</p>
+                <h3>Welcome to Runestone Academy</h3>
+                <p>We host a growing number of open source, interactive textbooks, written by award winning authors. Used by hundreds of schools</p>
                 <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/library.html" role="button">See the List</a>
                    <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take a Tour</a>
                 </p>
@@ -37,7 +51,7 @@
         <div class="item">
           <div class="container">
             <div class="carousel-caption">
-              <h1>How to Think Like a Computer Scientist: Interactive Edition</h1>
+              <h3>How to Think Like a Computer Scientist: Interactive Edition</h3>
               <p>Based on the original open source book.  Learn Python, try examples, answer questions, interactively, right in the book!</p>
               <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/thinkcspy/index.html" role="button">Try it Now</a></p>
             </div>
@@ -45,40 +59,31 @@
         </div>
 
 
-        <div class="item">
+          <div class="item">
+            <div class="container">
+              <div class="carousel-caption">
+                <h2>New Instructors</h2>
+                <p>Here is a Video that will help you get started. Or, take a tour of the unique interactive features of our books!</p>
+                <p><a class="btn btn-lg btn-primary" href="https://youtu.be/IGg_SUWEnGU" role="button">Watch Video</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take Tour</a></p>
+              </div>
+            </div>
+          </div>
+
+                  <div class="item">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Algorithms and Data Structures using Python</h1>
+              <h3>Algorithms and Data Structures using Python</h3>
               <p>Written by Brad Miller and David Ranum, this is a free and open source version of the book published by Franklin Beedle.</p>
               <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/pythonds/index.html" role="button">Learn more</a></p>
             </div>
           </div>
         </div>
 
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>Take a Tour</h1>
-                <p>This page shows you some of the unique interactive features used in our books.</p>
-                <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Learn more</a></p>
-              </div>
-            </div>
-          </div>
 
           <div class="item">
             <div class="container">
               <div class="carousel-caption">
-                <h1>Programs, Information, and People</h1>
-                <p>By Paul Resnick  This book introduces Python for an introductory, data-focused programming course.</p>
-                <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/pip2/index.html" role="button">Learn more</a></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>CS Principles -- Big Ideas in Programming</h1>
+                <h3>CS Principles -- Big Ideas in Programming</h3>
                 <p>By Mark Guzdial, Barbara Ericson, and Briana Morrison This book introduces important concepts for the new AP CS Principles course.</p>
                 <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/StudentCSP/index.html" role="button">Learn more</a></p>
               </div>
@@ -88,7 +93,7 @@
         <div class="item">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Java Review for the AP CS A Exam</h1>
+              <h3>Java Review for the AP CS A Exam</h3>
               <p>Not just for Python.  This great resource, written by Barbara Ericson, is loaded with review questions and clear explanations.</p>
               <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/JavaReview/index.html" role="button">Get Started</a></p>
             </div>
@@ -98,33 +103,202 @@
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
-{{pass}}
+
+
+    <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
 
 {{ if 'static' in request.env.query_string:}}
-<h2>Welcome</h2>
 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
-<p>Help spread the word! Join in the conversation, follow our development, learn about updates, or leave us a suggestion:  </p>
 
 {{pass}}
 
-<div class='col-md-6'>
-    <div class="alert alert-success">
-        <h3>Welcome to the New Home of Runestone Interactive</h3>
-        <ul>
-            <li>We have moved.  Same team, just a new hosting service and a bunch of new features.</li>
-            <li>A great new redesigned <a href="https://www.youtube.com/channel/UCAfQvSLv5senKZHfaycIz8w">instructor interface</a> two summers in the making.</li>
-            <li>Same great books</li>
-            <li>Any transition is likely to uncover bugs.  Please let us know if something isn't working!</li>
-        </ul>
-        <h3>If you find something broken</h3>
-        <p>Please contact us <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">file a bug report</a></p>
+    <!--  LOGIN -->
+{{ if request.args(0) == 'login': }}
+    <div id="web2py_user_form" class="col-md-4">
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                <label for="auth_user_username" class="control-label">Username</label>
+                <input type="text" class="form-control col-xs-4" id="auth_user_username" name="username"
+                       placeholder="Enter username">
+            </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <label for="auth_user_password" class="control-label ">Password</label>
+                    <div>
+                        <input type="password" class="form-control" id="auth_user_password" name="password"
+                               placeholder="Enter password">
+                </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button type="submit" class="btn btn-default">Login</button>
+                </div>
+            </div>
+        {{=form.custom.end}}
+        </form>
+        <!-- </form> Must use this to get all the good defaults for the form -->
+        <div id='auth-actions' class="" col-md-4>
+        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+            <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
+               role="button">{{=T('Lost Password')}}</a>
+            <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
+               role="button">{{=T('email my username')}}</a>
+        {{pass}}
+        </div>
     </div>
-  <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+    {{pass}}
 
-    {{if request.args(0) == 'retrieve_username': }}
-    <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
-    {{elif request.args(0) == 'register':}}
-    <p>Thanks for registering.  Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
+
+{{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password']: }}
+    <div id="web2py_user_form" class="col-md-4">
+        {{=form}}
+        {{ if request.args(0) != 'profile': }}
+        <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
+        {{pass}}
+    </div>
+{{pass}}
+</div>
+{{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
+
+<div class="content row">
+<!-- REGISTRATION -->
+{{if request.args(0) == 'register': }}
+    <div id="registration_div">
+    <div class="col-md-6 col-md-offset-3">
+        <h2>Runestone Registration</h2>
+    </div>
+    <div class="col-md-6">
+    <div id="web2py_user_form">
+    <form class="form-vertical" enctype="multipart/form-data" method="post">
+        <table>
+            <tr id="auth_user_username__row">
+                <td class="w2p_fl"><label class="" for="auth_user_username"
+                                          id="auth_user_username__label">Username: </label></td>
+                <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value=""/>
+                </td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_first_name__row">
+                <td class="w2p_fl"><label class="" for="auth_user_first_name" id="auth_user_first_name__label">First
+                    Name: </label></td>
+                <td class="w2p_fw"><input class="string" id="auth_user_first_name" name="first_name" type="text"
+                                          value=""/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_last_name__row">
+                <td class="w2p_fl"><label class="" for="auth_user_last_name" id="auth_user_last_name__label">Last
+                    Name: </label></td>
+                <td class="w2p_fw"><input class="string" id="auth_user_last_name" name="last_name" type="text"
+                                          value=""/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_email__row">
+                <td class="w2p_fl"><label class="" for="auth_user_email" id="auth_user_email__label">Email: </label>
+                </td>
+                <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value=""/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_password__row">
+                <td class="w2p_fl"><label class="" for="auth_user_password"
+                                          id="auth_user_password__label">Password: </label></td>
+                <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password"
+                                          value=""/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_password_two__row">
+                <td class="w2p_fl"><label class="" for="auth_user_password_two" id="auth_user_password_two__label">Confirm
+                    Password: </label></td>
+                <td class="w2p_fw"><input class="password" id="auth_user_password_two" name="password_two"
+                                          type="password" value=""/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+            <tr id="auth_user_course_id__row">
+                <td class="w2p_fl"><label class="" for="auth_user_course_id" id="auth_user_course_id__label">Course
+                    Name: </label></td>
+                <td class="w2p_fw ui-widget">
+                    <input class="string" id="auth_user_course_id" name="course_id" type="text"
+                                          value=""/>
+                </td>
+            </tr>
+            <tr id="donation_row">
+                <td class="w2p_fc">
+                    <label for="donate_amt">Donate</label>
+                </td>
+                <td>
+                    <input type="radio" name="donate" value="0" checked> None
+                    <input type="radio" name="donate" value="5"> $5
+                    <input type="radio" name="donate" value="10"> $10
+                    <input type="radio" name="donate" value="20"> $20
+                    <input type="radio" name="donate" value="50"> $50
+                </td>
+            </tr>
+            <tr id="create_course_row">
+                <td class="w2p_fl"><label for="ccn_checkbox">Create Course</label></td>
+                <td class="w2p_fl"><input type="checkbox" id="ccn_checkbox" name="ccn_checkbox"> Make course after registering (Instructors Only)</td>
+            </tr>
+            {{if settings.enable_captchas: }}
+            <tr id="captcha__row">
+                <td class="w2p_fl"><label>Verify:</label></td>
+                <td class="w2p_fw">
+                    <div id="recaptcha">
+                        <script><!--
+                        var RecaptchaOptions = {theme: 'blackglass'};
+                        //--></script>
+                        <script src="http://www.google.com/recaptcha/api/challenge?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD"
+                                type="text/javascript"></script>
+                        <noscript>
+                            <iframe frameborder="0" height="300"
+                                    src="http://www.google.com/recaptcha/api/noscript?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD"
+                                    width="500"></iframe>
+                            <br/><input name="recaptcha_response_field" type="hidden" value="manual_challenge"/>
+                        </noscript>
+                    </div>
+                </td>
+                <td class="w2p_fc"></td>
+            </tr>
+            {{pass}}
+            <tr id="submit_record__row">
+                <td class="w2p_fl"></td>
+                <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>
+                <td class="w2p_fc"></td>
+            </tr>
+        </table>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript">
+            $("#auth_user_course_id").autocomplete({
+                source: ['thinkcspy', 'pythonds']
+            });
+
+        </script>
+    {{=form.custom.end}}
+    </form> <!-- this tag is superflous as it is added by prev line -->
+    </div> <!-- end form div -->
+    </div>
+        <div class="col-md-6">
+            <h2>Please Support Runestone</h2>
+            <p>The College Board puts the annual cost of textbooks and materials at $1,168!
+                Our mission is to provide you with high quality textbooks at no charge!</p>
+            <p>Would you please consider a donation of $10 to support our work?  If you are an instructor could your department make a contribution?
+                We allow you to use Runestone for free, but it definitely is not free. Runestone takes lots of work and server resources.</p>
+        </div>
+    </div> <!-- end register div -->
+{{pass}}
+{{if request.args(0) == 'register':}}
+<div class="col-md-6">
+    <h4>Registration Hints</h4>
+        <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
     <ul>
         <li><strong>thinkcspy</strong> for How to Think Like a Computer Scientist</li>
         <li><strong>pythonds</strong> for Problem Solving with Algorithms and data structures</li>
@@ -132,28 +306,53 @@
         <li><strong>JavaReview</strong> for the AP Java Review</li>
         <li><strong>pip2</strong> for Programs, Information, People</li>
     </ul>
-    {{else:}}
-  <div id="loginexp">
-    <p><strong>Why Log in?</strong>  Excellent question.  You don't need to log in to use the books we've provided.  But you won't be able to save your work and come back to it later.  Don't worry: we have no plans to spam you with email, and we will never sell your contact information to anyone.  If you are a student that is part of a course, please <a  href="{{=URL(args='register')}}" >{{=T('register')}}</a> and/or login.  When you register be sure to choose the course that your instructor has given you.</p>
-  </div>
-    {{pass}}
-  <div id="web2py_user_form">
-    {{=form}}
-    {{if request.args(0)=='login':}}
-      <div id='auth-actions'>
-        {{if not 'register' in auth.settings.actions_disabled:}}
-          <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
-        {{pass}}
-        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-          <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}" role="button">{{=T('Lost Password')}}</a>
-          <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}" role="button">{{=T('email my username')}}</a>
-        {{pass}}
-      </div>
-    {{pass}}
-  </div>
-  <br />
 
-  <button class="btn btn-lg btn-default" onclick="window.location.href='../../designer/index'">Create a Course</button>
+</div>
+{{pass}}
+{{if request.args(0) != 'register':}}
+<div class="row">
+    <div class='col-md-6'>
+      <h2>About Runestone</h2>
+        <p>The mission of Runestone Interactive is to democratize textbooks for the 21st century.  Textbook prices are too high, and paper textbooks are too old fashioned.  We are changing that.</p>
+        <ul>
+            <li>Freely available open source books</li>
+            <li>Easy to use Authoring Tools to create Runestone books</li>
+            <li>Hosting services for your course</li>
+        </ul>
+        <p>To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
+    </div>
+
+{{pass}}
+{{if request.args(0) != 'register':}}
+
+    <div class="col-md-6">
+        <h2>Support Us</h2>
+        <p>This project is Open Source, but it does take time and resources.
+            Especially as our popularity has grown we have server costs. We
+            were also able to make great progress during the Summer of 2013
+            thanks to a generous grant from ACM-SIGCSE that supported one of our
+            undergraduate students. It would be great if we could have a student
+            working on this all the time.</p>
+        <p>If these books have helped you, if you liked them,
+            please consider making a small donation.</p>
+        <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"></a>
+    </div>
+{{pass}}
+    <div class="col-md-6">
+        <h2>Your Privacy</h2>
+        <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+            of our educational mission we do collect usage data to help us better understand how you learn and how you
+            use our
+            books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+            this data to publish
+            academic papers. We would never publish anything that revealed your identity. We may share this data with
+            fellow
+            educational researchers, but rest assured that all personally identifying information will be anonymized
+            before we do.
+            If you have questions about this please feel free to <a
+                    href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+    </div>
+</div>
 
 </div>
 
@@ -167,40 +366,9 @@
     });
 </script>
 
-<div class='col-md-6'>
-  <h2>More Information</h2>
-     What is Runestone? How can you use and contribute to what we offer? To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
 
-     <h2>New Instructors - Getting Started</h2>
-     <iframe width="560" height="315" src="https://www.youtube.com/embed/IGg_SUWEnGU" frameborder="0" allowfullscreen></iframe>
+<!--        {{if not 'register' in auth.settings.actions_disabled:}}
+          <a class="btn btn-lg btn-primary" href="{{=URL(args='register')}}" role="button">{{=T('Register')}}</a>
+        {{pass}} -->
 
-  <h2>Support Us</h2>
-  <div class="alert alert-info"><strong>Thank You! </strong>
-  Many thanks to the Minnesota State University Moorhead CS department for a generous donation to keep Runestone development active and all of these resources free.
-  Please consider having your own school or department do likewise.
-  </div>
-  <p>This project is Open Source, but it does take time and resources.
-     Especially as our popularity has grown we have server costs.  We
-     were also able to make great progress during the Summer of 2013
-     thanks to a generous grant from ACM-SIGCSE that supported one of our
-     undergraduate students. It would be great if we could have a student
-     working on this all the time.</p>
-  <p>If these books have helped you, if you liked them,
-     please consider making a small donation.</p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-  <input type="hidden" name="cmd" value="_s-xclick">
-  <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-  <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-  <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-  </form>
-
-    <h2>Your Privacy</h2>
-    <p>The books provided on Runestone Academy are free and open source.  They are for educational purposes.  As part
-    of our educational mission we do collect usage data to help us better understand how you learn and how you use our
-    books.  In exchange, we may use this data to make decisions about revisions to the content, and we may use this data to publish
-    academic papers.  We would never publish anything that revealed your identity.  We may share this data with fellow
-    educational researchers, but rest assured that all personally identifying information will be anonymized before we do.
-    If you have questions about this please feel free to <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
 </div>
-
-
