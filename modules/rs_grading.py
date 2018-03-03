@@ -702,8 +702,8 @@ def do_fill_user_topic_practice_log_missings(db, settings):
     flashcards = db(db.user_topic_practice.id > 0).select()
     for flashcard in flashcards:
         if flashcard.creation_time is None:
-            flashcard_logs = db((db.user_topic_practice_log.course_name == flashcard.course_name) & \
-                                (db.user_topic_practice_log.chapter_label == flashcard.chapter_label) & \
+            flashcard_logs = db((db.user_topic_practice_log.course_name == flashcard.course_name) &
+                                (db.user_topic_practice_log.chapter_label == flashcard.chapter_label) &
                                 (db.user_topic_practice_log.sub_chapter_label <= flashcard.sub_chapter_label)).select()
             flashcard.creation_time = min([f.start_practice for f in flashcard_logs])
             flashcard.update_record()
@@ -712,13 +712,20 @@ def do_fill_user_topic_practice_log_missings(db, settings):
     students = db(db.auth_user.id > 0).select(db.auth_user.username, db.auth_user.id)
     for student in students:
         # A) Retrieve all their practice logs, ordered by timestamp.
-        flashcard_logs = db(db.user_topic_practice_log.user_id ==
-                            student.id).select(orderby= db.user_topic_practice_log.start_practice)
+        flashcard_logs = db((db.user_topic_practice_log.user_id == student.id) &
+                            (db.user_topic_practice_log.course_name == student.course_name)
+                            ).select(orderby= db.user_topic_practice_log.start_practice)
+        # Retrieve all their flashcards, ordered by creation_time.
+        flashcards = db((db.user_topic_practice.course_name == flashcard_log.course_name) &
+                                (db.user_topic_practice.user_id == flashcard_log.user_id)
+                                ).select(orderby= db.user_topic_practice.creation_time)
         # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a wrong answer
         # they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll have multiple records in
         # user_topic_practice_log for the same topic. To this end, in the presentable_flashcards dictionary, we keep
         # unique records of topics as keys and for each one, we only include the most up-to-date flashcard.
         presentable_flashcards = {}
+        # Choose a day way before the start of the semester.
+        current_date = datetime.date(2010, 9, 1)
         # B) Go through those practice logs in order.
         for flashcard_log in flashcard_logs:
             # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
@@ -726,70 +733,41 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                 flashcard_log_date = flashcard_log.start_practice.date()
                 # Whenever you encounter a new date:
                 if flashcard_log_date != current_date:
-                    # B1) Query all the flashcards that were created on or before the current practice_log's date.
-                    flashcards = db((db.user_topic_practice.course_name == flashcard_log.course_name) & \
-                                    (db.user_topic_practice.user_id == flashcard_log.user_id) & \
-                                    (db.user_topic_practice.creation_time.date() <= flashcard_log_date)).select()
-
-                    # For the flashcards that have already been practiced, we cannot retrieve them from user_topic_practice
-                    # model. So we retrieve those flashcards from the user_topic_practice_log model that this user has practiced
-                    # in the current course and they have been practiced before flashcard_log_date.
-                    flashcards = db((db.user_topic_practice_log.course_name == flashcard_log.course_name) & \
-                                    (db.user_topic_practice_log.user_id == flashcard_log.user_id) & \
-                                    (db.user_topic_practice_log.start_practice.date() < flashcard_log_date)).select()
-                    # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a wrong answer
-                    # they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll have multiple records in
-                    # user_topic_practice_log for the same topic. So, in the presentable_flashcards dictionary, we keep unique
-                    # records of topics as keys and for each one, we only include the most up-to-date flashcard.
+                    # For the flashcards that have already been practiced, we cannot retrieve them from
+                    # user_topic_practice model. So we retrieve those flashcards from the user_topic_practice_log model
+                    # that this user has practiced in the current course and they have been practiced between
+                    # current_date and flashcard_log_date.
+                    practiced_flashcards = [f for f in flashcard_logs
+                                            if current_date <= f.start_practice.date() < flashcard_log_date]
+                    # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a
+                    # wrong answer they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll
+                    # have multiple records in user_topic_practice_log for the same topic. To this end, in the
+                    # presentable_flashcards dictionary, we keep unique records of topics as keys and for each one, we
+                    # only include the most up-to-date flashcard.
                     presentable_flashcards = {}
-                    for f in flashcards:
+                    for f in practiced_flashcards:
                         if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
                             presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
                         elif f.start_practice >= presentable_flashcards[
                             f.chapter_label + f.sub_chapter_label].start_practice:
                             presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                    # There are also flashcards created for this user in the current course that the user has never opened. We
-                    # need to retrieve these flashcards, from the user_topic_practice model. So we'll have a similar query with
-                    # two differences:
-                    # 1- the model name is user_topic_practice.
-                    # 2- We need to define the last condition on the last_completed field. If the following condition is
-                    # satisfied, it means that the flashcard has never been practiced.
-                    flashcards = db((db.user_topic_practice.course_name == flashcard_log.course_name) & \
-                                    (db.user_topic_practice.user_id == flashcard_log.user_id) & \
-                                    (db.user_topic_practice.last_completed <= flashcard_log.start_practice)).select()
-                    # Because we know that the flashcard has never been practiced, the following if statement is not necessary,
-                    # but we've added it to assure we do not update any record if it is already added from the
-                    # user_topic_practice_log model.
-                    for f in flashcards:
+                    # Retrieve all the flashcards that were created on flashcard_log_date or between current_date and
+                    # flashcard_log_date.
+                    created_flashcards = [f for f in flashcards
+                                          if current_date < f.creation_time.date() <= flashcard_log_date]
+                    # If the flashcard is created but has not been practiced until today:
+                    for f in created_flashcards:
                         if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
                             presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                            # Since we do not have 'end_practice' filed in the user_topic_practice_log model, we need to add it.
+                            # Since we do not have 'start_practice' filed in user_topic_practice, we need to add it.
                             presentable_flashcards[f.chapter_label + f.sub_chapter_label][
-                                'end_practice'] = f.last_completed
-                    # Now, it's the time to select only those where enough time has passed since last presentation.
-                    flashcards = [f for f in presentable_flashcards.values() if
-                                  (flashcard_log.end_practice.date() - f.end_practice.date()).days >= f.i_interval]
-                    # However, there are still flashcards remaining that have already been practiced today. Since they are
-                    # practiced today, their i-intervals do not satisfy the filter in the list comprehension and we need to
-                    # retrieve them again. So, first of all we need to reconstruct the presentable_flashcards dictionary to only
-                    # include those records that satisfy the filter in the list comprehension.
-                    presentable_flashcards = {}
-                    for f in flashcards:
-                        presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                    # So, in the following 3 lines, we retrieve those flashcards that have already been practiced today after
-                    # the current one:
-                    flashcards = db((db.user_topic_practice_log.course_name == flashcard_log.course_name) & \
-                                    (db.user_topic_practice_log.user_id == flashcard_log.user_id)).select()
-                    flashcards = [f for f in flashcards if
-                                  f.start_practice.date() == flashcard_log.start_practice.date() and
-                                  f.start_practice >= flashcard_log.start_practice]
-                    # Then we add the new ones to the dictionary.
-                    for f in flashcards:
-                        if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
-                            presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                    # Finally, we update the available_flashcards fields in the filtered flashcards list.
-                    flashcard_log.available_flashcards = len(presentable_flashcards)
-                    flashcard_log.update_record()
+                                'start_practice'] = flashcard_log.start_practice
+                    # Update current_date for the next iteration.
+                    current_date = flashcard_log_date
+                flashcard_log.available_flashcards = len(presentable_flashcards)
+                flashcard_log.update_record()
+                # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
+                del presentable_flashcards[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
 
             if flashcard_log.q == -1:
                 user = db(db.auth_user.id == flashcard_log.user_id).select().first()

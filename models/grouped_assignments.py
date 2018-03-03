@@ -96,6 +96,7 @@ class AssignmentTypeGrade(object):
         for a in self.assignments:
             a.csv(row, self.name, assignment_names)
 
+
 class CourseGrade(object):
     def __init__(self, user, course, assignment_types):
         self.assignment_type_grades = [AssignmentTypeGrade(t, user, course) for t in assignment_types]
@@ -122,14 +123,15 @@ class CourseGrade(object):
                                                    as_of_timestamp=as_of_timestamp)
         if 'PS Seconds' not in type_names:
             type_names.append('PS Seconds')
-        row['PS Seconds'] = get_engagement_time(assignment=None,
-                                                user=self.student,
-                                                preclass=False,
-                                                all_problem_sets=True,
-                                                as_of_timestamp=as_of_timestamp)
+        row['PS Seconds'], row['Earliness'] = get_engagement_time(assignment=None,
+                                                                  user=self.student,
+                                                                  preclass=False,
+                                                                  all_problem_sets=True,
+                                                                  as_of_timestamp=as_of_timestamp)
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
+
 
 db.define_table('assignment_types',
     Field('name', 'string'),
@@ -211,20 +213,29 @@ def get_deadline(assignment, user):
     else:
         return None
 
-def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False, all_non_problem_sets=False, as_of_timestamp=None):
+
+def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False, all_non_problem_sets=False,
+                        as_of_timestamp=None):
     if all_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_'))
+        q = db((db.useinfo.sid == user.username) &
+               (db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')) &
+               (db.question_grades.useinfo_id == auth.useinfo.id) &
+               (db.question_grades.sid == user.id) &
+               (db.question_grades.course_name == user.course_name) &
+               (db.question_grades.div_id == db.useinfo.div_id))
     elif all_non_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
+        q = db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
     else:
-        q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
+        q = db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
         if preclass:
             dl = get_deadline(assignment, user)
             if dl:
                 q = q(db.useinfo.timestamp < dl)
     if as_of_timestamp:
         q = q(db.useinfo.timestamp < as_of_timestamp)
-    activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
+    activities = q.select(db.useinfo.timestamp, db.question_grades.deadline, orderby=db.useinfo.timestamp)
+    if all_problem_sets:
+        first_last_timestamps = {}
     sessions = []
     THRESH = 300
     prev = None
@@ -238,11 +249,30 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
             # start a new session
             sessions.append(Session(activity.timestamp))
         prev = activity
+
+        if all_problem_sets:
+            if activity.deadline not in first_last_timestamps:
+                first_last_timestamps[activity.deadline] = {'first': activity.timestamp, 'last': activity.timestamp}
+            else:
+                if activity.timestamp < first_last_timestamps[activity.deadline]['first']:
+                    first_last_timestamps[activity.deadline]['first'] = activity.timestamp
+                if (activity.timestamp <= activity.deadline and
+                        activity.timestamp > first_last_timestamps[activity.deadline]['last']):
+                    first_last_timestamps[activity.deadline]['last'] = activity.timestamp
     if prev:
         # close out last session
         sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
+
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
+
+    if all_problem_sets:
+        earliness = 0
+        for deadline, v in first_last_timestamps.items():
+            earliness += (deadline - (v['last'] + v['first']) / 2).total_seconds()
+        return total_time, earliness
+
     return total_time
+
 
 def assignment_get_use_scores(assignment, problem=None, user=None, section_id=None, preclass=True):
     scores = []
