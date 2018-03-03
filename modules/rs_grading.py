@@ -705,19 +705,20 @@ def do_fill_user_topic_practice_log_missings(db, settings):
             flashcard_logs = db((db.user_topic_practice_log.course_name == flashcard.course_name) &
                                 (db.user_topic_practice_log.chapter_label == flashcard.chapter_label) &
                                 (db.user_topic_practice_log.sub_chapter_label <= flashcard.sub_chapter_label)).select()
-            flashcard.creation_time = min([f.start_practice for f in flashcard_logs])
+            flashcard.creation_time = (min([f.start_practice for f in flashcard_logs])
+                                       if len(flashcard_logs) > 0 else flashcard.last_presented)
             flashcard.update_record()
 
     # For each person:
-    students = db(db.auth_user.id > 0).select(db.auth_user.username, db.auth_user.id)
+    students = db(db.auth_user.id > 0).select()
     for student in students:
         # A) Retrieve all their practice logs, ordered by timestamp.
         flashcard_logs = db((db.user_topic_practice_log.user_id == student.id) &
                             (db.user_topic_practice_log.course_name == student.course_name)
                             ).select(orderby= db.user_topic_practice_log.start_practice)
         # Retrieve all their flashcards, ordered by creation_time.
-        flashcards = db((db.user_topic_practice.course_name == flashcard_log.course_name) &
-                                (db.user_topic_practice.user_id == flashcard_log.user_id)
+        flashcards = db((db.user_topic_practice.course_name == student.course_name) &
+                                (db.user_topic_practice.user_id == student.id)
                                 ).select(orderby= db.user_topic_practice.creation_time)
         # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a wrong answer
         # they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll have multiple records in
