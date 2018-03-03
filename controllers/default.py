@@ -126,9 +126,7 @@ def call(): return service()
 
 @auth.requires_login()
 def index():
-    print("REFERER = ", request.env.http_referer)
-    print("session - donate", session.donate)
-    print("session - build", session.build)
+#    print("REFERER = ", request.env.http_referer)
 
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
@@ -387,5 +385,4 @@ def donate():
         amt = session.donate
     else:
         amt = None
-    print("donate amoutn = ", amt)
     return dict(donate=amt)
