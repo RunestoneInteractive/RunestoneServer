@@ -256,8 +256,7 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
             else:
                 if activity.timestamp < first_last_timestamps[activity.deadline]['first']:
                     first_last_timestamps[activity.deadline]['first'] = activity.timestamp
-                if (activity.timestamp <= activity.deadline and
-                        activity.timestamp > first_last_timestamps[activity.deadline]['last']):
+                if first_last_timestamps[activity.deadline]['last'] < activity.timestamp <= activity.deadline:
                     first_last_timestamps[activity.deadline]['last'] = activity.timestamp
     if prev:
         # close out last session
