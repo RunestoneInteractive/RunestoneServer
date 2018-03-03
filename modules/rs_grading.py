@@ -590,8 +590,8 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
 
 def _get_next_i_interval(flashcard, q):
     """Get next inter-repetition interval after the n-th repetition"""
-    if q == -1:
-        # If the student has clicked "I want to postpone this to tomorrow."
+    if q == -1 or q == 1 or q == 2:
+        # If the student has clicked "I want to postpone this to tomorrow." or if we think they've forgotten the concept.
         flashcard.i_interval = 1
     elif q == 0:
         flashcard.i_interval = 0
@@ -706,8 +706,13 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                                 (db.user_topic_practice_log.chapter_label == flashcard.chapter_label) &
                                 (db.user_topic_practice_log.sub_chapter_label <= flashcard.sub_chapter_label)).select()
             flashcard.creation_time = (min([f.start_practice for f in flashcard_logs])
-                                       if len(flashcard_logs) > 0 else flashcard.last_presented)
+                                       if len(flashcard_logs) > 0
+                                       else flashcard.last_presented + datetime.timedelta(days=1))
             flashcard.update_record()
+        # There are many questions that students have forgotten and we need to ask them again to make sure they've
+        # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
+        if flashcard.e_factor <= 1.5:
+            flashcard.i_interval = 0
 
     # For each person:
     students = db(db.auth_user.id > 0).select()
