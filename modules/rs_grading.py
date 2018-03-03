@@ -745,7 +745,6 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                     # have multiple records in user_topic_practice_log for the same topic. To this end, in the
                     # presentable_flashcards dictionary, we keep unique records of topics as keys and for each one, we
                     # only include the most up-to-date flashcard.
-                    presentable_flashcards = {}
                     for f in practiced_flashcards:
                         if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
                             presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
@@ -768,8 +767,9 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                 flashcard_log.available_flashcards = len(presentable_flashcards)
                 flashcard_log.update_record()
                 # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
-                del presentable_flashcards[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
-
+                if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_flashcards and
+                        flashcard_log.i_interval != 0):
+                    del presentable_flashcards[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
             if flashcard_log.q == -1:
                 user = db(db.auth_user.id == flashcard_log.user_id).select().first()
                 course = db(db.courses.course_name == flashcard_log.course_name).select().first()
