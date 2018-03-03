@@ -76,7 +76,7 @@
         <!-- social media dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-share-alt" style="opacity: 0.9"></i>
+            <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
           </a>
           <ul class="dropdown-menu social-menu">
               <li>
@@ -185,11 +185,11 @@
         <li class="divider-vertical"></li>
 
         {{if 'user_navs' in globals() and user_navs: }}
-          <li><a href="/{{=request.application}}/default/user/register">Register</a> </li>
+
           {{if 'auth' in globals() and auth.user:}}
               <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
           {{pass}}
-          {{if 'auth' in globals() and not auth.user:}}
+          {{if 'auth' in globals() and not auth.user and request.args(0) != 'login':}}
           <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
           {{pass}}
         {{pass}}
@@ -199,7 +199,9 @@
         <li class="divider-vertical"></li>
 
       </ul>
-
+        {{if request.args(0) == 'login':}}
+        <a href="/{{=request.application}}/default/user/register"><button class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</button></a>
+        {{pass}}
     </div>
   </div>
 
