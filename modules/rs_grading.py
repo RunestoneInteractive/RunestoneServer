@@ -728,9 +728,9 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                                 ).select(orderby= db.user_topic_practice.creation_time)
         # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a wrong answer
         # they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll have multiple records in
-        # user_topic_practice_log for the same topic. To this end, in the presentable_flashcards dictionary, we keep
+        # user_topic_practice_log for the same topic. To this end, in the presented_flashcards dictionary, we keep
         # unique records of topics as keys and for each one, we only include the most up-to-date flashcard.
-        presentable_flashcards = {}
+        presented_flashcards = {}
         # Choose a day way before the start of the semester.
         current_date = datetime.date(2010, 9, 1)
         # B) Go through those practice logs in order.
@@ -749,33 +749,33 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                     # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a
                     # wrong answer they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll
                     # have multiple records in user_topic_practice_log for the same topic. To this end, in the
-                    # presentable_flashcards dictionary, we keep unique records of topics as keys and for each one, we
+                    # presented_flashcards dictionary, we keep unique records of topics as keys and for each one, we
                     # only include the most up-to-date flashcard.
                     for f in practiced_flashcards:
-                        if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
-                            presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                        elif f.start_practice >= presentable_flashcards[
+                        if (f.chapter_label + f.sub_chapter_label) not in presented_flashcards:
+                            presented_flashcards[f.chapter_label + f.sub_chapter_label] = f
+                        elif f.start_practice >= presented_flashcards[
                             f.chapter_label + f.sub_chapter_label].start_practice:
-                            presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
+                            presented_flashcards[f.chapter_label + f.sub_chapter_label] = f
                     # Retrieve all the flashcards that were created on flashcard_log_date or between current_date and
                     # flashcard_log_date.
                     created_flashcards = [f for f in flashcards
                                           if current_date < f.creation_time.date() <= flashcard_log_date]
                     # If the flashcard is created but has not been practiced until today:
                     for f in created_flashcards:
-                        if (f.chapter_label + f.sub_chapter_label) not in presentable_flashcards:
-                            presentable_flashcards[f.chapter_label + f.sub_chapter_label] = f
-                            # Since we do not have 'start_practice' filed in user_topic_practice, we need to add it.
-                            presentable_flashcards[f.chapter_label + f.sub_chapter_label][
+                        if (f.chapter_label + f.sub_chapter_label) not in presented_flashcards:
+                            presented_flashcards[f.chapter_label + f.sub_chapter_label] = f
+                            # Since we do not have 'start_practice' filled in user_topic_practice, we need to add it.
+                            presented_flashcards[f.chapter_label + f.sub_chapter_label][
                                 'start_practice'] = flashcard_log.start_practice
                     # Update current_date for the next iteration.
                     current_date = flashcard_log_date
-                flashcard_log.available_flashcards = len(presentable_flashcards)
+                flashcard_log.available_flashcards = len(presented_flashcards)
                 flashcard_log.update_record()
                 # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
-                if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_flashcards and
+                if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presented_flashcards and
                         flashcard_log.i_interval != 0):
-                    del presentable_flashcards[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
+                    del presented_flashcards[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
             if flashcard_log.q == -1:
                 user = db(db.auth_user.id == flashcard_log.user_id).select().first()
                 course = db(db.courses.course_name == flashcard_log.course_name).select().first()

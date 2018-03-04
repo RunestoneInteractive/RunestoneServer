@@ -6,7 +6,7 @@ from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
-from rs_grading import send_lti_grades, do_fill_user_topic_practice_log_missings
+from rs_grading import send_lti_grades
 
 import logging
 
