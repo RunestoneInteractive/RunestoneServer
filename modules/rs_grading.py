@@ -737,38 +737,40 @@ def do_fill_user_topic_practice_log_missings(db, settings):
         current_date = datetime.date(2010, 9, 1)
         # B) Go through those practice logs in order.
         for flashcard_log in flashcard_logs:
-            # As we go through the practice_log entries for this user, in timestamp order, we always keep track in
-            # last_practiced of the last practice_log for each topic. Keys are topics; values are practice_log rows.
-            last_practiced[flashcard_log.chapter_label + flashcard_log.sub_chapter_label] = flashcard_log
-            # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
-            flashcard_log_date = flashcard_log.start_practice.date()
-            # Whenever you encounter a new date:
-            if flashcard_log_date != current_date:
-                # presentable_topics keeps track of the filtered list of topics that are presentable today.
-                presentable_topics = {}
-                # Retrieve all the flashcards that were created on or before flashcard_log_date.
-                created_flashcards = [f for f in flashcards
-                                      if f.creation_time.date() <= flashcard_log_date]
-                for f in created_flashcards:
-                    # If the flashcard does not have a corresponding key in last_practiced:
-                    if ((f.chapter_label + f.sub_chapter_label) not in last_practiced or
-                            (f.chapter_label == flashcard_log.chapter_label and
-                             f.sub_chapter_label == flashcard_log.sub_chapter_label)):
-                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
-                    # have a corresponding key in last_practiced where the time of the corresponding
-                    # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
-                    elif ((flashcard_log.end_practice.date() -
-                           last_practiced[f.chapter_label + f.sub_chapter_label].end_practice.date()).days >=
-                          last_practiced[f.chapter_label + f.sub_chapter_label].i_interval):
-                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
-                # Update current_date for the next iteration.
-                current_date = flashcard_log_date
-            flashcard_log.available_flashcards = len(presentable_topics)
-            flashcard_log.update_record()
+            if flashcard_log.available_flashcards == -1:
+                # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
+                flashcard_log_date = flashcard_log.start_practice.date()
+                # Whenever you encounter a new date:
+                if flashcard_log_date != current_date:
+                    # presentable_topics keeps track of the filtered list of topics that are presentable today.
+                    presentable_topics = {}
+                    # Retrieve all the flashcards that were created on or before flashcard_log_date.
+                    created_flashcards = [f for f in flashcards
+                                          if f.creation_time.date() <= flashcard_log_date]
+                    for f in created_flashcards:
+                        # If the flashcard does not have a corresponding key in last_practiced:
+                        if ((f.chapter_label + f.sub_chapter_label) not in last_practiced or
+                                (f.chapter_label == flashcard_log.chapter_label and
+                                 f.sub_chapter_label == flashcard_log.sub_chapter_label)):
+                            presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                        # have a corresponding key in last_practiced where the time of the corresponding
+                        # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
+                        elif ((flashcard_log.end_practice.date() -
+                               last_practiced[f.chapter_label + f.sub_chapter_label].end_practice.date()).days >=
+                              last_practiced[f.chapter_label + f.sub_chapter_label].i_interval):
+                            presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                    # Update current_date for the next iteration.
+                    current_date = flashcard_log_date
+                flashcard_log.available_flashcards = len(presentable_topics)
+                flashcard_log.update_record()
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_topics and
                     flashcard_log.i_interval != 0):
                 del presentable_topics[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
+            # As we go through the practice_log entries for this user, in timestamp order, we always keep track in
+            # last_practiced of the last practice_log for each topic. Keys are topics; values are practice_log rows.
+            last_practiced[flashcard_log.chapter_label + flashcard_log.sub_chapter_label] = flashcard_log
+
             if flashcard_log.q == -1:
                 user = db(db.auth_user.id == flashcard_log.user_id).select().first()
                 course = db(db.courses.course_name == flashcard_log.course_name).select().first()
