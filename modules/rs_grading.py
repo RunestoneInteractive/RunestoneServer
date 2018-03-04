@@ -713,6 +713,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
         # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
         if flashcard.e_factor <= 1.5:
             flashcard.i_interval = 0
+            flashcard.update_record()
 
     # For each person:
     students = db(db.auth_user.id > 0).select()
