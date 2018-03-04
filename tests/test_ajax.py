@@ -116,7 +116,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = hsblog()
         request.vars.sid = 'user_11'
         res = getAssessResults()
-        print("RESULTS FROM = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0')
         #self.assertEqual(res['correct'], False)
@@ -131,7 +130,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         request.vars.div_id = 'ca_id_str'
         request.vars.sid = 'user_1674'
         res = json.loads(getAssessResults())
-        print("RES ", res)
         self.assertEqual(res['answer'], '0;1', msg=None)
         self.assertEqual(res['correct'], False)
         # timestamp 2017-09-04 00:56:34
@@ -146,7 +144,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = hsblog()
         request.vars.sid = 'user_11'
         res = getAssessResults()
-        print("RESULTS FROM = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], '0;1')
         self.assertEqual(res['correct'], False)
@@ -170,7 +167,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = hsblog()
         request.vars.sid = 'user_11'
         res = getAssessResults()
-        print("RESULTS FROM = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], 'hello_test')
 
@@ -188,7 +184,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = hsblog()
         request.vars.sid = 'user_11'
         res = getAssessResults()
-        print("RESULTS FROM = ", res)
         res = json.loads(res)
         self.assertEqual(res['answer'], '42')
         self.assertTrue(res['correct'])
@@ -211,7 +206,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = hsblog()
         request.vars.sid = 'user_11'
         res = json.loads(getAssessResults())
-        print(res)
         self.assertTrue(res['correct'])
 
 
@@ -366,7 +360,8 @@ class TestAjaxEndpoints(unittest.TestCase):
 
     def testGetNumOnline(self):
         res = json.loads(getnumonline())
-        self.assertEqual(0, res[0]['online'])
+        # this is 1 because gettop10 adds data to useinfo if the order of the tests change this may fail do to more or less distinct users showing activity in useinfo.
+        self.assertEqual(1, res[0]['online'])
 
     def testGetUserLoggedIn(self):
         auth.login_user(db.auth_user(11))
@@ -426,7 +421,6 @@ class TestAjaxEndpoints(unittest.TestCase):
 """
         request.vars.code = json.dumps(src)
         res = json.loads(preview_question())
-        print("PREVIEW = ", res)
         self.assertTrue('id="preview_test1"' in res)
         self.assertTrue('print("Hello World")' in res)
         self.assertTrue('</textarea>' in res)
@@ -466,11 +460,28 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res.end_date.day, now.day)
         self.assertEqual(res.end_date.year, now.year)
 
+    def test_donations(self):
+        auth.login_user(db.auth_user(1667))
+        res = save_donate()
+        self.assertIsNone(res)
+        res = json.loads(did_donate())
+        self.assertTrue(res['donate'])
+
+    def test_non_donor(self):
+        auth.login_user(db.auth_user(11))
+        res = json.loads(did_donate())
+        self.assertFalse(res['donate'])
+
 
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
-unittest.TextTestRunner(verbosity=2).run(suite)
+res = unittest.TextTestRunner(verbosity=2).run(suite)
+if len(res.errors) == 0 and len(res.failures) == 0:
+    sys.exit(0)
+else:
+    print("nonzero errors exiting with 1", res.errors, res.failures)
+    sys.exit(1)
 
 
 # One month of AJAX on runestone.academy
