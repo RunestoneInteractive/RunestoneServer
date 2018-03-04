@@ -711,6 +711,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
             flashcard.update_record()
         # There are many questions that students have forgotten and we need to ask them again to make sure they've
         # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
+        # Note that the condition used here is only a rough approximation of the condition used in SM2.
         if flashcard.e_factor <= 1.5:
             flashcard.i_interval = 0
             flashcard.update_record()
