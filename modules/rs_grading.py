@@ -613,11 +613,12 @@ def _change_e_factor(flashcard, q):
     return flashcard
 
 
-def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
+def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_delta):
     global logger
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
 
+    now_local = now - tz_delta
     lastQuestion = db(db.questions.id == int(qid)).select().first()
     chapter_label, sub_chapter_label = lastQuestion.topic.split('/')
 
@@ -628,13 +629,13 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
 
     # We need to make sure that the request was a valid request, i.e., the flashcard was supposed to be asked at this time.
-    if (now.date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
+    if (now_local.date() - flashcard.last_completed.date()).days >= flashcard.i_interval:
         # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
         flashcards = db((db.user_topic_practice.course_name == course_name) & \
                         (db.user_topic_practice.user_id == sid)).select()
         # Select only those where enough time has passed since last presentation.
         presentable_flashcards = [f for f in flashcards if
-                                  (now.date() - f.last_completed.date()).days >= f.i_interval]
+                                  (now_local.date() - f.last_completed.date()).days >= f.i_interval]
 
         if q:
             # User clicked one of the self-evaluated answer buttons.
@@ -650,7 +651,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
                                              flashcard.last_presented, db=db, now=now)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
-        flashcard.last_completed = now
+        flashcard.last_completed = now_local
         flashcard.update_record()
 
         db.user_topic_practice_log.insert(
@@ -665,7 +666,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now):
             trials_num=trials_num,
             available_flashcards=len(presentable_flashcards),
             start_practice=flashcard.last_presented,
-            end_practice=now,
+            end_practice=now_local,
         )
 
 

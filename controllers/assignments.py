@@ -402,9 +402,10 @@ def checkanswer():
 
     # If the question id exists:
     if request.vars.QID:
-        now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+        now = datetime.datetime.utcnow()
         # Use the autograding function to update the flashcard's e-factor and i-interval.
-        do_check_answer(sid, course_name, qid, username, q, db, settings, now)
+        do_check_answer(sid, course_name, qid, username, q, db, settings, now,
+                        datetime.timedelta(hours=int(session.timezoneoffset)))
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
     session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
