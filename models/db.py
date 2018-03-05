@@ -170,6 +170,7 @@ db.define_table('auth_user',
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id),readable=False, writable=False),
     Field('active',type='boolean',writable=False,readable=False,default=True),
+    Field('donated', type='boolean', writable=False, readble=False, default=False),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')

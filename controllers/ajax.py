@@ -295,8 +295,9 @@ def savegrade():
 def getuser():
     response.headers['content-type'] = 'application/json'
 
-    if  auth.user:
-        res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
+    if auth.user:
+        res = {'email': auth.user.email, 'nick': auth.user.username,
+               'cohortId': auth.user.cohort_id, 'donated': auth.user.donated}
         session.timezoneoffset = request.vars.timezoneoffset
         logger.debug("setting timezone offset in session %s", session.timezoneoffset)
     else:
@@ -802,3 +803,14 @@ def preview_question():
             return json.dumps(ctext)
 
     return json.dumps(res)
+
+def save_donate():
+    if auth.user:
+        db(db.auth_user.id == auth.user.id).update(donated=True)
+
+def did_donate():
+    if auth.user:
+        d_status = db(db.auth_user.id == auth.user.id).select(db.auth_user.donated).first()
+
+        return json.dumps(dict(donate=d_status.donated))
+    return json.dumps(dict(donate=False))
