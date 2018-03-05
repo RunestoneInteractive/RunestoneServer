@@ -104,7 +104,8 @@ def _score_one_codelens(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
-def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
+                              now=None):
     query = ((db.mchoice_answers.course_name == course_name) & \
             (db.mchoice_answers.sid == sid) & \
             (db.mchoice_answers.div_id == question_name) \
@@ -113,11 +114,13 @@ def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline,
         query = query & (db.mchoice_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.mchoice_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.mchoice_answers.timestamp <= now)
     return db(query).select(orderby=db.mchoice_answers.timestamp)
 
 
 def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=None, question_type=None,
-                       practice_start_time=None, db=None):
+                       practice_start_time=None, db=None, now=None):
     # look in useinfo, to see if visited (before deadline)
     # sid matches auth_user.username, not auth_user.id
     # if question type is page we must do better with the div_id
@@ -138,10 +141,13 @@ def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter=
         query = query & (db.useinfo.timestamp < deadline)
     if practice_start_time:
         query = query & (db.useinfo.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.useinfo.timestamp <= now)
     return db(query).select(db.useinfo.id, db.useinfo.act, orderby=db.useinfo.timestamp)
 
 
-def _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
+                              now=None):
     query = ((db.parsons_answers.course_name == course_name) & \
             (db.parsons_answers.sid == sid) & \
             (db.parsons_answers.div_id == question_name) \
@@ -150,10 +156,13 @@ def _scorable_parsons_answers(course_name, sid, question_name, points, deadline,
         query = query & (db.parsons_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.parsons_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.parsons_answers.timestamp <= now)
     return db(query).select(orderby=db.parsons_answers.timestamp)
 
 
-def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
+                           now=None):
     query = ((db.fitb_answers.course_name == course_name) & \
             (db.fitb_answers.sid == sid) & \
             (db.fitb_answers.div_id == question_name) \
@@ -162,10 +171,13 @@ def _scorable_fitb_answers(course_name, sid, question_name, points, deadline, pr
         query = query & (db.fitb_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.fitb_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.fitb_answers.timestamp <= now)
     return db(query).select(orderby=db.fitb_answers.timestamp)
 
 
-def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline, practice_start_time=None,
+                                    db=None, now=None):
     query = ((db.clickablearea_answers.course_name == course_name) & \
             (db.clickablearea_answers.sid == sid) & \
             (db.clickablearea_answers.div_id == question_name) \
@@ -174,10 +186,13 @@ def _scorable_clickablearea_answers(course_name, sid, question_name, points, dea
         query = query & (db.clickablearea_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.clickablearea_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.clickablearea_answers.timestamp <= now)
     return db(query).select(orderby=db.clickablearea_answers.timestamp)
 
 
-def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
+                                now=None):
     query = ((db.dragndrop_answers.course_name == course_name) & \
             (db.dragndrop_answers.sid == sid) & \
             (db.dragndrop_answers.div_id == question_name) \
@@ -186,10 +201,13 @@ def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadlin
         query = query & (db.dragndrop_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.dragndrop_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.dragndrop_answers.timestamp <= now)
     return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
 
-def _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None):
+def _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
+                               now=None):
     query = ((db.codelens_answers.course_name == course_name) & \
             (db.codelens_answers.sid == sid) & \
             (db.codelens_answers.div_id == question_name) \
@@ -198,6 +216,8 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
         query = query & (db.codelens_answers.timestamp < deadline)
     if practice_start_time:
         query = query & (db.codelens_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.codelens_answers.timestamp <= now)
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 
@@ -233,41 +253,46 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         else:
             event_filter = None
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter,
-                                     practice_start_time=practice_start_time, db=db)
+                                     practice_start_time=practice_start_time, db=db, now=now)
         scoring_fn = _score_one_code_run
     elif question_type == 'mchoice':
-        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
+        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time,
+                                            db=db, now=now)
         scoring_fn = _score_one_mchoice
     elif question_type == 'page':
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page',
-                                     practice_start_time=practice_start_time, db=db)
+                                     practice_start_time=practice_start_time, db=db, now=now)
         scoring_fn = _score_one_interaction
     elif question_type == 'parsonsprob':
-        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
+        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline, practice_start_time,
+                                            db=db, now=now)
         scoring_fn = _score_one_parsons
     elif question_type == 'fillintheblank':
-        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
+        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db,
+                                         now=now)
         scoring_fn = _score_one_fitb
     elif question_type == 'clickablearea':
         results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline,
-                                                  practice_start_time, db=db)
+                                                  practice_start_time, db=db, now=now)
         scoring_fn = _score_one_clickablearea
     elif question_type == 'dragndrop':
-        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
+        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline, practice_start_time,
+                                              db=db, now=now)
         scoring_fn = _score_one_dragndrop
     elif question_type == 'codelens':
         if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
             results = _scorable_useinfos(course_name, sid, question_name, points, deadline,
-                                         practice_start_time=practice_start_time, db=db)
+                                         practice_start_time=practice_start_time, db=db, now=now)
             scoring_fn = _score_one_interaction
         else:
-            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time, db=db)
+            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time,
+                                                 db=db, now=now)
             scoring_fn = _score_one_codelens
     elif question_type in ['video', 'showeval']:
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
-                                     practice_start_time=practice_start_time, db=db)
+                                     practice_start_time=practice_start_time, db=db, now=now)
         scoring_fn = _score_one_interaction
 
     else:
@@ -565,8 +590,8 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
 
 def _get_next_i_interval(flashcard, q):
     """Get next inter-repetition interval after the n-th repetition"""
-    if q == -1:
-        # If the student has clicked "I want to postpone this to tomorrow."
+    if q == -1 or q == 1 or q == 2:
+        # If the student has clicked "I want to postpone this to tomorrow." or if we think they've forgotten the concept.
         flashcard.i_interval = 1
     elif q == 0:
         flashcard.i_interval = 0
@@ -648,7 +673,8 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
     page_visits = db((db.useinfo.course_id == course_name) & \
                      (db.useinfo.sid == sid) & \
                      (db.useinfo.event == 'page') & \
-                     (db.useinfo.timestamp >= practice_start_time)) \
+                     (db.useinfo.timestamp >= practice_start_time) & \
+                     (db.useinfo.timestamp <= now)) \
         .select()
     practice_duration = (now - practice_start_time).seconds / 60
     practice_score = 0
@@ -664,3 +690,101 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
         else:
             practice_score = 1
     return (practice_score, trials_count)
+
+
+def do_fill_user_topic_practice_log_missings(db, settings):
+    global logger
+    logger = logging.getLogger(settings.logger)
+    logger.setLevel(settings.log_level)
+
+    # Recreate the user_topic_practice creation time for existing records, based on first time it was actually
+    # practiced.
+    flashcards = db(db.user_topic_practice.id > 0).select()
+    for flashcard in flashcards:
+        if flashcard.creation_time is None:
+            flashcard_logs = db((db.user_topic_practice_log.course_name == flashcard.course_name) &
+                                (db.user_topic_practice_log.chapter_label == flashcard.chapter_label) &
+                                (db.user_topic_practice_log.sub_chapter_label <= flashcard.sub_chapter_label)).select()
+            flashcard.creation_time = (min([f.start_practice for f in flashcard_logs])
+                                       if len(flashcard_logs) > 0
+                                       else flashcard.last_presented + datetime.timedelta(days=1))
+            flashcard.update_record()
+        # There are many questions that students have forgotten and we need to ask them again to make sure they've
+        # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
+        # Note that the condition used here is only a rough approximation of the condition used in SM2.
+        if flashcard.e_factor <= 1.5:
+            flashcard.i_interval = 0
+            flashcard.update_record()
+
+    # For each person:
+    students = db(db.auth_user.id > 0).select()
+    for student in students:
+        # A) Retrieve all their practice logs, ordered by timestamp.
+        flashcard_logs = db((db.user_topic_practice_log.user_id == student.id) &
+                            (db.user_topic_practice_log.course_name == student.course_name)
+                            ).select(orderby= db.user_topic_practice_log.start_practice)
+        # Retrieve all their flashcards, ordered by creation_time.
+        flashcards = db((db.user_topic_practice.course_name == student.course_name) &
+                                (db.user_topic_practice.user_id == student.id)
+                                ).select(orderby= db.user_topic_practice.creation_time)
+        # The retrieved flashcards are not unique, i.e., after practicing a flashcard, if they submit a wrong answer
+        # they'll do it again in the same day, otherwise, they'll do it tomorrow. So, we'll have multiple records in
+        # user_topic_practice_log for the same topic. To this end, in the last_practiced dictionary, we keep
+        # unique records of topics as keys and for each one, we only include the most up-to-date flashcard_log.
+        last_practiced = {}
+        presentable_topics = {}
+        # Choose a day way before the start of the semester.
+        current_date = datetime.date(2010, 9, 1)
+        # B) Go through those practice logs in order.
+        for flashcard_log in flashcard_logs:
+            # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
+            flashcard_log_date = flashcard_log.start_practice.date()
+            # Whenever you encounter a new date:
+            if flashcard_log_date != current_date:
+                # presentable_topics keeps track of the filtered list of topics that are presentable today.
+                presentable_topics = {}
+                # Retrieve all the flashcards that were created on or before flashcard_log_date.
+                created_flashcards = [f for f in flashcards
+                                      if f.creation_time.date() <= flashcard_log_date]
+                for f in created_flashcards:
+                    # If the flashcard does not have a corresponding key in last_practiced:
+                    if (f.chapter_label + f.sub_chapter_label) not in last_practiced:
+                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                    # have a corresponding key in last_practiced where the time of the corresponding
+                    # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
+                    elif ((flashcard_log.end_practice.date() -
+                           last_practiced[f.chapter_label + f.sub_chapter_label].end_practice.date()).days >=
+                          last_practiced[f.chapter_label + f.sub_chapter_label].i_interval):
+                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                # Update current_date for the next iteration.
+                current_date = flashcard_log_date
+            flashcard_log.available_flashcards = len(presentable_topics)
+            flashcard_log.update_record()
+            # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
+            if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_topics and
+                    flashcard_log.i_interval != 0):
+                del presentable_topics[flashcard_log.chapter_label + flashcard_log.sub_chapter_label]
+            # As we go through the practice_log entries for this user, in timestamp order, we always keep track in
+            # last_practiced of the last practice_log for each topic. Keys are topics; values are practice_log rows.
+            last_practiced[flashcard_log.chapter_label + flashcard_log.sub_chapter_label] = flashcard_log
+
+            if flashcard_log.q == -1:
+                user = db(db.auth_user.id == flashcard_log.user_id).select().first()
+                course = db(db.courses.course_name == flashcard_log.course_name).select().first()
+
+                question = db((db.questions.base_course == course.base_course) & \
+                              (db.questions.name == flashcard_log.question_name) & \
+                              (db.questions.topic == "{}/{}".format(flashcard_log.chapter_label,
+                                                                    flashcard_log.sub_chapter_label)) & \
+                              (db.questions.practice == True)).select().first()
+                # Compute q using the auto grader
+                autograde = 'pct_correct'
+                if question.autograde is not None:
+                    autograde = question.autograde
+                q, trials_num = _autograde_one_q(course.course_name, user.username, question.name, 100,
+                                             question.question_type, None, autograde, 'last_answer', False,
+                                             flashcard_log.start_practice, db=db, now=flashcard_log.end_practice)
+                flashcard_log.q = q
+                flashcard_log.trials_num = trials_num
+                flashcard_log.update_record()
+

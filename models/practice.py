@@ -9,6 +9,7 @@ db.define_table('user_topic_practice',
                 Field('last_practice', type='datetime'),
                 Field('last_presented', type='datetime'),
                 Field('last_completed', type='datetime'),
+                Field('creation_time', type='datetime'),
                 migrate='runestone_spacing.table')
 
 

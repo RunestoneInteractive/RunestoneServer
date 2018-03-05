@@ -405,3 +405,17 @@ def findProjectRoot():
         prevdir = start
         start = os.path.dirname(start)
     raise IOError("You must be in a web2py application to run rsmanage")
+
+#
+#    fill_practice_log_missings
+#
+
+@cli.command()
+@pass_config
+def fill_practice_log_missings(config):
+    """Only for one-time use to fill out the missing values of the columns that we added to user_topic_practice_log table during the semester."""
+    os.chdir(findProjectRoot())
+
+    subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py", shell=True)
+
+
