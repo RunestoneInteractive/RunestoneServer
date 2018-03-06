@@ -223,7 +223,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
-                     practice_start_time = None, db=None, now=None):
+                     practice_start_time=None, db=None, now=None, tz_delta=None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
@@ -333,14 +333,14 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         _save_question_grade(sid, course_name, question_name, score, id, deadline, db)
 
     if practice_start_time:
-        return _score_practice_quality(practice_start_time,
+        return _score_practice_quality(practice_start_time - tz_delta,
                                        course_name,
                                        sid,
                                        points,
                                        score,
                                        len(results) if results else 0,
                                        db,
-                                       now)
+                                       now - tz_delta)
     return score
 
 
@@ -580,7 +580,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         for s in sids:
             if autograde != 'manual':
                 _autograde_one_q(course_name, s, qdiv, points, question_type,
-                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade, db=db)
+                                 deadline=deadline, autograde=autograde, which_to_grade=which_to_grade, db=db)
                 count += 1
 
     # _profile(start, "after calls to _autograde_one_q")
@@ -648,7 +648,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
                 autograde = lastQuestion.autograde
             q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                              lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                             flashcard.last_presented, db=db, now=now)
+                                             flashcard.last_presented + tz_delta, db=db, now=now, tz_delta=tz_delta)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
         flashcard.last_completed = now_local
@@ -785,7 +785,9 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                     autograde = question.autograde
                 q, trials_num = _autograde_one_q(course.course_name, user.username, question.name, 100,
                                              question.question_type, None, autograde, 'last_answer', False,
-                                             flashcard_log.start_practice, db=db, now=flashcard_log.end_practice)
+                                             flashcard_log.start_practice + datetime.timedelta(hours=5),
+                                             db=db,
+                                             now=flashcard_log.end_practice + datetime.timedelta(hours=5))
                 flashcard_log.q = q
                 flashcard_log.trials_num = trials_num
                 flashcard_log.update_record()
