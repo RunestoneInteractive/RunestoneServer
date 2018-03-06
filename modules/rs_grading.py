@@ -223,7 +223,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
-                     practice_start_time = None, db=None, now=None):
+                     practice_start_time=None, db=None, now=None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
@@ -580,7 +580,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         for s in sids:
             if autograde != 'manual':
                 _autograde_one_q(course_name, s, qdiv, points, question_type,
-                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade, db=db)
+                                 deadline=deadline, autograde=autograde, which_to_grade=which_to_grade, db=db)
                 count += 1
 
     # _profile(start, "after calls to _autograde_one_q")
@@ -648,7 +648,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
                 autograde = lastQuestion.autograde
             q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                              lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                             flashcard.last_presented, db=db, now=now)
+                                             flashcard.last_presented + tz_delta, db=db, now=now)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
         flashcard.last_completed = now_local
@@ -738,29 +738,30 @@ def do_fill_user_topic_practice_log_missings(db, settings):
         current_date = datetime.date(2010, 9, 1)
         # B) Go through those practice logs in order.
         for flashcard_log in flashcard_logs:
-            # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
-            flashcard_log_date = flashcard_log.start_practice.date()
-            # Whenever you encounter a new date:
-            if flashcard_log_date != current_date:
-                # presentable_topics keeps track of the filtered list of topics that are presentable today.
-                presentable_topics = {}
-                # Retrieve all the flashcards that were created on or before flashcard_log_date.
-                created_flashcards = [f for f in flashcards
-                                      if f.creation_time.date() <= flashcard_log_date]
-                for f in created_flashcards:
-                    # If the flashcard does not have a corresponding key in last_practiced:
-                    if (f.chapter_label + f.sub_chapter_label) not in last_practiced:
-                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
-                    # have a corresponding key in last_practiced where the time of the corresponding
-                    # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
-                    elif ((flashcard_log.end_practice.date() -
-                           last_practiced[f.chapter_label + f.sub_chapter_label].end_practice.date()).days >=
-                          last_practiced[f.chapter_label + f.sub_chapter_label].i_interval):
-                        presentable_topics[f.chapter_label + f.sub_chapter_label] = f
-                # Update current_date for the next iteration.
-                current_date = flashcard_log_date
-            flashcard_log.available_flashcards = len(presentable_topics)
-            flashcard_log.update_record()
+            if flashcard_log.available_flashcards == -1:
+                # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
+                flashcard_log_date = flashcard_log.start_practice.date()
+                # Whenever you encounter a new date:
+                if flashcard_log_date != current_date:
+                    # presentable_topics keeps track of the filtered list of topics that are presentable today.
+                    presentable_topics = {}
+                    # Retrieve all the flashcards that were created on or before flashcard_log_date.
+                    created_flashcards = [f for f in flashcards
+                                          if f.creation_time.date() <= flashcard_log_date]
+                    for f in created_flashcards:
+                        # If the flashcard does not have a corresponding key in last_practiced:
+                        if (f.chapter_label + f.sub_chapter_label) not in last_practiced:
+                            presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                        # have a corresponding key in last_practiced where the time of the corresponding
+                        # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
+                        elif ((flashcard_log.end_practice.date() -
+                               last_practiced[f.chapter_label + f.sub_chapter_label].end_practice.date()).days >=
+                              last_practiced[f.chapter_label + f.sub_chapter_label].i_interval):
+                            presentable_topics[f.chapter_label + f.sub_chapter_label] = f
+                    # Update current_date for the next iteration.
+                    current_date = flashcard_log_date
+                flashcard_log.available_flashcards = len(presentable_topics)
+                flashcard_log.update_record()
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_topics and
                     flashcard_log.i_interval != 0):
@@ -784,7 +785,9 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                     autograde = question.autograde
                 q, trials_num = _autograde_one_q(course.course_name, user.username, question.name, 100,
                                              question.question_type, None, autograde, 'last_answer', False,
-                                             flashcard_log.start_practice, db=db, now=flashcard_log.end_practice)
+                                             flashcard_log.start_practice + datetime.timedelta(hours=5),
+                                             db=db,
+                                             now=flashcard_log.end_practice + datetime.timedelta(hours=5))
                 flashcard_log.q = q
                 flashcard_log.trials_num = trials_num
                 flashcard_log.update_record()
