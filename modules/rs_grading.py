@@ -223,7 +223,7 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
 
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
-                     practice_start_time=None, db=None, now=None, tz_delta=None):
+                     practice_start_time=None, db=None, now=None):
     logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
     if not autograde:
         logger.debug("autograde not set returning 0")
@@ -333,14 +333,14 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         _save_question_grade(sid, course_name, question_name, score, id, deadline, db)
 
     if practice_start_time:
-        return _score_practice_quality(practice_start_time - tz_delta,
+        return _score_practice_quality(practice_start_time,
                                        course_name,
                                        sid,
                                        points,
                                        score,
                                        len(results) if results else 0,
                                        db,
-                                       now - tz_delta)
+                                       now)
     return score
 
 
@@ -648,7 +648,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
                 autograde = lastQuestion.autograde
             q, trials_num = _autograde_one_q(course_name, username, lastQuestion.name, 100,
                                              lastQuestion.question_type, None, autograde, 'last_answer', False,
-                                             flashcard.last_presented + tz_delta, db=db, now=now, tz_delta=tz_delta)
+                                             flashcard.last_presented + tz_delta, db=db, now=now)
         flashcard = _change_e_factor(flashcard, q)
         flashcard = _get_next_i_interval(flashcard, q)
         flashcard.last_completed = now_local
