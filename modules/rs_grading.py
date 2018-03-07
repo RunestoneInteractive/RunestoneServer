@@ -765,7 +765,7 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     flashcard_log.update_record()
                 if (testing_mode and flashcard_log.id >= 42904 and
                         (flashcard_log.available_flashcards != len(presentable_topics))):
-                    print("I estimated for the following flashcard available_flashcardsq =", len(presentable_topics),
+                    print("I calculated for the following flashcard available_flashcardsq =", len(presentable_topics),
                           "However:")
                     print(flashcard_log)
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
@@ -798,7 +798,7 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     flashcard_log.q = q
                     flashcard_log.trials_num = trials_num
                     flashcard_log.update_record()
-                if testing_mode and (flashcard_log.q != q and flashcard_log.trials_num != trials_num):
-                    print("I estimated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
+                if testing_mode and flashcard_log.q != q and flashcard_log.trials_num != trials_num:
+                    print("I calculated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
                     print(flashcard_log)
 
