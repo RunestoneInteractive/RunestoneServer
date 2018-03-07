@@ -693,7 +693,7 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
     return (practice_score, trials_count)
 
 
-def do_fill_user_topic_practice_log_missings(db, settings):
+def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
     global logger
     logger = logging.getLogger(settings.logger)
     logger.setLevel(settings.log_level)
@@ -713,9 +713,9 @@ def do_fill_user_topic_practice_log_missings(db, settings):
         # There are many questions that students have forgotten and we need to ask them again to make sure they've
         # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
         # Note that the condition used here is only a rough approximation of the condition used in SM2.
-        if flashcard.e_factor <= 1.5:
-            flashcard.i_interval = 0
-            flashcard.update_record()
+        # if flashcard.e_factor <= 1.5:
+        #     flashcard.i_interval = 0
+        #     flashcard.update_record()
 
     # For each person:
     students = db(db.auth_user.id > 0).select()
@@ -738,7 +738,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
         current_date = datetime.date(2010, 9, 1)
         # B) Go through those practice logs in order.
         for flashcard_log in flashcard_logs:
-            if flashcard_log.available_flashcards == -1:
+            if testing_mode or flashcard_log.available_flashcards == -1:
                 # We calculate available_flashcards only for the flashcard logs without the # of available flashcards.
                 flashcard_log_date = flashcard_log.start_practice.date()
                 # Whenever you encounter a new date:
@@ -760,8 +760,14 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                             presentable_topics[f.chapter_label + f.sub_chapter_label] = f
                     # Update current_date for the next iteration.
                     current_date = flashcard_log_date
-                flashcard_log.available_flashcards = len(presentable_topics)
-                flashcard_log.update_record()
+                if flashcard_log.id < 42904 and flashcard_log.available_flashcards == -1:
+                    flashcard_log.available_flashcards = len(presentable_topics)
+                    flashcard_log.update_record()
+                if (testing_mode and flashcard_log.id >= 42904 and
+                        (flashcard_log.available_flashcards != len(presentable_topics))):
+                    print("I estimated for the following flashcard available_flashcardsq =", len(presentable_topics),
+                          "However:")
+                    print(flashcard_log)
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_topics and
                     flashcard_log.i_interval != 0):
@@ -770,7 +776,7 @@ def do_fill_user_topic_practice_log_missings(db, settings):
             # last_practiced of the last practice_log for each topic. Keys are topics; values are practice_log rows.
             last_practiced[flashcard_log.chapter_label + flashcard_log.sub_chapter_label] = flashcard_log
 
-            if flashcard_log.q == -1:
+            if testing_mode or flashcard_log.q == -1:
                 user = db(db.auth_user.id == flashcard_log.user_id).select().first()
                 course = db(db.courses.course_name == flashcard_log.course_name).select().first()
 
@@ -788,7 +794,11 @@ def do_fill_user_topic_practice_log_missings(db, settings):
                                              flashcard_log.start_practice + datetime.timedelta(hours=5),
                                              db=db,
                                              now=flashcard_log.end_practice + datetime.timedelta(hours=5))
-                flashcard_log.q = q
-                flashcard_log.trials_num = trials_num
-                flashcard_log.update_record()
+                if flashcard_log.q == -1:
+                    flashcard_log.q = q
+                    flashcard_log.trials_num = trials_num
+                    flashcard_log.update_record()
+                if testing_mode and (flashcard_log.q != q and flashcard_log.trials_num != trials_num):
+                    print("I estimated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
+                    print(flashcard_log)
 
