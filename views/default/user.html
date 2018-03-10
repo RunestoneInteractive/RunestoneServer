@@ -186,7 +186,7 @@
             <tr id="auth_user_username__row">
                 <td class="w2p_fl"><label class="" for="auth_user_username"
                                           id="auth_user_username__label">Username: </label></td>
-                <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value=""/>
+                <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value="{{=form.vars.username if form.vars.username else ""}}"/>
                 </td>
                 <td class="w2p_fc"></td>
             </tr>
@@ -194,20 +194,20 @@
                 <td class="w2p_fl"><label class="" for="auth_user_first_name" id="auth_user_first_name__label">First
                     Name: </label></td>
                 <td class="w2p_fw"><input class="string" id="auth_user_first_name" name="first_name" type="text"
-                                          value=""/></td>
+                                          value="{{=form.vars.first_name if form.vars.first_name else ""}}"/></td>
                 <td class="w2p_fc"></td>
             </tr>
             <tr id="auth_user_last_name__row">
                 <td class="w2p_fl"><label class="" for="auth_user_last_name" id="auth_user_last_name__label">Last
                     Name: </label></td>
                 <td class="w2p_fw"><input class="string" id="auth_user_last_name" name="last_name" type="text"
-                                          value=""/></td>
+                                          value="{{=form.vars.last_name if form.vars.last_name else ""}}"/></td>
                 <td class="w2p_fc"></td>
             </tr>
             <tr id="auth_user_email__row">
                 <td class="w2p_fl"><label class="" for="auth_user_email" id="auth_user_email__label">Email: </label>
                 </td>
-                <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value=""/></td>
+                <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value="{{=form.vars.email if form.vars.email else ""}}"/></td>
                 <td class="w2p_fc"></td>
             </tr>
             <tr id="auth_user_password__row">
@@ -229,7 +229,7 @@
                     Name: </label></td>
                 <td class="w2p_fw ui-widget">
                     <input class="string" id="auth_user_course_id" name="course_id" type="text"
-                                          value=""/>
+                                          value="{{=form.vars.course_id if form.vars.course_id else ""}}"/>
                 </td>
             </tr>
             <tr id="donation_row">
@@ -284,6 +284,16 @@
         </script>
     {{=form.custom.end}}
     </form> <!-- this tag is superflous as it is added by prev line -->
+        {{if form.errors: }}
+        <div class="warning">
+        <p><b>Please fix the following errors in your registration</b></p>
+            <ul>
+        {{ for error in form.errors:}}
+        <li>{{=error}}:  {{=form.errors[error]}}</li>
+        {{pass}}
+            </ul>
+        </div>
+        {{pass}}
     </div> <!-- end form div -->
     </div>
         <div class="col-md-6">
