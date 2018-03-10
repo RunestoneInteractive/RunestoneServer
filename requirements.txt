@@ -10,7 +10,7 @@ requests>=2.10.0
 runestone>=3.0.7
 selenium>=2.53.6
 six>=1.10.0
-Sphinx>=1.6.3
+Sphinx==1.6.3
 sphinxcontrib-paverutils>=1.7
 SQLAlchemy>=1.0.14
 cssselect>=1.0
