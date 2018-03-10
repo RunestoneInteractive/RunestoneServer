@@ -296,10 +296,13 @@ def getuser():
     response.headers['content-type'] = 'application/json'
 
     if auth.user:
-        res = {'email': auth.user.email, 'nick': auth.user.username,
-               'cohortId': auth.user.cohort_id, 'donated': auth.user.donated}
-        session.timezoneoffset = request.vars.timezoneoffset
-        logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+        try:
+            res = {'email': auth.user.email, 'nick': auth.user.username,
+                   'cohortId': auth.user.cohort_id, 'donated': auth.user.donated}
+            session.timezoneoffset = request.vars.timezoneoffset
+            logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+        except:
+            res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
     logger.debug("returning login info: %s",res)
