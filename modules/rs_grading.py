@@ -709,7 +709,8 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
             flashcard.creation_time = (min([f.start_practice for f in flashcard_logs])
                                        if len(flashcard_logs) > 0
                                        else flashcard.last_presented + datetime.timedelta(days=1))
-            flashcard.update_record()
+            if not testing_mode:
+                flashcard.update_record()
         # There are many questions that students have forgotten and we need to ask them again to make sure they've
         # learned the concepts. We need this to compensate for the wrong change we made to SuperMemo 2.
         # Note that the condition used here is only a rough approximation of the condition used in SM2.
@@ -762,7 +763,8 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     current_date = flashcard_log_date
                 if flashcard_log.id < 42904 and flashcard_log.available_flashcards == -1:
                     flashcard_log.available_flashcards = len(presentable_topics)
-                    flashcard_log.update_record()
+                    if not testing_mode:
+                        flashcard_log.update_record()
                 if (testing_mode and flashcard_log.id >= 42904 and
                         (flashcard_log.available_flashcards != len(presentable_topics))):
                     print("I calculated for the following flashcard available_flashcardsq =", len(presentable_topics),
@@ -797,8 +799,10 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                 if flashcard_log.q == -1:
                     flashcard_log.q = q
                     flashcard_log.trials_num = trials_num
-                    flashcard_log.update_record()
-                if testing_mode and flashcard_log.q != q and flashcard_log.trials_num != trials_num:
+                    if not testing_mode:
+                        flashcard_log.update_record()
+                if testing_mode and flashcard_log.id >= 20854 and \
+                                flashcard_log.q != q and flashcard_log.trials_num != trials_num:
                     print("I calculated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
                     print(flashcard_log)
 
