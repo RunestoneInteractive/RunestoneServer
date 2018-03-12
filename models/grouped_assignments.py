@@ -218,13 +218,27 @@ def get_deadline(assignment, user):
 
 def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False, all_non_problem_sets=False,
                         as_of_timestamp=None):
+    def get_deadline(assignment_id, user_id):
+        section = section_users(db.auth_user.id == user_id).select(db.sections.ALL).first()
+        q = db(db.deadlines.assignment == assignment_id)
+        if section:
+            q = q((db.deadlines.section == section.id) | (db.deadlines.section==None))
+        else:
+            q = q(db.deadlines.section==None)
+        dl = q.select(db.deadlines.ALL, orderby=db.deadlines.section).first()
+        if dl:
+            return dl.deadline  #a datetime object
+        else:
+            return None
+
     if all_problem_sets:
+        p2a = {}
+        for p in db(db.assignment_types.id == db.assignments.assignment_type)(db.assignment_types.grade_type == 'use')(
+                db.problems.assignment == db.assignments.id).select():
+            p2a[canonicalize(p.problems.acid)] = p.assignments.id
         # In order to get the deadline for each assignment, we join useinfo and question_grades.
         q = db((db.useinfo.sid == user.username) &
-               (db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')) &
-               (db.question_grades.useinfo_id == db.useinfo.id) &
-               (db.question_grades.course_name == user.course_name) &
-               (db.question_grades.div_id == db.useinfo.div_id))
+               (db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
 
     elif all_non_problem_sets:
         q = db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') |
@@ -238,11 +252,9 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
                 q = q(db.useinfo.timestamp < dl)
     if as_of_timestamp:
         q = q(db.useinfo.timestamp < as_of_timestamp)
-    if all_problem_sets:
-        # In order to get the deadline for each assignment, we join useinfo and question_grades.
-        activities = q.select(db.useinfo.timestamp, db.question_grades.deadline, orderby=db.useinfo.timestamp)
-    else:
-        activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
+
+    activities = q.select(db.useinfo.timestamp, db.useinfo.div_id, orderby=db.useinfo.timestamp)
+
     if all_problem_sets:
         # We want to define a variable that measures how early each student works on their assignments. We suppose this
         # measure as the inverse of a measurement of procrastination.
@@ -252,19 +264,12 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
     THRESH = 300
     prev = None
     for activity in activities:
-        if all_problem_sets:
-            timestamp = activity.useinfo.timestamp
-            deadline = activity.question_grades.deadline
-        else:
-            timestamp = activity.timestamp
+        timestamp = activity.timestamp
         if not prev:
             # first activity; start a session for it
             sessions.append(Session(timestamp))
         else:
-            if all_problem_sets:
-                prev_timestamp = prev.useinfo.timestamp
-            else:
-                prev_timestamp = prev.timestamp
+            prev_timestamp = prev.timestamp
             if (timestamp - prev_timestamp).total_seconds() > THRESH:
                 # close previous session; set its end time be previous activity's time, plus THRESH seconds
                 sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
@@ -272,7 +277,8 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
                 sessions.append(Session(timestamp))
         prev = activity
 
-        if all_problem_sets:
+        if all_problem_sets and canonicalize(activity.div_id) in p2a:
+            deadline = get_deadline(p2a[canonicalize(activity.div_id)], user.id)
             # Assuming that assignments have unique deadlines, we take the deadline as a representative of each
             # assignment.
             if deadline not in first_last_timestamps:
@@ -284,10 +290,7 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
                 if first_last_timestamps[deadline]['last'] < timestamp <= deadline:
                     first_last_timestamps[deadline]['last'] = timestamp
     if prev:
-        if all_problem_sets:
-            prev_timestamp = prev.useinfo.timestamp
-        else:
-            prev_timestamp = prev.timestamp
+        prev_timestamp = prev.timestamp
         # close out last session
         sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
 
