@@ -274,15 +274,16 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         if all_problem_sets:
             deadline = activity.assignments.duedate
             assignment_id = activity.assignments.id
-            # Use assignment id as key.
-            if assignment_id not in first_last_timestamps:
-                first_last_timestamps[assignment_id] = {'first': timestamp, 'last': timestamp, 'deadline':deadline}
-            else:
-                # We need to find the first and last timestamps that the student worked on each assignment.
-                if timestamp < first_last_timestamps[assignment_id]['first']:
-                    first_last_timestamps[assignment_id]['first'] = timestamp
-                if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
-                    first_last_timestamps[assignment_id]['last'] = timestamp
+            if timestamp <= deadline:
+                # Use assignment id as key.
+                if assignment_id not in first_last_timestamps:
+                    first_last_timestamps[assignment_id] = {'first': timestamp, 'last': timestamp, 'deadline': deadline}
+                else:
+                    # We need to find the first and last timestamps that the student worked on each assignment.
+                    if timestamp < first_last_timestamps[assignment_id]['first']:
+                        first_last_timestamps[assignment_id]['first'] = timestamp
+                    if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
+                        first_last_timestamps[assignment_id]['last'] = timestamp
     if prev:
         if all_problem_sets:
             prev_timestamp = prev.useinfo.timestamp
