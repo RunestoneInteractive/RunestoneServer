@@ -50,7 +50,7 @@
 
       payment: function(data, actions) {
         var amt_opts = document.getElementsByName("donate")
-        var amt = "10.00"
+        var amt = ""
         for (let rb of amt_opts) {
             if (rb.type === "radio" & rb.checked) {
                 amt = rb.value
