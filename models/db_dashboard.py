@@ -175,7 +175,7 @@ class UserActivity(object):
         # returns page views for the last 7 days
         recentViewCount = 0
         current = len(self.rows) - 1
-        while current >= 0 and self.rows[current]['timestamp'] >= datetime.now() - timedelta(days=7):
+        while current >= 0 and self.rows[current]['timestamp'] >= datetime.utcnow() - timedelta(days=7):
             recentViewCount += 1
             current = current - 1
         return recentViewCount
