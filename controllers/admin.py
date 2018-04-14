@@ -552,7 +552,7 @@ def createAssignment():
             due = datetime.datetime.strptime(d_str, format_str)
         else:
             due = None
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.now() + datetime.timedelta(days=7))
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
@@ -758,7 +758,7 @@ def edit_question():
         return "Could not find question {} to update".format(old_qname)
 
     author = auth.user.first_name + " " + auth.user.last_name
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.datetime.utcnow()
     chapter = old_question.chapter
     question_type = old_question.question_type
     subchapter = old_question.subchapter
@@ -883,7 +883,7 @@ def createquestion():
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
+                 question=request.vars['question'], timestamp=datetime.datetime.utcnow(), question_type=request.vars['template'],
                  is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
         assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points)
@@ -1147,7 +1147,7 @@ def save_assignment():
         due = datetime.datetime.strptime(d_str, format_str)
     except:
         logger.error("Bad Date format for assignment: {}".format(d_str))
-        due = datetime.datetime.now() + datetime.timedelta(7)
+        due = datetime.datetime.utcnow() + datetime.timedelta(7)
     try:
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,
