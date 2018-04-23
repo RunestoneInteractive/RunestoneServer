@@ -296,6 +296,7 @@ class UserLogCategorizer(object):
 
     @staticmethod
     def format_event(event, action, div_id):
+        short_div_id = div_id
         if len(div_id) > 25:
             short_div_id = "...{0}".format(div_id[-25:])
         if (event == 'page') & (action == 'view'):
