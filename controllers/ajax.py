@@ -817,3 +817,17 @@ def did_donate():
 
         return json.dumps(dict(donate=d_status.donated))
     return json.dumps(dict(donate=False))
+
+
+def get_datafile():
+    course = request.vars.course_id
+    acid = request.vars.acid
+    file_contents = db((db.source_code.acid == acid) & (db.source_code.course_id == course)).select(db.source_code.main_code).first()
+    if file_contents:
+        file_contents = file_contents.main_code
+    else:
+        file_contents = None
+
+    return json.dumps(dict(data=file_contents))
+
+
