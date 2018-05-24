@@ -298,7 +298,8 @@ def getuser():
     if auth.user:
         try:
             res = {'email': auth.user.email, 'nick': auth.user.username,
-                   'cohortId': auth.user.cohort_id, 'donated': auth.user.donated}
+                   'cohortId': auth.user.cohort_id, 'donated': auth.user.donated,
+                   'isInstructor': verifyInstructorStatus(auth.user.course_id, auth.user.id)}}
             session.timezoneoffset = request.vars.timezoneoffset
             logger.debug("setting timezone offset in session %s", session.timezoneoffset)
         except:
