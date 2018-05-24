@@ -1,0 +1,13 @@
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_name}}/_static/jquery.js"></script>
+<script type="text/javascript">
+var data = {timezoneoffset: (new Date()).getTimezoneOffset()/60};
+jQuery.post('/{{=request.application}}/ajax/set_tz_offset',data,
+    function() {
+        window.location = '{{=URL('assignments', 'practice')}}'
+    }
+);
+//window.location = '{{=URL('assignments', 'practice')}}'
+</script>
+
+Automatically redirecting to {{=URL('assignments', 'practice')}}

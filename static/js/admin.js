@@ -152,7 +152,6 @@ function autoGrade(){
             $('#assignmentTotalform').css('visibility', 'hidden');
             calculateTotals();
             alert(retdata.message);
-            calculateTotals();
         }
     }).always(function() {
         $("#autogradesubmit").prop("disabled",false);
@@ -352,6 +351,10 @@ function getRightSideGradingDiv(element, acid, studentId) {
                     if (newdata != "Error") {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
                     jQuery('#input-comments', rightDiv).val(newdata['comments']);}
+                    else {
+                        jQuery('#input-grade', rightDiv).val(null);
+                        jQuery('#input-comments', rightDiv).val(null);
+                    }
                 }}
         },250);
     }
@@ -537,7 +540,8 @@ function pickedStudents(column) {
         }
     }
 
-    keys.sort();
+    // keep sort order determined by server side
+    // keys.sort();
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];

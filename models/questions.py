@@ -10,7 +10,10 @@ db.define_table('questions',
                 Field('question_type',type='string'),
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
+                Field('practice', type='boolean'),
                 Field('autograde', type='string'),
+                Field('practice', type='boolean'),
+                Field('topic', type='string'),
                 migrate='runestone_questions.table')
 
 

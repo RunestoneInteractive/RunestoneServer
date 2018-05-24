@@ -96,6 +96,7 @@ class AssignmentTypeGrade(object):
         for a in self.assignments:
             a.csv(row, self.name, assignment_names)
 
+
 class CourseGrade(object):
     def __init__(self, user, course, assignment_types):
         self.assignment_type_grades = [AssignmentTypeGrade(t, user, course) for t in assignment_types]
@@ -106,22 +107,33 @@ class CourseGrade(object):
     def points(self, projected = False, potential = False):
         return sum([t.points(projected, potential) or 0 for t in self.assignment_type_grades])
 
-    def csv(self, type_names, assignment_names):
+    def csv(self, type_names, assignment_names, as_of_timestamp=None):
         # pass the row dictionary and fields_names into the csv method for the components, which will accumulate extra values and field names
         row = {}
         row['Lastname']= self.student.last_name
         row['Firstname']= self.student.first_name
         row['Email']= self.student.email
         row['Total']= self.points()
-        if 'NonPS Hours' not in type_names:
-            type_names.append('NonPS Hours')
-        row['NonPS Hours'] = get_engagement_time(None, self.student, False, all_non_problem_sets = True)/3600.0
-        if 'PS Hours' not in type_names:
-            type_names.append('PS Hours')
-        row['PS Hours'] = get_engagement_time(None, self.student, False, all_problem_sets = True)/3600.0
+        if 'NonPS Seconds' not in type_names:
+            type_names.append('NonPS Seconds')
+        row['NonPS Seconds'] = get_engagement_time(assignment=None,
+                                                   user=self.student,
+                                                   preclass=False,
+                                                   all_non_problem_sets=True,
+                                                   as_of_timestamp=as_of_timestamp)
+        if 'PS Seconds' not in type_names:
+            type_names.append('PS Seconds')
+        if 'Earliness' not in type_names:
+            type_names.append('Earliness')
+        row['PS Seconds'], row['Earliness'] = get_engagement_time(assignment=None,
+                                                                  user=self.student,
+                                                                  preclass=False,
+                                                                  all_problem_sets=True,
+                                                                  as_of_timestamp=as_of_timestamp)
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
+
 
 db.define_table('assignment_types',
     Field('name', 'string'),
@@ -143,6 +155,7 @@ db.define_table('assignments',
                                                                                   # questions portion
     Field('name', 'string'),
     Field('points', 'integer'),  # max possible points on the assignment, cached sum of assignment_question points
+    Field('threshold_pct', 'float'), # threshold required to qualify for maximum points on the assignment; null means use actual points
     Field('released', 'boolean'),
     Field('description', 'text'),
     Field('duedate','datetime'),
@@ -202,36 +215,102 @@ def get_deadline(assignment, user):
     else:
         return None
 
-def get_engagement_time(assignment, user, preclass, all_problem_sets = False, all_non_problem_sets = False):
+
+def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False, all_non_problem_sets=False,
+                        as_of_timestamp=None):
+    q = db(db.useinfo.sid == user.username)
     if all_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_'))
+        # In order to get the deadline for each assignment, we join useinfo and questions.
+        q = q((db.useinfo.div_id.startswith('ps_')) &
+               (db.useinfo.div_id == db.questions.name) &
+               (db.assignment_questions.question_id == db.questions.id) &
+               (db.assignment_questions.assignment_id == db.assignments.id))
+
     elif all_non_problem_sets:
-        q =  db(db.useinfo.sid == user.username)(~(db.useinfo.div_id.contains('Assignments') | db.useinfo.div_id.startswith('ps_')))
+        q = q(~(db.useinfo.div_id.contains('Assignments') |
+                db.useinfo.div_id.startswith('ps_')))
     else:
-        q =  db(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)(db.useinfo.sid == user.username)
+        q = q(db.useinfo.div_id == db.problems.acid)(db.problems.assignment ==
+                                                      assignment.id)
         if preclass:
             dl = get_deadline(assignment, user)
             if dl:
                 q = q(db.useinfo.timestamp < dl)
-    activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
+    if as_of_timestamp:
+        q = q(db.useinfo.timestamp < as_of_timestamp)
+
+    if all_problem_sets:
+        activities = q.select(db.useinfo.timestamp, db.assignments.duedate, db.assignments.id, orderby=db.useinfo.timestamp)
+        # We want to define a variable that measures how early each student works on their assignments. We suppose this
+        # measure as the inverse of a measurement of procrastination.
+        # For this purpose, we need to find the first and last timestamps that the student worked on each assignment.
+        first_last_timestamps = {}
+    else:
+        activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
+
     sessions = []
     THRESH = 300
     prev = None
     for activity in activities:
+        if all_problem_sets:
+            timestamp = activity.useinfo.timestamp
+        else:
+            timestamp = activity.timestamp
         if not prev:
             # first activity; start a session for it
-            sessions.append(Session(activity.timestamp))
-        elif (activity.timestamp - prev.timestamp).total_seconds() > THRESH:
-            # close previous session; set its end time be previous activity's time, plus 30 seconds
-            sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
-            # start a new session
-            sessions.append(Session(activity.timestamp))
+            sessions.append(Session(timestamp))
+        else:
+            if all_problem_sets:
+                prev_timestamp = prev.useinfo.timestamp
+            else:
+                prev_timestamp = prev.timestamp
+            if (timestamp - prev_timestamp).total_seconds() > THRESH:
+                # close previous session; set its end time be previous activity's time, plus THRESH seconds
+                sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
+                # start a new session
+                sessions.append(Session(timestamp))
         prev = activity
+
+        if all_problem_sets:
+            deadline = activity.assignments.duedate
+            assignment_id = activity.assignments.id
+            # Use assignment id as key.
+            if assignment_id not in first_last_timestamps:
+                first_last_timestamps[assignment_id] = {'first': timestamp, 'last': timestamp, 'deadline':deadline}
+            else:
+                # We need to find the first and last timestamps that the student worked on each assignment.
+                if timestamp < first_last_timestamps[assignment_id]['first']:
+                    first_last_timestamps[assignment_id]['first'] = timestamp
+                if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
+                    first_last_timestamps[assignment_id]['last'] = timestamp
     if prev:
+        if all_problem_sets:
+            prev_timestamp = prev.useinfo.timestamp
+        else:
+            prev_timestamp = prev.timestamp
         # close out last session
-        sessions[-1].end = prev.timestamp + datetime.timedelta(seconds=THRESH)
+        sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
+
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
+
+    if all_problem_sets:
+        for assignment_id, v in first_last_timestamps.items():
+            print assignment_id, v['first'], v['last'], v['deadline']
+
+    if all_problem_sets:
+        # We define the variable earliness that measures how early each student works on their assignments. We suppose
+        # this measure as the inverse of a measurement of procrastination and we calculate it as the difference between
+        # the deadline and mean of the first and the last time before the deadline that they worked on the assignment.
+        # Add up over all assignments; student who misses an assignments gets no earliness for it.
+        earliness = 0
+        for v in first_last_timestamps.values():
+            average_delta = (v['last'] - v['first']) / 2
+            average_ts = v['first'] + average_delta
+            earliness += (v['deadline'] - average_ts).total_seconds()
+        return total_time, earliness/float(3600 * 24)
+
     return total_time
+
 
 def assignment_get_use_scores(assignment, problem=None, user=None, section_id=None, preclass=True):
     scores = []
@@ -526,6 +605,8 @@ db.define_table('grades',
     Field('score', 'double'),
     Field('manual_total', 'boolean'),
     Field('projected', 'double'),
+    Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the Canvas gradebook
+    Field('lis_outcome_url', 'string'), #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
     migrate='runestone_grades.table',
     )
 
