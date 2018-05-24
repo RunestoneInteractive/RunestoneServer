@@ -133,8 +133,7 @@ class CourseProblemMetrics(object):
         def add_problems(result_set,tbl):
             for srow in result_set:
                 row = srow[tbl]
-                rslogger.debug("ROW = ",row)
-                rslogger.debug("UPDATE_METRICS %s", row)
+                rslogger.debug("UPDATE_METRICS {}".format(row))
                 if not row.div_id in self.problems:
                     self.problems[row.div_id] = ProblemMetrics(self.course_id, row.div_id, self.users)
                 self.problems[row.div_id].add_data_point(row)
@@ -297,6 +296,7 @@ class UserLogCategorizer(object):
 
     @staticmethod
     def format_event(event, action, div_id):
+        short_div_id = div_id
         if len(div_id) > 25:
             short_div_id = "...{0}".format(div_id[-25:])
         if (event == 'page') & (action == 'view'):

@@ -64,7 +64,7 @@ if settings.enable_captchas:
 
 auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
-#auth.settings.retrieve_username_captcha	= False
+auth.settings.retrieve_username_captcha	= False
 
 
 ## create all tables needed by auth if not custom tables
@@ -170,6 +170,7 @@ db.define_table('auth_user',
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id),readable=False, writable=False),
     Field('active',type='boolean',writable=False,readable=False,default=True),
+    Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
     format=lambda u: u.first_name + " " + u.last_name,
     migrate='runestone_auth_user.table')
@@ -217,15 +218,6 @@ from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
                                                    request.application)
 
-janrain_form = RPXAccount(request,
-                          api_key=settings.janrain_api_key, # set in 1.py
-                          domain=settings.janrain_domain, # set in 1.py
-                          url=janrain_url)
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
-#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
-
-request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
-
 db.define_table('user_courses',
                 Field('user_id', db.auth_user, ondelete='CASCADE'),
                 Field('course_id', db.courses, ondelete='CASCADE'),
@@ -266,3 +258,13 @@ except:
     mtime = random.randrange(10000)
 
 request.admin_mtime = str(mtime)
+
+def check_for_donate_or_build(field_dict,id_of_insert):
+    if 'donate' in request.vars:
+        session.donate = request.vars.donate
+
+    if 'ccn_checkbox' in request.vars:
+        session.build_course = True
+
+if 'auth_user' in db:
+    db.auth_user._after_insert.append(check_for_donate_or_build)

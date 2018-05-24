@@ -295,10 +295,14 @@ def savegrade():
 def getuser():
     response.headers['content-type'] = 'application/json'
 
-    if  auth.user:
-        res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
-        session.timezoneoffset = request.vars.timezoneoffset
-        logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+    if auth.user:
+        try:
+            res = {'email': auth.user.email, 'nick': auth.user.username,
+                   'cohortId': auth.user.cohort_id, 'donated': auth.user.donated}
+            session.timezoneoffset = request.vars.timezoneoffset
+            logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+        except:
+            res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
     logger.debug("returning login info: %s",res)
@@ -802,3 +806,28 @@ def preview_question():
             return json.dumps(ctext)
 
     return json.dumps(res)
+
+def save_donate():
+    if auth.user:
+        db(db.auth_user.id == auth.user.id).update(donated=True)
+
+def did_donate():
+    if auth.user:
+        d_status = db(db.auth_user.id == auth.user.id).select(db.auth_user.donated).first()
+
+        return json.dumps(dict(donate=d_status.donated))
+    return json.dumps(dict(donate=False))
+
+
+def get_datafile():
+    course = request.vars.course_id
+    acid = request.vars.acid
+    file_contents = db((db.source_code.acid == acid) & (db.source_code.course_id == course)).select(db.source_code.main_code).first()
+    if file_contents:
+        file_contents = file_contents.main_code
+    else:
+        file_contents = None
+
+    return json.dumps(dict(data=file_contents))
+
+

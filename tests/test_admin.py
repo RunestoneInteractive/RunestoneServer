@@ -87,7 +87,11 @@ class TestAdminEndpoints(unittest.TestCase):
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAdminEndpoints))
-unittest.TextTestRunner(verbosity=2).run(suite)
-
+res = unittest.TextTestRunner(verbosity=2).run(suite)
+if len(res.errors) == 0 and len(res.failures) == 0:
+    sys.exit(0)
+else:
+    print("nonzero errors exiting with 1", res.errors, res.failures)
+    sys.exit(1)
 
 
