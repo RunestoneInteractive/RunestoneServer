@@ -1055,7 +1055,7 @@ def releasegrades():
     if released:
         # send lti grades
         assignment = db(db.assignments.id == assignmentid).select().first()
-        if assignment:
+        if assignment and session.oauth_consumer_key:
             send_lti_grades(assignment, auth.user.course_id, db, settings, session.oauth_consumer_key)
     return "Success"
 
