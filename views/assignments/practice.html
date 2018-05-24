@@ -1,0 +1,643 @@
+{{extend 'admin/instructors.html'}}
+
+{{block tabcontent}}
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
+
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/lib/hammer.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timeddnd.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedclickable.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_activecode.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedfitb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_shortanswer.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedmc.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedparsons.js"></script>
+
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/javascript.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/sharedb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/clike.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/codelens.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/htmlmixed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/css.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/xml.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
+
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/clickable.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/activecode.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/fitb.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/modal-basic.css" type="text/css" />
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script>
+	$('#hideId').css('display','none');
+</script>
+
+<script type="text/javascript">
+  if(! eBookConfig) {
+	  eBookConfig = {};
+  }
+  eBookConfig.host = '';
+  eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = "{{=course['course_name']}}";
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = true;
+  eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
+  eBookConfig.isLoggedIn = false;
+  eBookConfig.useRunestoneServices = true;
+  eBookConfig.basecourse = "{{=course['base_course']}}";
+  eBookConfig.practice_mode = true;
+</script>
+
+<style>
+	.completed {
+		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/completed.png');
+	}
+	.started {
+		list-style-type: circle;
+		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
+	}
+    .NextQuestionAnchor {
+        font-size: 19px;
+    }
+    .canvas {
+        cursor: crosshair;
+        display: block;
+    }
+    #CanvasContainer {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
+    /* I had to make this !important to override the same !important style is defined for
+    .fb_iframe_widget span, .fb_iframe_widget iframe in runestone-custom-sphinx-bootstrap.css
+    that is required for the social icons on top of the page and I had to override it. */
+    .fb-comments span, .fb-comments iframe {
+        height: 4000px !important;
+        width: 550px !important;
+    }
+    #CongratulationsDIV {
+        padding-bottom: 40px;
+    }
+    #CongratulationsContinueDIV {
+        padding-bottom: 25px;
+    }
+    #FeedbackRequestDIV {
+        margin-top: 10px;
+        margin-right: 40px;
+        margin-bottom: 10px;
+    }
+    #LikeDislikeDIV {
+        margin-top: 19px;
+        margin-bottom: 10px;
+    }
+    .LikeDislikeIcon {
+        font-size: 19px;
+    }
+    .demo {
+        margin:0 auto;
+        width:100%;
+        height:100%;
+    }
+    .progress {
+        margin-right: 40px;
+    }
+    .bg-success {
+        background-color: #28a745!important;
+    }
+    .bg-info {
+        background-color: #17a2b8!important;
+    }
+    .bg-warning {
+        background-color: #ffc107!important;
+    }
+    .bg-danger {
+        background-color: #dc3545!important;
+    }
+</style>
+
+<!--Facebook Comments plugin script-->
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div id='part1' style="padding-left: 40px">
+	<h1 style='text-align:center'>Review Practice Questions</h1>
+    <div class="alert alert-danger" style="margin-right: 40px;">
+         {{ if flashcard_count > 1: }}
+             {{ if practice_today_left > 0: }}
+                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's point.</p>
+             {{else:}}
+                <p>You've already got today's point.</p>
+             {{pass}}
+             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.</p>
+         {{ elif flashcard_count == 1: }}
+             <p>Hang in there. Last question for today.</p>
+         {{pass}}
+         <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
+         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
+    </div>
+    {{ if flashcard_count > 0: }}
+         {{ if practice_today_left == 0 and not q: }}
+            <div id="CongratulationsContinueDIV">
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</p>
+                <p>Click on the fireworks to create more of them.</p>
+            </div>
+            <div id="CanvasContainer">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="follow-up-Container">
+                <div id="WillingToContinueDIV">
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">
+                        I'd like to continue practicing.
+                    </a>
+                </div>
+                <div id="LikeDislikeDIV">
+                    Do you like the practice feature?
+                    <button type="button" class="btn btn-info" id="Like"><i class="LikeDislikeIcon fa fa-thumbs-up"></i>
+                        Like
+                        <!--Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                    <button type="button" class="btn btn-info" id="Dislike"><i class="LikeDislikeIcon fa fa-thumbs-down"></i>
+                        Dislike
+                        <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
+                    </button>
+                </div>
+                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your suggestions on how to
+                    improve it. If someone else has already written the same feedback, please like/dislike those
+                    comments instead of repeating them.</div>
+                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice" data-numposts="5"></div>
+            </div>
+         {{ else: }}
+            <span>
+                <div class='oneq' id='QuestionContainer' style='width:90%;'>
+                    <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+                </div>
+            </span>
+            {{ if q[3] == 1: }}
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
+            {{ else: }}
+                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
+            {{ pass }}
+            <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
+            <ul>
+            {{ current_chapter = all_flashcards[0].chapters.chapter_name }}
+                <li><h4>{{=current_chapter}}</h4></li>
+                <ul>
+            {{ for flash_card in all_flashcards: }}
+                {{ if flash_card.chapters.chapter_name != current_chapter: }}
+                    </ul>
+                    {{ current_chapter = flash_card.chapters.chapter_name }}
+                    <li><h4>{{=current_chapter}}</h4></li>
+                    <ul>
+                {{ else: }}
+                    <li>
+                        <p><strong>{{=flash_card.sub_chapters.sub_chapter_name}}:</strong></p>
+                        {{ if flash_card.mastery_percent > 0: }}
+                        <div class="progress">
+                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar" style="width: {{=flash_card.mastery_percent}}%" aria-valuenow="{{=flash_card.mastery_percent}}" aria-valuemin="0" aria-valuemax="100">{{=flash_card.remaining_days}} days</div>
+                        </div>
+                        {{ else: }}
+                            <p>It's gonna be asked <strong>today</strong>!</p>
+                        {{ pass }}
+                    </li>
+                {{ pass }}
+            {{ pass }}
+                </ul>
+            </ul>
+         {{ pass }}
+    {{ else: }}
+        <div id="CongratulationsDIV">
+            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
+        </div>
+        <div class="demo"></div>
+    {{ pass }}
+</div>
+
+<script>
+	//console.log(document.getElementsByClassName('nav nav-tabs'))
+	// This script renders the html into elements in the DOM
+	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
+
+{{ if flashcard_count > 0: }}
+    $(window).on('load', function (e) {
+        var check_me_clicked = false;
+        if ($('button:contains(\"Check Me\")').length) {
+            $('button:contains(\"Check Me\")').click(function(event) {
+                check_me_clicked = true;
+            });
+        }
+        else if ($('button:contains("Save & Run")')) {
+            $('button:contains("Save & Run")').click(function(event) {
+                check_me_clicked = true;
+            });
+        }
+        $("#DoneBtn").click(function(event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
+            // click "Check me" for them.
+            if (!check_me_clicked) {
+                if ($('button:contains(\"Check Me\")').length) {
+                    $('button:contains(\"Check Me\")').click();
+                }
+                else if ($('button:contains("Save & Run")')) {
+                    $('button:contains("Save & Run")').click();
+                }
+                setTimeout(function(){
+                    window.location = url;
+                }, 2500);
+            }
+            else {
+                window.location = url;
+            }
+
+            return false; // for good measure
+        });
+    });
+{{ pass }}
+{{ if practice_today_left > 0 or q: }}
+	var questionHtmlCode = document.getElementById("htmlblock");
+	// Interestingly, javascript won't understand the html string without first dumping it into an html element
+	// a console.log of the html string within the questioninfo array would only give an unexpected token error
+	// pulling the html strings from the script element provides the string that javascript recognizes
+	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
+
+	// The htmlDecode is needed to unescape the html that the server has sent.
+	// because only unescaped html gets rendered as html elements
+
+	function htmlDecode(input){
+  		let e = document.createElement('div');
+  		e.innerHTML = input;
+  		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+	}
+
+	let $div = $("#QuestionContainer");
+    let unescapedhtml = htmlDecode(questionHtmlCode.innerHTML);
+    let change = $.parseHTML(unescapedhtml, keepScripts=true);
+    $div.append(change);
+
+    // $(function(){
+    //     var startTime = new Date($.now());
+    //     $('.NextQuestionAnchor').click(function(){
+    //         alert ($(this).attr('href') + "&startTime=" + startTime.toString());
+    //         window.location = $(this).attr('href') + "&startTime=" + startTime.toString();
+    //     });
+    // });
+
+{{ elif flashcard_count > 0: }}
+    $( "#Like, #Dislike" ).click(function() {
+        // var input = $(this).find('.qty1');
+        // input.val(parseInt(input.val())+ 1);
+
+        // Get some values from elements on the page:
+        var $atag = $( this ),
+        likeVal = $atag.attr( "id" );
+
+        // Send the data using post
+        var posting = $.post( "/{{=request.application}}/assignments/like_dislike", { likeVal: likeVal } );
+
+        // Put the results in a div
+        posting.done(function( data ) {
+            if (likeVal == "Like") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-secondary');
+                $("#Like").addClass('btn-success');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-danger');
+                $("#Dislike").addClass('btn-secondary');
+            }
+            else if (likeVal == "Dislike") {
+                $("#Like").removeClass('btn-info');
+                $("#Like").removeClass('btn-success');
+                $("#Like").addClass('btn-secondary');
+                $("#Dislike").removeClass('btn-info');
+                $("#Dislike").removeClass('btn-secondary');
+                $("#Dislike").addClass('btn-danger');
+            }
+        });
+    });
+
+    // when animating on canvas, it is best to use requestAnimationFrame instead of setTimeout or setInterval
+    // not supported in all browsers though and sometimes needs a prefix, so we need a shim
+    window.requestAnimFrame = ( function() {
+        return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function( callback ) {
+                        window.setTimeout( callback, 1000 / 60 );
+                    };
+    })();
+
+    // now we will setup our basic variables for the demo
+    var canvas = document.getElementById( 'canvas' ),
+            ctx = canvas.getContext( '2d' ),
+            // full screen dimensions
+            cw = window.innerWidth,
+            ch = window.innerHeight,
+            // firework collection
+            fireworks = [],
+            // particle collection
+            particles = [],
+            // starting hue
+            hue = 120,
+            // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5 loop ticks
+            limiterTotal = 5,
+            limiterTick = 0,
+            // this will time the auto launches of fireworks, one launch per 80 loop ticks
+            timerTotal = 80,
+            timerTick = 0,
+            mousedown = false,
+            // mouse x coordinate,
+            mx,
+            // mouse y coordinate
+            my;
+
+    // set canvas dimensions
+    canvas.width = $(window).width();
+    {{ if flashcard_count > 0: }}
+        var congratulationsContinueDIV = $("#CongratulationsContinueDIV");
+        canvas.height = congratulationsContinueDIV.height() + congratulationsContinueDIV.offset().top;
+    {{ else: }}
+        canvas.height = $(window).height();
+    {{ pass }}
+
+    // now we are going to setup our function placeholders for the entire demo
+
+    // get a random number within a range
+    function random( min, max ) {
+        return Math.random() * ( max - min ) + min;
+    }
+
+    // calculate the distance between two points
+    function calculateDistance( p1x, p1y, p2x, p2y ) {
+        var xDistance = p1x - p2x,
+                yDistance = p1y - p2y;
+        return Math.sqrt( Math.pow( xDistance, 2 ) + Math.pow( yDistance, 2 ) );
+    }
+
+    // create firework
+    function Firework( sx, sy, tx, ty ) {
+        // actual coordinates
+        this.x = sx;
+        this.y = sy;
+        // starting coordinates
+        this.sx = sx;
+        this.sy = sy;
+        // target coordinates
+        this.tx = tx;
+        this.ty = ty;
+        // distance from starting point to target
+        this.distanceToTarget = calculateDistance( sx, sy, tx, ty );
+        this.distanceTraveled = 0;
+        // track the past coordinates of each firework to create a trail effect, increase the coordinate count to create more prominent trails
+        this.coordinates = [];
+        this.coordinateCount = 3;
+        // populate initial coordinate collection with the current coordinates
+        while( this.coordinateCount-- ) {
+            this.coordinates.push( [ this.x, this.y ] );
+        }
+        this.angle = Math.atan2( ty - sy, tx - sx );
+        this.speed = 2;
+        this.acceleration = 1.05;
+        this.brightness = random( 50, 70 );
+        // circle target indicator radius
+        this.targetRadius = 1;
+    }
+
+    // update firework
+    Firework.prototype.update = function( index ) {
+        // remove last item in coordinates array
+        this.coordinates.pop();
+        // add current coordinates to the start of the array
+        this.coordinates.unshift( [ this.x, this.y ] );
+
+        // cycle the circle target indicator radius
+        if( this.targetRadius < 8 ) {
+            this.targetRadius += 0.3;
+        } else {
+            this.targetRadius = 1;
+        }
+
+        // speed up the firework
+        this.speed *= this.acceleration;
+
+        // get the current velocities based on angle and speed
+        var vx = Math.cos( this.angle ) * this.speed,
+                vy = Math.sin( this.angle ) * this.speed;
+        // how far will the firework have traveled with velocities applied?
+        this.distanceTraveled = calculateDistance( this.sx, this.sy, this.x + vx, this.y + vy );
+
+        // if the distance traveled, including velocities, is greater than the initial distance to the target, then the target has been reached
+        if( this.distanceTraveled >= this.distanceToTarget ) {
+            createParticles( this.tx, this.ty );
+            // remove the firework, use the index passed into the update function to determine which to remove
+            fireworks.splice( index, 1 );
+        } else {
+            // target not reached, keep traveling
+            this.x += vx;
+            this.y += vy;
+        }
+    }
+
+    // draw firework
+    Firework.prototype.draw = function() {
+        ctx.beginPath();
+        // move to the last tracked coordinate in the set, then draw a line to the current x and y
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ], this.coordinates[ this.coordinates.length - 1][ 1 ] );
+        ctx.lineTo( this.x, this.y );
+        ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
+        ctx.stroke();
+
+        ctx.beginPath();
+        // draw the target for this firework with a pulsing circle
+        ctx.arc( this.tx, this.ty, this.targetRadius, 0, Math.PI * 2 );
+        ctx.stroke();
+    }
+
+    // create particle
+    function Particle( x, y ) {
+        this.x = x;
+        this.y = y;
+        // track the past coordinates of each particle to create a trail effect, increase the coordinate count to create more prominent trails
+        this.coordinates = [];
+        this.coordinateCount = 5;
+        while( this.coordinateCount-- ) {
+            this.coordinates.push( [ this.x, this.y ] );
+        }
+        // set a random angle in all possible directions, in radians
+        this.angle = random( 0, Math.PI * 2 );
+        this.speed = random( 1, 10 );
+        // friction will slow the particle down
+        this.friction = 0.95;
+        // gravity will be applied and pull the particle down
+        this.gravity = 1;
+        // set the hue to a random number +-50 of the overall hue variable
+        this.hue = random( hue - 50, hue + 50 );
+        this.brightness = random( 50, 80 );
+        this.alpha = 1;
+        // set how fast the particle fades out
+        this.decay = random( 0.015, 0.03 );
+    }
+
+    // update particle
+    Particle.prototype.update = function( index ) {
+        // remove last item in coordinates array
+        this.coordinates.pop();
+        // add current coordinates to the start of the array
+        this.coordinates.unshift( [ this.x, this.y ] );
+        // slow down the particle
+        this.speed *= this.friction;
+        // apply velocity
+        this.x += Math.cos( this.angle ) * this.speed;
+        this.y += Math.sin( this.angle ) * this.speed + this.gravity;
+        // fade out the particle
+        this.alpha -= this.decay;
+
+        // remove the particle once the alpha is low enough, based on the passed in index
+        if( this.alpha <= this.decay ) {
+            particles.splice( index, 1 );
+        }
+    }
+
+    // draw particle
+    Particle.prototype.draw = function() {
+        ctx. beginPath();
+        // move to the last tracked coordinates in the set, then draw a line to the current x and y
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ], this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
+        ctx.lineTo( this.x, this.y );
+        ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+        ctx.stroke();
+    }
+
+    // create particle group/explosion
+    function createParticles( x, y ) {
+        // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased particles though
+        var particleCount = 30;
+        while( particleCount-- ) {
+            particles.push( new Particle( x, y ) );
+        }
+    }
+
+    // main demo loop
+    function loop() {
+        // this function will run endlessly with requestAnimationFrame
+        requestAnimFrame( loop );
+
+        // increase the hue to get different colored fireworks over time
+        //hue += 0.5;
+
+      // create random color
+      hue= random(0, 360 );
+
+        // normally, clearRect() would be used to clear the canvas
+        // we want to create a trailing effect though
+        // setting the composite operation to destination-out will allow us to clear the canvas at a specific opacity, rather than wiping it entirely
+        ctx.globalCompositeOperation = 'destination-out';
+        // decrease the alpha property to create more prominent trails
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect( 0, 0, cw, ch );
+        // change the composite operation back to our main mode
+        // lighter creates bright highlight points as the fireworks and particles overlap each other
+        ctx.globalCompositeOperation = 'lighter';
+
+        // loop over each firework, draw it, update it
+        var i = fireworks.length;
+        while( i-- ) {
+            fireworks[ i ].draw();
+            fireworks[ i ].update( i );
+        }
+
+        // loop over each particle, draw it, update it
+        var i = particles.length;
+        while( i-- ) {
+            particles[ i ].draw();
+            particles[ i ].update( i );
+        }
+
+        // launch fireworks automatically to random coordinates, when the mouse isn't down
+        if( timerTick >= timerTotal ) {
+            if( !mousedown ) {
+                // start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
+                fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
+                timerTick = 0;
+            }
+        } else {
+            timerTick++;
+        }
+
+        // limit the rate at which fireworks get launched when mouse is down
+        if( limiterTick >= limiterTotal ) {
+            if( mousedown ) {
+                // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the target
+                fireworks.push( new Firework( cw / 2, ch, mx, my ) );
+                limiterTick = 0;
+            }
+        } else {
+            limiterTick++;
+        }
+    }
+
+    // mouse event bindings
+    // update the mouse coordinates on mousemove
+    canvas.addEventListener( 'mousemove', function( e ) {
+        mx = e.pageX - canvas.offsetLeft;
+        my = e.pageY - canvas.offsetTop;
+    });
+
+    // toggle mousedown state and prevent canvas from being selected
+    canvas.addEventListener( 'mousedown', function( e ) {
+        e.preventDefault();
+        mousedown = true;
+    });
+
+    canvas.addEventListener( 'mouseup', function( e ) {
+        e.preventDefault();
+        mousedown = false;
+    });
+
+    // once the window loads, we are ready for some fireworks!
+    window.onload = loop;
+{{ pass }}
+</script>
+{{ if flashcard_count == 0: }}
+    <script src="{{=URL('static', 'js/jquery.fireworks.js')}}"></script>
+    <script>
+        $('.demo').fireworks({ sound: true, opacity: 0.7, width: '100%', height: '100%' });
+    </script>
+{{ pass }}
+
+{{end}}
+

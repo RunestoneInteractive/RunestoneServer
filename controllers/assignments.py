@@ -5,7 +5,9 @@ import sys
 import json
 import logging
 import datetime
+from collections import OrderedDict
 from psycopg2 import IntegrityError
+from rs_grading import do_autograde, do_calculate_totals, do_check_answer
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -15,7 +17,7 @@ logger.setLevel(settings.log_level)
 def index():
     if not auth.user:
         session.flash = "Please Login"
-        return redirect(URL('default','index'))
+        return redirect(URL('default', 'index'))
     if 'sid' not in request.vars:
         #return redirect(URL('assignments','index') + '?sid=%s' % (auth.user.username))
         request.vars.sid = auth.user.username
@@ -26,13 +28,13 @@ def index():
         db.auth_user.first_name,
         db.auth_user.last_name,
         db.auth_user.email,
-        ).first()
+    ).first()
     if not student:
-        return redirect(URL('assignments','index'))
+        return redirect(URL('assignments', 'index'))
 
-    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','webfundamentals','StudentCSP','apcsareview']:
+    if auth.user.course_name in ['thinkcspy', 'pythonds', 'JavaReview', 'webfundamentals', 'StudentCSP', 'apcsareview']:
         session.flash = "{} is not a graded course".format(auth.user.course_name)
-        return redirect(URL('default','user'))
+        return redirect(URL('default', 'user'))
 
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     data_analyzer.load_user_metrics(request.vars.sid)
@@ -44,362 +46,23 @@ def index():
             "label": chapter.chapter_label,
             "status": chapter.status_text(),
             "subchapters": chapter.get_sub_chapter_progress()
-            })
+        })
     activity = data_analyzer.formatted_activity.activities
 
-    return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name, user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
+                user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
-
-def _score_from_pct_correct(pct_correct, points, autograde):
-    # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
-    if autograde == 'interact' or autograde == 'visited':
-        return points
-    elif autograde == 'pct_correct':
-        # prorate credit based on percentage correct
-        return int(round((pct_correct * points)/100.0))
-    elif autograde == 'all_or_nothing' or autograde == 'unittest':
-        # 'unittest' is legacy, now deprecated
-        # have to get *all* tests to pass in order to get any credit
-        if pct_correct == 100:
-            return points
-        else:
-            return 0
-
-
-def _score_one_code_run(row, points, autograde):
-    # row is one row from useinfo table
-    # second element of act is the percentage of tests that passed
-    if autograde == 'interact':
-        return _score_one_interaction(row, points, autograde)
-
-    try:
-        (ignore, pct, ignore, passed, ignore, failed) = row.act.split(':')
-        pct_correct = 100 * float(passed)/(int(failed) + int(passed))
-    except:
-        pct_correct = 0 # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_mchoice(row, points, autograde):
-    # row is from mchoice_answers
-    ## It appears that the mchoice_answers is only storing a binary correct_or_not
-    ## If that is updated to store a pct_correct, the next few lines can change
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_interaction(row, points, autograde):
-    # row is from useinfo
-    if row:
-        return points
-    else:
-        return 0
-
-def _score_one_parsons(row, points, autograde):
-    # row is from parsons_answers
-    # Much like mchoice, parsons_answers currently stores a binary correct value
-    # So much like in _score_one_mchoice, the next lines can be altered if a pct_correct value is added to parsons_answers
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_fitb(row, points, autograde):
-    # row is from fitb_answers
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_clickablearea(row, points, autograde):
-    # row is from clickablearea_answers
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_dragndrop(row, points, autograde):
-    # row is from dragndrop_answers
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-def _score_one_codelens(row, points, autograde):
-    # row is from codelens_answers
-    if row.correct:
-        pct_correct = 100
-    else:
-        pct_correct = 0
-    return _score_from_pct_correct(pct_correct, points, autograde)
-
-
-def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.mchoice_answers.course_name == course_name) & \
-            (db.mchoice_answers.sid == sid) & \
-            (db.mchoice_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.mchoice_answers.timestamp < deadline)
-    return db(query).select(orderby=db.mchoice_answers.timestamp)
-
-def _scorable_useinfos(course_name, sid, div_id, points, deadline, event_filter = None, question_type=None):
-    # look in useinfo, to see if visited (before deadline)
-    # sid matches auth_user.username, not auth_user.id
-    # if question type is page we must do better with the div_id
-
-    query = ((db.useinfo.course_id == course_name) & \
-            (db.useinfo.sid == sid))
-
-    if question_type == 'page':
-        quest = db(db.questions.name == div_id).select().first()  #todo cache this translation somehow
-        div_id = u"{}/{}".format(quest.chapter, quest.subchapter)
-        query = query & (db.useinfo.div_id.contains(div_id))
-    else:
-        query = query & (db.useinfo.div_id == div_id)
-
-    if event_filter:
-        query = query & (db.useinfo.event == event_filter)
-    if deadline:
-        query = query & (db.useinfo.timestamp < deadline)
-    return db(query).select(orderby=db.useinfo.timestamp)
-
-def _scorable_parsons_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.parsons_answers.course_name == course_name) & \
-            (db.parsons_answers.sid == sid) & \
-            (db.parsons_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.parsons_answers.timestamp < deadline)
-    return db(query).select(orderby=db.parsons_answers.timestamp)
-
-def _scorable_fitb_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.fitb_answers.course_name == course_name) & \
-            (db.fitb_answers.sid == sid) & \
-            (db.fitb_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.fitb_answers.timestamp < deadline)
-    return db(query).select(orderby=db.fitb_answers.timestamp)
-
-def _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.clickablearea_answers.course_name == course_name) & \
-            (db.clickablearea_answers.sid == sid) & \
-            (db.clickablearea_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.clickablearea_answers.timestamp < deadline)
-    return db(query).select(orderby=db.clickablearea_answers.timestamp)
-
-def _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.dragndrop_answers.course_name == course_name) & \
-            (db.dragndrop_answers.sid == sid) & \
-            (db.dragndrop_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.dragndrop_answers.timestamp < deadline)
-    return db(query).select(orderby=db.dragndrop_answers.timestamp)
-
-def _scorable_codelens_answers(course_name, sid, question_name, points, deadline):
-    query = ((db.codelens_answers.course_name == course_name) & \
-            (db.codelens_answers.sid == sid) & \
-            (db.codelens_answers.div_id == question_name) \
-            )
-    if deadline:
-        query = query & (db.codelens_answers.timestamp < deadline)
-
-    return db(query).select(orderby=db.codelens_answers.timestamp)
-
-def _autograde_one_q(course_name, sid, question_name, points, question_type, deadline=None, autograde=None, which_to_grade=None, save_score=True):
-
-
-    logger.debug("autograding %s %s %s %s %s %s", course_name, question_name, sid, deadline, autograde, which_to_grade)
-    if not autograde:
-        logger.debug("autograde not set returning 0")
-        return 0
-
-    # if previously manually graded, don't overwrite
-    existing = db((db.question_grades.sid == sid) \
-       & (db.question_grades.course_name == course_name) \
-       & (db.question_grades.div_id == question_name) \
-       ).select().first()
-    if existing and (existing.comment != "autograded"):
-        logger.debug("skipping; previously manually graded, comment = {}".format(existing.comment))
-        return 0
-
-
-    # For all question types, and values of which_to_grade, we have the same basic structure:
-    # 1. Query the appropriate table to get rows representing student responses
-    # 2. Apply a scoring function to the first, last, or all rows
-    #   2a. if scoring 'best_answer', take the max score
-    #   Note that the scoring function will take the autograde parameter as an input, which might
-    #      affect how the score is determined.
-
-    # get the results from the right table, and choose the scoring function
-    if question_type in ['activecode', 'actex']:
-        if autograde in ['pct_correct', 'all_or_nothing', 'unittest']:
-            event_filter = 'unittest'
-        else:
-            event_filter = None
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, event_filter)
-        scoring_fn = _score_one_code_run
-    elif question_type == 'mchoice':
-        results = _scorable_mchoice_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_mchoice
-    elif question_type == 'page':
-        # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='page')
-        scoring_fn = _score_one_interaction
-    elif question_type == 'parsonsprob':
-        results = _scorable_parsons_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_parsons
-    elif question_type == 'fillintheblank':
-        results = _scorable_fitb_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_fitb
-    elif question_type == 'clickablearea':
-        results = _scorable_clickablearea_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_clickablearea
-    elif question_type == 'dragndrop':
-        results = _scorable_dragndrop_answers(course_name, sid, question_name, points, deadline)
-        scoring_fn = _score_one_dragndrop
-    elif question_type == 'codelens':
-        if autograde == 'interact':  # this is probably what we want for *most* codelens it will not be correct when it is an actual codelens question in a reading
-            results = _scorable_useinfos(course_name, sid, question_name, points, deadline)
-            scoring_fn = _score_one_interaction
-        else:
-            results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline)
-            scoring_fn = _score_one_codelens
-    elif question_type in ['video', 'showeval']:
-        # question_name does not help us
-        results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video')
-        scoring_fn = _score_one_interaction
-
-    else:
-        logger.debug("skipping; question_type = {}".format(question_type))
-        return 0
-
-    # use query results and the scoring function
-    if results:
-        if which_to_grade in ['first_answer', 'last_answer', None]:
-            # get single row
-            if which_to_grade == 'first_answer':
-                row = results.first()
-            elif which_to_grade == 'last_answer':
-                row = results.last()
-            else:
-                # default is last
-                row = results.last()
-            # extract its score
-            score = scoring_fn(row, points, autograde)
-        elif which_to_grade == 'best_answer':
-            # score all rows and take the best one
-            best_row = max(results, key = lambda row: scoring_fn(row, points, autograde))
-            score = scoring_fn(best_row, points, autograde)
-            logger.debug("SCORE = %s by %s", score, scoring_fn)
-        else:
-            logger.error("Unknown Scoring Scheme %s ", which_to_grade)
-            score = 0
-    else:
-        # no results found, score is 0, not attributed to any row
-        score = 0
-
-    # Save the score
-    if save_score:
-        _save_question_grade(sid, course_name, question_name, score, deadline)
-
-    return score
-
-def _save_question_grade(sid, course_name, question_name, score, deadline=None):
-    try:
-        db.question_grades.update_or_insert(
-            ((db.question_grades.sid == sid) &
-            (db.question_grades.course_name == course_name) &
-            (db.question_grades.div_id == question_name)
-            ),
-            sid=sid,
-            course_name=course_name,
-            div_id=question_name,
-            score = score,
-            comment = "autograded",
-            useinfo_id=None,
-            deadline=deadline
-        )
-    except IntegrityError:
-        logger.error("IntegrityError {} {} {}".format(sid, course_name, question_name))
-
-
-def _compute_assignment_total(student, assignment, course_name):
-    # return the computed score and the manual score if there is one; if no manual score, save computed score
-    # student is a row, containing id and username
-    # assignment is a row, containing name and id and points
-
-    # Get all question_grades for this sid/assignment_id
-    # Retrieve from question_grades table  with right sids and div_ids
-    # sid is really a username, so look it up in auth_user
-    # div_id is found in questions; questions are associated with assignments, which have assignment_id
-
-    # print(student.id, assignment.id)
-
-    # compute the score
-    query =  (db.question_grades.sid == student.username) \
-             & (db.question_grades.div_id == db.questions.name) \
-             & (db.questions.id == db.assignment_questions.question_id) \
-             & (db.assignment_questions.assignment_id == assignment.id) \
-             & (db.question_grades.course_name == course_name )
-    scores = db(query).select(db.question_grades.score)
-    logger.debug("List of scores to add for %s is %s",student.username, scores)
-    total = sum([row.score for row in scores if row.score])
-    score = total
-
-    grade = db(
-        (db.grades.auth_user == student.id) &
-        (db.grades.assignment == assignment.id)).select().first()
-
-    if grade and grade.manual_total:
-        # don't save it; return the calculated and the previous manual score
-        return score, grade.score
-    else:
-        # Write the score to the grades table
-        try:
-            db.grades.update_or_insert(
-                ((db.grades.auth_user == student.id) &
-                 (db.grades.assignment == assignment.id)),
-                auth_user = student.id,
-                assignment = assignment.id,
-                score=score)
-        except IntegrityError:
-            logger.error("IntegrityError update or insert {} {} with score {}"
-                         .format(student.id, assignment.id, score))
-        return score, None
-
-def _get_students(course_id, sid = None):
-    if sid:
-        # sid which is passed in is a username, not a row id
-        student_rows = db((db.user_courses.course_id == course_id) &
-                          (db.user_courses.user_id == db.auth_user.id) &
-                          (db.auth_user.username == sid)
-                          ).select(db.auth_user.username, db.auth_user.id)
-    else:
-        # get all student usernames for this course
-        student_rows = db((db.user_courses.course_id == course_id) &
-                          (db.user_courses.user_id == db.auth_user.id)
-                          ).select(db.auth_user.username, db.auth_user.id)
-    return student_rows
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_assignment_score():
     score = request.vars.get('score', None)
     assignment_name = request.vars.assignment
-    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    assignment = db(
+        (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
     if assignment:
         assignment_id = assignment.id
     else:
-        return json.dumps({'success':False, 'message':"Select an assignment before trying to calculate totals."})
+        return json.dumps({'success': False, 'message': "Select an assignment before trying to calculate totals."})
 
     if score:
         # Write the score to the grades table
@@ -408,144 +71,80 @@ def record_assignment_score():
         sid = db((db.auth_user.username == sname)).select(db.auth_user.id).first().id
         db.grades.update_or_insert(
             ((db.grades.auth_user == sid) &
-            (db.grades.assignment == assignment_id)),
-            auth_user = sid,
-            assignment = assignment_id,
+             (db.grades.assignment == assignment_id)),
+            auth_user=sid,
+            assignment=assignment_id,
             score=score,
             manual_total=True
         )
 
+# download a CSV with the student's performance on all assignments so far
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def download_time_spent():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    students = db(db.auth_user.course_id == course.id).select()
+    assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type == db.assignment_types.id
+                                                         ).select(orderby=db.assignments.assignment_type)
+    grades = db(db.grades).select()
+
+    field_names = ['Lastname','Firstname','Email','Total']
+    type_names = []
+    assignment_names = []
+
+    # datestr should be in format "05-20-13"
+    datestr = request.vars.as_of
+    try:
+        as_of_timestamp = datetime.datetime.strptime(datestr, '%m-%d-%y')
+    except:
+        return dict(error="Please enter ?as_of=03-24-16")
+    # probably broken now; assignment_types is deprecated and maybe not filled in correctly
+    # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
+    rows = [CourseGrade(user = student,
+                        course=course,
+                        assignment_types=[]).csv(type_names,
+                                                 assignment_names,
+                                                 as_of_timestamp=as_of_timestamp
+                                                 ) for student in students]
+    response.view='generic.csv'
+    return dict(filename='grades_download.csv', csvdata=rows, field_names=field_names+type_names+assignment_names)
+
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
     assignment_name = request.vars.assignment
-    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    if assignment:
-        assignment_id = assignment.id
-    else:
-        return json.dumps({'success':False, 'message':"Select an assignment before trying to calculate totals."})
-
     sid = request.vars.get('sid', None)
-
-    student_rows = _get_students(auth.user.course_id, sid)
-
-    results = {'success':True}
-    if sid:
-        computed_total, manual_score = _compute_assignment_total(student_rows[0], assignment, auth.user.course_name)
-        results['message'] = "Total for {} is {}".format(sid, computed_total)
-        results['computed_score'] = computed_total
-        results['manual_score'] = manual_score
+    assignment = db(
+        (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        return json.dumps(
+            do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name, sid, db, settings))
     else:
-        # compute total score for the assignment for each sid; also saves in DB unless manual value saved
-        scores = [_compute_assignment_total(student, assignment, auth.user.course_name)[0] for student in student_rows]
-        results['message'] = "Calculated totals for {} students\n\tmax: {}\n\tmin: {}\n\tmean: {}".format(
-            len(scores),
-            max(scores),
-            min(scores),
-            sum(scores)/float(len(scores))
-        )
+        return json.dumps({'success': False, 'message': "Select an assignment before trying to calculate totals."})
 
-    return json.dumps(results)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
     ### This endpoint is hit to autograde one or all students or questions for an assignment
 
-    assignment_name = request.vars.assignment
-    assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    if assignment:
-        assignment_id = assignment.id
-    else:
-        return json.dumps({'success':False, 'message':"Select an assignment before trying to autograde."})
-
     sid = request.vars.get('sid', None)
     question_name = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
-    if enforce_deadline == 'true':
-        # get the deadline associated with the assignment
-        deadline = assignment.duedate
+    assignment_name = request.vars.assignment
+    timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
+
+    assignment = db(
+        (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name, sid, question_name,
+                             enforce_deadline, timezoneoffset, db, settings)
+        return json.dumps({'message': "autograded {} items".format(count)})
     else:
-        deadline = None
-
-    if 'timezoneoffset' in session and deadline:
-        deadline = deadline + datetime.timedelta(hours=int(session.timezoneoffset))
-        logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
-
-    student_rows = _get_students(auth.user.course_id, sid)
-    sids = [row.username for row in student_rows]
-
-    if question_name:
-        questions_query = db(
-            (db.assignment_questions.assignment_id == assignment_id) &
-            (db.assignment_questions.question_id == db.questions.id) &
-            (db.questions.name == question_name)
-            ).select()
-    else:
-        # get all qids and point values for this assignment
-        questions_query = db((db.assignment_questions.assignment_id == assignment_id) &
-                             (db.assignment_questions.question_id == db.questions.id)
-                             ).select()
-
-    readings = [(row.questions.name,
-                 row.questions.chapter,
-                 row.questions.subchapter,
-                 row.assignment_questions.points,
-                 row.assignment_questions.activities_required,
-                 row.assignment_questions.autograde,
-                 row.assignment_questions.which_to_grade,
-                 ) for row in questions_query if row.assignment_questions.reading_assignment == True]
-    logger.debug("GRADING READINGS")
-    # Now for each reading, get all of the questions in that subsection
-    # call _autograde_one_q using the autograde and which to grade for that section. likely interact
-    #
-    base_course = row = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
-    count = 0
-    for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
-        count += 1
-        for s in sids:
-            score = 0
-            rows = db((db.questions.chapter == chapter) &
-                      (db.questions.subchapter == subchapter) &
-                      (db.questions.base_course == base_course)).select()
-            for row in rows:
-                score += _autograde_one_q(auth.user.course_name, s, row.name, 1, row.question_type,
-                                          deadline=deadline, autograde=ag, which_to_grade=wtg, save_score=False )
-                logger.debug("Score is now %s for %s for %s", score, row.name, auth.user.username)
-            if score >= ar:
-                save_points = points
-                logger.debug("full points for %s on %s", auth.user.username, name)
-            else:
-                save_points = 0
-                logger.debug("no points for %s on %s", auth.user.username, name)
-
-            _save_question_grade(s, auth.user.course_name, name, save_points,
-                                 deadline=deadline)
-
-    logger.debug("GRADING QUESTIONS")
-    questions = [(row.questions.name,
-                  row.assignment_questions.points,
-                  row.assignment_questions.autograde,
-                  row.assignment_questions.which_to_grade,
-                  row.questions.question_type) for row in questions_query
-                  if row.assignment_questions.reading_assignment == False or
-                     row.assignment_questions.reading_assignment == None]
-
-    logger.debug("questions to grade = %s", questions)
-    for (qdiv, points, autograde, which_to_grade, question_type) in questions:
-        for s in sids:
-            if autograde != 'manual':
-                _autograde_one_q(auth.user.course_name, s, qdiv, points, question_type,
-                                 deadline=deadline, autograde = autograde, which_to_grade = which_to_grade)
-                count += 1
-
-    return json.dumps({'message': "autograded {} items".format(count)})
-
-
-
+        return json.dumps({'success': False, 'message': "Select an assignment before trying to autograde."})
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():
     if 'acid' not in request.vars or 'sid' not in request.vars:
-        return json.dumps({'success':False, 'message':"Need problem and user."})
+        return json.dumps({'success': False, 'message': "Need problem and user."})
 
     score_str = request.vars.get('grade', 0)
     if score_str == "":
@@ -555,47 +154,50 @@ def record_grade():
     comment = request.vars.get('comment', None)
     if score_str != "" or ('comment' in request.vars and comment != ""):
         try:
-            db.question_grades.update_or_insert((\
-                (db.question_grades.sid == request.vars['sid']) \
-                & (db.question_grades.div_id == request.vars['acid']) \
-                & (db.question_grades.course_name == auth.user.course_name) \
+            db.question_grades.update_or_insert(( \
+                        (db.question_grades.sid == request.vars['sid']) \
+                        & (db.question_grades.div_id == request.vars['acid']) \
+                        & (db.question_grades.course_name == auth.user.course_name) \
                 ),
-                sid = request.vars['sid'],
-                div_id = request.vars['acid'],
-                course_name = auth.user.course_name,
-                score = score,
-                comment = comment)
+                sid=request.vars['sid'],
+                div_id=request.vars['acid'],
+                course_name=auth.user.course_name,
+                score=score,
+                comment=comment)
         except IntegrityError:
-            logger.error("IntegrityError {} {} {}".format(request.vars['sid'], request.vars['acid'], auth.user.course_name))
+            logger.error(
+                "IntegrityError {} {} {}".format(request.vars['sid'], request.vars['acid'], auth.user.course_name))
             return json.dumps({'response': 'not replaced'})
         return json.dumps({'response': 'replaced'})
     else:
         return json.dumps({'response': 'not replaced'})
+
 
 # create a unique index:  question_grades_sid_course_name_div_id_idx" UNIQUE, btree (sid, course_name, div_id)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_problem():
     if 'acid' not in request.vars or 'sid' not in request.vars:
-        return json.dumps({'success':False, 'message':"Need problem and user."})
+        return json.dumps({'success': False, 'message': "Need problem and user."})
 
     user = db(db.auth_user.username == request.vars.sid).select().first()
     if not user:
-        return json.dumps({'success':False, 'message':"User does not exist. Sorry!"})
+        return json.dumps({'success': False, 'message': "User does not exist. Sorry!"})
 
     res = {
-        'id':"%s-%d" % (request.vars.acid, user.id),
-        'acid':request.vars.acid,
-        'sid':user.id,
-        'username':user.username,
-        'name':"%s %s" % (user.first_name, user.last_name),
+        'id': "%s-%d" % (request.vars.acid, user.id),
+        'acid': request.vars.acid,
+        'sid': user.id,
+        'username': user.username,
+        'name': "%s %s" % (user.first_name, user.last_name),
         'code': ""
     }
 
     # get the deadline associated with the assignment
     assignment_name = request.vars.assignment
     if assignment_name and auth.user.course_id:
-        assignment = db((db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+        assignment = db(
+            (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
         deadline = assignment.duedate
     else:
         deadline = None
@@ -603,20 +205,21 @@ def get_problem():
     offset = datetime.timedelta(0)
     if session.timezoneoffset and deadline:
         offset = datetime.timedelta(hours=int(session.timezoneoffset))
-        logger.debug("setting offset %s %s", offset, deadline+offset)
+        logger.debug("setting offset %s %s", offset, deadline + offset)
 
-    query =  (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (db.code.course_id == auth.user.course_id)
+    query = (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (
+            db.code.course_id == auth.user.course_id)
     if request.vars.enforceDeadline == "true" and deadline:
         query = query & (db.code.timestamp < deadline + offset)
         logger.debug("DEADLINE QUERY = %s", query)
-    c = db(query).select(orderby = db.code.id).last()
+    c = db(query).select(orderby=db.code.id).last()
 
     if c:
         res['code'] = c.code
 
     # add prefixes, suffix_code and files that are available
     # retrieve the db record
-    source = db.source_code(acid = request.vars.acid, course_id = auth.user.course_name)
+    source = db.source_code(acid=request.vars.acid, course_id=auth.user.course_name)
 
     if source and c and c.code:
         def get_source(acid):
@@ -625,16 +228,17 @@ def get_problem():
                 return r.main_code
             else:
                 return ""
+
         if source.includes:
             # strip off "data-include"
             txt = source.includes[len("data-include="):]
             included_divs = [x.strip() for x in txt.split(',') if x != '']
             # join together code for each of the includes
             res['includes'] = '\n'.join([get_source(acid) for acid in included_divs])
-            #logger.debug(res['includes'])
+            # logger.debug(res['includes'])
         if source.suffix_code:
             res['suffix_code'] = source.suffix_code
-            #logger.debug(source.suffix_code)
+            # logger.debug(source.suffix_code)
 
         file_divs = [x.strip() for x in source.available_files.split(',') if x != '']
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
@@ -644,157 +248,361 @@ def get_problem():
 def doAssignment():
     if not auth.user:
         session.flash = "Please Login"
-        return redirect(URL('default','index'))
+        return redirect(URL('default', 'index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
     if not assignment_id or assignment_id.isdigit() == False:
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
         session.flash = "Bad Assignment ID"
-        return redirect(URL("assignments","chooseAssignment"))
+        return redirect(URL("assignments", "chooseAssignment"))
 
     logger.debug("COURSE = %s assignment %s", course, assignment_id)
-    assignment = db((db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
+    assignment = db(
+        (db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
 
     if not assignment:
-        logger.error("NO ASSIGNMENT assign_id = %s course = %s user = %s",assignment_id, course, auth.user.username)
+        logger.error("NO ASSIGNMENT assign_id = %s course = %s user = %s", assignment_id, course, auth.user.username)
         session.flash = "Could not find login and try again."
-        return redirect(URL('default','index'))
+        return redirect(URL('default', 'index'))
 
     if assignment.visible == 'F' or assignment.visible == None:
         if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
             session.flash = "That assignment is no longer available"
-            return redirect(URL('assignments','chooseAssignment'))
+            return redirect(URL('assignments', 'chooseAssignment'))
 
-
-    questions_html = db((db.assignment_questions.assignment_id == assignment.id) & \
-                        (db.assignment_questions.question_id == db.questions.id) & \
-                        (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T')) \
-                        .select(db.questions.htmlsrc, db.questions.id, db.questions.chapter, db.questions.subchapter, db.questions.name, orderby=db.assignment_questions.sorting_priority)
-
-    readings = db((db.assignment_questions.assignment_id == assignment.id) &
-                  (db.assignment_questions.question_id == db.questions.id) &
-                  (db.assignment_questions.reading_assignment == 'T'))\
-        .select(db.questions.base_course, db.questions.name,
-                db.questions.chapter, db.questions.subchapter,
+    questions = db((db.assignment_questions.assignment_id == assignment.id) & \
+                   (db.assignment_questions.question_id == db.questions.id)) \
+        .select(db.questions.name,
+                db.questions.htmlsrc,
+                db.questions.id,
+                db.questions.chapter,
+                db.questions.subchapter,
+                db.assignment_questions.points,
+                db.assignment_questions.activities_required,
+                db.assignment_questions.reading_assignment,
                 orderby=db.assignment_questions.sorting_priority)
 
-    questions_scores = db((db.assignment_questions.assignment_id == assignment.id) &
-                    (db.assignment_questions.question_id == db.questions.id) &
-                    (db.assignment_questions.reading_assignment == None or db.assignment_questions.reading_assignment != 'T') & \
-                    (db.question_grades.sid == auth.user.username) &
-                    (db.question_grades.div_id == db.questions.name)) \
-        .select(db.questions.id, db.question_grades.score, db.question_grades.comment, db.assignment_questions.points, orderby=db.assignment_questions.sorting_priority)
-
     questionslist = []
-    readingsDict = {}
+    questions_score = 0
+    readings = OrderedDict()
+    readings_score = 0
 
-    # The next for loop formats the readings information into readingsDict
-    # The keys of readingsDict are ids in the chapters table
-    # Each value is a list of lists detailing the information about each section within the assigned chapter
-    # Chapter ids are used as keys so the dictionary can be iterated in the correct order within doAssignment.html
-
-    # Once the questions table starts recording chapters for readings, a dictionary may not be needed anymore,
-    # and the labels query won't be needed at all
-
-    for r in readings:
-        logger.debug("READING = %s",r.name)
-        # todo: eliminate this query
-        labels = db((db.chapters.chapter_label == r.chapter) &
-                    (db.chapters.course_id == auth.user.course_name) &
-                    (db.chapters.id == db.sub_chapters.chapter_id) &
-                    (db.sub_chapters.sub_chapter_label == r.subchapter)) \
-            .select(db.sub_chapters.chapter_id, db.sub_chapters.sub_chapter_name,
-                    db.sub_chapters.sub_chapter_label, db.chapters.chapter_name, db.chapters.chapter_label,
-                    db.chapters.id).first()
-        logger.debug("LABELS = %s",labels)
-        logger.debug("user_id = %s labels[chapters] = %s labels[sub_chapters] = %s",auth.user.id,labels['chapters'].chapter_label,labels['sub_chapters'].sub_chapter_label)
-        chapter_name = labels.chapters.chapter_name
-        subchapter_name = labels.sub_chapters.sub_chapter_name
-        completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
-            (db.user_sub_chapter_progress.chapter_id == labels['chapters'].chapter_label) &
-            (db.user_sub_chapter_progress.sub_chapter_id == labels['sub_chapters'].sub_chapter_label)).select().first()
-
-        # Sometimes when a sub-chapter is added to the book after the user has registerd and the
-        # subchapter tables have been created you need to catch that and insert.
-        if not completion:
-            newid = db.user_sub_chapter_progress.insert(chapter_id=labels['chapters'].chapter_label,
-                                                        sub_chapter_id=labels['sub_chapters'].sub_chapter_label,
-                                                        status=-1,
-                                                        user_id=auth.user.id)
-            completion = db(db.user_sub_chapter_progress.id == newid).select().first()
-
-        logger.debug("COMPLETION = %s",completion)
-        chapterPath = (completion.chapter_id + '/toctree.html')
-        sectionPath = (completion.chapter_id + '/' + completion.sub_chapter_id + '.html')
-
-        if labels['chapters'].id not in readingsDict:
-            readingsDict[labels['chapters'].id] = []
-
-        if completion.status == 1:
-            readingsDict[labels['chapters'].id].append([chapter_name, chapterPath, subchapter_name, sectionPath, 'completed'])
-        elif completion.status == 0:
-            readingsDict[labels['chapters'].id].append([chapter_name, chapterPath, subchapter_name, sectionPath, 'started'])
-        else:
-            readingsDict[labels['chapters'].id].append([chapter_name, chapterPath, subchapter_name, sectionPath, 'notstarted'])
-
-    # This is to get the chapters' completion states based on the completion of sections of the readings in assignments
-    # The completion of chapters in reading assignments means that all the assigned sections for that specific chapter have been completed
-    # This means chapter completion states within assignments will not always match up with chapter completion states in the ToC,
-    # So the DB is not queried and instead the readingsDict is iterated through after it's been built.
-    # Each chapter's completion gets appended to the first list within the list of section information for each chapter in the readingsDict
-    for chapter in readingsDict:
-        hasStarted = False
-        completionState = 'completed'
-        for s in readingsDict[chapter]:
-            if s[4] == 'completed':
-                hasStarted = True
-            if s[4] == 'started':
-                hasStarted = True
-                completionState = 'started'
-        if hasStarted:
-            readingsDict[chapter][0].append(completionState)
-        else:
-            readingsDict[chapter][0].append('notstarted')
-
-    currentqScore = 0
-
-    # This formats questionslist into a list of lists.
-    # Each list within questionslist represents a question and holds the question's html string to be rendered in the view and the question's scoring information
+    # For each question, accumulate information, and add it to either the readings or questions data structure
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
-    for q in questions_html:
 
-        # It there is no html recorded, the question can't be rendered
-        if q.htmlsrc != None:
-
+    for q in questions:
+        if q.questions.htmlsrc:
             # This replacement is to render images
-            q.htmlsrc = bytes(q.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course['course_name'] + '/_static/')
-            q.htmlsrc = q.htmlsrc.replace("../_images","/{}/static/{}/_images".format(request.application,course.course_name))
-            try:
-                if q.id == questions_scores[currentqScore]['questions'].id  and assignment['released']:
-                    questioninfo = [q.htmlsrc,
-                                    questions_scores[currentqScore]['question_grades'].score,
-                                    questions_scores[currentqScore]['assignment_questions'].points,
-                                    questions_scores[currentqScore]['question_grades'].comment,
-                                    q.chapter,
-                                    q.subchapter,
-                                    q.name]
-                    currentqScore += 1
+            htmlsrc = bytes(q.questions.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course[
+                'course_name'] + '/_static/')
+            htmlsrc = htmlsrc.replace("../_images",
+                                      "/{}/static/{}/_images".format(request.application, course.course_name))
+        else:
+            htmlsrc = None
+        if assignment['released']:
+            # get score and comment
+            grade = db((db.question_grades.sid == auth.user.username) &
+                       (db.question_grades.div_id == q.questions.name)).select().first()
+            if grade:
+                score, comment = grade.score, grade.comment
+            else:
+                score, comment = 0, 'ungraded'
+        else:
+            score, comment = 0, 'ungraded'
+
+        info = dict(
+            htmlsrc=htmlsrc,
+            score=score,
+            points=q.assignment_questions.points,
+            comment=comment,
+            chapter=q.questions.chapter,
+            subchapter=q.questions.subchapter,
+            name=q.questions.name,
+            activities_required=q.assignment_questions.activities_required
+        )
+        if q.assignment_questions.reading_assignment:
+            # add to readings
+            if q.questions.chapter not in readings:
+                # add chapter info
+                completion = db((db.user_chapter_progress.user_id == auth.user.id) & \
+                                (db.user_chapter_progress.chapter_id == q.questions.chapter)).select().first()
+                if not completion:
+                    status = 'notstarted'
+                elif completion.status == 1:
+                    status = 'completed'
+                elif completion.status == 0:
+                    status = 'started'
                 else:
-                    questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
-            except:
-                # There are still questions, but no more recorded grades
-                questioninfo  = [q.htmlsrc, '', '','',q.chapter,q.subchapter,q.name]
+                    status = 'notstarted'
+                readings[q.questions.chapter] = dict(status=status, subchapters=[])
 
-            questionslist.append(questioninfo)
+            # add subchapter info
+            # add completion status to info
+            subch_completion = db((db.user_sub_chapter_progress.user_id == auth.user.id) & \
+                                  (
+                                          db.user_sub_chapter_progress.sub_chapter_id == q.questions.subchapter)).select().first()
+            if not subch_completion:
+                status = 'notstarted'
+            elif subch_completion.status == 1:
+                status = 'completed'
+            elif subch_completion.status == 0:
+                status = 'started'
+            else:
+                status = 'notstarted'
+            info['status'] = status
 
-    return dict(course=course, course_name=auth.user.course_name, assignment=assignment, questioninfo=questionslist, course_id=auth.user.course_name, readings=readingsDict)
+            readings[q.questions.chapter]['subchapters'].append(info)
+            readings_score += info['score']
+
+        else:
+            # add to questions
+            questionslist.append(info)
+            questions_score += info['score']
+
+    return dict(course=course,
+                course_name=auth.user.course_name,
+                assignment=assignment,
+                questioninfo=questionslist,
+                course_id=auth.user.course_name,
+                readings=readings,
+                questions_score=questions_score,
+                readings_score=readings_score)
+
 
 def chooseAssignment():
     if not auth.user:
         session.flash = "Please Login"
-        return redirect(URL('default','index'))
+        return redirect(URL('default', 'index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
-    assignments = db((db.assignments.course == course.id) & (db.assignments.visible == 'T')).select(orderby=db.assignments.duedate)
-    return(dict(assignments=assignments))
+    assignments = db((db.assignments.course == course.id) & (db.assignments.visible == 'T')).select(
+        orderby=db.assignments.duedate)
+    return (dict(assignments=assignments))
+
+
+# The rest of the file is about the the spaced practice:
+
+
+# Called when user clicks "I'm done" button.
+def checkanswer():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    sid = auth.user.id
+    course_name = auth.user.course_name
+    # Retrieve the question id from the request object.
+    qid = request.vars.get('QID', None)
+    username = auth.user.username
+    # Retrieve the q (quality of answer) from the request object.
+    q = request.vars.get('q', None)
+
+    # If the question id exists:
+    if request.vars.QID:
+        now = datetime.datetime.utcnow()
+        # Use the autograding function to update the flashcard's e-factor and i-interval.
+        do_check_answer(sid, course_name, qid, username, q, db, settings, now,
+                        datetime.timedelta(hours=int(session.timezoneoffset)))
+        # Since the user wants to continue practicing, continue with the practice action.
+        redirect(URL('practice'))
+    session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
+    redirect(URL('practice'))
+
+
+# Only questions that are marked for practice are eligible for the spaced practice.
+def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
+    return db((db.questions.base_course == base_course) & \
+              (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) & \
+              (db.questions.practice == True)).select()
+
+
+# Gets invoked from lti to set timezone and then redirect to practice()
+def settz_then_practice():
+    return dict(course_name=request.vars.get('course_name', 'UMSI106'))
+
+
+# Gets invoked when the student requests practicing topics.
+def practice():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+
+    # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
+    # 2018, please replace it.
+    remaining_days = (datetime.date(2018, 4, 19) - now.date()).days
+
+    # Since each authenticated user has only one active course, we retrieve the course this way.
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
+    # Retrieve the existing flashcards in the current course for this user.
+    existing_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                             (db.user_topic_practice.user_id == auth.user.id))
+
+    # If the user already has flashcards for the current course.
+    if existing_flashcards.isempty():
+        # new student; create flashcards
+        # We only create flashcards for those sections that are marked by the instructor as taught.
+        subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
+                               (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
+                               (db.sub_chapter_taught.sub_chapter_name == db.sub_chapters.sub_chapter_name) & \
+                               (db.chapters.course_id == auth.user.course_name) & \
+                               (db.sub_chapters.chapter_id == db.chapters.id)) \
+            .select(db.chapters.chapter_label, db.chapters.chapter_name, db.sub_chapters.sub_chapter_label,
+                    orderby=db.chapters.id | db.sub_chapters.id)
+        for subchapterTaught in subchaptersTaught:
+            # We only retrive questions to be used in flashcards if they are marked for practice purpose.
+            questions = _get_qualified_questions(course.base_course,
+                                                 subchapterTaught.chapters.chapter_label,
+                                                 subchapterTaught.sub_chapters.sub_chapter_label)
+            if len(questions) > 0:
+                # There is at least one qualified question in this subchapter, so insert a flashcard for the subchapter.
+                db.user_topic_practice.insert(
+                    user_id=auth.user.id,
+                    course_name=auth.user.course_name,
+                    chapter_label=subchapterTaught.chapters.chapter_label,
+                    sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
+                    question_name=questions[0].name,
+                    # Treat it as if the first eligible question is the last one asked.
+                    i_interval=0,
+                    e_factor=2.5,
+                    # add as if yesterday, so can practice right away
+                    last_presented=now.date() - datetime.timedelta(1),
+                    last_completed=now.date() - datetime.timedelta(1),
+                    creation_time=now,
+                )
+
+    # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
+    practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
+                               (db.user_topic_practice_log.user_id == auth.user.id) & \
+                               (db.user_topic_practice_log.q != 0) & \
+                               (db.user_topic_practice_log.q != -1) & \
+                               (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
+                                                                                             now.month,
+                                                                                             now.day,
+                                                                                             0, 0, 0, 0))).count()
+    # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
+    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                    (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
+    # Select only those where enough time has passed since last presentation.
+    presentable_flashcards = [f for f in flashcards if
+                              (now.date() - f.last_completed.date()).days >= f.i_interval]
+
+    all_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
+                        (db.user_topic_practice.user_id == auth.user.id) & \
+                        (db.user_topic_practice.chapter_label == db.chapters.chapter_label) & \
+                        (db.user_topic_practice.sub_chapter_label == db.sub_chapters.sub_chapter_label) & \
+                        (db.chapters.course_id == auth.user.course_name) & \
+                        (db.sub_chapters.chapter_id == db.chapters.id)) \
+            .select(db.chapters.chapter_name, db.sub_chapters.sub_chapter_name, db.user_topic_practice.i_interval,
+                db.user_topic_practice.last_completed, orderby=db.user_topic_practice.id)
+    for f_card in all_flashcards:
+        f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval -
+                                       (now.date() - f_card.user_topic_practice.last_completed.date()).days)
+        f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
+        f_card["mastery_color"] = "danger"
+        if f_card["mastery_percent"] >= 75:
+            f_card["mastery_color"] = "success"
+        elif f_card["mastery_percent"] >= 50:
+            f_card["mastery_color"] = "info"
+        elif f_card["mastery_percent"] >= 25:
+            f_card["mastery_color"] = "warning"
+
+    # Define how many topics you expect your students practice every day.
+    practice_times_to_pass_today = 10
+
+    # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
+    # have intrinsic motivation to practice beyond what they are expected to do.
+    if len(presentable_flashcards) > 0 and (practiced_today_count != practice_times_to_pass_today or
+                                            request.vars.willing_to_continue):
+        # Present the first one.
+        flashcard = presentable_flashcards[0]
+        # Get eligible questions.
+        questions = _get_qualified_questions(course.base_course,
+                                             flashcard.chapter_label,
+                                             flashcard.sub_chapter_label)
+        # Find index of the last question asked.
+        question_names = [q.name for q in questions]
+        qIndex = question_names.index(flashcard.question_name)
+        # present the next one in the list after the last one that was asked
+        question = questions[(qIndex + 1) % len(questions)]
+
+        # This replacement is to render images
+        question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
+                                                                          'src="../static/' + course[
+                                                                              'course_name'] + '/_static/')
+        question.htmlsrc = question.htmlsrc.replace("../_images",
+                                                    "/{}/static/{}/_images".format(request.application,
+                                                                                   course.course_name))
+
+        autogradable = 1
+        # If it is possible to autograde it:
+        if ((question.autograde is not None) or
+                (question.question_type is not None and question.question_type in
+                 ['mchoice', 'parsonsprob', 'fillintheblank', 'clickablearea', 'dragndrop'])):
+            autogradable = 2
+
+        questioninfo = [question.htmlsrc, question.name, question.id, autogradable]
+
+        # This is required to check the same question in do_check_answer().
+        flashcard.question_name = question.name
+        # This is required to only check answers after this timestamp in do_check_answer().
+        flashcard.last_presented = now
+        flashcard.update_record()
+
+    else:
+        questioninfo = None
+
+        # Add a practice completion record for today, if there isn't one already.
+        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                                       (db.user_topic_practice_Completion.user_id == auth.user.id) & \
+                                       (db.user_topic_practice_Completion.practice_completion_time == now.date()))
+        if practice_completion_today.isempty():
+            db.user_topic_practice_Completion.insert(
+                user_id=auth.user.id,
+                course_name=auth.user.course_name,
+                practice_completion_time=now.date()
+            )
+
+    # The number of days the student has completed their practice.
+    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
+                                   (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
+
+    # Calculate the number of times left for the student to practice today to get the completion point.
+    practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today - practiced_today_count))
+
+    return dict(course=course, course_name=auth.user.course_name,
+                course_id=auth.user.course_name,
+                q=questioninfo, all_flashcards=all_flashcards,
+                flashcard_count=len(presentable_flashcards),
+                # The number of days the student has completed their practice.
+                practice_completion_count=practice_completion_count,
+                remaining_days=remaining_days, max_days=45,
+                # The number of times remaining to practice today to get the completion point.
+                practice_today_left=practice_today_left,
+                # The number of times this user has submitted their practice from the beginning of today (12:00 am) till now.
+                practiced_today_count=practiced_today_count)
+
+
+# Called when user clicks like or dislike icons.
+def like_dislike():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    sid = auth.user.id
+    course_name = auth.user.course_name
+    likeVal = request.vars.get('likeVal', None)
+
+    if likeVal:
+        db.user_topic_practice_survey.insert(
+            user_id=sid,
+            course_name=course_name,
+            like_practice=likeVal,
+            response_time=datetime.datetime.now(),
+        )
+        return json.dumps(dict(complete=True))
+    session.flash = "Sorry, your request was not saved. Please login and try again."
+    redirect(URL('practice'))

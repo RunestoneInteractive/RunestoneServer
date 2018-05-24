@@ -348,6 +348,28 @@ def addinstructor(config, username, course):
         print("{} is already an instructor for {}".format(username, course))
 
 #
+#    grade
+#
+
+@cli.command()
+@click.option("--enforce", is_flag=True, help="Enforce deadline when grading")
+@click.option("--course", help="The name of a course that should already exist in the DB")
+@click.option("--pset", help="Database ID of the Problem Set")
+@pass_config
+def grade(config, course, pset, enforce):
+    """Grade a problem set; hack for long-running grading processes"""
+    os.chdir(findProjectRoot())
+
+    userinfo = {}
+    userinfo['course'] = course if course else click.prompt("Name of course")
+    userinfo['pset'] = pset if pset else click.prompt("Problem Set ID")
+    userinfo['enforce_deadline'] = enforce if enforce else click.confirm("Enforce deadline?", default=True)
+    os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+
+    subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py", shell=True)
+
+
+#
 # Utility Functions Below here
 #
 
@@ -383,3 +405,17 @@ def findProjectRoot():
         prevdir = start
         start = os.path.dirname(start)
     raise IOError("You must be in a web2py application to run rsmanage")
+
+#
+#    fill_practice_log_missings
+#
+
+@cli.command()
+@pass_config
+def fill_practice_log_missings(config):
+    """Only for one-time use to fill out the missing values of the columns that we added to user_topic_practice_log table during the semester."""
+    os.chdir(findProjectRoot())
+
+    subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py", shell=True)
+
+

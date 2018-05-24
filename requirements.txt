@@ -14,5 +14,6 @@ Sphinx>=1.7.1
 sphinxcontrib-paverutils>=1.17
 SQLAlchemy>=1.0.14
 cssselect>=1.0
+oauth2>=1.9
 coverage
 -e rsmanage/

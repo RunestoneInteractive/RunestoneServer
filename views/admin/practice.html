@@ -1,0 +1,88 @@
+{{extend 'admin/instructors.html'}}
+{{ block tabcontent }}
+
+<script type="text/javascript">
+  // Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_.
+  eBookConfig.toc = {{=XML(toc)}};
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js">
+</script>
+
+<link href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" rel="stylesheet" type="text/css">
+<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}">
+</script>
+
+<link href="{{=URL('static', 'js/jstree_themes/proton/style.min.css')}}" rel="stylesheet">
+<script src="{{=URL('static', 'js/jstree.min.js')}}">
+</script>
+
+<link href="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/css/bootstrap-editable.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.css')}}" rel="stylesheet">
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-en-US.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-editable.min.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-editable/js/bootstrap-editable.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/jquery.tablednd.js')}}">
+</script>
+<script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.js')}}">
+</script>
+<script src="{{=URL('static', 'js/WaitingFor.js')}}">
+</script>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <h4>Choose the sections taught, so that students can practice them.</h4>
+    <div id="search-tree-practice-picker-container">
+      <input id="search-tree-practice-picker" type="text">
+    </div>
+    <div id="tree-practice-picker" style="margin-bottom: 40px;"></div>
+  </div>
+  <div class="col-md-1">
+      <!-- <div style="margin-top:100px">
+        <a href="/{{=request.application}}/admin/add_practice_items" type="button" class="btn btn-success">Add selected sections.</a>
+      </div>-->
+  </div>
+</div>
+
+<script type="text/javascript">
+
+// Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
+$(function () {
+    $(".dashboardnav").removeClass("active");
+    $("#practicetab").addClass("active");
+
+    var practice_picker = $('#tree-practice-picker');
+
+    if (eBookConfig.toc.practice_picker.length != 0) {
+        configure_tree_picker(practice_picker, eBookConfig.toc.practice_picker, $('#search-tree-practice-picker'), 2,
+                // Called when a node is checked.
+                function (node) {
+                },
+                // Called when a node is unchecked.
+                function (node) {
+                }
+        );
+
+        practice_picker.on("check_node.jstree uncheck_node.jstree", function (event, data) {
+            waitingDialog.show('Please wait to load the flashcards for all the students.', {progressType: 'warning'});
+            $.post("/{{=request.application}}/admin/add_practice_items", { data: JSON.stringify(practice_picker.jstree(true).get_checked()) })
+            .done(function () {
+                waitingDialog.hide();
+            });
+        });
+    }
+    else {
+        $("#search-tree-practice-picker-container").hide();
+        $("#tree-practice-picker").text("None of the sections contain any question eligible for practice! Please add ':practice: 1' tag to the appropriate questions in your .rst files and rebuild your textbook.");
+    }
+});
+</script>
+
+{{ end }}

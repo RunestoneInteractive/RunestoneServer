@@ -1,13 +1,18 @@
 from os import path
 import os
 from datetime import date, timedelta
+import re
 from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
+from rs_grading import send_lti_grades
+
 import logging
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
+
 
 ALL_AUTOGRADE_OPTIONS = ['manual', 'all_or_nothing', 'pct_correct', 'interact']
 AUTOGRADE_POSSIBLE_VALUES = dict(
@@ -205,6 +210,7 @@ def sections_update():
         bulk_email_form = bulk_email_form,
         )
 
+
 def diffviewer():
     sid = ""
     div_id = request.vars.divid
@@ -213,9 +219,6 @@ def diffviewer():
         sid = auth.user.username
         course_name = auth.user.course_name
     return dict(course_id=course_name, sid=sid, divid=div_id)
-
-
-
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -244,13 +247,78 @@ def assignments():
         chapter_labels.append(row.chapter_label)
     return dict(coursename=auth.user.course_name,
                 confirm=False,
-                course_id = auth.user.course_name,
+                course_id=auth.user.course_name,
                 course_url=course_url,
                 assignments=assigndict,
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
                 )
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def practice():
+    return dict(course_id=auth.user.course_name, toc=_get_toc_and_questions())
+
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def add_practice_items():
+    course = db(db.courses.course_name == auth.user.course_name).select().first()
+
+    data = json.loads(request.vars.data)
+    string_data = [x.encode('UTF8') for x in data]
+
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+
+    students = db((db.auth_user.course_name == auth.user.course_name)) \
+        .select()
+    chapters = db((db.chapters.course_id == auth.user.course_name)) \
+        .select()
+    for chapter in chapters:
+        subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
+            .select()
+        for subchapter in subchapters:
+            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
+                               (db.sub_chapter_taught.chapter_name == chapter.chapter_name) & \
+                               (db.sub_chapter_taught.sub_chapter_name == subchapter.sub_chapter_name))
+            questions = db((db.questions.base_course == course.base_course) & \
+                           (db.questions.topic == "{}/{}".format(chapter.chapter_label, subchapter.sub_chapter_label)) & \
+                           (db.questions.practice == True))
+            if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
+                if subchapterTaught.isempty() and not questions.isempty():
+                    db.sub_chapter_taught.insert(
+                        course_name=auth.user.course_name,
+                        chapter_name=chapter.chapter_name,
+                        sub_chapter_name=subchapter.sub_chapter_name,
+                        teaching_date=now,
+                    )
+                    for student in students:
+                        flashcards = db((db.user_topic_practice.user_id == student.id) & \
+                                        (db.user_topic_practice.course_name == course.course_name) &
+                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
+                        if flashcards.isempty():
+                            db.user_topic_practice.insert(
+                                user_id=student.id,
+                                course_name=course.course_name,
+                                chapter_label=chapter.chapter_label,
+                                sub_chapter_label=subchapter.sub_chapter_label,
+                                question_name=questions.select().first().name,
+                                i_interval=0,
+                                e_factor=2.5,
+                                # add as if yesterday, so can practice right away
+                                last_presented=now.date() - datetime.timedelta(1),
+                                last_completed=now.date() - datetime.timedelta(1),
+                                creation_time=now,
+                            )
+            else:
+                if not subchapterTaught.isempty():
+                    subchapterTaught.delete()
+                    db((db.user_topic_practice.course_name == course.course_name) &
+                       (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                       (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
+    return json.dumps(dict(complete=True))
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
@@ -364,8 +432,8 @@ def course_students():
     cur_students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
-    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
-    searchdict = {}
+    ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name, orderby= db.auth_user.last_name|db.auth_user.first_name)
+    searchdict = OrderedDict()
     for row in cur_students:
         name = row.first_name + " " + row.last_name
         username = row.username
@@ -973,7 +1041,6 @@ def editindexrst():
     except Exception as ex:
         logger.error(ex)
 
-
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
@@ -981,9 +1048,17 @@ def releasegrades():
         released = (request.vars['released'] == 'yes')
         assignment = db(db.assignments.id == assignmentid).select().first()
         assignment.update_record(released=released)
-        return "Success"
+
     except Exception as ex:
         logger.error(ex)
+
+    if released:
+        # send lti grades
+        assignment = db(db.assignments.id == assignmentid).select().first()
+        if assignment:
+            send_lti_grades(assignment, auth.user.course_id, db, settings, session.oauth_consumer_key)
+    return "Success"
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment_release_states():
@@ -1010,19 +1085,74 @@ def _get_toc_and_questions():
         #      -- get the divs associated with it, and insert into the sub-sub-dictionary
 
         question_picker = []
-        reading_picker = []  # this one doesn't include the questions, but otherwise the same
+        reading_picker = []  # This one doesn't include the questions, but otherwise the same
+        practice_picker = []  # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
+        subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
+        chapters_and_subchapters_taught = [(row.chapter_name, row.sub_chapter_name) for row in subchapters_taught_query]
+
+
+
+        topic_query = db((db.courses.course_name == auth.user.course_name) & \
+                         (db.questions.base_course == db.courses.base_course) & \
+                         (db.questions.practice == True) & \
+                         (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
+        for q in topic_query:
+            chap, subch = q.topic.split('/')
+            # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
+            # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
+            # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
+            # corresponding tables.
+            chapter = db((db.chapters.course_id == auth.user.course_name) & \
+                              (db.chapters.chapter_label == chap)) \
+                              .select()[0]
+            sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
+                              (db.sub_chapters.sub_chapter_label == subch)) \
+                              .select()[0].sub_chapter_name
+            chapter_name = chapter.chapter_name
+            # find the item in practice picker for this chapter
+            p_ch_info = None
+            for ch_info in practice_picker:
+                if ch_info['text'] == chapter_name:
+                    p_ch_info = ch_info
+            if not p_ch_info:
+                # if there isn't one, add one
+                p_ch_info = {}
+                practice_picker.append(p_ch_info)
+                p_ch_info['text'] = chapter_name
+                p_ch_info['children'] = []
+            # add the subchapter
+            p_sub_ch_info = {}
+            if sub_chapter_name not in [child['text'] for child in p_ch_info['children']]:
+                p_ch_info['children'].append(p_sub_ch_info)
+                p_sub_ch_info['id'] = "{}/{}".format(chapter_name, sub_chapter_name)
+                p_sub_ch_info['text'] = sub_chapter_name
+                # checked if
+                p_sub_ch_info['state'] = {'checked':
+                                          (chapter_name, sub_chapter_name) in chapters_and_subchapters_taught}
+
         # chapters are associated with courses, not with base_courses
         chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
+        ids = {row.chapter_name: row.id for row in chapters_query}
+        practice_picker.sort(key=lambda d: ids[d['text']])
+
         for ch in chapters_query:
             q_ch_info = {}
             question_picker.append(q_ch_info)
             q_ch_info['text'] = ch.chapter_name
             q_ch_info['children'] = []
-            # copy same stuff for reading picker
+            # Copy the same stuff for reading picker.
             r_ch_info = {}
             reading_picker.append(r_ch_info)
             r_ch_info['text'] = ch.chapter_name
             r_ch_info['children'] = []
+            # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
+            #                         (db.questions.practice == True))
+            # if not practice_questions.isempty():
+            #     # Copy the same stuff for practice picker.
+            #     p_ch_info = {}
+            #     practice_picker.append(p_ch_info)
+            #     p_ch_info['text'] = ch.chapter_name
+            #     p_ch_info['children'] = []
             subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
@@ -1032,12 +1162,23 @@ def _get_toc_and_questions():
                 if sub_ch.sub_chapter_name == 'Exercises':
                     q_sub_ch_info['id'] = ch.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
-                # copy same stuff for reading picker
+                # Copy the same stuff for reading picker.
                 r_sub_ch_info = {}
                 r_ch_info['children'].append(r_sub_ch_info)
                 r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
                 r_sub_ch_info['text'] = sub_ch.sub_chapter_name
-
+                # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
+                #                (db.questions.subchapter == sub_ch.sub_chapter_label) & \
+                #                (db.questions.practice == True))
+                # if not practice_questions.isempty():
+                #     # Copy the same stuff for reading picker.
+                #     p_sub_ch_info = {}
+                #     p_ch_info['children'].append(p_sub_ch_info)
+                #     p_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
+                #     p_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                #     # checked if
+                #     p_sub_ch_info['state'] = {'checked':
+                #                               (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
                 # include another level for questions only in the question picker
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
                                      (db.questions.base_course == db.courses.base_course) & \
@@ -1046,11 +1187,12 @@ def _get_toc_and_questions():
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
                 for question in questions_query:
                     q_info = dict(
-                        text = question.questions.name,
-                        id = question.questions.name,
+                        text=question.questions.name,
+                        id=question.questions.name,
                     )
                     q_sub_ch_info['children'].append(q_info)
         return json.dumps({'reading_picker': reading_picker,
+                          'practice_picker': practice_picker,
                           'question_picker': question_picker})
     # except Exception as ex:
     #     print ex
