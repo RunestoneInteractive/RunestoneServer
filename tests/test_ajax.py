@@ -472,6 +472,26 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = json.loads(did_donate())
         self.assertFalse(res['donate'])
 
+    def test_datafile(self):
+        db.source_code.insert(course_id='testcourse',
+            acid='mystery.txt',
+            main_code = 'hello world')
+
+        auth.login_user(db.auth_user(11))
+        request.vars.course_id = 'testcourse'
+        request.vars.acid = 'mystery.txt'
+        res = json.loads(get_datafile())
+        print('res = ', res)
+        self.assertEqual(res['data'], 'hello world')
+        # non-existant
+        request.vars.course_id = 'testcourse'
+        request.vars.acid = 'nothere.txt'
+        res = json.loads(get_datafile())
+        self.assertIsNone(res['data'])
+
+
+
+
 
 
 suite = unittest.TestSuite()
