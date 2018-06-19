@@ -46,6 +46,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     codelens=ALL_WHICH_OPTIONS,
     parsonsprob=ALL_WHICH_OPTIONS,
     video=[],
+    youtube=[],
     poll=[],
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS
