@@ -51,11 +51,11 @@ def build():
         else:
             base_course = request.vars.coursetype
 
-        row = scheduler.queue_task(run_sphinx, timeout=600, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=base_course,
                                                                        application=request.application,
-                                                                       http_host=request.env.http_host))
+                                                                       http_host=request.env.http_host), immediate=True)
         uuid = row['uuid']
 
         if request.vars.startdate == '':
@@ -124,10 +124,10 @@ def build():
 
 def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=600, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
-                                                                   http_host=request.env.http_host))
+                                                                   http_host=request.env.http_host), immediate=True)
     uuid = row['uuid']
 
     course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")

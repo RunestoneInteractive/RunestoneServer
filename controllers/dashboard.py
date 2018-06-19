@@ -147,6 +147,8 @@ def index():
 @auth.requires_login()
 def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
+    #todo: Test to see if vars.id is there -- if its not then load_user_metrics will crash
+    #todo: This seems redundant with assignments/index  -- should use this one... id should be text sid
     data_analyzer.load_user_metrics(request.vars.id)
     data_analyzer.load_assignment_metrics(request.vars.id)
 

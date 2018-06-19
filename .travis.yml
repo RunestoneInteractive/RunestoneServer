@@ -16,6 +16,9 @@ script:
 - cd runestone
 - mkdir private
 - echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key
+- cd books
+- git clone https://github.com/RunestoneInteractive/thinkcspy.git
+- cd ..
 - cd tests
 - "./run_tests.sh"
 notifications:
