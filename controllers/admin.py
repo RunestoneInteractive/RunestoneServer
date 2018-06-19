@@ -27,6 +27,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     codelens=ALL_AUTOGRADE_OPTIONS,
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
     video=['interact'],
+    youtube=['interact'],
     poll=['interact'],
     page=['interact'],
     showeval=['interact']
