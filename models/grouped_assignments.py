@@ -240,10 +240,11 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         q = q(db.useinfo.timestamp < as_of_timestamp)
 
     if all_problem_sets:
-        activities = q.select(db.useinfo.timestamp, db.assignments.duedate, db.assignments.id, orderby=db.useinfo.timestamp)
+        activities = q.select(db.useinfo.timestamp, db.assignments.duedate, db.assignments.id,
+                              orderby=db.useinfo.timestamp)
         # We want to define a variable that measures how early each student works on their assignments. We suppose this
-        # measure as the inverse of a measurement of procrastination.
-        # For this purpose, we need to find the first and last timestamps that the student worked on each assignment.
+        # measure as the inverse of a measurement of procrastination. For this purpose, we need to find the first, last,
+        # and all the timestamps that the student worked on each assignment.
         first_last_timestamps = {}
     else:
         activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
@@ -277,9 +278,14 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
             if timestamp <= deadline:
                 # Use assignment id as key.
                 if assignment_id not in first_last_timestamps:
-                    first_last_timestamps[assignment_id] = {'first': timestamp, 'last': timestamp, 'deadline': deadline}
+                    first_last_timestamps[assignment_id] = {'first': timestamp,
+                                                            'last': timestamp,
+                                                            'visits': [timestamp],
+                                                            'deadline': deadline}
                 else:
-                    # We need to find the first and last timestamps that the student worked on each assignment.
+                    # We need to find the first, last, and all the timestamps timestamps that the student worked on
+                    # each assignment.
+                    first_last_timestamps[assignment_id]['visits'].append(timestamp)
                     if timestamp < first_last_timestamps[assignment_id]['first']:
                         first_last_timestamps[assignment_id]['first'] = timestamp
                     if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
@@ -299,16 +305,21 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
             print assignment_id, v['first'], v['last'], v['deadline']
 
     if all_problem_sets:
-        # We define the variable earliness that measures how early each student works on their assignments. We suppose
+        # We I define the variable earliness that measures how early each student works on their assignments. We suppose
         # this measure as the inverse of a measurement of procrastination and we calculate it as the difference between
-        # the deadline and mean of the first and the last time before the deadline that they worked on the assignment.
+        # the deadline and mean of all the timestamps before the deadline that they worked on the assignment.
         # Add up over all assignments; student who misses an assignments gets no earliness for it.
         earliness = 0
         for v in first_last_timestamps.values():
-            average_delta = (v['last'] - v['first']) / 2
-            average_ts = v['first'] + average_delta
-            earliness += (v['deadline'] - average_ts).total_seconds()
-        return total_time, earliness/float(3600 * 24)
+            average_delta = 0
+            for timestamp in v['visits']:
+                average_delta += v['deadline'] - timestamp
+            average_delta /= len(v['visits'])
+            earliness += average_delta.total_seconds()
+        # Finally, divide the earliness by the number of assignments, so that earliness does not depend on the number of
+        # submitted assignments.
+        earliness /= len(first_last_timestamps)
+        return total_time, earliness/float(3600)
 
     return total_time
 
