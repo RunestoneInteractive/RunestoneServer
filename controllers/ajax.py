@@ -27,9 +27,10 @@ EVENT_TABLE = {'mChoice':'mchoice_answers',
                'clickablearea':'clickablearea_answers',
                'parsonsprob': 'parsons_answers' }
 
+
 def compareAndUpdateCookieData(sid):
     if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
-        db.useinfo(db.useinfo.sid == request.cookies['ipuser'].value).update(sid=sid)
+        db.useinfo.update_or_insert(db.useinfo.sid == request.cookies['ipuser'].value, sid=sid)
 
 def hsblog():
     setCookie = False
