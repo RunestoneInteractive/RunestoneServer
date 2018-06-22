@@ -57,7 +57,7 @@ def hsblog():
         tt = 0
 
     try:
-        db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+        db.useinfo.insert(sid=sid,act=act[0:512],div_id=div_id,event=event,timestamp=ts,course_id=course)
     except:
         logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
