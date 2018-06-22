@@ -51,7 +51,9 @@ def hsblog():
     div_id = request.vars.div_id
     event = request.vars.event
     course = request.vars.course
-    ts = datetime.datetime.now()
+    # Get the current time, rounded to the nearest second -- this is how time time will be stored in the database.
+    ts = datetime.datetime.utcnow()
+    ts -= datetime.timedelta(microseconds=ts.microsecond)
     tt = request.vars.time
     if not tt:
         tt = 0
@@ -78,6 +80,10 @@ def hsblog():
             logger.debug('correct {} incorrect {} skipped {} time {}'.format(request.vars.correct, request.vars.incorrect, request.vars.skipped, request.vars.time))
             logger.debug('Error: {}'.format(e.message))
 
+    # Produce a default result.
+    res = dict(log=True, timestamp=str(ts))
+
+    # Process this event.
     if event == 'mChoice' and auth.user:
         # # has user already submitted a correct answer for this question?
         # if db((db.mchoice_answers.sid == sid) &
@@ -141,7 +147,6 @@ def hsblog():
             sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course)
 
     response.headers['content-type'] = 'application/json'
-    res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
         response.cookies['ipuser']['expires'] = 24*3600*90
