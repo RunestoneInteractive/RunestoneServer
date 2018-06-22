@@ -14,10 +14,10 @@ logger.setLevel(settings.log_level)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
-EVENT_TABLE = {'mChoice':'mchoice_answers', 
-               'fillb':'fitb_answers', 
-               'dragNdrop':'dragndrop_answers', 
-               'clickableArea':'clickablearea_answers', 
+EVENT_TABLE = {'mChoice':'mchoice_answers',
+               'fillb':'fitb_answers',
+               'dragNdrop':'dragndrop_answers',
+               'clickableArea':'clickablearea_answers',
                'parsons':'parsons_answers',
                'codelens1':'codelens_answers',
                'shortanswer':'shortanswer_answers',
@@ -498,7 +498,7 @@ def _getStudentResults(question):
     tbl_name = EVENT_TABLE[qst.question_type]
     tbl = db[tbl_name]
 
-    res = db( (tbl.div_id == question) & 
+    res = db( (tbl.div_id == question) &
                 (tbl.course_name == cc.course_name) &
                 (tbl.timestamp >= cc.term_start_date)).select(tbl.sid, tbl.answer, orderby=tbl.sid)
 
@@ -836,5 +836,3 @@ def get_datafile():
         file_contents = None
 
     return json.dumps(dict(data=file_contents))
-
-
