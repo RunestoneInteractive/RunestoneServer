@@ -58,7 +58,10 @@ class TestAjaxEndpoints(unittest.TestCase):
         # call the function
         res = hsblog()
         res = json.loads(res)
-        self.assertEqual(res, {'log':True})
+        self.assertEqual(len(res.keys()), 2)
+        self.assertEqual(res['log'], True)
+        time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamp'], '%Y-%m-%d %H:%M:%S')
+        self.assertLess(time_delta, datetime.timedelta(seconds=1))
 
         # make sure the basic db stuff was written
         dbres = db(db.useinfo.div_id == 'unit_test_1').select(db.useinfo.ALL)
