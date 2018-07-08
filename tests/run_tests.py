@@ -29,7 +29,7 @@ if __name__ == '__main__':
     assert os.environ['TEST_DBURL']
 
     # Extract the components of the DBURL. The expected format is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
-    empty1, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgresql://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
+    empty1, postgres_ql, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgres(ql)?://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
     assert (not empty1) and (not empty2)
     os.environ['PGPASSWORD'] = pgpassword
 
