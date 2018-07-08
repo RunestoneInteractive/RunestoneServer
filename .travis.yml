@@ -20,7 +20,7 @@ script:
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
 - cd ..
 - cd tests
-- "./run_tests.sh"
+- python run_tests.py
 notifications:
   slack:
     secure: OfeZ/+YHpSl7GNFkzEKu0uObuMdymKmDEeDyfB++RaglalcgkDQAqrCPx+YVw6brXOHGeC6BkGJe/Fs143Ai8/yf38nMmZg/dej5nLgZNST67jWaapIydx5QeuCrsRKvUP+z6yEYoBkYXTsYPyTiKGGsyzvX6dimZRT4nD8qrv0=
