@@ -1,0 +1,69 @@
+import os
+import sys
+import argparse
+import re
+from ci_utils import xqt, pushd
+
+# Assume we are running with working directory in tests
+
+if __name__ == '__main__':
+    os.environ['WEB2PY_CONFIG'] = 'test'
+    # HINT: make sure that ``0.py`` has something like the following, that reads this environment variable:
+    #
+    # .. code:: Python
+    #   :number-lines:
+    #
+    #   config = environ.get("WEB2PY_CONFIG","production")
+    #
+    #   if config == "production":
+    #       settings.database_uri = environ["DBURL"]
+    #   elif config == "development":
+    #       settings.database_uri = environ.get("DEV_DBURL")
+    #   elif config == "test":
+    #       settings.database_uri = environ.get("TEST_DBURL")
+    #   else:
+    #       raise ValueError("unknown value for WEB2PY_CONFIG")
+
+    # HINT: make sure that you export TEST_DBURL in your environment; not set here because it's specific to local
+    # setup, possibly with a password, and thus can't be committed to the repo.
+    assert os.environ['TEST_DBURL']
+
+    # Extract the components of the DBURL. The expected format is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
+    empty1, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgresql://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
+    assert (not empty1) and (not empty2)
+    os.environ['PGPASSWORD'] = pgpassword
+
+    # HINT: if using postgres, set an environment variable for PGUSER so that the database drops and creates will work
+    os.environ['PGUSER'] = 'postgres'
+
+
+    parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
+    parser.add_argument('--rebuildgrades', action='store_true',
+        help='Reset the unit test based on current grading code.')
+    parser.add_argument('--skipdbinit', action='store_true',
+        help='Skip initialization of the test database.')
+    parsed_args = parser.parse_args()
+
+    if parsed_args.rebuildgrades:
+        with pushd('../../..'):
+            print("recalculating grades tables")
+            xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
+            print("dumping the data")
+            xqt('pg_dump --no-owner runestone_test > applications/runestone/tests/runestone_test.sql')
+        sys.exit(0)
+
+    if parsed_args.skipdbinit:
+        print('Skipping DB initialization.')
+    else:
+        # make sure runestone_test is nice and clean
+        xqt('dropdb --echo --if-exists "{}"'.format(dbname),
+            'createdb --echo "{}"'.format(dbname),
+            'psql "{}" < runestone_test.sql'.format(dbname))
+
+    with pushd('../../..'):
+        # Now run
+        cover_dirs = 'applications/runestone/tests,applications/runestone/controllers,applications/runestone/models'
+        xqt('{} -m coverage run --source={} web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py'.format(sys.executable, cover_dirs))
+        xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, cover_dirs, x)
+              for x in ['test_dashboard.py', 'test_admin.py', 'test_assignments.py']])
+        xqt('{} -m coverage report'.format(sys.executable))
