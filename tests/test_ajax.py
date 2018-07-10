@@ -14,13 +14,18 @@
 # timedAssess
 
 
-
 import unittest
 import json
 import datetime
 from gluon.globals import Request, Session
 from gluon.tools import Auth
 from dateutil.parser import parse
+import sys
+
+# This doesn't work -- ``__file__`` is ``applications\runestone\models\user_biography.py`` on my PC. ???
+#sys.path.append(os.path.dirname(__file__))
+sys.path.append('applications/runestone/tests')
+from ci_utils import is_linux
 
 # bring in the ajax controllers
 
@@ -37,6 +42,11 @@ class TestAjaxEndpoints(unittest.TestCase):
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         execfile("applications/runestone/controllers/ajax.py", globals())
 
+    def tearDown(self):
+        # In case of an error, roll back the last transaction to leave the
+        # database in a working state.
+        db.rollback()
+
     def testHSBLog(self):
         # Set up the request object
         request.vars["act"] = 'run'
@@ -48,7 +58,10 @@ class TestAjaxEndpoints(unittest.TestCase):
         # call the function
         res = hsblog()
         res = json.loads(res)
-        self.assertEqual(res, {'log':True})
+        self.assertEqual(len(res.keys()), 2)
+        self.assertEqual(res['log'], True)
+        time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamp'], '%Y-%m-%d %H:%M:%S')
+        self.assertLess(time_delta, datetime.timedelta(seconds=1))
 
         # make sure the basic db stuff was written
         dbres = db(db.useinfo.div_id == 'unit_test_1').select(db.useinfo.ALL)
@@ -346,22 +359,25 @@ class TestAjaxEndpoints(unittest.TestCase):
 
         request.vars.lastPageUrl = 'https://runestone.academy/runestone/static/testcourse/Recursion/SierpinskiTriangle.html'
         res = json.loads(getCompletionStatus())
-        self.assertEqual(-1, res[0]['completionStatus'])   
+        self.assertEqual(-1, res[0]['completionStatus'])
         row = db((db.user_sub_chapter_progress.chapter_id == 'Recursion') & (db.user_sub_chapter_progress.sub_chapter_id == 'SierpinskiTriangle')).select().first()
         self.assertIsNotNone(row)
         self.assertIsNone(row.end_date)
         today = datetime.datetime.now()
         self.assertEqual(row.start_date.month, today.month)
-        self.assertEqual(row.start_date.day, today.day)        
-        self.assertEqual(row.start_date.year, today.year)        
+        self.assertEqual(row.start_date.day, today.day)
+        self.assertEqual(row.start_date.year, today.year)
 
         res = json.loads(getAllCompletionStatus())
         self.assertEqual(409, len(res))
 
-    def testGetNumOnline(self):
+    def test_GetNumOnline(self):
+        # Put some users online and record that in the database.
+        self.testGettop10Answers()
+        db.commit()
         res = json.loads(getnumonline())
-        # this is 1 because gettop10 adds data to useinfo if the order of the tests change this may fail do to more or less distinct users showing activity in useinfo.
-        self.assertEqual(1, res[0]['online'])
+        # this is 6 because gettop10 adds data for 6 users to useinfo.
+        self.assertEqual(6, res[0]['online'])
 
     def testGetUserLoggedIn(self):
         auth.login_user(db.auth_user(11))
@@ -374,7 +390,7 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertTrue('redirect' in res)
 
 
-    def test_gettop10Answers(self):
+    def testGettop10Answers(self):
         # We don't have any fillb answers in our test database, so lets add some.
         db.questions.insert(base_course='thinkcspy', name='fillb1',
                             chapter='Exceptions',
@@ -407,17 +423,18 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertEqual(res[0]['answer'], '42')
         self.assertEqual(res[0]['count'], 4)
         self.assertEqual(res[1]['answer'], '41')
-        self.assertEqual(res[1]['count'], 2)                        
+        self.assertEqual(res[1]['count'], 2)
         self.assertEqual(misc['yourpct'], 100)
 
+    @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.')
     def testPreviewQuestion(self):
         src = """
 .. activecode:: preview_test1
-        
+
    Hello World
    ~~~~
    print("Hello World")
-   
+
 """
         request.vars.code = json.dumps(src)
         res = json.loads(preview_question())

@@ -6,13 +6,16 @@ services:
 addons:
   postgresql: '9.4'
 script:
+- mkdir runestone
+# Move everything except the newly-created ``runestone/`` directory into ``runestone/``. See https://askubuntu.com/questions/91740/how-to-move-all-files-in-current-folder-to-subfolder.
+- mv !(runestone) runestone
 - export LANG=en_US.UTF-8
 - export WEB2PY_CONFIG=test
 - export TEST_DBURL=postgres://postgres:@localhost/runestone_test
 - wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip
 - unzip web2py_src.zip
 - cd web2py/applications
-- ln -s ../../ runestone
+- mv ../../runestone .
 - cd runestone
 - mkdir private
 - echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key
@@ -20,7 +23,7 @@ script:
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
 - cd ..
 - cd tests
-- "./run_tests.sh"
+- python run_tests.py
 notifications:
   slack:
     secure: OfeZ/+YHpSl7GNFkzEKu0uObuMdymKmDEeDyfB++RaglalcgkDQAqrCPx+YVw6brXOHGeC6BkGJe/Fs143Ai8/yf38nMmZg/dej5nLgZNST67jWaapIydx5QeuCrsRKvUP+z6yEYoBkYXTsYPyTiKGGsyzvX6dimZRT4nD8qrv0=
