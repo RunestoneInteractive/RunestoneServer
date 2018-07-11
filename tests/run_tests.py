@@ -34,7 +34,7 @@ if __name__ == '__main__':
     os.environ['PGPASSWORD'] = pgpassword
 
     # HINT: if using postgres, set an environment variable for PGUSER so that the database drops and creates will work
-    os.environ['PGUSER'] = 'postgres'
+    os.environ['PGUSER'] = pguser
 
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
