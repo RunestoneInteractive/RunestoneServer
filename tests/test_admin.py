@@ -1,9 +1,7 @@
 import unittest
 import json
-import datetime
 from gluon.globals import Request, Session
 from gluon.tools import Auth
-from dateutil.parser import parse
 
 #     getGradeComments      24180 273.000    6281
 # add__or_update_assignment_question        14059 678.000    7232

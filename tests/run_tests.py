@@ -32,10 +32,7 @@ if __name__ == '__main__':
     empty1, postgres_ql, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgres(ql)?://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
     assert (not empty1) and (not empty2)
     os.environ['PGPASSWORD'] = pgpassword
-
-    # HINT: if using postgres, set an environment variable for PGUSER so that the database drops and creates will work
     os.environ['PGUSER'] = pguser
-
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
     parser.add_argument('--rebuildgrades', action='store_true',

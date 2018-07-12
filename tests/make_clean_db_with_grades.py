@@ -12,7 +12,7 @@
 from gluon.globals import Request
 
 # bring in the assignments controllers
-execfile("applications/runestone/controllers/assignments.py", globals())
+execfile("applications/runestone/modules/rs_grading.py", globals())
 
 # clean up the database
 db(db.useinfo.div_id == 'unit_test_1').delete()
@@ -51,5 +51,5 @@ for g in graded:
                                       deadline=g.assignments.duedate if use_deadline else None,
                                       autograde=g.assignment_questions.autograde,
                                       which_to_grade=g.assignment_questions.which_to_grade,
-                                      save_score=True)
+                                      save_score=True, db=db)
     use_deadline = not use_deadline
