@@ -283,6 +283,14 @@ def doAssignment():
                 db.assignment_questions.reading_assignment,
                 orderby=db.assignment_questions.sorting_priority)
 
+
+    try:
+        db.useinfo.insert(sid=auth.user.username,act='viewassignment',div_id=assignment.name,
+                          event='page',
+                          timestamp=datetime.datetime.utcnow(),course_id=course.course_name)
+    except:
+        logger.debug('failed to insert log record for {} in {} : doAssignment '.format(auth.user.username, course.course_name))
+
     questionslist = []
     questions_score = 0
     readings = OrderedDict()

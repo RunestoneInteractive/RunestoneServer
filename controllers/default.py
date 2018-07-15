@@ -289,14 +289,15 @@ def coursechooser():
 @auth.requires_login()
 def removecourse():
     course_id_query = db(db.courses.course_name == request.args[0]).select(db.courses.id)
-
+    # todo: properly encode course_names to handle courses with special characters
     # Check if they're about to remove their currently active course
     auth_query = db(db.auth_user.id == auth.user.id).select()
     for row in auth_query:
-        if row.course_name == request.args[0]:
+        if row.course_name == request.args[0] and course_id_query:
             session.flash = T("Sorry, you cannot remove your current active course.")
         else:
-            db((db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == course_id_query[0].id)).delete()
+            db((db.user_courses.user_id == auth.user.id) & 
+               (db.user_courses.course_id == course_id_query[0].id)).delete()
 
     redirect('/%s/default/courses' % request.application)
 
