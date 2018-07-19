@@ -168,7 +168,7 @@ def runlog():    # Log errors and runs with code
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code if request.vars.code else ""
-    ts = datetime.datetime.now()
+    ts = datetime.datetime.utcnow()
     error_info = request.vars.errinfo
     pre = request.vars.prefix if request.vars.prefix else ""
     post = request.vars.suffix if request.vars.suffix else ""
@@ -368,13 +368,13 @@ def updatelastpage():
                    last_page_chapter = lastPageChapter,
                    last_page_subchapter = lastPageSubchapter,
                    last_page_scroll_location = lastPageScrollLocation,
-                   last_page_accessed_on = datetime.datetime.now())
+                   last_page_accessed_on = datetime.datetime.utcnow())
         db.commit()
         db((db.user_sub_chapter_progress.user_id == auth.user.id) &
            (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
            (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
                    status = completionFlag,
-                   end_date = datetime.datetime.now())
+                   end_date = datetime.datetime.utcnow())
         db.commit()
 
 def getCompletionStatus():
@@ -536,7 +536,7 @@ def getaggregateresults():
     is_instructor = verifyInstructorStatus(course,auth.user.id)
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     if course == 'thinkcspy' or course == 'pythonds':
-        start_date = datetime.datetime.now() - datetime.timedelta(days=90)
+        start_date = datetime.datetime.utcnow() - datetime.timedelta(days=90)
     else:
         start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
