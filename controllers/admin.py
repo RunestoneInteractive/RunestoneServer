@@ -1107,7 +1107,7 @@ def _get_toc_and_questions():
                 chap, subch = q.topic.split('/')
             except:
                 # a badly formed "topic" for the question; just ignore it
-                continue
+                logger.info("Badly form Topic: {}".format(q.topic))
             try:
                 chapter = db((db.chapters.course_id == auth.user.course_name) & \
                               (db.chapters.chapter_label == chap)) \
@@ -1118,7 +1118,8 @@ def _get_toc_and_questions():
                               .select()[0].sub_chapter_name
             except:
                 # topic's chapter and subchapter are not in the book; ignore this topic
-                continue
+                logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
+                
             chapter_name = chapter.chapter_name
             # find the item in practice picker for this chapter
             p_ch_info = None
