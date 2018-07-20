@@ -1,11 +1,20 @@
 import datetime
 import logging
 from math import ceil
+
 from outcome_request import OutcomeRequest
+
+# When testing, the ``settings`` object isn't defined. Import it in this case.
+try:
+    logger
+except:
+    execfile('applications/runestone/models/0.py', globals())
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
-    print "{}: {}.{}".format(msg, delta.seconds, delta.microseconds)
+    print("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
 
 
 def _score_from_pct_correct(pct_correct, points, autograde):
@@ -433,28 +442,24 @@ def send_lti_grade(assignment, student, lti_record, db):
         # send it back to the LMS
         # have to send a percentage of the max score, rather than total points
         pct = grade.score / float(points) if points else 0.0
-        # print "score", score, points, pct
+        # print("score", score, points, pct)
         request = OutcomeRequest({"consumer_key": lti_record.consumer,
                                   "consumer_secret": lti_record.secret,
                                   "lis_outcome_service_url": grade.lis_outcome_url,
                                   "lis_result_sourcedid": grade.lis_result_sourcedid})
         resp = request.post_replace_result(pct)
-        # print resp
+        # print(resp)
         return pct
     elif grade and grade.lis_result_sourcedid and grade.lis_outcome_url:
-        print "would have sent", grade.score / float(points) if points else 0.0
+        print("would have sent", grade.score / float(points) if points else 0.0)
     elif grade:
-        print "nowhere to send", student.id
+        print("nowhere to send", student.id)
     else:
-        print "nothing to send", student.id
+        print("nothing to send", student.id)
 
     return "No grade sent"
 
 def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
-    global logger
-    logger = logging.getLogger(settings.logger)
-    logger.setLevel(settings.log_level)
-
     print("sending lti grades")
     if oauth_consumer_key:
         lti_record = db(db.lti_keys.consumer == oauth_consumer_key).select().first()
@@ -467,10 +472,6 @@ def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
     print("done sending lti grades")
 
 def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
-    global logger
-    logger = logging.getLogger(settings.logger)
-    logger.setLevel(settings.log_level)
-
     student_rows = _get_students(course_id, sid, db)
 
     results = {'success':True}
@@ -493,10 +494,6 @@ def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
 
 
 def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, db, settings):
-    global logger
-    logger = logging.getLogger(settings.logger)
-    logger.setLevel(settings.log_level)
-
     start = datetime.datetime.now()
     if enforce_deadline == 'true':
         # get the deadline associated with the assignment
@@ -540,10 +537,10 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
     count = 0
     # _profile(start, "after readings fetched")
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
-        print "\nGrading all students for {}/{}".format(chapter, subchapter)
+        print("\nGrading all students for {}/{}".format(chapter, subchapter))
         count += 1
         for s in sids:
-            print ".",
+            print("."),
             score = 0
             rows = db((db.questions.chapter == chapter) &
                       (db.questions.subchapter == subchapter) &
@@ -614,10 +611,6 @@ def _change_e_factor(flashcard, q):
 
 
 def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_delta):
-    global logger
-    logger = logging.getLogger(settings.logger)
-    logger.setLevel(settings.log_level)
-
     now_local = now - tz_delta
     lastQuestion = db(db.questions.id == int(qid)).select().first()
     chapter_label, sub_chapter_label = lastQuestion.topic.split('/')
@@ -694,10 +687,6 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
 
 
 def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
-    global logger
-    logger = logging.getLogger(settings.logger)
-    logger.setLevel(settings.log_level)
-
     # Recreate the user_topic_practice creation time for existing records, based on first time it was actually
     # practiced.
     flashcards = db(db.user_topic_practice.id > 0).select()
