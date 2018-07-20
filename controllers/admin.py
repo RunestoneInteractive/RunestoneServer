@@ -1099,17 +1099,26 @@ def _get_toc_and_questions():
                          (db.questions.practice == True) & \
                          (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
         for q in topic_query:
-            chap, subch = q.topic.split('/')
             # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
             # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
             # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
             # corresponding tables.
-            chapter = db((db.chapters.course_id == auth.user.course_name) & \
+            try:
+                chap, subch = q.topic.split('/')
+            except:
+                # a badly formed "topic" for the question; just ignore it
+                continue
+            try:
+                chapter = db((db.chapters.course_id == auth.user.course_name) & \
                               (db.chapters.chapter_label == chap)) \
                               .select()[0]
-            sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
+
+                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
                               (db.sub_chapters.sub_chapter_label == subch)) \
                               .select()[0].sub_chapter_name
+            except:
+                # topic's chapter and subchapter are not in the book; ignore this topic
+                continue
             chapter_name = chapter.chapter_name
             # find the item in practice picker for this chapter
             p_ch_info = None
