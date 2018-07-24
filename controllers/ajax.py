@@ -408,13 +408,11 @@ def updatelastpage():
                    last_page_subchapter=lastPageSubchapter,
                    last_page_scroll_location=lastPageScrollLocation,
                    last_page_accessed_on=datetime.datetime.utcnow())
-        db.commit()
         db((db.user_sub_chapter_progress.user_id == auth.user.id) &
            (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
            (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
                    status=completionFlag,
                    end_date=datetime.datetime.utcnow())
-        db.commit()
 
         practice_settings = db(db.course_practice.course_name == auth.user.course_name)
         if (practice_settings.count() != 0 and
