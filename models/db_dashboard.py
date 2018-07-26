@@ -120,16 +120,24 @@ class CourseProblemMetrics(object):
         mcans = db((db.mchoice_answers.course_name==course_name) &
                    (db.mchoice_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
-                    ).select()
+                    ).select(orderby=db.mchoice_answers.timestamp)
         rslogger.debug("Found {} exercises")
         fbans = db((db.fitb_answers.course_name==course_name) &
                    (db.fitb_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
-                   ).select()
+                   ).select(orderby=db.fitb_answers.timestamp)
         psans = db((db.parsons_answers.course_name==course_name) &
                    (db.parsons_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
-                   ).select()
+                   ).select(orderby=db.parsons_answers.timestamp)
+
+        # convert the numeric answer to letter answers to match the questions easier.
+        to_letter = dict(zip("0123456789", "ABCDEFGHIJ"))
+
+        for row in mcans:
+            mc = row['mchoice_answers']
+            mc.answer = to_letter[mc.answer]
+
         def add_problems(result_set,tbl):
             for srow in result_set:
                 row = srow[tbl]
