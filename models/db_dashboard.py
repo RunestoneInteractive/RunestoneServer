@@ -136,7 +136,7 @@ class CourseProblemMetrics(object):
 
         for row in mcans:
             mc = row['mchoice_answers']
-            mc.answer = to_letter[mc.answer]
+            mc.answer = to_letter.get(mc.answer, mc.answer)
 
         def add_problems(result_set,tbl):
             for srow in result_set:
