@@ -16,7 +16,7 @@ for row in curs:
     bc = "books/{}/_sources/index.rst".format(row[1])
 
     if os.path.exists(course) and os.path.exists(bc):
-        print ("comparing {} to {}".format(course,bc))
+        print("comparing {} to {}".format(course,bc))
         res = filecmp.cmp(course, bc)
         if not res:
             print("{} is DIFFERENT".format(course))

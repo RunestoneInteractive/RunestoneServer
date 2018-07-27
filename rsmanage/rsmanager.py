@@ -237,7 +237,7 @@ def build(config, course, repo, skipclone):
             exit(1)
     except ImportError as e:
         click.echo("You do not appear to have project_name defined in your pavement.py file.")
-        print e
+        print(e)
         exit(1)
 
     if project_name != course:
