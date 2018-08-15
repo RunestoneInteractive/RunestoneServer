@@ -14,6 +14,7 @@ db.define_table('sub_chapters',
   Field('chapter_id','reference chapters'),
   Field('sub_chapter_length','integer'),
   Field('sub_chapter_label','string'), # no spaces, actual filename path
+  Field('skipreading', 'boolean'), # If true do not include this subchapter in the readings picker
   migrate='runestone_sub_chapters.table'
 )
 
