@@ -1165,6 +1165,7 @@ def _get_toc_and_questions():
             #     practice_picker.append(p_ch_info)
             #     p_ch_info['text'] = ch.chapter_name
             #     p_ch_info['children'] = []
+            # todo:  check the chapters attribute to see if its available for readings
             subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
@@ -1175,10 +1176,11 @@ def _get_toc_and_questions():
                     q_sub_ch_info['id'] = ch.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
                 # Copy the same stuff for reading picker.
-                r_sub_ch_info = {}
-                r_ch_info['children'].append(r_sub_ch_info)
-                r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
-                r_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                if sub_ch.skipreading == 'F' or sub_ch.skipreading == False or sub_ch.skipreading == None:
+                    r_sub_ch_info = {}
+                    r_ch_info['children'].append(r_sub_ch_info)
+                    r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
+                    r_sub_ch_info['text'] = sub_ch.sub_chapter_name
                 # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
                 #                (db.questions.subchapter == sub_ch.sub_chapter_label) & \
                 #                (db.questions.practice == True))
