@@ -20,6 +20,11 @@ def index():
     user_id = request.vars.get('user_id', None)
     last_name = request.vars.get('lis_person_name_family', None)
     first_name = request.vars.get('lis_person_name_given', None)
+    full_name = request.vars.get('lis_person_name_full', None)
+    if full_name and not last_name:
+        names = full_name.strip().split()
+        last_name = names[-1]
+        first_name = ' '.join(names[:-1])
     email = request.vars.get('lis_person_contact_email_primary', None)
     instructor = ("Instructor" in request.vars.get('roles', None)) or \
                  ("TeachingAssistant" in request.vars.get('roles', None))
@@ -36,6 +41,8 @@ def index():
     if practice_id:
         practice_id=practice_id[0]
     # print "practice_id: ", practice_id
+
+
     if user_id is None :
         lti_errors.append("user_id is required for this tool to function")
     elif first_name is None :
