@@ -327,6 +327,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         try {
             jQuery('#' + data.id).focus();
         } catch (err) {
+            // this will happen when you try to preview a reading assignment in the manual grading interface
             console.log(`Cannot preview ${data.id}`)
         }
 
