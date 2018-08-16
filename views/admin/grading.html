@@ -123,6 +123,9 @@
 <script type="application/json" id="getassignmentids">
   {{= XML(assignmentids)}}
 </script>
+<script type="application/json" id="getquestion_points">
+  {{= XML(question_points)}}
+</script>
 
 <script>
   $(".dashboardnav").removeClass("active");
@@ -132,7 +135,7 @@
   var students = null;
   var assignmentids = JSON.parse(document.getElementById("getassignmentids").innerHTML);
   var assignment_deadlines = JSON.parse(document.getElementById("getassignment_deadlines").innerHTML);
-  var question_points = {{ = XML(question_points) }};
+  var question_points = JSON.parse(document.getElementById("getquestion_points").innerHTML);
   
   $('#autogradingform').submit(function(event) {
     event.preventDefault();

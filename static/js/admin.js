@@ -324,7 +324,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 
         });
-        jQuery('#' + data.id).focus();
+        try {
+            jQuery('#' + data.id).focus();
+        } catch (err) {
+            console.log(`Cannot preview ${data.id}`)
+        }
 
 
 
