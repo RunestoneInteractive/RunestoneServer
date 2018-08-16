@@ -489,11 +489,19 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'),
-                autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'),
-                calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'),
-                getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
-                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines, question_points=json.dumps(question_points)
+    return dict(assignmentinfo=json.dumps(assignments), students=searchdict, 
+                chapters=json.dumps(chapter_labels), 
+                gradingUrl = URL('assignments', 'get_problem'),
+                autogradingUrl = URL('assignments', 'autograde'), 
+                gradeRecordingUrl = URL('assignments', 'record_grade'),
+                calcTotalsURL = URL('assignments', 'calculate_totals'), 
+                setTotalURL=URL('assignments', 'record_assignment_score'),
+                getCourseStudentsURL = URL('admin', 'course_students'), 
+                get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
+                course_id = auth.user.course_name, 
+                assignmentids=json.dumps(assignmentids), 
+                assignment_deadlines=json.dumps(assignment_deadlines), 
+                question_points=json.dumps(question_points)
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
