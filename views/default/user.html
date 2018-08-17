@@ -181,7 +181,18 @@
     </div>
     <div class="col-md-6">
     <div id="web2py_user_form">
-    <form class="form-vertical" enctype="multipart/form-data" method="post">
+        <script type="text/javascript">
+            function checkTcp() {
+                let cb = document.getElementById("auth_user_accept_tcp");
+                if (cb.checked) {
+                    return true;
+                } else {
+                    alert("You must accept our terms and conditions to register");
+                    return false;
+                }
+            }
+        </script>
+    <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()">
         <table>
             <tr id="auth_user_username__row">
                 <td class="w2p_fl"><label class="" for="auth_user_username"
@@ -232,13 +243,20 @@
                                           value="{{=form.vars.course_id if form.vars.course_id else ""}}"/>
                 </td>
             </tr>
+            <tr id="auth_user_accept_tcp__row">
+                <td class="w2p_fl">
+                    <label for="auth_user_accept_tcp">I Agree</label>
+                </td>
+                <td class="w2p_fw ui-widget">
+                    <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp">  I have read and accept your <a href="/runestone/default/privacy">privacy policy</a>
+                </td>
+            </tr>
             <tr id="donation_row">
                 <td class="w2p_fc">
                     <label for="donate_amt">Donate</label>
                 </td>
                 <td>
                     <input type="radio" name="donate" value="0" checked> None
-                    <input type="radio" name="donate" value="5"> $5
                     <input type="radio" name="donate" value="10"> $10
                     <input type="radio" name="donate" value="20"> $20
                     <input type="radio" name="donate" value="50"> $50

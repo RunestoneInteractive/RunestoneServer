@@ -2,8 +2,8 @@
 {{ block tabcontent }}
 
 
-<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
-<script type="text/javascript" src="https://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script type="text/javascript" src="https://kozea.github.io/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="https://kozea.github.io/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
@@ -35,6 +35,7 @@
 					<td id="leaveAlone0">FName</td>
 					<td id="leaveAlone1">LName</td>
 					<td id="leaveAlone2">UName</td>
+					<td id="leaveAlone3">E-mail</td>
 					{{for assignment in assignments:}}
 						<td class="headrow">{{=assignment['name']}}</td>
 					{{pass}}
@@ -44,6 +45,7 @@
 			<tbody>
 				<tr bgcolor="lightgray" id="classaverage">
 					<td>Class Average</td>
+					<td> </td>
 					<td> </td>
 					<td> </td>
 					{{for average in range(len(averagerow)):}}
@@ -60,12 +62,12 @@
 				{{for row in range(len(gradetable)):}}
 					<tr class="search">
 						{{for item in range(len(gradetable[row])):}}
-							{{if item > 2 and gradetable[row][item] != 'n/a':}}
-								<td class="{{=assignments[item-3]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-3]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
-							{{elif item < 3:}}
+							{{if item > 3 and gradetable[row][item] != 'n/a':}}
+								<td class="{{=assignments[item-4]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-4]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
+							{{elif item < 4:}}
 								<td class="roguecol">{{=gradetable[row][item]}}</td>
 							{{else:}}
-								<td class="{{=assignments[item-3]['name']}}"></td>
+								<td class="{{=assignments[item-4]['name']}}"></td>
 							{{pass}}
 						{{pass}}
 					</tr>

@@ -62,4 +62,9 @@ We have a Travis-CI job set up to automatically test all PR's if your pull reque
 
 Please take a look at the few unit tests we have, and write a new one that demonstrates that your feature or enhancement works.
 
+## Major Feature Contributions
+
+There are many ways that we can continue to improve and make the Runestone platform great, and I am exctied to see the platform evolve.  What I would ask is that if you have a large new feature that you would like to propose / contribute please start by creating an issue.  This will allow us to discuss it together up front, consider the design implications, and make it more likely that the PR will be accepted with a minimum of fuss.
+
+Runestone has grown organically over the years but that has led to duplicated tables in the database duplicated code and lots of inconsistency.  We need to start working to change all of that if we are going to continue to grow runestone efficiently.
 
