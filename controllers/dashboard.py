@@ -179,7 +179,7 @@ def grades():
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name,
-             db.auth_user.id,
+             db.auth_user.id, db.auth_user.email,
              orderby=(db.auth_user.last_name, db.auth_user.first_name))
 
 
@@ -195,7 +195,8 @@ def grades():
     for s in students:
         studentinfo[s.id]= {'last_name': s.last_name,
                             'first_name': s.first_name,
-                            'username': s.username}
+                            'username': s.username,
+                            'email': s.email}
 
     # create a matrix indexed by user.id and assignment.id
     gradebook = OrderedDict((sid.id, OrderedDict()) for sid in students)
@@ -219,6 +220,7 @@ def grades():
         studentrow.append(studentinfo[k]['first_name'])
         studentrow.append(studentinfo[k]['last_name'])
         studentrow.append(studentinfo[k]['username'])
+        studentrow.append(studentinfo[k]['email'])
         for assignment in gradebook[k]:
             studentrow.append(gradebook[k][assignment])
         gradetable.append(studentrow)

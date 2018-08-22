@@ -27,6 +27,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     codelens=ALL_AUTOGRADE_OPTIONS,
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
     video=['interact'],
+    youtube=['interact'],
     poll=['interact'],
     page=['interact'],
     showeval=['interact']
@@ -45,6 +46,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     codelens=ALL_WHICH_OPTIONS,
     parsonsprob=ALL_WHICH_OPTIONS,
     video=[],
+    youtube=[],
     poll=[],
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS
@@ -620,7 +622,7 @@ def createAssignment():
             due = datetime.datetime.strptime(d_str, format_str)
         else:
             due = None
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.now() + datetime.timedelta(days=7))
+        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
 
@@ -826,7 +828,7 @@ def edit_question():
         return "Could not find question {} to update".format(old_qname)
 
     author = auth.user.first_name + " " + auth.user.last_name
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.datetime.utcnow()
     chapter = old_question.chapter
     question_type = old_question.question_type
     subchapter = old_question.subchapter
@@ -951,7 +953,7 @@ def createquestion():
     try:
         newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
                  subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.now(), question_type=request.vars['template'],
+                 question=request.vars['question'], timestamp=datetime.datetime.utcnow(), question_type=request.vars['template'],
                  is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
 
         assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points)
@@ -1097,17 +1099,27 @@ def _get_toc_and_questions():
                          (db.questions.practice == True) & \
                          (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
         for q in topic_query:
-            chap, subch = q.topic.split('/')
             # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
             # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
             # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
             # corresponding tables.
-            chapter = db((db.chapters.course_id == auth.user.course_name) & \
+            try:
+                chap, subch = q.topic.split('/')
+            except:
+                # a badly formed "topic" for the question; just ignore it
+                logger.info("Badly form Topic: {}".format(q.topic))
+            try:
+                chapter = db((db.chapters.course_id == auth.user.course_name) & \
                               (db.chapters.chapter_label == chap)) \
                               .select()[0]
-            sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
+
+                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
                               (db.sub_chapters.sub_chapter_label == subch)) \
                               .select()[0].sub_chapter_name
+            except:
+                # topic's chapter and subchapter are not in the book; ignore this topic
+                logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
+                
             chapter_name = chapter.chapter_name
             # find the item in practice picker for this chapter
             p_ch_info = None
@@ -1153,6 +1165,7 @@ def _get_toc_and_questions():
             #     practice_picker.append(p_ch_info)
             #     p_ch_info['text'] = ch.chapter_name
             #     p_ch_info['children'] = []
+            # todo:  check the chapters attribute to see if its available for readings
             subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(orderby=db.sub_chapters.id)
             for sub_ch in subchapters_query:
                 q_sub_ch_info = {}
@@ -1163,10 +1176,11 @@ def _get_toc_and_questions():
                     q_sub_ch_info['id'] = ch.chapter_name + ' Exercises'
                 q_sub_ch_info['children'] = []
                 # Copy the same stuff for reading picker.
-                r_sub_ch_info = {}
-                r_ch_info['children'].append(r_sub_ch_info)
-                r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
-                r_sub_ch_info['text'] = sub_ch.sub_chapter_name
+                if sub_ch.skipreading == 'F' or sub_ch.skipreading == False or sub_ch.skipreading == None:
+                    r_sub_ch_info = {}
+                    r_ch_info['children'].append(r_sub_ch_info)
+                    r_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
+                    r_sub_ch_info['text'] = sub_ch.sub_chapter_name
                 # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
                 #                (db.questions.subchapter == sub_ch.sub_chapter_label) & \
                 #                (db.questions.practice == True))
@@ -1289,7 +1303,7 @@ def save_assignment():
         due = datetime.datetime.strptime(d_str, format_str)
     except:
         logger.error("Bad Date format for assignment: {}".format(d_str))
-        due = datetime.datetime.now() + datetime.timedelta(7)
+        due = datetime.datetime.utcnow() + datetime.timedelta(7)
     try:
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,

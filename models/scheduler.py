@@ -119,7 +119,8 @@ def makePavement(http_host, rvars, sourcedir, base_course):
             'dburl': settings.database_uri,
             'basecourse': base_course,
             'default_ac_lang': rvars.get('default_ac_lang') if rvars.get('default_ac_lang',False) else 'python',
-            'downloads_enabled': rvars.get('downloads_enabled','false')
+            'downloads_enabled': rvars.get('downloads_enabled','false'),
+            'enable_chatcodes': 'false'
             }
     if 'loginreq' in rvars:
         opts['login_req'] = 'true'
