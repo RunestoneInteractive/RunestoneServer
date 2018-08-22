@@ -13,10 +13,9 @@ def index():
     params = None
     masterapp = None
     oauth_error = None
-    lti_errors = list()
     userinfo = None
     logged_in = False
-    
+
     user_id = request.vars.get('user_id', None)
     last_name = request.vars.get('lis_person_name_family', None)
     first_name = request.vars.get('lis_person_name_given', None)
@@ -33,8 +32,8 @@ def index():
     # print request.vars
     # print result_source_did, outcome_url
     assignment_id=request.vars.get('assignment_id', None)
-    if assignment_id:
-        # for some reason, url query parameters are being processed twice and returned as a list, like [23, 23]
+    if assignment_id and type(assignment_id) == type([]):
+        # for some reason, url query parameters are being processed twice by Canvas and returned as a list, like [23, 23]
         # so just take the first element in the list
         assignment_id=assignment_id[0]
     practice_id = request.vars.get('practice', None)
@@ -42,15 +41,14 @@ def index():
         practice_id=practice_id[0]
     # print "practice_id: ", practice_id
 
-
     if user_id is None :
-        lti_errors.append("user_id is required for this tool to function")
+        return dict(logged_in=False, lti_errors=["user_id is required for this tool to function", request.vars], masterapp=masterapp)
     elif first_name is None :
-        lti_errors.append("First Name is required for this tool to function")
+        return dict(logged_in=False, lti_errors=["First Name is required for this tool to function", request.vars], masterapp=masterapp)
     elif last_name is None :
-        lti_errors.append("Last Name is required for this tool to function")
+        return dict(logged_in=False, lti_errors=["Last Name is required for this tool to function", request.vars], masterapp=masterapp)
     elif email is None :
-        lti_errors.append("Email is required for this tool to function")
+        return dict(logged_in=False, lti_errors=["Email is required for this tool to function", request.vars], masterapp=masterapp)
     else :
         userinfo = dict()
         userinfo['first_name'] = first_name
@@ -62,7 +60,8 @@ def index():
         myrecord = db(db.lti_keys.consumer==key).select().first()
     #    print myrecord, type(myrecord)
         if myrecord is None :
-            lti_errors.append("Could not find oauth_consumer_key")
+            return dict(logged_in=False, lti_errors=["Could not find oauth_consumer_key", request.vars],
+                        masterapp=masterapp)
         else:
             session.oauth_consumer_key = key
     
@@ -87,17 +86,12 @@ def index():
             consumer, token, params = oauth_server.verify_request(oauth_request)
             # print "Verified."
         except oauth.OAuthError, err:
-            oauth_error = "OAuth Security Validation failed:"+err.message
-            lti_errors.append(oauth_error)
-            # print oauth_error
+            return dict(logged_in=False, lti_errors=["OAuth Security Validation failed:"+err.message, request.vars],
+                        masterapp=masterapp)
             consumer = None
-        # except:
-        #     print "Unexpected error"
-        #     oauth_error = "Unexpected Error"
-        #     consumer = None
-    
+
     # Time to create / update / login the user
-    if consumer is not None:
+    if userinfo and (consumer is not None):
         userinfo['username'] = email
         # print db.auth_user.password.validate('1C5CHFA_enUS503US503')
         # pw = db.auth_user.password.validate('2C5CHFA_enUS503US503')[0];
@@ -107,8 +101,9 @@ def index():
         # print userinfo
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
         # print user
-        if user is None : 
-            lti_errors.append("Unable to create user record")
+        if user is None :
+            return dict(logged_in=False, lti_errors=["Unable to create user record", request.vars],
+                        masterapp=masterapp)
         else:
             # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
             course_id = request.vars.get('custom_course_id', None)
@@ -147,12 +142,10 @@ def index():
     elif practice_id:
         db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == practice_id),
                                    auth_user=user.id,
-                                   assignment=practice_id,
+                                   assignment= PRACTICE_ID (0)  practice_id,
                                    lis_result_sourcedid=result_source_did,
                                    lis_outcome_url=outcome_url)
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
-    # print(lti_errors)
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
 
-    return dict(logged_in=logged_in, lti_errors=lti_errors, masterapp=masterapp)
