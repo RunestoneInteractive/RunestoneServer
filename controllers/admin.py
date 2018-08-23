@@ -7,6 +7,7 @@ from paver.easy import sh
 import json
 from runestone import cmap
 from rs_grading import send_lti_grades
+from dateutil.parser import parse
 
 import logging
 
@@ -358,12 +359,14 @@ def admin():
 
     my_vers = 0
     mst_vers = 0
+    bugfix = False
     rebuild_notice = path.join('applications',request.application,'REBUILD')
     if os.path.exists(rebuild_notice):
         rebuild_post = os.path.getmtime(rebuild_notice)
         if rebuild_post > last_build:
             response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-    elif master_build and my_build:
+            bugfix = True
+    if master_build and my_build and not bugfix:
         mst_vers,mst_bld,mst_hsh = master_build.split('-')
         my_vers,my_bld,my_hsh = my_build.split('-')
         if my_vers != mst_vers:
@@ -407,7 +410,7 @@ def admin():
         due = request.vars.startdate
         format_str = "%m/%d/%Y"
         try:
-            date = datetime.datetime.strptime(due, format_str).date()
+            date = parse(due).date()
             course.update_record(term_start_date=date)
         except:
             logger.error("Bad date format, not updating start date")
