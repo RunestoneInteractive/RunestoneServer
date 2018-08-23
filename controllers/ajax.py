@@ -802,6 +802,8 @@ def gettop10Answers():
     course = request.vars.course
     question = request.vars.div_id
     response.headers['content-type'] = 'application/json'
+    if settings.is_testing:
+        return json.dumps([ [], [] ])
     rows = []
 
     try:
@@ -948,6 +950,9 @@ def getAssessResults():
             return ""   # server doesn't have it so we load from local storage instead
         answer = json.loads(rows.answer)
         correct = rows.correct
+        if settings.is_testing:
+            answer['resultString'] = answer['resultString'].rsplit('Test results:\n', 1)[0]
+            correct = None
         return json.dumps({
             'answer': answer,
             'timestamp': str(rows.timestamp),

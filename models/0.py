@@ -32,6 +32,9 @@ settings.server_type = "http://"
 settings.academy_mode = True
 settings.lti_only_mode = False
 settings.coursera_mode = False
+# True to enable a testing environment, where feedback on certain question types
+# is not provided to the student.
+settings.is_testing = False
 
 # Do not control this with hostnames
 config = environ.get("WEB2PY_CONFIG", "NOT SET")
