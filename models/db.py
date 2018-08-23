@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import os
 import random
 
@@ -35,8 +34,9 @@ else:
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
 
-# Make the database available in modules.
+# Make the settings and database available in modules.
 current.db = db
+current.settings = settings
 
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
@@ -175,7 +175,7 @@ db.define_table('auth_user',
     Field('active',type='boolean',writable=False,readable=False,default=True),
     Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
-    format=lambda u: u.first_name + " " + u.last_name,
+    format=lambda u: (u.first_name or "") + " " + (u.last_name or ''),
     migrate='runestone_auth_user.table')
 
 
