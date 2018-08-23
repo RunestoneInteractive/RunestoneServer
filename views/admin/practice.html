@@ -38,11 +38,95 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <h4>Choose the sections taught, so that students can practice them.</h4>
+    <form class="needs-validation" style="margin-top: 25px;"
+          action="/{{=request.application}}/admin/practice" method="post">
+      <div class="form-group">
+        <label for="EndDateInput">Choose when students should end their spaced practice:</label>
+        <input type="date" class="form-control" id="EndDateInput" name="EndDate" required
+        {{if end_date != "":}}
+               value={{=end_date}}
+        {{ pass }}
+        >
+        {{if error_part == "EndDate":}}
+        <div class="invalid-feedback">
+            Please specify the end date in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group">
+        <label for="maxPracticeDaysInput">Enter max number of days of practice students can get points for:</label>
+        <input type="number" class="form-control" id="maxPracticeDaysInput" name="maxPracticeDays" required
+        {{if max_practice_days != "":}}
+               value={{=max_practice_days}}
+        {{ pass }}
+        >
+        {{if error_part == "maxPracticeDays":}}
+        <div class="invalid-feedback">
+            Please specify the max number of days of practice in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group">
+        <label for="pointsPerDayInput">Enter number of points for completing each day:</label>
+        <input type="number" class="form-control" id="pointsPerDayInput" name="pointsPerDay" required
+        {{if day_completion_points != "":}}
+               value={{=day_completion_points}}
+        {{ pass }}
+        >
+        {{if error_part == "pointsPerDay":}}
+        <div class="invalid-feedback">
+            Please specify the number of points for completing each day in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group">
+        <label for="itemsPerPointInput">Enter number of questions to get the points for that day:</label>
+        <input type="number" class="form-control" id="itemsPerPointInput" name="itemsPerPoint" required
+        {{if questions_to_complete_day != "":}}
+               value={{=questions_to_complete_day}}
+        {{ pass }}
+        >
+      </div>
+      <div class="form-group">
+        <label for="flashcardsCreationTypeInput">Choose how topic flashcards should be generated for students:</label>
+        <select class="form-control" id="flashcardsCreationTypeInput" name="flashcardsCreationType">
+            <option value="0"
+        {{if flashcard_creation_method == 0:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Self-paced (when student marks a page complete)
+            </option>
+            <option value="1"
+        {{if flashcard_creation_method == 1:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Whenever a page is assigned in any reading assignment and the reading assignment deadline passes
+            </option>
+            <option value="2"
+        {{if flashcard_creation_method == 2:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Manually by the instructor
+            </option>
+        </select>
+        {{if error_part == "flashcardsCreationType":}}
+        <div class="invalid-feedback">
+            Please specify how topic flashcards should be generated in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      <input class="btn btn-success mb-2" type="submit" value="Save Practice Settings">
+    </form>
+    {{if toc != "":}}
+    <h4 style="margin-top: 25px;">Choose the sections taught, so that students can practice them.</h4>
     <div id="search-tree-practice-picker-container">
       <input id="search-tree-practice-picker" type="text">
     </div>
     <div id="tree-practice-picker" style="margin-bottom: 40px;"></div>
+    {{ pass }}
   </div>
   <div class="col-md-1">
       <!-- <div style="margin-top:100px">
@@ -58,6 +142,7 @@ $(function () {
     $(".dashboardnav").removeClass("active");
     $("#practicetab").addClass("active");
 
+    {{if toc != "":}}
     var practice_picker = $('#tree-practice-picker');
 
     if (eBookConfig.toc.practice_picker.length != 0) {
@@ -82,6 +167,7 @@ $(function () {
         $("#search-tree-practice-picker-container").hide();
         $("#tree-practice-picker").text("None of the sections contain any question eligible for practice! Please add ':practice: 1' tag to the appropriate questions in your .rst files and rebuild your textbook.");
     }
+    {{ pass }}
 });
 </script>
 
