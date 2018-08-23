@@ -56,6 +56,11 @@ if __name__ == '__main__':
         xqt('dropdb --echo --if-exists "{}"'.format(dbname),
             'createdb --echo "{}"'.format(dbname),
             'psql "{}" < runestone_test.sql'.format(dbname))
+        # Build the test book to add in db fields needed.
+        with pushd('test_book'):
+            # The runestone build process only look at ``DBURL``.
+            os.environ['DBURL'] = os.environ['TEST_DBURL']
+            xqt('{} -m runestone build --all'.format(sys.executable))
 
     with pushd('../../..'):
         # Now run
