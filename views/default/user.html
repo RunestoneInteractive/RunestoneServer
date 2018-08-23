@@ -161,7 +161,7 @@
     {{pass}}
 
 
-{{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password']: }}
+{{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
     <div id="web2py_user_form" class="col-md-4">
         {{=form}}
         {{ if request.args(0) not in ['profile', 'reset_password']: }}
