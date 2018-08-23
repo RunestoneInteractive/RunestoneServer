@@ -59,3 +59,21 @@ Fill in the Blank
     -   :away: Correct.
         :x: Incorrect. Try 'away'.
 
+
+.. fillintheblank:: test_fitb_numeric
+
+   The answer is 10.
+
+   -  :10: Correct.
+      :10 1: Close.
+      :x: Nope.
+
+
+.. fillintheblank:: test_fitb_regex
+   :casei:
+
+   Who had a little lamb?
+
+   -   :mary|Mair[a|e|i]: Correct.
+       :Sue: Is wrong.
+       :x: Nope.
