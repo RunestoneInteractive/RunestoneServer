@@ -116,10 +116,16 @@ def fitb_feedback(answer_json, feedback):
                 displayFeed.append(feedback_for_blank[-1]['feedback'])
 
     # Return grading results to the client for a non-test scenario.
-    res = dict(
-        correct=correct,
-        displayFeed=displayFeed,
-        isCorrectArray=isCorrectArray)
+    if current.settings.is_testing:
+        res = dict(
+            correct=True,
+            displayFeed=['Response recorded.']*len(answer),
+            isCorrectArray=[True]*len(answer) )
+    else:
+        res = dict(
+            correct=correct,
+            displayFeed=displayFeed,
+            isCorrectArray=isCorrectArray)
     return 'T' if correct else 'F', res
 
 
@@ -373,6 +379,7 @@ def _scheduled_builder(
     try:
         p = subprocess.Popen(args, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE, **sp_args)
+
         # Horrible kludge: implement a crude timeout. Instead, use ``timeout``
         # with Python 3.
         def on_timeout(msg_list):
