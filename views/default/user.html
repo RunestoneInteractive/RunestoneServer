@@ -164,7 +164,7 @@
 {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
     <div id="web2py_user_form" class="col-md-4">
         {{=form}}
-        {{ if request.args(0) not in ['profile', 'reset_password']: }}
+        {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
         <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
         {{pass}}
     </div>
