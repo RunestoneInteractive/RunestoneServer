@@ -21,7 +21,7 @@
 <div class="row ">
 <!-- Carousel
     ================================================== -->
-    <link href="/runestone/static/css/carousel.css" rel="stylesheet">
+    <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
     <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
@@ -248,7 +248,7 @@
                     <label for="auth_user_accept_tcp">I Agree</label>
                 </td>
                 <td class="w2p_fw ui-widget">
-                    <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp">  I have read and accept your <a href="/runestone/default/privacy">privacy policy</a>
+                    <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp">  I have read and accept your <a href="/{{=request.application}}/default/privacy">privacy policy</a>
                 </td>
             </tr>
             <tr id="donation_row">

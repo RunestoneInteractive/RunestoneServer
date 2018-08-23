@@ -177,7 +177,7 @@
             <li><a href="/{{=request.application}}/static/pip2/index.html">Programs, Information, and People</a></li>
             <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
             <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
-            <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>            
+            <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>
             <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
           </ul>
         </li>
@@ -233,7 +233,7 @@
       <p>
         &copy; Copyright 2018 Runestone Interactive LLC
           {{ if settings.academy_mode: }}
-          &emsp; ● <a href="/runestone/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/runestone/default/terms">Terms of Service</a>
+          &emsp; ● <a href="/{{=request.application}}/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/{{=request.application}}/default/terms">Terms of Service</a>
           {{ pass }}
       </p>
     </div>
@@ -247,7 +247,7 @@
 	data-fg="#FFFFFF"
 	data-link="#F1D600"
   data-cookie="CookieInfoScript"
-  data-message="By continuing to visit this site you agree to our use of cookies and our privacy policy. "
+  data-message="By continuing to visit this site you agree to our use of cookies and our privacy policy."
   data-moreinfo="https://runestone.academy/runestone/default/privacy"
 	data-text-align="left"
        data-close-text="Got it!">

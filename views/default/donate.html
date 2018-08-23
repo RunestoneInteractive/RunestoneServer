@@ -74,9 +74,9 @@
 
                 // The payment is complete!
                 // You can now show a confirmation message to the customer
-            $.get("/runestone/ajax/save_donate")
+            $.get("/{{=request.application}}/ajax/save_donate")
             alert('Payment successful - Thank you! ')
-            window.location.href = "/runestone/default"
+            window.location.href = "/{{=request.application}}/default"
             });
       },
 
