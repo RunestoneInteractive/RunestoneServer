@@ -1152,6 +1152,12 @@ def editindexrst():
     except Exception as ex:
         logger.error(ex)
 
+def _get_assignment(assignment_id):
+    return db(db.assignments.id == assignmentid).select().first()
+
+def _get_lti_record(oauth_consumer_key):
+    return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
@@ -1165,9 +1171,10 @@ def releasegrades():
 
     if released:
         # send lti grades
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        if assignment:
-            send_lti_grades(assignment, auth.user.course_id, db, settings, session.oauth_consumer_key)
+        assignment = _get_assignment(assignmentid)
+        lti_record = _get_lti_record(session.oauth_consumer_key)
+        if assignment and lti_record:
+            send_lti_grades(assignment.id, assignment.points, auth.user.course_id, lti_record, db)
     return "Success"
 
 

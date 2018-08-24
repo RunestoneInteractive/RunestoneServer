@@ -36,10 +36,7 @@ def index():
         # for some reason, url query parameters are being processed twice by Canvas and returned as a list, like [23, 23]
         # so just take the first element in the list
         assignment_id=assignment_id[0]
-    practice_id = request.vars.get('practice', None)
-    if practice_id:
-        practice_id=practice_id[0]
-    # print "practice_id: ", practice_id
+    practice = request.vars.get('practice', None)
 
     if user_id is None :
         return dict(logged_in=False, lti_errors=["user_id is required for this tool to function", request.vars], masterapp=masterapp)
@@ -64,7 +61,7 @@ def index():
                         masterapp=masterapp)
         else:
             session.oauth_consumer_key = key
-    
+    # print 1, myrecord, userinfo
     if myrecord is not None : 
         masterapp = myrecord.application
         if len(masterapp) < 1 :
@@ -139,12 +136,12 @@ def index():
                                    lis_outcome_url=outcome_url)
         redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
 
-    elif practice_id:
-        db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == practice_id),
+    elif practice:
+        db.practice_grades.update_or_insert((db.practice_grades.auth_user == user.id),
                                    auth_user=user.id,
-                                   assignment= PRACTICE_ID (0)  practice_id,
                                    lis_result_sourcedid=result_source_did,
-                                   lis_outcome_url=outcome_url)
+                                   lis_outcome_url=outcome_url,
+                                   course_name=getCourseNameFromId(course_id))
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))

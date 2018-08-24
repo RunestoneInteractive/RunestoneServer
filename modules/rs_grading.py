@@ -430,46 +430,37 @@ def _get_students(course_id, sid = None, db=None):
                           ).select(db.auth_user.username, db.auth_user.id)
     return student_rows
 
-def send_lti_grade(assignment, student, lti_record, db):
-    # get total points for assignment, so can compute percentage to send to gradebook via LTI
+def send_lti_grade(assignment_points, score, consumer, secret, outcome_url, result_sourcedid):
+    pct = score / float(assignment_points) if assignment_points else 0.0
+    # print "pct", pct
 
-    points = assignment.points
-    grade = db(
-        (db.grades.auth_user == student.id) &
-        (db.grades.assignment == assignment.id)).select().first()
+    # send it back to the LMS
+    # print("score", score, points, pct)
+    request = OutcomeRequest({"consumer_key": consumer,
+                              "consumer_secret": secret,
+                              "lis_outcome_service_url": outcome_url,
+                              "lis_result_sourcedid": result_sourcedid})
+    resp = request.post_replace_result(pct)
+    # print(resp)
 
-    if grade and grade.lis_result_sourcedid and grade.lis_outcome_url and lti_record:
-        # send it back to the LMS
-        # have to send a percentage of the max score, rather than total points
-        pct = grade.score / float(points) if points else 0.0
-        # print("score", score, points, pct)
-        request = OutcomeRequest({"consumer_key": lti_record.consumer,
-                                  "consumer_secret": lti_record.secret,
-                                  "lis_outcome_service_url": grade.lis_outcome_url,
-                                  "lis_result_sourcedid": grade.lis_result_sourcedid})
-        resp = request.post_replace_result(pct)
-        # print(resp)
-        return pct
-    elif grade and grade.lis_result_sourcedid and grade.lis_outcome_url:
-        print("would have sent", grade.score / float(points) if points else 0.0)
-    elif grade:
-        print("nowhere to send", student.id)
-    else:
-        print("nothing to send", student.id)
+    return pct
 
-    return "No grade sent"
-
-def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
-    print("sending lti grades")
-    if oauth_consumer_key:
-        lti_record = db(db.lti_keys.consumer == oauth_consumer_key).select().first()
-    else:
-        lti_record = None
-
+def send_lti_grades(assignment_id, assignment_points, course_id, lti_record, db):
+    #print("sending lti grades")
     student_rows = _get_students(course_id, db=db)
     for student in student_rows:
-        send_lti_grade(assignment, student, lti_record, db)
-    print("done sending lti grades")
+        grade = db(
+            (db.grades.auth_user == student.id) &
+            (db.grades.assignment == assignment_id)).select().first()
+
+        if grade.lis_result_sourcedid and grade.lis_outcome_url:
+            send_lti_grade(assignment_points,
+                           score=grade.score,
+                           consumer=lti_record.consumer,
+                           secret=lti_record.secret,
+                           outcome_url=grade.lis_outcome_url,
+                           result_sourcedid= grade.lis_result_sourcedid)
+    #print("done sending lti grades")
 
 def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
     student_rows = _get_students(course_id, sid, db)
