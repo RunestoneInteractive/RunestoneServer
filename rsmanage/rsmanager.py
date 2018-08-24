@@ -93,6 +93,14 @@ def initdb(config, list_tables, reset, fake):
     if res != 0:
         click.echo(message="Database Initialization Failed")
 
+@cli.command()
+@pass_config
+def migrate(config):
+    "Startup web2py and load the models with Migrate set to Yes"
+    os.chdir(findProjectRoot())
+    os.environ['WEB2PY_MIGRATE'] = 'Yes'
+    subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py", shell=True)
+
 
 #
 #    run
@@ -270,7 +278,7 @@ def inituser(config, instructor, fromfile):
             userinfo['course'] = line[5]
             userinfo['instructor'] = False
             os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-            res = subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+            res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
             if res != 0:
                 click.echo("Failed to create user {} fix your data and try again".format(line[0]))
                 exit(1)
