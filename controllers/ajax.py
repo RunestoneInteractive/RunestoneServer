@@ -623,12 +623,18 @@ def getpollresults():
     for i in opt_list:
         count_list.append(opt_counts[i])
 
-    # todo:  Get this users last answer
-    user_res = db((db.useinfo.sid == auth.user.username) & 
-        (db.useinfo.course_id == course) & 
-        (db.useinfo.div_id == div_id)).select(db.useinfo.act, orderby=~db.useinfo.id).first()
+    user_res = None
+    if auth.user:
+        user_res = db((db.useinfo.sid == auth.user.username) & 
+            (db.useinfo.course_id == course) & 
+            (db.useinfo.div_id == div_id)).select(db.useinfo.act, orderby=~db.useinfo.id).first()
 
-    return json.dumps([len(result_list), opt_list, count_list, div_id, user_res.act])
+    if user_res:
+        my_vote = user_res.act
+    else:
+        my_vote = -1
+
+    return json.dumps([len(result_list), opt_list, count_list, div_id, my_vote])
 
 
 def gettop10Answers():
