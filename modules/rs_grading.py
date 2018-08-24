@@ -652,6 +652,7 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
             start_practice=flashcard.last_presented,
             end_practice=now_local,
         )
+    db.commit()
 
 
 def _score_practice_quality(practice_start_time, course_name, sid, points, score, trials_count, db, now):

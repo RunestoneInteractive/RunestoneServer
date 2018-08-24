@@ -422,27 +422,10 @@ def checkanswer():
     # If the question id exists:
     if request.vars.QID:
         now = datetime.datetime.utcnow()
+        old_completion_count = _get_practice_completion_count(sid, course_name)
         # Use the autograding function to update the flashcard's e-factor and i-interval.
         do_check_answer(sid, course_name, qid, username, q, db, settings, now,
                         datetime.timedelta(hours=int(session.timezoneoffset)))
-
-        # That scored the particular question. So now get the total number completed and send grade back via LTI
-        completion_count = _get_practice_completion_count(sid, course_name)
-
-        lti_record = _get_lti_record(session.oauth_consumer_key)
-        practice_grade = _get_student_practice_grade(sid, course_name)
-        course_settings = _get_course_practice_record(course_name)
-        # print "count:", completion_count
-        # print "lti_record:", lti_record,
-        # print "practice_grade:", practice_grade,
-        # print "course_settings:", course_settings
-        if lti_record and practice_grade and course_settings:
-            send_lti_grade(assignment_points=course_settings.max_practice_days,
-                           score=completion_count,
-                           consumer=lti_record.consumer,
-                           secret=lti_record.secret,
-                           outcome_url=practice_grade.lis_outcome_url,
-                           result_sourcedid=practice_grade.lis_result_sourcedid)
 
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
@@ -605,10 +588,25 @@ def practice():
                 course_name=auth.user.course_name,
                 practice_completion_time=now.date()
             )
+            # send practice grade via lti, if setup for that
+            lti_record = _get_lti_record(session.oauth_consumer_key)
+            practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
+            course_settings = _get_course_practice_record(auth.user.course_name)
+            if lti_record and practice_grade and course_settings:
+                practice_completion_count = _get_practice_completion_count(auth.user.id, auth.user.course_name)
+                print "sending"
+                send_lti_grade(assignment_points=course_settings.max_practice_days,
+                               score=practice_completion_count,
+                               consumer=lti_record.consumer,
+                               secret=lti_record.secret,
+                               outcome_url=practice_grade.lis_outcome_url,
+                               result_sourcedid=practice_grade.lis_result_sourcedid)
 
-    # The number of days the student has completed their practice.
-    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                                   (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
+    # The number of days the student has completed their practice; get if haven't already in lti code above
+    try:
+        practice_completion_count
+    except:
+        practice_completion_count = _get_practice_completion_count(auth.user.id, auth.user.course_name)
 
     # Calculate the number of times left for the student to practice today to get the completion point.
     practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today - practiced_today_count))
