@@ -595,10 +595,14 @@ def getpollresults():
 
     response.headers['content-type'] = 'application/json'
 
-    query = '''select act from useinfo
-               where event = 'poll' and div_id = '%s' and course_id = '%s'
-               ''' % (div_id, course)
+
+    query = '''select act from useinfo 
+    join (select sid,  max(id) mid 
+        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T 
+        on id = T.mid'''.format(div_id, course)
+
     rows = db.executesql(query)
+
 
     result_list = []
     for row in rows:
@@ -608,6 +612,10 @@ def getpollresults():
     # maps option : count
     opt_counts = Counter(result_list)
 
+    if result_list:
+        for i in range(max(result_list)):
+            if i not in opt_counts:
+                opt_counts[i] = 0
     # opt_list holds the option numbers from smallest to largest
     # count_list[i] holds the count of responses that chose option i
     opt_list = sorted(opt_counts.keys())
@@ -615,7 +623,12 @@ def getpollresults():
     for i in opt_list:
         count_list.append(opt_counts[i])
 
-    return json.dumps([len(result_list), opt_list, count_list, div_id])
+    # todo:  Get this users last answer
+    user_res = db((db.useinfo.sid == auth.user.username) & 
+        (db.useinfo.course_id == course) & 
+        (db.useinfo.div_id == div_id)).select(db.useinfo.act, orderby=~db.useinfo.id).first()
+
+    return json.dumps([len(result_list), opt_list, count_list, div_id, user_res.act])
 
 
 def gettop10Answers():
