@@ -440,9 +440,10 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
               (db.questions.practice == True)).select()
 
 
-# Gets invoked from lti to set timezone and then redirect to practice()
-def settz_then_practice():
-    return dict(course_name=request.vars.get('course_name', 'UMSI106'))
+# Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
+def practiceNotStartedYet():
+    return dict(course_id=auth.user.course_name,
+                message1=request.vars.message1, message2=request.vars.message2)
 
 
 # Gets invoked when the student requests practicing topics.
@@ -455,11 +456,28 @@ def practice():
         session.timezoneoffset = 0
     now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
 
-    # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
-    # 2018, please replace it.
-    # todo: This should come from the database -- add a field on the course creation page so
-    # the instructor can put in an end date for the term.
-    remaining_days = (datetime.date(2018, 12, 15) - now.date()).days
+    practice_settings = db(db.course_practice.course_name == auth.user.course_name)
+    if practice_settings.count() == 0:
+        message1 = "Practice tool is not set up for this course yet."
+        message2 = "Please ask your instructor to set it up."
+        session.flash = message1 + " " + message2
+        return redirect(URL('practiceNotStartedYet',
+                            vars=dict(message1=message1,
+                                      message2=message2)))
+
+    practice_start_date = practice_settings.select().first().start_date
+    if practice_start_date > now.date():
+        remaining_days = (practice_start_date - now.date()).days
+        message1 = "Practice will start in this course on " + str(practice_start_date) + "."
+        message2 = "Please return in " + str(remaining_days) + " days."
+        session.flash = (message1 + " " + message2)
+        return redirect(URL('practiceNotStartedYet',
+                            vars=dict(message1=message1,
+                                      message2=message2)))
+
+    practice_settings = practice_settings.select().first()
+    # Calculates the remaining days to the end of the semester.
+    remaining_days = (practice_settings.end_date - now.date()).days
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -538,7 +556,7 @@ def practice():
             f_card["mastery_color"] = "warning"
 
     # Define how many topics you expect your students practice every day.
-    practice_times_to_pass_today = 10
+    practice_times_to_pass_today = practice_settings.questions_to_complete_day
 
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
@@ -615,17 +633,23 @@ def practice():
     # Calculate the number of times left for the student to practice today to get the completion point.
     practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today - practiced_today_count))
 
+    points_received = practice_settings.day_completion_points * practice_completion_count
+    total_possible_points = practice_settings.day_completion_points * practice_settings.max_practice_days
+
     return dict(course=course, course_name=auth.user.course_name,
                 course_id=auth.user.course_name,
                 q=questioninfo, all_flashcards=all_flashcards,
                 flashcard_count=len(presentable_flashcards),
                 # The number of days the student has completed their practice.
                 practice_completion_count=practice_completion_count,
-                remaining_days=remaining_days, max_days=45,
+                remaining_days=remaining_days, max_days=practice_settings.max_practice_days,
                 # The number of times remaining to practice today to get the completion point.
                 practice_today_left=practice_today_left,
-                # The number of times this user has submitted their practice from the beginning of today (12:00 am) till now.
-                practiced_today_count=practiced_today_count)
+                # The number of times this user has submitted their practice from the beginning of today (12:00 am)
+                # till now.
+                practiced_today_count=practiced_today_count,
+                points_received=points_received,
+                total_possible_points=total_possible_points)
 
 
 # Called when user clicks like or dislike icons.

@@ -1,0 +1,74 @@
+{{extend 'admin/instructors.html'}}
+
+{{block tabcontent}}
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/prettify.css" type="text/css" />
+
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/prettify.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/hammer.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timeddnd.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedclickable.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_activecode.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedfitb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed_shortanswer.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedmc.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/timedparsons.js"></script>
+
+
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/python.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/javascript.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/sharedb.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/clike.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/codelens.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/htmlmixed.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/css.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/xml.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
+<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
+
+
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/clickable.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/activecode.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/dragndrop.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/fitb.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/poll.css" type="text/css" />
+<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/modal-basic.css" type="text/css" />
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script>
+	$('#hideId').css('display','none');
+</script>
+
+<style>
+</style>
+
+<!--Facebook Comments plugin script-->
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.11';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div id='part1' style="padding-left: 40px">
+    <h4 style="margin-top: 25px;">{{=message1}}</h4>
+    <h4>{{=message2}}</h4>
+</div>
+{{end}}
+

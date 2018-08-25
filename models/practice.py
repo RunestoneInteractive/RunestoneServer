@@ -1,5 +1,6 @@
 db.define_table('course_practice',
                 Field('course_name', 'string'),
+                Field('start_date', type='date'),
                 Field('end_date', type='date'),
                 Field('max_practice_days', type='integer'),
                 Field('day_completion_points', type='integer'),

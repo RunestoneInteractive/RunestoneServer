@@ -38,8 +38,38 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <form class="needs-validation" style="margin-top: 25px;"
+    <div id="ShowPracticeSettingsDIV" style="margin-top: 25px; margin-bottom: 25px;
+        {{if complete == 1:}}
+         display:block;
+        {{ else: }}
+         display:none;
+        {{ pass }}
+            "
+    >
+        <button id="ShowPracticeSettingsA" class="btn btn-primary mb-2">Show Practice Settings</button>
+    </div>
+    <form id="PracticeSettingsForm" class="needs-validation" style="margin-top: 25px;
+        {{if complete == 1:}}
+         display:none;
+        {{ else: }}
+         display:block;
+        {{ pass }}
+            "
           action="/{{=request.application}}/admin/practice" method="post">
+      <div class="form-group">
+        <label for="StartDateInput">Choose when students should start their spaced practice:</label>
+        <input type="date" class="form-control" id="StartDateInput" name="StartDate" required
+               min="{{=course_start_date}}"
+        {{if start_date != "":}}
+               value={{=start_date}}
+        {{ pass }}
+        >
+        {{if error_start_date == 1:}}
+        <div class="invalid-feedback">
+            Please specify the start date in the right format. It cannot be earlier than the start date of the course.
+        </div>
+        {{ pass }}
+      </div>
       <div class="form-group">
         <label for="EndDateInput">Choose when students should end their spaced practice:</label>
         <input type="date" class="form-control" id="EndDateInput" name="EndDate" required
@@ -47,9 +77,9 @@
                value={{=end_date}}
         {{ pass }}
         >
-        {{if error_part == "EndDate":}}
+        {{if error_end_date == 1:}}
         <div class="invalid-feedback">
-            Please specify the end date in the right format.
+            Please specify the end date in the right format. It cannot be earlier than the start date of the practice.
         </div>
         {{ pass }}
       </div>
@@ -60,7 +90,7 @@
                value={{=max_practice_days}}
         {{ pass }}
         >
-        {{if error_part == "maxPracticeDays":}}
+        {{if error_max_practice_days == 1:}}
         <div class="invalid-feedback">
             Please specify the max number of days of practice in the right format.
         </div>
@@ -73,7 +103,7 @@
                value={{=day_completion_points}}
         {{ pass }}
         >
-        {{if error_part == "pointsPerDay":}}
+        {{if error_day_completion_points == 1:}}
         <div class="invalid-feedback">
             Please specify the number of points for completing each day in the right format.
         </div>
@@ -86,6 +116,11 @@
                value={{=questions_to_complete_day}}
         {{ pass }}
         >
+        {{if error_questions_to_complete_day == 1:}}
+        <div class="invalid-feedback">
+            Please specify the number of points for completing each day in the right format.
+        </div>
+        {{ pass }}
       </div>
       <div class="form-group">
         <label for="flashcardsCreationTypeInput">Choose how topic flashcards should be generated for students:</label>
@@ -112,7 +147,7 @@
                 Manually by the instructor
             </option>
         </select>
-        {{if error_part == "flashcardsCreationType":}}
+        {{if error_flashcard_creation_method == 1:}}
         <div class="invalid-feedback">
             Please specify how topic flashcards should be generated in the right format.
         </div>
@@ -141,6 +176,13 @@
 $(function () {
     $(".dashboardnav").removeClass("active");
     $("#practicetab").addClass("active");
+
+{{if complete == 1:}}
+    $( "#ShowPracticeSettingsA" ).click(function() {
+      $( "#ShowPracticeSettingsDIV" ).hide();
+      $( "#PracticeSettingsForm" ).show();
+    });
+{{ pass }}
 
     {{if toc != "":}}
     var practice_picker = $('#tree-practice-picker');

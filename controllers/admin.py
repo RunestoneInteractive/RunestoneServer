@@ -265,111 +265,128 @@ def practice():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     course_start_date = course.term_start_date
 
+    start_date = course_start_date
     end_date = ""
     max_practice_days = ""
     day_completion_points = ""
     questions_to_complete_day = ""
     flashcard_creation_method = 0
+    error_start_date = 0
+    error_end_date = 0
+    error_max_practice_days = 0
+    error_day_completion_points = 0
+    error_questions_to_complete_day = 0
+    error_flashcard_creation_method = 0
 
-    practice_settings = db(db.course_practice.course_name == auth.user.course_name).count()
-    if practice_settings > 0:
-        practice_settings = db(db.course_practice.course_name == auth.user.course_name).select().first()
+    already_exists = 0
+    practice_settings = db(db.course_practice.course_name == auth.user.course_name)
+    if practice_settings.count() > 0:
+        practice_settings = practice_settings.select().first()
+        start_date = practice_settings.start_date
         end_date = practice_settings.end_date
         max_practice_days = practice_settings.max_practice_days
         day_completion_points = practice_settings.day_completion_points
         questions_to_complete_day = practice_settings.questions_to_complete_day
         flashcard_creation_method = practice_settings.flashcard_creation_method
+        already_exists = 1
 
-    if not ('EndDate' in request.vars or
+    toc = ""
+    if flashcard_creation_method == 2:
+        toc = _get_toc_and_questions()
+
+    if not ('StartDate' in request.vars or
+            'EndDate' in request.vars or
             'maxPracticeDays' in request.vars or
             'pointsPerDay' in request.vars or
             'itemsPerPoint' in request.vars or
             'flashcardsCreationType' in request.vars):
         return dict(course_id=auth.user.course_name,
-                    end_date=end_date,
-                    max_practice_days=max_practice_days,
-                    day_completion_points=day_completion_points,
-                    questions_to_complete_day=questions_to_complete_day,
-                    flashcard_creation_method=flashcard_creation_method,
-                    toc="",
-                    error_part="")
-    else:
-        try:
-            end_date = datetime.datetime.strptime(request.vars.get('EndDate', None), '%Y-%m-%d').date()
-        except:
-            return dict(course_id=auth.user.course_name,
-                        end_date=end_date,
-                        max_practice_days=max_practice_days,
-                        day_completion_points=day_completion_points,
-                        questions_to_complete_day=questions_to_complete_day,
-                        flashcard_creation_method=flashcard_creation_method,
-                        toc="",
-                        error_part="EndDate")
-        try:
-            max_practice_days = int(request.vars.get('maxPracticeDays', None))
-        except:
-            return dict(course_id=auth.user.course_name,
-                        end_date=end_date,
-                        max_practice_days=max_practice_days,
-                        day_completion_points=day_completion_points,
-                        questions_to_complete_day=questions_to_complete_day,
-                        flashcard_creation_method=flashcard_creation_method,
-                        toc="",
-                        error_part="maxPracticeDays")
-        try:
-            day_completion_points = int(request.vars.get('pointsPerDay', None))
-        except:
-            return dict(course_id=auth.user.course_name,
-                        end_date=end_date,
-                        max_practice_days=max_practice_days,
-                        day_completion_points=day_completion_points,
-                        questions_to_complete_day=questions_to_complete_day,
-                        flashcard_creation_method=flashcard_creation_method,
-                        toc="",
-                        error_part="pointsPerDay")
-        try:
-            questions_to_complete_day = int(request.vars.get('itemsPerPoint', None))
-        except:
-            return dict(course_id=auth.user.course_name,
-                        end_date=end_date,
-                        max_practice_days=max_practice_days,
-                        day_completion_points=day_completion_points,
-                        questions_to_complete_day=questions_to_complete_day,
-                        flashcard_creation_method=flashcard_creation_method,
-                        toc="",
-                        error_part="itemsPerPoint")
-        try:
-            flashcard_creation_method = int(request.vars.get('flashcardsCreationType', None))
-        except:
-            return dict(course_id=auth.user.course_name,
-                        end_date=end_date,
-                        max_practice_days=max_practice_days,
-                        day_completion_points=day_completion_points,
-                        questions_to_complete_day=questions_to_complete_day,
-                        flashcard_creation_method=flashcard_creation_method,
-                        toc="",
-                        error_part="flashcardsCreationType")
-
-        db.course_practice.update_or_insert(db.course_practice.course_name == course.course_name,
-                                            course_name=course.course_name,
-                                            end_date=end_date,
-                                            max_practice_days=max_practice_days,
-                                            day_completion_points=day_completion_points,
-                                            questions_to_complete_day=questions_to_complete_day,
-                                            flashcard_creation_method=flashcard_creation_method
-                                            )
-
-        toc = ""
-        if flashcard_creation_method == 2:
-            toc = _get_toc_and_questions()
-        return dict(course_id=auth.user.course_name,
+                    course_start_date=course_start_date,
+                    start_date=start_date,
                     end_date=end_date,
                     max_practice_days=max_practice_days,
                     day_completion_points=day_completion_points,
                     questions_to_complete_day=questions_to_complete_day,
                     flashcard_creation_method=flashcard_creation_method,
                     toc=toc,
-                    error_part="Nothing")
+                    error_start_date=error_start_date,
+                    error_end_date=error_end_date,
+                    error_max_practice_days=error_max_practice_days,
+                    error_day_completion_points=error_day_completion_points,
+                    error_questions_to_complete_day=error_questions_to_complete_day,
+                    error_flashcard_creation_method=error_flashcard_creation_method,
+                    complete=already_exists
+                    )
+    else:
+        try:
+            start_date = datetime.datetime.strptime(request.vars.get('StartDate', None), '%Y-%m-%d').date()
+            if start_date < course_start_date:
+                error_start_date = 1
+        except:
+            error_start_date = 1
+        try:
+            end_date = datetime.datetime.strptime(request.vars.get('EndDate', None), '%Y-%m-%d').date()
+            if end_date < start_date:
+                error_end_date = 1
+        except:
+            error_end_date = 1
+        try:
+            max_practice_days = int(request.vars.get('maxPracticeDays', None))
+        except:
+            error_max_practice_days = 1
+        try:
+            day_completion_points = int(request.vars.get('pointsPerDay', None))
+        except:
+            error_day_completion_points = 1
+        try:
+            questions_to_complete_day = int(request.vars.get('itemsPerPoint', None))
+        except:
+            error_questions_to_complete_day = 1
+        try:
+            flashcard_creation_method = int(request.vars.get('flashcardsCreationType', None))
+        except:
+            error_flashcard_creation_method = 1
+
+        no_error = 0
+        if (error_start_date == 0 and
+            error_end_date == 0 and
+            error_max_practice_days == 0 and
+            error_day_completion_points == 0 and
+            error_questions_to_complete_day == 0 and
+            error_flashcard_creation_method == 0):
+            no_error = 1
+        if no_error == 1:
+            db.course_practice.update_or_insert(db.course_practice.course_name == course.course_name,
+                                                course_name=course.course_name,
+                                                course_start_date=course_start_date,
+                                                start_date=start_date,
+                                                end_date=end_date,
+                                                max_practice_days=max_practice_days,
+                                                day_completion_points=day_completion_points,
+                                                questions_to_complete_day=questions_to_complete_day,
+                                                flashcard_creation_method=flashcard_creation_method
+                                                )
+
+        toc = ""
+        if flashcard_creation_method == 2:
+            toc = _get_toc_and_questions()
+        return dict(course_id=auth.user.course_name,
+                    course_start_date=course_start_date,
+                    start_date=start_date,
+                    end_date=end_date,
+                    max_practice_days=max_practice_days,
+                    day_completion_points=day_completion_points,
+                    questions_to_complete_day=questions_to_complete_day,
+                    flashcard_creation_method=flashcard_creation_method,
+                    toc=toc,
+                    error_start_date=error_start_date,
+                    error_end_date=error_end_date,
+                    error_max_practice_days=error_max_practice_days,
+                    error_day_completion_points=error_day_completion_points,
+                    error_questions_to_complete_day=error_questions_to_complete_day,
+                    error_flashcard_creation_method=error_flashcard_creation_method,
+                    complete=no_error
+                    )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

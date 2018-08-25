@@ -152,21 +152,25 @@
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
              {{ if practice_today_left > 0: }}
-                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's point.</p>
+                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's
+                    point.</p>
              {{else:}}
                 <p>You've already got today's point.</p>
              {{pass}}
-             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.</p>
+             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.
+             </p>
          {{ elif flashcard_count == 1: }}
              <p>Hang in there. Last question for today.</p>
          {{pass}}
-         <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
+         <p>You've completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out
+             of {{=max_days}} days of your review practice.</p>
          <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
             <div id="CongratulationsContinueDIV">
-                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</p>
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.
+                </p>
                 <p>Click on the fireworks to create more of them.</p>
             </div>
             <div id="CanvasContainer">
@@ -174,7 +178,8 @@
             </div>
             <div id="follow-up-Container">
                 <div id="WillingToContinueDIV">
-                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button"
+                       class="btn btn-success NextQuestionAnchor">
                         I'd like to continue practicing.
                     </a>
                 </div>
@@ -184,15 +189,17 @@
                         Like
                         <!--Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />-->
                     </button>
-                    <button type="button" class="btn btn-info" id="Dislike"><i class="LikeDislikeIcon fa fa-thumbs-down"></i>
+                    <button type="button" class="btn btn-info" id="Dislike">
+                        <i class="LikeDislikeIcon fa fa-thumbs-down"></i>
                         Dislike
                         <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
                     </button>
                 </div>
-                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your suggestions on how to
-                    improve it. If someone else has already written the same feedback, please like/dislike those
-                    comments instead of repeating them.</div>
-                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice" data-numposts="5"></div>
+                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your
+                    suggestions on how to improve it. If someone else has already written the same feedback, please
+                    like/dislike those comments instead of repeating them.</div>
+                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice"
+                     data-numposts="5"></div>
             </div>
          {{ else: }}
             <span>
@@ -201,15 +208,28 @@
                 </div>
             </span>
             {{ if q[3] == 1: }}
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button"
+                      class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button"
+                      class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button"
+                      class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a>
+                </p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button"
+                      class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one
+                    seemed easy to recall.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button"
+                      class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the
+                    correct one.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button"
+                      class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
-                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
+                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button"
+                      class="btn btn-success NextQuestionAnchor">Done!
+                {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button"
+                      class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another
+                    question.</a></p>
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
             <ul>
@@ -227,7 +247,10 @@
                         <p><strong>{{=flash_card.sub_chapters.sub_chapter_name}}:</strong></p>
                         {{ if flash_card.mastery_percent > 0: }}
                         <div class="progress">
-                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar" style="width: {{=flash_card.mastery_percent}}%" aria-valuenow="{{=flash_card.mastery_percent}}" aria-valuemin="0" aria-valuemax="100">{{=flash_card.remaining_days}} days</div>
+                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar"
+                                 style="width: {{=flash_card.mastery_percent}}%"
+                                 aria-valuenow="{{=flash_card.mastery_percent}}" aria-valuemin="0"
+                                 aria-valuemax="100">{{=flash_card.remaining_days}} days</div>
                         </div>
                         {{ else: }}
                             <p>It's gonna be asked <strong>today</strong>!</p>
@@ -240,7 +263,8 @@
          {{ pass }}
     {{ else: }}
         <div id="CongratulationsDIV">
-            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
+            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.
+            </p>
         </div>
         <div class="demo"></div>
     {{ pass }}
@@ -293,7 +317,8 @@
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the html string within the questioninfo array would only give an unexpected token error
 	// pulling the html strings from the script element provides the string that javascript recognizes
-	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
+	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the
+    // result, the html string was still seen as an undefined type according to javascript
 
 	// The htmlDecode is needed to unescape the html that the server has sent.
 	// because only unescaped html gets rendered as html elements
@@ -373,7 +398,8 @@
             particles = [],
             // starting hue
             hue = 120,
-            // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5 loop ticks
+            // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5
+            // loop ticks
             limiterTotal = 5,
             limiterTick = 0,
             // this will time the auto launches of fireworks, one launch per 80 loop ticks
@@ -422,7 +448,8 @@
         // distance from starting point to target
         this.distanceToTarget = calculateDistance( sx, sy, tx, ty );
         this.distanceTraveled = 0;
-        // track the past coordinates of each firework to create a trail effect, increase the coordinate count to create more prominent trails
+        // track the past coordinates of each firework to create a trail effect, increase the coordinate count to create
+        // more prominent trails
         this.coordinates = [];
         this.coordinateCount = 3;
         // populate initial coordinate collection with the current coordinates
@@ -460,7 +487,8 @@
         // how far will the firework have traveled with velocities applied?
         this.distanceTraveled = calculateDistance( this.sx, this.sy, this.x + vx, this.y + vy );
 
-        // if the distance traveled, including velocities, is greater than the initial distance to the target, then the target has been reached
+        // if the distance traveled, including velocities, is greater than the initial distance to the target, then the
+        // target has been reached
         if( this.distanceTraveled >= this.distanceToTarget ) {
             createParticles( this.tx, this.ty );
             // remove the firework, use the index passed into the update function to determine which to remove
@@ -476,7 +504,8 @@
     Firework.prototype.draw = function() {
         ctx.beginPath();
         // move to the last tracked coordinate in the set, then draw a line to the current x and y
-        ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ], this.coordinates[ this.coordinates.length - 1][ 1 ] );
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ],
+                this.coordinates[ this.coordinates.length - 1][ 1 ] );
         ctx.lineTo( this.x, this.y );
         ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
         ctx.stroke();
@@ -491,7 +520,8 @@
     function Particle( x, y ) {
         this.x = x;
         this.y = y;
-        // track the past coordinates of each particle to create a trail effect, increase the coordinate count to create more prominent trails
+        // track the past coordinates of each particle to create a trail effect, increase the coordinate count to create
+        // more prominent trails
         this.coordinates = [];
         this.coordinateCount = 5;
         while( this.coordinateCount-- ) {
@@ -536,7 +566,8 @@
     Particle.prototype.draw = function() {
         ctx. beginPath();
         // move to the last tracked coordinates in the set, then draw a line to the current x and y
-        ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ], this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ],
+                this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
         ctx.lineTo( this.x, this.y );
         ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
         ctx.stroke();
@@ -544,7 +575,8 @@
 
     // create particle group/explosion
     function createParticles( x, y ) {
-        // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased particles though
+        // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased
+        // particles though
         var particleCount = 30;
         while( particleCount-- ) {
             particles.push( new Particle( x, y ) );
@@ -564,7 +596,8 @@
 
         // normally, clearRect() would be used to clear the canvas
         // we want to create a trailing effect though
-        // setting the composite operation to destination-out will allow us to clear the canvas at a specific opacity, rather than wiping it entirely
+        // setting the composite operation to destination-out will allow us to clear the canvas at a specific opacity,
+        // rather than wiping it entirely
         ctx.globalCompositeOperation = 'destination-out';
         // decrease the alpha property to create more prominent trails
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -590,7 +623,8 @@
         // launch fireworks automatically to random coordinates, when the mouse isn't down
         if( timerTick >= timerTotal ) {
             if( !mousedown ) {
-                // start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
+                // start the firework at the bottom middle of the screen, then set the random target coordinates, the
+                // random y coordinates will be set within the range of the top half of the screen
                 fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
                 timerTick = 0;
             }
@@ -601,7 +635,8 @@
         // limit the rate at which fireworks get launched when mouse is down
         if( limiterTick >= limiterTotal ) {
             if( mousedown ) {
-                // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the target
+                // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the
+                // target
                 fireworks.push( new Firework( cw / 2, ch, mx, my ) );
                 limiterTick = 0;
             }
