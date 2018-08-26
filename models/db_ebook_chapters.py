@@ -41,7 +41,7 @@ db.define_table('sub_chapter_taught',
   Field('course_name', 'string'),
   Field('chapter_name', 'string'),
   Field('sub_chapter_name', 'string'),
-  Field('teaching_date', 'datetime', default=datetime.datetime.now()),
+  Field('teaching_date', 'date', default=datetime.datetime.utcnow()),
   migrate='runestone_sub_chapter_taught.table'
 )
 

@@ -133,6 +133,40 @@
     .bg-danger {
         background-color: #dc3545!important;
     }
+    #HoldOnH1 {
+        display: none;
+        color: rgba(0, 0, 0, 0);
+        /* Safari 4.0 - 8.0 */
+        -webkit-animation-name: holdon;
+        -webkit-animation-duration: 4s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-delay: 0s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-direction: alternate;
+        /* Standard syntax */
+        animation-name: holdon;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes holdon {
+        0%   {color: rgba(0, 0, 0, 0);}
+        25%  {color: rgba(0, 0, 0, 0.25);}
+        50%  {color: rgba(0, 0, 0, 0.50);}
+        75%  {color: rgba(0, 0, 0, 0.75);}
+        100% {color: rgba(0, 0, 0, 1);}
+    }
+    /* Standard syntax */
+    @keyframes holdon {
+        0%   {color: rgba(0, 0, 0, 0);}
+        25%  {color: rgba(0, 0, 0, 0.25);}
+        50%  {color: rgba(0, 0, 0, 0.50);}
+        75%  {color: rgba(0, 0, 0, 0.75);}
+        100% {color: rgba(0, 0, 0, 1);}
+    }
 </style>
 
 <!--Facebook Comments plugin script-->
@@ -152,19 +186,23 @@
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
              {{ if practice_today_left > 0: }}
-                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's
+                <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left to get today's
                     point.</p>
              {{else:}}
                 <p>You've already got today's point.</p>
              {{pass}}
-             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.
+             <p>{{=flashcard_count}} more question{{='' if flashcard_count == 1 else 's'}} available to practice today.
              </p>
          {{ elif flashcard_count == 1: }}
              <p>Hang in there. Last question for today.</p>
-         {{pass}}
-         <p>You've completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out
+         {{ pass }}
+         <p>You've completed {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out
              of {{=max_days}} days of your review practice.</p>
-         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
+         {{ if remaining_days > 0: }}
+            <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
+         {{ else: }}
+            <p>The practicing period this semester is over, though you can continue practicing without receiving any extra points.</p>
+         {{ pass }}
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
@@ -227,9 +265,9 @@
                 <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button"
                       class="btn btn-success NextQuestionAnchor">Done!
                 {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button"
+                <p><a id="PostponeBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button"
                       class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another
-                    question.</a></p>
+                    question.</a> <h1 id="HoldOnH1">Hold on...</h1></p>
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
             <ul>
@@ -307,6 +345,20 @@
             else {
                 window.location = url;
             }
+
+            return false; // for good measure
+        });
+        $("#PostponeBtn").click(function(event) {
+            event.preventDefault();
+
+            $("#HoldOnH1").show();
+            $("#DoneBtn").hide();
+            $("#PostponeBtn").hide();
+
+            var url = $(this).attr('href');
+            setTimeout(function(){
+                window.location = url;
+            }, 1000);
 
             return false; // for good measure
         });

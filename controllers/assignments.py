@@ -402,7 +402,7 @@ def _get_student_practice_grade(sid, course_name):
               (db.practice_grades.course_name==course_name)).select().first()
 
 def _get_practice_completion_count(user_id, course_name):
-    return db((db.user_topic_practice_Completion.course_name == course_name) & \
+    return db((db.user_topic_practice_Completion.course_name == course_name) &
        (db.user_topic_practice_Completion.user_id == user_id)).count()
 
 # Called when user clicks "I'm done" button.
@@ -424,8 +424,7 @@ def checkanswer():
         now = datetime.datetime.utcnow()
         old_completion_count = _get_practice_completion_count(sid, course_name)
         # Use the autograding function to update the flashcard's e-factor and i-interval.
-        do_check_answer(sid, course_name, qid, username, q, db, settings, now,
-                        datetime.timedelta(hours=int(session.timezoneoffset)))
+        do_check_answer(sid, course_name, qid, username, q, db, settings, now, int(session.timezoneoffset))
 
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
@@ -435,8 +434,8 @@ def checkanswer():
 
 # Only questions that are marked for practice are eligible for the spaced practice.
 def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db((db.questions.base_course == base_course) & \
-              (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) & \
+    return db((db.questions.base_course == base_course) &
+              (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) &
               (db.questions.practice == True)).select()
 
 
@@ -454,7 +453,8 @@ def practice():
 
     if not session.timezoneoffset:
         session.timezoneoffset = 0
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+    now = datetime.datetime.utcnow()
+    now_local = now - datetime.timedelta(hours=int(session.timezoneoffset))
 
     practice_settings = db(db.course_practice.course_name == auth.user.course_name)
     if practice_settings.count() == 0:
@@ -466,10 +466,10 @@ def practice():
                                       message2=message2)))
 
     practice_start_date = practice_settings.select().first().start_date
-    if practice_start_date > now.date():
-        remaining_days = (practice_start_date - now.date()).days
+    if practice_start_date > now_local.date():
+        days_to_start = (practice_start_date - now_local.date()).days
         message1 = "Practice will start in this course on " + str(practice_start_date) + "."
-        message2 = "Please return in " + str(remaining_days) + " days."
+        message2 = "Please return in " + str(days_to_start) + " days."
         session.flash = (message1 + " " + message2)
         return redirect(URL('practiceNotStartedYet',
                             vars=dict(message1=message1,
@@ -477,7 +477,7 @@ def practice():
 
     practice_settings = practice_settings.select().first()
     # Calculates the remaining days to the end of the semester.
-    remaining_days = (practice_settings.end_date - now.date()).days
+    remaining_days = (practice_settings.end_date - now_local.date()).days
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -513,10 +513,12 @@ def practice():
                     # Treat it as if the first eligible question is the last one asked.
                     i_interval=0,
                     e_factor=2.5,
+                    next_eligible_date=now_local.date(),
                     # add as if yesterday, so can practice right away
-                    last_presented=now.date() - datetime.timedelta(1),
-                    last_completed=now.date() - datetime.timedelta(1),
+                    last_presented=now - datetime.timedelta(1),
+                    last_completed=now - datetime.timedelta(1),
                     creation_time=now,
+                    tz_offset=int(session.timezoneoffset)
                 )
 
     # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
@@ -532,8 +534,7 @@ def practice():
     flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                     (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
     # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if
-                              (now.date() - f.last_completed.date()).days >= f.i_interval]
+    presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
 
     all_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
                         (db.user_topic_practice.user_id == auth.user.id) & \
@@ -541,12 +542,16 @@ def practice():
                         (db.user_topic_practice.sub_chapter_label == db.sub_chapters.sub_chapter_label) & \
                         (db.chapters.course_id == auth.user.course_name) & \
                         (db.sub_chapters.chapter_id == db.chapters.id)) \
-            .select(db.chapters.chapter_name, db.sub_chapters.sub_chapter_name, db.user_topic_practice.i_interval,
-                db.user_topic_practice.last_completed, orderby=db.user_topic_practice.id)
+            .select(db.chapters.chapter_name,
+                    db.sub_chapters.sub_chapter_name,
+                    db.user_topic_practice.i_interval,
+                    db.user_topic_practice.next_eligible_date,
+                    db.user_topic_practice.last_completed,
+                    orderby=db.user_topic_practice.id)
     for f_card in all_flashcards:
-        f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval -
-                                       (now.date() - f_card.user_topic_practice.last_completed.date()).days)
-        f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
+        f_card["remaining_days"] = max(0, (f_card.user_topic_practice.next_eligible_date - now_local.date()).days)
+        # f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
+        f_card["mastery_percent"] = int(f_card["remaining_days"])
         f_card["mastery_color"] = "danger"
         if f_card["mastery_percent"] >= 75:
             f_card["mastery_color"] = "success"
@@ -595,20 +600,21 @@ def practice():
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
         flashcard.last_presented = now
+        flashcard.tz_offset = int(session.timezoneoffset)
         flashcard.update_record()
 
     else:
         questioninfo = None
 
         # Add a practice completion record for today, if there isn't one already.
-        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                                       (db.user_topic_practice_Completion.user_id == auth.user.id) & \
-                                       (db.user_topic_practice_Completion.practice_completion_time == now.date()))
+        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) &
+                                       (db.user_topic_practice_Completion.user_id == auth.user.id) &
+                                       (db.user_topic_practice_Completion.practice_completion_date == now_local.date()))
         if practice_completion_today.isempty():
             db.user_topic_practice_Completion.insert(
                 user_id=auth.user.id,
                 course_name=auth.user.course_name,
-                practice_completion_time=now.date()
+                practice_completion_date=now_local.date()
             )
             # send practice grade via lti, if setup for that
             lti_record = _get_lti_record(session.oauth_consumer_key)
@@ -616,7 +622,6 @@ def practice():
             course_settings = _get_course_practice_record(auth.user.course_name)
             if lti_record and practice_grade and course_settings:
                 practice_completion_count = _get_practice_completion_count(auth.user.id, auth.user.course_name)
-                print "sending"
                 send_lti_grade(assignment_points=course_settings.max_practice_days,
                                score=practice_completion_count,
                                consumer=lti_record.consumer,
@@ -667,7 +672,8 @@ def like_dislike():
             user_id=sid,
             course_name=course_name,
             like_practice=likeVal,
-            response_time=datetime.datetime.now(),
+            response_time=datetime.datetime.utcnow(),
+            tz_offset=session.timezoneoffset if 'timezoneoffset' in session else 0,
         )
         return json.dumps(dict(complete=True))
     session.flash = "Sorry, your request was not saved. Please login and try again."
