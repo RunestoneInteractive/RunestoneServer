@@ -389,10 +389,20 @@ def practice():
                     )
 
 
+# I was not sure if it's okay to import it from `assignmnets.py`.
+# Only questions that are marked for practice are eligible for the spaced practice.
+def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
+    return db((db.questions.base_course == base_course) &
+              ((db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) |
+               ((db.questions.chapter == chapter_label) &
+                (db.questions.topic == None) &
+                (db.questions.subchapter == sub_chapter_label))) &
+              (db.questions.practice == True))
+
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
-
     data = json.loads(request.vars.data)
 
     string_data = [x.encode('UTF8') for x in data]
@@ -408,24 +418,24 @@ def add_practice_items():
         subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
             .select()
         for subchapter in subchapters:
-            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
-                               (db.sub_chapter_taught.chapter_name == chapter.chapter_name) & \
-                               (db.sub_chapter_taught.sub_chapter_name == subchapter.sub_chapter_name))
-            questions = db((db.questions.base_course == course.base_course) & \
-                           (db.questions.topic == "{}/{}".format(chapter.chapter_label, subchapter.sub_chapter_label)) & \
-                           (db.questions.practice == True))
+            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
+                               (db.sub_chapter_taught.chapter_label == chapter.chapter_label) &
+                               (db.sub_chapter_taught.sub_chapter_label == subchapter.sub_chapter_label))
+            questions = _get_qualified_questions(course.base_course,
+                                                 chapter.chapter_label,
+                                                 subchapter.sub_chapter_label)
             if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
                 if subchapterTaught.isempty() and not questions.isempty():
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
-                        chapter_name=chapter.chapter_name,
-                        sub_chapter_name=subchapter.sub_chapter_name,
+                        chapter_label=chapter.chapter_label,
+                        sub_chapter_label=subchapter.sub_chapter_label,
                         teaching_date=now_local.date(),
                     )
                     for student in students:
-                        flashcards = db((db.user_topic_practice.user_id == student.id) & \
+                        flashcards = db((db.user_topic_practice.user_id == student.id) &
                                         (db.user_topic_practice.course_name == course.course_name) &
-                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) &
                                         (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
                         if flashcards.isempty():
                             db.user_topic_practice.insert(
@@ -447,7 +457,7 @@ def add_practice_items():
                 if not subchapterTaught.isempty():
                     subchapterTaught.delete()
                     db((db.user_topic_practice.course_name == course.course_name) &
-                       (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                       (db.user_topic_practice.chapter_label == chapter.chapter_label) &
                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
     return json.dumps(dict(complete=True))
 
@@ -1247,41 +1257,60 @@ def _get_toc_and_questions():
         #      -- get the divs associated with it, and insert into the sub-sub-dictionary
 
         question_picker = []
-        reading_picker = []  # This one doesn't include the questions, but otherwise the same
-        practice_picker = []  # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
-        subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
-        chapters_and_subchapters_taught = [(row.chapter_name, row.sub_chapter_name) for row in subchapters_taught_query]
-
-
-
-        topic_query = db((db.courses.course_name == auth.user.course_name) & \
-                         (db.questions.base_course == db.courses.base_course) & \
-                         (db.questions.practice == True) & \
-                         (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
+        # This one doesn't include the questions, but otherwise the same
+        reading_picker = []
+        # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
+        practice_picker = []
+        subchapters_taught_query = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
+                                      (db.chapters.course_id == auth.user.course_name) &
+                                      (db.chapters.chapter_label == db.sub_chapter_taught.chapter_label) &
+                                      (db.sub_chapters.chapter_id == db.chapters.id) &
+                                      (db.sub_chapters.sub_chapter_label == db.sub_chapter_taught.sub_chapter_label)
+                                      ).select(db.chapters.chapter_name,
+                                               db.sub_chapters.sub_chapter_name)
+        chapters_and_subchapters_taught = [(row.chapters.chapter_name, row.sub_chapters.sub_chapter_name)
+                                           for row in subchapters_taught_query]
+        topic_query = db((db.courses.course_name == auth.user.course_name) &
+                         (db.questions.base_course == db.courses.base_course) &
+                         (db.questions.practice == True)).select(db.questions.topic,
+                                                                 db.questions.chapter,
+                                                                 db.questions.subchapter,
+                                                                 orderby=db.questions.id)
         for q in topic_query:
-            # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
-            # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
-            # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
+            # We know chapter_name and sub_chapter_name include spaces.
+            # So we cannot directly use the labels retrieved from q.topic as chapter_name and
+            # sub_chapter_name and we need to query the corresponding chapter_name and sub_chapter_name from the
             # corresponding tables.
-            try:
-                chap, subch = q.topic.split('/')
-            except:
-                # a badly formed "topic" for the question; just ignore it
-                logger.info("Badly form Topic: {}".format(q.topic))
-            try:
-                chapter = db((db.chapters.course_id == auth.user.course_name) & \
-                              (db.chapters.chapter_label == chap)) \
-                              .select()[0]
+            if q.topic is not None:
+                try:
+                    chap, subch = q.topic.split('/')
+                except:
+                    # a badly formed "topic" for the question; just ignore it
+                    logger.info("Bad Topic: {}".format(q.topic))
+                try:
+                    chapter = db((db.chapters.course_id == auth.user.course_name) &
+                                  (db.chapters.chapter_label == chap)) \
+                                  .select()[0]
 
-                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
-                              (db.sub_chapters.sub_chapter_label == subch)) \
-                              .select()[0].sub_chapter_name
-            except:
-                # topic's chapter and subchapter are not in the book; ignore this topic
-                logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
-                
+                    sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
+                                  (db.sub_chapters.sub_chapter_label == subch)) \
+                                  .select()[0].sub_chapter_name
+                except:
+                    # topic's chapter and subchapter are not in the book; ignore this topic
+                    logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
+            else:
+                chap = q.chapter
+                subch = q.subchapter
+                chapter = db((db.chapters.course_id == auth.user.course_name) &
+                             (db.chapters.chapter_label == chap)) \
+                    .select()[0]
+
+                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
+                                      (db.sub_chapters.sub_chapter_label == subch)) \
+                    .select()[0].sub_chapter_name
+
             chapter_name = chapter.chapter_name
-            # find the item in practice picker for this chapter
+            # Find the item in practice picker for this chapter
             p_ch_info = None
             for ch_info in practice_picker:
                 if ch_info['text'] == chapter_name:

@@ -201,13 +201,15 @@
          {{ if remaining_days > 0: }}
             <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
          {{ else: }}
-            <p>The practicing period this semester is over, though you can continue practicing without receiving any extra points.</p>
+            <p>The practicing period this semester is over, though you can continue practicing without receiving any
+                extra points.</p>
          {{ pass }}
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
             <div id="CongratulationsContinueDIV">
-                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions correctly and received
+                    today's point.
                 </p>
                 <p>Click on the fireworks to create more of them.</p>
             </div>
@@ -262,14 +264,23 @@
                 <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button"
                       class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
+                <h1 id="HoldOnH1">Hold on...</h1>
                 <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button"
                       class="btn btn-success NextQuestionAnchor">Done!
                 {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <p><a id="PostponeBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button"
-                      class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another
-                    question.</a> <h1 id="HoldOnH1">Hold on...</h1></p>
+                <p><a id="PostponeBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1"
+                      type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask
+                        me another question.</a></p>
+                {{ if flashcard_creation_method == 0: }}
+                <p>Note: Pages that you marked as complete are eligible for practice. If you mistakenly marked a page as
+                    complete, you can remove it from practice by visiting that page and unmarking it as complete.</p>
+                {{ pass }}
             {{ pass }}
             <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
+            {{ if flashcard_creation_method == 0: }}
+            <p>Note: Only the pages you've marked as complete, at the bottom of the page, are the ones that are
+                eligible for practice.</p>
+            {{ pass }}
             <ul>
             {{ current_chapter = all_flashcards[0].chapters.chapter_name }}
                 <li><h4>{{=current_chapter}}</h4></li>
@@ -328,6 +339,11 @@
         }
         $("#DoneBtn").click(function(event) {
             event.preventDefault();
+
+            $("#HoldOnH1").show();
+            $("#DoneBtn").hide();
+            $("#PostponeBtn").hide();
+
             var url = $(this).attr('href');
             // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
             // click "Check me" for them.

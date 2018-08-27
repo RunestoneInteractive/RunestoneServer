@@ -39,8 +39,8 @@ db.define_table('user_sub_chapter_progress',
 
 db.define_table('sub_chapter_taught',
   Field('course_name', 'string'),
-  Field('chapter_name', 'string'),
-  Field('sub_chapter_name', 'string'),
+  Field('chapter_label', 'string'),
+  Field('sub_chapter_label', 'string'),
   Field('teaching_date', 'date', default=datetime.datetime.utcnow()),
   migrate='runestone_sub_chapter_taught.table'
 )
