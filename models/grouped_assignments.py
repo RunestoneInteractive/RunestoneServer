@@ -125,11 +125,18 @@ class CourseGrade(object):
             type_names.append('PS Seconds')
         if 'Earliness' not in type_names:
             type_names.append('Earliness')
-        row['PS Seconds'], row['Earliness'] = get_engagement_time(assignment=None,
-                                                                  user=self.student,
-                                                                  preclass=False,
-                                                                  all_problem_sets=True,
-                                                                  as_of_timestamp=as_of_timestamp)
+        (row['PS Seconds'],
+         row['Earliness'],
+         assignment_specific_data) = get_engagement_time(assignment=None,
+                                                         user=self.student,
+                                                         preclass=False,
+                                                         all_problem_sets=True,
+                                                         as_of_timestamp=as_of_timestamp)
+        for assignment, v in assignment_specific_data.items():
+            type_names.append(assignment + '_Earliness')
+            row[assignment + '_Duration'] = v['total_duration']
+            row[assignment + '_Earliness'] = v['earliness']
+
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
@@ -245,7 +252,7 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         # We want to define a variable that measures how early each student works on their assignments. We suppose this
         # measure as the inverse of a measurement of procrastination. For this purpose, we need to find the first, last,
         # and all the timestamps that the student worked on each assignment.
-        first_last_timestamps = {}
+        assignment_specific_data = {}
     else:
         activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
 
@@ -270,26 +277,31 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
                 sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
                 # start a new session
                 sessions.append(Session(timestamp))
-        prev = activity
 
         if all_problem_sets:
             deadline = activity.assignments.duedate
             assignment_id = activity.assignments.id
             if timestamp <= deadline:
                 # Use assignment id as key.
-                if assignment_id not in first_last_timestamps:
-                    first_last_timestamps[assignment_id] = {'first': timestamp,
-                                                            'last': timestamp,
-                                                            'visits': [timestamp],
-                                                            'deadline': deadline}
+                if assignment_id not in assignment_specific_data:
+                    assignment_specific_data[assignment_id] = {'first': timestamp,
+                                                               'last': timestamp,
+                                                               'visits': [timestamp],
+                                                               'durations': [],
+                                                               'deadline': deadline}
                 else:
                     # We need to find the first, last, and all the timestamps timestamps that the student worked on
                     # each assignment.
-                    first_last_timestamps[assignment_id]['visits'].append(timestamp)
-                    if timestamp < first_last_timestamps[assignment_id]['first']:
-                        first_last_timestamps[assignment_id]['first'] = timestamp
-                    if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
-                        first_last_timestamps[assignment_id]['last'] = timestamp
+                    assignment_specific_data[assignment_id]['visits'].append(timestamp)
+                    if timestamp < assignment_specific_data[assignment_id]['first']:
+                        assignment_specific_data[assignment_id]['first'] = timestamp
+                    if assignment_specific_data[assignment_id]['last'] < timestamp <= deadline:
+                        assignment_specific_data[assignment_id]['last'] = timestamp
+                    if not prev:
+                        assignment_specific_data[assignment_id]['durations'].append(THRESH)
+
+        prev = activity
+
     if prev:
         if all_problem_sets:
             prev_timestamp = prev.useinfo.timestamp
@@ -301,25 +313,31 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
 
     if all_problem_sets:
-        for assignment_id, v in first_last_timestamps.items():
+        for assignment_id, v in assignment_specific_data.items():
             print assignment_id, v['first'], v['last'], v['deadline']
 
     if all_problem_sets:
-        # We I define the variable earliness that measures how early each student works on their assignments. We suppose
+        # We define the variable earliness that measures how early each student works on their assignments. We suppose
         # this measure as the inverse of a measurement of procrastination and we calculate it as the difference between
         # the deadline and mean of all the timestamps before the deadline that they worked on the assignment.
-        # Add up over all assignments; student who misses an assignments gets no earliness for it.
+        # Add up over all assignments; students who miss an assignment get 0 earliness for it.
         earliness = 0
-        for v in first_last_timestamps.values():
+        assignment_specific_data = []
+        for assignment, v in assignment_specific_data.items():
             average_delta = 0
             for timestamp in v['visits']:
-                average_delta += v['deadline'] - timestamp
+                if v['deadline'] > timestamp:
+                    average_delta += (v['deadline'] - timestamp).total_seconds()
             average_delta /= len(v['visits'])
-            earliness += average_delta.total_seconds()
+            assignment_specific_data[assignment]['earliness'] = average_delta/float(3600)
+            earliness += average_delta
+
+            assignment_specific_data[assignment]['total_duration'] = sum(v['durations'])/float(3600)
+
         # Finally, divide the earliness by the number of assignments, so that earliness does not depend on the number of
         # submitted assignments.
-        earliness /= len(first_last_timestamps)
-        return total_time, earliness/float(3600)
+        earliness /= len(assignment_specific_data)
+        return total_time, earliness/float(3600), assignment_specific_data
 
     return total_time
 

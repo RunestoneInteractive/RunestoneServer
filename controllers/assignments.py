@@ -261,7 +261,7 @@ def download_time_spent():
         return dict(error="Please enter ?as_of=03-24-16")
     # probably broken now; assignment_types is deprecated and maybe not filled in correctly
     # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    rows = [CourseGrade(user = student,
+    rows = [CourseGrade(user=student,
                         course=course,
                         assignment_types=[]).csv(type_names,
                                                  assignment_names,
