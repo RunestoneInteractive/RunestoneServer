@@ -545,6 +545,9 @@ def backup():
 def removeStudents():
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
+    answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers', 
+                     'dragndrop_answers', 'fitb_answers','parsons_answers',
+                     'shortanswer_answers']
 
     if not isinstance(request.vars["studentList"], basestring):
         # Multiple ids selected
@@ -559,9 +562,19 @@ def removeStudents():
 
     for studentID in studentList:
         if studentID.isdigit() and int(studentID) != auth.user.id:
+            sid = db(db.auth_user.id == int(studentID)).select(db.auth_user.username).first()
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
-            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
+            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName, active='F')
+            db( (db.useinfo.sid == sid) &
+                (db.useinfo.course_id == auth.user.course_name)).update(course_id=baseCourseName)
+            for tbl in answer_tables:
+                db( (db[tbl].sid == sid) & (db[tbl].course_name == auth.user.course_name)).update(course_name=baseCourseName)
+            db((db.code.sid == sid) & 
+               (db.code.course_id == auth.user.course_id)).update(course_id=baseCourseID)
+            db((db.acerror_log.sid == sid) & 
+               (db.acerror_log.course_id == auth.user.course_name)).update(course_id=baseCourseName)
+            # leave user_chapter_progress and user_sub_chapter_progress alone for now.
 
     session.flash = T("You have successfully removed students")
     return redirect('/%s/admin/admin' % (request.application))

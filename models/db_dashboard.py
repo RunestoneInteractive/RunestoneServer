@@ -53,6 +53,7 @@ class ProblemMetrics(object):
         if row.sid in self.user_responses:
             self.user_responses[row.sid].add_response(choice, correct)
 
+    # this is where the donut chart data is created
     def user_response_stats(self):
         correct = 0
         correct_mult_attempts = 0
@@ -347,7 +348,7 @@ class DashboardDataAnalyzer(object):
         #should probably be stored and only new data appended.
         self.course = db(db.courses.id == self.course_id).select().first()
         rslogger.debug("COURSE QUERY GOT %s", self.course)
-        self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
+        self.users = db((db.auth_user.course_id == auth.user.course_id) & (db.auth_user.active == 'T') ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
             (db.auth_user.course_id == auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
