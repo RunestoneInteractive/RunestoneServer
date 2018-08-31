@@ -3,6 +3,7 @@ import logging
 from math import ceil
 
 from outcome_request import OutcomeRequest
+from psycopg2 import IntegrityError
 
 # When testing, the ``settings`` object isn't defined. Import it in this case.
 try:
