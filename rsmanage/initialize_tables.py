@@ -19,6 +19,9 @@ if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='TeacherCSP', base_course='TeacherCSP', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='JavaReview', base_course='apcsareview', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='fopp', base_course='fopp', term_start_date=datetime.date(2000, 1, 1))    
+    db.courses.insert(course_name='cppds', base_course='cppds', term_start_date=datetime.date(2000, 1, 1))        
+    db.courses.insert(course_name='webfundamentals', base_course='webfundamentals', term_start_date=datetime.date(2000, 1, 1))            
 else:
     click.echo(message="Your database already has Courses")
 
