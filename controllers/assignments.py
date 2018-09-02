@@ -53,6 +53,7 @@ def index():
      now_local,
      practice_message1,
      practice_message2,
+     practice_graded,
      practice_completion_count,
      remaining_days,
      max_days,
@@ -67,7 +68,7 @@ def index():
     return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
                 user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades,
                 practice_message1=practice_message1, practice_message2=practice_message2,
-                flashcard_count=len(presentable_flashcards),
+                practice_graded=practice_graded, flashcard_count=len(presentable_flashcards),
                 # The number of days the student has completed their practice.
                 practice_completion_count=practice_completion_count,
                 remaining_days=remaining_days, max_days=max_days,
@@ -94,6 +95,8 @@ def _get_practice_data(user, tzOffset):
     points_received = 0
     total_possible_points = 0
     flashcard_creation_method = 0
+    practice_times_to_pass_today = 0
+    practice_graded = 1
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=tzOffset)
@@ -107,6 +110,7 @@ def _get_practice_data(user, tzOffset):
         practice_message2 = "Please ask your instructor to set it up."
     else:
         practice_settings = practice_settings.select().first()
+        practice_graded = practice_settings.graded
         practice_start_date = practice_settings.start_date
         flashcard_creation_method = practice_settings.flashcard_creation_method
         # Calculates the remaining days to the end of the semester.
@@ -193,8 +197,11 @@ def _get_practice_data(user, tzOffset):
             practice_completion_count = _get_practice_completion_count(user.id, user.course_name)
 
             # Calculate the number of times left for the student to practice today to get the completion point.
-            practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today -
-                                                                       practiced_today_count))
+            if practice_graded == 1:
+                practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today -
+                                                                           practiced_today_count))
+            else:
+                practice_today_left = len(presentable_flashcards)
 
             points_received = practice_settings.day_completion_points * practice_completion_count
             total_possible_points = practice_settings.day_completion_points * practice_settings.max_practice_days
@@ -203,6 +210,7 @@ def _get_practice_data(user, tzOffset):
             now_local,
             practice_message1,
             practice_message2,
+            practice_graded,
             practice_completion_count,
             remaining_days,
             max_days,
@@ -622,6 +630,7 @@ def practice():
      now_local,
      message1,
      message2,
+     practice_graded,
      practice_completion_count,
      remaining_days,
      max_days,
@@ -669,7 +678,8 @@ def practice():
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
     if len(presentable_flashcards) > 0 and (practiced_today_count != practice_times_to_pass_today or
-                                            request.vars.willing_to_continue):
+                                            request.vars.willing_to_continue or
+                                            practice_graded == 0):
         # Present the first one.
         flashcard = presentable_flashcards[0]
         # Get eligible questions.
@@ -746,6 +756,7 @@ def practice():
                 practiced_today_count=practiced_today_count,
                 points_received=points_received,
                 total_possible_points=total_possible_points,
+                practice_graded=practice_graded,
                 flashcard_creation_method=flashcard_creation_method)
 
 

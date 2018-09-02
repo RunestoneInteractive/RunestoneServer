@@ -10,6 +10,7 @@
 			<div class="dash-section-header">
 				Grades
 			</div>
+            {{ if practice_graded == 1: }}
 			<div class="dash-section-content scroll">
              {{ if practice_message1 != "": }}
                  <p>{{=practice_message1}}</p>
@@ -35,6 +36,7 @@
                  {{ pass }}
              {{ pass }}
             </div>
+            {{ pass }}
             <div class="dash-section-content scroll">
 				<table width="90%">
 					<thead>

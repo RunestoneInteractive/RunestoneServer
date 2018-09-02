@@ -183,6 +183,7 @@
 
 <div id='part1' style="padding-left: 40px">
 	<h1 style='text-align:center'>Review Practice Questions</h1>
+    {{ if practice_graded == 1: }}
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
              {{ if practice_today_left > 0: }}
@@ -205,13 +206,22 @@
                 extra points.</p>
          {{ pass }}
     </div>
+    {{ pass }}
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
             <div id="CongratulationsContinueDIV">
+                {{ if practice_graded == 1: }}
                 <p>Congratulations! You have answered {{=practiced_today_count}} questions correctly and received
-                    today's point.
-                </p>
+                    today's point.</p>
+                {{else:}}
+                <p style="margin-bottom: 100px;">Congratulations! Today, so far you have answered
+                    {{=practiced_today_count}} questions correctly.</p>
+                {{ pass }}
                 <p>Click on the fireworks to create more of them.</p>
+                <!--<p>The designers of the practice tool are a group of researchers with the goal of making computer
+                    science education as effective aspossible. In order to improve the design of the practice tool and
+                    personalize the questions for you, we need to learn more about you.</p>
+                <p>Please answer the following question before continuing practicing.</p>-->
             </div>
             <div id="CanvasContainer">
                 <canvas id="canvas"></canvas>
@@ -235,11 +245,11 @@
                         <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
                     </button>
                 </div>
-                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your
+                <!--<div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your
                     suggestions on how to improve it. If someone else has already written the same feedback, please
                     like/dislike those comments instead of repeating them.</div>
                 <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice"
-                     data-numposts="5"></div>
+                     data-numposts="5"></div>-->
             </div>
          {{ else: }}
             <span>
@@ -332,7 +342,7 @@
                 check_me_clicked = true;
             });
         }
-        else if ($('button:contains("Save & Run")')) {
+        else if ($('button:contains("Save & Run")').length) {
             $('button:contains("Save & Run")').click(function(event) {
                 check_me_clicked = true;
             });
@@ -374,7 +384,7 @@
             var url = $(this).attr('href');
             setTimeout(function(){
                 window.location = url;
-            }, 1000);
+            }, 10000);
 
             return false; // for good measure
         });

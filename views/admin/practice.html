@@ -84,6 +84,34 @@
         {{ pass }}
       </div>
       <div class="form-group">
+        <label for="gradedInput">Choose whether students should receive points for practicing:</label>
+        <select class="form-control" id="gradedInput" name="graded">
+            <option value="1"
+        {{if graded == 1:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Practicing should be graded automatically.
+            </option>
+            <option value="0"
+        {{if graded == 0:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Practicing should not be graded.
+            </option>
+        </select>
+        {{if error_graded == 1:}}
+        <div class="invalid-feedback">
+            Please specify whether students should receive points for practicing.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group" id="maxPracticeDaysContainer"
+        {{if graded == 0:}}
+           style="display: none;"
+        {{ pass }}
+      >
         <label for="maxPracticeDaysInput">Enter max number of days of practice students can get points for:</label>
         <input type="number" class="form-control" id="maxPracticeDaysInput" name="maxPracticeDays" required
         {{if max_practice_days != "":}}
@@ -96,7 +124,11 @@
         </div>
         {{ pass }}
       </div>
-      <div class="form-group">
+      <div class="form-group" id="pointsPerDayContainer"
+        {{if graded == 0:}}
+           style="display: none;"
+        {{ pass }}
+      >
         <label for="pointsPerDayInput">Enter number of points for completing each day:</label>
         <input type="number" class="form-control" id="pointsPerDayInput" name="pointsPerDay" required
         {{if day_completion_points != "":}}
@@ -109,7 +141,11 @@
         </div>
         {{ pass }}
       </div>
-      <div class="form-group">
+      <div class="form-group" id="itemsPerPointContainer"
+        {{if graded == 0:}}
+           style="display: none;"
+        {{ pass }}
+      >
         <label for="itemsPerPointInput">Enter number of questions to get the points for that day:</label>
         <input type="number" class="form-control" id="itemsPerPointInput" name="itemsPerPoint" required
         {{if questions_to_complete_day != "":}}
@@ -153,10 +189,10 @@
         </div>
         {{ pass }}
       </div>
-      <input class="btn btn-success mb-2" type="submit" value="Save Practice Settings">
+      <input style="margin-bottom: 25px;" class="btn btn-success mb-2" type="submit" value="Save Practice Settings">
     </form>
     {{if toc != "":}}
-    <h4 style="margin-top: 25px;">Choose the sections taught, so that students can practice them.</h4>
+    <h4>Choose the sections taught, so that students can practice them.</h4>
     <div id="search-tree-practice-picker-container">
       <input id="search-tree-practice-picker" type="text">
     </div>
@@ -177,10 +213,23 @@ $(function () {
     $(".dashboardnav").removeClass("active");
     $("#practicetab").addClass("active");
 
+    $("#gradedInput").change(function() {
+      if ($( this ).val() == 0) {
+          $("#maxPracticeDaysContainer").hide('slow');
+          $("#pointsPerDayContainer").hide('slow');
+          $("#itemsPerPointContainer").hide('slow');
+      }
+      else {
+          $("#maxPracticeDaysContainer").show('slow');
+          $("#pointsPerDayContainer").show('slow');
+          $("#itemsPerPointContainer").show('slow');
+      }
+    });
+
 {{if complete == 1:}}
     $( "#ShowPracticeSettingsA" ).click(function() {
-      $( "#ShowPracticeSettingsDIV" ).hide();
-      $( "#PracticeSettingsForm" ).show();
+      $( "#ShowPracticeSettingsDIV" ).hide('slow');
+      $( "#PracticeSettingsForm" ).show('slow');
     });
 {{ pass }}
 

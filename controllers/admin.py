@@ -267,16 +267,18 @@ def practice():
 
     start_date = course_start_date
     end_date = ""
-    max_practice_days = ""
-    day_completion_points = ""
-    questions_to_complete_day = ""
+    max_practice_days = 50
+    day_completion_points = 1
+    questions_to_complete_day = 10
     flashcard_creation_method = 0
+    graded = 1
     error_start_date = 0
     error_end_date = 0
     error_max_practice_days = 0
     error_day_completion_points = 0
     error_questions_to_complete_day = 0
     error_flashcard_creation_method = 0
+    error_graded = 0
 
     already_exists = 0
     practice_settings = db(db.course_practice.course_name == auth.user.course_name)
@@ -288,6 +290,7 @@ def practice():
         day_completion_points = practice_settings.day_completion_points
         questions_to_complete_day = practice_settings.questions_to_complete_day
         flashcard_creation_method = practice_settings.flashcard_creation_method
+        graded = practice_settings.graded
         already_exists = 1
 
     toc = ""
@@ -299,7 +302,8 @@ def practice():
             'maxPracticeDays' in request.vars or
             'pointsPerDay' in request.vars or
             'itemsPerPoint' in request.vars or
-            'flashcardsCreationType' in request.vars):
+            'flashcardsCreationType' in request.vars or
+            'graded' in request.vars):
         return dict(course_id=auth.user.course_name,
                     course_start_date=course_start_date,
                     start_date=start_date,
@@ -308,6 +312,7 @@ def practice():
                     day_completion_points=day_completion_points,
                     questions_to_complete_day=questions_to_complete_day,
                     flashcard_creation_method=flashcard_creation_method,
+                    graded=graded,
                     toc=toc,
                     error_start_date=error_start_date,
                     error_end_date=error_end_date,
@@ -315,6 +320,7 @@ def practice():
                     error_day_completion_points=error_day_completion_points,
                     error_questions_to_complete_day=error_questions_to_complete_day,
                     error_flashcard_creation_method=error_flashcard_creation_method,
+                    error_graded=error_graded,
                     complete=already_exists
                     )
     else:
@@ -346,14 +352,19 @@ def practice():
             flashcard_creation_method = int(request.vars.get('flashcardsCreationType', None))
         except:
             error_flashcard_creation_method = 1
+        try:
+            graded = int(request.vars.get('graded', None))
+        except:
+            error_graded = 1
 
         no_error = 0
         if (error_start_date == 0 and
-            error_end_date == 0 and
-            error_max_practice_days == 0 and
-            error_day_completion_points == 0 and
-            error_questions_to_complete_day == 0 and
-            error_flashcard_creation_method == 0):
+                error_end_date == 0 and
+                error_max_practice_days == 0 and
+                error_day_completion_points == 0 and
+                error_questions_to_complete_day == 0 and
+                error_flashcard_creation_method == 0 and
+                error_graded == 0):
             no_error = 1
         if no_error == 1:
             db.course_practice.update_or_insert(db.course_practice.course_name == course.course_name,
@@ -364,7 +375,8 @@ def practice():
                                                 max_practice_days=max_practice_days,
                                                 day_completion_points=day_completion_points,
                                                 questions_to_complete_day=questions_to_complete_day,
-                                                flashcard_creation_method=flashcard_creation_method
+                                                flashcard_creation_method=flashcard_creation_method,
+                                                graded=graded
                                                 )
 
         toc = ""
@@ -378,6 +390,8 @@ def practice():
                     day_completion_points=day_completion_points,
                     questions_to_complete_day=questions_to_complete_day,
                     flashcard_creation_method=flashcard_creation_method,
+                    graded=graded,
+                    error_graded=error_graded,
                     toc=toc,
                     error_start_date=error_start_date,
                     error_end_date=error_end_date,

@@ -394,9 +394,6 @@ def updatelastpage():
             # Since each authenticated user has only one active course, we retrieve the course this way.
             course = db(db.courses.id == auth.user.course_id).select().first()
 
-            print("course.base_course:", course.base_course)
-            print("lastPageChapter:", lastPageChapter)
-            print("lastPageSubchapter:", lastPageSubchapter)
             # We only retrieve questions to be used in flashcards if they are marked for practice purpose.
             questions = _get_qualified_questions(course.base_course,
                                                  lastPageChapter,
@@ -410,8 +407,6 @@ def updatelastpage():
                                          (db.user_topic_practice.sub_chapter_label == lastPageSubchapter) &
                                          (db.user_topic_practice.question_name == questions[0].name)
                                          )
-                print("completionFlag:", completionFlag)
-                print("existing_flashcards.isempty():", existing_flashcards.isempty())
                 # There is at least one qualified question in this subchapter, so insert a flashcard for the subchapter.
                 if completionFlag == '1' and existing_flashcards.isempty():
                     db.user_topic_practice.insert(

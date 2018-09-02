@@ -5,6 +5,7 @@ db.define_table('course_practice',
                 Field('max_practice_days', type='integer'),
                 Field('day_completion_points', type='integer'),
                 Field('questions_to_complete_day', type='integer'),
+                Field('graded', type='integer'),
                 # A value of 0 indicates self-paced (when student marks a page complete).
                 # A value of 1 indicates whenever a page is assigned in any reading assignment and the reading
                 #   assignment deadline passes.
