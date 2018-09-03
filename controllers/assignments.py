@@ -95,8 +95,10 @@ def _get_practice_data(user, tzOffset):
     points_received = 0
     total_possible_points = 0
     flashcard_creation_method = 0
-    practice_times_to_pass_today = 0
+    questions_to_complete_day = 0
     practice_graded = 1
+    spacing = 0
+    interleaving = 0
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=tzOffset)
@@ -110,14 +112,16 @@ def _get_practice_data(user, tzOffset):
         practice_message2 = "Please ask your instructor to set it up."
     else:
         practice_settings = practice_settings.select().first()
-        practice_graded = practice_settings.graded
         practice_start_date = practice_settings.start_date
         flashcard_creation_method = practice_settings.flashcard_creation_method
         # Calculates the remaining days to the end of the semester.
         remaining_days = (practice_settings.end_date - now_local.date()).days
         max_days = practice_settings.max_practice_days
-        # Define how many topics you expect your students practice every day.
-        practice_times_to_pass_today = practice_settings.questions_to_complete_day
+        # Define how many questions you expect your students practice every day.
+        questions_to_complete_day = practice_settings.questions_to_complete_day
+        practice_graded = practice_settings.graded
+        spacing = practice_settings.spacing
+        interleaving = practice_settings.interleaving
 
         if practice_start_date > now_local.date():
             days_to_start = (practice_start_date - now_local.date()).days
@@ -194,17 +198,21 @@ def _get_practice_data(user, tzOffset):
                                                                                                      now.day,
                                                                                                      0, 0, 0,
                                                                                                      0))).count()
-            practice_completion_count = _get_practice_completion_count(user.id, user.course_name)
+            practice_completion_count = _get_practice_completion_count(user.id, user.course_name, spacing)
 
-            # Calculate the number of times left for the student to practice today to get the completion point.
             if practice_graded == 1:
-                practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today -
-                                                                           practiced_today_count))
-            else:
-                practice_today_left = len(presentable_flashcards)
+                points_received = practice_settings.day_or_question_points * practice_completion_count
+                if spacing == 1:
+                    total_possible_points = (practice_settings.day_or_question_points *
+                                             practice_settings.max_practice_days)
+                else:
+                    points_received = (practice_settings.day_or_question_points *
+                                       practice_settings.max_practice_days *
+                                       practice_settings.questions_to_complete_day)
 
-            points_received = practice_settings.day_completion_points * practice_completion_count
-            total_possible_points = practice_settings.day_completion_points * practice_settings.max_practice_days
+                    # Calculate the number of questions left for the student to practice today to get the completion point.
+            practice_today_left = min(len(presentable_flashcards), max(0, questions_to_complete_day -
+                                                                       practiced_today_count))
 
     return (now,
             now_local,
@@ -216,7 +224,7 @@ def _get_practice_data(user, tzOffset):
             max_days,
             presentable_flashcards,
             practiced_today_count,
-            practice_times_to_pass_today,
+            questions_to_complete_day,
             practice_today_left,
             points_received,
             total_possible_points,
@@ -571,9 +579,14 @@ def _get_student_practice_grade(sid, course_name):
     return db((db.practice_grades.auth_user==sid) &
               (db.practice_grades.course_name==course_name)).select().first()
 
-def _get_practice_completion_count(user_id, course_name):
-    return db((db.user_topic_practice_Completion.course_name == course_name) &
-       (db.user_topic_practice_Completion.user_id == user_id)).count()
+def _get_practice_completion_count(user_id, course_name, spacing):
+    if spacing == 1:
+        return db((db.user_topic_practice_Completion.course_name == course_name) &
+           (db.user_topic_practice_Completion.user_id == user_id)).count()
+    return db((db.user_topic_practice_log.course_name == course_name) &
+                                       (db.user_topic_practice_log.user_id == user_id) &
+                                       (db.user_topic_practice_log.q != 0) &
+                                       (db.user_topic_practice_log.q != -1)).count()
 
 # Called when user clicks "I'm done" button.
 def checkanswer():
@@ -636,7 +649,7 @@ def practice():
      max_days,
      presentable_flashcards,
      practiced_today_count,
-     practice_times_to_pass_today,
+     questions_to_complete_day,
      practice_today_left,
      points_received,
      total_possible_points,
@@ -677,7 +690,7 @@ def practice():
 
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
-    if len(presentable_flashcards) > 0 and (practiced_today_count != practice_times_to_pass_today or
+    if len(presentable_flashcards) > 0 and (practiced_today_count != questions_to_complete_day or
                                             request.vars.willing_to_continue or
                                             practice_graded == 0):
         # Present the first one.
@@ -754,6 +767,8 @@ def practice():
                 # The number of times this user has submitted their practice from the beginning of today (12:00 am)
                 # till now.
                 practiced_today_count=practiced_today_count,
+                total_today_count=practice_today_left + practiced_today_count,
+                questions_to_complete_day=questions_to_complete_day,
                 points_received=points_received,
                 total_possible_points=total_possible_points,
                 practice_graded=practice_graded,

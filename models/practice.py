@@ -1,11 +1,14 @@
 db.define_table('course_practice',
+                Field('auth_user_id', 'reference auth_user', label=T('Instructor Name'), required=True, default=1),
                 Field('course_name', 'string'),
                 Field('start_date', type='date'),
                 Field('end_date', type='date'),
                 Field('max_practice_days', type='integer'),
-                Field('day_completion_points', type='integer'),
+                Field('day_or_question_points', type='integer'),
                 Field('questions_to_complete_day', type='integer'),
                 Field('graded', type='integer'),
+                Field('spacing', type='integer'),
+                Field('interleaving', type='integer'),
                 # A value of 0 indicates self-paced (when student marks a page complete).
                 # A value of 1 indicates whenever a page is assigned in any reading assignment and the reading
                 #   assignment deadline passes.

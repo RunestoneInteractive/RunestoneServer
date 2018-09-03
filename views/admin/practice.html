@@ -112,7 +112,13 @@
            style="display: none;"
         {{ pass }}
       >
-        <label for="maxPracticeDaysInput">Enter max number of days of practice students can get points for:</label>
+        <label for="maxPracticeDaysInput">Enter the
+        {{if spacing == 0:}}
+            maximum number of days of practice students can get points for:
+        {{ else: }}
+            the recommended number of days of practice for each student:
+        {{ pass }}
+        </label>
         <input type="number" class="form-control" id="maxPracticeDaysInput" name="maxPracticeDays" required
         {{if max_practice_days != "":}}
                value={{=max_practice_days}}
@@ -124,37 +130,62 @@
         </div>
         {{ pass }}
       </div>
-      <div class="form-group" id="pointsPerDayContainer"
+      <div class="form-group" id="pointsPerDayorQuestionContainer"
         {{if graded == 0:}}
            style="display: none;"
         {{ pass }}
       >
-        <label for="pointsPerDayInput">Enter number of points for completing each day:</label>
-        <input type="number" class="form-control" id="pointsPerDayInput" name="pointsPerDay" required
+        <label for="pointsPerDayorQuestionInput">Enter the number of points for
+        {{if spacing == 0:}}
+            completing each day:
+        {{ else: }}
+            answering each question:
+        {{ pass }}
+        </label>
+        <input type="number" class="form-control" id="pointsPerDayorQuestionInput" name="pointsPerDayorQuestion"
+               required
         {{if day_completion_points != "":}}
                value={{=day_completion_points}}
         {{ pass }}
         >
         {{if error_day_completion_points == 1:}}
         <div class="invalid-feedback">
-            Please specify the number of points for completing each day in the right format.
+            Please specify the number of points for
+        {{if spacing == 0:}}
+            completing each day:
+        {{ else: }}
+            answering each question:
+        {{ pass }}
+            in the right format.
         </div>
         {{ pass }}
       </div>
-      <div class="form-group" id="itemsPerPointContainer"
+      <div class="form-group" id="questionsPerDayContainer"
         {{if graded == 0:}}
            style="display: none;"
         {{ pass }}
       >
-        <label for="itemsPerPointInput">Enter number of questions to get the points for that day:</label>
-        <input type="number" class="form-control" id="itemsPerPointInput" name="itemsPerPoint" required
+        <label for="questionsPerDayInput">Enter the
+        {{if spacing == 0:}}
+            number of questions to get the points for each day:
+        {{ else: }}
+            recommended number of questions to answer on each day:
+        {{ pass }}
+        </label>
+        <input type="number" class="form-control" id="questionsPerDayInput" name="questionsPerDay" required
         {{if questions_to_complete_day != "":}}
                value={{=questions_to_complete_day}}
         {{ pass }}
         >
         {{if error_questions_to_complete_day == 1:}}
         <div class="invalid-feedback">
-            Please specify the number of points for completing each day in the right format.
+            Please specify the
+        {{if spacing == 0:}}
+            number of questions to get the points for each day
+        {{ else: }}
+            recommended number of questions to answer on each day
+        {{ pass }}
+            in the right format.
         </div>
         {{ pass }}
       </div>
@@ -216,13 +247,13 @@ $(function () {
     $("#gradedInput").change(function() {
       if ($( this ).val() == 0) {
           $("#maxPracticeDaysContainer").hide('slow');
-          $("#pointsPerDayContainer").hide('slow');
-          $("#itemsPerPointContainer").hide('slow');
+          $("#pointsPerDayorQuestionContainer").hide('slow');
+          $("#questionsPerDayContainer").hide('slow');
       }
       else {
           $("#maxPracticeDaysContainer").show('slow');
-          $("#pointsPerDayContainer").show('slow');
-          $("#itemsPerPointContainer").show('slow');
+          $("#pointsPerDayorQuestionContainer").show('slow');
+          $("#questionsPerDayContainer").show('slow');
       }
     });
 

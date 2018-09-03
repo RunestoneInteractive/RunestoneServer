@@ -183,30 +183,54 @@
 
 <div id='part1' style="padding-left: 40px">
 	<h1 style='text-align:center'>Review Practice Questions</h1>
-    {{ if practice_graded == 1: }}
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
-             {{ if practice_today_left > 0: }}
-                <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left to get today's
-                    point.</p>
-             {{else:}}
-                <p>You've already got today's point.</p>
+             {{ if spacing == 1: }}
+                 {{ if practice_today_left > 0: }}
+                    <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left
+                        {{ if practice_graded == 1: }}
+                        to get today's point.
+                        {{else:}}
+                        out of our recommended {{=total_today_count}} questions to practice today.
+                        {{pass}}
+                    </p>
+                 {{else:}}
+                    <p>You've already
+                        {{ if practice_graded == 1: }}
+                        got today's point.
+                        {{else:}}
+                        completed our recommended {{=total_today_count}} questions to practice today.
+                        {{pass}}
+                    </p>
+                 {{pass}}
              {{pass}}
              <p>{{=flashcard_count}} more question{{='' if flashcard_count == 1 else 's'}} available to practice today.
              </p>
          {{ elif flashcard_count == 1: }}
              <p>Hang in there. Last question for today.</p>
          {{ pass }}
-         <p>You've completed {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out
-             of {{=max_days}} days of your review practice.</p>
+         {{ if spacing == 1: }}
+             <p>You've
+                 {{ if practice_graded == 1: }}
+                 completed and received points for
+                 {{else:}}
+                 answered our recommended {{=questions_to_complete_day}} questions on
+                 {{pass}}
+                 {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out
+                 of {{=max_days}} days of your review practice.</p>
+         {{ pass }}
          {{ if remaining_days > 0: }}
             <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
          {{ else: }}
-            <p>The practicing period this semester is over, though you can continue practicing without receiving any
-                extra points.</p>
+            <p>The practicing period this semester is over, though you can continue practicing
+             {{ if practice_graded == 1: }}
+                without receiving any extra points.
+             {{else:}}
+                and improve your long-term learning.
+             {{pass}}
+            </p>
          {{ pass }}
     </div>
-    {{ pass }}
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
             <div id="CongratulationsContinueDIV">
@@ -214,8 +238,8 @@
                 <p>Congratulations! You have answered {{=practiced_today_count}} questions correctly and received
                     today's point.</p>
                 {{else:}}
-                <p style="margin-bottom: 100px;">Congratulations! Today, so far you have answered
-                    {{=practiced_today_count}} questions correctly.</p>
+                <p>Congratulations! Today, you have answered our recommended {{=practiced_today_count}} questions
+                    correctly.</p>
                 {{ pass }}
                 <p>Click on the fireworks to create more of them.</p>
                 <!--<p>The designers of the practice tool are a group of researchers with the goal of making computer
