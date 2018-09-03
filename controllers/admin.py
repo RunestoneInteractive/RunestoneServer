@@ -8,6 +8,7 @@ from paver.easy import sh
 import json
 from runestone import cmap
 from rs_grading import send_lti_grades
+from dateutil.parser import parse
 
 import logging
 
@@ -467,12 +468,14 @@ def admin():
 
     my_vers = 0
     mst_vers = 0
+    bugfix = False
     rebuild_notice = path.join('applications',request.application,'REBUILD')
     if os.path.exists(rebuild_notice):
         rebuild_post = os.path.getmtime(rebuild_notice)
         if rebuild_post > last_build:
             response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-    elif master_build and my_build:
+            bugfix = True
+    if master_build and my_build and not bugfix:
         mst_vers,mst_bld,mst_hsh = master_build.split('-')
         my_vers,my_bld,my_hsh = my_build.split('-')
         if my_vers != mst_vers:
@@ -516,7 +519,7 @@ def admin():
         due = request.vars.startdate
         format_str = "%m/%d/%Y"
         try:
-            date = datetime.datetime.strptime(due, format_str).date()
+            date = parse(due).date()
             course.update_record(term_start_date=date)
         except:
             logger.error("Bad date format, not updating start date")
@@ -598,11 +601,19 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=assignments, students=searchdict, chapters=chapter_labels, gradingUrl = URL('assignments', 'get_problem'),
-                autogradingUrl = URL('assignments', 'autograde'),gradeRecordingUrl = URL('assignments', 'record_grade'),
-                calcTotalsURL = URL('assignments', 'calculate_totals'), setTotalURL=URL('assignments', 'record_assignment_score'),
-                getCourseStudentsURL = URL('admin', 'course_students'), get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
-                course_id = auth.user.course_name, assignmentids=assignmentids, assignment_deadlines=assignment_deadlines, question_points=json.dumps(question_points)
+    return dict(assignmentinfo=json.dumps(assignments), students=searchdict, 
+                chapters=json.dumps(chapter_labels), 
+                gradingUrl = URL('assignments', 'get_problem'),
+                autogradingUrl = URL('assignments', 'autograde'), 
+                gradeRecordingUrl = URL('assignments', 'record_grade'),
+                calcTotalsURL = URL('assignments', 'calculate_totals'), 
+                setTotalURL=URL('assignments', 'record_assignment_score'),
+                getCourseStudentsURL = URL('admin', 'course_students'), 
+                get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
+                course_id = auth.user.course_name, 
+                assignmentids=json.dumps(assignmentids), 
+                assignment_deadlines=json.dumps(assignment_deadlines), 
+                question_points=json.dumps(question_points)
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -643,6 +654,9 @@ def backup():
 def removeStudents():
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
+    answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers', 
+                     'dragndrop_answers', 'fitb_answers','parsons_answers',
+                     'shortanswer_answers']
 
     if not isinstance(request.vars["studentList"], basestring):
         # Multiple ids selected
@@ -657,9 +671,19 @@ def removeStudents():
 
     for studentID in studentList:
         if studentID.isdigit() and int(studentID) != auth.user.id:
+            sid = db(db.auth_user.id == int(studentID)).select(db.auth_user.username).first()
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
-            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName)
+            db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName, active='F')
+            db( (db.useinfo.sid == sid) &
+                (db.useinfo.course_id == auth.user.course_name)).update(course_id=baseCourseName)
+            for tbl in answer_tables:
+                db( (db[tbl].sid == sid) & (db[tbl].course_name == auth.user.course_name)).update(course_name=baseCourseName)
+            db((db.code.sid == sid) & 
+               (db.code.course_id == auth.user.course_id)).update(course_id=baseCourseID)
+            db((db.acerror_log.sid == sid) & 
+               (db.acerror_log.course_id == auth.user.course_name)).update(course_id=baseCourseName)
+            # leave user_chapter_progress and user_sub_chapter_progress alone for now.
 
     session.flash = T("You have successfully removed students")
     return redirect('/%s/admin/admin' % (request.application))

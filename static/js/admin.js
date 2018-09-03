@@ -324,7 +324,12 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 
         });
-        jQuery('#' + data.id).focus();
+        try {
+            jQuery('#' + data.id).focus();
+        } catch (err) {
+            // this will happen when you try to preview a reading assignment in the manual grading interface
+            console.log(`Cannot preview ${data.id}`)
+        }
 
 
 
@@ -403,7 +408,7 @@ function updateColumn2() {
     }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
-        var assignments = JSON.parse(assignmentinfo);
+        var assignments = assignmentinfo;
         var assignment_names = assignments[selectedval];
         assignment_names.sort()
         for (i = 0; i < assignment_names.length; i++) {
@@ -495,7 +500,7 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
 
     $("#" + column).empty();
-    var assignments = JSON.parse(assignmentinfo);
+    var assignments = assignmentinfo;
     set_release_button();
     autograde_form.style.visibility = 'visible';
 
@@ -1240,7 +1245,7 @@ function createQuestionObject(name, points, autograde, autograde_possible_values
 }
 
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    question_table.bootstrapTable('append', [createQuestionObject(name,points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values)]);
+    question_table.bootstrapTable('append', [createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values)]);
 }
 
 // Update the grading parameters used for an assignment.
@@ -1313,23 +1318,13 @@ function assignmentInfo() {
         // Clear all checks and the table initially.
         tqp.uncheck_all();
         question_table.bootstrapTable('removeAll');
-        // {
-        //     question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
-        //     question_id: name,
-        //     points: points,
-        //     autograde: autograde,
-        //     autograde_possible_values: autograde_possible_values,
-        //     which_to_grade: which_to_grade,
-        //     which_to_grade_possible_values: which_to_grade_possible_values,
-        //     // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
-        //     _id: _id,
-        // }
         let allQuestions = []
         for (let question of data['questions_data']) {
             // Put the qeustion in the table.
             let name = question['name'];
             allQuestions.push(createQuestionObject(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']));
-            // Check this question in the question tree picker.
+            // Check this question in the question tree picker.  
+            // Assumes that the picker tree is built before we do this loop.
             tqp.check_node(tqp.get_node(name));
         }
 
@@ -1900,7 +1895,7 @@ function toggle_release_grades() {
         //go release the grades now
         get_assignment_release_states()
         release_state = assignment_release_states[assignment];
-        var ids = JSON.parse(assignmentids);
+        var ids = assignmentids;
         var assignmentid = ids[assignment];
         var obj = new XMLHttpRequest();
         if (release_state == true) {

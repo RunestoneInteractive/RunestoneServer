@@ -451,11 +451,15 @@ def practice():
         session.flash = "Please Login"
         return redirect(URL('default', 'index'))
 
+    if not session.timezoneoffset:
+        session.timezoneoffset = 0
     now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
 
     # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
     # 2018, please replace it.
-    remaining_days = (datetime.date(2018, 4, 19) - now.date()).days
+    # todo: This should come from the database -- add a field on the course creation page so
+    # the instructor can put in an end date for the term.
+    remaining_days = (datetime.date(2018, 12, 15) - now.date()).days
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == auth.user.course_id).select().first()
