@@ -632,7 +632,7 @@ def removeassign():
     try:
         assignment_id = int(request.args[0])
     except:
-        session.flash("Cannot remove assignment with id of {}".format(request.args[0]))
+        session.flash = "Cannot remove assignment with id of {}".format(request.args[0])
         return;
     db(db.assignments.id == assignment_id).delete()
 
