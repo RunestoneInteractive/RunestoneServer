@@ -411,6 +411,28 @@ def grade(config, course, pset, enforce):
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py", shell=True)
 
 
+@cli.command()
+@click.option("--course", help="name of course")
+@pass_config
+def findinstructor(config, course):
+    """
+    Print the PII of the instructor for a given course.
+    """
+    if not course:
+        course = click.prompt("enter the course name")
+    eng = create_engine(config.dburl)
+    query = '''
+    select username, first_name, last_name, email 
+from auth_user join course_instructor on auth_user.id = instructor join courses on course = courses.id
+where courses.course_name = %s order by last_name
+'''
+    res = eng.execute(query, course)
+
+    if res:
+        for row in res:
+            print("{} {} {} {}").format(row.first_name, row.last_name, row.email, row.username)
+    else:
+        print("No instructors found for {}".format(course))
 #
 # Utility Functions Below here
 #
