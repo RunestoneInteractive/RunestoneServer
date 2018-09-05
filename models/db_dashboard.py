@@ -380,6 +380,8 @@ class DashboardDataAnalyzer(object):
                        (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
         if not self.user:
             rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
+            session.flash = 'Please make sure you are in the correct course'
+            redirect('/runestone/default/courses')
 
         self.logs = db((db.useinfo.course_id==self.course.course_name) &
                        (db.useinfo.sid == username) &
