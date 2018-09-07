@@ -203,8 +203,9 @@ def _get_practice_data(user, tzOffset):
                 presentable_flashcards = [f for f in flashcards if (f.e_factor <= 2.5 and f.q != -1)]
                 if len(presentable_flashcards) > 0:
                     # It's okay to continue with the next chapter if there is no more question in the current chapter
-                    # eligible to be asked (and not postponed). Note that this is not an implementation of pure
-                    # blocking, but the sequence of the questions is way more blocked than the interleaved condition.
+                    # eligible to be asked (not postponed). Note that this is not an implementation of pure
+                    # blocking, because a postponed question from the current chapter could be asked tomorrow, after
+                    # some questions from the next chapter that are asked today.
                     presentable_chapter = presentable_flashcards[0].chapter_label
                     presentable_flashcards = [f for f in presentable_flashcards if f.chapter_label == presentable_chapter]
                     shuffle(presentable_flashcards)
@@ -219,7 +220,10 @@ def _get_practice_data(user, tzOffset):
                                                                                                      now.day,
                                                                                                      0, 0, 0,
                                                                                                      0))).count()
-            practice_completion_count = _get_practice_completion_count(user.id, user.course_name, spacing)
+            if spacing == 1:
+                practice_completion_count = _get_practice_days_completed(user.id, user.course_name, spacing)
+            else:
+                practice_completion_count = _get_practice_questions_completed(user.id, user.course_name, spacing)
 
             if practice_graded == 1:
                 if spacing == 1:
@@ -604,10 +608,12 @@ def _get_student_practice_grade(sid, course_name):
     return db((db.practice_grades.auth_user==sid) &
               (db.practice_grades.course_name==course_name)).select().first()
 
-def _get_practice_completion_count(user_id, course_name, spacing):
-    if spacing == 1:
-        return db((db.user_topic_practice_Completion.course_name == course_name) &
-           (db.user_topic_practice_Completion.user_id == user_id)).count()
+
+def _get_practice_days_completed(user_id, course_name, spacing):
+    return db((db.user_topic_practice_Completion.course_name == course_name) &
+       (db.user_topic_practice_Completion.user_id == user_id)).count()
+
+def _get_practice_questions_completed(user_id, course_name, spacing):
     return db((db.user_topic_practice_log.course_name == course_name) &
                                        (db.user_topic_practice_log.user_id == user_id) &
                                        (db.user_topic_practice_log.q != 0) &
@@ -630,7 +636,6 @@ def checkanswer():
     # If the question id exists:
     if request.vars.QID:
         now = datetime.datetime.utcnow()
-        # old_completion_count = _get_practice_completion_count(sid, course_name)
         # Use the autograding function to update the flashcard's e-factor and i-interval.
         do_check_answer(sid, course_name, qid, username, q, db, settings, now, int(session.timezoneoffset))
 
@@ -717,6 +722,7 @@ def practice():
             # f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
             f_card["mastery_percent"] = int(f_card["remaining_days"])
         else:
+            # The maximum q is 5.0 and the minimum e_factor that indicates mastery of the topic is 2.5. `5 * 2.5 = 12.5`
             f_card["mastery_percent"] = int(100 * f_card.user_topic_practice.e_factor *
                                             f_card.user_topic_practice.q / 12.5)
         f_card["mastery_color"] = "danger"
@@ -786,10 +792,16 @@ def practice():
                 lti_record = _get_lti_record(session.oauth_consumer_key)
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
                 course_settings = _get_course_practice_record(auth.user.course_name)
+
+                if spacing == 1:
+                    practice_completion_count = _get_practice_days_completed(auth.user.id,
+                                                                             auth.user.course_name,
+                                                                             spacing)
+                else:
+                    practice_completion_count = _get_practice_questions_completed(auth.user.id,
+                                                                                  auth.user.course_name,
+                                                                                  spacing)
                 if lti_record and practice_grade and course_settings:
-                    practice_completion_count = _get_practice_completion_count(auth.user.id,
-                                                                               auth.user.course_name,
-                                                                               spacing)
                     if spacing == 1:
                         send_lti_grade(assignment_points=max_days,
                                        score=practice_completion_count,
@@ -804,10 +816,6 @@ def practice():
                                        secret=lti_record.secret,
                                        outcome_url=practice_grade.lis_outcome_url,
                                        result_sourcedid=practice_grade.lis_result_sourcedid)
-            else:
-                practice_completion_count = _get_practice_completion_count(auth.user.id,
-                                                                           auth.user.course_name,
-                                                                           spacing)
 
     return dict(course=course, course_name=auth.user.course_name,
                 course_id=auth.user.course_name,

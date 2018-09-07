@@ -289,11 +289,15 @@ def practice():
 
     already_exists = 0
     any_practice_settings = db(db.course_practice.auth_user_id == auth.user.id)
+    # If the instructor has created practice for other courses, don't randomize spacing and interleaving for the new
+    # course.
     if not any_practice_settings.isempty():
         any_practice_settings = any_practice_settings.select().first()
         spacing = any_practice_settings.spacing
         interleaving = any_practice_settings.interleaving
 
+        #  Now checking to see if there are practice settigns for this course.
+        #  If not, stick with the defaults.
         practice_settings = db((db.course_practice.auth_user_id == auth.user.id) &
                                (db.course_practice.course_name == course.course_name))
         if (not practice_settings.isempty() and
@@ -338,6 +342,7 @@ def practice():
     if flashcard_creation_method == 2:
         toc = _get_toc_and_questions()
 
+    # If the GET request is to open the page for the first time (they're not submitting the form):
     if not ('StartDate' in request.vars or
             'EndDate' in request.vars or
             'maxPracticeDays' in request.vars or

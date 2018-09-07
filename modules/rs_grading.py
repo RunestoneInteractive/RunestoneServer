@@ -665,9 +665,6 @@ def _score_practice_quality(practice_start_time, course_name, sid, points, score
         .select()
     practice_duration = (now - practice_start_time).seconds / 60
     practice_score = 0
-    print("len(page_visits):", len(page_visits))
-    print("trials_count:", trials_count)
-    print("practice_duration:", practice_duration)
     if score == points:
         if len(page_visits) <= 1 and trials_count <= 1 and practice_duration <= 2:
             practice_score = 5
