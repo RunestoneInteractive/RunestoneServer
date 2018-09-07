@@ -16,23 +16,33 @@
                  <p>{{=practice_message1}}</p>
                  <p>{{=practice_message2}}</p>
              {{else:}}
-                 {{ if flashcard_count >= 1: }}
+                 {{ if spacing == 1: }}
                      {{ if practice_today_left > 0: }}
-                        <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left to get today's
-                            practicing point.</p>
-                     {{else:}}
-                        <p>You've already got today's practicing point.</p>
-                     {{pass}}
+                        <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left to get
+                            today's point of practicing.
+                        </p>
+                     {{ else: }}
+                        <p>You've already got today's point of practicing.</p>
+                     {{ pass }}
+                     <p>So far, you've received {{=points_received}} point{{='' if points_received == 1 else 's'}} out
+                         of {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for
+                         completing {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}}
+                         out of {{=max_days}} days of your review practice.
+                     </p>
+                 {{ else: }}
+                     <p>So far, you've received {{=points_received}} point{{='' if points_received == 1 else 's'}} out
+                         of {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for
+                         answering {{=practice_completion_count}}
+                         question{{='' if practice_completion_count == 1 else 's'}} out
+                         of {{=max_questions}} questions to complete your practice.
+                         </p>
                  {{ pass }}
-                 <p>You've completed {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out
-                     of {{=max_days}} days of your review practice.</p>
-                 <p>So you've earned {{=points_received}} point{{='' if points_received == 1 else 's'}} out
-                     of {{=total_possible_points}} total points possible to earn from practicing.</p>
                  {{ if remaining_days > 0: }}
                     <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
                  {{ else: }}
-                    <p>The practicing period this semester is over, though you can continue practicing without receiving any
-                        extra points.</p>
+                    <p>The practicing period this semester is over, though you can continue practicing
+                        without receiving any extra points.
+                    </p>
                  {{ pass }}
              {{ pass }}
             </div>
