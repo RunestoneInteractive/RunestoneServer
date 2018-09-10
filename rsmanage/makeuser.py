@@ -1,6 +1,7 @@
 # running in the context of a web2py shell
 import json
-
+import sys
+from psycopg2 import IntegrityError
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
@@ -31,6 +32,17 @@ if '--userfile' in sys.argv:
 else:
     # user info will come in as a json object
     userinfo = json.loads(os.environ['RSM_USERINFO'])
-    createUser(userinfo['username'], userinfo['password'], userinfo['first_name'],
-               userinfo['last_name'], userinfo['email'], userinfo['course'],
-               userinfo['instructor'])
+    try:
+        createUser(userinfo['username'], userinfo['password'], userinfo['first_name'],
+                userinfo['last_name'], userinfo['email'], userinfo['course'],
+                userinfo['instructor'])
+    except ValueError as e:
+        print('Value Error: ', e)
+        sys.exit(1)
+    except IntegrityError as e:
+        print('Caught an integrity error: ', e)
+        sys.exit(1)
+    except Exception as e:
+        print('Unexpected Error: ', e)
+        sys.exit(1)
+    

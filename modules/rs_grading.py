@@ -3,6 +3,7 @@ import logging
 from math import ceil
 
 from outcome_request import OutcomeRequest
+from psycopg2 import IntegrityError
 
 # When testing, the ``settings`` object isn't defined. Import it in this case.
 try:
@@ -14,7 +15,7 @@ logger.setLevel(settings.log_level)
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
-    print("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
+    logger.debug("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
 
 
 def _score_from_pct_correct(pct_correct, points, autograde):
@@ -442,25 +443,25 @@ def send_lti_grade(assignment, student, lti_record, db):
         # send it back to the LMS
         # have to send a percentage of the max score, rather than total points
         pct = grade.score / float(points) if points else 0.0
-        # print("score", score, points, pct)
+        # logger.debug("score", score, points, pct)
         request = OutcomeRequest({"consumer_key": lti_record.consumer,
                                   "consumer_secret": lti_record.secret,
                                   "lis_outcome_service_url": grade.lis_outcome_url,
                                   "lis_result_sourcedid": grade.lis_result_sourcedid})
         resp = request.post_replace_result(pct)
-        # print(resp)
+        # logger.debug(resp)
         return pct
     elif grade and grade.lis_result_sourcedid and grade.lis_outcome_url:
-        print("would have sent", grade.score / float(points) if points else 0.0)
+        logger.debug("would have sent", grade.score / float(points) if points else 0.0)
     elif grade:
-        print("nowhere to send", student.id)
+        logger.debug("nowhere to send", student.id)
     else:
-        print("nothing to send", student.id)
+        logger.debug("nothing to send", student.id)
 
     return "No grade sent"
 
 def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
-    print("sending lti grades")
+    logger.debug("sending lti grades")
     if oauth_consumer_key:
         lti_record = db(db.lti_keys.consumer == oauth_consumer_key).select().first()
     else:
@@ -469,7 +470,7 @@ def send_lti_grades(assignment, course_id, db, settings, oauth_consumer_key):
     student_rows = _get_students(course_id, db=db)
     for student in student_rows:
         send_lti_grade(assignment, student, lti_record, db)
-    print("done sending lti grades")
+    logger.debug("done sending lti grades")
 
 def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
     student_rows = _get_students(course_id, sid, db)
@@ -537,10 +538,10 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
     count = 0
     # _profile(start, "after readings fetched")
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
-        print("\nGrading all students for {}/{}".format(chapter, subchapter))
+        logger.debug("\nGrading all students for {}/{}".format(chapter, subchapter))
         count += 1
         for s in sids:
-            print("."),
+            logger.debug("."),
             score = 0
             rows = db((db.questions.chapter == chapter) &
                       (db.questions.subchapter == subchapter) &
@@ -756,9 +757,9 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                         flashcard_log.update_record()
                 if (testing_mode and flashcard_log.id >= 42904 and
                         (flashcard_log.available_flashcards != len(presentable_topics))):
-                    print("I calculated for the following flashcard available_flashcardsq =", len(presentable_topics),
+                    logger.debug("I calculated for the following flashcard available_flashcardsq =", len(presentable_topics),
                           "However:")
-                    print(flashcard_log)
+                    logger.debug(flashcard_log)
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (flashcard_log.chapter_label + flashcard_log.sub_chapter_label in presentable_topics and
                     flashcard_log.i_interval != 0):
@@ -792,6 +793,6 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                         flashcard_log.update_record()
                 if testing_mode and flashcard_log.id >= 20854 and \
                                 flashcard_log.q != q and flashcard_log.trials_num != trials_num:
-                    print("I calculated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
-                    print(flashcard_log)
+                    logger.debug("I calculated for the following flashcard q =", q, "and trials_num =", trials_num, "However:")
+                    logger.debug(flashcard_log)
 

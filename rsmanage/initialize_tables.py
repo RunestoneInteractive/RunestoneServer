@@ -19,6 +19,9 @@ if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='TeacherCSP', base_course='TeacherCSP', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='JavaReview', base_course='apcsareview', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='fopp', base_course='fopp', term_start_date=datetime.date(2000, 1, 1))    
+    db.courses.insert(course_name='cppds', base_course='cppds', term_start_date=datetime.date(2000, 1, 1))        
+    db.courses.insert(course_name='webfundamentals', base_course='webfundamentals', term_start_date=datetime.date(2000, 1, 1))            
 else:
     click.echo(message="Your database already has Courses")
 
@@ -38,6 +41,7 @@ if environ.get('WEB2PY_MIGRATE', "") != 'fake':
     click.echo(message="Adding Constraints and Indices", file=None, nl=True, err=False, color='red')
     try:
         db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
+        db.executesql('''alter table auth_user add constraint unique_user UNIQUE(username)''')
         db.executesql('''alter table grades ADD CONSTRAINT user_assign_unique UNIQUE (auth_user, assignment);''')
         db.executesql('''create index "course_id_index" on useinfo using btree (course_id);''')
         db.executesql('''create index "div_id_index" on useinfo using btree (div_id);''')
@@ -54,7 +58,8 @@ if environ.get('WEB2PY_MIGRATE', "") != 'fake':
         db.executesql('''CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);''')
     except:
         click.echo(message="The creation of one or more indices/constraints failed", file=None, nl=True, err=False, color='red')
-
+        sys.exit(1)
+        
 if "--list_tables" in sys.argv:
     res = db.executesql("""
     SELECT table_name

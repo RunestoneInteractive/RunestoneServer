@@ -53,6 +53,7 @@ class ProblemMetrics(object):
         if row.sid in self.user_responses:
             self.user_responses[row.sid].add_response(choice, correct)
 
+    # this is where the donut chart data is created
     def user_response_stats(self):
         correct = 0
         correct_mult_attempts = 0
@@ -347,15 +348,16 @@ class DashboardDataAnalyzer(object):
         #should probably be stored and only new data appended.
         self.course = db(db.courses.id == self.course_id).select().first()
         rslogger.debug("COURSE QUERY GOT %s", self.course)
-        self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
+        self.users = db((db.auth_user.course_id == auth.user.course_id) & (db.auth_user.active == 'T') ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name, db.auth_user.id)
+        self.instructors = db((db.course_instructor.course == auth.user.course_id)).select(db.course_instructor.instructor)
+        inums = [x.instructor for x in self.instructors]
+        self.users.exclude(lambda x: x.id in inums)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
             (db.auth_user.course_id == auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
-            (db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
-
+            (db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status,db.auth_user.id)
+        self.db_chapter_progress.exclude(lambda x: x.auth_user.id in inums)
         self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
-        #self.divs = db(db.div_ids).select(db.div_ids.div_id)
-        #print self.divs
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)

@@ -110,19 +110,33 @@
 
 </div>
 
+<!-- Per https://stackoverflow.com/questions/9320427/best-practice-for-embedding-arbitrary-json-in-the-dom -->
+<script type="application/json" id="getassignmentinfo">
+  {{= XML(assignmentinfo)}}
+</script>
+<script type="application/json" id="getassignment_deadlines">
+  {{= XML(assignment_deadlines)}}
+</script>
+<script type="application/json" id="getchapters">
+  {{= XML(chapters)}}
+</script>
+<script type="application/json" id="getassignmentids">
+  {{= XML(assignmentids)}}
+</script>
+<script type="application/json" id="getquestion_points">
+  {{= XML(question_points)}}
+</script>
+
 <script>
   $(".dashboardnav").removeClass("active");
   $("#gradingtab").addClass("active");
-  var assignmentinfo = "{{=assignmentinfo}}".replace(/&#x27;/g, '"');
-  var chapters = "{{=chapters}}".replace(/&#x27;/g, '"');
-  chapters = JSON.parse(chapters);
+  var assignmentinfo = JSON.parse(document.getElementById("getassignmentinfo").innerHTML);
+  var chapters = JSON.parse(document.getElementById("getchapters").innerHTML);
   var students = null;
-  var assignmentids = "{{=assignmentids}}".replace(/&#x27;/g, '"');
-  var assignment_deadlines = "{{=assignment_deadlines}}".replace(/&#x27;/g, '"');
-  var question_points = {{ = XML(question_points) }};
+  var assignmentids = JSON.parse(document.getElementById("getassignmentids").innerHTML);
+  var assignment_deadlines = JSON.parse(document.getElementById("getassignment_deadlines").innerHTML);
+  var question_points = JSON.parse(document.getElementById("getquestion_points").innerHTML);
   
-  assignment_deadlines = JSON.parse(assignment_deadlines);
-
   $('#autogradingform').submit(function(event) {
     event.preventDefault();
     $("#autogradesubmit").prop("disabled", true);

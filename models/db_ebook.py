@@ -155,6 +155,6 @@ db.define_table('shortanswer_answers',
     Field('div_id','string'),
     Field('sid','string'),
     Field('course_name','string'),
-    Field('answer','string'),
+    Field('answer','text'),
     migrate='runestone_shortanswer_answers.table'
     )
