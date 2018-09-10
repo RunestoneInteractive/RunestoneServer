@@ -473,7 +473,7 @@ function updateColumn3() {
 
     else if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn3").empty();
-        var assignments = JSON.parse(assignmentinfo);
+        var assignments = assignmentinfo;
         for (i = 0; i < assignments[selectedval].length; i++) {
             var q = assignments[selectedval][i];
             var option = document.createElement("option");

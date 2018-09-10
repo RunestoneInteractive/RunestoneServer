@@ -15,11 +15,13 @@ APP = 'runestone'
 APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
 BUILDDIR = '{}/build'.format(APP_PATH)
+PRIVATEDIR = '{}/private'.format(APP_PATH)
 
 @click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
+@click.option("--if_clean", is_flag=True, help="only run if database is uninitialized")
 @pass_config
-def cli(config, verbose):
+def cli(config, verbose, if_clean):
     """Type subcommand --help for help on any subcommand"""
     checkEnvironment()
 
@@ -41,6 +43,15 @@ def cli(config, verbose):
     if verbose:
         echoEnviron(config)
 
+    if if_clean:
+        eng = create_engine(config.dburl)
+        res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
+        count = res.first()[0]
+        if count != 0:
+            click.echo("The database is already inititlized Exiting")
+            sys.exit()
+    
+
     config.verbose = verbose
 
 #
@@ -57,6 +68,10 @@ def initdb(config, list_tables, reset, fake):
     if not os.path.exists(DBSDIR):
         click.echo("Making databases folder")
         os.mkdir(DBSDIR)
+
+    if not os.path.exists(PRIVATEDIR):
+        click.echo("Making private directory for auth")
+        os.mkdir(PRIVATEDIR)
 
     if reset:
         click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
@@ -86,7 +101,7 @@ def initdb(config, list_tables, reset, fake):
         os.environ['WEB2PY_MIGRATE'] = 'fake'
 
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    cmd = "python web2py.py -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(APP, APP_PATH, list_tables)
+    cmd = "python web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(APP, APP_PATH, list_tables)
     click.echo("Running: {}".format(cmd))
     res = subprocess.call(cmd, shell=True)
 
@@ -252,10 +267,20 @@ def build(config, course, repo, skipclone):
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
 @click.option("--fromfile", default=None, type=click.File(mode="r"), help="read a csv file of users of the form username, email, first_name, last_name, password, course")
+@click.option("--username", help="Username, must be unique")
+@click.option("--password", help="password - plaintext -- sorry")
+@click.option("--first_name", help="Real first name")
+@click.option("--last_name", help="Real last name")
+@click.option("--email", help="email address for password resets")
+@click.option("--course", help="course to register for")
 @pass_config
-def inituser(config, instructor, fromfile):
+def inituser(config, instructor, fromfile, username, password, first_name, last_name, email, course):
     """Add a user (or users from a csv file)"""
     os.chdir(findProjectRoot())
+    if config.verbose:
+        quiet = ""
+    else:
+        quiet = "-Q"
 
     if fromfile:
         # if fromfile then be sure to get the full path name NOW.
@@ -278,22 +303,31 @@ def inituser(config, instructor, fromfile):
             userinfo['course'] = line[5]
             userinfo['instructor'] = False
             os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-            res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+            res = subprocess.call("python web2py.py {} --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py".format(quiet), shell=True)
             if res != 0:
                 click.echo("Failed to create user {} fix your data and try again".format(line[0]))
                 exit(1)
     else:
         userinfo = {}
-        userinfo['username'] = click.prompt("Username")
-        userinfo['password'] = click.prompt("Password", hide_input=True)
-        userinfo['first_name'] = click.prompt("First Name")
-        userinfo['last_name'] = click.prompt("Last Name")
-        userinfo['email'] = click.prompt("email address")
-        userinfo['course'] = click.prompt("course name")
-        userinfo['instructor'] = True if instructor else click.confirm("Make this user an instructor", default=False)
+        userinfo['username'] = username or click.prompt("Username")
+        userinfo['password'] = password or click.prompt("Password", hide_input=True)
+        userinfo['first_name'] = first_name or click.prompt("First Name")
+        userinfo['last_name'] = last_name or click.prompt("Last Name")
+        userinfo['email'] = email or click.prompt("email address")
+        userinfo['course'] = course or click.prompt("course name")
+        if not instructor:
+            if username and course:  # user has supplied other info via CL parameter safe to assume False
+                userinfo['instructor'] = False
+            else:
+                userinfo['instructor'] = click.confirm("Make this user an instructor", default=False)
 
         os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-        subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
+        res = subprocess.call("python web2py.py {} --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py".format(quiet), shell=True)
+        if res != 0:
+            click.echo("Failed to create user {} fix your data and try again. Use --verbose for more detail".format(username))
+            exit(1)
+        else:
+            click.echo("Success")
 
 @cli.command()
 @pass_config
@@ -377,6 +411,28 @@ def grade(config, course, pset, enforce):
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py", shell=True)
 
 
+@cli.command()
+@click.option("--course", help="name of course")
+@pass_config
+def findinstructor(config, course):
+    """
+    Print the PII of the instructor for a given course.
+    """
+    if not course:
+        course = click.prompt("enter the course name")
+    eng = create_engine(config.dburl)
+    query = '''
+    select username, first_name, last_name, email 
+from auth_user join course_instructor on auth_user.id = instructor join courses on course = courses.id
+where courses.course_name = %s order by last_name
+'''
+    res = eng.execute(query, course)
+
+    if res:
+        for row in res:
+            print("{} {} {} {}").format(row.first_name, row.last_name, row.email, row.username)
+    else:
+        print("No instructors found for {}".format(course))
 #
 # Utility Functions Below here
 #
