@@ -62,6 +62,7 @@ def index():
      max_days,
      max_questions,
      presentable_flashcards,
+     available_flashcards_num,
      practiced_today_count,
      questions_to_complete_day,
      practice_today_left,
@@ -72,7 +73,7 @@ def index():
     return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
                 user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades,
                 practice_message1=message1, practice_message2=message2,
-                practice_graded=practice_graded, flashcard_count=len(presentable_flashcards),
+                practice_graded=practice_graded, flashcard_count=available_flashcards_num,
                 # The number of days the student has completed their practice.
                 practice_completion_count=practice_completion_count,
                 remaining_days=remaining_days, max_questions=max_questions, max_days=max_days,
@@ -98,6 +99,7 @@ def _get_practice_data(user, tzOffset):
     max_days = 0
     max_questions = 0
     presentable_flashcards = []
+    available_flashcards_num = 0
     practiced_today_count = 0
     practice_today_left = 0
     points_received = 0
@@ -198,9 +200,11 @@ def _get_practice_data(user, tzOffset):
             if interleaving == 1:
                 # Select only those where enough time has passed since last presentation.
                 presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
+                available_flashcards_num = len(presentable_flashcards)
             else:
                 # Select only those that are not mastered yet.
                 presentable_flashcards = [f for f in flashcards if (f.e_factor <= 2.5 and f.q != -1)]
+                available_flashcards_num = len(presentable_flashcards)
                 if len(presentable_flashcards) > 0:
                     # It's okay to continue with the next chapter if there is no more question in the current chapter
                     # eligible to be asked (not postponed). Note that this is not an implementation of pure
@@ -235,10 +239,10 @@ def _get_practice_data(user, tzOffset):
 
             # Calculate the number of questions left for the student to practice today to get the completion point.
             if spacing == 1:
-                practice_today_left = min(len(presentable_flashcards), max(0, questions_to_complete_day -
+                practice_today_left = min(available_flashcards_num, max(0, questions_to_complete_day -
                                                                            practiced_today_count))
             else:
-                practice_today_left = len(presentable_flashcards)
+                practice_today_left = available_flashcards_num
 
     return (now,
             now_local,
@@ -252,6 +256,7 @@ def _get_practice_data(user, tzOffset):
             max_days,
             max_questions,
             presentable_flashcards,
+            available_flashcards_num,
             practiced_today_count,
             questions_to_complete_day,
             practice_today_left,
@@ -686,6 +691,7 @@ def practice():
      max_days,
      max_questions,
      presentable_flashcards,
+     available_flashcards_num,
      practiced_today_count,
      questions_to_complete_day,
      practice_today_left,
@@ -735,7 +741,7 @@ def practice():
 
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
-    if len(presentable_flashcards) > 0 and (practiced_today_count != questions_to_complete_day or
+    if available_flashcards_num > 0 and (practiced_today_count != questions_to_complete_day or
                                             request.vars.willing_to_continue or
                                             spacing == 0):
         # Present the first one.
@@ -820,7 +826,7 @@ def practice():
     return dict(course=course, course_name=auth.user.course_name,
                 course_id=auth.user.course_name,
                 q=questioninfo, all_flashcards=all_flashcards,
-                flashcard_count=len(presentable_flashcards),
+                flashcard_count=available_flashcards_num,
                 # The number of days the student has completed their practice.
                 practice_completion_count=practice_completion_count,
                 remaining_days=remaining_days, max_questions=max_questions, max_days=max_days,

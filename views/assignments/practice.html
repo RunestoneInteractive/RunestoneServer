@@ -184,11 +184,6 @@
 <div id='part1' style="padding-left: 40px">
 	<h1 style='text-align:center'>Review Practice Questions</h1>
     <div class="alert alert-danger" style="margin-right: 40px;">
-         {{ if interleaving == 0: }}
-             {{ if practice_today_left > 0: }}
-                 <p>Today, you have answered {{=practiced_today_count}} questions correctly.</p>
-             {{ pass }}
-         {{ pass }}
          {{ if flashcard_count > 1: }}
              {{ if spacing == 1: }}
                  {{ if practice_today_left > 0: }}
@@ -212,11 +207,7 @@
              <p>{{=flashcard_count}} more question{{='' if flashcard_count == 1 else 's'}} available to practice today.
              </p>
          {{ elif flashcard_count == 1: }}
-             <p>Hang in there. Last question
-                 {{ if interleaving == 0: }}
-                    from the current chapter
-                 {{ pass }}
-                 for today.</p>
+             <p>Hang in there. Last question for today.</p>
          {{ pass }}
          {{ if spacing == 1: }}
              <p>So far, you've
