@@ -133,6 +133,40 @@
     .bg-danger {
         background-color: #dc3545!important;
     }
+    #HoldOnH1 {
+        display: none;
+        color: rgba(0, 0, 0, 0);
+        /* Safari 4.0 - 8.0 */
+        -webkit-animation-name: holdon;
+        -webkit-animation-duration: 4s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-delay: 0s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-direction: alternate;
+        /* Standard syntax */
+        animation-name: holdon;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes holdon {
+        0%   {color: rgba(0, 0, 0, 0);}
+        25%  {color: rgba(0, 0, 0, 0.25);}
+        50%  {color: rgba(0, 0, 0, 0.50);}
+        75%  {color: rgba(0, 0, 0, 0.75);}
+        100% {color: rgba(0, 0, 0, 1);}
+    }
+    /* Standard syntax */
+    @keyframes holdon {
+        0%   {color: rgba(0, 0, 0, 0);}
+        25%  {color: rgba(0, 0, 0, 0.25);}
+        50%  {color: rgba(0, 0, 0, 0.50);}
+        75%  {color: rgba(0, 0, 0, 0.75);}
+        100% {color: rgba(0, 0, 0, 1);}
+    }
 </style>
 
 <!--Facebook Comments plugin script-->
@@ -151,30 +185,90 @@
 	<h1 style='text-align:center'>Review Practice Questions</h1>
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
-             {{ if practice_today_left > 0: }}
-                <p>{{=practice_today_left}} question{{='' if practice_today_left==1 else 's'}} left to get today's point.</p>
-             {{else:}}
-                <p>You've already got today's point.</p>
-             {{pass}}
-             <p>{{=flashcard_count}} more question{{='' if flashcard_count==1 else 's'}} available to practice today.</p>
+             {{ if spacing == 1: }}
+                 {{ if practice_today_left > 0: }}
+                    <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left
+                        {{ if practice_graded == 1: }}
+                        to get today's point.
+                        {{ else: }}
+                        out of our recommended {{=total_today_count}} questions to practice today.
+                        {{ pass }}
+                    </p>
+                 {{ else: }}
+                    <p>You've already
+                        {{ if practice_graded == 1: }}
+                        got today's point.
+                        {{ else: }}
+                        answered our recommended {{=total_today_count}} questions to practice today.
+                        {{ pass }}
+                    </p>
+                 {{ pass }}
+             {{ pass }}
+             <p>{{=flashcard_count}} more question{{='' if flashcard_count == 1 else 's'}} available to practice today.
+             </p>
          {{ elif flashcard_count == 1: }}
              <p>Hang in there. Last question for today.</p>
-         {{pass}}
-         <p>You have completed {{=practice_completion_count}} day{{='' if practice_completion_count ==1 else 's'}} out of {{=max_days}} days of your review practice.</p>
-         <p>{{=remaining_days}} days are remaining to the end of the semester.</p>
+         {{ pass }}
+         {{ if spacing == 1: }}
+             <p>So far, you've
+                 {{ if practice_graded == 1: }}
+                 received {{=points_received}} point{{='' if points_received == 1 else 's'}} out of
+                 {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for completing
+                 {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out
+                 of {{=max_days}} days of your review practice.
+                 {{ else: }}
+                 answered the recommended {{=questions_to_complete_day}} questions correctly on
+                 {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out of
+                 {{=max_days}} recommended days of your review practice.
+                 {{ pass }}
+             </p>
+         {{ else: }}
+             <p>So far, you've
+                 {{ if practice_graded == 1: }}
+                 received {{=points_received}} point{{='' if points_received == 1 else 's'}} out of
+                 {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for answering
+                 {{=practice_completion_count}} question{{='' if practice_completion_count == 1 else 's'}} out
+                 of {{=max_questions}} questions to complete your practice.
+                 {{ else: }}
+                 answered {{=practice_completion_count}} question{{='' if practice_completion_count == 1 else 's'}}.
+                 {{ pass }}
+                 </p>
+         {{ pass }}
+         {{ if remaining_days > 0: }}
+            <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
+         {{ else: }}
+            <p>The practicing period this semester is over, though you can continue practicing
+             {{ if practice_graded == 1: }}
+                without receiving any extra points.
+             {{ else: }}
+                and improve your long-term learning.
+             {{ pass }}
+            </p>
+         {{ pass }}
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
             <div id="CongratulationsContinueDIV">
-                <p>Congratulations! You have answered {{=practiced_today_count}} questions and received today's point.</p>
+                {{ if practice_graded == 1: }}
+                <p>Congratulations! You have answered {{=practiced_today_count}} questions correctly and received
+                    today's point.</p>
+                {{ else: }}
+                <p>Congratulations! Today, you have answered our recommended {{=practiced_today_count}} questions
+                    correctly.</p>
+                {{ pass }}
                 <p>Click on the fireworks to create more of them.</p>
+                <!--<p>The designers of the practice tool are a group of researchers with the goal of making computer
+                    science education as effective aspossible. In order to improve the design of the practice tool and
+                    personalize the questions for you, we need to learn more about you.</p>
+                <p>Please answer the following question before continuing practicing.</p>-->
             </div>
             <div id="CanvasContainer">
                 <canvas id="canvas"></canvas>
             </div>
             <div id="follow-up-Container">
                 <div id="WillingToContinueDIV">
-                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button" class="btn btn-success NextQuestionAnchor">
+                    <a href="/{{=request.application}}/assignments/practice/?willing_to_continue=1" type="button"
+                       class="btn btn-success NextQuestionAnchor">
                         I'd like to continue practicing.
                     </a>
                 </div>
@@ -184,15 +278,30 @@
                         Like
                         <!--Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />-->
                     </button>
-                    <button type="button" class="btn btn-info" id="Dislike"><i class="LikeDislikeIcon fa fa-thumbs-down"></i>
+                    <button type="button" class="btn btn-info" id="Dislike">
+                        <i class="LikeDislikeIcon fa fa-thumbs-down"></i>
                         Dislike
                         <!--Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />-->
                     </button>
                 </div>
-                <div id="FeedbackRequestDIV">Please tell us how you feel about the practice feature and let us know your suggestions on how to
-                    improve it. If someone else has already written the same feedback, please like/dislike those
-                    comments instead of repeating them.</div>
-                <div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice" data-numposts="5"></div>
+                {{ if feedback_saved == "1": }}
+                <div id="FeedbackRequestDIV">
+                    <p style="color: green;">Thank you. We've successfully received your feedback.</p>
+                {{ else: }}
+                    <form id="PracticeFeedbackForm" class="needs-validation"
+                        action="/{{=request.application}}/assignments/practice_feedback" method="post">
+                      <div class="form-group">
+                        <label for="FeedInput">Please tell us how you feel about the practice tool and let us know your
+                            suggestions on how to improve it.</label>
+                        <textarea class="form-control" id="FeedInput" name="Feed" rows="3" required></textarea>
+                      </div>
+                      <input style="margin-bottom: 25px;" class="btn btn-success mb-2" type="submit"
+                             value="Submit my feedback">
+                    </form>
+                {{ pass }}
+                </div>
+                <!--<div class="fb-comments" data-href="https://106w18.learningpython.today/assignments/practice"
+                     data-numposts="5"></div>-->
             </div>
          {{ else: }}
             <span>
@@ -201,17 +310,45 @@
                 </div>
             </span>
             {{ if q[3] == 1: }}
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button" class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button" class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button" class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button" class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one seemed easy to recall.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button" class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the correct one.</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button" class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=5" type="button"
+                      class="btn btn-success NextQuestionAnchor">5 - I knew that right away.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=4" type="button"
+                      class="btn btn-primary NextQuestionAnchor">4 - I correctly responded after a hesitation.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=3" type="button"
+                      class="btn btn-info NextQuestionAnchor">3 - I correctly responded but with serious difficulty.</a>
+                </p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=2" type="button"
+                      class="btn btn-default NextQuestionAnchor">2 - I incorrectly responded; where the correct one
+                    seemed easy to recall.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=1" type="button"
+                      class="btn btn-warning NextQuestionAnchor">1 - I incorrectly responded; but I remembered the
+                    correct one.</a></p>
+                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=0" type="button"
+                      class="btn btn-danger NextQuestionAnchor">0 - I don't know the answer.</a></p>
             {{ else: }}
-                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button" class="btn btn-success NextQuestionAnchor">Done! {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
-                <p><a href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1" type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask me another question.</a></p>
+                <h1 id="HoldOnH1">Hold on...</h1>
+                <p><a id="DoneBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}" type="button"
+                      class="btn btn-success NextQuestionAnchor">Done!
+                {{= "Ask me another question!" if practice_today_left != 1 else "Claim my completion point!" }}</a></p>
+                <p><a id="PostponeBtn" href="/{{=request.application}}/assignments/checkanswer/?QID={{=q[2]}}&q=-1"
+                      type="button" class="btn btn-danger NextQuestionAnchor">I want to postpone this to tomorrow! Ask
+                        me another question.</a></p>
+                {{ if flashcard_creation_method == 0: }}
+                <p>Note: Pages that you marked as complete are eligible for practice. If you mistakenly marked a page as
+                    complete, you can remove it from practice by visiting that page and unmarking it as complete.</p>
+                {{ pass }}
             {{ pass }}
-            <h3>Questions from the following topics will be asked again in the specified number of days:</h3>
+            <h3>
+            {{ if interleaving == 1: }}
+                Questions from the following topics will be asked again in the specified number of days:
+            {{ else: }}
+                The following diagram demonstrates how well you've learned each of the topics:
+            {{ pass }}
+            </h3>
+            {{ if flashcard_creation_method == 0: }}
+            <p>Note: Only the pages you've marked as complete, at the bottom of the page, are the ones that are
+                eligible for practice.</p>
+            {{ pass }}
             <ul>
             {{ current_chapter = all_flashcards[0].chapters.chapter_name }}
                 <li><h4>{{=current_chapter}}</h4></li>
@@ -222,25 +359,40 @@
                     {{ current_chapter = flash_card.chapters.chapter_name }}
                     <li><h4>{{=current_chapter}}</h4></li>
                     <ul>
-                {{ else: }}
+                {{ pass }}
                     <li>
                         <p><strong>{{=flash_card.sub_chapters.sub_chapter_name}}:</strong></p>
-                        {{ if flash_card.mastery_percent > 0: }}
                         <div class="progress">
-                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar" style="width: {{=flash_card.mastery_percent}}%" aria-valuenow="{{=flash_card.mastery_percent}}" aria-valuemin="0" aria-valuemax="100">{{=flash_card.remaining_days}} days</div>
+                            <div class="progress-bar bg-{{=flash_card.mastery_color}}" role="progressbar"
+                                 style="width: {{=flash_card.mastery_percent}}%"
+                                 aria-valuenow="
+                            {{ if flash_card.mastery_percent < 100: }}
+                                 {{=flash_card.mastery_percent}}
+                            {{ elif flash_card.mastery_percent >= 100: }}
+                                 100
+                            {{ pass }}
+                                 " aria-valuemin="0"
+                                 aria-valuemax="100">
+                            {{ if interleaving == 1: }}
+                                 {{=flash_card.remaining_days}} days
+                            {{ elif flash_card.mastery_percent <= 0: }}
+                                 0%
+                            {{ elif flash_card.mastery_percent < 100: }}
+                                 {{=flash_card.mastery_percent}}%
+                            {{ elif flash_card.mastery_percent >= 100: }}
+                                 100%
+                            {{ pass }}
+                            </div>
                         </div>
-                        {{ else: }}
-                            <p>It's gonna be asked <strong>today</strong>!</p>
-                        {{ pass }}
                     </li>
-                {{ pass }}
             {{ pass }}
                 </ul>
             </ul>
          {{ pass }}
     {{ else: }}
         <div id="CongratulationsDIV">
-            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.</p>
+            <p>Congratulations! You have answered all the questions for today. Please continue your practice tomorrow.
+            </p>
         </div>
         <div class="demo"></div>
     {{ pass }}
@@ -259,17 +411,22 @@
                 check_me_clicked = true;
             });
         }
-        else if ($('button:contains("Save & Run")')) {
+        else if ($('button:contains("Save & Run")').length) {
             $('button:contains("Save & Run")').click(function(event) {
                 check_me_clicked = true;
             });
         }
         $("#DoneBtn").click(function(event) {
             event.preventDefault();
+
+            $("#HoldOnH1").show();
+            $("#DoneBtn").hide();
+            $("#PostponeBtn").hide();
+
             var url = $(this).attr('href');
             // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
             // click "Check me" for them.
-            if (!check_me_clicked) {
+            if (!check_me_clicked && !$('[id*="_feedback"]').length) {
                 if ($('button:contains(\"Check Me\")').length) {
                     $('button:contains(\"Check Me\")').click();
                 }
@@ -286,6 +443,20 @@
 
             return false; // for good measure
         });
+        $("#PostponeBtn").click(function(event) {
+            event.preventDefault();
+
+            $("#HoldOnH1").show();
+            $("#DoneBtn").hide();
+            $("#PostponeBtn").hide();
+
+            var url = $(this).attr('href');
+            setTimeout(function(){
+                window.location = url;
+            }, 10000);
+
+            return false; // for good measure
+        });
     });
 {{ pass }}
 {{ if practice_today_left > 0 or q: }}
@@ -293,7 +464,8 @@
 	// Interestingly, javascript won't understand the html string without first dumping it into an html element
 	// a console.log of the html string within the questioninfo array would only give an unexpected token error
 	// pulling the html strings from the script element provides the string that javascript recognizes
-	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the result, the html string was still seen as an undefined type according to javascript
+	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the
+    // result, the html string was still seen as an undefined type according to javascript
 
 	// The htmlDecode is needed to unescape the html that the server has sent.
 	// because only unescaped html gets rendered as html elements
@@ -373,7 +545,8 @@
             particles = [],
             // starting hue
             hue = 120,
-            // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5 loop ticks
+            // when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5
+            // loop ticks
             limiterTotal = 5,
             limiterTick = 0,
             // this will time the auto launches of fireworks, one launch per 80 loop ticks
@@ -422,7 +595,8 @@
         // distance from starting point to target
         this.distanceToTarget = calculateDistance( sx, sy, tx, ty );
         this.distanceTraveled = 0;
-        // track the past coordinates of each firework to create a trail effect, increase the coordinate count to create more prominent trails
+        // track the past coordinates of each firework to create a trail effect, increase the coordinate count to create
+        // more prominent trails
         this.coordinates = [];
         this.coordinateCount = 3;
         // populate initial coordinate collection with the current coordinates
@@ -460,7 +634,8 @@
         // how far will the firework have traveled with velocities applied?
         this.distanceTraveled = calculateDistance( this.sx, this.sy, this.x + vx, this.y + vy );
 
-        // if the distance traveled, including velocities, is greater than the initial distance to the target, then the target has been reached
+        // if the distance traveled, including velocities, is greater than the initial distance to the target, then the
+        // target has been reached
         if( this.distanceTraveled >= this.distanceToTarget ) {
             createParticles( this.tx, this.ty );
             // remove the firework, use the index passed into the update function to determine which to remove
@@ -476,7 +651,8 @@
     Firework.prototype.draw = function() {
         ctx.beginPath();
         // move to the last tracked coordinate in the set, then draw a line to the current x and y
-        ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ], this.coordinates[ this.coordinates.length - 1][ 1 ] );
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ],
+                this.coordinates[ this.coordinates.length - 1][ 1 ] );
         ctx.lineTo( this.x, this.y );
         ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
         ctx.stroke();
@@ -491,7 +667,8 @@
     function Particle( x, y ) {
         this.x = x;
         this.y = y;
-        // track the past coordinates of each particle to create a trail effect, increase the coordinate count to create more prominent trails
+        // track the past coordinates of each particle to create a trail effect, increase the coordinate count to create
+        // more prominent trails
         this.coordinates = [];
         this.coordinateCount = 5;
         while( this.coordinateCount-- ) {
@@ -536,7 +713,8 @@
     Particle.prototype.draw = function() {
         ctx. beginPath();
         // move to the last tracked coordinates in the set, then draw a line to the current x and y
-        ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ], this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
+        ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ],
+                this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
         ctx.lineTo( this.x, this.y );
         ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
         ctx.stroke();
@@ -544,7 +722,8 @@
 
     // create particle group/explosion
     function createParticles( x, y ) {
-        // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased particles though
+        // increase the particle count for a bigger explosion, beware of the canvas performance hit with the increased
+        // particles though
         var particleCount = 30;
         while( particleCount-- ) {
             particles.push( new Particle( x, y ) );
@@ -564,7 +743,8 @@
 
         // normally, clearRect() would be used to clear the canvas
         // we want to create a trailing effect though
-        // setting the composite operation to destination-out will allow us to clear the canvas at a specific opacity, rather than wiping it entirely
+        // setting the composite operation to destination-out will allow us to clear the canvas at a specific opacity,
+        // rather than wiping it entirely
         ctx.globalCompositeOperation = 'destination-out';
         // decrease the alpha property to create more prominent trails
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -590,7 +770,8 @@
         // launch fireworks automatically to random coordinates, when the mouse isn't down
         if( timerTick >= timerTotal ) {
             if( !mousedown ) {
-                // start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
+                // start the firework at the bottom middle of the screen, then set the random target coordinates, the
+                // random y coordinates will be set within the range of the top half of the screen
                 fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
                 timerTick = 0;
             }
@@ -601,7 +782,8 @@
         // limit the rate at which fireworks get launched when mouse is down
         if( limiterTick >= limiterTotal ) {
             if( mousedown ) {
-                // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the target
+                // start the firework at the bottom middle of the screen, then set the current mouse coordinates as the
+                // target
                 fireworks.push( new Firework( cw / 2, ch, mx, my ) );
                 limiterTick = 0;
             }

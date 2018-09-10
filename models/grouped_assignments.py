@@ -125,11 +125,21 @@ class CourseGrade(object):
             type_names.append('PS Seconds')
         if 'Earliness' not in type_names:
             type_names.append('Earliness')
-        row['PS Seconds'], row['Earliness'] = get_engagement_time(assignment=None,
-                                                                  user=self.student,
-                                                                  preclass=False,
-                                                                  all_problem_sets=True,
-                                                                  as_of_timestamp=as_of_timestamp)
+        (row['PS Seconds'],
+         row['Earliness'],
+         assignment_specific_data) = get_engagement_time(assignment=None,
+                                                         user=self.student,
+                                                         preclass=False,
+                                                         all_problem_sets=True,
+                                                         as_of_timestamp=as_of_timestamp)
+        for assignment, v in assignment_specific_data.items():
+            if str(assignment) + '_Duration' not in type_names:
+                type_names.append(str(assignment) + '_Duration')
+            if str(assignment) + '_Earliness' not in type_names:
+                type_names.append(str(assignment) + '_Earliness')
+            row[str(assignment) + '_Duration'] = v['total_duration']
+            row[str(assignment) + '_Earliness'] = v['earliness']
+
         for t in self.assignment_type_grades:
             t.csv(row, type_names, assignment_names)
         return row
@@ -230,8 +240,7 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         q = q(~(db.useinfo.div_id.contains('Assignments') |
                 db.useinfo.div_id.startswith('ps_')))
     else:
-        q = q(db.useinfo.div_id == db.problems.acid)(db.problems.assignment ==
-                                                      assignment.id)
+        q = q(db.useinfo.div_id == db.problems.acid)(db.problems.assignment == assignment.id)
         if preclass:
             dl = get_deadline(assignment, user)
             if dl:
@@ -240,17 +249,19 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         q = q(db.useinfo.timestamp < as_of_timestamp)
 
     if all_problem_sets:
-        activities = q.select(db.useinfo.timestamp, db.assignments.duedate, db.assignments.id, orderby=db.useinfo.timestamp)
+        activities = q.select(db.useinfo.timestamp, db.assignments.duedate, db.assignments.name,
+                              orderby=db.useinfo.timestamp)
         # We want to define a variable that measures how early each student works on their assignments. We suppose this
-        # measure as the inverse of a measurement of procrastination.
-        # For this purpose, we need to find the first and last timestamps that the student worked on each assignment.
-        first_last_timestamps = {}
+        # measure as the inverse of a measurement of procrastination. For this purpose, we need to find the first, last,
+        # and all the timestamps that the student worked on each assignment.
+        assignment_specific_data = {}
     else:
         activities = q.select(db.useinfo.timestamp, orderby=db.useinfo.timestamp)
 
     sessions = []
     THRESH = 300
     prev = None
+    new_session_created = False
     for activity in activities:
         if all_problem_sets:
             timestamp = activity.useinfo.timestamp
@@ -259,6 +270,7 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
         if not prev:
             # first activity; start a session for it
             sessions.append(Session(timestamp))
+            new_session_created = True
         else:
             if all_problem_sets:
                 prev_timestamp = prev.useinfo.timestamp
@@ -269,20 +281,32 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
                 sessions[-1].end = prev_timestamp + datetime.timedelta(seconds=THRESH)
                 # start a new session
                 sessions.append(Session(timestamp))
-        prev = activity
+                new_session_created = True
 
         if all_problem_sets:
             deadline = activity.assignments.duedate
-            assignment_id = activity.assignments.id
-            # Use assignment id as key.
-            if assignment_id not in first_last_timestamps:
-                first_last_timestamps[assignment_id] = {'first': timestamp, 'last': timestamp, 'deadline':deadline}
-            else:
-                # We need to find the first and last timestamps that the student worked on each assignment.
-                if timestamp < first_last_timestamps[assignment_id]['first']:
-                    first_last_timestamps[assignment_id]['first'] = timestamp
-                if first_last_timestamps[assignment_id]['last'] < timestamp <= deadline:
-                    first_last_timestamps[assignment_id]['last'] = timestamp
+            assignment_name = activity.assignments.name
+            if timestamp <= deadline:
+                # Use assignment name as key.
+                if assignment_name not in assignment_specific_data:
+                    assignment_specific_data[assignment_name] = {'first': timestamp,
+                                                                 'last': timestamp,
+                                                                 'visits': [timestamp],
+                                                                 'durations': [],
+                                                                 'deadline': deadline}
+                else:
+                    # We need to find the first, last, and all the timestamps timestamps that the student worked on
+                    # each assignment.
+                    assignment_specific_data[assignment_name]['visits'].append(timestamp)
+                    if timestamp < assignment_specific_data[assignment_name]['first']:
+                        assignment_specific_data[assignment_name]['first'] = timestamp
+                    if assignment_specific_data[assignment_name]['last'] < timestamp <= deadline:
+                        assignment_specific_data[assignment_name]['last'] = timestamp
+                    if new_session_created:
+                        assignment_specific_data[assignment_name]['durations'].append(THRESH)
+
+        prev = activity
+
     if prev:
         if all_problem_sets:
             prev_timestamp = prev.useinfo.timestamp
@@ -294,20 +318,27 @@ def get_engagement_time(assignment, user, preclass=False, all_problem_sets=False
     total_time = sum([(s.end-s.start).total_seconds() for s in sessions])
 
     if all_problem_sets:
-        for assignment_id, v in first_last_timestamps.items():
-            print assignment_id, v['first'], v['last'], v['deadline']
-
-    if all_problem_sets:
         # We define the variable earliness that measures how early each student works on their assignments. We suppose
         # this measure as the inverse of a measurement of procrastination and we calculate it as the difference between
-        # the deadline and mean of the first and the last time before the deadline that they worked on the assignment.
-        # Add up over all assignments; student who misses an assignments gets no earliness for it.
+        # the deadline and mean of all the timestamps before the deadline that they worked on the assignment.
+        # Add up over all assignments; students who miss an assignment get 0 earliness for it.
         earliness = 0
-        for v in first_last_timestamps.values():
-            average_delta = (v['last'] - v['first']) / 2
-            average_ts = v['first'] + average_delta
-            earliness += (v['deadline'] - average_ts).total_seconds()
-        return total_time, earliness/float(3600 * 24)
+        for assignment, v in assignment_specific_data.items():
+            average_delta = 0
+            for timestamp in v['visits']:
+                if v['deadline'] > timestamp:
+                    average_delta += (v['deadline'] - timestamp).total_seconds()
+            average_delta /= len(v['visits'])
+            assignment_specific_data[assignment]['earliness'] = average_delta/float(3600)
+            earliness += average_delta
+
+            assignment_specific_data[assignment]['total_duration'] = sum(v['durations'])/float(3600)
+
+        # Finally, divide the earliness by the number of assignments, so that earliness does not depend on the number of
+        # submitted assignments.
+        if len(assignment_specific_data) != 0:
+            earliness /= len(assignment_specific_data)
+        return total_time, earliness/float(3600), assignment_specific_data
 
     return total_time
 
@@ -605,10 +636,21 @@ db.define_table('grades',
     Field('score', 'double'),
     Field('manual_total', 'boolean'),
     Field('projected', 'double'),
-    Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the Canvas gradebook
+    Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the external gradebook
     Field('lis_outcome_url', 'string'), #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
     migrate='runestone_grades.table',
     )
+
+db.define_table('practice_grades',
+                Field('auth_user', db.auth_user),
+                Field('course_name', 'string'),
+                Field('score', 'double'),
+                Field('lis_result_sourcedid', 'string'),
+                # guid for the student x assignment cell in the external gradebook
+                Field('lis_outcome_url', 'string'),
+                # web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
+                migrate='runestone_practice_grades.table',
+                )
 
 # deprecated; now storing deadlines directly in assignments table, so no separate deadlines for different sections
 db.define_table('deadlines',

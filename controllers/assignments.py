@@ -5,9 +5,10 @@ import sys
 import json
 import logging
 import datetime
+from random import shuffle
 from collections import OrderedDict
 from psycopg2 import IntegrityError
-from rs_grading import do_autograde, do_calculate_totals, do_check_answer
+from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -49,8 +50,219 @@ def index():
         })
     activity = data_analyzer.formatted_activity.activities
 
+    (now,
+     now_local,
+     message1,
+     message2,
+     practice_graded,
+     spacing,
+     interleaving,
+     practice_completion_count,
+     remaining_days,
+     max_days,
+     max_questions,
+     presentable_flashcards,
+     available_flashcards_num,
+     practiced_today_count,
+     questions_to_complete_day,
+     practice_today_left,
+     points_received,
+     total_possible_points,
+     flashcard_creation_method) = _get_practice_data(auth.user, int(session.timezoneoffset))
+
     return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
-                user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+                user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades,
+                practice_message1=message1, practice_message2=message2,
+                practice_graded=practice_graded, flashcard_count=available_flashcards_num,
+                # The number of days the student has completed their practice.
+                practice_completion_count=practice_completion_count,
+                remaining_days=remaining_days, max_questions=max_questions, max_days=max_days,
+                total_today_count=min(practice_today_left + practiced_today_count, questions_to_complete_day),
+                # The number of times remaining to practice today to get the completion point.
+                practice_today_left=practice_today_left,
+                # The number of times this user has submitted their practice from the beginning of today (12:00 am)
+                # till now.
+                practiced_today_count=practiced_today_count,
+                points_received=points_received,
+                total_possible_points=total_possible_points,
+                spacing=spacing,
+                interleaving=interleaving
+                )
+
+
+# Get practice data for this student and create flashcards for them is they are newcomers.
+def _get_practice_data(user, tzOffset):
+    practice_message1 = ""
+    practice_message2 = ""
+    practice_completion_count = 0
+    remaining_days = 0
+    max_days = 0
+    max_questions = 0
+    presentable_flashcards = []
+    available_flashcards_num = 0
+    practiced_today_count = 0
+    practice_today_left = 0
+    points_received = 0
+    total_possible_points = 0
+    flashcard_creation_method = 0
+    questions_to_complete_day = 0
+    practice_graded = 1
+    spacing = 0
+    interleaving = 0
+
+    now = datetime.datetime.utcnow()
+    now_local = now - datetime.timedelta(hours=tzOffset)
+
+    # Since each authenticated user has only one active course, we retrieve the course this way.
+    course = db(db.courses.id == user.course_id).select().first()
+
+    practice_settings = db(db.course_practice.course_name == user.course_name)
+    if practice_settings.isempty():
+        practice_message1 = "Practice tool is not set up for this course yet."
+        practice_message2 = "Please ask your instructor to set it up."
+    else:
+        practice_settings = practice_settings.select().first()
+        practice_start_date = practice_settings.start_date
+        flashcard_creation_method = practice_settings.flashcard_creation_method
+        # Calculates the remaining days to the end of the semester.
+        remaining_days = (practice_settings.end_date - now_local.date()).days
+        max_days = practice_settings.max_practice_days
+        max_questions = practice_settings.max_practice_questions
+        # Define how many questions you expect your students practice every day.
+        questions_to_complete_day = practice_settings.questions_to_complete_day
+        practice_graded = practice_settings.graded
+        spacing = practice_settings.spacing
+        interleaving = practice_settings.interleaving
+
+        if practice_start_date > now_local.date():
+            days_to_start = (practice_start_date - now_local.date()).days
+            practice_message1 = "Practice period will start in this course on " + str(practice_start_date) + "."
+            practice_message2 = "Please return in " + str(days_to_start) + " day" + "." if days_to_start == 1 else "s."
+        else:
+            # Check whether falshcards are created for this user in the current course.
+            flashcards = db((db.user_topic_practice.course_name == user.course_name) &
+                            (db.user_topic_practice.user_id == user.id))
+            if flashcards.isempty():
+                if flashcard_creation_method == 0:
+                    practice_message1 = ("Only pages that you mark as complete, at the bottom of the page, are the" +
+                                         " ones that are eligible for practice.")
+                    practice_message2 = ("You've not marked any pages as complete yet. Please mark some pages first" +
+                                         " to practice them.")
+                else:
+                    # new student; create flashcards
+                    # We only create flashcards for those sections that are marked by the instructor as taught.
+                    subchaptersTaught = db((db.sub_chapter_taught.course_name == user.course_name) &
+                                           (db.sub_chapter_taught.chapter_label == db.chapters.chapter_label) &
+                                           (db.sub_chapter_taught.sub_chapter_label == db.sub_chapters.sub_chapter_label) &
+                                           (db.chapters.course_id == user.course_name) &
+                                           (db.sub_chapters.chapter_id == db.chapters.id))
+                    if subchaptersTaught.isempty():
+                        practice_message1 = ("The practice period is already started, but your instructor has not" +
+                                             " added topics of your course to practice.")
+                        practice_message2 = "Please ask your instructor to add topics to practice."
+                    else:
+                        subchaptersTaught = subchaptersTaught.select(db.chapters.chapter_label,
+                                                                     db.chapters.chapter_name,
+                                                                     db.sub_chapters.sub_chapter_label,
+                                                                     orderby=db.chapters.id | db.sub_chapters.id)
+                        for subchapterTaught in subchaptersTaught:
+                            # We only retrieve questions to be used in flashcards if they are marked for practice
+                            # purpose.
+                            questions = _get_qualified_questions(course.base_course,
+                                                                 subchapterTaught.chapters.chapter_label,
+                                                                 subchapterTaught.sub_chapters.sub_chapter_label)
+                            if len(questions) > 0:
+                                # There is at least one qualified question in this subchapter, so insert a flashcard for
+                                # the subchapter.
+                                db.user_topic_practice.insert(
+                                    user_id=user.id,
+                                    course_name=user.course_name,
+                                    chapter_label=subchapterTaught.chapters.chapter_label,
+                                    sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
+                                    question_name=questions[0].name,
+                                    # Treat it as if the first eligible question is the last one asked.
+                                    i_interval=0,
+                                    e_factor=2.5,
+                                    q=0,
+                                    next_eligible_date=now_local.date(),
+                                    # add as if yesterday, so can practice right away
+                                    last_presented=now - datetime.timedelta(1),
+                                    last_completed=now - datetime.timedelta(1),
+                                    creation_time=now,
+                                    tz_offset=tzOffset
+                                )
+
+            # Retrieve all the falshcards created for this user in the current course and order them by their order of
+            # creation.
+            flashcards = db((db.user_topic_practice.course_name == user.course_name) &
+                            (db.user_topic_practice.user_id == user.id)).select(orderby=db.user_topic_practice.id)
+
+            if interleaving == 1:
+                # Select only those where enough time has passed since last presentation.
+                presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
+                available_flashcards_num = len(presentable_flashcards)
+            else:
+                # Select only those that are not mastered yet.
+                presentable_flashcards = [f for f in flashcards if (f.e_factor <= 2.5 and f.q != -1)]
+                available_flashcards_num = len(presentable_flashcards)
+                if len(presentable_flashcards) > 0:
+                    # It's okay to continue with the next chapter if there is no more question in the current chapter
+                    # eligible to be asked (not postponed). Note that this is not an implementation of pure
+                    # blocking, because a postponed question from the current chapter could be asked tomorrow, after
+                    # some questions from the next chapter that are asked today.
+                    presentable_chapter = presentable_flashcards[0].chapter_label
+                    presentable_flashcards = [f for f in presentable_flashcards if f.chapter_label == presentable_chapter]
+                    shuffle(presentable_flashcards)
+
+            # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
+            practiced_today_count = db((db.user_topic_practice_log.course_name == user.course_name) &
+                                       (db.user_topic_practice_log.user_id == user.id) &
+                                       (db.user_topic_practice_log.q != 0) &
+                                       (db.user_topic_practice_log.q != -1) &
+                                       (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
+                                                                                                     now.month,
+                                                                                                     now.day,
+                                                                                                     0, 0, 0,
+                                                                                                     0))).count()
+            if spacing == 1:
+                practice_completion_count = _get_practice_days_completed(user.id, user.course_name, spacing)
+            else:
+                practice_completion_count = _get_practice_questions_completed(user.id, user.course_name, spacing)
+
+            if practice_graded == 1:
+                if spacing == 1:
+                    total_possible_points = practice_settings.day_points * max_days
+                    points_received = practice_settings.day_points * practice_completion_count
+                else:
+                    total_possible_points = practice_settings.question_points * max_questions
+                    points_received = practice_settings.question_points * practice_completion_count
+
+            # Calculate the number of questions left for the student to practice today to get the completion point.
+            if spacing == 1:
+                practice_today_left = min(available_flashcards_num, max(0, questions_to_complete_day -
+                                                                           practiced_today_count))
+            else:
+                practice_today_left = available_flashcards_num
+
+    return (now,
+            now_local,
+            practice_message1,
+            practice_message2,
+            practice_graded,
+            spacing,
+            interleaving,
+            practice_completion_count,
+            remaining_days,
+            max_days,
+            max_questions,
+            presentable_flashcards,
+            available_flashcards_num,
+            practiced_today_count,
+            questions_to_complete_day,
+            practice_today_left,
+            points_received,
+            total_possible_points,
+            flashcard_creation_method)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -99,7 +311,7 @@ def download_time_spent():
         return dict(error="Please enter ?as_of=03-24-16")
     # probably broken now; assignment_types is deprecated and maybe not filled in correctly
     # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    rows = [CourseGrade(user = student,
+    rows = [CourseGrade(user=student,
                         course=course,
                         assignment_types=[]).csv(type_names,
                                                  assignment_names,
@@ -391,6 +603,26 @@ def chooseAssignment():
 
 # The rest of the file is about the the spaced practice:
 
+def _get_lti_record(oauth_consumer_key):
+    return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+
+def _get_course_practice_record(course_name):
+    return db(db.course_practice.course_name == course_name).select().first()
+
+def _get_student_practice_grade(sid, course_name):
+    return db((db.practice_grades.auth_user==sid) &
+              (db.practice_grades.course_name==course_name)).select().first()
+
+
+def _get_practice_days_completed(user_id, course_name, spacing):
+    return db((db.user_topic_practice_Completion.course_name == course_name) &
+       (db.user_topic_practice_Completion.user_id == user_id)).count()
+
+def _get_practice_questions_completed(user_id, course_name, spacing):
+    return db((db.user_topic_practice_log.course_name == course_name) &
+                                       (db.user_topic_practice_log.user_id == user_id) &
+                                       (db.user_topic_practice_log.q != 0) &
+                                       (db.user_topic_practice_log.q != -1)).count()
 
 # Called when user clicks "I'm done" button.
 def checkanswer():
@@ -410,8 +642,8 @@ def checkanswer():
     if request.vars.QID:
         now = datetime.datetime.utcnow()
         # Use the autograding function to update the flashcard's e-factor and i-interval.
-        do_check_answer(sid, course_name, qid, username, q, db, settings, now,
-                        datetime.timedelta(hours=int(session.timezoneoffset)))
+        do_check_answer(sid, course_name, qid, username, q, db, settings, now, int(session.timezoneoffset))
+
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
     session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
@@ -420,14 +652,18 @@ def checkanswer():
 
 # Only questions that are marked for practice are eligible for the spaced practice.
 def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db((db.questions.base_course == base_course) & \
-              (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) & \
+    return db((db.questions.base_course == base_course) &
+              ((db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) |
+               ((db.questions.chapter == chapter_label) &
+                (db.questions.topic == None) &
+                (db.questions.subchapter == sub_chapter_label))) &
               (db.questions.practice == True)).select()
 
 
-# Gets invoked from lti to set timezone and then redirect to practice()
-def settz_then_practice():
-    return dict(course_name=request.vars.get('course_name', 'UMSI106'))
+# Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
+def practiceNotStartedYet():
+    return dict(course_id=auth.user.course_name,
+                message1=request.vars.message1, message2=request.vars.message2)
 
 
 # Gets invoked when the student requests practicing topics.
@@ -438,82 +674,63 @@ def practice():
 
     if not session.timezoneoffset:
         session.timezoneoffset = 0
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
 
-    # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
-    # 2018, please replace it.
-    # todo: This should come from the database -- add a field on the course creation page so
-    # the instructor can put in an end date for the term.
-    remaining_days = (datetime.date(2018, 12, 15) - now.date()).days
+    feedback_saved = request.vars.get('feedback_saved', None)
+    if feedback_saved is None:
+        feedback_saved = ""
+
+    (now,
+     now_local,
+     message1,
+     message2,
+     practice_graded,
+     spacing,
+     interleaving,
+     practice_completion_count,
+     remaining_days,
+     max_days,
+     max_questions,
+     presentable_flashcards,
+     available_flashcards_num,
+     practiced_today_count,
+     questions_to_complete_day,
+     practice_today_left,
+     points_received,
+     total_possible_points,
+     flashcard_creation_method) = _get_practice_data(auth.user, int(session.timezoneoffset))
+
+    if message1 != "":
+        session.flash = message1 + " " + message2
+        return redirect(URL('practiceNotStartedYet',
+                            vars=dict(message1=message1,
+                                      message2=message2)))
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == auth.user.course_id).select().first()
 
-    # Retrieve the existing flashcards in the current course for this user.
-    existing_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                             (db.user_topic_practice.user_id == auth.user.id))
-
-    # If the user already has flashcards for the current course.
-    if existing_flashcards.isempty():
-        # new student; create flashcards
-        # We only create flashcards for those sections that are marked by the instructor as taught.
-        subchaptersTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
-                               (db.sub_chapter_taught.chapter_name == db.chapters.chapter_name) & \
-                               (db.sub_chapter_taught.sub_chapter_name == db.sub_chapters.sub_chapter_name) & \
-                               (db.chapters.course_id == auth.user.course_name) & \
-                               (db.sub_chapters.chapter_id == db.chapters.id)) \
-            .select(db.chapters.chapter_label, db.chapters.chapter_name, db.sub_chapters.sub_chapter_label,
-                    orderby=db.chapters.id | db.sub_chapters.id)
-        for subchapterTaught in subchaptersTaught:
-            # We only retrive questions to be used in flashcards if they are marked for practice purpose.
-            questions = _get_qualified_questions(course.base_course,
-                                                 subchapterTaught.chapters.chapter_label,
-                                                 subchapterTaught.sub_chapters.sub_chapter_label)
-            if len(questions) > 0:
-                # There is at least one qualified question in this subchapter, so insert a flashcard for the subchapter.
-                db.user_topic_practice.insert(
-                    user_id=auth.user.id,
-                    course_name=auth.user.course_name,
-                    chapter_label=subchapterTaught.chapters.chapter_label,
-                    sub_chapter_label=subchapterTaught.sub_chapters.sub_chapter_label,
-                    question_name=questions[0].name,
-                    # Treat it as if the first eligible question is the last one asked.
-                    i_interval=0,
-                    e_factor=2.5,
-                    # add as if yesterday, so can practice right away
-                    last_presented=now.date() - datetime.timedelta(1),
-                    last_completed=now.date() - datetime.timedelta(1),
-                    creation_time=now,
-                )
-
-    # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
-    practiced_today_count = db((db.user_topic_practice_log.course_name == auth.user.course_name) & \
-                               (db.user_topic_practice_log.user_id == auth.user.id) & \
-                               (db.user_topic_practice_log.q != 0) & \
-                               (db.user_topic_practice_log.q != -1) & \
-                               (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
-                                                                                             now.month,
-                                                                                             now.day,
-                                                                                             0, 0, 0, 0))).count()
-    # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
-    flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                    (db.user_topic_practice.user_id == auth.user.id)).select(orderby=db.user_topic_practice.id)
-    # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if
-                              (now.date() - f.last_completed.date()).days >= f.i_interval]
-
-    all_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) & \
-                        (db.user_topic_practice.user_id == auth.user.id) & \
-                        (db.user_topic_practice.chapter_label == db.chapters.chapter_label) & \
-                        (db.user_topic_practice.sub_chapter_label == db.sub_chapters.sub_chapter_label) & \
-                        (db.chapters.course_id == auth.user.course_name) & \
+    all_flashcards = db((db.user_topic_practice.course_name == auth.user.course_name) &
+                        (db.user_topic_practice.user_id == auth.user.id) &
+                        (db.user_topic_practice.chapter_label == db.chapters.chapter_label) &
+                        (db.user_topic_practice.sub_chapter_label == db.sub_chapters.sub_chapter_label) &
+                        (db.chapters.course_id == auth.user.course_name) &
                         (db.sub_chapters.chapter_id == db.chapters.id)) \
-            .select(db.chapters.chapter_name, db.sub_chapters.sub_chapter_name, db.user_topic_practice.i_interval,
-                db.user_topic_practice.last_completed, orderby=db.user_topic_practice.id)
+            .select(db.chapters.chapter_name,
+                    db.sub_chapters.sub_chapter_name,
+                    db.user_topic_practice.i_interval,
+                    db.user_topic_practice.next_eligible_date,
+                    db.user_topic_practice.e_factor,
+                    db.user_topic_practice.q,
+                    db.user_topic_practice.last_completed,
+                    orderby=db.user_topic_practice.id)
     for f_card in all_flashcards:
-        f_card["remaining_days"] = max(0, f_card.user_topic_practice.i_interval -
-                                       (now.date() - f_card.user_topic_practice.last_completed.date()).days)
-        f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
+        if interleaving == 1:
+            f_card["remaining_days"] = max(0, (f_card.user_topic_practice.next_eligible_date - now_local.date()).days)
+            # f_card["mastery_percent"] = int(100 * f_card["remaining_days"] // 55)
+            f_card["mastery_percent"] = int(f_card["remaining_days"])
+        else:
+            # The maximum q is 5.0 and the minimum e_factor that indicates mastery of the topic is 2.5. `5 * 2.5 = 12.5`
+            f_card["mastery_percent"] = int(100 * f_card.user_topic_practice.e_factor *
+                                            f_card.user_topic_practice.q / 12.5)
         f_card["mastery_color"] = "danger"
         if f_card["mastery_percent"] >= 75:
             f_card["mastery_color"] = "success"
@@ -522,13 +739,11 @@ def practice():
         elif f_card["mastery_percent"] >= 25:
             f_card["mastery_color"] = "warning"
 
-    # Define how many topics you expect your students practice every day.
-    practice_times_to_pass_today = 10
-
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
-    if len(presentable_flashcards) > 0 and (practiced_today_count != practice_times_to_pass_today or
-                                            request.vars.willing_to_continue):
+    if available_flashcards_num > 0 and (practiced_today_count != questions_to_complete_day or
+                                            request.vars.willing_to_continue or
+                                            spacing == 0):
         # Present the first one.
         flashcard = presentable_flashcards[0]
         # Get eligible questions.
@@ -562,40 +777,72 @@ def practice():
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
         flashcard.last_presented = now
+        flashcard.tz_offset = int(session.timezoneoffset)
         flashcard.update_record()
 
     else:
         questioninfo = None
 
         # Add a practice completion record for today, if there isn't one already.
-        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                                       (db.user_topic_practice_Completion.user_id == auth.user.id) & \
-                                       (db.user_topic_practice_Completion.practice_completion_time == now.date()))
+        practice_completion_today = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) &
+                                       (db.user_topic_practice_Completion.user_id == auth.user.id) &
+                                       (db.user_topic_practice_Completion.practice_completion_date == now_local.date()))
         if practice_completion_today.isempty():
             db.user_topic_practice_Completion.insert(
                 user_id=auth.user.id,
                 course_name=auth.user.course_name,
-                practice_completion_time=now.date()
+                practice_completion_date=now_local.date()
             )
+            if practice_graded == 1:
+                # send practice grade via lti, if setup for that
+                lti_record = _get_lti_record(session.oauth_consumer_key)
+                practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
+                course_settings = _get_course_practice_record(auth.user.course_name)
 
-    # The number of days the student has completed their practice.
-    practice_completion_count = db((db.user_topic_practice_Completion.course_name == auth.user.course_name) & \
-                                   (db.user_topic_practice_Completion.user_id == auth.user.id)).count()
-
-    # Calculate the number of times left for the student to practice today to get the completion point.
-    practice_today_left = min(len(presentable_flashcards), max(0, practice_times_to_pass_today - practiced_today_count))
+                if spacing == 1:
+                    practice_completion_count = _get_practice_days_completed(auth.user.id,
+                                                                             auth.user.course_name,
+                                                                             spacing)
+                else:
+                    practice_completion_count = _get_practice_questions_completed(auth.user.id,
+                                                                                  auth.user.course_name,
+                                                                                  spacing)
+                if lti_record and practice_grade and course_settings:
+                    if spacing == 1:
+                        send_lti_grade(assignment_points=max_days,
+                                       score=practice_completion_count,
+                                       consumer=lti_record.consumer,
+                                       secret=lti_record.secret,
+                                       outcome_url=practice_grade.lis_outcome_url,
+                                       result_sourcedid=practice_grade.lis_result_sourcedid)
+                    else:
+                        send_lti_grade(assignment_points=max_questions,
+                                       score=practice_completion_count,
+                                       consumer=lti_record.consumer,
+                                       secret=lti_record.secret,
+                                       outcome_url=practice_grade.lis_outcome_url,
+                                       result_sourcedid=practice_grade.lis_result_sourcedid)
 
     return dict(course=course, course_name=auth.user.course_name,
                 course_id=auth.user.course_name,
                 q=questioninfo, all_flashcards=all_flashcards,
-                flashcard_count=len(presentable_flashcards),
+                flashcard_count=available_flashcards_num,
                 # The number of days the student has completed their practice.
                 practice_completion_count=practice_completion_count,
-                remaining_days=remaining_days, max_days=45,
+                remaining_days=remaining_days, max_questions=max_questions, max_days=max_days,
                 # The number of times remaining to practice today to get the completion point.
                 practice_today_left=practice_today_left,
-                # The number of times this user has submitted their practice from the beginning of today (12:00 am) till now.
-                practiced_today_count=practiced_today_count)
+                # The number of times this user has submitted their practice from the beginning of today (12:00 am)
+                # till now.
+                practiced_today_count=practiced_today_count,
+                total_today_count=min(practice_today_left + practiced_today_count, questions_to_complete_day),
+                questions_to_complete_day=questions_to_complete_day,
+                points_received=points_received,
+                total_possible_points=total_possible_points,
+                practice_graded=practice_graded,
+                spacing=spacing, interleaving=interleaving,
+                flashcard_creation_method=flashcard_creation_method,
+                feedback_saved=feedback_saved)
 
 
 # Called when user clicks like or dislike icons.
@@ -613,8 +860,32 @@ def like_dislike():
             user_id=sid,
             course_name=course_name,
             like_practice=likeVal,
-            response_time=datetime.datetime.now(),
+            response_time=datetime.datetime.utcnow(),
+            tz_offset=session.timezoneoffset if 'timezoneoffset' in session else 0,
         )
-        return json.dumps(dict(complete=True))
+        redirect(URL('practice'))
+    session.flash = "Sorry, your request was not saved. Please login and try again."
+    redirect(URL('practice'))
+
+
+# Called when user submits their feedback at the end of practicing.
+def practice_feedback():
+    if not auth.user:
+        session.flash = "Please Login"
+        return redirect(URL('default', 'index'))
+
+    sid = auth.user.id
+    course_name = auth.user.course_name
+    feedback = request.vars.get('Feed', None)
+
+    if feedback:
+        db.user_topic_practice_feedback.insert(
+            user_id=sid,
+            course_name=course_name,
+            feedback=feedback,
+            response_time=datetime.datetime.utcnow(),
+            tz_offset=session.timezoneoffset if 'timezoneoffset' in session else 0,
+        )
+        redirect(URL('practice', vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."
     redirect(URL('practice'))

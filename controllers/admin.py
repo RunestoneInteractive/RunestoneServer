@@ -1,7 +1,9 @@
 from os import path
 import os
 from datetime import date, timedelta
+import datetime
 import re
+from random import randint
 from collections import OrderedDict
 from paver.easy import sh
 import json
@@ -261,17 +263,244 @@ def assignments():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def practice():
-    return dict(course_id=auth.user.course_name, toc=_get_toc_and_questions())
+    course = db(db.courses.course_name == auth.user.course_name).select().first()
+    course_start_date = course.term_start_date
+
+    start_date = course_start_date + datetime.timedelta(days=13)
+    end_date = ""
+    max_practice_days = 50
+    max_practice_questions = 500
+    day_points = 2
+    question_points = 0.2
+    questions_to_complete_day = 10
+    flashcard_creation_method = 0
+    graded = 1
+    spacing = 0
+    interleaving = 0
+    error_start_date = 0
+    error_end_date = 0
+    error_max_practice_days = 0
+    error_max_practice_questions = 0
+    error_day_points = 0
+    error_question_points = 0
+    error_questions_to_complete_day = 0
+    error_flashcard_creation_method = 0
+    error_graded = 0
+
+    already_exists = 0
+    any_practice_settings = db(db.course_practice.auth_user_id == auth.user.id)
+    # If the instructor has created practice for other courses, don't randomize spacing and interleaving for the new
+    # course.
+    if not any_practice_settings.isempty():
+        any_practice_settings = any_practice_settings.select().first()
+        spacing = any_practice_settings.spacing
+        interleaving = any_practice_settings.interleaving
+
+        #  Now checking to see if there are practice settigns for this course.
+        #  If not, stick with the defaults.
+        practice_settings = db((db.course_practice.auth_user_id == auth.user.id) &
+                               (db.course_practice.course_name == course.course_name))
+        if (not practice_settings.isempty() and
+                practice_settings.select().first().end_date != "" and
+                practice_settings.select().first().end_date is not None):
+            practice_setting = practice_settings.select().first()
+            start_date = practice_setting.start_date
+            end_date = practice_setting.end_date
+            max_practice_days = practice_setting.max_practice_days
+            max_practice_questions = practice_setting.max_practice_questions
+            day_points = practice_setting.day_points
+            question_points = practice_setting.question_points
+            questions_to_complete_day = practice_setting.questions_to_complete_day
+            flashcard_creation_method = practice_setting.flashcard_creation_method
+            graded = practice_setting.graded
+            spacing = practice_setting.spacing
+            interleaving = practice_setting.interleaving
+            already_exists = 1
+    else:
+        if randint(0, 1) == 1:
+            spacing = 1
+        if randint(0, 1) == 1:
+            interleaving = 1
+        db.course_practice.insert(auth_user_id=auth.user.id,
+                                  course_name=course.course_name,
+                                  start_date=start_date,
+                                  end_date=end_date,
+                                  max_practice_days=max_practice_days,
+                                  max_practice_questions=max_practice_questions,
+                                  day_points=day_points,
+                                  question_points=question_points,
+                                  questions_to_complete_day=questions_to_complete_day,
+                                  flashcard_creation_method=flashcard_creation_method,
+                                  graded=graded,
+                                  spacing=spacing,
+                                  interleaving=interleaving
+                                  )
+        practice_settings = db((db.course_practice.auth_user_id == auth.user.id) &
+                               (db.course_practice.course_name == course.course_name))
+
+    toc = ""
+    if flashcard_creation_method == 2:
+        toc = _get_toc_and_questions()
+
+    # If the GET request is to open the page for the first time (they're not submitting the form):
+    if not ('StartDate' in request.vars or
+            'EndDate' in request.vars or
+            'maxPracticeDays' in request.vars or
+            'maxPracticeQuestions' in request.vars or
+            'pointsPerDay' in request.vars or
+            'pointsPerQuestion' in request.vars or
+            'questionsPerDay' in request.vars or
+            'flashcardsCreationType' in request.vars or
+            'question_points' in request.vars or
+            'graded' in request.vars):
+        return dict(course_id=course.course_name,
+                    course_start_date=course_start_date,
+                    start_date=start_date,
+                    end_date=end_date,
+                    max_practice_days=max_practice_days,
+                    max_practice_questions=max_practice_questions,
+                    day_points=day_points,
+                    question_points=question_points,
+                    questions_to_complete_day=questions_to_complete_day,
+                    flashcard_creation_method=flashcard_creation_method,
+                    graded=graded,
+                    spacing=spacing,
+                    interleaving=interleaving,
+                    toc=toc,
+                    error_start_date=error_start_date,
+                    error_end_date=error_end_date,
+                    error_max_practice_days=error_max_practice_days,
+                    error_max_practice_questions=error_max_practice_questions,
+                    error_day_points=error_day_points,
+                    error_question_points=error_question_points,
+                    error_questions_to_complete_day=error_questions_to_complete_day,
+                    error_flashcard_creation_method=error_flashcard_creation_method,
+                    error_graded=error_graded,
+                    complete=already_exists
+                    )
+    else:
+        try:
+            start_date = datetime.datetime.strptime(request.vars.get('StartDate', None), '%Y-%m-%d').date()
+            if start_date < course_start_date:
+                error_start_date = 1
+        except:
+            error_start_date = 1
+        try:
+            end_date = datetime.datetime.strptime(request.vars.get('EndDate', None), '%Y-%m-%d').date()
+            if end_date < start_date:
+                error_end_date = 1
+        except:
+            error_end_date = 1
+        if spacing == 1:
+            try:
+                max_practice_days = int(request.vars.get('maxPracticeDays', None))
+            except:
+                error_max_practice_days = 1
+        else:
+            try:
+                max_practice_questions = int(request.vars.get('maxPracticeQuestions', None))
+            except:
+                error_max_practice_questions = 1
+        if spacing == 1:
+            try:
+                day_points = float(request.vars.get('pointsPerDay', None))
+            except:
+                error_day_points = 1
+        else:
+            try:
+                question_points = float(request.vars.get('pointsPerQuestion', None))
+            except:
+                error_question_points = 1
+        if spacing == 1:
+            try:
+                questions_to_complete_day = int(request.vars.get('questionsPerDay', None))
+            except:
+                error_questions_to_complete_day = 1
+        try:
+            flashcard_creation_method = int(request.vars.get('flashcardsCreationType', None))
+        except:
+            error_flashcard_creation_method = 1
+        try:
+            graded = int(request.vars.get('graded', None))
+        except:
+            error_graded = 1
+
+        no_error = 0
+        if (error_start_date == 0 and
+                error_end_date == 0 and
+                error_max_practice_days == 0 and
+                error_max_practice_questions == 0 and
+                error_day_points == 0 and
+                error_question_points == 0 and
+                error_questions_to_complete_day == 0 and
+                error_flashcard_creation_method == 0 and
+                error_graded == 0):
+            no_error = 1
+        if no_error == 1:
+            practice_settings.update(course_start_date=course_start_date,
+                                     start_date=start_date,
+                                     end_date=end_date,
+                                     max_practice_days=max_practice_days,
+                                     max_practice_questions=max_practice_questions,
+                                     day_points=day_points,
+                                     question_points=question_points,
+                                     questions_to_complete_day=questions_to_complete_day,
+                                     flashcard_creation_method=flashcard_creation_method,
+                                     graded=graded,
+                                     spacing=spacing,
+                                     interleaving=interleaving
+                                     )
+
+        toc = ""
+        if flashcard_creation_method == 2:
+            toc = _get_toc_and_questions()
+        return dict(course_id=auth.user.course_name,
+                    course_start_date=course_start_date,
+                    start_date=start_date,
+                    end_date=end_date,
+                    max_practice_days=max_practice_days,
+                    max_practice_questions=max_practice_questions,
+                    day_points=day_points,
+                    question_points=question_points,
+                    questions_to_complete_day=questions_to_complete_day,
+                    flashcard_creation_method=flashcard_creation_method,
+                    graded=graded,
+                    spacing=spacing,
+                    interleaving=interleaving,
+                    error_graded=error_graded,
+                    toc=toc,
+                    error_start_date=error_start_date,
+                    error_end_date=error_end_date,
+                    error_max_practice_days=error_max_practice_days,
+                    error_max_practice_questions=error_max_practice_questions,
+                    error_day_points=error_day_points,
+                    error_question_points=error_question_points,
+                    error_questions_to_complete_day=error_questions_to_complete_day,
+                    error_flashcard_creation_method=error_flashcard_creation_method,
+                    complete=no_error
+                    )
+
+
+# I was not sure if it's okay to import it from `assignmnets.py`.
+# Only questions that are marked for practice are eligible for the spaced practice.
+def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
+    return db((db.questions.base_course == base_course) &
+              ((db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) |
+               ((db.questions.chapter == chapter_label) &
+                (db.questions.topic == None) &
+                (db.questions.subchapter == sub_chapter_label))) &
+              (db.questions.practice == True))
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
-
     data = json.loads(request.vars.data)
+
     string_data = [x.encode('UTF8') for x in data]
 
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+    now = datetime.datetime.utcnow()
+    now_local = now - datetime.timedelta(hours=int(session.timezoneoffset))
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -281,24 +510,24 @@ def add_practice_items():
         subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
             .select()
         for subchapter in subchapters:
-            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) & \
-                               (db.sub_chapter_taught.chapter_name == chapter.chapter_name) & \
-                               (db.sub_chapter_taught.sub_chapter_name == subchapter.sub_chapter_name))
-            questions = db((db.questions.base_course == course.base_course) & \
-                           (db.questions.topic == "{}/{}".format(chapter.chapter_label, subchapter.sub_chapter_label)) & \
-                           (db.questions.practice == True))
+            subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
+                               (db.sub_chapter_taught.chapter_label == chapter.chapter_label) &
+                               (db.sub_chapter_taught.sub_chapter_label == subchapter.sub_chapter_label))
+            questions = _get_qualified_questions(course.base_course,
+                                                 chapter.chapter_label,
+                                                 subchapter.sub_chapter_label)
             if "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name) in string_data:
                 if subchapterTaught.isempty() and not questions.isempty():
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
-                        chapter_name=chapter.chapter_name,
-                        sub_chapter_name=subchapter.sub_chapter_name,
-                        teaching_date=now,
+                        chapter_label=chapter.chapter_label,
+                        sub_chapter_label=subchapter.sub_chapter_label,
+                        teaching_date=now_local.date(),
                     )
                     for student in students:
-                        flashcards = db((db.user_topic_practice.user_id == student.id) & \
+                        flashcards = db((db.user_topic_practice.user_id == student.id) &
                                         (db.user_topic_practice.course_name == course.course_name) &
-                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                                        (db.user_topic_practice.chapter_label == chapter.chapter_label) &
                                         (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label))
                         if flashcards.isempty():
                             db.user_topic_practice.insert(
@@ -309,16 +538,19 @@ def add_practice_items():
                                 question_name=questions.select().first().name,
                                 i_interval=0,
                                 e_factor=2.5,
+                                q=0,
+                                next_eligible_date=now_local.date(),
                                 # add as if yesterday, so can practice right away
                                 last_presented=now.date() - datetime.timedelta(1),
                                 last_completed=now.date() - datetime.timedelta(1),
                                 creation_time=now,
+                                tz_offset=int(session.timezoneoffset)
                             )
             else:
                 if not subchapterTaught.isempty():
                     subchapterTaught.delete()
                     db((db.user_topic_practice.course_name == course.course_name) &
-                       (db.user_topic_practice.chapter_label == chapter.chapter_label) & \
+                       (db.user_topic_practice.chapter_label == chapter.chapter_label) &
                        (db.user_topic_practice.sub_chapter_label == subchapter.sub_chapter_label)).delete()
     return json.dumps(dict(complete=True))
 
@@ -1067,6 +1299,12 @@ def editindexrst():
     except Exception as ex:
         logger.error(ex)
 
+def _get_assignment(assignment_id):
+    return db(db.assignments.id == assignmentid).select().first()
+
+def _get_lti_record(oauth_consumer_key):
+    return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
     try:
@@ -1080,9 +1318,10 @@ def releasegrades():
 
     if released:
         # send lti grades
-        assignment = db(db.assignments.id == assignmentid).select().first()
-        if assignment:
-            send_lti_grades(assignment, auth.user.course_id, db, settings, session.oauth_consumer_key)
+        assignment = _get_assignment(assignmentid)
+        lti_record = _get_lti_record(session.oauth_consumer_key)
+        if assignment and lti_record:
+            send_lti_grades(assignment.id, assignment.points, auth.user.course_id, lti_record, db)
     return "Success"
 
 
@@ -1111,41 +1350,60 @@ def _get_toc_and_questions():
         #      -- get the divs associated with it, and insert into the sub-sub-dictionary
 
         question_picker = []
-        reading_picker = []  # This one doesn't include the questions, but otherwise the same
-        practice_picker = []  # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
-        subchapters_taught_query = db(db.sub_chapter_taught.course_name == auth.user.course_name).select()
-        chapters_and_subchapters_taught = [(row.chapter_name, row.sub_chapter_name) for row in subchapters_taught_query]
-
-
-
-        topic_query = db((db.courses.course_name == auth.user.course_name) & \
-                         (db.questions.base_course == db.courses.base_course) & \
-                         (db.questions.practice == True) & \
-                         (db.questions.topic != None)).select(db.questions.topic, orderby=db.questions.id)
+        # This one doesn't include the questions, but otherwise the same
+        reading_picker = []
+        # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
+        practice_picker = []
+        subchapters_taught_query = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
+                                      (db.chapters.course_id == auth.user.course_name) &
+                                      (db.chapters.chapter_label == db.sub_chapter_taught.chapter_label) &
+                                      (db.sub_chapters.chapter_id == db.chapters.id) &
+                                      (db.sub_chapters.sub_chapter_label == db.sub_chapter_taught.sub_chapter_label)
+                                      ).select(db.chapters.chapter_name,
+                                               db.sub_chapters.sub_chapter_name)
+        chapters_and_subchapters_taught = [(row.chapters.chapter_name, row.sub_chapters.sub_chapter_name)
+                                           for row in subchapters_taught_query]
+        topic_query = db((db.courses.course_name == auth.user.course_name) &
+                         (db.questions.base_course == db.courses.base_course) &
+                         (db.questions.practice == True)).select(db.questions.topic,
+                                                                 db.questions.chapter,
+                                                                 db.questions.subchapter,
+                                                                 orderby=db.questions.id)
         for q in topic_query:
-            # We have saved chapter_name and sub_chapter_name in db.sub_chapter_taught, and we know these names include
-            # spaces in them. So we cannot directly use the labels retrieved from q.topic as chapter_name and
-            # sub_chapter_name. So we need to query the corresponding chapter_name and sub_chapter_name from the
+            # We know chapter_name and sub_chapter_name include spaces.
+            # So we cannot directly use the labels retrieved from q.topic as chapter_name and
+            # sub_chapter_name and we need to query the corresponding chapter_name and sub_chapter_name from the
             # corresponding tables.
-            try:
-                chap, subch = q.topic.split('/')
-            except:
-                # a badly formed "topic" for the question; just ignore it
-                logger.info("Badly form Topic: {}".format(q.topic))
-            try:
-                chapter = db((db.chapters.course_id == auth.user.course_name) & \
-                              (db.chapters.chapter_label == chap)) \
-                              .select()[0]
+            if q.topic is not None:
+                try:
+                    chap, subch = q.topic.split('/')
+                except:
+                    # a badly formed "topic" for the question; just ignore it
+                    logger.info("Bad Topic: {}".format(q.topic))
+                try:
+                    chapter = db((db.chapters.course_id == auth.user.course_name) &
+                                  (db.chapters.chapter_label == chap)) \
+                                  .select()[0]
 
-                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) & \
-                              (db.sub_chapters.sub_chapter_label == subch)) \
-                              .select()[0].sub_chapter_name
-            except:
-                # topic's chapter and subchapter are not in the book; ignore this topic
-                logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
-                
+                    sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
+                                  (db.sub_chapters.sub_chapter_label == subch)) \
+                                  .select()[0].sub_chapter_name
+                except:
+                    # topic's chapter and subchapter are not in the book; ignore this topic
+                    logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
+            else:
+                chap = q.chapter
+                subch = q.subchapter
+                chapter = db((db.chapters.course_id == auth.user.course_name) &
+                             (db.chapters.chapter_label == chap)) \
+                    .select()[0]
+
+                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
+                                      (db.sub_chapters.sub_chapter_label == subch)) \
+                    .select()[0].sub_chapter_name
+
             chapter_name = chapter.chapter_name
-            # find the item in practice picker for this chapter
+            # Find the item in practice picker for this chapter
             p_ch_info = None
             for ch_info in practice_picker:
                 if ch_info['text'] == chapter_name:
