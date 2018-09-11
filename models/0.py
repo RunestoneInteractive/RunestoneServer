@@ -1,5 +1,4 @@
 from gluon.storage import Storage
-from platform import uname
 import logging
 from os import environ
 
@@ -25,7 +24,7 @@ settings.plugins = []
 settings.server_type = "http://"
 
 # Do not control this with hostnames
-config = environ.get("WEB2PY_CONFIG","NOT SET")
+config = environ.get("WEB2PY_CONFIG", "NOT SET")
 
 if config == "production":
     settings.database_uri = environ["DBURL"]
@@ -39,7 +38,7 @@ else:
     raise ValueError("unknown value for WEB2PY_CONFIG")
 
 # Just for compatibility -- many things use postgresql but web2py removes the ql
-settings.database_uri = settings.database_uri.replace('postgresql://','postgres://')
+settings.database_uri = settings.database_uri.replace('postgresql://', 'postgres://')
 
 
 settings.logger = "web2py.app.runestone"
