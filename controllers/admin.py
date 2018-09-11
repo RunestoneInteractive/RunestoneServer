@@ -437,8 +437,7 @@ def practice():
                 error_graded == 0):
             no_error = 1
         if no_error == 1:
-            practice_settings.update(course_start_date=course_start_date,
-                                     start_date=start_date,
+            practice_settings.update(start_date=start_date,
                                      end_date=end_date,
                                      max_practice_days=max_practice_days,
                                      max_practice_questions=max_practice_questions,

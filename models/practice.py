@@ -32,7 +32,8 @@ db.define_table('user_topic_practice',
                 Field('last_completed', type='datetime'),
                 Field('next_eligible_date', type='date'),
                 Field('creation_time', type='datetime'),
-                Field('tz_offset', type='integer', default=0),
+                Field('tz_offset_hours', type='integer', default=0),
+                Field('tz_offset_minutes', type='integer', default=0),
                 migrate='runestone_spacing.table')
 
 
@@ -49,7 +50,8 @@ db.define_table('user_topic_practice_log',
                 Field('available_flashcards', type='integer', notnull=True, default=-1),
                 Field('start_practice', type='datetime'),
                 Field('end_practice', type='datetime'),
-                Field('tz_offset', type='integer', default=0),
+                Field('tz_offset_hours', type='integer', default=0),
+                Field('tz_offset_minutes', type='integer', default=0),
                 Field('next_eligible_date', type='date'),
                 migrate='runestone_spacing_log.table')
 
@@ -68,7 +70,8 @@ db.define_table('user_topic_practice_survey',
                 Field('like_practice', requires=IS_IN_SET(['Like', 'Dislike'])),
                 Field('response_time', type='datetime',
                       default=request.now, update=request.now, writable=False),
-                Field('tz_offset', type='integer', default=0),
+                Field('tz_offset_hours', type='integer', default=0),
+                Field('tz_offset_minutes', type='integer', default=0),
                 migrate='user_topic_practice_survey.table')
 
 
@@ -79,5 +82,6 @@ db.define_table('user_topic_practice_feedback',
                 Field('feedback', 'string'),
                 Field('response_time', type='datetime',
                       default=request.now, update=request.now, writable=False),
-                Field('tz_offset', type='integer', default=0),
+                Field('tz_offset_hours', type='integer', default=0),
+                Field('tz_offset_minutes', type='integer', default=0),
                 migrate='user_topic_practice_feedback.table')

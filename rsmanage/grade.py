@@ -15,7 +15,10 @@ do_autograde(assignment,
              sid = None,
              question_name = None,
              enforce_deadline = userinfo['enforce_deadline'],
-             timezoneoffset = 5,
+             # I don't know what this is for, but if you want to set this to Michigan timezone offset, it should be 4
+             # not 5.
+             tzHourOffset = 4,
+             tzMinuteOffset = 0,
              db=db,
              settings=settings)
 

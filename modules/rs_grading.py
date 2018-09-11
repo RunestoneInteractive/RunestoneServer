@@ -484,7 +484,8 @@ def do_calculate_totals(assignment, course_id, course_name, sid, db, settings):
     return results
 
 
-def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, timezoneoffset, db, settings):
+def do_autograde(assignment, course_id, course_name, sid, question_name, enforce_deadline, tzHourOffset, tzMinuteOffset,
+                 db, settings):
     start = datetime.datetime.now()
     if enforce_deadline == 'true':
         # get the deadline associated with the assignment
@@ -492,8 +493,8 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
     else:
         deadline = None
 
-    if timezoneoffset and deadline:
-        deadline = deadline + datetime.timedelta(hours=int(timezoneoffset))
+    if tzHourOffset and tzMinuteOffset and deadline:
+        deadline = deadline + datetime.timedelta(hours=int(tzHourOffset), minutes=int(tzMinuteOffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
     student_rows = _get_students(course_id, sid, db)
@@ -601,7 +602,7 @@ def _change_e_factor(flashcard, q):
     return flashcard
 
 
-def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_delta):
+def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tzHourOffset, tzMinuteOffset):
     now_local = now - datetime.timedelta(hours=tz_delta)
     lastQuestion = db(db.questions.id == int(qid)).select().first()
     chapter_label, sub_chapter_label = lastQuestion.topic.split('/')
@@ -634,7 +635,8 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
     flashcard = _get_next_i_interval(flashcard, q)
     flashcard.next_eligible_date = (now_local + datetime.timedelta(days=flashcard.i_interval)).date()
     flashcard.last_completed = now
-    flashcard.tz_offset = tz_delta
+    flashcard.tz_offset_hours = tzHourOffset
+    flashcard.tz_offset_minutes = tzMinuteOffset
     flashcard.q = q
     flashcard.update_record()
 
@@ -652,6 +654,8 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, tz_de
         available_flashcards=len(presentable_flashcards),
         start_practice=flashcard.last_presented,
         end_practice=now,
+        tz_offset_hours=tzHourOffset,
+        tz_offset_minutes=tzMinuteOffset
     )
     db.commit()
 
