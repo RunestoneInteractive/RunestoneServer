@@ -69,8 +69,7 @@ def index():
      points_received,
      total_possible_points,
      flashcard_creation_method) = _get_practice_data(auth.user,
-                                                     int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-                                                     int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0)
+                                                     int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
     return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
                 user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades,
@@ -93,7 +92,7 @@ def index():
 
 
 # Get practice data for this student and create flashcards for them is they are newcomers.
-def _get_practice_data(user, tzHourOffset, tzMinuteOffset):
+def _get_practice_data(user, timezoneoffset):
     practice_message1 = ""
     practice_message2 = ""
     practice_completion_count = 0
@@ -113,7 +112,7 @@ def _get_practice_data(user, tzHourOffset, tzMinuteOffset):
     interleaving = 0
 
     now = datetime.datetime.utcnow()
-    now_local = now - datetime.timedelta(hours=tzHourOffset, minutes=tzMinuteOffset)
+    now_local = now - datetime.timedelta(minutes=timezoneoffset)
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == user.course_id).select().first()
@@ -191,8 +190,7 @@ def _get_practice_data(user, tzHourOffset, tzMinuteOffset):
                                     last_presented=now - datetime.timedelta(1),
                                     last_completed=now - datetime.timedelta(1),
                                     creation_time=now,
-                                    tz_offset_hours=tzHourOffset,
-                                    tz_offset_minutes=tzMinuteOffset
+                                    timezoneoffset=timezoneoffset
                                 )
 
             # Retrieve all the falshcards created for this user in the current course and order them by their order of
@@ -345,14 +343,13 @@ def autograde():
     question_name = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
     assignment_name = request.vars.assignment
-    tzHourOffset = session.tzHourOffset if 'tzHourOffset' in session else None
-    tzMinuteOffset = session.tzMinuteOffset if 'tzMinuteOffset' in session else None
+    timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
 
     assignment = db(
         (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
     if assignment:
         count = do_autograde(assignment, auth.user.course_id, auth.user.course_name, sid, question_name,
-                             enforce_deadline, tzHourOffset, tzMinuteOffset, db, settings)
+                             enforce_deadline, timezoneoffset, db, settings)
         return json.dumps({'message': "autograded {} items".format(count)})
     else:
         return json.dumps({'success': False, 'message': "Select an assignment before trying to autograde."})
@@ -370,10 +367,10 @@ def record_grade():
     comment = request.vars.get('comment', None)
     if score_str != "" or ('comment' in request.vars and comment != ""):
         try:
-            db.question_grades.update_or_insert(( \
-                        (db.question_grades.sid == request.vars['sid']) \
-                        & (db.question_grades.div_id == request.vars['acid']) \
-                        & (db.question_grades.course_name == auth.user.course_name) \
+            db.question_grades.update_or_insert((
+                        (db.question_grades.sid == request.vars['sid'])
+                        & (db.question_grades.div_id == request.vars['acid'])
+                        & (db.question_grades.course_name == auth.user.course_name)
                 ),
                 sid=request.vars['sid'],
                 div_id=request.vars['acid'],
@@ -654,8 +651,7 @@ def checkanswer():
                         db,
                         settings,
                         now,
-                        int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-                        int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0)
+                        int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
@@ -692,10 +688,6 @@ def practice():
     if feedback_saved is None:
         feedback_saved = ""
 
-    print("'tzHourOffset' in session:", 'tzHourOffset' in session)
-    print("session.tzHourOffset:", session.tzHourOffset)
-    print("'tzMinuteOffset' in session:", 'tzMinuteOffset' in session)
-    print("session.tzMinuteOffset:", session.tzMinuteOffset)
     (now,
      now_local,
      message1,
@@ -715,8 +707,7 @@ def practice():
      points_received,
      total_possible_points,
      flashcard_creation_method) = _get_practice_data(auth.user,
-                                                     int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-                                                     int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0)
+                                                     int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
     if message1 != "":
         session.flash = message1 + " " + message2
@@ -796,8 +787,7 @@ def practice():
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
         flashcard.last_presented = now
-        flashcard.tz_offset_hours = int(session.tzHourOffset) if 'tzHourOffset' in session else 0
-        flashcard.tz_offset_minutes = int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0
+        flashcard.timezoneoffset = int(session.timezoneoffset) if 'timezoneoffset' in session else 0
         flashcard.update_record()
 
     else:
@@ -881,8 +871,7 @@ def like_dislike():
             course_name=course_name,
             like_practice=likeVal,
             response_time=datetime.datetime.utcnow(),
-            tz_offset_hours=int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-            tz_offset_minutes=int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0
+            timezoneoffset=int(session.timezoneoffset) if 'timezoneoffset' in session else 0
         )
         redirect(URL('practice'))
     session.flash = "Sorry, your request was not saved. Please login and try again."
@@ -905,8 +894,7 @@ def practice_feedback():
             course_name=course_name,
             feedback=feedback,
             response_time=datetime.datetime.utcnow(),
-            tz_offset_hours=int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-            tz_offset_minutes=int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0
+            timezoneoffset=int(session.timezoneoffset) if 'timezoneoffset' in session else 0
         )
         redirect(URL('practice', vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."

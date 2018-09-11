@@ -306,24 +306,18 @@ def getuser():
             res = {'email': auth.user.email, 'nick': auth.user.username,
                    'cohortId': auth.user.cohort_id, 'donated': auth.user.donated,
                    'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id)}
-            print("getuser: request.vars.tzHourOffset:", request.vars.tzHourOffset)
-            print("getuser: request.vars.tzMinuteOffset:", request.vars.tzMinuteOffset)
-            session.tzHourOffset = request.vars.tzHourOffset
-            session.tzMinuteOffset = request.vars.tzMinuteOffset
-            logger.debug("setting timezone offset in session %s", session.tzHourOffset, ":", session.tzMinuteOffse)
+            session.timezoneoffset = request.vars.timezoneoffset
+            logger.debug("setting timezone offset in session %s", session.timezoneoffset, "minutes.")
         except:
             res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
-    logger.debug("returning login info: %s",res)
+    logger.debug("returning login info: %s", res)
     return json.dumps([res])
 
 def set_tz_offset():
-    print("set_tz_offset: request.vars.tzHourOffset:", request.vars.tzHourOffset)
-    print("set_tz_offset: request.vars.tzMinuteOffset:", request.vars.tzMinuteOffset)
-    session.tzHourOffset = request.vars.tzHourOffset
-    session.tzMinuteOffset = request.vars.tzMinuteOffset
-    logger.debug("setting timezone offset in session %s", session.tzHourOffset, ":", session.tzMinuteOffse)
+    session.timezoneoffset = request.vars.timezoneoffset
+    logger.debug("setting timezone offset in session %s", session.timezoneoffset, "minutes.")
     return "done"
 
 
@@ -406,8 +400,7 @@ def updatelastpage():
                                                  lastPageSubchapter)
             if len(questions) > 0:
                 now = datetime.datetime.utcnow()
-                now_local = now - datetime.timedelta(hours=int(session.tzHourOffset),
-                                                     minutes=int(session.tzMinuteOffset))
+                now_local = now - datetime.timedelta(minutes=int(session.timezoneoffset))
                 existing_flashcards = db((db.user_topic_practice.user_id == auth.user.id) &
                                          (db.user_topic_practice.course_name == auth.user.course_name) &
                                          (db.user_topic_practice.chapter_label == lastPageChapter) &
@@ -430,8 +423,7 @@ def updatelastpage():
                         last_presented=now - datetime.timedelta(1),
                         last_completed=now - datetime.timedelta(1),
                         creation_time=now,
-                        tz_offset_hours=int(session.tzHourOffset) if 'tzHourOffset' in session else 0,
-                        tz_offset_minutes=int(session.tzMinuteOffset) if 'tzMinuteOffset' in session else 0
+                        timezoneoffset=int(session.timezoneoffset) if 'timezoneoffset' in session else 0
                     )
                 if completionFlag == '0' and not existing_flashcards.isempty():
                     existing_flashcards.delete()
