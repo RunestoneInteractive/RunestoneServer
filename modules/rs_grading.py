@@ -503,7 +503,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         deadline = None
 
     if timezoneoffset and deadline:
-        deadline = deadline + datetime.timedelta(hours=int(timezoneoffset))
+        deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
     student_rows = _get_students(course_id, sid, db)

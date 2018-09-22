@@ -204,7 +204,7 @@ def get_problem():
 
     offset = datetime.timedelta(0)
     if session.timezoneoffset and deadline:
-        offset = datetime.timedelta(hours=int(session.timezoneoffset))
+        offset = datetime.timedelta(hours=float(session.timezoneoffset))
         logger.debug("setting offset %s %s", offset, deadline + offset)
 
     query = (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (
@@ -411,7 +411,7 @@ def checkanswer():
         now = datetime.datetime.utcnow()
         # Use the autograding function to update the flashcard's e-factor and i-interval.
         do_check_answer(sid, course_name, qid, username, q, db, settings, now,
-                        datetime.timedelta(hours=int(session.timezoneoffset)))
+                        datetime.timedelta(hours=float(session.timezoneoffset)))
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
     session.flash = "Sorry, your score was not saved. Please try submitting your answer again."
@@ -438,7 +438,7 @@ def practice():
 
     if not session.timezoneoffset:
         session.timezoneoffset = 0
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=float(session.timezoneoffset))
 
     # Calculates the remaining days to the end of the semester. If your semester ends at any time other than April 19,
     # 2018, please replace it.

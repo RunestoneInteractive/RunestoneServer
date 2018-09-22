@@ -271,7 +271,7 @@ def add_practice_items():
     data = json.loads(request.vars.data)
     string_data = [x.encode('UTF8') for x in data]
 
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=int(session.timezoneoffset))
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=float(session.timezoneoffset))
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
