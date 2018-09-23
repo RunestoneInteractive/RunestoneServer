@@ -494,7 +494,7 @@ def do_autograde(assignment, course_id, course_name, sid, question_name, enforce
         deadline = None
 
     if timezoneoffset and deadline:
-        deadline = deadline + datetime.timedelta(minutes=int(timezoneoffset))
+        deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
         logger.debug("ASSIGNMENT DEADLINE OFFSET %s",deadline)
 
     student_rows = _get_students(course_id, sid, db)
@@ -603,7 +603,7 @@ def _change_e_factor(flashcard, q):
 
 
 def do_check_answer(sid, course_name, qid, username, q, db, settings, now, timezoneoffset):
-    now_local = now - datetime.timedelta(minutes=timezoneoffset)
+    now_local = now - datetime.timedelta(hours=timezoneoffset)
     lastQuestion = db(db.questions.id == int(qid)).select().first()
     chapter_label, sub_chapter_label = lastQuestion.topic.split('/')
 

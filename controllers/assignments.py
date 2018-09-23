@@ -69,7 +69,7 @@ def index():
      points_received,
      total_possible_points,
      flashcard_creation_method) = _get_practice_data(auth.user,
-                                                     int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
+                                                     float(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
     return dict(student=student, course_id=auth.user.course_id, course_name=auth.user.course_name,
                 user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades,
@@ -112,13 +112,13 @@ def _get_practice_data(user, timezoneoffset):
     interleaving = 0
 
     now = datetime.datetime.utcnow()
-    now_local = now - datetime.timedelta(minutes=timezoneoffset)
+    now_local = now - datetime.timedelta(hours=timezoneoffset)
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == user.course_id).select().first()
 
     practice_settings = db(db.course_practice.course_name == user.course_name)
-    if practice_settings.isempty():
+    if practice_settings.isempty() or practice_settings.select().first().end_date is None:
         practice_message1 = "Practice tool is not set up for this course yet."
         practice_message2 = "Please ask your instructor to set it up."
     else:
@@ -417,7 +417,7 @@ def get_problem():
 
     offset = datetime.timedelta(0)
     if session.timezoneoffset and deadline:
-        offset = datetime.timedelta(hours=int(session.timezoneoffset))
+        offset = datetime.timedelta(hours=float(session.timezoneoffset))
         logger.debug("setting offset %s %s", offset, deadline + offset)
 
     query = (db.code.acid == request.vars.acid) & (db.code.sid == request.vars.sid) & (
@@ -651,7 +651,7 @@ def checkanswer():
                         db,
                         settings,
                         now,
-                        int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
+                        float(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
         # Since the user wants to continue practicing, continue with the practice action.
         redirect(URL('practice'))
@@ -707,7 +707,7 @@ def practice():
      points_received,
      total_possible_points,
      flashcard_creation_method) = _get_practice_data(auth.user,
-                                                     int(session.timezoneoffset) if 'timezoneoffset' in session else 0)
+                                                     float(session.timezoneoffset) if 'timezoneoffset' in session else 0)
 
     if message1 != "":
         session.flash = message1 + " " + message2
@@ -787,7 +787,7 @@ def practice():
         flashcard.question_name = question.name
         # This is required to only check answers after this timestamp in do_check_answer().
         flashcard.last_presented = now
-        flashcard.timezoneoffset = int(session.timezoneoffset) if 'timezoneoffset' in session else 0
+        flashcard.timezoneoffset = float(session.timezoneoffset) if 'timezoneoffset' in session else 0
         flashcard.update_record()
 
     else:
@@ -871,7 +871,7 @@ def like_dislike():
             course_name=course_name,
             like_practice=likeVal,
             response_time=datetime.datetime.utcnow(),
-            timezoneoffset=int(session.timezoneoffset) if 'timezoneoffset' in session else 0
+            timezoneoffset=float(session.timezoneoffset) if 'timezoneoffset' in session else 0
         )
         redirect(URL('practice'))
     session.flash = "Sorry, your request was not saved. Please login and try again."
@@ -894,7 +894,7 @@ def practice_feedback():
             course_name=course_name,
             feedback=feedback,
             response_time=datetime.datetime.utcnow(),
-            timezoneoffset=int(session.timezoneoffset) if 'timezoneoffset' in session else 0
+            timezoneoffset=float(session.timezoneoffset) if 'timezoneoffset' in session else 0
         )
         redirect(URL('practice', vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."

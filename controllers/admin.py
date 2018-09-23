@@ -499,7 +499,7 @@ def add_practice_items():
     string_data = [x.encode('UTF8') for x in data]
 
     now = datetime.datetime.utcnow()
-    now_local = now - datetime.timedelta(hours=int(session.timezoneoffset))
+    now_local = now - datetime.timedelta(hours=float(session.timezoneoffset))
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
@@ -543,7 +543,7 @@ def add_practice_items():
                                 last_presented=now.date() - datetime.timedelta(1),
                                 last_completed=now.date() - datetime.timedelta(1),
                                 creation_time=now,
-                                tz_offset=int(session.timezoneoffset)
+                                tz_offset=float(session.timezoneoffset)
                             )
             else:
                 if not subchapterTaught.isempty():
