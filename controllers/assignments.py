@@ -193,7 +193,7 @@ def _get_practice_data(user, timezoneoffset):
                                     timezoneoffset=timezoneoffset
                                 )
 
-            # Retrieve all the falshcards created for this user in the current course and order them by their order of
+            # Retrieve all the flashcards created for this user in the current course and order them by their order of
             # creation.
             flashcards = db((db.user_topic_practice.course_name == user.course_name) &
                             (db.user_topic_practice.user_id == user.id)).select(orderby=db.user_topic_practice.id)
