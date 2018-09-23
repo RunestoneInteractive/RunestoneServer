@@ -12,16 +12,18 @@ course=db(db.courses.course_name == userinfo['course']).select().first()
 do_autograde(assignment,
              course.id,
              course.course_name,
-             sid = None,
-             question_name = None,
-             enforce_deadline = userinfo['enforce_deadline'],
-             timezoneoffset = 5,
+             sid=None,
+             question_name=None,
+             enforce_deadline=userinfo['enforce_deadline'],
+             # I don't know what this is for, but if you want to set this to Michigan timezone offset, it should be 4
+             # not 5.
+             timezoneoffset=240,
              db=db,
              settings=settings)
 
 do_calculate_totals(assignment,
                     course.id,
                     course.course_name,
-                    sid = None,
-                    db = db,
-                    settings = settings)
+                    sid=None,
+                    db=db,
+                    settings=settings)

@@ -307,17 +307,17 @@ def getuser():
                    'cohortId': auth.user.cohort_id, 'donated': auth.user.donated,
                    'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id)}
             session.timezoneoffset = request.vars.timezoneoffset
-            logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+            logger.debug("setting timezone offset in session %s", session.timezoneoffset, "hours.")
         except:
             res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
-    logger.debug("returning login info: %s",res)
+    logger.debug("returning login info: %s", res)
     return json.dumps([res])
 
 def set_tz_offset():
     session.timezoneoffset = request.vars.timezoneoffset
-    logger.debug("setting timezone offset in session %s", session.timezoneoffset)
+    logger.debug("setting timezone offset in session %s", session.timezoneoffset, "hours.")
     return "done"
 
 
@@ -400,7 +400,7 @@ def updatelastpage():
                                                  lastPageSubchapter)
             if len(questions) > 0:
                 now = datetime.datetime.utcnow()
-                now_local = now - datetime.timedelta(hours=int(session.timezoneoffset))
+                now_local = now - datetime.timedelta(hours=float(session.timezoneoffset))
                 existing_flashcards = db((db.user_topic_practice.user_id == auth.user.id) &
                                          (db.user_topic_practice.course_name == auth.user.course_name) &
                                          (db.user_topic_practice.chapter_label == lastPageChapter) &
@@ -423,7 +423,7 @@ def updatelastpage():
                         last_presented=now - datetime.timedelta(1),
                         last_completed=now - datetime.timedelta(1),
                         creation_time=now,
-                        tz_offset=int(session.timezoneoffset)
+                        timezoneoffset=float(session.timezoneoffset) if 'timezoneoffset' in session else 0
                     )
                 if completionFlag == '0' and not existing_flashcards.isempty():
                     existing_flashcards.delete()
