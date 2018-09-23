@@ -426,7 +426,7 @@
             var url = $(this).attr('href');
             // This means that they clicked "Done! Ask me another question!" before clicking "Check me". So we should
             // click "Check me" for them.
-            if (!check_me_clicked && !$('[id*="_feedback"]').length) {
+            if (!check_me_clicked && !$('[id*="_feedback"]').text().length) {
                 if ($('button:contains(\"Check Me\")').length) {
                     $('button:contains(\"Check Me\")').click();
                 }
