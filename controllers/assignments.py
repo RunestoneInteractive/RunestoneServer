@@ -61,6 +61,8 @@ def index():
      remaining_days,
      max_days,
      max_questions,
+     day_points,
+     question_points,
      presentable_flashcards,
      available_flashcards_num,
      practiced_today_count,
@@ -99,6 +101,8 @@ def _get_practice_data(user, timezoneoffset):
     remaining_days = 0
     max_days = 0
     max_questions = 0
+    day_points = 0
+    question_points = 0
     presentable_flashcards = []
     available_flashcards_num = 0
     practiced_today_count = 0
@@ -129,6 +133,8 @@ def _get_practice_data(user, timezoneoffset):
         remaining_days = (practice_settings.end_date - now_local.date()).days
         max_days = practice_settings.max_practice_days
         max_questions = practice_settings.max_practice_questions
+        day_points = practice_settings.day_points
+        question_points = practice_settings.question_points
         # Define how many questions you expect your students practice every day.
         questions_to_complete_day = practice_settings.questions_to_complete_day
         practice_graded = practice_settings.graded
@@ -225,18 +231,15 @@ def _get_practice_data(user, timezoneoffset):
                                                                                                      now.day,
                                                                                                      0, 0, 0,
                                                                                                      0))).count()
-            if spacing == 1:
-                practice_completion_count = _get_practice_days_completed(user.id, user.course_name, spacing)
-            else:
-                practice_completion_count = _get_practice_questions_completed(user.id, user.course_name, spacing)
+            practice_completion_count = _get_practice_completion(user.id, user.course_name, spacing)
 
             if practice_graded == 1:
                 if spacing == 1:
                     total_possible_points = practice_settings.day_points * max_days
-                    points_received = practice_settings.day_points * practice_completion_count
+                    points_received = day_points * practice_completion_count
                 else:
                     total_possible_points = practice_settings.question_points * max_questions
-                    points_received = practice_settings.question_points * practice_completion_count
+                    points_received = question_points * practice_completion_count
 
             # Calculate the number of questions left for the student to practice today to get the completion point.
             if spacing == 1:
@@ -256,6 +259,8 @@ def _get_practice_data(user, timezoneoffset):
             remaining_days,
             max_days,
             max_questions,
+            day_points,
+            question_points,
             presentable_flashcards,
             available_flashcards_num,
             practiced_today_count,
@@ -615,15 +620,14 @@ def _get_student_practice_grade(sid, course_name):
               (db.practice_grades.course_name==course_name)).select().first()
 
 
-def _get_practice_days_completed(user_id, course_name, spacing):
-    return db((db.user_topic_practice_Completion.course_name == course_name) &
-       (db.user_topic_practice_Completion.user_id == user_id)).count()
-
-def _get_practice_questions_completed(user_id, course_name, spacing):
+def _get_practice_completion(user_id, course_name, spacing):
+    if spacing == 1:
+        return db((db.user_topic_practice_Completion.course_name == course_name) &
+                  (db.user_topic_practice_Completion.user_id == user_id)).count()
     return db((db.user_topic_practice_log.course_name == course_name) &
-                                       (db.user_topic_practice_log.user_id == user_id) &
-                                       (db.user_topic_practice_log.q != 0) &
-                                       (db.user_topic_practice_log.q != -1)).count()
+              (db.user_topic_practice_log.user_id == user_id) &
+              (db.user_topic_practice_log.q != 0) &
+              (db.user_topic_practice_log.q != -1)).count()
 
 # Called when user clicks "I'm done" button.
 def checkanswer():
@@ -699,6 +703,8 @@ def practice():
      remaining_days,
      max_days,
      max_questions,
+     day_points,
+     question_points,
      presentable_flashcards,
      available_flashcards_num,
      practiced_today_count,
@@ -809,14 +815,16 @@ def practice():
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
                 course_settings = _get_course_practice_record(auth.user.course_name)
 
+                practice_completion_count = _get_practice_completion(auth.user.id,
+                                                                     auth.user.course_name,
+                                                                     spacing)
                 if spacing == 1:
-                    practice_completion_count = _get_practice_days_completed(auth.user.id,
-                                                                             auth.user.course_name,
-                                                                             spacing)
+                    total_possible_points = day_points * max_days
+                    points_received = day_points * practice_completion_count
                 else:
-                    practice_completion_count = _get_practice_questions_completed(auth.user.id,
-                                                                                  auth.user.course_name,
-                                                                                  spacing)
+                    total_possible_points = question_points * max_questions
+                    points_received = question_points * practice_completion_count
+
                 if lti_record and practice_grade and course_settings:
                     if spacing == 1:
                         send_lti_grade(assignment_points=max_days,
