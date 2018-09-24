@@ -543,7 +543,7 @@ def add_practice_items():
                                 last_presented=now.date() - datetime.timedelta(1),
                                 last_completed=now.date() - datetime.timedelta(1),
                                 creation_time=now,
-                                tz_offset=float(session.timezoneoffset)
+                                timezoneoffset=float(session.timezoneoffset)
                             )
             else:
                 if not subchapterTaught.isempty():
