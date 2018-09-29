@@ -289,6 +289,7 @@ def practice():
 
     already_exists = 0
     any_practice_settings = db(db.course_practice.auth_user_id == auth.user.id)
+    practice_settings = any_practice_settings(db.course_practice.course_name == course.course_name)
     # If the instructor has created practice for other courses, don't randomize spacing and interleaving for the new
     # course.
     if not any_practice_settings.isempty():
@@ -296,13 +297,11 @@ def practice():
         spacing = any_practice_settings.spacing
         interleaving = any_practice_settings.interleaving
 
-        #  Now checking to see if there are practice settigns for this course.
+        #  Now checking to see if there are practice settings for this course.
         #  If not, stick with the defaults.
-        practice_settings = db((db.course_practice.auth_user_id == auth.user.id) &
-                               (db.course_practice.course_name == course.course_name))
         if (not practice_settings.isempty() and
-                practice_settings.select().first().end_date != "" and
-                practice_settings.select().first().end_date is not None):
+                practice_settings.select().first().end_date is not None and
+                practice_settings.select().first().end_date != ""):
             practice_setting = practice_settings.select().first()
             start_date = practice_setting.start_date
             end_date = practice_setting.end_date
@@ -321,6 +320,7 @@ def practice():
             spacing = 1
         if randint(0, 1) == 1:
             interleaving = 1
+    if practice_settings.isempty():
         db.course_practice.insert(auth_user_id=auth.user.id,
                                   course_name=course.course_name,
                                   start_date=start_date,
