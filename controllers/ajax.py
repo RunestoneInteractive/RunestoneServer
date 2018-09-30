@@ -307,17 +307,17 @@ def getuser():
                    'cohortId': auth.user.cohort_id, 'donated': auth.user.donated,
                    'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id)}
             session.timezoneoffset = request.vars.timezoneoffset
-            logger.debug("setting timezone offset in session %s", session.timezoneoffset, "hours.")
+            logger.debug("setting timezone offset in session %s hours" % session.timezoneoffset)
         except:
             res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
-    logger.debug("returning login info: %s", res)
+    logger.debug("returning login info: %s" % res)
     return json.dumps([res])
 
 def set_tz_offset():
     session.timezoneoffset = request.vars.timezoneoffset
-    logger.debug("setting timezone offset in session %s", session.timezoneoffset, "hours.")
+    logger.debug("setting timezone offset in session %s hours" % session.timezoneoffset)
     return "done"
 
 
