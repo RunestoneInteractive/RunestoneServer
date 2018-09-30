@@ -38,15 +38,232 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-10">
+    <div id="ShowPracticeSettingsDIV" style="margin-top: 25px; margin-bottom: 25px;
+        {{if complete == 1:}}
+         display:block;
+        {{ else: }}
+         display:none;
+        {{ pass }}
+            "
+    >
+        <button id="ShowPracticeSettingsA" class="btn btn-primary mb-2">Show Practice Settings</button>
+    </div>
+    <p>We're a group of researchers at the University of Michigan who have developed this practice tool. We are experimenting 
+        with some alternative schedules for which questions to ask when, and are randomizing instructors to different experimental conditions. So, don't be alarmed if you
+        see some different settings in your course in comparison with courses taught by other instructors.
+    </p>
+    <form id="PracticeSettingsForm" class="needs-validation" style="margin-top: 25px;
+        {{if complete == 1:}}
+         display:none;
+        {{ else: }}
+         display:block;
+        {{ pass }}
+            "
+          action="/{{=request.application}}/admin/practice" method="post">
+      <div class="form-group">
+        <label for="StartDateInput">Choose when students should start their practice. We recommend picking a
+            start date sometime after students have completed enough material for review to make sense, usually two
+            weeks after the beginning of the semester.</label>
+        <input type="date" class="form-control" id="StartDateInput" name="StartDate" required
+               min="{{=course_start_date}}"
+        {{if start_date != "":}}
+               value={{=start_date}}
+        {{ pass }}
+        >
+        {{if error_start_date == 1:}}
+        <div class="invalid-feedback">
+            Please specify the start date in the right format. It cannot be earlier than the start date of the course.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group">
+        <label for="EndDateInput">Choose when students should end their practice:</label>
+        <input type="date" class="form-control" id="EndDateInput" name="EndDate" required
+        {{if end_date != "":}}
+               value={{=end_date}}
+        {{ pass }}
+        >
+        {{if error_end_date == 1:}}
+        <div class="invalid-feedback">
+            Please specify the end date in the right format. It cannot be earlier than the start date of the practice.
+        </div>
+        {{ pass }}
+      </div>
+      <div class="form-group">
+        <label for="gradedInput">Choose whether students should receive points for practicing:</label>
+        <select class="form-control" id="gradedInput" name="graded">
+            <option value="1"
+        {{if graded == 1:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Practicing should be graded automatically.
+            </option>
+            <option value="0"
+        {{if graded == 0:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Practicing should not be graded.
+            </option>
+        </select>
+        {{if error_graded == 1:}}
+        <div class="invalid-feedback">
+            Please specify whether students should receive points for practicing.
+        </div>
+        {{ pass }}
+      </div>
+      {{if spacing == 1:}}
+      <div class="form-group" id="maxPracticeDaysContainer">
+        <label for="maxPracticeDaysInput" id="maxPracticeDaysLabel">Enter the
+        {{if graded == 1:}}
+            maximum number of days of practice students can get points for:
+        {{ else: }}
+            recommended number of days of practice for each student:
+        {{ pass }}
+        </label>
+        <input type="number" class="form-control" id="maxPracticeDaysInput" name="maxPracticeDays" required
+        {{if max_practice_days != "":}}
+               value={{=max_practice_days}}
+        {{ pass }}
+        >
+        {{if error_max_practice_days == 1:}}
+        <div class="invalid-feedback">
+            Please specify the max number of days of practice in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      {{ else: }}
+      <div class="form-group" id="maxPracticeQuestionsContainer">
+        <label for="maxPracticeQuestionsInput" id="maxPracticeQuestionsLabel">Enter the
+        {{if graded == 1:}}
+            maximum number of questions students can get points for over the semester:
+        {{ else: }}
+            recommended number of questions for each student over the semester:
+        {{ pass }}
+        </label>
+        <input type="number" class="form-control" id="maxPracticeQuestionsInput" name="maxPracticeQuestions" required
+        {{if max_practice_questions != "":}}
+               value={{=max_practice_questions}}
+        {{ pass }}
+        >
+        {{if error_max_practice_questions == 1:}}
+        <div class="invalid-feedback">
+            Please specify the max number of questions in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      {{ pass }}
+      {{if spacing == 1:}}
+      <div class="form-group" id="pointsPerDayContainer"
+        {{if graded == 0:}}
+           style="display: none;"
+        {{ pass }}
+      >
+        <label for="pointsPerDayInput">Enter the number of points for completing each day:</label>
+        <input type="number" class="form-control" id="pointsPerDayInput" name="pointsPerDay" step="0.01" min="0"
+        {{if graded == 1:}}
+               required
+        {{ pass }}
+        {{if day_points != "":}}
+               value={{=day_points}}
+        {{ pass }}
+        >
+        {{if error_day_points == 1:}}
+        <div class="invalid-feedback">
+            Please specify the number of points in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      {{ else: }}
+      <div class="form-group" id="pointsPerQuestionContainer"
+        {{if graded == 0:}}
+           style="display: none;"
+        {{ pass }}
+      >
+        <label for="pointsPerQuestionInput">Enter the number of points for answering each question:</label>
+        <input type="number" class="form-control" id="pointsPerQuestionInput" name="pointsPerQuestion" step="0.01"
+               min="0"
+        {{if graded == 1:}}
+               required
+        {{ pass }}
+        {{if question_points != "":}}
+               value={{=question_points}}
+        {{ pass }}
+        >
+        {{if error_question_points == 1:}}
+        <div class="invalid-feedback">
+            Please specify the number of points for in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      {{ pass }}
+      {{if spacing == 1:}}
+      <div class="form-group" id="questionsPerDayContainer">
+        <label for="questionsPerDayInput" id="questionsPerDayLabel">Enter the
+        {{if graded == 1:}}
+            number of questions to get the points for each day:
+        {{ else: }}
+            recommended number of questions to answer on each day:
+        {{ pass }}
+        </label>
+        <input type="number" class="form-control" id="questionsPerDayInput" name="questionsPerDay" required
+        {{if questions_to_complete_day != "":}}
+               value={{=questions_to_complete_day}}
+        {{ pass }}
+        >
+        {{if error_questions_to_complete_day == 1:}}
+        <div class="invalid-feedback">
+            Please specify the number of questions in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      {{ pass }}
+      <div class="form-group">
+        <label for="flashcardsCreationTypeInput">Choose how topic flashcards should be generated for students:</label>
+        <select class="form-control" id="flashcardsCreationTypeInput" name="flashcardsCreationType">
+            <option value="0"
+        {{if flashcard_creation_method == 0:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Self-paced (when student marks a page complete)
+            </option>
+            <option value="1"
+        {{if flashcard_creation_method == 1:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Whenever a page is assigned in any reading assignment and the reading assignment deadline passes
+            </option>
+            <option value="2"
+        {{if flashcard_creation_method == 2:}}
+               selected="selected"
+        {{ pass }}
+            >
+                Manually by the instructor
+            </option>
+        </select>
+        {{if error_flashcard_creation_method == 1:}}
+        <div class="invalid-feedback">
+            Please specify how topic flashcards should be generated in the right format.
+        </div>
+        {{ pass }}
+      </div>
+      <input style="margin-bottom: 25px;" class="btn btn-success mb-2" type="submit" value="Save Practice Settings">
+    </form>
+    {{if toc != "":}}
     <h4>Choose the sections taught, so that students can practice them.</h4>
     <div id="search-tree-practice-picker-container">
       <input id="search-tree-practice-picker" type="text">
     </div>
     <div id="tree-practice-picker" style="margin-bottom: 40px;"></div>
+    {{ pass }}
   </div>
   <div class="col-md-1">
       <!-- <div style="margin-top:100px">
-        <a href="/{{=request.application}}/admin/add_practice_items" type="button" class="btn btn-success">Add selected sections.</a>
+        <a href="/{{=request.application}}/admin/add_practice_items" type="button" class="btn btn-success">
+        Add selected sections.</a>
       </div>-->
   </div>
 </div>
@@ -58,6 +275,37 @@ $(function () {
     $(".dashboardnav").removeClass("active");
     $("#practicetab").addClass("active");
 
+    $("#gradedInput").change(function() {
+      if ($( this ).val() == 0) {
+        {{ if spacing == 1: }}
+          $("#maxPracticeDaysLabel").text("Enter the recommended number of days of practice for each student:");
+          $("#questionsPerDayLabel").text('Enter the recommended number of questions to answer on each day:');
+          $("#pointsPerDayContainer").hide('slow');
+        {{ else: }}
+          $("#maxPracticeQuestionsLabel").text("Enter the recommended number of questions for each student over the semester:");
+          $("#pointsPerQuestionContainer").hide('slow');
+        {{ pass }}
+      }
+      else {
+        {{ if spacing == 1: }}
+          $("#maxPracticeDaysLabel").text("Enter the maximum number of days of practice students can get points for:");
+          $("#questionsPerDayLabel").text('Enter the number of questions to get the points for each day:');
+          $("#pointsPerDayContainer").show('slow');
+        {{ else: }}
+          $("#maxPracticeQuestionsLabel").text("Enter the maximum number of questions students can get points for over the semester:");
+          $("#pointsPerQuestionContainer").show('slow');
+        {{ pass }}
+      }
+    });
+
+{{if complete == 1:}}
+    $( "#ShowPracticeSettingsA" ).click(function() {
+      $( "#ShowPracticeSettingsDIV" ).hide('slow');
+      $( "#PracticeSettingsForm" ).show('slow');
+    });
+{{ pass }}
+
+    {{if toc != "":}}
     var practice_picker = $('#tree-practice-picker');
 
     if (eBookConfig.toc.practice_picker.length != 0) {
@@ -82,6 +330,7 @@ $(function () {
         $("#search-tree-practice-picker-container").hide();
         $("#tree-practice-picker").text("None of the sections contain any question eligible for practice! Please add ':practice: 1' tag to the appropriate questions in your .rst files and rebuild your textbook.");
     }
+    {{ pass }}
 });
 </script>
 

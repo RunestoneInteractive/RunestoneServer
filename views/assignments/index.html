@@ -6,6 +6,70 @@
 	<h2>Student Progress for {{=course_name}}</h2>
 	<div class="col-md-7">
 
+		<div class="dash-section">
+			<div class="dash-section-header">
+				Grades
+			</div>
+            {{ if practice_graded == 1: }}
+			<div class="dash-section-content scroll">
+             {{ if practice_message1 != "": }}
+                 <p>{{=practice_message1}}</p>
+                 <p>{{=practice_message2}}</p>
+             {{else:}}
+                 {{ if spacing == 1: }}
+                     {{ if practice_today_left > 0: }}
+                        <p>{{=practice_today_left}} question{{='' if practice_today_left == 1 else 's'}} left to get
+                            today's point of practicing.
+                        </p>
+                     {{ else: }}
+                        <p>You've already got today's point of practicing.</p>
+                     {{ pass }}
+                     <p>So far, you've received {{=points_received}} point{{='' if points_received == 1 else 's'}} out
+                         of {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for
+                         completing {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}}
+                         out of {{=max_days}} days of your review practice.
+                     </p>
+                 {{ else: }}
+                     <p>So far, you've received {{=points_received}} point{{='' if points_received == 1 else 's'}} out
+                         of {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for
+                         answering {{=practice_completion_count}}
+                         question{{='' if practice_completion_count == 1 else 's'}} out
+                         of {{=max_questions}} questions to complete your practice.
+                         </p>
+                 {{ pass }}
+                 {{ if remaining_days > 0: }}
+                    <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
+                 {{ else: }}
+                    <p>The practicing period this semester is over, though you can continue practicing
+                        without receiving any extra points.
+                    </p>
+                 {{ pass }}
+             {{ pass }}
+            </div>
+            {{ pass }}
+            <div class="dash-section-content scroll">
+				<table width="90%">
+					<thead>
+						<tr>
+							<td>Assignment</td>
+							<td>Due Date</td>
+							<td>Grade</td>
+							<td>Average</td>
+						</tr>
+					</thead>
+					<tbody>
+						{{ for k in sorted(assignments.keys()): }}
+						<tr>
+							<td>{{=k}}</td>
+							<td>{{=assignments[k]["due_date"]}}</td>
+							<td>{{=assignments[k]["score"]}}</td>
+							<td>{{=assignments[k]["class_average"]}}</td>
+						</tr>
+						{{ pass }}
+					</tbody>
+				</table>
+			</div>
+		</div>
 		<div class="dash-section" id="book-completion">
 			<div class="dash-section-header">
 				Book Completion
@@ -31,33 +95,6 @@
 					$(this).parent().children(".chapter-detail").toggleClass("dhide");
 				});
 				</script>
-			</div>
-		</div>
-		<div class="dash-section">
-			<div class="dash-section-header">
-				Grades
-			</div>
-			<div class="dash-section-content scroll">
-				<table width="90%">
-					<thead>
-						<tr>
-							<td>Assignment</td>
-							<td>Due Date</td>
-							<td>Grade</td>
-							<td>Average</td>
-						</tr>
-					</thead>
-					<tbody>
-						{{ for k in sorted(assignments.keys()): }}
-						<tr>
-							<td>{{=k}}</td>
-							<td>{{=assignments[k]["due_date"]}}</td>
-							<td>{{=assignments[k]["score"]}}</td>
-							<td>{{=assignments[k]["class_average"]}}</td>
-						</tr>
-						{{ pass }}
-					</tbody>
-				</table>
 			</div>
 		</div>
 	</div>
