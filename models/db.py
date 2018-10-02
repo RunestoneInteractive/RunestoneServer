@@ -98,12 +98,9 @@ db.define_table('cohort_master',
 
 def getCourseNameFromId(courseid):
     ''' used to compute auth.user.course_name field '''
-    if courseid == 1: # boguscourse
-        return ''
-    else:
-        q = db.courses.id == courseid
-        course_name = db(q).select()[0].course_name
-        return course_name
+    q = db.courses.id == courseid
+    course_name = db(q).select()[0].course_name
+    return course_name
 
 
 def verifyInstructorStatus(course, instructor):
