@@ -117,9 +117,6 @@ def _get_practice_data(user, timezoneoffset):
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=timezoneoffset)
-    print("timezoneoffset:", timezoneoffset)
-    print("now.date():", now.date())
-    print("now_local.date():", now_local.date())
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == user.course_id).select().first()
@@ -226,15 +223,16 @@ def _get_practice_data(user, timezoneoffset):
                     shuffle(presentable_flashcards)
 
             # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
-            practiced_today_count = db((db.user_topic_practice_log.course_name == user.course_name) &
-                                       (db.user_topic_practice_log.user_id == user.id) &
-                                       (db.user_topic_practice_log.q != 0) &
-                                       (db.user_topic_practice_log.q != -1) &
-                                       (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
-                                                                                                     now.month,
-                                                                                                     now.day,
-                                                                                                     0, 0, 0,
-                                                                                                     0))).count()
+            practiced_log = db((db.user_topic_practice_log.course_name == user.course_name) &
+                           (db.user_topic_practice_log.user_id == user.id) &
+                           (db.user_topic_practice_log.q != 0) &
+                           (db.user_topic_practice_log.q != -1)).select()
+            practiced_today_count = 0
+            for pr in practiced_log:
+                if (pr.end_practice - datetime.timedelta(hours=pr.timezoneoffset) >=
+                        datetime.datetime(now_local.year, now_local.month, now_local.day, 0, 0, 0, 0)):
+                    practiced_today_count += 1
+
             practice_completion_count = _get_practice_completion(user.id, user.course_name, spacing)
 
             if practice_graded == 1:
