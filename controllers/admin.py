@@ -1299,7 +1299,7 @@ def editindexrst():
         logger.error(ex)
 
 def _get_assignment(assignment_id):
-    return db(db.assignments.id == assignmentid).select().first()
+    return db(db.assignments.id == assignment_id).select().first()
 
 def _get_lti_record(oauth_consumer_key):
     return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
