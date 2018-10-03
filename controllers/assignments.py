@@ -117,9 +117,6 @@ def _get_practice_data(user, timezoneoffset):
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=timezoneoffset)
-    print("timezoneoffset:", timezoneoffset)
-    print("now.date():", now.date())
-    print("now_local.date():", now_local.date())
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == user.course_id).select().first()
@@ -214,7 +211,7 @@ def _get_practice_data(user, timezoneoffset):
                 available_flashcards_num = len(presentable_flashcards)
             else:
                 # Select only those that are not mastered yet.
-                presentable_flashcards = [f for f in flashcards if (f.e_factor <= 2.5 and f.q != -1)]
+                presentable_flashcards = [f for f in flashcards if (f.e_factor * f.q < 10 and f.q != -1)]
                 available_flashcards_num = len(presentable_flashcards)
                 if len(presentable_flashcards) > 0:
                     # It's okay to continue with the next chapter if there is no more question in the current chapter
@@ -226,15 +223,16 @@ def _get_practice_data(user, timezoneoffset):
                     shuffle(presentable_flashcards)
 
             # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
-            practiced_today_count = db((db.user_topic_practice_log.course_name == user.course_name) &
-                                       (db.user_topic_practice_log.user_id == user.id) &
-                                       (db.user_topic_practice_log.q != 0) &
-                                       (db.user_topic_practice_log.q != -1) &
-                                       (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
-                                                                                                     now.month,
-                                                                                                     now.day,
-                                                                                                     0, 0, 0,
-                                                                                                     0))).count()
+            practiced_log = db((db.user_topic_practice_log.course_name == user.course_name) &
+                           (db.user_topic_practice_log.user_id == user.id) &
+                           (db.user_topic_practice_log.q != 0) &
+                           (db.user_topic_practice_log.q != -1)).select()
+            practiced_today_count = 0
+            for pr in practiced_log:
+                if (pr.end_practice - datetime.timedelta(hours=pr.timezoneoffset) >=
+                        datetime.datetime(now_local.year, now_local.month, now_local.day, 0, 0, 0, 0)):
+                    practiced_today_count += 1
+
             practice_completion_count = _get_practice_completion(user.id, user.course_name, spacing)
 
             if practice_graded == 1:
@@ -749,8 +747,14 @@ def practice():
             f_card["mastery_percent"] = int(f_card["remaining_days"])
         else:
             # The maximum q is 5.0 and the minimum e_factor that indicates mastery of the topic is 2.5. `5 * 2.5 = 12.5`
+            # I learned that when students under the blocking condition answer something wrong multiple times,
+            # it becomes too difficult for them to pass it and the system asks them the same question many times
+            # (because most subchapters have only one question). To solve this issue, I changed the blocking formula.
             f_card["mastery_percent"] = int(100 * f_card.user_topic_practice.e_factor *
-                                            f_card.user_topic_practice.q / 12.5)
+                                            f_card.user_topic_practice.q / 10)
+            if f_card["mastery_percent"] > 100:
+                f_card["mastery_percent"] = 100
+
         f_card["mastery_color"] = "danger"
         if f_card["mastery_percent"] >= 75:
             f_card["mastery_color"] = "success"
