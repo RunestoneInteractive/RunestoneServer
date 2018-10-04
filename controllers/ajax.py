@@ -190,8 +190,9 @@ def runlog():    # Log errors and runs with code
         except Exception as e:
             logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
             num_tries -= 1
-
-    # this insert is error prone as it is also read quite frequently.
+    if num_tries == 0:
+        raise Exception("Runlog Failed to insert into useinfo")
+    
     num_tries = 3
     done = False
     while num_tries > 0 and not done:
@@ -206,6 +207,8 @@ def runlog():    # Log errors and runs with code
         except:
             logger.error("INSERT into acerror_log FAILED retrying")
             num_tries -= 1
+    if num_tries == 0:
+        raise Exception("Runlog Failed to insert into acerror_log")
 
     #lintAfterSave(dbid, code, div_id, sid)
     if auth.user:
@@ -225,6 +228,8 @@ def runlog():    # Log errors and runs with code
                 except:
                     num_tries -= 1
                     logger.error("INSERT into code FAILED retrying")
+            if num_tries == 0:
+                raise Exception("Runlog Failed to insert into code")
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
