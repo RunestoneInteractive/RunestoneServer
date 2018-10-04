@@ -1302,7 +1302,8 @@ def _get_assignment(assignment_id):
     return db(db.assignments.id == assignment_id).select().first()
 
 def _get_lti_record(oauth_consumer_key):
-    return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+    if oauth_consumer_key:
+        return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
