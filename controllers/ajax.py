@@ -181,27 +181,50 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    try:
-        db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
-    except Exception as e:
-        logger.debug("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
+    num_tries = 3
+    done = False
+    while num_tries > 0 and not done:
+        try:
+            db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
+            done = True
+        except Exception as e:
+            logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
+            num_tries -= 1
 
-    dbid = db.acerror_log.insert(sid=sid,
-                                 div_id=div_id,
-                                 timestamp=ts,
-                                 course_id=course,
-                                 code=pre+code+post,
-                                 emessage=error_info)
+    # this insert is error prone as it is also read quite frequently.
+    num_tries = 3
+    done = False
+    while num_tries > 0 and not done:
+        try:
+            dbid = db.acerror_log.insert(sid=sid,
+                                        div_id=div_id,
+                                        timestamp=ts,
+                                        course_id=course,
+                                        code=pre+code+post,
+                                        emessage=error_info)
+            done = True
+        except:
+            logger.error("INSERT into acerror_log FAILED retrying")
+            num_tries -= 1
+
     #lintAfterSave(dbid, code, div_id, sid)
     if auth.user:
         if 'to_save' in request.vars and (request.vars.to_save == "True" or request.vars.to_save == "true"):
-            db.code.insert(sid=sid,
-                acid=div_id,
-                code=code,
-                emessage=error_info,
-                timestamp=ts,
-                course_id=auth.user.course_id,
-                language=request.vars.lang)
+            num_tries = 3
+            done = False
+            while num_tries > 0 and not done:
+                try:
+                    db.code.insert(sid=sid,
+                        acid=div_id,
+                        code=code,
+                        emessage=error_info,
+                        timestamp=ts,
+                        course_id=auth.user.course_id,
+                        language=request.vars.lang)
+                    done = True 
+                except:
+                    num_tries -= 1
+                    logger.error("INSERT into code FAILED retrying")
 
     response.headers['content-type'] = 'application/json'
     res = {'log':True}
