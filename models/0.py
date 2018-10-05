@@ -1,3 +1,10 @@
+# Uncomment this to enable `auto-reloading
+# <http://web2py.com/books/default/chapter/29/04/the-core?search=import+module#Sharing-the-global-scope-with-modules-using-the-current-object>`_
+# of code in the ``modules/`` subdirectory. This is helpful when doing
+# development; otherwise, the web2py server must be restarted to reload any
+# changes made to ``modules/``.
+#from gluon.custom_import import track_changes; track_changes(True)
+
 from gluon.storage import Storage
 from platform import uname
 import logging

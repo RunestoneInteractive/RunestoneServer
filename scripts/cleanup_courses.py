@@ -2,7 +2,7 @@ import psycopg2
 import shutil
 import os
 
-conn = psycopg2.connect(host="localhost",user="bnmnetp_courselib", 
+conn = psycopg2.connect(host="localhost",user="bnmnetp_courselib",
                  password="al3xandria", database="bnmnetp_courselib");
 
 curs = conn.cursor()
@@ -14,7 +14,7 @@ cleancount = 0
 for row in curs:
     course = row[0]
     if course and os.path.exists("./live/static/{}".format(course)):
-        print ('removing {} count: {} last_access: {}'.format(course, row[1], row[2]))
+        print('removing {} count: {} last_access: {}'.format(course, row[1], row[2]))
         try:
             shutil.rmtree("./live/static/{}".format(course))
             shutil.rmtree("./live/custom_courses/{}".format(course))

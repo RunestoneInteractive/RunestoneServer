@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import os
 import random
+
+from gluon import current
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -32,6 +33,10 @@ else:
     ## from gluon.contrib.memdb import MEMDB
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
+
+# Make the settings and database available in modules.
+current.db = db
+current.settings = settings
 
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
@@ -170,7 +175,7 @@ db.define_table('auth_user',
     Field('active',type='boolean',writable=False,readable=False,default=True),
     Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
-    format=lambda u: u.first_name + " " + u.last_name,
+    format=lambda u: (u.first_name or "") + " " + (u.last_name or ''),
     migrate='runestone_auth_user.table')
 
 
@@ -240,7 +245,7 @@ db.define_table('user_courses',
 ##
 ## >>> db.mytable.insert(myfield='value')
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
+## >>> for row in rows: print(row.id, row.myfield)
 #########################################################################
 
 

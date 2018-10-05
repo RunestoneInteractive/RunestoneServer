@@ -1,13 +1,13 @@
 import json
 import datetime
 import logging
-import time
 import uuid
 from collections import Counter
 from diff_match_patch import *
-import os, sys
+import os
 from io import open
 from lxml import html
+from feedback import is_server_feedback, fitb_feedback
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -94,14 +94,23 @@ def hsblog():
             correct = request.vars.correct
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
-        # # Has user already submitted a correct answer for this question? If not, insert a record
-        # if db((db.fitb_answers.sid == sid) &
-        #       (db.fitb_answers.div_id == div_id) &
-        #       (db.fitb_answers.course_name == auth.user.course_name) &
-        #       (db.fitb_answers.correct == 'T')).count() == 0:
-            answer = request.vars.answer
-            correct = request.vars.correct
-            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
+        answer_json = request.vars.answer
+        correct = request.vars.correct
+        # Get the information about this question.
+        query_results = (db(
+            (db.questions.name == div_id) &
+            (db.questions.base_course == db.courses.base_course) &
+            (db.courses.course_name == course))
+            .select(db.questions.feedback, db.courses.login_required).first())
+
+        # Grade on the server if needed.
+        do_server_feedback, feedback = is_server_feedback(div_id, course)
+        if do_server_feedback:
+            correct, res_update = fitb_feedback(answer_json, feedback)
+            res.update(res_update)
+
+        # Save this data.
+        db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer_json, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
         # if db((db.dragndrop_answers.sid == sid) &
@@ -408,13 +417,11 @@ def updatelastpage():
                    last_page_subchapter=lastPageSubchapter,
                    last_page_scroll_location=lastPageScrollLocation,
                    last_page_accessed_on=datetime.datetime.utcnow())
-        db.commit()
         db((db.user_sub_chapter_progress.user_id == auth.user.id) &
            (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
            (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
                    status=completionFlag,
                    end_date=datetime.datetime.utcnow())
-        db.commit()
 
         practice_settings = db(db.course_practice.course_name == auth.user.course_name)
         if (practice_settings.count() != 0 and
@@ -829,11 +836,19 @@ def getAssessResults():
 
     # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
-        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, db.fitb_answers.correct, orderby=~db.fitb_answers.timestamp).first()
+        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, orderby=~db.fitb_answers.timestamp).first()
         if not rows:
             return ""   # server doesn't have it so we load from local storage instead
-        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
-        return json.dumps(res)
+        #
+        res = {
+            'answer': rows.answer,
+            'timestamp': str(rows.timestamp)
+        }
+        do_server_feedback, feedback = is_server_feedback(div_id, course)
+        if do_server_feedback:
+            correct, res_update = fitb_feedback(rows.answer, feedback)
+            res.update(res_update)
+        return json.dumps(res);
     elif event == "mChoice":
         rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
         if not rows:
